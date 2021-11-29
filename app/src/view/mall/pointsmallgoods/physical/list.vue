@@ -832,6 +832,7 @@ export default {
             type: 'success',
             duration: 2 * 1000
           })
+          this.getGoodsList();
         }
         this.submitLoading = false
         this.skuLoading = false
