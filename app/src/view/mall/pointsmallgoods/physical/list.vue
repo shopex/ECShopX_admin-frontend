@@ -660,6 +660,8 @@ export default {
         this.total_count = response.data.data.total_count
         this.warning_store = response.data.data.warning_store
         this.loading = false
+        this.templates_new_id='';
+        this.itemstore=0;
       })
     },
     deleteItemsAction(index, row) {
