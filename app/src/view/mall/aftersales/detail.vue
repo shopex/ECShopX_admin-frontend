@@ -375,7 +375,7 @@
     <!-- 退货 -->
     <template  v-if="aftersalesInfo.distributor_id == '0'  && aftersalesInfo.progress == '0' || $store.getters.login_type=='distributor' && aftersalesInfo.progress == '0'" >
       <div class="section-header with-border">
-        <h3>商家处理信息2</h3>
+        <h3>商家处理信息</h3>
       </div>
       <div class="section-body">
         <template>
