@@ -16,17 +16,27 @@
             class="iconfont icon-plus-circle banner-button-uploader"
             @click="addTab"
             size="mini"
-          >添加标签</el-button>
+          >
+            添加标签</el-button
+          >
           <p>
-            <span class="tag" v-for="(item,index) in seletedTags" :key="item.id">{{item.tag_name}} <span class="el-icon-close" @click="deleteTag(index)"></span></span>
+            <draggable
+              v-if="seletedTags.length > 0"
+              v-model="seletedTags"
+              :options="dragItemsOptions"
+              @end="onEnd"
+            >
+              <span class="tag" v-for="(item, index) in seletedTags" :key="item.id"
+                >{{ item.tag_name }} <span class="el-icon-close" @click="deleteTag(index)"></span
+              ></span>
+            </draggable>
           </p>
-          
         </el-form-item>
         <el-form-item label="显示优惠券">
-          <el-switch v-model="base.padded" active-color="#27cc6a" inactive-color="#efefef">
+          <el-switch v-model="base.show_coupon" active-color="#27cc6a" inactive-color="#efefef">
           </el-switch>
         </el-form-item>
-        <el-form-item label='商家排序'>
+        <el-form-item label="商家排序">
           <span>LBS定位</span>
         </el-form-item>
       </el-form>
@@ -35,7 +45,11 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 export default {
+  components: {
+    draggable
+  },
   props: {
     res: {
       type: Object,
@@ -57,29 +71,40 @@ export default {
       name: '',
       base: {},
       config: {},
-      data: [],
-      seletedTags:[], // tab
-      activeName:'',
-      tabIndex: 0
+      seletedTags: [], // tab
+      activeName: '',
+      tabIndex: 0,
+      dragItemsOptions: {
+        animation: 300,
+        forceFallback: false,
+        scroll: true
+      },
     }
   },
   methods: {
     setData(val) {
-      console.log('============',val);
+      console.log('============', val)
       this.name = val.name
       this.base = val.base
-      this.config = val.config
-      this.data = val.data
       this.seletedTags = val.seletedTags
     },
-    addTab(){
-      this.$emit('tagSelectVisibleHandle','nearby_shop')
+    addTab() {
+      this.$emit('tagSelectVisibleHandle', 'nearby_shop')
     },
-    deleteTag(index){
-      this.seletedTags.splice(index,1)
-      console.log(index);
+    deleteTag(index) {
+      this.seletedTags.splice(index, 1)
+      console.log(index)
+    },
+    onEnd(evt) {
+      console.log(evt)
+      // this.temp = this.data[evt.oldIndex]
+      const temp = this.seletedTags[evt.oldIndex]
+      // console.log(temp);
+      this.seletedTags.splice(evt.oldIndex, 1)
+      this.seletedTags.splice(evt.newIndex, 0, temp)
+      
+      // console.log(this.seletedTags);
     }
-
   },
   mounted() {
     this.setData(this.res)
@@ -88,23 +113,28 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.tag{
+.tag {
   margin: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  &:hover {
+    color: #1480e3;
+  }
 }
-.el-icon-close{
-  transition: all .3s cubic-bezier(.645,.045,.355,1);
+
+.el-icon-close {
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   border-radius: 50%;
-  cursor:pointer
+  cursor: pointer;
 }
- .el-icon-close:before {
-    -webkit-transform: scale(.9);
-    transform: scale(.9);
-    display: inline-block;
+.el-icon-close:before {
+  -webkit-transform: scale(0.9);
+  transform: scale(0.9);
+  display: inline-block;
 }
 .el-icon-close:hover {
-    background-color: #C0C4CC;
-    color: #FFF;
-
+  background-color: #c0c4cc;
+  color: #fff;
 }
 .upload-box {
   height: 100px;

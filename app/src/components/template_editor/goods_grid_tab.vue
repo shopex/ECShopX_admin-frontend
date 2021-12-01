@@ -241,6 +241,7 @@ export default {
       this.temp = this.data[evt.oldIndex]
       this.data.splice(evt.oldIndex, 1)
       this.data.splice(evt.newIndex, 0, this.temp)
+      debugger
     },
     handleMoreLink() {
       this.$emit('bindLinks')

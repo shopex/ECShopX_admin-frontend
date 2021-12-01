@@ -590,7 +590,8 @@ export default {
           name:'nearbyShop',
           base:{
             title:'附近商家',
-            padded: true
+            padded: true,
+            show_coupon:true,
           },
           seletedTags:[],
         },

@@ -48,8 +48,8 @@
     >
     </el-pagination>
     <span slot="footer" class="dialog-footer">
-      <el-button size='small'>取 消</el-button>
-      <el-button  size='small' type="primary" @click="confirm">确 定</el-button>
+      <el-button size="small" @click="handleClose">取 消</el-button>
+      <el-button size="small" type="primary" @click="confirm">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -64,20 +64,23 @@ export default {
     },
     type: {
       default: ''
+    },
+    seletedTags: {
+      type: Array
     }
   },
   data() {
     return {
-      tableData:[],
-      multipleSelection:[],
-      total:0,
-      loading:false,
+      tableData: [],
+      multipleSelection: [],
+      total: 0,
+      loading: false,
       query: {
         tag_name: ''
       },
       params: {
         page: 1,
-        pageSize: 10,
+        pageSize: 10
       }
     }
   },
@@ -88,16 +91,21 @@ export default {
     async getConfig() {
       let type = this.type
       if (type == 'nearby_shop') {
-        const result = await getTagList({...this.query,...this.params});
-        console.log(result);
-        const { data } =result.data;
+        const result = await getTagList({ ...this.query, ...this.params })
+        console.log(result)
+        const { data } = result.data
         this.tableData = data.list
         this.total = data.total_count
       }
+
+      if (this.seletedTags.length > 0) {
+        this.$refs.multipleTable.clearSelection()
+        this.toggleSelection(this.seletedTags)
+      }
     },
-    confirm(){
-      console.log(this.multipleSelection);
-      this.$emit('seletedTagsHandle',this.multipleSelection);
+    confirm() {
+      console.log(this.multipleSelection)
+      this.$emit('seletedTagsHandle', this.multipleSelection)
     },
     queryHandle() {
       this.getConfig()
@@ -106,8 +114,6 @@ export default {
       this.$emit('visibleHandle')
     },
     handleSelectionChange(val) {
-      // debugger
-      console.log('handleSelectionChange', val)
       if (val.length > 0) {
         this.multipleSelection = val
       }
@@ -121,9 +127,18 @@ export default {
       this.params.page = val
       this.getConfig()
     },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
     getRowKeys(val) {
       return val.tag_id
-    },
+    }
   }
 }
 </script>
