@@ -1,0 +1,156 @@
+<template>
+  <el-dialog
+    class="new_tagselect"
+    title="选择标签"
+    :visible.sync="visible"
+    :append-to-body="true"
+    width="60%"
+    :before-close="handleClose"
+  >
+    <div class="query">
+      <div></div>
+      <el-input
+        placeholder="请输入查找的标签名"
+        style="width: 300px"
+        v-model="query.tag_name"
+        class="input-with-select"
+      >
+        <el-button slot="append" @click="queryHandle">查询</el-button>
+      </el-input>
+    </div>
+    <div class="list">
+      <el-table
+        border
+        :row-key="getRowKeys"
+        v-loading="loading"
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column :reserve-selection="true" type="selection" width="55"></el-table-column>
+        <el-table-column prop="tag_name" label="标签名称" width="220"> </el-table-column>
+        <el-table-column prop="description" label="标签描述" show-overflow-tooltip>
+        </el-table-column>
+      </el-table>
+    </div>
+    <el-pagination
+      style="text-align: center"
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="params.page"
+      :page-sizes="[10, 20, 30]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
+    <span slot="footer" class="dialog-footer">
+      <el-button size='small'>取 消</el-button>
+      <el-button  size='small' type="primary" @click="confirm">确 定</el-button>
+    </span>
+  </el-dialog>
+</template>
+
+<script>
+import { saveTag, getTagList, updateTag, deleteTag } from '@/api/marketing'
+export default {
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      default: ''
+    }
+  },
+  data() {
+    return {
+      tableData:[],
+      multipleSelection:[],
+      total:0,
+      loading:false,
+      query: {
+        tag_name: ''
+      },
+      params: {
+        page: 1,
+        pageSize: 10,
+      }
+    }
+  },
+  mounted() {
+    this.getConfig()
+  },
+  methods: {
+    async getConfig() {
+      let type = this.type
+      if (type == 'nearby_shop') {
+        const result = await getTagList({...this.query,...this.params});
+        console.log(result);
+        const { data } =result.data;
+        this.tableData = data.list
+        this.total = data.total_count
+      }
+    },
+    confirm(){
+      console.log(this.multipleSelection);
+      this.$emit('seletedTagsHandle',this.multipleSelection);
+    },
+    queryHandle() {
+      this.getConfig()
+    },
+    handleClose() {
+      this.$emit('visibleHandle')
+    },
+    handleSelectionChange(val) {
+      // debugger
+      console.log('handleSelectionChange', val)
+      if (val.length > 0) {
+        this.multipleSelection = val
+      }
+    },
+    handleSizeChange(val) {
+      this.params.pageSize = val
+      this.params.page = 1
+      this.getConfig()
+    },
+    handleCurrentChange(val) {
+      this.params.page = val
+      this.getConfig()
+    },
+    getRowKeys(val) {
+      return val.tag_id
+    },
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.new_tagselect {
+  .query {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .list {
+    padding: 30px 0px;
+  }
+  .tips {
+    padding: 10px;
+    padding-bottom: 0;
+    color: #999;
+  }
+  .btn {
+    text-align: right;
+    margin-top: 20px;
+  }
+  .icon {
+    font-size: 20px;
+    margin-right: 6px;
+    color: #409eff;
+  }
+}
+</style>

@@ -15,6 +15,12 @@
         class="components-view"
       >
         <div v-for="(item, index) in initData" :key="index" class="component-control">
+          <template v-if="item.name === 'nearbyShop'">
+            <svg class="svg-icon" aria-hidden="true">
+              <use xlink:href="#icon-scroll"></use>
+            </svg>
+            附近商家
+          </template>
           <template v-if="item.name === 'coupon'">
             <svg class="svg-icon" aria-hidden="true">
               <use xlink:href="#icon-tag"></use>
@@ -182,6 +188,11 @@
                     @click="removeCurrent"
                   ></div>
                 </transition>
+                <nearbyShop
+                  v-if="item.name === 'nearbyShop'"
+                  :res="item"
+                  :active="index == editorIndex">
+                </nearbyShop>
                 <coupon
                   v-if="item.name === 'coupon'"
                   :res="item"
@@ -288,6 +299,12 @@
         </div>
         <template v-else>
           <!-- {{editorData}} -->
+          <nearbyShopEditor
+            :res="editorData"
+            @tagSelectVisibleHandle='tagSelectVisibleHandle'
+            @bindImgs="showImgs"
+          >
+          </nearbyShopEditor>
           <couponEditor
             :res="editorData"
             @bindCoupons="showCoupons"
@@ -390,6 +407,15 @@
         @bindImgs="showImgs"
       ></couponPackageSelect>
     </template>
+    <template v-if="tagSelectVisible">
+      <TagSelect 
+        :visible="tagSelectVisible"
+        :type='tagType' 
+        :seletedTags="editorData.seletedTags"
+        @visibleHandle='tagSelectVisibleHandle'
+        @seletedTagsHandle='seletedTagsHandle'>
+      </TagSelect>
+    </template>
   </el-dialog>
 </template>
 
@@ -403,6 +429,7 @@ import linkSetter from '@/components/template_links'
 import goodsSelect from '@/components/goodsSelect'
 import couponPicker from '@/components/coupon_picker'
 import couponPackageSelect from '@/components/couponPackageSelect'
+import TagSelect from '@/components/new_tagselect'
 // 店铺装修组件
 // view层组件
 import coupon from '@/components/template/coupon'
@@ -416,12 +443,13 @@ import navigation from '@/components/template/navigation'
 import search from '@/components/template/search'
 import showcase from '@/components/template/showcase'
 import slider from '@/components/template/slider'
-import store from '@/components/template/store'
+import store from '@/components/template/store' //推荐商铺
 import floorImg from '@/components/template/floorImg'
 import floorImgTwo from '@/components/template/floorImg-two'
 import headline from '@/components/template/headline'
 import hotTopic from '@/components/template/hotTopic'
 import imgGif from '@/components/template/img-gif'
+import nearbyShop from '@/components/template/nearby_shop';
 
 // control层组件
 import couponEditor from '@/components/template_editor/coupon'
@@ -441,6 +469,8 @@ import floorImgTwoEditor from '@/components/template_editor/floorImg-two'
 import headlineEditor from '@/components/template_editor/headline'
 import hotTopicEditor from '@/components/template_editor/hotTopic'
 import imgGifEditor from '@/components/template_editor/img-gif'
+import nearbyShopEditor from '@/components/template_editor/nearby_shop';
+
 // 第三方组件
 import draggable from 'vuedraggable'
 
@@ -449,7 +479,6 @@ import { savePageParams, getParamByTempName } from '@/api/wxa'
 import { getPagesTemplateDetail, savePagesTemplate } from '@/api/template'
 import { getRecommendLikeItemList } from '@/api/promotions'
 import { getItemsList } from '@/api/goods'
-import { forEach } from 'jszip'
 
 export default {
   props: {
@@ -515,16 +544,22 @@ export default {
     headlineEditor,
     hotTopicEditor,
     imgGifEditor,
+    nearbyShop,
+    nearbyShopEditor,
     // 其他组件
     imgPicker,
     linkSetter,
     goodsSelect,
     couponPicker,
+    TagSelect,
     // 第三方组件
     draggable
   },
+   
   data() {
     return {
+      tagSelectVisible:false,
+      tagType:'',  // nearby_shop || store
       couponPackageVisible: false,
       componentHeight: '',
       editorIndex: null,
@@ -551,6 +586,14 @@ export default {
       saveInit: '',
       isSouponPackage: false, //是否为劵包 （用来判断图片选择）
       initData: [
+        {
+          name:'nearbyShop',
+          base:{
+            title:'附近商家',
+            padded: true
+          },
+          seletedTags:[],
+        },
         {
           name: 'coupon',
           base: {
@@ -935,6 +978,22 @@ export default {
     }
   },
   methods: {
+    /* ---------------------------------------------选择标签------------------------------------------ */
+    tagSelectVisibleHandle(type){
+      this.tagSelectVisible = !this.tagSelectVisible ;
+      if (this.tagSelectVisible) {
+        this.tagType = type
+      }else{
+        this.tagType = ''
+      }
+    },
+    seletedTagsHandle(seletedTags){
+      this.editorData.seletedTags = seletedTags;
+      this.components[this.editorIndex].seletedTags = seletedTags;
+      this.tagSelectVisibleHandle();
+    },
+    /* ---------------------------------------------选择标签------------------------------------------ */
+
     /* ---------------------------------------------劵包组件方法------------------------------------------ */
     pickHandle() {
       this.couponPackageVisible = true
@@ -1271,9 +1330,13 @@ export default {
           this.initData.push({
             name: 'store',
             base: {
-              title: '推荐商铺',
+              title: '推荐商铺22',
               subtitle: '热门商铺，官方推荐',
-              padded: true
+              padded: true,
+              backgroundColor:'#FFF',
+              borderColor:'#FF6700',
+              picture:'',
+              tags:[]
             },
             data: [
               {

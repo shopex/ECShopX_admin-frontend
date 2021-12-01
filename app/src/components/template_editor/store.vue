@@ -1,8 +1,6 @@
 <template>
   <section v-if="name === 'store'" class="section">
-    <div class="section-header with-border">
-      设置
-    </div>
+    <div class="section-header with-border">设置</div>
     <div class="section-body">
       <el-form label-width="100px">
         <el-form-item label="标题">
@@ -30,7 +28,7 @@
                       class="store-logo"
                       :src="
                         store.logo ||
-                          'https://fakeimg.pl/120x120/EFEFEF/CCC/?text=logo&font=lobster'
+                        'https://fakeimg.pl/120x120/EFEFEF/CCC/?text=logo&font=lobster'
                       "
                       alt=""
                     />
@@ -82,7 +80,7 @@
               </div>
             </div>
           </draggable>
-          <div>
+          <!-- <div>
             <el-button
               :disabled="data.length >= 5"
               type="default"
@@ -91,7 +89,38 @@
             >
               添加推荐</el-button
             >
+          </div> -->
+        </el-form-item>
+        <el-form-item label="背景色">
+          <el-color-picker v-model="base.backgroundColor"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="商品边框色">
+          <el-color-picker v-model="base.borderColor"></el-color-picker>
+        </el-form-item>
+        <el-form-item label="宣传图">
+          <span>点击图片可更换，图片大小不能超过 2MB（建议尺寸：700px*116px）</span>
+          <div class="setting-item slider">
+            <div class="upload-box" v-if="base.imgUrl">
+              <img
+                :src="wximageurl + base.imgUrl"
+                class="banner-uploader"
+                @click="handleImgChange"
+              />
+            </div>
+            <div class="banner-uploader" v-else @click="handleImgChange">
+              <i class="iconfont icon-camera"></i>上传图片
+            </div>
           </div>
+        </el-form-item>
+        <el-form-item label="设置标签">
+          <el-button
+            size="mini"
+            type="default"
+            class="iconfont icon-plus-circle banner-button-uploader"
+            @click="addItem"
+          >
+            设置标签</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -144,6 +173,9 @@ export default {
       this.config = val.config
       this.data = val.data
     },
+    handleImgChange(index) {
+      this.$emit('bindImgs', index)
+    },
     handleGoods(idx) {
       this.$emit('bindGoods', idx)
     },
@@ -173,6 +205,7 @@ export default {
   },
   mounted() {
     this.setData(this.res)
+    console.log(this.res);
   }
 }
 </script>
