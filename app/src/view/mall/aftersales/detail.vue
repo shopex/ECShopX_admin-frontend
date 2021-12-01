@@ -45,7 +45,7 @@
       <el-row>
         <el-col :span="3" class="col-3 content-right">申请时间:</el-col>
         <el-col :span="20">{{
-          aftersalesInfo.create_time | datetime("YYYY-MM-DD hh:mm:ss")
+          aftersalesInfo.create_time |datetime('YYYY-MM-DD HH:mm:ss')
         }}</el-col>
       </el-row>
       <el-row>
