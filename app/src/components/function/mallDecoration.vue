@@ -1334,7 +1334,7 @@ export default {
               title: '推荐商铺22',
               subtitle: '热门商铺，官方推荐',
               padded: true,
-              backgroundColor:'#FFF',
+              backgroundColor:'#13DCCE',
               borderColor:'#FF6700',
               picture:'',
               tags:[]

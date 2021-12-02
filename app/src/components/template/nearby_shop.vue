@@ -163,8 +163,9 @@ export default {
       white-space: nowrap;
       padding-bottom: 3px;
       .shop {
-        border: 1px solid #ccc;
+        border: 1px solid #f5f5f5;
         margin-right: 10px;
+        border-radius: 4px;
         // width: 100px;
         img {
           width: 100%;
@@ -172,7 +173,7 @@ export default {
         }
         .bg {
           position: relative;
-          width: 110px;
+          width: 100px;
           height: 60px;
           .logo {
             position: absolute;

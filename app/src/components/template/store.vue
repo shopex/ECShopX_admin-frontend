@@ -1,6 +1,6 @@
 <template>
   <div class="component-wrap" :class="{ 'component-padded': base.padded, 'active': active }">
-    <div class="current-active"></div>
+    <!-- <div class="current-active"></div> -->
     <div v-if="base.title" class="component-header">
       <div class="component-title">
         <div>{{ base.title }}</div>
@@ -11,7 +11,7 @@
       </div> -->
     </div>
     <div class="">
-      <div v-for="store in data" class="store-card">
+      <div v-for="store in data" class="store-card" :key="store.id" :style="{background:base.backgroundColor}">
         <template v-if="store.id">
           <div class="view-flex view-flex-middle">
             <img
@@ -22,8 +22,8 @@
             <div class="store-name">{{ store.name }}</div>
           </div>
           <div class="store-items">
-            <div v-for="(item, idx) in store.items" v-if="idx < 4" class="store-item">
-              <img class="store-item-thumb" :src="item.imgUrl" alt="" />
+            <div v-for="item in store.items.slice(0,4)" :key="item.goodsId" class="store-item">
+              <img class="store-item-thumb" :src="item.imgUrl" alt="" :style="{'border-color':base.borderColor || '#000'}" />
               <div class="store-item-amount">
                 <span class="price">¥{{ item.price / 100 }}</span>
               </div>
@@ -138,6 +138,8 @@ export default {
         width: 60px;
         height: 60px;
         background: #efefef;
+        // border-width: 1px;
+        // border-style:solid;
       }
       .price {
         width: 30px;
@@ -164,6 +166,8 @@ export default {
         margin-right: 10px;
         width: 60px;
         height: 60px;
+          border-width: 1px;
+        border-style:solid;
       }
       .store-item-amount {
         height: 28px;
