@@ -59,6 +59,8 @@
 
 <script>
 import { getTagList } from '@/api/marketing'
+import { getTagList as getGoodsTag } from '@/api/goods'
+
 export default {
   props: {
     visible: {
@@ -72,8 +74,8 @@ export default {
       type: Array
     }
   },
-  watch:{
-    multipleSelection(){
+  watch: {
+    multipleSelection() {
       this.$emit('seletedTagsHandle', this.multipleSelection)
     }
   },
@@ -102,19 +104,27 @@ export default {
 
       if (type == 'nearby_shop') {
         const result = await getTagList({ ...this.query, ...this.params })
-        this.loading = false
-        const { list, total_count } = result.data.data
-        this.tableData = list
-        this.total = total_count
-        if (this.seletedTags !== undefined && this.seletedTags.length > 0) {
-          this.$refs.multipleTable.clearSelection()
-          this.toggleSelection(this.seletedTags)
-        }
+        this.handle(result)
+      } else if ((type = 'store')) {
+        const result = await getGoodsTag({ ...this.query, ...this.params })
+        this.handle(result)
       }
     },
+
+    handle(result) {
+      this.loading = false
+      const { list, total_count } = result.data.data
+      this.tableData = list
+      this.total = total_count
+      if (this.seletedTags !== undefined && this.seletedTags.length > 0) {
+        this.$refs.multipleTable.clearSelection()
+        this.toggleSelection(this.seletedTags)
+      }
+    },
+    
     confirm() {
       this.$emit('seletedTagsHandle', this.multipleSelection)
-       this.$emit('visibleHandle')
+      this.$emit('visibleHandle')
     },
     queryHandle() {
       this.getConfig()
@@ -124,7 +134,7 @@ export default {
       this.$emit('visibleHandle')
     },
     handleSelectionChange(val) {
-       console.log('handleSelectionChange', val)
+      console.log('handleSelectionChange', val)
       if (val.length > 0) {
         this.multipleSelection = val
       }
@@ -143,8 +153,8 @@ export default {
         rows.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row)
         })
-      }else{
-         this.$refs.multipleTable.clearSelection()
+      } else {
+        this.$refs.multipleTable.clearSelection()
       }
     },
     getRowKeys(val) {

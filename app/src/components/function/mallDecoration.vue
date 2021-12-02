@@ -360,7 +360,7 @@
           <headlineEditor :res="editorData"></headlineEditor>
           <hotTopicEditor :res="editorData" @bindLinks="showLinks"></hotTopicEditor>
           <imgGifEditor :res="editorData" @bindImgs="showImgs"></imgGifEditor>
-          <storeEditor :res="editorData" @bindGoods="showGoods"></storeEditor>
+          <storeEditor :res="editorData" @bindGoods="showGoods" @bindImgs="showImgs"  @tagSelectVisibleHandle='tagSelectVisibleHandle'></storeEditor>
         </template>
       </div>
     </section>
@@ -989,8 +989,11 @@ export default {
       }
     },
     seletedTagsHandle(seletedTags){
-      this.editorData.seletedTags = seletedTags;
-      this.components[this.editorIndex].seletedTags = seletedTags;
+      console.log('this.editorData====================',this.editorData);
+      console.log('this.components==========',this.components[this.editorIndex]);
+      this.editorData.seletedTags = seletedTags; // editor
+      this.components[this.editorIndex].seletedTags = seletedTags; // view
+       
       // this.tagSelectVisibleHandle();
     },
     /* ---------------------------------------------选择标签------------------------------------------ */
@@ -1075,18 +1078,21 @@ export default {
       }
     },
     pickImg(data) {
+      // debugger
       console.log(this.isSouponPackage)
       if (this.components[this.editorIndex].name === 'imgHotzone') {
         this.components[this.editorIndex].config.imgUrl = data.url
       } else if (
         this.components[this.editorIndex].name === 'floorImg' ||
-        this.components[this.editorIndex].name === 'goodsScroll'
+        this.components[this.editorIndex].name === 'goodsScroll' 
       ) {
         if (this.editorDataIndex == 'backImg') {
           this.components[this.editorIndex].base.backgroundImg = data.url
         } else {
           this.components[this.editorIndex].data[this.editorDataIndex].imgUrl = data.url
         }
+      }else if(this.components[this.editorIndex].name === 'store'){
+        this.components[this.editorIndex].base.imgUrl = data.url
       } else {
         if (this.isSouponPackage) {
           // this.components[this.editorIndex].voucher_package[this.editorDataIndex].imgUrl = data.url   //无法触发watch。
@@ -1331,13 +1337,12 @@ export default {
           this.initData.push({
             name: 'store',
             base: {
-              title: '推荐商铺22',
+              title: '推荐商铺',
               subtitle: '热门商铺，官方推荐',
               padded: true,
               backgroundColor:'#13DCCE',
               borderColor:'#FF6700',
-              picture:'',
-              tags:[]
+              imgUrl:'',
             },
             data: [
               {
@@ -1346,7 +1351,8 @@ export default {
                 logo: '',
                 items: []
               }
-            ]
+            ],
+            seletedTags:[]
           })
         }
       }
@@ -1553,6 +1559,7 @@ export default {
     }
   }
 }
+
 .setting-view {
   position: absolute;
   left: 540px;
