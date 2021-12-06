@@ -36,11 +36,11 @@
                     <el-input v-model="form.brief" :maxlength="30" placeholder=""></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <!-- <el-col :span="8">
                   <el-form-item label="外文标题">
                     <el-input v-model="form.item_en_name" :maxlength="100" placeholder=""></el-input>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="8">
                   <el-form-item label="* 运费模板">
                     <el-select v-model="form.templates_id" placeholder="请选择" class="wid100">
