@@ -86,11 +86,12 @@ export default {
       total: 0,
       loading: false,
       query: {
-        tag_name: ''
+        tag_name: '',
+        front_show:1
       },
       params: {
         page: 1,
-        pageSize: 10
+        pageSize: 10,
       }
     }
   },
@@ -123,6 +124,12 @@ export default {
     },
     
     confirm() {
+      if (this.type == 'store') {
+        if ( this.multipleSelection.length >3 ) {
+           return this.$message.error('最多选择3个标签')
+        }
+       
+      }
       this.$emit('seletedTagsHandle', this.multipleSelection)
       this.$emit('visibleHandle')
     },
