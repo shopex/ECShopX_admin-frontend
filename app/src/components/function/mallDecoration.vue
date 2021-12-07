@@ -1155,16 +1155,7 @@ export default {
     pickGoods(data, store) {
       // console.log(data)
       // debugger
-      if (this.editorDataIndex !== null) {
-        if (!store.id) {
-          this.relItemsIds.splice(0)
-          this.$message({
-            message: '请选择店铺',
-            type: 'error'
-          })
-          return
-        }
-      }
+
       // 如果是平台版本推荐店铺组件且店铺为总店（店铺id 0）
       if (
         this.editorData.name === 'store' &&
@@ -1177,6 +1168,29 @@ export default {
         })
         return false
       }
+
+      if (this.editorDataIndex !== null) {
+        console.log('store.id====',store.id);
+
+        // if (store.id ==0) {
+        //   this.relItemsIds.splice(0)
+        //   this.$message({
+        //     message: '推荐店铺不能为总店',
+        //     type: 'error'
+        //   })
+        //   return
+        // }
+
+        if (!store.id) {
+          this.relItemsIds.splice(0)
+          this.$message({
+            message: '请选择店铺',
+            type: 'error'
+          })
+          return
+        }
+      }
+
       this.relItemsIds = data
       this.curStore = store
       let values = []
