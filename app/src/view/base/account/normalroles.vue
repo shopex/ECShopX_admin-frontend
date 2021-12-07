@@ -228,7 +228,7 @@ export default {
     menu.forEach((item)=>{
       if (item.alias_name=='setting') {
         item.children.forEach((itemy,indexy)=>{
-          if (itemy.is_super == 'N') {
+          if (itemy.is_super == 'Y') {
            item.children.splice(indexy,1);
           }
         })

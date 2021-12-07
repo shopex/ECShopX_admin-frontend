@@ -129,7 +129,7 @@ export default {
           const filterParams = {
             ...this.$refs.baseFormRef.form,
             ...this.$refs.imageFormRef.form,
-            ...this.deleteParams(['name','logo','contact','mobile','contract_phone','is_audit_goods','is_ziti'],this.$refs.shopFormRef.form),
+            ...this.deleteParams(['name','logo','contact','mobile','contract_phone','is_audit_goods','is_ziti','banner'],this.$refs.shopFormRef.form),
             ...this.$refs.dadaFormRef.form,
             ...this.$refs.fashionFormRef.form,
             hour:
