@@ -49,7 +49,7 @@
       :total="total"
     >
     </el-pagination>
-    <p>已选择：{{ multipleSelection.length }} 包</p>
+    <p>已选择：{{ multipleSelection.length }} </p>
     <span slot="footer" class="dialog-footer">
       <el-button size="small" @click="handleClose">取 消</el-button>
       <el-button size="small" type="primary" @click="confirm">确 定</el-button>

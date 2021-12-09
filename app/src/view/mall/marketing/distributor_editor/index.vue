@@ -23,7 +23,7 @@
 
       <DadaForm :rules="rules" ref="dadaFormRef" :externalForm="form" @onChangeData="handleChangeData" />
 
-      <FashionForm ref="fashionFormRef" :externalForm="form" />
+      <!-- <FashionForm ref="fashionFormRef" :externalForm="form" /> -->
 
       <GlobalFooter>
         <div class="section-footer content-center">

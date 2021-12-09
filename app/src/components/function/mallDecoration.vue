@@ -1172,15 +1172,6 @@ export default {
       if (this.editorDataIndex !== null) {
         console.log('store.id====',store.id);
 
-        // if (store.id ==0) {
-        //   this.relItemsIds.splice(0)
-        //   this.$message({
-        //     message: '推荐店铺不能为总店',
-        //     type: 'error'
-        //   })
-        //   return
-        // }
-
         if (!store.id) {
           this.relItemsIds.splice(0)
           this.$message({
