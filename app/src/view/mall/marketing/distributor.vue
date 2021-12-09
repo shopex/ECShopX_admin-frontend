@@ -295,6 +295,7 @@
             <span v-for="item in tag.editItem" :key="item">{{item}}，</span>
           </div>
         </div>
+       
         <div class="selected-tags view-flex">
           <div class="label">已选中标签：</div>
           <div class="view-flex-item">
@@ -308,7 +309,9 @@
             >{{tag.tag_name}}</el-tag>
           </div>
         </div>
+        <hr>
         <div>
+           <div class="label">全部标签：</div>
           <el-tag
             class="tag-item"
             :key="index"
