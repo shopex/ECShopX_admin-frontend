@@ -471,3 +471,14 @@ export function queryTagShop(params) {
     params
   })
 }
+
+
+
+// 删除tag
+export function NewdeleteTag(params) {
+  return fetch({
+    url:'/distributor/deltag',
+    method:'post',
+    params
+  })
+}
