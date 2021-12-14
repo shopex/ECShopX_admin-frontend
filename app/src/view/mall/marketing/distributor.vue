@@ -807,6 +807,8 @@ export default {
               type: 'success',
               message: '已修改',
             })
+            this.editValidDialog = false
+
           })
         })
         .catch(() => {
