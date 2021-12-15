@@ -411,9 +411,10 @@
         :visible="tagSelectVisible"
         :type='tagType' 
         :seletedTags="editorData.seletedTags"
+        :storeID="storeID"
         @visibleHandle='tagSelectVisibleHandle'
         @seletedTagsHandle='seletedTagsHandle'
-        @getOldDateHandle='getData'>
+        >
       </TagSelect>
     </template>
   </el-dialog>
@@ -506,7 +507,7 @@ export default {
     },
     templateName: {
       type: String
-    }
+    },
   },
   components: {
     coupon,
@@ -560,6 +561,7 @@ export default {
     return {
       tagSelectVisible:false,
       tagType:'',  // nearby_shop || store
+      storeID:null,
       couponPackageVisible: false,
       componentHeight: '',
       editorIndex: null,
@@ -969,7 +971,8 @@ export default {
       app_page_type: {
         wechat: 'wechat',
         alipay: 'alipay'
-      }
+      },
+      OldData:[]
     }
   },
   computed: {
@@ -981,6 +984,10 @@ export default {
   methods: {
     /* ---------------------------------------------选择标签------------------------------------------ */
     tagSelectVisibleHandle(type){
+      if (type=='store') {
+          this.storeID = this.components[this.editorIndex].data[0].id;
+      }
+      
       this.tagSelectVisible = !this.tagSelectVisible ;
       if (this.tagSelectVisible) {
         this.tagType = type
@@ -996,6 +1003,7 @@ export default {
        
       // this.tagSelectVisibleHandle();
     },
+
     /* ---------------------------------------------选择标签------------------------------------------ */
 
     /* ---------------------------------------------劵包组件方法------------------------------------------ */
@@ -1172,6 +1180,7 @@ export default {
       if (this.editorDataIndex !== null) {
         console.log('store.id====',store.id);
 
+
         if (!store.id) {
           this.relItemsIds.splice(0)
           this.$message({
@@ -1181,7 +1190,7 @@ export default {
           return
         }
       }
-
+      this.storeID = store.id
       this.relItemsIds = data
       this.curStore = store
       let values = []
@@ -1345,7 +1354,7 @@ export default {
               title: '推荐商铺',
               subtitle: '热门商铺，官方推荐',
               padded: true,
-              backgroundColor:'#13DCCE',
+              backgroundColor:'#FFF',
               borderColor:'#FF6700',
               imgUrl:'',
             },
@@ -1390,9 +1399,13 @@ export default {
           }
         })
         this.platformComponents = platformComponents
+        
         this.components = shopComponents
+
+      
       } else {
         this.components = [...this.initData]
+        
       }
     },
     cancelAction() {
@@ -1401,6 +1414,7 @@ export default {
   },
   watch: {
     dialogVisible(newVal, oldVal) {
+      console.log('==================');
       if (newVal) {
         this.curStore = this.relStore
         this.editorData = {}

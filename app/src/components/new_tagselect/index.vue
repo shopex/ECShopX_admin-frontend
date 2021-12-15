@@ -49,9 +49,8 @@
       :total="total"
     >
     </el-pagination>
-    <p>已选择：{{ multipleSelection.length }} </p>
+    <p>已选择：{{ multipleSelection.length }}</p>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" @click="handleClose">取 消</el-button>
       <el-button size="small" type="primary" @click="confirm">确 定</el-button>
     </span>
   </el-dialog>
@@ -72,6 +71,10 @@ export default {
     },
     seletedTags: {
       type: Array
+    },
+    //当type = ‘store’ 需要
+    storeID:{
+      default:null
     }
   },
   watch: {
@@ -87,14 +90,15 @@ export default {
       loading: false,
       query: {
         tag_name: '',
-        front_show:1
+        front_show: 1
       },
       params: {
         page: 1,
-        pageSize: 10,
+        pageSize: 10
       }
     }
   },
+  
   mounted() {
     this.getConfig()
   },
@@ -107,7 +111,8 @@ export default {
         const result = await getTagList({ ...this.query, ...this.params })
         this.handle(result)
       } else if ((type = 'store')) {
-        const result = await getGoodsTag({ ...this.query, ...this.params })
+        console.log(this.storeID);
+        const result = await getGoodsTag({ ...this.query, ...this.params,distributor_id:this.storeID })
         this.handle(result)
       }
     },
@@ -117,40 +122,45 @@ export default {
       const { list, total_count } = result.data.data
       this.tableData = list
       this.total = total_count
+       
       if (this.seletedTags !== undefined && this.seletedTags.length > 0) {
-        this.$refs.multipleTable.clearSelection()
+         this.$refs.multipleTable.clearSelection()
         this.toggleSelection(this.seletedTags)
       }
     },
-    
-    confirm() {
-      
+    checkTags(fn) {
       if (this.type == 'store') {
-        if ( this.multipleSelection.length >3 ) {
-           return this.$message.error('最多选择3个标签')
+        if (this.multipleSelection.length > 3) {
+          return this.$message.error('所选标签数量不得大于3')
         }
-       
       }
-
 
       if (this.type == 'nearby_shop') {
-        if ( this.multipleSelection.length >10 ) {
-           return this.$message.error('最多选择10个标签')
+        if (this.multipleSelection.length > 10) {
+          return this.$message.error('所选标签数量不得大于10')
         }
       }
+      fn()
+    },
 
-      this.$emit('seletedTagsHandle', this.multipleSelection)
-      this.$emit('visibleHandle')
+    confirm() {
+      this.checkTags(() => {
+        this.$emit('seletedTagsHandle', this.multipleSelection)
+        this.$emit('visibleHandle')
+      })
     },
     queryHandle() {
       this.getConfig()
     },
 
     handleClose() {
-      this.$emit('visibleHandle')
+      this.checkTags(()=>{
+        this.$emit('visibleHandle')
+      })
     },
     handleSelectionChange(val) {
       console.log('handleSelectionChange', val)
+
       if (val.length > 0) {
         this.multipleSelection = val
       }
@@ -165,6 +175,7 @@ export default {
       this.getConfig()
     },
     toggleSelection(rows) {
+      
       if (rows) {
         rows.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row)

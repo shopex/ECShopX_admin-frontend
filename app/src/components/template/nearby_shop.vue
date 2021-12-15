@@ -90,7 +90,6 @@ export default {
       seletedTags: [], // tab
       shoplist: [],
       checkde: 0,
-
     }
   },
   mounted() {
@@ -131,6 +130,9 @@ export default {
     position: relative;
     margin: 0px 10px 0;
     white-space: nowrap;
+    // &::-webkit-scrollbar {
+    //   display: none;
+    // }
     span {
       padding: 2px 10px;
       border: 1px solid #999;
@@ -181,6 +183,7 @@ export default {
             left: 50%;
             transform: translate(-50%, -50%);
             width: 40px;
+            height: 40px;
             border-radius: 50%;
           }
         }
