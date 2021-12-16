@@ -15,7 +15,7 @@
         class="components-view"
       >
         <div v-for="(item, index) in initData" :key="index" class="component-control">
-          <template v-if="item.name === 'nearbyShop'">
+          <template v-if="item.name === 'nearbyShop' && system_mode === 'platform' && $store.getters.login_type !== 'distributor'">
             <svg class="svg-icon" aria-hidden="true">
               <use xlink:href="#icon-scroll"></use>
             </svg>
@@ -972,7 +972,7 @@ export default {
         wechat: 'wechat',
         alipay: 'alipay'
       },
-      OldData:[]
+
     }
   },
   computed: {
@@ -1190,7 +1190,18 @@ export default {
           return
         }
       }
+
+      /* 店铺标签逻辑 */
+      const oldStoreID = this.components[this.editorIndex].data[0].id
+      console.log(store.id);
+      if (oldStoreID != store.id) {
+        this.editorData.seletedTags = []; // template
+        this.components[this.editorIndex].seletedTags = [] //view
+      }
       this.storeID = store.id
+
+    
+    
       this.relItemsIds = data
       this.curStore = store
       let values = []
