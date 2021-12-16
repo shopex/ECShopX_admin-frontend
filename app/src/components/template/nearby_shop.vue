@@ -9,7 +9,8 @@
         <div class="more">查看更多</div>
       </div>
     </div>
-    <div class="tags">
+    <div class="nearbyBox">
+          <div class="tags">
       <span
         v-for="(item, index) in seletedTags"
         :key="item.tag_id"
@@ -45,6 +46,8 @@
         </draggable>
       </div>
     </div>
+    </div>
+
   </div>
 </template>
 
@@ -86,10 +89,10 @@ export default {
         bgImg
       },
       base: {},
-      data:[],
+      data: [],
       seletedTags: [], // tab
       shoplist: [],
-      checkde: 0,
+      checkde: 0
     }
   },
   mounted() {
@@ -102,7 +105,7 @@ export default {
     },
     async getShop(val) {
       if (val.length <= 0) {
-        this.shoplist =[]
+        this.shoplist = []
         return
       }
       const tag_id = val[this.checkde].tag_id
@@ -111,8 +114,7 @@ export default {
       const { list } = result.data.data
       this.shoplist = list
       console.log(result)
-    },
-
+    }
   }
 }
 </script>
@@ -123,6 +125,14 @@ export default {
     .more {
       font-size: 12px;
     }
+  }
+  .nearbyBox {
+    width: 300px;
+    position: relative;
+    margin: 10px 10px 0;
+    padding: 10px 0px 0px 0px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   }
   .tags {
     max-width: 300px;
@@ -164,6 +174,9 @@ export default {
       overflow-x: auto;
       white-space: nowrap;
       padding-bottom: 3px;
+      // &::-webkit-scrollbar {
+      //   display: none;
+      // }
       .shop {
         border: 1px solid #f5f5f5;
         margin-right: 10px;
@@ -188,9 +201,14 @@ export default {
           }
         }
         .title {
+          width: 80px;
+
           text-align: center;
-          margin: 22px 0 4px;
+          margin: 22px auto 4px;
           font-size: 12px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .coupon {
           width: 80px;

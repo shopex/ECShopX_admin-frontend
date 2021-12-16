@@ -7,6 +7,7 @@
     :close-on-press-escape="false"
     :append-to-body="true"
     width="60%"
+    :show-close='false'
     :before-close="handleClose"
   >
     <div class="query">
