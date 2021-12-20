@@ -31,6 +31,11 @@ export default {
       path: 'storemanager/distributoraftersalesaddress',
       name: `售后地址`,
       component: () => import( '@/view/mall/marketing/distributorAftersalesAddress' )
+    },
+    {
+      path:'storemanager/setting',
+      name:'商家设置',
+      component: () => import( '@/view/mall/marketing/setting' )
     }
   ]
 }
