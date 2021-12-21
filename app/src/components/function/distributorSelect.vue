@@ -3,7 +3,7 @@
     class="store-dialog"
     :title="isSynchronize ? '同步模板到店铺' : '选择店铺'"
     :visible.sync="showDialog"
-    :show-close="false"
+    :show-close="isSynchronize?true:false"
     :close-on-click-modal="false"
     :before-close="cancelAction"
   >
