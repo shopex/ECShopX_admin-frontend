@@ -339,7 +339,7 @@
             <template slot-scope="scope">
               <el-button type="text" @click="getDetail(scope.row.user_id)">详情</el-button>
               <el-button
-                v-if="$store.getters.login_type != 'distributor'"
+                v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
                 type="text"
                 @click="infoUpdate(scope.row)"
                 >编辑基础信息</el-button
