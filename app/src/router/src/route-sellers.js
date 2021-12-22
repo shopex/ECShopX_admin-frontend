@@ -9,19 +9,25 @@ export default {
     {
       path: 'storemanager/marketingdistributor',
       name: `商家列表`,
-      component: () => import( '@/view/mall/marketing/distributor' ),
-      children: [
-        {
-          path: 'editor/:itemId?',
-          component: () =>
-            import( '@/view/mall/marketing/distributor_editor' )
-        },
-        {
-          path: 'template/:distributor_id?',
-          component: () =>import('@/view/mall/marketing/distributor_template')
-        }
-      ]
+      component: () => import( '@/view/mall/marketing/merchantList/index.vue' ),
     },
+    // 旧商家列表
+    // {
+    //   path: 'storemanager/marketingdistributor',
+    //   name: `商家列表`,
+    //   component: () => import( '@/view/mall/marketing/distributor' ),
+    //   children: [
+    //     {
+    //       path: 'editor/:itemId?',
+    //       component: () =>
+    //         import( '@/view/mall/marketing/distributor_editor' )
+    //     },
+    //     {
+    //       path: 'template/:distributor_id?',
+    //       component: () =>import('@/view/mall/marketing/distributor_template')
+    //     }
+    //   ]
+    // },
     {
       path: 'storemanager/distributortags',
       name: `商家标签`,
