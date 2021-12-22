@@ -7,7 +7,7 @@
                 <span class="title">编辑分类</span>
             </template>
             <template v-else>
-                <template v-if="parent_id=='0'">
+                <template v-if="!parent_name">
                     <span class="title">新增分类</span>
                     <span class="subtitle">商户类型，例：贸易型</span>
                 </template>
@@ -19,13 +19,13 @@
         </div>
       <div class="content">
           <el-form :model="form" ref="form" label-width="80px" class="form" :rules="rules">
-            <el-form-item :label="parent_id=='0'?'分类名称':'子类名称'" prop="name">
+            <el-form-item :label="!parent_name?'分类名称':'子类名称'" prop="name">
                 <el-input class="input1" v-model="form.name" size='small'></el-input>
             </el-form-item>
             <el-form-item label="是否可见" prop="is_show">
                 <el-select class="input" v-model="form.is_show" placeholder="请选择" size='small'>
-                    <el-option label="是" value="true">是</el-option>
-                    <el-option label="否" value="false">否</el-option>
+                    <el-option label="是" value="1">是</el-option>
+                    <el-option label="否" value="0">否</el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="分类排序">
@@ -46,7 +46,6 @@
 
 <script>
 import { MaxRules, requiredRules } from '@/view/base/setting/dealer/tools'
-import { addMerchantsClassification,editMerchantsClassification } from '@/api/mall/marketing.js'
 export default {
     props:{
         visible:{
@@ -66,7 +65,7 @@ export default {
       return {
         form: {
           name: '',
-          is_show:"true",
+          is_show:"1",
           sort:0
         },
         rules: {
@@ -76,7 +75,7 @@ export default {
       };
     },
     mounted(){
-        if (this.editInfo && Object.keys(this.editInfo).length > 0) {
+        if (this.editInfo && this.editInfo.type=='edit') {
             const {name,is_show,sort} =this.editInfo
             this.form.name = name
             this.form.is_show = is_show
@@ -87,29 +86,12 @@ export default {
         fnConfirm(formName){
             this.$refs[formName].validate(async(valid) => {
                 if (valid) {
-                    if (this.editInfo.type=='edit') {
-                        const result = await editMerchantsClassification(this.editInfo.id,this.form);
-                        console.log(result);
-                        if (result.data.data.status) {
-                            this.$message.success('编辑成功')
-                            this.handleClose();
-                            this.$parent.getConfig();
-                        }
-
-                    }else{
-                        const result = await addMerchantsClassification({...this.form,parent_id:this.parent_id});
-                        if (result.data.data.status) {
-                            this.$message.success('添加成功')
-                            this.handleClose();
-                            this.$parent.getConfig();
-                        }
-                    }
-
+                    this.$emit('callbackConfirm',{...this.form,parent_id:this.parent_id},this.editInfo && this.editInfo.type)
                 }
             });
         },
         handleClose(){
-            this.$emit('switchBoxHandle')
+            this.$emit('switchBoxHandle',true)
         }
  
     }

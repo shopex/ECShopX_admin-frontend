@@ -28,30 +28,33 @@
             </el-table-column>
             <el-table-column prop="sort" label="排序" sortable>
                 <template slot-scope="scope">
-                    <el-input type='number' min='0' :style="{width:'100px'}" v-model="scope.row.sort" @change="changeHandle(scope.row)"></el-input>
+                    <el-input type='number' min='0' :style="{width:'100px'}" v-model="scope.row.sort" @change="callbackConfirm(scope.row,'edit')"></el-input>
                 </template>
             </el-table-column>
             <el-table-column prop="date" label="操作">
                 <template slot-scope="scope">
                     <template v-if="scope.row.children">
-                        <el-button @click.native.prevent="addRow(scope.row, merchantsClassificationList)" type="text" size="small">新增子类</el-button>
+                        <el-button @click.native.prevent="addRow(scope.row)" type="text" size="small">新增子类</el-button>
                     </template>
-                    <el-button @click.native.prevent="editRow(scope.row, merchantsClassificationList)" type="text" size="small">编辑</el-button>
-                    <el-button @click.native.prevent="deleteRow(scope.row.id, merchantsClassificationList)" type="text" size="small">删除</el-button>
+                    <el-button @click.native.prevent="editRow(scope.row)" type="text" size="small">编辑</el-button>
+                    <el-button @click.native.prevent="deleteRow(scope.row.id)" type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
 
         </el-table>
     </div>
     <template v-if="AddClassifyBox.visible">
-        <AddClassifyBox :editInfo='editInfo' :visible='AddClassifyBox.visible' :parent_id='AddClassifyBox.parent_id' :parent_name='AddClassifyBox.parent_name' @switchBoxHandle='switchBoxHandle'></AddClassifyBox>
+        <AddClassifyBox 
+            :editInfo='editInfo' 
+            :visible='AddClassifyBox.visible' :parent_id='AddClassifyBox.parent_id' :parent_name='AddClassifyBox.parent_name' 
+            @switchBoxHandle='switchBoxHandle' @callbackConfirm='callbackConfirm'></AddClassifyBox>
     </template>
     
   </div>
 </template>
 
 <script>
-import { getMerchantsClassification,deleteMerchantsClassification,editMerchantsClassification } from '@/api/mall/marketing.js'
+import { getMerchantsClassification,deleteMerchantsClassification,editMerchantsClassification,addMerchantsClassification } from '@/api/mall/marketing.js'
 import AddClassifyBox from '@/components/addClassifyBox'
 
 export default {
@@ -62,11 +65,11 @@ export default {
         return{
             AddClassifyBox:{
                 visible:false,
-                parent_id:'0',
+                parent_id:'',
                 parent_name:''
             },
             loading:false,
-            editInfo:null,
+            editInfo:null, //当前编辑数据
             query:{
                 name:'',
                 sort_order_by:'asc', //按排序字段进行排序 asc:正序 desc:倒序
@@ -86,11 +89,17 @@ export default {
             this.merchantsClassificationList = result.data.data
         },
         addClassify(){
+            this.AddClassifyBox.parent_name='';
+            this.AddClassifyBox.parent_id='0';
+            this.editInfo ={}
             this.switchBoxHandle();
         },
         addRow(row){
+            console.log(row);
+            this.editInfo = row;
+            this.editInfo.type= 'add'
             console.log(this.merchantsClassificationList);
-            this.AddClassifyBox.parent_id = row.parent_id;
+            this.AddClassifyBox.parent_id = row.id;
             this.AddClassifyBox.parent_name = row.name;
             this.switchBoxHandle();
         },
@@ -119,21 +128,36 @@ export default {
                 this.getConfig()
             }
         },
-        async changeHandle(row){
-            const obj = {
-                name: row.name,
-                is_show:row.is_show,
-                sort:row.sort
+        async callbackConfirm(row,type){
+            console.log(row,type);
+            console.log(this.editInfo);
+            if (type=='edit') {
+                const {name,sort,is_show} =row
+                const result = await editMerchantsClassification(this.editInfo && this.editInfo.id || row.id,{name,sort,is_show});
+                console.log(result);
+                if (result.data.data.status) {
+                    this.$message.success('编辑成功')
+                    this.switchBoxHandle(true);
+                    this.getConfig();
+                }
+            }else{
+                const {name,sort,is_show,parent_id} =row
+                const result = await addMerchantsClassification({name,sort,is_show,parent_id});
+                if (result.data.data.status) {
+                    this.$message.success('添加成功')
+                    this.switchBoxHandle(true);
+                    this.getConfig();
+                }
             }
-            const result = await editMerchantsClassification(row.id,obj);
-            console.log(result);
-            if (result.data.data.status) {
-                this.$message.success('编辑成功')
-                this.getConfig();
-            }
+
         },
-        switchBoxHandle(){
-            this.AddClassifyBox.visible = !this.AddClassifyBox.visible;
+        switchBoxHandle(status){
+            if (status) {
+                this.AddClassifyBox.visible = false
+            }else{
+                 this.AddClassifyBox.visible = true;
+            }
+           
         }
     }
 }
