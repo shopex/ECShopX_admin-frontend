@@ -35,3 +35,19 @@ export function deleteMerchantsClassification(id) {
         method: 'delete',
     })
 }
+
+//获取商家基础配置
+export function getShopConfig() {
+    return fetch({
+        url:'/merchant/basesetting',
+        method:'get'
+    })
+}
+// b保存商家基础设置
+export function saveShopConfig(params) {
+    return fetch({
+        url:'/merchant/basesetting',
+        method:'post',
+        params
+    })
+}
