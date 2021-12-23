@@ -148,7 +148,6 @@ export default {
     },
     editAction(index, row) {
       // 编辑商品弹框
-      row.front_show = JSON.stringify(row.front_show)
       this.form = row
       this.show_sideBar = true
     },
@@ -166,6 +165,7 @@ export default {
       getTagList(this.params)
         .then((response) => {
           this.tagsList = response.data.data.list
+          console.log(this.tagsList[0].front_show);
           this.total_count = response.data.data.total_count
           this.loading = false
         })
