@@ -3,10 +3,11 @@
     class="store-dialog"
     :title="isSynchronize ? '同步模板到店铺' : '选择店铺'"
     :visible.sync="showDialog"
-    :show-close="isSynchronize?true:false"
+    
     :close-on-click-modal="false"
     :before-close="cancelAction"
   >
+  <!-- :show-close="isSynchronize?true:false" -->
     <div style="margin-bottom: 15px;">
       <el-input
         :placeholder="isSynchronize ? '请选择店铺所在地' : '输入店铺名称'"
@@ -41,7 +42,7 @@
       </el-pagination>
     </div>
     <span slot="footer" class="dialog-footer">
-      <!-- <el-button @click="cancelAction">取 消</el-button> -->
+      <el-button @click="cancelAction">取 消</el-button>
       <el-button type="primary" v-if="!isSynchronize" @click="saveStoreAction">确 定</el-button>
       <el-button type="primary" v-else @click="saveStoreAction">确 定 同 步</el-button>
       <el-button type="primary" v-if="isSynchronize" @click="saveAllStoreAction"
@@ -190,13 +191,24 @@ export default {
     sourceType(newVal, oldVal) {
       this.dataType = this.sourceType
     },
-    relDataIds(newVal, oldVal) {
-      this.selectRows = newVal
+    relDataIds:{
+        immediate:true,
+        handler(newVal){
+            this.selectRows = newVal
+        }
     },
-    getStatus(newVal, oldVal) {
-      if (newVal) {
-        this.getDistributor()
-      }
+    // relDataIds(newVal, oldVal) {
+    //   debugger
+    //   this.selectRows = newVal
+    // },
+    getStatus:{
+      immediate:true,
+      handler(newVal){
+        if (newVal) {
+          this.getDistributor()
+        }
+      },
+
     }
   }
 }
