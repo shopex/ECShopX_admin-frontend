@@ -6,8 +6,8 @@
         </div>
         <SpFinder
           ref="finder"
-          :split-count="4"
-          :search-row-count="4"
+          :split-count="2"
+          :search-row-count="2"
           :fixed-row-action="true"
           :setting="setting"
           noSelection
@@ -23,7 +23,7 @@
                 style="width: 100%"
                 type="daterange"
                 value-format="yyyy-MM-dd"
-                range-separator="至"
+                range-separator="-"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 @change="timeHandle"
