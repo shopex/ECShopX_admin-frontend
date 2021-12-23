@@ -251,6 +251,7 @@ export default {
       total_count: '',
       activeType: 'first',
       store: {},
+      currentStore:{},
       params: {
         page: 1,
         pageSize: 30,
@@ -298,7 +299,7 @@ export default {
     handleTabClick() {
       this.getNewsList()
     },
-    handleStoreChange(val) {
+    handleStoreChange(val) { 
       if (Object.keys(val).length == 0) {
         // 代表进行了关闭店铺 设置为总店的操作
         val.id = 0;
@@ -334,7 +335,7 @@ export default {
       this.params.pageSize = pageSize
       this.getNewsList()
     },
-    searchByKey() {
+    searchByKey() { 
       this.params.page = 1
       this.getNewsList()
     },
@@ -347,7 +348,7 @@ export default {
         this.params.store_lt = this.store_value
         delete this.params.store_gt
       }
-      this.params.page = 1
+      this.params.page = 1 
       this.getNewsList()
     },
     handleSelectAll(val) {
@@ -416,7 +417,7 @@ export default {
         this.$emit('chooseStore', this.selectRows, this.store)
       }
     },
-    getNewsList() {
+    getNewsList() { 
       if (this.getStatus) {
         this.loading = true
         let param = {
@@ -426,13 +427,13 @@ export default {
           this.system_mode == 'platform' ||
           !this.params.distributor_id ||
           this.params.distributor_id == '0'
-        ) {
+        ) {  
           getItemsList(param).then((response) => {
             this.itemsData = response.data.data.list
             this.total_count = parseInt(response.data.data.total_count)
             this.loading = false
-          })
-        } else {
+          }) 
+        } else {  
           getDistributorItems(param).then((response) => {
             this.itemsData = response.data.data.list
             this.total_count = parseInt(response.data.data.total_count)
@@ -502,7 +503,9 @@ export default {
   watch: {
     itemsVisible(val) {
       console.log("itemsVisible==",val,this.relStore);
+       
       if (val) {
+         
         if (this.relStore.id) {
           this.params.distributor_id = this.relStore.id
           this.store = this.relStore
@@ -521,7 +524,7 @@ export default {
         this.loading = true
         this.multipleSelection.forEach((item) => {
           ids.push(item.item_id)
-        })
+        })  
         if (ids.length > 0) {
           let param = JSON.parse(JSON.stringify(this.params))
           param.page = 1
@@ -549,8 +552,8 @@ export default {
               console.log('sku------------'+ this.selectRows);
               this.loading = false
             })
-          } else { 
-            getDistributorItems(param).then((res) => {
+          } else {  
+            getDistributorItems(param).then((res) => {  
               const selectRows = res.data.data.list
               this.selectRows = selectRows
               this.$refs.multipleTable.clearSelection()
@@ -593,12 +596,7 @@ export default {
           }
         })
       }
-    },
-    getStatus(newVal, oldVal) {
-      if (newVal) {
-        this.getNewsList()
-      }
-    },
+    }, 
     itemType(newVal, oldVal) {
       if (newVal) {
         this.params.item_type = newVal
@@ -640,7 +638,7 @@ export default {
               })
               this.loading = false
             })
-          } else {
+          } else { 
             getDistributorItems(param).then((res) => {
               const selectRows = res.data.data.list
               this.selectRows = selectRows
@@ -666,7 +664,7 @@ export default {
     relStore(newVal, oldVal) {
       if (newVal.id) {
         this.params.distributor_id = newVal.id
-        this.store = newVal
+        this.store = newVal 
         this.getNewsList()
       }
     },
@@ -681,7 +679,7 @@ export default {
       }
     },
     getStatus(newVal, oldVal) {
-      if (newVal) {
+      if (newVal) { 
         this.getNewsList()
       }
     },

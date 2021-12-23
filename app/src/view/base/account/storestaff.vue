@@ -267,8 +267,7 @@ export default {
         this.getDistributor(ids)
       }
     },
-    submitAction() {
-      debugger
+    submitAction() { 
       // 提交物料
       this.form.shop_ids = []
       this.form.distributor_ids = []

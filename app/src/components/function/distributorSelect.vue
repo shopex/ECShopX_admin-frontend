@@ -118,7 +118,7 @@ export default {
       //   is_app:1
       // }
     },
-    getDistributor() {
+    getDistributor() { 
       getDistributorList(this.params).then((response) => {        
         if(this.storeData.length > 0) this.isFristLoad = false
         this.storeData = response.data.data.list

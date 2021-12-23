@@ -73,7 +73,7 @@ export default {
       console.log(val)
     },
     handleAvatarSuccess(res, file) {
-      debugger
+       
       this.$emit('successHandle', res.data.data)
       this.loading = false
     },

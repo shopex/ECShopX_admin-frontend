@@ -185,9 +185,10 @@ export default {
     },
     fetch() {
       this.loading = true
-      this.params.page += 1
+      this.params.page += 1 
       api.marketing.getDistributorList(this.params).then((res) => {
         let list = []
+        this.$emit('changeStore', res.data.data.list)
         res.data.data.list.map((item) => {
           let tags = []
           item.tagList.map((tag) => {

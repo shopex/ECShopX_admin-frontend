@@ -132,8 +132,7 @@ export default {
       this.couponsVisible = false
       this.$emit('pickCoupon', values)
     },
-    getCouponList() {
-      debugger
+    getCouponList() { 
       this.loading = true
       getCardList({...this.params,from:'btn'})
         .then((res) => {
