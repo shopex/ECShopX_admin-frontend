@@ -290,10 +290,7 @@ export default {
       cursymbol: '￥',
       templateRadio: ''
     }
-  },
-  computed: {
-    ...mapGetters(['wheight'])
-  },
+  }, 
   components: {
     StoreFilter
   },
@@ -499,7 +496,8 @@ export default {
     },
     singleData() {
       return this.single
-    }
+    },
+    ...mapGetters(['wheight'])
   },
   watch: {
     itemsVisible(val) {
