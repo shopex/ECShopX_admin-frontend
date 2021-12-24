@@ -1,5 +1,6 @@
 <template>
-  <div class="merchantList">
+  <div>
+    <div class="merchantList" v-if="$route.path.indexOf('editor') === -1">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>操作列表</span>
@@ -16,22 +17,29 @@
           }"
           url="/merchant/list"
         >
-         <template v-slot:date>
-                <!-- 默认今天，时间最长一周 -->
-              <el-date-picker
-                v-model="time"
-                style="width: 100%"
-                type="daterange"
-                value-format="yyyy-MM-dd"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                @change="timeHandle"
-              >
-              </el-date-picker>
-         </template>
+          <template v-slot:date>
+            <!-- 默认今天，时间最长一周 -->
+            <el-date-picker
+              v-model="time"
+              style="width: 100%"
+              type="daterange"
+              value-format="yyyy-MM-dd"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="timeHandle"
+            >
+            </el-date-picker>
+          </template>
+          <template v-slot:tableTop>
+            <div style="text-align:right;margin-bottom:20px">
+              <el-button size='small' type="primary" plain @click="addMerchant">新增商户</el-button>
+            </div>
+          </template>
         </SpFinder>
       </el-card>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -42,8 +50,8 @@ export default {
     return {
       time: [],
       operator: '',
-      begin_time:'',
-      end_time:'',
+      begin_time: '',
+      end_time: ''
     }
   },
   mounted() {
@@ -56,10 +64,14 @@ export default {
     }
   },
   methods: {
-
-    timeHandle(val){
-      this.begin_time = val[0];
-      this.end_time = val[1];
+    timeHandle(val) {
+      this.begin_time = val[0]
+      this.end_time = val[1]
+    },
+    addMerchant(){
+      console.log( this.matchHidePage('editor'));
+      this.$router.push({ path: this.matchHidePage('editor') })
+       
     },
     day(n) {
       const startTimestamp = new Date(this.begin_time).getTime()
@@ -71,19 +83,17 @@ export default {
     beforeSearch(params) {
       params.begin_time = this.begin_time
       params.end_time = this.end_time
-      
-      this.day(7)
-      return {...params}
-    },
-    
 
+      this.day(7)
+      return { ...params }
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .merchantList {
-    .yahh{
+  .yahh {
     color: #ff6700;
   }
   .sp-finder-search .el-input__inner {
@@ -93,7 +103,7 @@ export default {
   .clearfix span {
     font-weight: 700;
   }
-  .search-field{
+  .search-field {
     width: 500px !important;
   }
   label {
@@ -115,7 +125,6 @@ export default {
 
 <style lang="scss" scoped>
 .zyk_adapay_account {
-
   .group {
     margin: 30px 0;
     border: 1px solid #f5f5f5;

@@ -9,7 +9,14 @@ export default {
     {
       path: 'storemanager/marketingdistributor',
       name: `商家列表`,
-      component: () => import( '@/view/mall/marketing/merchantList/index.vue' ),
+      component: () => import('@/view/mall/marketing/merchantList/index.vue'),
+      children: [
+        {
+          path: 'editor',
+          component: () => import('@/view/mall/marketing/merchantList/editor.vue')
+          
+        }
+      ]
     },
     // 旧商家列表
     // {
@@ -31,17 +38,17 @@ export default {
     {
       path: 'storemanager/distributortags',
       name: `商家标签`,
-      component: () => import('@/view/mall/marketing/distributortags' )
+      component: () => import('@/view/mall/marketing/distributortags')
     },
     {
       path: 'storemanager/distributoraftersalesaddress',
       name: `售后地址`,
-      component: () => import( '@/view/mall/marketing/distributorAftersalesAddress' )
+      component: () => import('@/view/mall/marketing/distributorAftersalesAddress')
     },
     {
-      path:'storemanager/setting',
-      name:'商家设置',
-      component: () => import( '@/view/mall/marketing/setting' )
+      path: 'storemanager/setting',
+      name: '商家设置',
+      component: () => import('@/view/mall/marketing/setting')
     }
   ]
 }
