@@ -51,3 +51,12 @@ export function saveShopConfig(params) {
         params
     })
 }
+
+// 添加/更新 商家
+export function addTheBusinessman(params,id) {
+    return fetch({
+        url:`/api/merchant${id?`/${id}`:''}`,
+        method:'post',
+        params
+    })
+}
