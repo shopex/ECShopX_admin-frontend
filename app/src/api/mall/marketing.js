@@ -112,3 +112,20 @@ export function setChangePassword(id) {
         method: 'put',
     })
 }
+
+// 商户入驻详情 
+export function merchantsInDetail(id) {
+    return fetch({
+        url:`/merchant/settlement/apply/${id}`,
+        method:'get'
+    })
+}
+
+// 审核商户入驻
+export function setCheckTheEntryOfMerchants(params={}) {
+    return fetch({
+        url:`/merchant/settlement/apply/audit`,
+        method:'post',
+        params
+    })
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="merchantVerify">
-    <div v-if="$route.path.indexOf('approve') === -1">
-      <div>
+    <div v-if="$route.path.indexOf('verify') === -1">
+      <div class="query">
         <el-form :model="query" ref="myForm" label-width="80px">
           <el-row :gutter="20">
             <el-col :span="8">
@@ -68,7 +68,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item>
+              <el-form-item style="text-align: right;width:91%">
                 <el-button type="primary" @click="searchData">查询</el-button>
                 <el-button @click="resetForm('myForm')">重置</el-button>
               </el-form-item>
@@ -77,51 +77,51 @@
         </el-form>
       </div>
       <el-divider></el-divider>
-      <el-card v-if="list.length>0">
+      <el-card v-if="list.length>0"  shadow="never">
         <div class="cus-list" v-for="item in list" :key="item.id">
           <el-row class="cus-row">
             <el-col :span="3">
               <img
-                v-if="item.apply_type === 'distributor'"
+                v-if="item.source === 'h5'"
                 class="cus-row-img"
                 src="@/assets/img/adapay/distributor.png"
                 alt=""
               />
               <img
-                v-if="item.apply_type === 'dealer'"
+                v-if="item.source === 'admin'"
                 class="cus-row-img"
                 src="@/assets/img/adapay/dealer.png"
                 alt=""
               />
             </el-col>
             <el-col :span="13">
-              <router-link :to="{ path: matchHidePage('approve'), query: { id: item.id } }">
-                <span class="cus-row-name">{{ item.user_name }}</span>
+              <router-link :to="{ path:matchHidePage('verify'), query: { type:'verify',merchantId: item.id } }">
+                <span class="cus-row-name">{{ item.merchant_name }}</span>
               </router-link>
               <div class="cus-row-time">
                 <span
-                  >申请时间：{{ item.create_time ? createTimeFilter(item.create_time) : '-' }}</span
+                  >申请时间：{{ item.created ? createTimeFilter(item.created) : '-' }}</span
                 >
-                <span>所属地区：{{ item.address || '-' }}</span>
+                <span>所属地区：{{ item.province+'-'+item.city+'-'+item.area || '-' }}</span>
               </div>
             </el-col>
             <el-col :span="5">
               <img
-                v-if="item.status === 'APPROVED'"
+                v-if="item.audit_status === '2'"
                 src="@/assets/img/adapay/pass.png"
                 alt=""
                 style="width: 100px; height: 84px"
               />
               <img
-                v-if="item.status === 'REJECT'"
+                v-if="item.audit_status === '3'"
                 src="@/assets/img/adapay/reject.png"
                 alt=""
                 style="width: 90px; height: 89px"
               />
             </el-col>
-            <el-col class="cus-row-btn" :span="3" :offset="item.status === 'WAIT_APPROVE' ? 5 : 0">
+            <el-col class="cus-row-btn" :span="3" :offset="item.audit_status !== '1'?0:5">
               <router-link
-                v-if="item.status === 'WAIT_APPROVE'"
+                v-if="item.audit_status === '1'"
                 :to="{ path: matchHidePage('approve'), query: { id: item.id } }"
               >
                 <el-button type="primary">审批</el-button>
@@ -152,8 +152,6 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import district from '@/common/district.json'
-import { getOpenApprovedList } from '@/api/adapay/dealer'
-import { getList, exportList, getAftersalesRemind, setAftersalesRemind } from '@/api/aftersales'
 import { getApplicationListForMerchantEntry } from '@/api/mall/marketing.js'
 export default {
   data() {
@@ -262,7 +260,7 @@ export default {
       height: 90px;
     }
     &-name {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: bold;
     }
     &-time {
@@ -287,7 +285,7 @@ export default {
 <style lang="scss">
 .merchantVerify {
   .input-m {
-    width: 80% !important;
+    width: 90% !important;
   }
 }
 </style>

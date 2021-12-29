@@ -75,7 +75,7 @@ export default (vm) => {
         action: {
           type: 'link',
           handler: async val => {
-            vm.$router.push({ path: vm.matchHidePage('editor'),query:{type:'editor',merchantId:val[0].id} })
+            vm.$router.push({ path: vm.matchHidePage('editor'),query:{type:'edit',merchantId:val[0].id} })
           }
         }
       },

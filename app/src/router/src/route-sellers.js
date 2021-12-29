@@ -50,8 +50,8 @@ export default {
       component: () => import('@/view/mall/marketing/merchantVerify'),
       children: [
         {
-          path: 'approve/:id?',
-          component: () => import('@/view/mall/marketing/openingapproval/approve')
+          path: 'verify',
+          component: () => import('@/view/mall/marketing/merchantVerify/verify')
         }
       ]
     },

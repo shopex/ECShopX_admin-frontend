@@ -84,8 +84,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="form.bank_acct_type =='2'">
-            <el-form-item label="银行预留手机号" prop="bank_mobile" :disabled="disabled || editDisabled">
-              <el-input v-model="form.bank_mobile"></el-input>
+            <el-form-item label="银行预留手机号" prop="bank_mobile" >
+              <el-input v-model="form.bank_mobile" :disabled="disabled || editDisabled"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8" v-else>
@@ -146,7 +146,7 @@
           </el-col>
           <el-col :span="8">
               <el-form-item label="审核商品" prop='audit_goods'>
-                <el-select v-model="form.audit_goods" placeholder="请选择" :disabled="disabled">
+                <el-select v-model="form.audit_goods" placeholder="请选择" :disabled="$route.query.type=='verify'?verifyDisabled:disabled">
                     <el-option label="是" value="true"></el-option>
                     <el-option label="否" value="false"></el-option>
                 </el-select>
@@ -243,9 +243,21 @@
 
         </el-row>
       </el-card>
-      <template v-if="$route.query.type!='detail'">
+      <template v-if="$route.query.type=='edit' || !$route.query.type">
         <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
           <el-button type="primary" style="padding:10px 50px" @click="submitFn('form')">保存</el-button>
+        </el-form-item>
+      </template>
+      <template v-if="$route.query.type=='verify'">
+        <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
+          <template v-if="form.audit_status=='1'">
+            <el-button type="success" style="padding:10px 50px" @click="fnPass">通过</el-button>
+            <el-button type="danger" style="padding:10px 50px" @click="fnReject">驳回</el-button>
+          </template>
+          <template v-else>
+             <el-button type="info" style="padding:10px 50px">已审批</el-button>
+          </template>
+          
         </el-form-item>
       </template>
     </el-form>
@@ -256,24 +268,35 @@
       @chooseImg="pickImg"
       @closeImgDialog="closeImgDialog"
     ></imgPicker>
+    <check-box ref="checkbox" :visible='checkBoxConfig.visible' :message='checkBoxConfig.message'  :is_idea='checkBoxConfig.is_idea' @checkBoxVisibleHandle='checkBoxVisibleHandle' @checkBoxConfirmHandle='checkBoxConfirmHandle'></check-box>
   </div>
 </template>
 
 <script>
 import AreaJson from '@/common/district.json'
 import { MaxRules, requiredRules } from '@/view/base/setting/dealer/tools'
-import { getMerchantsClassification,addTheBusinessman,getTheMerchant,updateTheMerchant } from '@/api/mall/marketing.js'
+import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants } from '@/api/mall/marketing.js'
 import imgPicker from '@/components/imageselect'
+import checkBox from '@/view/base/setting/dealer/cpn/checkBox.vue'
 
 export default {
+  props:['props_type'],
   data() {
     return {
+      checkBoxConfig:{
+        visible:false,
+        message:'',
+        is_idea:true
+      },
+      currentCheckBoxStatus:'',
       AreaJson: AreaJson,
       MerchantsType:[],
       WorkingGroupList:[],
       sort_order_by:'asc',
       pickerImgType:'',
       disabled:false,
+      editDisabled:false,
+      verifyDisabled:false,
       // 图片选择
       imgDialog: false,
       isGetImage: false,
@@ -369,11 +392,8 @@ export default {
     'form.merchant_type':{
       immediate: true,
       handler(value){
-        console.log(value);
         this.getWorkingGroupList(value)
-        console.log(value);
       }
-
     },
     'form.legal_mobile'(value){
       if (value && this.form.createAccount=='1') {
@@ -398,16 +418,11 @@ export default {
     this.init();
   },
   methods:{
-    merchantType_change(val){
-      this.form.merchant_type = val;
-      this.form.merchant_type_id = ''
-      this.getWorkingGroupList(val)
-      console.log(val);
-    },
+
     async init(){
       console.log(this.$route);
       const { type,merchantId } = this.$route.query;
-      if (type) {
+      if (type=='edit' || type=='detail') {
         let action ='edit';
         if (type=='detail') {
           this.disabled = true;
@@ -416,15 +431,20 @@ export default {
           this.editDisabled = true
         }
         const result = await getTheMerchant({action},merchantId);
+        this.resultHandler(result)        
+      }else if(type =='verify'){
+        this.disabled = true;
+        const result = await merchantsInDetail(merchantId);
+        this.resultHandler(result)
+      }
+    },
+    resultHandler(result){
         this.form = result.data.data;
         this.form.regions_id = JSON.parse(this.form.regions_id);
         this.form.merchant_type = this.form.merchant_type_parent_name;
         this.form.audit_goods = JSON.stringify(this.form.audit_goods);
         this.form.regions = [this.form.province,this.form.city,this.form.area]
         console.log(result);
-        
-      }
-      console.log(type);
     },
     submitFn(formName){
       this.$refs[formName].validate(async (valid) => {
@@ -442,6 +462,42 @@ export default {
         }
       });
     },
+    fnPass(){
+      this.checkBoxConfig.visible = true;
+      this.checkBoxConfig.message = this.checkBoxMessage('通过')
+      this.currentCheckBoxStatus = true;
+    },
+    fnReject(){
+      this.checkBoxConfig.visible = true;
+      this.checkBoxConfig.message = this.checkBoxMessage('驳回')
+      this.currentCheckBoxStatus = false;
+    },
+    /* -------------------------checkbox------------------------- */
+    async checkBoxConfirmHandle(data){
+      console.log(data);
+      console.log(this.form);
+      const obj = {
+        id:this.form.id,
+        audit_status:this.currentCheckBoxStatus?'2':'3',
+        audit_memo:data.comments,
+        audit_goods:this.form.audit_goods?'1':'0'
+      }
+      const result = await setCheckTheEntryOfMerchants(obj);
+      if (result.data.data.status) {
+        this.$message.success('审批成功');
+        this.checkBoxVisibleHandle();
+        this.init();
+      }
+      console.log(result);
+      // setCheckTheEntryOfMerchants
+      console.log('checkBoxVisibleHandle');
+    },
+    checkBoxVisibleHandle(){
+      this.currentCheckBoxStatus = '';
+      this.checkBoxConfig.visible = false;
+    },
+    /* -------------------------checkbox------------------------- */
+
     /* -------------------------图片选择------------------------- */
     pickImg({url}) {
       if (url && this.pickerImgType) { 
@@ -499,6 +555,12 @@ export default {
       this.form.bank_code = val.bank_code
       this.form.bank_name = val.value
     },
+    merchantType_change(val){
+      this.form.merchant_type = val;
+      this.form.merchant_type_id = ''
+      this.getWorkingGroupList(val)
+      console.log(val);
+    },
     regionChange(value){      
       console.log(value);
       var vals = this.getCascaderObj(value, AreaJson)
@@ -520,9 +582,12 @@ export default {
         return null
       })
     },
+    checkBoxMessage(status){
+      return `请确认是否${status} 【${this.form.merchant_name}】 的入驻申请，<br/>最终审核结果将有短信提醒发送至其注册手机号<br/>（短信费用将在短信余额中扣除）。`
+    },
   },
   components:{
-    imgPicker
+    imgPicker,checkBox
   },
 }
 </script>

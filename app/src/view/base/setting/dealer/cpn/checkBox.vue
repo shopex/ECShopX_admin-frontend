@@ -2,14 +2,13 @@
   <div class="checkBoxDialog">
     <el-dialog :visible.sync="visible" :before-close="handleClose" :modal-append-to-body="false">
       <div class="title" slot="title"><i class="el-icon-info"></i> 提交审批</div>
-      <p class="message">{{ message }}</p>
-      <template v-if="info && info.length > 0">
+      <p class="message" v-html="message"></p>
+
         <el-form :model="form">
-          <el-form-item style="justify-content: center">
+          <el-form-item style="justify-content: center" v-if="is_sms">
             <el-checkbox-group v-model="form.is_sms">
               <el-checkbox value="1" :key="info[0].value"
-                >{{ info[0].value }}<br />(短信费用将在短信余额中扣除)</el-checkbox
-              >
+                >{{ info[0].value }}<br />(短信费用将在短信余额中扣除)</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item  style="justify-content: center;" v-if="is_idea">
@@ -24,7 +23,7 @@
             />
           </el-form-item>
         </el-form>
-      </template>
+
 
       <div slot="footer" class="dialog-footer">
         <!-- <el-button type="primary" size="mini" @click="confirm">确 定</el-button> -->
@@ -59,14 +58,16 @@ export default {
     isNote: {
       type: String
     },
+    is_sms:{
+
+    },
     is_idea:{
       type:Boolean,
       default:false
     },
     comments: {
       default: '',
-      
-    }
+    },
   },
   // mounted(){
   //   debugger
