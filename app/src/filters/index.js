@@ -75,7 +75,7 @@ const install = function(Vue) {
   Vue.filter('keepTwoDecimalFull', function(num) {
     var result = parseFloat(num)
     if (isNaN(result)) {
-      console('传递参数错误，请检查！')
+      console.log('传递参数错误，请检查！')
       return false
     }
     result = Math.round(num * 100) / 100
