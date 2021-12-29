@@ -4,7 +4,6 @@
     .el-checkbox__label {
       height: 28px;
       line-height: 28px;
-      width: 120px;
     }
   }
 }
@@ -416,8 +415,6 @@ export default {
       )
     },
     handleSkuChange(data, index) {
-      
-      debugger
       this.$parent.getSkuItems()
     },
     handleSkuName (val, m, n) {
