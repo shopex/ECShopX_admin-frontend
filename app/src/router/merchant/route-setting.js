@@ -9,8 +9,8 @@ export default {
     {
       path: 'Merchantstaff',
       name: `账号管理-店铺管理员`, 
-    //   component: () => import('@/view/base/account/storestaff')
-      component: () => import('@/view/base/exportlog/index')
+      component: () => import('@/view/base/account/storestaff')
+      // component: () => import('@/view/base/exportlog/index')
 
     },
     {

@@ -9,6 +9,15 @@
       <template v-if="$store.getters.login_type == 'dealer'">
         <el-tab-pane label="分账导出" name="adapay_tradedata"></el-tab-pane>
       </template>
+      <template v-else-if="$store.getters.login_type == 'merchant'">
+        <el-tab-pane label="主订单导出" name="normal_master_order"></el-tab-pane>
+        <el-tab-pane label="子订单导出" name="normal_order"></el-tab-pane>
+        <el-tab-pane label="待开票订单导出" name="invoice"></el-tab-pane>
+        <el-tab-pane label="售后列表导出" name="aftersale_record_count"></el-tab-pane>
+        <el-tab-pane label="交易单导出" name="tradedata"></el-tab-pane>
+        <el-tab-pane label="退款单导出" name="refund_record_count"></el-tab-pane>
+        <el-tab-pane label="商品统计导出" name="goods_data"></el-tab-pane>
+      </template>
       <template v-else>
         <el-tab-pane label="会员导出" name="member"></el-tab-pane>
         <el-tab-pane label="服务订单导出" name="service_order"></el-tab-pane>

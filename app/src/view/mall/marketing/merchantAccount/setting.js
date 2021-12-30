@@ -1,6 +1,7 @@
 import { createSetting } from '@shopex/finder'
 import { Divider, Message, MessageBox } from 'element-ui'
 export default (vm) => {
+
   const formatDate = (timestamp) => {
     var date = new Date(timestamp * 1000) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
     var YY = date.getFullYear() + '-'
@@ -11,52 +12,108 @@ export default (vm) => {
     var ss = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
     return YY + MM + DD + ' ' + hh + mm + ss
   }
-  return createSetting({
-    search: [
-      { key: 'mobile', name: '手机号' },
-      { key: 'merchant_name', name: '商户名称' },
-    ],
-    columns: [
-      { name: '手机号（账户名称）', key: 'mobile' },
-      {
-        name: '商户类型', key: 'settled_type', render: (h, { row }) =>{
-          if (row.settled_type=='soletrader') {
-            return (h(
-              'el-tag',
-              {
-                props: { type: 'text',type: 'warning',size:"medium" },
-              },
-              [h('span', { class: 'aaa' }, '个体户')]
+  if (vm.$store.getters.login_type != 'merchant') {
+    return createSetting({
 
-            ))
-          }else{
-            return (h(
-              'el-tag',
-              {
-                props: { type: 'text',type: 'success',size:"medium" },
-              },
-              [h('span', { class: 'aaa' }, '企业')]
+      search: [
+        { key: 'mobile', name: '手机号' },
+        { key: 'merchant_name', name: '商户名称' },
+      ],
+      columns: [
+        { name: '手机号（账户名称）', key: 'mobile' },
+        {
+          name: '商户类型', key: 'settled_type', render: (h, { row }) => {
+            if (row.settled_type == 'soletrader') {
+              return (h(
+                'el-tag',
+                {
+                  props: { type: 'text', type: 'warning', size: "medium" },
+                },
+                [h('span', { class: 'aaa' }, '个体户')]
 
-            ))
+              ))
+            } else {
+              return (h(
+                'el-tag',
+                {
+                  props: { type: 'text', type: 'success', size: "medium" },
+                },
+                [h('span', { class: 'aaa' }, '企业')]
+
+              ))
+            }
+          }
+
+        },
+        { name: '商户名称', key: 'merchant_name' },
+      ],
+      actions: [
+        {
+          name: '重置密码',
+          key: 'detail',
+          type: 'button',
+          buttonType: 'text',
+          action: {
+            type: 'link',
+            handler: async val => {
+              vm.fnChangePassword(val[0])
+            }
           }
         }
+      ],
+    })
+  } else {
+    return createSetting({
+      columns: [
+        {
+          name: '手机号（账号名称）', key: 'mobile', render: (h, { row }) => {
+            if (row.is_merchant_main == '1') {
+              return [(
+                h(
+                  'span',
+                  {
+                    style: { 'margin-right': '20px' }
+                  },
+                  row.mobile
+                )
+              ), h(
+                'el-tag',
+                {
+                  props: { type: 'text', type: 'warning', size: "medium" },
+                },
+                '超级管理员'
+              )]
+            } else {
+              return (
+                h(
+                  'span',
+                  {
+                    style: { 'margin-right': '20px' }
+                  },
+                  row.mobile
+                )
+              )
+            }
 
-      },
-      { name: '商户名称', key: 'merchant_name' },
-    ],
-    actions: [
-      {
-        name: '重置密码',
-        key: 'detail',
-        type: 'button',
-        buttonType: 'text',
-        action: {
-          type: 'link',
-          handler: async val => {
-            vm.fnChangePassword(val[0])            
+          }
+        },
+      ],
+      actions: [
+        {
+          name: '编辑',
+          key: 'detail',
+          type: 'button',
+          buttonType: 'text',
+          action: {
+            type: 'link',
+            handler: async val => {
+              vm.editHandler(val[0])
+              console.log(val);
+            }
           }
         }
-      }
-    ],
-  })
+      ],
+    })
+  }
+
 }

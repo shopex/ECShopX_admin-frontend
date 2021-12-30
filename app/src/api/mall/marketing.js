@@ -129,3 +129,11 @@ export function setCheckTheEntryOfMerchants(params={}) {
         params
     })
 }
+
+// 商家端获取商户信息
+export function getTheMerchantInfo() {
+    return fetch({
+        url:'/merchant/info',
+        method:'get'
+    })
+}

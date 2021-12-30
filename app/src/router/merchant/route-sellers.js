@@ -25,14 +25,7 @@ export default {
     {
       path: 'merchantinfo',
       name: `商家列表`,
-      component: () => import('@/view/mall/marketing/merchantList/index.vue'),
-      children: [
-        {
-          path: 'editor',
-          component: () => import('@/view/mall/marketing/merchantList/editor.vue')
-
-        }
-      ]
+      component: () => import('@/view/mall/marketing/merchantList/editor.vue')
     },
     {
       path: 'distributoraftersalesaddress',

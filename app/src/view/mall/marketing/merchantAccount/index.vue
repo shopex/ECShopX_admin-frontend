@@ -13,6 +13,26 @@
       url="/merchant/operator"
     >
     </SpFinder>
+    <el-dialog
+      title="编辑账号信息"
+      :visible.sync="visible"
+      width="30%"
+      :before-close="handleClose">
+      <el-form :model="form" label-width="60px">
+          <el-form-item label="登录账号">
+            <span>{{form.mobile}}</span>
+            <!-- <el-input v-model="form.mobile" autocomplete="off"></el-input> -->
+          </el-form-item>
+          <el-form-item label="登录密码">
+            <el-input type='password' v-model="form.password" autocomplete="off"></el-input>
+            <span style="color:#999;">密码6-16位，支持字母、数字、下划线</span>
+          </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="visible = false" size='small'>取 消</el-button>
+        <el-button type="primary" @click="visible = false" size='small'>确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -20,6 +40,15 @@
 import setting_ from './setting'
 import { setChangePassword } from '@/api/mall/marketing.js'
 export default {
+  data(){
+    return{
+      visible:false,
+      form:{
+        mobile:'',
+        password:''
+      }
+    }
+  },
   computed: {
     setting() {
       return setting_(this)
@@ -48,6 +77,15 @@ export default {
     },
     beforeSearch(params) {
       return { ...params }
+    },
+    editHandler(row){
+      this.visible = true
+      this.form.mobile = row.mobile
+      console.log(row);
+    },
+    handleClose(){
+      this.visible =false
+      this.form.password = '';
     }
   }
 }
@@ -55,6 +93,12 @@ export default {
 
 <style lang="scss">
 .merchantAccount {
+  .el-dialog__header{
+    border-bottom: 1px solid #ccc;
+  }
+  .el-dialog__footer{
+     border-top: 1px solid #ccc;
+  }
   .yahh {
     color: #409eff;
   }

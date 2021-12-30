@@ -206,7 +206,7 @@
         </div>
       </el-card>
       <!-- 账号信息 -->
-      <el-card class="box-card" shadow="never" v-if="!$route.query.type">
+      <el-card class="box-card" shadow="never" v-if="!$route.query.type && $store.getters.login_type!='merchant'">
         <div slot="header" class="clearfix">
           <span class="theme">账号信息 </span>
         </div>
@@ -243,7 +243,7 @@
 
         </el-row>
       </el-card>
-      <template v-if="$route.query.type=='edit' || !$route.query.type">
+      <template v-if="$route.query.type=='edit' || !$route.query.type && $store.getters.login_type!='merchant'">
         <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
           <el-button type="primary" style="padding:10px 50px" @click="submitFn('form')">保存</el-button>
         </el-form-item>
@@ -275,7 +275,7 @@
 <script>
 import AreaJson from '@/common/district.json'
 import { MaxRules, requiredRules } from '@/view/base/setting/dealer/tools'
-import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants } from '@/api/mall/marketing.js'
+import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants,getTheMerchantInfo } from '@/api/mall/marketing.js'
 import imgPicker from '@/components/imageselect'
 import checkBox from '@/view/base/setting/dealer/cpn/checkBox.vue'
 
@@ -392,7 +392,10 @@ export default {
     'form.merchant_type':{
       immediate: true,
       handler(value){
-        this.getWorkingGroupList(value)
+        if (this.$store.getters.login_type!='merchant') {
+          this.getWorkingGroupList(value)
+        }
+        
       }
     },
     'form.legal_mobile'(value){
@@ -414,11 +417,22 @@ export default {
     }
   },
   mounted(){
+    // 商家端只需获取信息
+    if (this.$store.getters.login_type=='merchant') {
+       this.init();
+       return;
+    }
     this.getMerchantsTypeList();
     this.init();
   },
   methods:{
     async init(){
+      if (this.$store.getters.login_type=='merchant') {
+        const result = await getTheMerchantInfo();
+        this.disabled = true;
+        this.resultHandler(result)  
+        return
+      }
       console.log(this.$route);
       const { type,merchantId } = this.$route.query;
       if (type=='edit' || type=='detail') {
