@@ -360,7 +360,6 @@
             point_num: goodsDetail.point_num
           }
         }
-        
         this.tdk_info = JSON.parse(goodsDetail.tdk_content)
         if (typeof goodsDetail.intro === 'object') {
           this.mode = 'component'
@@ -658,9 +657,9 @@
             item_bn: this.skuData.specData.item_bn,
             weight: this.skuData.specData.weight,
             volume: this.skuData.specData.volume,
-            price: this.skuData.specData.price * 100,
-            cost_price: this.skuData.specData.cost_price * 100,
-            market_price: this.skuData.specData.market_price * 100,
+            price: this.skuData.specData.price,
+            cost_price: this.skuData.specData.cost_price,
+            market_price: this.skuData.specData.market_price,
             barcode: this.skuData.specData.barcode,
             point_num: this.skuData.specData.point_num
           }
