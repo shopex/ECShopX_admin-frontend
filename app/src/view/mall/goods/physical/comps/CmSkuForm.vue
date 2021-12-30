@@ -419,13 +419,19 @@ export default {
     },
     handleSkuName (val, m, n) {
   
-      const { itemSpecList, specImages } = this.value
+      const { itemSpecList, specImages, specItems } = this.value
       const fd = specImages.find(item => item.spec_value_id == val.attribute_value_id)
       if(fd) { 
         fd.spec_custom_value_name = val.custom_attribute_value 
       }
       itemSpecList[m].attribute_values.list[n].custom_attribute_value = val.custom_attribute_value 
-
+      specItems.forEach(item => {
+        item.item_spec.forEach(k => {
+          if(k.spec_value_id == val.attribute_value_id) {
+            k.spec_custom_value_name = val.custom_attribute_value 
+          }
+        })
+      })
       this.$parent.getSkuItems()
     },
     handleImgRemove(parent, index) {
