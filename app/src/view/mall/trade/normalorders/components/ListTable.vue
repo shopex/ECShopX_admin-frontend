@@ -73,20 +73,22 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column width="90" label="订单类型" v-if="!isMicorMall">
-        <template slot-scope="scope">
-          <span v-if="scope.row.order_class == 'normal'">
-            <span v-if="scope.row.type == '1'">跨境订单</span>
-            <span v-else>普通订单</span>
-          </span>
-          <span v-if="scope.row.order_class == 'groups'">团购订单</span>
-          <span v-if="scope.row.order_class == 'seckill'">秒杀订单</span>
-          <span v-if="scope.row.order_class == 'community'">社区订单</span>
-          <span v-if="scope.row.order_class == 'shopguide'">导购订单</span>
-          <span v-if="scope.row.order_class == 'bargain'">助力订单</span>
-          <span v-if="scope.row.order_class == 'excard'">兑换订单</span>
-        </template>
-      </el-table-column>
+      <template v-if="$store.getters.login_type!='merchant'">
+        <el-table-column width="90" label="订单类型" v-if="!isMicorMall ">
+          <template slot-scope="scope">
+            <span v-if="scope.row.order_class == 'normal'">
+              <span v-if="scope.row.type == '1'">跨境订单</span>
+              <span v-else>普通订单</span>
+            </span>
+            <span v-if="scope.row.order_class == 'groups'">团购订单</span>
+            <span v-if="scope.row.order_class == 'seckill'">秒杀订单</span>
+            <span v-if="scope.row.order_class == 'community'">社区订单</span>
+            <span v-if="scope.row.order_class == 'shopguide'">导购订单</span>
+            <span v-if="scope.row.order_class == 'bargain'">助力订单</span>
+            <span v-if="scope.row.order_class == 'excard'">兑换订单</span>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column width="100" prop="order_status" label="订单状态">
         <template slot-scope="scope">
           <!-- 订单状态 -->
@@ -171,7 +173,7 @@
           <span v-if="scope.row.receipt_type == 'dada'">同城配</span>
         </template>
       </el-table-column>
-      <el-table-column width="120" label="海关审批状态">
+      <el-table-column width="120" label="海关审批状态" v-if="$store.getters.login_type!='merchant'">
         <template slot-scope="scope">
           <template v-if="scope.row.type == 1">
             <span v-if="scope.row.audit_status == 'approved'">审核通过</span>

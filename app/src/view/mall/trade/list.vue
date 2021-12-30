@@ -157,7 +157,7 @@
 
           </template>
         </el-table-column>
-        <el-table-column width="60" label="汇率">
+        <el-table-column width="60" label="汇率" v-if="$store.getters.login_type!='merchant'">
           <template slot-scope="scope">
             <span>{{scope.row.curFeeRate}}</span>
           </template>

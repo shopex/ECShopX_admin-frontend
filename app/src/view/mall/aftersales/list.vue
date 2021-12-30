@@ -30,7 +30,7 @@
           </el-select>
           <el-select v-model="aftersales_type" @change="TypeHandle" placeholder="请选择售后类型">
             <el-option
-              v-for="(item, index) in aftersalesTypeList"
+              v-for="(item, index) in $store.getters.login_type=='merchant'?aftersalesTypeList2:aftersalesTypeList"
               :key="index"
               :label="item.name"
               :value="item.value">
@@ -184,6 +184,10 @@
           {name: '仅退款', value: 'ONLY_REFUND'},
           {name: '退货退款', value: 'REFUND_GOODS'},
           {name: '换货', value: 'EXCHANGING_GOODS'}
+        ],
+        aftersalesTypeList2: [
+          {name: '仅退款', value: 'ONLY_REFUND'},
+          {name: '退货退款', value: 'REFUND_GOODS'},
         ],
         aftersales_type: '',
         aftersales_status: '',

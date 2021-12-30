@@ -11,7 +11,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" v-if="$store.getters.login_type!='merchant'">
           <el-form-item label="导购手机号:">
             <el-input
               v-model="orderForm.salesman_mobile"
@@ -38,8 +38,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="订单来源:">
             <el-autocomplete
@@ -70,7 +68,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" v-if="$store.getters.login_type!='merchant'">
           <el-form-item label="订单类型:">
             <el-select
               v-model="orderForm.order_class"
@@ -88,8 +86,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :gutter="20">
         <el-col :span="8" v-if="!isMicorMall">
           <el-form-item label="开票状态:">
             <el-select
@@ -126,7 +122,7 @@
         </el-col>
       </el-row>
       <el-row v-if="!isMicorMall">
-        <el-col :span="16">
+        <el-col :span="12">
           <el-form-item label="选择店铺:">
             <shop-select
               :size="size"
@@ -173,7 +169,7 @@ export default {
         time_start_end: "",
         distributor_id: "",
       },
-      size: "small",
+      size: "",
 
       invoice_status_list: [
         { name: "全部", value: "" },
@@ -224,6 +220,7 @@ export default {
   },
   mounted() {
     this.getAllSourcesList();
+    console.log(this.$store.getters.login_type);
   },
   computed: {
     ...mapGetters(['isMicorMall']),
@@ -348,7 +345,7 @@ export default {
 
 <style scoped>
 .el-form-item {
-  margin-bottom: 0;
+  /* margin-bottom: 0; */
 }
 .flex-right {
   display: flex;
