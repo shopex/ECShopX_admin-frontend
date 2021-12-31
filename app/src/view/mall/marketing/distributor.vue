@@ -23,7 +23,11 @@
            <div> 自动同步：开启自动同步后，总部添加编辑商品会自动同步上架到到店铺，保留开启前的商品状态。关闭同步后将保留已同步的商品数据 </div>
          </el-alert>
       </div>
-
+      <div style="margin-bottom:10px" v-if="$store.getters.login_type === 'merchant'">
+         <el-alert type="info" title="" show-icon >
+           <div> 可在设置-店铺管理员添加店铺端账号，登录地址 【店铺地址域名/地址】</div>
+         </el-alert>
+      </div>
       <el-row class="filter-header" :gutter="20">
         <el-col>
           <el-select v-model="params.is_valid" @change="isValidSelectHandle" placeholder="是否启用">

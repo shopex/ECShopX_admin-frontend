@@ -8,7 +8,7 @@
     <el-divider></el-divider>
     <div class="control">
         <el-button plain size='mini' style="margin-right:10px" @click="addClassify">新增分类 </el-button>
-        <el-tooltip content="商家分类" placement="top" effect="light">
+        <el-tooltip content="商户类型" placement="top" effect="light">
             <i class="el-icon-question" style="color:#888"></i>
         </el-tooltip>
     </div>
@@ -141,6 +141,7 @@ export default {
         async callbackConfirm(row,type){
             console.log(row,type);
             console.log(this.editInfo);
+            // you row 代表是主页面input 更改 、没有是弹窗更改
             if (type=='edit') {
                 debugger
                 const {name,sort,is_show} =row

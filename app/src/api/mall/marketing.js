@@ -2,6 +2,15 @@ import fetch from '@/utils/fetch'
 
 /* 商家入驻 */
 
+// 获取省市区
+export function getArea(params={}) {
+    return fetch({
+        url: '/espier/address',
+        method: 'get',
+        params: params
+    })
+}
+
 // 商家分类列表
 export function getMerchantsClassification(params = {}) {
     return fetch({

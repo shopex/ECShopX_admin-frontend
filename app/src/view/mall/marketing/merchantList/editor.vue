@@ -274,9 +274,8 @@
 </template>
 
 <script>
-import AreaJson from '@/common/district.json'
 import { MaxRules, requiredRules } from '@/view/base/setting/dealer/tools'
-import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants,getTheMerchantInfo } from '@/api/mall/marketing.js'
+import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants,getTheMerchantInfo,getArea } from '@/api/mall/marketing.js'
 import imgPicker from '@/components/imageselect'
 import checkBox from '@/view/base/setting/dealer/cpn/checkBox.vue'
 
@@ -290,7 +289,7 @@ export default {
         is_idea:true
       },
       currentCheckBoxStatus:'',
-      AreaJson: AreaJson,
+      AreaJson: [],
       MerchantsType:[],
       WorkingGroupList:[],
       sort_order_by:'asc',
@@ -392,13 +391,18 @@ export default {
   },
   watch:{
     'form.merchant_type':{
-      // immediate: true,
       handler(value){
-        if (this.$store.getters.login_type!='merchant') {
-          console.log(value);
-          this.getWorkingGroupList(value)
+        if (this.MerchantsType.length>0) {
+           this.getWorkingGroupList(value)
         }
-        
+        console.log(value);
+      }
+    },
+    MerchantsType:{
+      handler(){
+        if (this.form.merchant_type) {
+          this.getWorkingGroupList(this.form.merchant_type)
+        }
       }
     },
     'form.legal_mobile'(value){
@@ -419,18 +423,14 @@ export default {
       }
     }
   },
-  computed:{
-    merchant_type(){
-      return this.form.merchant_type
-    }
-  },
   mounted(){
     // 商家端只需获取信息
-    if (this.$store.getters.login_type=='merchant') {
-       this.init();
-       return;
-    }
+    // if (this.$store.getters.login_type=='merchant') {
+    //    this.init();
+    //    return;
+    // }
     this.getMerchantsTypeList();
+    this.getAreaList();
     this.init();
   },
   methods:{
@@ -441,7 +441,7 @@ export default {
         this.resultHandler(result)  
         return
       }
-      console.log(this.$route);
+
       const { type,merchantId } = this.$route.query;
       if (type=='edit' || type=='detail') {
         let action ='edit';
@@ -458,17 +458,19 @@ export default {
         const result = await merchantsInDetail(merchantId);
         this.resultHandler(result)
       }
+      
     },
     resultHandler(result){
-      const {settled_type,merchant_name,regions_id,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id}  = result.data.data;
+      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id}  = result.data.data;
       this.form = {
-        settled_type,merchant_name,regions_id,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
+        settled_type,merchant_name,address,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
         audit_goods:JSON.stringify(audit_goods),
         regions_id: JSON.parse(regions_id),
         regions:[province,city,area],
         merchant_type:merchant_type_parent_id
       };
-      console.log(result);
+      console.log(this.form);
+      // console.log(result);
     },
     submitFn(formName){
       this.$refs[formName].validate(async (valid) => {
@@ -552,10 +554,20 @@ export default {
       this.MerchantsType = result.data.data;
     },
     async getWorkingGroupList(id){
+      // setTimeout(async()=>{
+      //   console.log(this.MerchantsType); 
+      //   const currentInfo = this.MerchantsType.find((item)=>{
+      //     return item.id == id
+      //   })  
+      //   const result = await getMerchantsClassification({sort_order_by:this.sort_order_by,is_show: 'true',name:currentInfo?currentInfo.name:''});
+      //   this.WorkingGroupList = (result.data.data.length>0 && result.data.data[0].children) || [];
+      // },100)
+
       const currentInfo = this.MerchantsType.find((item)=>{
         return item.id == id
-      })     
-      const result = await getMerchantsClassification({sort_order_by:this.sort_order_by,name:currentInfo?currentInfo.name:''});
+      })  
+      const result = await getMerchantsClassification({sort_order_by:this.sort_order_by,is_show: 'true',name:currentInfo?currentInfo.name:''});
+      // debugger
       this.WorkingGroupList = (result.data.data.length>0 && result.data.data[0].children) || [];
     },
     // 结算所属银行
@@ -593,7 +605,7 @@ export default {
     },
     regionChange(value){      
       console.log(value);
-      var vals = this.getCascaderObj(value, AreaJson)
+      var vals = this.getCascaderObj(value, this.AreaJson)
       if (vals.length > 0) {
         this.form.regions = [vals[0].label,vals[1].label,vals[2].label]
       } else {
@@ -615,6 +627,10 @@ export default {
     checkBoxMessage(status){
       return `请确认是否${status} 【${this.form.merchant_name}】 的入驻申请，<br/>最终审核结果将有短信提醒发送至其注册手机号<br/>（短信费用将在短信余额中扣除）。`
     },
+    async getAreaList(){
+      const result = await getArea();
+      this.AreaJson = result.data.data;
+    }
   },
   components:{
     imgPicker,checkBox
