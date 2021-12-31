@@ -331,7 +331,7 @@ export default {
             this.list.gmvPointData.push(companyDataList[key].gmv_point_count / 100)
           }
           this.loading = false
-          const name = this.tab.name || 'order'
+          const name = this.tab.name
           this.$nextTick(() => {
             let params = {
               id: 'canvas_' +name,
@@ -350,6 +350,7 @@ export default {
         })
     },
     chartInit(params) {
+      console.log(params);
       var config = {
         type: 'line',
         data: {

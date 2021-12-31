@@ -132,7 +132,7 @@
                 </el-select>
               </el-form-item>
           </el-col>
-          <el-col :span="8" v-if="form.merchant_type_id">
+          <el-col :span="8">
               <el-form-item label="经营范围" prop='merchant_type_id'>
                 <el-select v-model="form.merchant_type_id" placeholder="请选择" style="width:100%" :disabled="disabled">
                     <el-option
