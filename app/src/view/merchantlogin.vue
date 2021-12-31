@@ -183,12 +183,11 @@ export default {
             password: this.ruleForm1.checkPass,
             logintype: this.symbol
           }
-          try {
-            const res = await this.$api.auth.login(params)
+          try { 
+            const res = await this.$api.auth.login(params) 
             const { token } = res.data.data
             this.setTokenAndGetRoute(token) 
-          } catch(e) {
-            console.log(e)
+          } catch(e) { 
             this.submitDisabled = false
           }
         } else {

@@ -30,6 +30,10 @@ export function isInSalesCenter () {
   }
 }
 
+export function isInMerchant(){
+  return /\/merchant/.test(window.location.pathname)
+}
+
 export function importAll (r, fn = (key, r) => r(key)) {
   r.keys().forEach((key) => fn(key, r))
 }

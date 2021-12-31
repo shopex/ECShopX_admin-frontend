@@ -500,25 +500,7 @@
                       </div>
                     </div>
                   </el-col>
-                  <el-col :span="12">
-                    <div class="view-flex">
-                      <div class="view-flex-item">
-                        <div class="label">实新增储值金额(元)</div>
-                        <div class="real-data" v-if="staticsData">
-                          {{
-                            (staticsData.today_data.real_deposit / 100)
-                              | keepTwoDecimalFull
-                          }}
-                        </div>
-                        <div class="history-data" v-if="staticsData">
-                          昨日：{{
-                            (staticsData.yesterday_data.real_deposit / 100)
-                              | keepTwoDecimalFull
-                          }}
-                        </div>
-                      </div>
-                    </div>
-                  </el-col>
+                  
                 </el-row>
               </div>
             </section>
@@ -560,67 +542,10 @@
                       ></el-col
                     >
                   </el-row>
-                </div>
-                <div class="notices-group">
-                  <div class="subtitle">商品相关</div>
-                  <el-row>
-                    <el-col class="notice-item" :span="12"
-                      ><router-link to="/entity/goods/goodsphysical?tab=second"
-                        >库存预警商品：{{
-                          staticsData &&
-                          staticsData.notice_data.warning_goods_count
-                        }}</router-link
-                      ></el-col
-                    >
-                  </el-row>
-                </div>
-                <div class="notices-group">
-                  <div class="subtitle">营销相关</div>
-                  <el-row>
-                    <el-col class="notice-item" :span="12"
-                      ><router-link
-                        to="/marketing/marketingseckill?status=in_sale"
-                        >进行中的秒杀：{{
-                          staticsData &&
-                          staticsData.notice_data.started_seckill_count
-                        }}</router-link
-                      ></el-col
-                    >
-                    <el-col class="notice-item" :span="12"
-                      ><router-link to="/marketing/groupsindex?activeName=third"
-                        >进行中的拼团：{{
-                          staticsData &&
-                          staticsData.notice_data.started_gtoups_count
-                        }}</router-link
-                      ></el-col
-                    >
-                  </el-row>
-                </div>
+                </div>  
               </div>
             </section>
-          </el-col>
-          <el-col :span="14">
-              <section class="section-card">
-              <div class="section-card-header">
-                <div class="section-card-title">常用功能</div>
-              </div>
-              <div class="quick-link clearfix">
-                <router-link
-                  class="link-item"
-                  v-for="(item, index) in links"
-                  :key="index"
-                  :to="item.link"
-                >
-                  <i
-                    class="iconfont"
-                    :class="'icon-' + item.icon"
-                    :style="'background:' + item.color"
-                  ></i
-                  >{{ item.text }}
-                </router-link>
-              </div>
-            </section>
-          </el-col>
+          </el-col> 
         </el-row> 
       </el-col>
       <el-col :span="4">
