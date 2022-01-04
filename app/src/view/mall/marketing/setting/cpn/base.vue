@@ -19,7 +19,7 @@
       </el-form-item>
       <div class="content">
         <p>
-          注销协议内容修改后，提交后对线上客户生效；注销协议在客户注销账号时须同意才可继续注销。
+          入驻协议内容修改后，提交后对线上客户生效。
         </p>
         <el-form-item label="入驻协议内容" label-width="100px">
           <vue-html5-editor

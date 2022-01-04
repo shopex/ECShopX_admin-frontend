@@ -33,9 +33,11 @@
 import setting_ from './setting/setting'
 import { setCommodityAudit,setMerchantsState } from '@/api/mall/marketing.js'
 export default {
-  mounted() {
+  data() {
+    return {
+      
+    }
     // this.currentDay();
-    //  this.$refs.finder.refresh()
   },
   computed: {
     setting() {
@@ -43,6 +45,8 @@ export default {
     }
   },
   methods: {
+
+    //  this.$refs.finder.refresh()
     fnAffirm(row){
       const message = row.audit_goods?'关闭后商户商品上架是无需审核，请确认是否关闭':'开启后商户商品上架是需要审核，请确认是否开启';
        this.$confirm(message, '通知消息', {

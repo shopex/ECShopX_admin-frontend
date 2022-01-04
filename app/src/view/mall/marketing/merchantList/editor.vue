@@ -16,7 +16,7 @@
         <section>
           <el-row :gutter="20">
             <el-col :span="8">
-              <el-form-item label="企业全称" prop='merchant_name'>
+              <el-form-item :label="form.settled_type=='enterprise'?'企业全称':'商户名称'" prop='merchant_name'>
                 <el-input :disabled="disabled || editDisabled" v-model="form.merchant_name"></el-input>
               </el-form-item>
             </el-col>
