@@ -38,17 +38,17 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="法人姓名" prop='legal_name'>
+              <el-form-item :label="form.settled_type=='enterprise'?'法人姓名':'负责人姓名'" prop='legal_name'>
                 <el-input v-model="form.legal_name" :disabled="disabled || editDisabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="法人身份证号" prop='legal_cert_id'>
+              <el-form-item :label="form.settled_type=='enterprise'?'法人身份证号':'负责人身份证号'" prop='legal_cert_id'>
                 <el-input v-model="form.legal_cert_id" :disabled="disabled || editDisabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="法人手机号" prop='legal_mobile'>
+              <el-form-item :label="form.settled_type=='enterprise'?'法人手机号':'负责人手机号'"  prop='legal_mobile'>
                 <el-input v-model="form.legal_mobile" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
@@ -180,14 +180,14 @@
               <img  class="avatar" v-if="form.legal_certid_front_url" :src="form.legal_certid_front_url" />
               <i v-else slot="default" class="el-icon-plus"></i>
             </div>
-            <p><span style='color:red'>*</span> 法人手持身份证正面</p>
+            <p><span style='color:red'>*</span> {{form.settled_type=='enterprise'?'法人':'负责人'}}手持身份证正面</p>
           </el-form-item>
           <el-form-item prop="legal_cert_id_back_url" label-width='30px'>
             <div class="upload-box" @click="handleImgPicker('legal_cert_id_back_url')">
               <img  class="avatar" v-if="form.legal_cert_id_back_url" :src="form.legal_cert_id_back_url" />
               <i v-else slot="default" class="el-icon-plus"></i>
             </div>
-            <p><span style='color:red'>*</span> 法人手持身份证反面</p>
+            <p><span style='color:red'>*</span> {{form.settled_type=='enterprise'?'法人':'负责人'}}手持身份证反面</p>
           </el-form-item>
           <el-form-item prop="bank_card_front_url" label-width='30px'>
             <div class="upload-box" @click="handleImgPicker('bank_card_front_url')">
@@ -243,6 +243,12 @@
 
         </el-row>
       </el-card>
+      <!-- 审核详情 -->
+      <template v-if="audit_status!='1'">
+        <p><span :class="['audit_status',audit_status=='2'?'success':'fail']" ></span>{{audit_status=='2'&&'通过' || audit_status=='3'&&'拒绝' }} </p>
+        <p>审批备注: {{ audit_memo || '-' }}</p>
+      </template>
+
       <!-- 按钮 -->
       <template v-if="$route.query.type=='edit' || !$route.query.type && $store.getters.login_type!='merchant'">
         <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
@@ -289,7 +295,10 @@ export default {
         is_idea:true
       },
       currentCheckBoxStatus:'',
+      // 审批相关
       audit_status:'',
+      audit_memo:'',
+      // ---------
       AreaJson: [],
       MerchantsType:[],
       WorkingGroupList:[],
@@ -461,7 +470,7 @@ export default {
       
     },
     resultHandler(result){
-      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id,datapass_block}  = result.data.data;
+      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id,datapass_block,audit_memo}  = result.data.data;
       this.form = {
         settled_type,merchant_name,address,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
         audit_goods:JSON.stringify(audit_goods),
@@ -472,6 +481,7 @@ export default {
       };
       this.datapass_block = datapass_block
       this.audit_status = audit_status;
+      this.audit_memo = audit_memo;
     },
     submitFn(formName){
       this.$refs[formName].validate(async (valid) => {
@@ -646,6 +656,22 @@ export default {
       border-color: #409EFF;
     }
   }
+  .audit_status{
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-bottom: 3px;
+    margin-right: 10px;
+    border-radius: 50%;
+    &.success{
+    background: #67c23a;
+  }
+    &.fail{
+      background: red;
+    }
+  }
+
+
 }
 </style>
 

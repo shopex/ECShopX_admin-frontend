@@ -195,6 +195,7 @@ export default {
       vdate: '',
       loading: true,
       activeName: this.$store.getters.login_type!=='merchant'?'member':'order',
+      // activeName: '',
       params: {
         start: '',
         end: '',
@@ -218,8 +219,8 @@ export default {
         gmvPointData: []
       },
       tab: {
-        'name': 'member',
-        'label': '新增会员数'
+        'name':  this.$store.getters.login_type!=='merchant'?'member':'order',
+        'label':  this.$store.getters.login_type!=='merchant'?'新增会员数':'订单数',
       },
       chartColors: {
         red: 'rgb(255, 99, 132)',
@@ -291,7 +292,7 @@ export default {
         this.distributorOption = res.data.data.list
       })
     },
-    getDistributorDataList(isfirst) {
+    getDistributorDataList() {
       this.userTimeArr = []
       this.list.memberData = []
       this.list.aftersalesData = []
@@ -316,6 +317,7 @@ export default {
         .then((res) => {
           this.allListData = res.data.data.list
           let companyDataList = res.data.data.list
+          console.log(companyDataList);
           for (var key in companyDataList) {
             this.userTimeArr.push(companyDataList[key].count_date)
             this.list.memberData.push(companyDataList[key].member_count)
@@ -409,7 +411,10 @@ export default {
       this.is_distributor = true
     }
     if (this.is_distributor === false) {
-      this.getDistributorData()
+      this.$nextTick(()=>{
+         this.getDistributorData()
+      })
+     
     }
     var start = new Date()
     var end = new Date()

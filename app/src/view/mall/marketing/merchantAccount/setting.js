@@ -20,30 +20,43 @@ export default (vm) => {
         { key: 'merchant_name', name: '商户名称' },
       ],
       columns: [
-        { name: '手机号（账户名称）', key: 'mobile' },
         {
-          name: '商户类型', key: 'settled_type', render: (h, { row }) => {
+          name: '手机号（账号名称）', key: 'mobile', render: (h, { row }) => {
             if (row.settled_type == 'soletrader') {
-              return (h(
+              return [(
+                h(
+                  'span',
+                  {
+                    style: { 'margin-right': '20px' }
+                  },
+                  row.mobile
+                )
+              ), h(
                 'el-tag',
                 {
                   props: { type: 'text', type: 'warning', size: "medium" },
                 },
-                [h('span', { class: 'aaa' }, '个体户')]
-
-              ))
+                '企业'
+              )]
             } else {
-              return (h(
+              return [(
+                h(
+                  'span',
+                  {
+                    style: { 'margin-right': '20px' }
+                  },
+                  row.mobile
+                )
+              ),h(
                 'el-tag',
                 {
                   props: { type: 'text', type: 'success', size: "medium" },
                 },
-                [h('span', { class: 'aaa' }, '企业')]
-
-              ))
+                '个体户'
+              )]
             }
-          }
 
+          }
         },
         { name: '商户名称', key: 'merchant_name' },
       ],
