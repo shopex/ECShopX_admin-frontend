@@ -364,6 +364,7 @@ export default {
         createAccount:'1',
         mobile:'',
         settled_succ_sendsms:'',// 1:立即 2:商家H5确认入驻协议后
+        id:'', // 会多返回一个ID 作为当前id
       },
       rules: {
         merchant_name:[requiredRules('企业全称')],
@@ -425,11 +426,6 @@ export default {
     }
   },
   mounted(){
-    // 商家端只需获取信息
-    // if (this.$store.getters.login_type=='merchant') {
-    //    this.init();
-    //    return;
-    // }
     this.getMerchantsTypeList();
     this.getAreaList();
     this.init();
@@ -462,13 +458,14 @@ export default {
       
     },
     resultHandler(result){
-      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status}  = result.data.data;
+      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id}  = result.data.data;
       this.form = {
         settled_type,merchant_name,address,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
         audit_goods:JSON.stringify(audit_goods),
         regions_id: JSON.parse(regions_id),
         regions:[province,city,area],
-        merchant_type:merchant_type_parent_id
+        merchant_type:merchant_type_parent_id,
+        id
       };
       this.audit_status = audit_status;
       console.log(this.form);
