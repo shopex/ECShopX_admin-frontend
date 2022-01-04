@@ -78,8 +78,8 @@ export default (vm) => {
             vm.$router.push({ path: vm.matchHidePage('editor'),query:{type:'edit',merchantId:val[0].id} })
           }
         },
-        visible:((val)=>{
-          console.log(val);
+        visible:(()=>{
+          return vm.datapass_block == 0
         })
       },
       {
@@ -95,7 +95,7 @@ export default (vm) => {
           
         },
         visible:(val)=>{
-          return val.disabled;
+          return !val.disabled;
         },
       },
       {
@@ -111,7 +111,7 @@ export default (vm) => {
           
         },
         visible:(val)=>{
-          return !val.disabled;
+          return val.disabled;
         },
       }
     ],

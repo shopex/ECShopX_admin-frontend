@@ -249,7 +249,7 @@
           <el-button type="primary" style="padding:10px 50px" @click="submitFn('form')">保存</el-button>
         </el-form-item>
       </template>
-      <template v-if="$route.query.type=='verify'">
+      <template v-if="$route.query.type=='verify' && datapass_block == 0">
         <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
           <template v-if="audit_status=='1'">
             <el-button type="success" style="padding:10px 50px" @click="fnPass">通过</el-button>
@@ -301,6 +301,8 @@ export default {
       // 图片选择
       imgDialog: false,
       isGetImage: false,
+      // 脱敏
+      datapass_block:0,
       // form: {
       //   settled_type: 'enterprise',
       //   merchant_name:'张三的烧饼店',
@@ -436,6 +438,7 @@ export default {
         const result = await getTheMerchantInfo();
         this.disabled = true;
         this.resultHandler(result)  
+        console.log('商户端');
         return
       }
 
@@ -458,7 +461,7 @@ export default {
       
     },
     resultHandler(result){
-      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id}  = result.data.data;
+      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id,datapass_block}  = result.data.data;
       this.form = {
         settled_type,merchant_name,address,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
         audit_goods:JSON.stringify(audit_goods),
@@ -467,9 +470,8 @@ export default {
         merchant_type:merchant_type_parent_id,
         id
       };
+      this.datapass_block = datapass_block
       this.audit_status = audit_status;
-      console.log(this.form);
-      console.log(result);
     },
     submitFn(formName){
       this.$refs[formName].validate(async (valid) => {

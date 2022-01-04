@@ -13,7 +13,8 @@
           :setting="setting"
           noSelection
           :hooks="{
-            beforeSearch: beforeSearch
+            beforeSearch: beforeSearch,
+            afterSearch:afterSearch
           }"
           url="/merchant/list"
         >
@@ -35,7 +36,7 @@ import { setCommodityAudit,setMerchantsState } from '@/api/mall/marketing.js'
 export default {
   data() {
     return {
-      
+      datapass_block:0
     }
     // this.currentDay();
   },
@@ -91,6 +92,9 @@ export default {
     },
     beforeSearch(params) {
       return { ...params }
+    },
+    afterSearch({datapass_block}){
+     this.datapass_block = datapass_block;
     }
   }
 }

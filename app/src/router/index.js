@@ -45,7 +45,6 @@ router.beforeEach(( to, from, next ) => {
   
   const _token = store.getters.token
   const _menus = store.getters.menus
-  console.log(_menus,'_menus');
   
   if ( _token ) {
     const curPath = constantRouterMap.RouteAuth.find( item => item.path == to.path )
