@@ -211,7 +211,7 @@
           <span class="theme">账号信息 </span>
         </div>
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :span="24">
             <el-form-item label="生成账号" prop="createAccount">
               <el-tooltip
                 :style="{ 'margin-right': 30 + 'px' }"
@@ -232,7 +232,7 @@
               </template>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="24">
             <el-form-item label="短信发送时间" prop="settled_succ_sendsms">
               <el-radio-group v-model="form.settled_succ_sendsms" :disabled="disabled">
                 <el-radio label="1">立即发送</el-radio>
@@ -364,7 +364,7 @@ export default {
         // 入驻信息
         merchant_type:'',
         merchant_type_id:'',
-        audit_goods:'',
+        audit_goods:'true',
         // 证照信息
         license_url:'',
         legal_certid_front_url:'',

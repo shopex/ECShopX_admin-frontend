@@ -25,7 +25,7 @@
       </div>
       <div style="margin-bottom:10px" v-if="$store.getters.login_type === 'merchant'">
          <el-alert type="info" title="" show-icon >
-           <div> 可在设置-店铺管理员添加店铺端账号，登录地址 【店铺地址域名/地址】</div>
+           <div> 可在设置-店铺管理员添加店铺端账号，登录地址 【 {{wxAuthCallbackUrl}}shopadmin/login 】</div>
          </el-alert>
       </div>
       <el-row class="filter-header" :gutter="20">
