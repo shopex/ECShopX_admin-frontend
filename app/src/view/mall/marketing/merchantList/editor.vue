@@ -64,7 +64,7 @@
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span class="theme">结算账户信息 </span>
-          <span style="fons-size:10px;color:#999"> （结算银行卡姓名要与{{form.enterprise=='enterprise'?'法人':'负责人'}}姓名一致）</span>
+          <span style="fons-size:10px;color:#999"> （结算银行卡姓名要与{{form.settled_type=='enterprise'?'法人':'负责人'}}姓名一致）</span>
         </div>
         <el-row :gutter="20">
           <el-col :span="8">

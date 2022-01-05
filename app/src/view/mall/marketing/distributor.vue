@@ -613,14 +613,15 @@ export default {
       this.$router.push({ path: this.matchHidePage('editor'), query: { distributor_type: 'distributor_self', distributor_id: this.distributor_self } })
     },
     getList() {
+      // debugger
       this.loading = true
       getDistributorList(this.params).then((response) => {
-        if (response.data.data.list) {
+        // if (response.data.data.list) {
           this.list = response.data.data.list
           this.total_count = response.data.data.total_count
           this.distributor_self = response.data.data.distributor_self
           this.datapass_block = response.data.data.datapass_block;
-        }
+        // }
         this.loading = false
       })
     },

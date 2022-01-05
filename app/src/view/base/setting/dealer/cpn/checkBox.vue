@@ -4,7 +4,7 @@
       <div class="title" slot="title"><i class="el-icon-info"></i> 提交审批</div>
       <p class="message" v-html="message"></p>
 
-        <el-form :model="form">
+        <el-form :model="form" ref="form">
           <el-form-item style="justify-content: center" v-if="is_sms">
             <el-checkbox-group v-model="form.is_sms">
               <el-checkbox value="1" :key="info[0].value"
@@ -91,6 +91,7 @@ export default {
     },
     handleClose() {
       this.$emit('checkBoxVisibleHandle')
+      this.$refs['form'].resetFields();
     },
     closeLoading() {
       this.$refs['loadingBtn'].closeLoading()
