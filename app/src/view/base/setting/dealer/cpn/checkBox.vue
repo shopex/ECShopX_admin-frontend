@@ -55,9 +55,6 @@ export default {
     info: {
       default: ''
     },
-    isNote: {
-      type: String
-    },
     is_sms:{
 
     },
@@ -99,11 +96,11 @@ export default {
       this.$refs['loadingBtn'].closeLoading()
     }
   },
-  watch: {
-    isNote(val) {
-      this.form.is_sms = val == '1' ? true : false
-    }
-  }
+  // watch: {
+  //   isNote(val) {
+  //     this.form.is_sms = val == '1' ? true : false
+  //   }
+  // }
 }
 </script>
 <style lang="scss" scoped>

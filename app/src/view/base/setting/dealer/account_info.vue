@@ -358,7 +358,7 @@
       :visible="checkBoxConfig.visible"
       :message="checkBoxConfig.message"
       :info="checkBoxConfig.info"
-      :isNote='checkBoxConfig.is_sms'
+      :is_sms='checkBoxConfig.is_sms'
       @checkBoxConfirmHandle="checkBoxConfirmHandle"
       @checkBoxVisibleHandle="checkBoxVisibleHandle"
     ></check-box>
@@ -396,7 +396,7 @@ export default {
         visible: false,
         message: '请确认信息无误！',
         info: [{type:'checkbox',value:'审核结果将有短信提醒发送至注册手机号'}],
-        is_sms:'',
+        is_sms:true,
       },
       props_city: {
         lazy: true,
@@ -731,6 +731,7 @@ export default {
     },
     /* ----------------------------------checkBox start----------------------------------- */
     async checkBoxConfirmHandle(data) {
+      console.log(data);
       try {
         const result = await this.$api.adapay.accountCreate({ ...this.form, ...data })
         const { status } = result.data.data
