@@ -14,7 +14,7 @@
           <el-input class="input-m" placeholder="订单号" v-model="identifier">
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
-          <el-input class="input-m" placeholder="售后单号" v-model="AfterSalesOrder">
+          <el-input class="input-m" placeholder="售后单号" v-model="aftersales_bn">
             <el-button slot="append" icon="el-icon-search" @click="search2"></el-button>
           </el-input>
           <export-tip @exportHandle="exportData">
@@ -113,7 +113,7 @@ export default {
       total_count: 0,
       list: [],
       identifier: '',
-      AfterSalesOrder: ''
+      aftersales_bn: ''
     }
   },
   computed: {
@@ -135,7 +135,7 @@ export default {
       this.params.page = 1
       this.params.time_start_begin = this.time_start_begin
       this.params.time_start_end = this.time_start_end
-      this.params.AfterSalesOrder = this.AfterSalesOrder
+      this.params.aftersales_bn = this.aftersales_bn
        this.params.order_id = ''
       this.getAftersalesList(this.params)
     },
@@ -168,7 +168,7 @@ export default {
       this.params.time_start_begin = this.time_start_begin
       this.params.time_start_end = this.time_start_end
       this.params.order_id = this.identifier
-      this.params.AfterSalesOrder = ''
+      this.params.aftersales_bn = ''
     },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
