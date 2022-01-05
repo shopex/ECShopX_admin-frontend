@@ -9,7 +9,7 @@
             <template v-else>
                 <template v-if="!parent_name">
                     <span class="title">新增分类</span>
-                    <span class="subtitle">商户类型，例：贸易型</span>
+                    <span class="subtitle">商户类型，例：贸易类</span>
                 </template>
                 <template v-else>
                     <span class="title">新增子类</span>

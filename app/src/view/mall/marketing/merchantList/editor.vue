@@ -146,7 +146,7 @@
           </el-col>
           <el-col :span="8">
               <el-form-item label="审核商品" prop='audit_goods'>
-                <el-select v-model="form.audit_goods" placeholder="请选择" :disabled="$route.query.type=='verify'?verifyDisabled:disabled">
+                <el-select v-model="form.audit_goods" style="width:60%" placeholder="请选择" :disabled="$route.query.type=='verify'?verifyDisabled:disabled">
                     <el-option label="是" value="true"></el-option>
                     <el-option label="否" value="false"></el-option>
                 </el-select>

@@ -202,6 +202,7 @@
                 <span v-else>不可销售</span>
               </template>
             </el-table-column>
+
             <!-- <el-table-column prop="itemMainCatName" label="主类目" width="150"></el-table-column> -->
             <el-table-column prop="itemCatName" label="商品分类" width="150"></el-table-column>
           </el-table>

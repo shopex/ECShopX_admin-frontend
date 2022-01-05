@@ -16,7 +16,7 @@ export default (vm) => {
       { key: 'merchant_name', name: '商户名称' },
       { key: 'legal_name', name: '联系人' },
       { key: 'legal_mobile', name: '联系电话' },
-      { key: 'time_start', name: '入驻时间',type:'date-range' ,defaultTime:['00:00:00', '23:59:59'] },
+      { key: 'time_start', name: '入驻时间',type:'date-range' ,defaultTime:['00:00:00', '23:59:59'], startPlaceholder:"开始日期",endPlaceholder:"结束日期"},
 
     ],
     columns: [

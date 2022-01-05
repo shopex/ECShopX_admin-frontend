@@ -60,6 +60,13 @@
           <el-input class="input-m" placeholder="联系人手机号" v-model="params.mobile">
             <el-button slot="append" icon="el-icon-search" @click="numberSearch"></el-button>
           </el-input>
+          <el-select v-model="params.distribution_type" clearable placeholder="选择店铺类型" @change="distribution_typeHandle" v-if="$store.getters.login_type=='normal'">
+            <el-option label="加盟" value='1'>加盟</el-option>
+            <el-option label="自营" value='0'>自营</el-option>
+          </el-select>
+          <el-input class="input-m" placeholder="所属商家" v-model="params.merchant_name" v-if="$store.getters.login_type=='normal'">
+            <el-button slot="append" icon="el-icon-search" @click="merchant_nameSearch"></el-button>
+          </el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -195,7 +202,13 @@
               <span v-else class="muted">废弃</span>
             </template>
           </el-table-column>
-          <el-table-column width="80" label="是否默认" v-if="$store.getters.login_type!='merchant'">
+          <el-table-column label="店铺类型" width="80" v-if="$store.getters.login_type=='normal'">
+               <template slot-scope="scope">
+                 <span v-if="scope.row.distribution_type=='1'">加盟</span>
+                 <span v-else-if="scope.row.distribution_type=='0'">自营</span>
+               </template>
+          </el-table-column>
+          <el-table-column width="80" label="是否默认" v-if="$store.getters.login_type=='normal'">
             <template slot-scope="scope" v-if="scope.row.is_valid !== 'delete'">
               <el-tooltip effect="dark" content="请先启用店铺" placement="top-start">
                 <el-switch
@@ -222,6 +235,11 @@
               >{{taglist.tag_name}}
               </el-tag>
             </template>
+          </el-table-column>
+          <el-table-column label="所属商家" width="80" v-if="$store.getters.login_type!='merchant'">
+               <template slot-scope="scope">
+                 <span>{{scope.row.merchant_name || '-'}}</span>
+               </template>
           </el-table-column>
           <el-table-column width="180" label="操作">
             <template slot-scope="scope">
@@ -473,6 +491,8 @@ export default {
         province: '',
         city: '',
         area: '',
+        distribution_type:'',
+        merchant_name:'',
       },
       form: {
         distributor_id: null,
@@ -560,8 +580,16 @@ export default {
       this.params.page = 1
       this.getList()
     },
+    distribution_typeHandle(){
+       this.params.page = 1
+       this.getList()
+    },
     numberSearch(e) {
       this.params.page = 1
+      this.getList()
+    },
+    merchant_nameSearch(){
+      this.params.page = 1;
       this.getList()
     },
     handleCurrentChange(page_num) {
