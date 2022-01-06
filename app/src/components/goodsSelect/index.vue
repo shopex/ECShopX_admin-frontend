@@ -18,7 +18,7 @@
         class="store"
         :data="store"
         :lock="lockStore"
-        :isChangeStore="false"
+        :isChangeStore="isChangeStore"
         @change="handleStoreChange"
       />
       <el-row :gutter="10">
@@ -193,7 +193,7 @@ export default {
     },
     isChangeStore:{
       type:Boolean,
-      default:true
+      default:false
     },
     lockStore: {
       type: Boolean,

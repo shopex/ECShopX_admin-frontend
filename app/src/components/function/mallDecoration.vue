@@ -404,6 +404,7 @@
       :lock-store="relStore.id == '0' ? false : true"
       @chooseStore="pickGoods"
       @closeStoreDialog="closeDialog"
+      :isChangeStore="true"
     ></goodsSelect>
     <couponPicker
       :visible="couponsVisible"
