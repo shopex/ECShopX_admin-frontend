@@ -1,22 +1,22 @@
 <template>
   <div>
     <div class="store-picker view-flex view-flex-middle">
-      <div class="store-info view-flex-item" >
+      <div class="store-info view-flex-item">
         <div class="store-name">
-          {{ currentStoreName }}
+          {{ isChangeStore ? (checked.name? checked.name:'总店') : currentStoreName}}
         </div>
         <div class="store-address">
           {{ checked.address }}
         </div>
       </div>
-      <!-- <div class="view-flex-item default-store" v-else>总店</div> -->
+      <!-- <div class="view-flex-item default-store" v-else >总店</div>  -->
       <template v-if="!lock">
         <div
           v-if="checked.id && checked.id != '0'"
           class="iconfont icon-times"
           @click="handleResetClick"
         ></div>
-        <!-- <div class="iconfont icon-sync-alt" @click="handleClick"></div> -->
+        <div class="iconfont icon-sync-alt" @click="handleClick" v-if="isChangeStore"></div>
       </template>
     </div>
     <storeList :visible="visible" :data="checked" @changeStore="handleChangeStore" @onClose="handleClose" @change="handleChange" />
@@ -39,6 +39,10 @@ export default {
     lock: {
       type: Boolean,
       default: false
+    },
+    isChangeStore:{
+      type:Boolean,
+      default:true
     }
   },
   data() {
@@ -68,6 +72,9 @@ export default {
       } else {
         this.checked = {}
       }
+    },
+    checked(val){
+      console.log("---checked--->",val)
     }
   },
   methods: {
@@ -87,7 +94,7 @@ export default {
     handleChangeStore(list){ 
       //如果返回只有一个则为店铺端
       this.currentStoreName=list.length===1?list[0].name:'总店';
-      console.log("==currentStoreName",this.currentStoreName)
+      console.log("==currentStoreName",list,this.currentStoreName)
     }
   },
   mounted() {
