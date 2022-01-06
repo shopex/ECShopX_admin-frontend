@@ -3,7 +3,7 @@
     <div class="store-picker view-flex view-flex-middle">
       <div class="store-info view-flex-item" >
         <div class="store-name">
-          {{ currentStoreName }}
+          {{ isChangeStore ? (checked.name? checked.name:'总店') : currentStoreName}}
         </div>
         <div class="store-address">
           {{ checked.address }}
@@ -16,7 +16,7 @@
           class="iconfont icon-times"
           @click="handleResetClick"
         ></div>
-        <!-- <div class="iconfont icon-sync-alt" @click="handleClick"></div> -->
+        <div class="iconfont icon-sync-alt" @click="handleClick" v-if="isChangeStore"></div>
       </template>
     </div>
     <storeList :visible="visible" :data="checked" @changeStore="handleChangeStore" @onClose="handleClose" @change="handleChange" />
@@ -35,6 +35,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    isChangeStore:{
+      type:Boolean,
+      default:true
     },
     lock: {
       type: Boolean,
