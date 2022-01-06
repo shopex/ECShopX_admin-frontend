@@ -281,7 +281,7 @@
 
 <script>
 import { MaxRules, requiredRules } from '@/view/base/setting/dealer/tools'
-import { getMerchantsClassification,addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants,getTheMerchantInfo,getArea,getMerchantsType } from '@/api/mall/marketing.js'
+import { addTheBusinessman,getTheMerchant,merchantsInDetail,setCheckTheEntryOfMerchants,getTheMerchantInfo,getArea,getMerchantsType } from '@/api/mall/marketing.js'
 import imgPicker from '@/components/imageselect'
 import checkBox from '@/view/base/setting/dealer/cpn/checkBox.vue'
 
