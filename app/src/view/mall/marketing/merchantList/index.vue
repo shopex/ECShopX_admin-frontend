@@ -79,7 +79,7 @@ export default {
         type: 'warning',
         center: true
       }).then(async () => {
-        const result = await setMerchantsState({ disabled: status }, id)
+        const result = await setMerchantsState({ disabled: !status }, id)
         if (result.data.data.status) {
           this.$message({
             type: 'success',
