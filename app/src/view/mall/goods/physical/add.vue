@@ -291,6 +291,7 @@
       },
       async fetchDetail() {
         const { itemId } = this.$route.params
+        const { is_new } = this.$route.query
         const res = await getItemsDetail(itemId)
         const goodsDetail = res.data.data
         // this.select_regions_value = goodsDetail.regions_id
@@ -350,7 +351,7 @@
           this.skuData.specData = {
             approve_status: goodsDetail.approve_status,
             store: goodsDetail.store,
-            item_bn: goodsDetail.item_bn,
+            item_bn: is_new ? "" : goodsDetail.item_bn,
             weight: goodsDetail.weight,
             volume: goodsDetail.volume,
             price: goodsDetail.price / 100,
@@ -434,6 +435,7 @@
       },
       // 生成skuItems
       getSkuItems() {
+        const { is_new } = this.$route.query
         const skuMartix = []
         this.skuData.skus.forEach(sku => {
           skuMartix.push(sku.checked_sku)
@@ -454,7 +456,7 @@
             is_default: cacheItems[key] ? cacheItems[key].is_default : false,
             approve_status: cacheItems[key] ? cacheItems[key].approve_status : '',
             store: cacheItems[key] ? cacheItems[key].store : '',
-            item_bn: cacheItems[key] ? cacheItems[key].item_bn : '',
+            item_bn: is_new ? '' : (cacheItems[key] ? cacheItems[key].item_bn : ''),
             weight: cacheItems[key] ? cacheItems[key].weight : '',
             volume: cacheItems[key] ? cacheItems[key].volume : '',
             price: cacheItems[key] ? cacheItems[key].price : '',
@@ -572,6 +574,7 @@
         isPackageItems, isGift, pics, pics_create_qrcode, itemVideo,
         item_type, special_type, item_source, item_main_cat_id } = this.baseData
         const { nospec, isShowSpecimg } = this.skuData
+        const { is_new } = this.$route.query
         let params = {
           item_type: item_type,
           special_type: special_type,
@@ -618,6 +621,7 @@
             ...params,
             spec_images: JSON.stringify(specImages)
           }
+          // 编辑
           if(item_id) {
             params['spec_items'] = JSON.stringify(this.skuData.specItems.filter(item => !!item.approve_status))
           } else {
@@ -672,7 +676,7 @@
         } else {
           params['intro'] = this.intro
         }
-        if(item_id) {
+        if(item_id && !is_new) {
           try {
             params = { 
               ...params,
