@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     confirm() {
-      // this.$refs['loadingBtn'].loading = true;
+      this.$refs['loadingBtn'].loading = true;
       if (this.form.is_sms) {
         this.form.is_sms = '1'
       } else {
@@ -91,10 +91,15 @@ export default {
     },
     handleClose() {
       this.$emit('checkBoxVisibleHandle')
-      this.$refs['form'].resetFields();
+      this.clearForm();
     },
     closeLoading() {
+      this.clearForm()
       this.$refs['loadingBtn'].closeLoading()
+    },
+    clearForm(){
+      this.form.is_sms = '';
+      this.form.comments = '';
     }
   },
   // watch: {

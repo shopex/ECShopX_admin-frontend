@@ -206,7 +206,7 @@
         </div>
       </el-card>
       <!-- 账号信息 -->
-      <el-card class="box-card" shadow="never" v-if="!$route.query.type && $store.getters.login_type!='merchant'">
+      <el-card class="box-card" shadow="never" v-if="$route.query.type=='add' && $store.getters.login_type!='merchant'">
         <div slot="header" class="clearfix">
           <span class="theme">账号信息 </span>
         </div>
@@ -250,7 +250,7 @@
       </template>
 
       <!-- 按钮 -->
-      <template v-if="$route.query.type=='edit' || !$route.query.type && $store.getters.login_type!='merchant'">
+      <template v-if="$route.query.type=='edit' || $route.query.type=='add' && $store.getters.login_type!='merchant'">
         <el-form-item label-width='0px' style="text-align: center;margin-top:60px">
           <el-button type="primary" style="padding:10px 50px" @click="submitFn('form')">保存</el-button>
         </el-form-item>
@@ -522,12 +522,10 @@ export default {
       const result = await setCheckTheEntryOfMerchants(obj);
       if (result.data.data.status) {
         this.$message.success('审批成功');
-        this.checkBoxVisibleHandle();
+        this.checkBoxVisibleHandle()
         this.init();
       }
-      console.log(result);
-      // setCheckTheEntryOfMerchants
-      console.log('checkBoxVisibleHandle');
+
     },
     checkBoxVisibleHandle(){
       this.currentCheckBoxStatus = '';
