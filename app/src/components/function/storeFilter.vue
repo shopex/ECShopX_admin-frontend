@@ -36,6 +36,10 @@ export default {
         return {}
       }
     },
+    isChangeStore:{
+      type:Boolean,
+      default:true
+    },
     lock: {
       type: Boolean,
       default: false

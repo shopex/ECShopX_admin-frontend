@@ -191,10 +191,10 @@ export default {
         return {}
       }
     },
-    isChangeStore:{
-      type:Boolean,
+     isChangeStore:{
+      type:Boolean, 
       default:false
-    },
+    }, 
     lockStore: {
       type: Boolean,
       default: false
