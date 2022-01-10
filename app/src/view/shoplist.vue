@@ -12,6 +12,7 @@
         <el-table-column label="是否启用">
           <template slot-scope="scope">
             <el-tag type="success" v-if="scope.row.is_valid == 'true'">启用</el-tag>
+            <el-tag type="success" v-if="scope.row.is_valid == 'delete'">废弃</el-tag>
             <el-tag type="info" v-else>禁用</el-tag>
           </template>
         </el-table-column>
