@@ -99,8 +99,7 @@ export function saveDistributorItems(query) {
   })
 }
 
-export function getDistributorItems(query) {
-  debugger
+export function getDistributorItems(query) { 
   return fetch({
     url: '/distributor/items',
     method: 'get',

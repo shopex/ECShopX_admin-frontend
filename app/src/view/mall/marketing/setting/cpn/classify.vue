@@ -149,7 +149,7 @@ export default {
             console.log(this.editInfo);
             // you row 代表是主页面input 更改 、没有是弹窗更改
             if (type=='edit') {
-                debugger
+                 
                 const {name,sort,is_show} =row
                 const result = await editMerchantsClassification( row.id || this.editInfo && this.editInfo.id,{name,sort,is_show});
                 console.log(result);

@@ -357,8 +357,7 @@ export default {
         this.rolesListData = res.data.data.list
       })
     },
-    DistributorChooseAction(data) {
-      debugger
+    DistributorChooseAction(data) { 
       console.log(data)
       this.DistributorVisible = false
       if (data === null || data.length <= 0) return

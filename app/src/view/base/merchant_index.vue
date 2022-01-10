@@ -518,7 +518,7 @@
                   <el-row>
                     <el-col class="notice-item" :span="12"
                       ><router-link
-                        to="/order/entitytrade/tradenormalorders?tab=notship"
+                        to="/merchant/order/tradenormalorders?tab=notship"
                         >待发货订单：{{
                           staticsData &&
                           staticsData.notice_data.wait_delivery_count
@@ -526,7 +526,7 @@
                       ></el-col
                     >
                     <el-col class="notice-item" :span="12"
-                      ><router-link to="order/entitytrade/aftersaleslist"
+                      ><router-link to="/merchant/order/aftersaleslist"
                         >待处理退款：{{
                           staticsData &&
                           staticsData.notice_data.aftersales_count
@@ -534,7 +534,7 @@
                       </el-col
                     >
                     <el-col class="notice-item" :span="12"
-                      ><router-link to="/order/Refunderrorlogs"
+                      ><router-link to="/merchant/order/aftersalesrefundlist"
                         >退款失败待处理：{{
                           staticsData &&
                           staticsData.notice_data.refund_errorlogs_count

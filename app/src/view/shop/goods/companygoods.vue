@@ -238,8 +238,7 @@ export default {
       }
       this.show_sideBar = true
       this.itemSkuParam.item_id = row.item_id
-      this.itemSkuParam.distributor_id = row.distributor_id
-       debugger;
+      this.itemSkuParam.distributor_id = row.distributor_id 
       getDistributorItems(this.itemSkuParam).then((res) => {
         this.itemSkuList = res.data.data.list
       })
