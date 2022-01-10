@@ -2,7 +2,8 @@
   <div class="MerchantsEditor">
     <h5>选择商家类型</h5>
     <el-divider></el-divider>
-    <el-select v-model="form.settled_type" placeholder="请选择" :disabled="disabled || editDisabled" >
+    <span v-if="$route.query.type=='detail'">{{form.settled_type=='enterprise'?'企业':'个体户'}}</span>
+    <el-select v-else v-model="form.settled_type" placeholder="请选择" :disabled="disabled || editDisabled" >
       <el-option label="企业" value="enterprise"></el-option>
       <el-option label="个体户" value="soletrader"></el-option>
     </el-select>
@@ -17,44 +18,52 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item :label="form.settled_type=='enterprise'?'企业全称':'商户名称'" prop='merchant_name'>
-                <el-input :disabled="disabled || editDisabled" v-model="form.merchant_name"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.merchant_name}}</span>
+                <el-input v-else :disabled="disabled || editDisabled" v-model="form.merchant_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="统一社会信用代码" prop='social_credit_code_id'>
-                <el-input :disabled="disabled || editDisabled" v-model="form.social_credit_code_id"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.social_credit_code_id}}</span>
+                <el-input v-else :disabled="disabled || editDisabled" v-model="form.social_credit_code_id"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="所在省市区" prop="regions_id">
-                <el-cascader style="width: 100%" v-model="form.regions_id" :options="AreaJson" clearable
+                <span v-if="$route.query.type=='detail'">{{form.regions.join('/')}}</span>
+                <el-cascader v-else style="width: 100%" v-model="form.regions_id" :options="AreaJson" clearable
                   :props="{ value: 'value',label: 'label',children: 'children'}" @change="regionChange" :disabled="disabled">
                 </el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="详细地址" prop='address'>
-                <el-input v-model="form.address" :disabled="disabled"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.address}}</span>
+                <el-input v-else v-model="form.address" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item :label="form.settled_type=='enterprise'?'法人姓名':'负责人姓名'" prop='legal_name'>
-                <el-input v-model="form.legal_name" :disabled="disabled || editDisabled"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.legal_name}}</span>
+                <el-input v-else v-model="form.legal_name" :disabled="disabled || editDisabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item :label="form.settled_type=='enterprise'?'法人身份证号':'负责人身份证号'" prop='legal_cert_id'>
-                <el-input v-model="form.legal_cert_id" :disabled="disabled || editDisabled"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.legal_cert_id}}</span>
+                <el-input v-else v-model="form.legal_cert_id" :disabled="disabled || editDisabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item :label="form.settled_type=='enterprise'?'法人手机号':'负责人手机号'"  prop='legal_mobile'>
-                <el-input v-model="form.legal_mobile" :disabled="disabled"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.legal_mobile}}</span>
+                <el-input v-else v-model="form.legal_mobile" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="联系邮箱" prop='email'>
-                <el-input v-model="form.email" :disabled="disabled"></el-input>
+                <span v-if="$route.query.type=='detail'">{{form.email}}</span>
+                <el-input v-else v-model="form.email" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -69,29 +78,35 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="结算银行账户类型" prop="bank_acct_type">
-              <el-radio-group v-model="form.bank_acct_type" :disabled="disabled || editDisabled">
-                <el-radio label="1">对公</el-radio>
-                <el-radio label="2">对私</el-radio>
-              </el-radio-group>
-              <el-tooltip
-                :style="{ 'margin-left': 30 + 'px' }"
-                content="提现到账银行卡账户类型"
-                placement="top-end"
-                effect="light"
-              >
-                <i class="el-icon-warning-outline"></i>
-              </el-tooltip>
+              <span v-if="$route.query.type=='detail'">{{form.bank_acct_type=='1'?'对公':'对私'}}</span>
+              <template v-else>
+                <el-radio-group v-model="form.bank_acct_type" :disabled="disabled || editDisabled">
+                  <el-radio label="1">对公</el-radio>
+                  <el-radio label="2">对私</el-radio>
+                </el-radio-group>
+                <el-tooltip
+                  :style="{ 'margin-left': 30 + 'px' }"
+                  content="提现到账银行卡账户类型"
+                  placement="top-end"
+                  effect="light"
+                >
+                  <i class="el-icon-warning-outline"></i>
+                </el-tooltip>
+              </template>
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="form.bank_acct_type =='2'">
             <el-form-item label="银行预留手机号" prop="bank_mobile" >
-              <el-input v-model="form.bank_mobile" :disabled="disabled || editDisabled"></el-input>
+              <span v-if="$route.query.type=='detail'">{{form.bank_mobile}}</span>
+              <el-input v-else v-model="form.bank_mobile" :disabled="disabled || editDisabled"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8" v-else>
             <el-form-item label="结算银行卡所属银行" prop="bank_name">
               <div class="flex">
+                <span v-if="$route.query.type=='detail'">{{form.bank_name}}</span>
                 <el-autocomplete
+                  v-else
                   :disabled="disabled || editDisabled"
                   style="width: 100%"
                   prefix-icon="el-icon-search"
@@ -104,11 +119,10 @@
               </div>
             </el-form-item>
           </el-col>
-
-
           <el-col :span="8">
             <el-form-item label="结算银行卡号" prop="card_id_mask">
-              <el-input v-model="form.card_id_mask" :disabled="disabled || editDisabled"></el-input>
+              <span v-if="$route.query.type=='detail'">{{form.card_id_mask}}</span>
+              <el-input v-else v-model="form.card_id_mask" :disabled="disabled || editDisabled"></el-input>
             </el-form-item>
           </el-col>
 
@@ -122,7 +136,8 @@
         <el-row :gutter="20">
           <el-col :span="8">
               <el-form-item label="商户类型" prop='merchant_type'>
-                <el-select v-model="form.merchant_type" placeholder="请选择" style="width:100%" :disabled="disabled" @change="merchantType_change">
+                <span v-if="$route.query.type=='detail'">{{form.merchant_type_parent_name}}</span>
+                <el-select v-else v-model="form.merchant_type" placeholder="请选择" style="width:100%" :disabled="disabled" @change="merchantType_change">
                     <el-option
                       v-for="item in MerchantsType"
                       :key="item.id"
@@ -134,7 +149,8 @@
           </el-col>
           <el-col :span="8">
               <el-form-item label="经营范围" prop='merchant_type_id'>
-                <el-select v-model="form.merchant_type_id" placeholder="请选择" style="width:100%" :disabled="disabled">
+                <span v-if="$route.query.type=='detail'">{{form.merchant_type_name}}</span>
+                <el-select v-else v-model="form.merchant_type_id" placeholder="请选择" style="width:100%" :disabled="disabled">
                     <el-option
                       v-for="item in WorkingGroupList"
                       :key="item.id"
@@ -146,7 +162,8 @@
           </el-col>
           <el-col :span="8">
               <el-form-item label="审核商品" prop='audit_goods'>
-                <el-select v-model="form.audit_goods" style="width:60%" placeholder="请选择" :disabled="$route.query.type=='verify'?verifyDisabled:disabled">
+                <span v-if="$route.query.type=='detail'">{{form.audit_goods=='true'?'是':'否'}}</span>
+                <el-select v-else v-model="form.audit_goods" style="width:60%" placeholder="请选择" :disabled="$route.query.type=='verify'?verifyDisabled:disabled">
                     <el-option label="是" value="true"></el-option>
                     <el-option label="否" value="false"></el-option>
                 </el-select>
@@ -376,6 +393,9 @@ export default {
         mobile:'',
         settled_succ_sendsms:'',// 1:立即 2:商家H5确认入驻协议后
         id:'', // 会多返回一个ID 作为当前id
+        // 会回显时需要
+        merchant_type_parent_name:'',
+        merchant_type_name:''
       },
       rules: {
         merchant_name:[requiredRules('企业全称')],
@@ -470,14 +490,16 @@ export default {
       
     },
     resultHandler(result){
-      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id,datapass_block,audit_memo}  = result.data.data;
+      const {settled_type,merchant_name,regions_id,address,province,city,area,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,audit_goods,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,merchant_type_parent_id,audit_status,id,datapass_block,audit_memo,merchant_type_name,merchant_type_parent_name}  = result.data.data;
       this.form = {
         settled_type,merchant_name,address,social_credit_code_id,legal_name,legal_cert_id,legal_mobile,email,bank_acct_type,bank_name,bank_mobile,card_id_mask,merchant_type_id,license_url,legal_certid_front_url,legal_cert_id_back_url,bank_card_front_url,contract_url,
         audit_goods:JSON.stringify(audit_goods),
         regions_id: JSON.parse(regions_id),
         regions:[province,city,area],
         merchant_type:merchant_type_parent_id,
-        id
+        id,
+        merchant_type_parent_name,
+        merchant_type_name
       };
       this.datapass_block = datapass_block
       this.audit_status = audit_status;
