@@ -385,7 +385,7 @@ export default {
         }
       ],
       bulkFilling: [{
-        item_spec: '批量填充',
+        // item_spec: '批量填充',
         approve_status: '',
         store: '',
         item_bn: '',

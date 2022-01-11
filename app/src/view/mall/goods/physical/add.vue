@@ -444,13 +444,16 @@
         })
         const _specItmes = this.cartesianProductOf(...skuMartix )
         const cacheItems = {}
+        console.log('specItems:', this.skuData.specItems)
         this.skuData.specItems.forEach(sitem => {
           const itemSpecs = sitem.item_spec.map(k => {
             return k.spec_value_id
           })
           cacheItems[itemSpecs.join('_')] = sitem
         })
+        console.log('cacheItems:', cacheItems)
         this.skuData.specItems = _specItmes.map(item => {
+          console.log('item:', item)
           const key = item.join('_')
           const temp = {
             sku_id: key,
@@ -466,11 +469,21 @@
             market_price: cacheItems[key] ? cacheItems[key].market_price: '',
             barcode: cacheItems[key] ? cacheItems[key].barcode : '',
             point_num: cacheItems[key] ? cacheItems[key].point_num : '',
-            item_spec: cacheItems[key] ? cacheItems[key].item_spec : []
+            item_spec: cacheItems[key] ? cacheItems[key].item_spec : item.map((m, n) => {
+              const { sku_id, sku_value } = this.skuData.skus[n]
+              const fd = sku_value.find( sv => sv.attribute_value_id == m)
+              return {
+                spec_id: sku_id,
+                spec_value_id: m,
+                spec_value_name: fd.attribute_value,
+                spec_custom_value_name: fd.custom_attribute_value
+              }
+            })
           }
           if(this.isEditor) {
             temp['item_id'] = cacheItems[key] ? cacheItems[key].item_id : ''
           }
+          console.log('temp:', temp)
           return temp
         })
       },
