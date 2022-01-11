@@ -1,13 +1,15 @@
 <template>
   <div class="smsAccountPage">
-    <el-row :gutter="30">
-      <el-col :span="4" v-for="item in sms" :key="item.title">
-        <section class="box-card">
+    <el-row :gutter="20">
+      <el-col :lg="4"  v-for="(item, index) in sms" :key="item.title">
+        <section class="box-card" @click="tabClick(index)">
           <img :src="item.img" alt="" />
           <span>{{ item.title }}</span>
         </section>
       </el-col>
     </el-row>
+
+    
   </div>
 </template>
 
@@ -29,6 +31,19 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.$router
+          break;
+      
+        default:
+          break;
+      }
+      console.log(index)
+    }
   }
 }
 </script>
@@ -36,6 +51,7 @@ export default {
 <style lang="scss" scope>
 .smsAccountPage {
   .box-card {
+    max-width: 300px;
     position: relative;
     cursor: pointer;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
