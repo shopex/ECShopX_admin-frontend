@@ -647,7 +647,7 @@
               item_image_url: item.item_image_url
             }
           })
-          // debugger
+          debugger
           params = {
             ...params,
             spec_images: JSON.stringify(specImages)

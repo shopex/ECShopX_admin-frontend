@@ -453,7 +453,7 @@
         })
         console.log('cacheItems:', cacheItems)
         this.skuData.specItems = _specItmes.map(item => {
-          // console.log('item:', item)
+          console.log('item:', item)
           const key = item.join('_')
           const temp = {
             sku_id: key,
@@ -483,24 +483,9 @@
           if(this.isEditor) {
             temp['item_id'] = cacheItems[key] ? cacheItems[key].item_id : ''
           }
-          // console.log('temp:', temp)
+          console.log('temp:', temp)
           return temp
         })
-        // 查找规格图片
-        const imgSkus = this.skuData.skus.find(item => item.is_image == 'true')
-        if(imgSkus) {
-          const checkedImgSkus = imgSkus.sku_value.filter(item => imgSkus.checked_sku.indexOf(item.attribute_value_id) > -1)
-          this.skuData.specImages = checkedImgSkus.map(skuItem => {
-            return {
-              spec_value_id: skuItem.attribute_value_id,
-              spec_custom_value_name: skuItem.custom_attribute_value,
-              spec_value_name: skuItem.attribute_value,
-              item_image_url: skuItem.image_url ? [skuItem.image_url] : []
-            }
-          })
-        }
-        console.log(this.skuData.specImages)
-
       },
       cartesianProductOf() {
         return Array.prototype.reduce.call(arguments, function(a, b) {
@@ -566,7 +551,7 @@
             }
           })
         }
-        this.skuData.specImages
+         this.skuData.specImages
         this.loading = false
       },
       specOnChange() {
@@ -647,7 +632,6 @@
               item_image_url: item.item_image_url
             }
           })
-          // debugger
           params = {
             ...params,
             spec_images: JSON.stringify(specImages)
