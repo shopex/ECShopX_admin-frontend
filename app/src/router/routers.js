@@ -168,7 +168,7 @@ import DataAnalysis from '@/view/base/setting/dataAnalysis' // 数据分析配�
 
 import GoodsShareSetting from '@/view/base/setting/goodsShareSetting' // 商品分享设置
 
-import Wxappmanage from '@/view/wxapp/minimanage/list' // 小程序列表
+import Wxappmanage from '@/view/wxapp/wxappmanage/list' // 小程序列表
 
 
 // import Basic_setting from '@/view/mall/marketing/basicSetting' // 基础配置
