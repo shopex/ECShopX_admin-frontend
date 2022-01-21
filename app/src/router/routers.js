@@ -321,7 +321,8 @@ import Salesreportlist from '@/view/mall/trade/financial/list' // 财务-销售�
 import Whitelistlist from '@/view/member/whitelist/list' // 会员-白名单
 import Whitelistuploade from '@/view/member/whitelist/uploadeindex' // 会员-白名单导入
 
-import Shopmenu from '@/view/menus/shopmenu' // 菜单管理
+import Shopmenu from '@/view/menus/shopmenu' // 商城菜单管理
+import Distributormenu from '@/view/menus/distributormenu' // 店铺菜单管理
 
 import Regionauth from '@/view/regionauth/list' // 地区权限
 
@@ -666,8 +667,10 @@ export default {
   // 小程序外链
   Extminilink,
   Extminilink_editor,
-  // 菜单管理
+  //商城菜单管理
   Shopmenu,
+  //店铺菜单管理
+  Distributormenu,
   // 地区权限
   Regionauth,
   // 积分商城相关
