@@ -168,6 +168,9 @@ import DataAnalysis from '@/view/base/setting/dataAnalysis' // 数据分析配�
 
 import GoodsShareSetting from '@/view/base/setting/goodsShareSetting' // 商品分享设置
 
+import Wxappmanage from '@/view/wxapp/wxappmanage/list' // 小程序列表
+
+
 // import Basic_setting from '@/view/mall/marketing/basicSetting' // 基础配置
 // import Onecode from '@/view/brand/codegoods/thingslist' // 商品码管理
 // import Things from '@/view/brand/codegoods/thingsedit' // 新增编辑物品
@@ -714,7 +717,8 @@ export default {
   Exportstoreitems,
 
   // 万宁-店铺-店铺交易统计
-  TransactionStatistics
+  TransactionStatistics,
+  Wxappmanage
 }
 
 // 如果路由通过页面传值那么需要定义当前值的字段名称
