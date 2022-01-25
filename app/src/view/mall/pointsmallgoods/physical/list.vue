@@ -207,7 +207,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="store" label="库存" width="80"></el-table-column>
-            <el-table-column label="原价" width="80">
+            <el-table-column label="市场价" width="80">
               <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
             </el-table-column>
             <el-table-column label="积分价格" width="150">
