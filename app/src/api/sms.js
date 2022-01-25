@@ -123,10 +123,30 @@ export function addSceneItem(params) {
   })
 }
 
+// 短信模板
+
 // 签名模板列表
 export function getTemplateList(params={}) {
   return fetch({
     url: `/aliyunsms/template/list`,
+    method: 'get',
+    params
+  })
+}
+
+// 下拉短信场景列表
+export function getTemplateSeleteList(params={}) {
+  return fetch({
+    url: `/aliyunsms/scene/simpleList`,
+    method: 'get',
+    params
+  })
+}
+
+// 短信场景内容label
+export function getTemplateContentLabel(params={}) {
+  return fetch({
+    url: `/aliyunsms/scene/detail`,
     method: 'get',
     params
   })

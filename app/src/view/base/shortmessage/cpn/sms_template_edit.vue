@@ -9,6 +9,16 @@
           <el-radio label="2">推广短信（0.055元 / 条）</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label='短信场景' prop='scene_id' v-if="form.template_type">
+        <el-select v-model="form.scene_id" placeholder="请选择" style="width:400px">
+          <el-option
+            v-for="item in template_type_options"
+            :key="item.id"
+            :label="item.scene_name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="模板名称" prop="template_name">
         <el-input
           :disabled="disabled"
@@ -19,11 +29,25 @@
           placeholder="长度限1-30个字符"
         ></el-input>
       </el-form-item>
-      <el-form-item label="申请说明" prop="remark">
+      <el-form-item label='模板内容' prop='template_content'>
+        <nav>
+          <span class="key" @click="fnKey(item)" v-for="item in variables" :key="item.var_name">${ {{item.var_title}} }</span>
+        </nav>
         <el-input
           :disabled="disabled"
           type="textarea"
           :rows="8"
+          v-model="form.template_content"
+          maxlength="500"
+          show-word-limit
+          placeholder="短信模板申请说明，请描述您的业务使用场景，长度为1-500个字符。"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="申请说明" prop="remark">
+        <el-input
+          :disabled="disabled"
+          type="textarea"
+          :rows="4"
           v-model="form.remark"
           maxlength="100"
           show-word-limit
@@ -74,6 +98,9 @@ import { requiredRules, MaxRules, MinRules } from '@/utils/validate'
 import imgPicker from '@/components/imageselect'
 import loadingBtn from '@/components/loading-btn'
 import {
+  getTemplateSeleteList,
+  getTemplateContentLabel,
+
   setTheNewSignature,
   getTheSignature,
   editTheSignature,
@@ -95,22 +122,41 @@ export default {
       pickerImgType: '',
       // result
       resultVisible: false,
+
+      // 
       form: {
-        sign_name: '', //签名名称
-        sign_source: '',
-        remark: '',
-        sign_file: '', // 证明文件
-        delegate_file: '' //委托授权书
+        template_type: '',
+        scene_id: '',
+        template_name: '',
+        template_content: '',
+        remark: '' 
       },
       rules: {
-        sign_name: [requiredRules('签名名称'), MaxRules(12), MinRules(2)],
-        sign_source: [requiredRules('签名来源', 'change')],
+        template_type: [requiredRules('短信类型', 'change')],
+        scene_id: [requiredRules('短信场景'),'change'],
+        template_name: [requiredRules('模板名称')],
+        template_content:[requiredRules('模板内容'), MaxRules(500),MinRules(1)],
         remark: [requiredRules('申请说明'), MaxRules(200)]
-      }
+      },
+      template_type_options:[],
+      variables:[] , //可用的模板变量
+
+
     }
   },
   mounted() {
     this.init()
+  },
+  watch:{
+    async 'form.template_type'(template_type){
+      const result = await getTemplateSeleteList({template_type})
+      this.template_type_options = result.data.data.list;
+    },
+    async 'form.scene_id'(id){
+      const result = await getTemplateContentLabel({id});
+      this.variables = result.data.data.variables
+      console.log(result);
+    }
   },
   methods: {
     async init() {
@@ -187,8 +233,19 @@ export default {
         this.imgDialog = true
         this.isGetImage = true
       }
-    }
+    },
     /* -------------------------图片选择------------------------- */
+
+    // 获取短信场景下拉列表
+    async fnSelectList(id){
+ 
+    },
+    fnKey(item){
+      console.log(item);
+      
+      this.form.template_content = this.form.template_content+' ${'+item.var_title+'}'+' '
+      
+    }
   }
 }
 </script>
@@ -217,6 +274,12 @@ export default {
 </style>
 <style lang="scss">
 .sms_signatures_edit {
+  .key{
+    padding: 4px 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+    border:1px solid #409EFF;
+  }
   padding-bottom: 50px;
   .el-radio-group {
     margin-top: 10px;
