@@ -7,6 +7,8 @@
       <el-tab-pane label="基础配置" name="base_config"> </el-tab-pane>
       <el-tab-pane label="发送短信" name="send_sms"> </el-tab-pane>
       <el-tab-pane label="短信签名" name="sms_signatures"> </el-tab-pane>
+      <el-tab-pane label="短信模板" name="sms_template"> </el-tab-pane>
+
     </el-tabs>
 
     <router-view />

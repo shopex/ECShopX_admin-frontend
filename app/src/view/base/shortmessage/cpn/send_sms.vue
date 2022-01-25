@@ -83,8 +83,7 @@
 
 <script>
 import tips from '@/components/tips'
-import { requiredRules, MaxRules, MinRules } from '@/utils/validate'
-import setting_ from '../finder-setting/send_sms'
+import { requiredRules } from '@/utils/validate'
 import { getScenarioList, offDisablingSms, onDisablingSms,deletedDisablingSms,getSmsSignatureList,getSmsTemplateList,addSceneItem } from '@/api/sms'
 
 export default {
@@ -92,9 +91,6 @@ export default {
     tips
   },
   computed: {
-    setting() {
-      return setting_(this)
-    },
     noMore() {
       return this.smsScenarioList.length >= this.count
     },

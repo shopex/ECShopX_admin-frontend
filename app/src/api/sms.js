@@ -1,5 +1,33 @@
 import fetch from '@/utils/fetch'
 
+// 基础配置
+
+export function getSmsConfig(params={}) {
+  return fetch({
+    url: `/aliyunsms/config`,
+    method: 'get',
+    params
+  })
+}
+// 修改基础配置
+export function setSmsConfig(params={}) {
+  return fetch({
+    url: `/aliyunsms/config`,
+    method: 'post',
+    params
+  })
+}
+
+// 修改阿里短信状态
+export function setAlisms(params={}) {
+  return fetch({
+    url: `/aliyunsms/status`,
+    method: 'post',
+    params
+  })
+}
+
+
 export function setTheNewSignature(params = {}) {
   return fetch({
     url: '/aliyunsms/sign/add',
@@ -91,6 +119,15 @@ export function addSceneItem(params) {
   return fetch({
     url: `/aliyunsms/scene/addItem`,
     method: 'post',
+    params
+  })
+}
+
+// 签名模板列表
+export function getTemplateList(params={}) {
+  return fetch({
+    url: `/aliyunsms/template/list`,
+    method: 'get',
     params
   })
 }
