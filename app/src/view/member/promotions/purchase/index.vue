@@ -1,27 +1,64 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <div class="content-bottom-padded">
-        <el-button type="primary" icon="el-icon-circle-plus" @click="addCoupon">新增活动</el-button>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-select
+            v-model="fetchParams.activity_status"
+            @change="dataSearch"
+            placeholder="请选择活动状态"
+            clearable
+            style="width: 100%"
+          >
+            <el-option label="全部" value="0"></el-option>
+            <el-option label="未开始" value="waiting"></el-option>
+            <el-option label="进行中" value="ongoing"></el-option>
+            <el-option label="已结束" value="it_has_ended"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-input clearable placeholder="请输入活动名称" v-model="fetchParams.purchase_name">
+            <el-select
+              v-model="fetchParams.purchase_name"
+              clearable
+              slot="prepend"
+              placeholder="活动名称"
+              @change="dataSearch"
+              style="width: 120px"
+            >
+              <el-option
+                v-for="item in cardList"
+                :key="item.purchase_name"
+                :label="item.purchase_name"
+                :value="item.purchase_name"
+              >
+              </el-option>
+            </el-select>
+            <el-button slot="append" icon="el-icon-search" @click="dataSearch"></el-button>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="primary" icon="el-icon-circle-plus" @click="addCoupon"
+            >新增活动</el-button
+          >
+        </el-col>
+      </el-row>
       <el-card>
         <el-table :data="cardList" v-loading="loading" @selection-change="handleSelectionChange">
-          <el-table-column prop="title" label="活动ID"></el-table-column>
-          <el-table-column label="活动名称"></el-table-column>
-          <el-table-column prop="get_num" label="员工额度"> </el-table-column>
-          <el-table-column prop="use_num" label="家属额度"> </el-table-column>
-          <el-table-column prop="source_name" label="活动状态"> </el-table-column>
+          <el-table-column prop="purchase_id" label="活动ID"></el-table-column>
+          <el-table-column prop="purchase_name" label="活动名称"></el-table-column>
+          <el-table-column prop="employee_limitfee" label="员工额度"> </el-table-column>
+          <el-table-column prop="dependents_limitfee" label="家属额度"> </el-table-column>
+          <el-table-column prop="activity_status" label="活动状态">
+            <template slot-scope="scope">
+              {{ scope.row.activity_status | formatStatus }}
+            </template>
+          </el-table-column>
           <el-table-column width="280" label="活动有效期">
             <template slot-scope="scope">
-              <template v-if="scope.row.takeEffect">
-                {{ scope.row.takeEffect }}
-              </template>
-              <template v-else>
-                {{ scope.row.begin_time | datetime('YYYY-MM-DD HH:mm:ss') }}
-                <template v-if="scope.row.end_time">~</template>
-                {{ scope.row.end_time | datetime('YYYY-MM-DD HH:mm:ss') }}
-                {{ Date.parse(new Date()) > scope.row.end_time * 1000 ? '已过期' : '' }}
-              </template>
+              {{ scope.row.begin_date }}
+              <template v-if="scope.row.end_date">~</template>
+              {{ scope.row.end_date }}
             </template>
           </el-table-column>
           <el-table-column width="120" label="操作">
@@ -32,28 +69,26 @@
                     :to="{
                       path: matchHidePage('detail'),
                       query: {
-                        chooseCardtype: scope.row.card_type,
-                        cardId: scope.row.card_id,
-                        title: scope.row.title
+                        id: scope.row.purchase_id
                       }
                     }"
                     >查看</router-link
                   >
                 </el-button>
-                <el-button type="text" v-if="scope.row.edit_btn == 'Y'">
+                <el-button type="text" v-if="scope.row.activity_status == 'ongoing'">
                   <router-link
                     :to="{
                       path: matchHidePage('editor'),
-                      query: { chooseCardtype: scope.row.card_type, cardId: scope.row.card_id }
+                      query: { id: scope.row.purchase_id }
                     }"
                     >编辑</router-link
                   >
                 </el-button>
                 <el-button
                   type="text"
-                  v-if="scope.row.status != 'CARD_STATUS_DISPATCH'"
-                  @click="deleteCard(scope.row.card_id, scope.$index)"
-                  >终止活动</el-button
+                  v-if="scope.row.activity_status != 'it_has_ended'"
+                  @click="deleteCard(scope.row.purchase_id, scope.$index)"
+                  ><span style="color: #f56c6c">终止活动</span></el-button
                 >
               </div>
             </template>
@@ -76,10 +111,8 @@
 </template>
 
 <script>
-import store from '@/store'
 import { mapGetters } from 'vuex'
-import { getPurchaseList, endPurchase } from '../../../../api/purchase'
-import util from '../../../../common/js/util'
+import { getPurchaseList, endPurchase } from '@/api/purchase'
 export default {
   provide() {
     return {
@@ -98,7 +131,6 @@ export default {
       typeId: -1,
       pageSize: 10,
       currentPage: 1,
-      params: {},
       fetchParams: {
         activity_status: '',
         purchase_name: '',
@@ -108,7 +140,23 @@ export default {
       multipleSelection: []
     }
   },
-  filters: {},
+  filters: {
+    formatStatus(status) {
+      var str = ''
+      switch (status) {
+        case 'waiting':
+          str = '未开始'
+          break
+        case 'ongoing':
+          str = '进行中'
+          break
+        case 'it_has_ended':
+          str = '已结束'
+          break
+      }
+      return str
+    }
+  },
   computed: {
     ...mapGetters(['wheight'])
   },
@@ -132,8 +180,10 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            endPurchase({ 'card_id': id }).then((res) => {
-              this.cardList.splice(index, 1)
+            endPurchase({ 'purchase_id': id })
+            this.$message({
+              type: 'success',
+              message: '终止成功'
             })
           }
           done()
@@ -165,6 +215,10 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    dataSearch() {
+      this.fetchParams.page = 1
+      this.getPurchaseList(this.fetchParams)
     }
   },
   mounted() {

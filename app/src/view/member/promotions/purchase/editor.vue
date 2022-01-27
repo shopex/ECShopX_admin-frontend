@@ -238,6 +238,7 @@ import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { handleUploadFile, exportUploadTemplate } from '../../../../api/common'
 import { getItemsList, getCategory, getTagList, getGoodsAttr } from '@/api/goods'
+import { createPurchase, editPurchase } from '@/api/purchase'
 import {
   addMarketingActivity,
   updateMarketingActivity,
@@ -270,7 +271,7 @@ export default {
         dependents_limitfee: '',
         is_share_limitfee: false,
         used_roles: ['employee'],
-        item_limit: '' // item_type=all时为数字,否则为数组{id:标签id,limit_num:每人限购,limit_fee:限额}
+        item_limit: 1 // item_type=all时为数字,否则为数组{id:标签id,limit_num:每人限购,limit_fee:限额}
       },
       activity_date: [],
       rules: {},
@@ -662,7 +663,7 @@ export default {
         }
       }
       console.log('form-->', this.form)
-      return
+      // return
       if (this.form.marketing_id) {
         editPurchase(this.form).then((res) => {
           if (res.data.data.marketing_id) {
