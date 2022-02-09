@@ -25,12 +25,17 @@
         <el-form-item label="员工邀请家属上限：" v-if="detail.used_roles.includes('dependents')">{{
           detail.dependents_limit
         }}</el-form-item>
-        <el-form-item label="限购：">
-          <p v-if="detail.item_type == 'all'">全部商品 每人限购{{ detail.item_limit }}件</p>
+        <el-form-item :label="itemTypeTransform(detail.item_type) + '限购：'">
+          <p v-if="detail.item_type == 'all'">每人限购{{ detail.item_limit }}件</p>
           <el-table v-else :data="detail.item_limit">
-            <el-table-column prop="id" label="关联商品ID"> </el-table-column>
+            <el-table-column prop="id" label="ID"> </el-table-column>
             <el-table-column prop="name" label="名称"> </el-table-column>
-            <el-table-column prop="item_spec_desc" label="商品规格描述"> </el-table-column>
+            <el-table-column
+              prop="item_spec_desc"
+              label="商品规格描述"
+              v-if="detail.item_type === 'item'"
+            >
+            </el-table-column>
             <el-table-column prop="limit_num" label="每人限购"> </el-table-column>
             <el-table-column prop="limit_fee" label="每人额度"> </el-table-column>
           </el-table>
@@ -61,6 +66,20 @@ export default {
       role.includes('employee') && textArr.push('员工')
       role.includes('dependents') && textArr.push('家属')
       return textArr.toString()
+    },
+    itemTypeTransform(type) {
+      switch (type) {
+        case 'all':
+          return '全部商品'
+        case 'item':
+          return '指定商品'
+        case 'tag':
+          return '指定商品标签'
+        case 'category':
+          return '指定分类'
+        case 'brand':
+          return '指定品牌'
+      }
     }
   },
   mounted() {

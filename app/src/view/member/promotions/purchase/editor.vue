@@ -59,7 +59,6 @@
           <el-checkbox v-model="form.is_share_limitfee">是否共享额度</el-checkbox>
         </el-form-item>
       </div>
-
       <el-form-item
         label="家属额度："
         v-if="form.used_roles.includes('dependents') && !form.is_share_limitfee"
@@ -75,7 +74,7 @@
       </el-form-item>
       <el-card header="活动商品" shadow="naver">
         <el-form-item label="适用商品">
-          <el-radio-group v-model="form.use_bound" @change="itemTypeChange">
+          <el-radio-group v-model="form.item_type" @change="itemTypeChange">
             <el-radio label="all">全部商品</el-radio>
             <el-radio label="item">指定商品适用</el-radio>
             <el-radio label="category">指定分类适用</el-radio>
@@ -89,10 +88,9 @@
           >
         </el-form-item>
         <div v-if="!zdItemHidden" style="position: relative">
-          <SkuSelector @change="getItems" :data="relItems"></SkuSelector>
           <div style="position: absolute; bottom: 0px; left: 112px">
             <el-upload
-              style="display: inline-block; height: 0"
+              style="display: inline-block"
               action=""
               :on-change="uploadHandleChange"
               :auto-upload="false"
@@ -104,25 +102,86 @@
               >下载模板</el-button
             >
           </div>
+          <SkuSelector @change="getItems" :data="relItems"></SkuSelector>
+          <el-button type="primary" plain style="margin-top: 10px" @click="dialogFormVisible = true"
+            >批量设置</el-button
+          >
+          <el-table :data="good.currentGoods">
+            <el-table-column prop="itemName" label="商品名称" width="180"> </el-table-column>
+            <el-table-column prop="item_spec_desc" label="规格" width="180"> </el-table-column>
+            <el-table-column prop="limit_num" label="每人限购" width="280">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.limit_num"
+                  ><template slot="append">件</template></el-input
+                >
+              </template>
+            </el-table-column>
+            <el-table-column prop="limit_fee" label="每人限额" width="280">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.limit_fee"
+                  ><template slot="append">元</template></el-input
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-        <el-col :xs="12" :sm="12" :md="12" v-if="!categoryHidden">
-          <div style="height: 350px">
-            <treeselect
-              :options="categoryList"
-              :show-count="true"
-              :multiple="true"
-              :disable-branch-nodes="true"
-              :clearable="false"
-              v-model="form.item_category"
-              @select="categorySelect"
-              @deselect="categoryDeselect"
+        <el-col v-if="!categoryHidden">
+          <div>
+            <div style="width: 300px">
+              <treeselect
+                :options="categoryList"
+                :show-count="true"
+                :multiple="true"
+                :disable-branch-nodes="true"
+                :clearable="false"
+                value-format="object"
+                v-model="form.item_category"
+              >
+              </treeselect>
+            </div>
+            <el-button
+              type="primary"
+              plain
+              style="margin-top: 10px"
+              @click="dialogFormVisible = true"
+              >批量设置</el-button
             >
-            </treeselect>
+            <el-table :data="form.item_category">
+              <el-table-column prop="category_name" label="分类名称" width="180"> </el-table-column>
+              <el-table-column label="每人限购" width="280">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.limit_num"
+                    ><template slot="append">件</template></el-input
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column prop="limit_fee" label="每人限额" width="280">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.limit_fee"
+                    ><template slot="append">元</template></el-input
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-col>
         <template v-if="!tagHidden">
-          <div class="selected-tags view-flex">
-            <div class="label">已选中标签：</div>
+          <div class="view-flex">
+            <div class="label">未选标签：</div>
+            <el-tag
+              class="tag-item"
+              :key="index"
+              v-for="(tag, index) in tag.tags"
+              size="medium"
+              color="#ffffff"
+              :disable-transitions="false"
+              @click.native="tagAdd(tag, index)"
+            >
+              {{ tag.tag_name }}
+            </el-tag>
+          </div>
+          <div class="selected-tags view-flex" style="margin-top: 10px">
+            <div class="label">已选标签：</div>
             <div class="view-flex-item">
               <el-tag
                 :key="index"
@@ -136,19 +195,26 @@
               </el-tag>
             </div>
           </div>
-          <div>
-            <el-tag
-              class="tag-item"
-              :key="index"
-              v-for="(tag, index) in tag.tags"
-              size="medium"
-              color="#ffffff"
-              :disable-transitions="false"
-              @click.native="tagAdd(tag, index)"
-            >
-              {{ tag.tag_name }}
-            </el-tag>
-          </div>
+          <el-button type="primary" plain style="margin-top: 10px" @click="dialogFormVisible = true"
+            >批量设置</el-button
+          >
+          <el-table :data="tag.currentTags">
+            <el-table-column prop="tag_name" label="标签名称" width="180"> </el-table-column>
+            <el-table-column prop="limit_num" label="每人限购" width="280">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.limit_num"
+                  ><template slot="append">件</template></el-input
+                >
+              </template>
+            </el-table-column>
+            <el-table-column prop="limit_fee" label="每人限额" width="280">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.limit_fee"
+                  ><template slot="append">元</template></el-input
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </template>
         <template v-if="!brandHidden">
           <div class="view-flex">
@@ -237,9 +303,8 @@ import SkuSelector from '@/components/function/skuSelector'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { handleUploadFile, exportUploadTemplate } from '../../../../api/common'
-import { getItemsList, getCategory, getTagList, getGoodsAttr } from '@/api/goods'
+import { getCategory, getTagList, getGoodsAttr } from '@/api/goods'
 import { createPurchase, editPurchase } from '@/api/purchase'
-import { seckillActivityGetItemsList } from '../../../../api/promotions'
 
 export default {
   inject: ['refresh'],
@@ -255,10 +320,8 @@ export default {
         purchase_name: '',
         ad_pic: '',
         item_type: 'all',
-        item_ids: [],
         item_category: [],
         tag_ids: [],
-        brand_ids: [],
         begin_time: '',
         end_time: '',
         employee_limitfee: '',
@@ -266,14 +329,12 @@ export default {
         dependents_limitfee: '',
         is_share_limitfee: false,
         used_roles: ['employee'],
-        use_bound: 'all',
         item_limit: 1 // item_type=all时为数字,否则为数组{id:标签id,limit_num:每人限购,limit_fee:限额}
       },
       activity_date: [],
       rules: {},
       imgDialog: false,
       isGetImage: false,
-      validRole: [],
       roleArr: [
         { key: 'employee', name: '员工' },
         { key: 'dependents', name: '家属' }
@@ -283,35 +344,25 @@ export default {
       relItems: [],
       categoryHidden: true,
       categoryList: [],
+      category: {
+        currentCategory: []
+      },
+      good: {
+        currentGoods: []
+      },
       tagHidden: true,
       tag: {
         list: [],
-        form: {
-          tag_ids: []
-        },
         currentTags: [],
         tags: []
       },
       brandHidden: true,
       brand: {
         list: [],
-        form: {
-          brand_ids: []
-        },
         currentBrands: [],
         brands: []
       },
       ItemsList: [],
-      invalidItemsList: [],
-      params: {
-        page: 1,
-        pageSize: -1,
-        item_type: 'all',
-        templates_id: '',
-        tag_id: '',
-        type: 0,
-        item_id: ''
-      },
       dialogFormVisible: false,
       dialogForm: {
         limit_num: '',
@@ -319,7 +370,6 @@ export default {
       }
     }
   },
-  watch: {},
 
   mounted() {
     this.fetchMainCate()
@@ -333,7 +383,6 @@ export default {
       this.isGetImage = true
     },
     pickImg(data) {
-      console.log('data==>', data)
       this.form.ad_pic = data.url
       this.imgDialog = false
     },
@@ -341,35 +390,34 @@ export default {
       this.imgDialog = false
     },
     itemTypeChange: function (val) {
-      this.params.main_cat_id = ''
-      this.params.tag_id = ''
-      this.params.brand_id = ''
       this.allHiden = true
       this.zdItemHidden = true
       this.categoryHidden = true
       this.tagHidden = true
       this.brandHidden = true
       this.form.items = []
-      this.invalidItemsList = []
       this.form.rel_item_ids = []
       this.form.itemTreeLists = []
       this.form.item_category = []
-      this.form.item_category = []
       this.tag.currentTags = []
+      this.form.item_type = val
       if (val === 'item') {
         this.zdItemHidden = false
+        this.form.item_limit = []
       } else if (val === 'category') {
         this.form.rel_item_ids = []
-        this.form.itemTreeLists = []
+        this.form.item_limit = []
         this.categoryHidden = false
         this.form.item_category = []
       } else if (val === 'tag') {
         this.tagHidden = false
         this.tag.currentTags = []
+        this.form.item_limit = []
         this.showTags()
       } else if (val === 'brand') {
         this.brandHidden = false
         this.brand.currentBrands = []
+        this.form.item_limit = []
         this.showBrands()
       } else if (val === 'all') {
         this.allHiden = false
@@ -381,11 +429,8 @@ export default {
       })
     },
     getItems(data) {
-      let ids = []
-      data.forEach((item) => {
-        ids.push(item.itemId)
-      })
-      this.form.item_ids = ids
+      this.good.currentGoods = data
+      console.log('data==>', data)
     },
     /**
      * 上传模板
@@ -448,71 +493,6 @@ export default {
         }
       })
     },
-    categorySelect: function (node, instanceId) {
-      this.params.main_cat_id = node.category_id
-      this.getGoodsList()
-    },
-    categoryDeselect: function (node, instanceId) {
-      let items
-      items = []
-      this.ItemsList.forEach((item, index) => {
-        if (node.category_id != item.item_main_cat_id) items.push(item)
-      })
-      let invalidItems = []
-      this.invalidItemsList.forEach((i) => {
-        if (node.category_id != i.item_main_cat_id) invalidItems.push(i)
-      })
-
-      this.invalidItemsList = invalidItems
-      this.ItemsList = items
-      this.getItems(this.ItemsList)
-    },
-    getGoodsList: function () {
-      let params = JSON.parse(JSON.stringify(this.params))
-      if (this.$route.params.purchase_id) {
-        params.activity_id = this.$route.params.purchase_id
-      }
-      params.marketing_type = this.form.marketing_type
-      params.activity_release_time = params.activity_begin_time = this.activity_date[0]
-      params.activity_end_time = this.activity_date[1]
-      if (params.is_gift == 'all') {
-        this.$delete(params, 'is_gift')
-      }
-      seckillActivityGetItemsList(params).then((response) => {
-        let itemList = response.data.data.list.validItems.concat(this.ItemsList)
-        let invalidItemList = response.data.data.list.invalidItems.concat(this.invalidItemsList)
-        let newItemList = []
-        let invalidItems = []
-        let obj = {}
-        let obj1 = {}
-        itemList.forEach((item) => {
-          let tag_ids = []
-          item.tagList.forEach((tag) => {
-            tag_ids.push(tag.tag_id)
-          })
-          item.tag_ids = tag_ids
-          if (!obj[item.item_id]) {
-            newItemList.push(item)
-            obj[item.item_id] = true
-          }
-        })
-        invalidItemList.forEach((item) => {
-          let tag_ids = []
-          item.tagList.forEach((tag) => {
-            tag_ids.push(tag.tag_id)
-          })
-          item.tag_ids = tag_ids
-          if (!obj1[item.item_id]) {
-            invalidItems.push(item)
-            obj1[item.item_id] = true
-          }
-        })
-
-        this.ItemsList = newItemList
-        this.invalidItemsList = invalidItems
-        this.getItems(this.ItemsList)
-      })
-    },
     getAllTagLists: function () {
       let params = {
         page: 1,
@@ -528,7 +508,6 @@ export default {
       this.tag.tags = [...this.tag.list]
       this.tag.tags.forEach((item, index) => {
         let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
-        //if (isInArr != -1) this.tag.tags.splice(index, 1)
         if (isInArr == -1) remainTags.push(item)
       })
       this.tag.tags = remainTags
@@ -550,15 +529,12 @@ export default {
       this.tag.currentTags.forEach((item) => {
         this.form.tag_ids.push(item.tag_id)
       })
-      this.params.tag_id = item.tag_id
-      //this.getGoodsList()
     },
     tagRemove: function (index) {
       this.tag.tags.unshift(this.tag.currentTags[index])
       this.tag.currentTags.splice(index, 1)
       this.form.tag_ids = []
       let tagItems = []
-      let tagInvalidItems = []
       this.tag.currentTags.forEach((item) => {
         this.form.tag_ids.push(item.tag_id)
         let items = []
@@ -567,15 +543,8 @@ export default {
           if (i.tag_ids.indexOf(item.tag_id) != -1) items.push(i)
         })
         tagItems = items
-
-        let invalidItems = []
-        this.invalidItemsList.forEach((i) => {
-          if (i.tag_ids.indexOf(item.tag_id) != -1) invalidItems.push(i)
-        })
-        tagInvalidItems = invalidItems
       })
       this.ItemsList = tagItems
-      this.invalidItemsList = tagInvalidItems
       this.getItems(this.ItemsList)
     },
     // 获取品牌列表
@@ -609,21 +578,11 @@ export default {
       this.ItemsList.forEach((item) => {
         if (this.brand.currentBrands[index].attribute_id != item.brand_id) items.push(item)
       })
-      let invalidItems = []
-      this.invalidItemsList.forEach((i) => {
-        if (this.brand.currentBrands[index].attribute_id != i.brand_id) invalidItems.push(i)
-      })
-
-      this.invalidItemsList = invalidItems
       this.ItemsList = items
       this.getItems(this.ItemsList)
 
       this.brand.brands.unshift(this.brand.currentBrands[index])
       this.brand.currentBrands.splice(index, 1)
-      this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
-        this.form.brand_ids.push(item.attribute_id)
-      })
     },
     brandAdd: function (item, index) {
       if (this.activity_date.length <= 0) {
@@ -638,12 +597,6 @@ export default {
         this.brand.currentBrands.push(item)
         this.brand.brands.splice(index, 1)
       }
-      this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
-        this.form.brand_ids.push(item.attribute_id)
-      })
-      this.params.brand_id = item.attribute_id
-      //this.getGoodsList()
     },
     submitActivityAction() {
       const that = this
@@ -651,14 +604,47 @@ export default {
         this.form.begin_time = this.activity_date[0]
         this.form.end_time = this.activity_date[1]
       }
-
-      if (this.form.item_type == 'item') {
-        if (this.form.item_ids && this.form.item_ids.length <= 0) {
-          this.$message.error('参加活动的商品必填!')
-          return false
-        }
+      if (this.form.item_type === 'brand') {
+        const newArr = this.brand.currentBrands.map((item) => {
+          const newItem = {}
+          newItem.id = item.attribute_id
+          newItem.limit_fee = item.limit_fee
+          newItem.limit_num = item.limit_num
+          return newItem
+        })
+        this.form.item_limit = newArr
       }
-      console.log('form-->', this.form)
+      if (this.form.item_type === 'tag') {
+        const newArr = this.tag.currentTags.map((item) => {
+          const newItem = {}
+          newItem.id = item.tag_id
+          newItem.limit_fee = item.limit_fee
+          newItem.limit_num = item.limit_num
+          return newItem
+        })
+        this.form.item_limit = newArr
+      }
+      if (this.form.item_type === 'category') {
+        const newArr = this.form.item_category.map((item) => {
+          const newItem = {}
+          newItem.id = item.category_id
+          newItem.limit_fee = item.limit_fee
+          newItem.limit_num = item.limit_num
+          return newItem
+        })
+        this.form.item_limit = newArr
+      }
+      if (this.form.item_type === 'item') {
+        const newArr = this.good.currentGoods.map((item) => {
+          const newItem = {}
+          newItem.id = item.goods_id
+          newItem.limit_fee = item.limit_fee
+          newItem.limit_num = item.limit_num
+          return newItem
+        })
+        this.form.item_limit = newArr
+      }
+      // console.log('this.form==>', this.form)
       // return
       if (this.form.purchase_id) {
         editPurchase(this.form).then((res) => {
