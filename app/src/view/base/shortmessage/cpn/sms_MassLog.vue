@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sms_signatures" v-if="$route.path.indexOf('edit') === -1">
+    <div class="sms_signatures">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>短信发送记录</span>
@@ -21,14 +21,27 @@
         </SpFinder>
       </el-card>
     </div>
-    <router-view />
+    <template v-if="visible">
+      <smsMassLogEdit
+        :visible="visible"
+        :info="info"
+        @smsMassLogEditHandler="smsMassLogEditHandler"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import setting_ from '../finder-setting/sms_MassLog'
-import { deleteSmsTemplate } from '@/api/sms'
+import { deleteTaskSms } from '@/api/sms'
+import smsMassLogEdit from './sms_MassLog_edit.vue'
+import Template from '../../../wxapp/template.vue'
+
 export default {
+  components: {
+    smsMassLogEdit,
+    Template
+  },
   computed: {
     setting() {
       return setting_(this)
@@ -36,14 +49,15 @@ export default {
   },
   data() {
     return {
-      failVisible: false,
+      visible: false,
+      info: {},
+
       search_options: [
         { label: '等待中', value: '1' },
         { label: '群发成功', value: '2' },
         { label: '群发失败', value: '3' },
-        { label: '已撤销', value: '4' },
-
-      ],
+        { label: '已撤销', value: '4' }
+      ]
     }
   },
   methods: {
@@ -54,10 +68,20 @@ export default {
       return { ...params }
     },
     afterSearch() {},
-    async deleteTemplateHandle(id) {
-      const result = await deleteSmsTemplate(id)
-      this.$message.success('删除成功')
-      console.log(result)
+    async deleteSMS(id) {
+      const message = '选择确定后，群发定时任务将会撤销。。'
+      this.$confirm(message, '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const result = await deleteTaskSms({ id })
+        this.$message.success('撤销成功')
+        this.$refs.finder.refresh()
+      })
+    },
+    smsMassLogEditHandler() {
+      this.visible = false
     }
   }
 }

@@ -1,107 +1,115 @@
 <template>
-  <div class="sms_signatures_edit">
-    <h4>群发短信</h4>
-    <el-form :model="form" :rules="rules" ref="form" label-width="150px" class="demo-ruleForm">
-      <el-form-item label="任务名称" prop="task_name">
-        <el-input
-          :disabled="disabled"
-          v-model="form.task_name"
-          minlength="1"
-          maxlength="30"
-          show-word-limit
-          placeholder="长度限1-30个字符"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="短信签名" prop="sign_id">
-        <el-select
-          v-model="form.sign_id"
-          placeholder="请选择"
-          style="width: 400px"
-          :disabled="disabled"
-        >
-          <el-option
-            v-for="item in sign_options"
-            :key="item.id"
-            :label="item.sign_name"
-            :value="item.id"
+  <el-dialog title="群发短信" :visible="visible" :before-close="handleClose">
+    <div class="sms_signatures_edit">
+      <el-form :model="form" :rules="rules" ref="form" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="任务名称" prop="task_name">
+          <el-input
+            :disabled="disabled"
+            v-model="form.task_name"
+            minlength="1"
+            maxlength="30"
+            show-word-limit
+            placeholder="长度限1-30个字符"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="短信签名" prop="sign_id">
+          <el-select
+            v-model="form.sign_id"
+            placeholder="请选择"
+            style="width: 400px"
+            :disabled="disabled"
           >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="短信模板" prop="template_id">
-        <el-select
-          v-model="form.template_id"
-          placeholder="请选择"
-          style="width: 400px"
-          :disabled="disabled"
-        >
-          <el-option
-            v-for="item in template_options"
-            :key="item.id"
-            :label="item.scene_name"
-            :value="item.id"
+            <el-option
+              v-for="item in sign_options"
+              :key="item.id"
+              :label="item.sign_name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="短信模板" prop="template_id">
+          <el-select
+            v-model="form.template_id"
+            placeholder="请选择"
+            style="width: 400px"
+            :disabled="disabled"
           >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="定时发送">
-        <el-switch v-model="form.timing" active-color="#13ce66" inactive-color="#ff4949">
-        </el-switch>
-      </el-form-item>
-      <el-form-item label="" prop="send_at" v-if="form.timing">
-        <el-date-picker v-model="form.send_at" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" >
-        </el-date-picker>
-        <ul class="tips">
-          <li>如需撤销，请在发送时间前5分钟操作</li>
-        </ul>
-      </el-form-item>
-      <el-form-item v-if="$route.query.type !== 'detail'">
-        <!-- <el-button type="primary" @click="submitForm('form')">确定</el-button> -->
-        <loadingBtn @clickHandle="submitForm('form')" ref="loadingBtn" />
-        <el-button @click="fnBack">取消</el-button>
-
-      </el-form-item>
-    </el-form>
-
-    <!-- result -->
-    <el-dialog :visible="resultVisible" class="result" :show-close="false">
-      <el-result icon="success" title="提交成功" subTitle="请根据提示进行操作">
-        <template slot="subTitle">
-          <h5>签名已提交审核，审核结果可在签名列表中查看。</h5>
+            <el-option
+              v-for="item in template_options"
+              :key="item.id"
+              :label="item.scene_name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="定时发送">
+          <el-switch v-model="form.timing" active-color="#13ce66" inactive-color="#ff4949" :disabled="disabled">
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="" prop="send_at" v-if="form.timing">
+          <el-date-picker
+            :disabled="disabled"
+            @change="dateTimeChange"
+            v-model="form.send_at"
+            type="datetime"
+            placeholder="选择日期时间"
+            value-format="timestamp"
+          >
+          </el-date-picker>
           <ul class="tips">
-            <li>预计两小时完成审核，政企签名预计在 48 小时工作时间内审核</li>
-            <li>审核工作时间：周一至周日 9:00-23:00（法定节日顺延）</li>
+            <li>如需撤销，请在发送时间前5分钟操作</li>
           </ul>
-        </template>
-        <template slot="extra">
-          <el-button type="primary" @click="fnBack" size="medium">返回列表</el-button>
-          <el-button v-if="!$route.query.type" size="medium" @click="resultVisible = false"
-            >再添加一个模板</el-button
-          >
-        </template>
-      </el-result>
-    </el-dialog>
-  </div>
+        </el-form-item>
+      </el-form>
+      <!-- result
+      <el-dialog :visible="resultVisible" class="result" :show-close="false">
+        <el-result icon="success" title="提交成功" subTitle="请根据提示进行操作">
+          <template slot="subTitle">
+            <h5>签名已提交审核，审核结果可在签名列表中查看。</h5>
+            <ul class="tips">
+              <li>预计两小时完成审核，政企签名预计在 48 小时工作时间内审核</li>
+              <li>审核工作时间：周一至周日 9:00-23:00（法定节日顺延）</li>
+            </ul>
+          </template>
+          <template slot="extra">
+            <el-button type="primary" @click="fnBack" size="medium">返回列表</el-button>
+            <el-button v-if="!$route.query.type" size="medium" @click="resultVisible = false"
+              >再添加一个模板</el-button
+            >
+          </template>
+        </el-result>
+      </el-dialog> -->
+    </div>
+    <span slot="footer" class="dialog-footer" v-if="info.type !== 'detail'">
+      <loadingBtn @clickHandle="submitForm('form')" ref="loadingBtn" />
+      <el-button @click="fnBack">取消</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
 import { requiredRules, MaxRules, MinRules } from '@/utils/validate'
-import imgPicker from '@/components/imageselect'
 import loadingBtn from '@/components/loading-btn'
 import {
   getSmsSignatureList,
   getSmsTemplateList,
   taskSmsDetail,
-  getTemplateSeleteList,
-  getTemplateContentLabel,
-  addSmsTemplate,
-  SmsTemplateDetail,
-  editSmsTemplate
+  editTaskSms,
 } from '@/api/sms'
 
 export default {
   components: {
     loadingBtn
+  },
+  props: {
+    visible:{
+      type:Boolean
+    },
+    info:{
+      
+    }
   },
   data() {
     return {
@@ -117,13 +125,13 @@ export default {
         template_id: '',
         timing: true,
         send_at: '',
-        user_id:''
+        user_id: ''
       },
       rules: {
         task_name: [requiredRules('任务名称')],
         sign_id: [requiredRules('短信签名'), 'change'],
-        template_id: [requiredRules('短信模板','change')],
-        send_at: [requiredRules('发送时间'),'change']
+        template_id: [requiredRules('短信模板', 'change')],
+        send_at: [requiredRules('发送时间'), 'change']
       },
       sign_options: [],
       template_options: []
@@ -135,7 +143,7 @@ export default {
   },
   methods: {
     async init() {
-      const { type, id } = this.$route.query
+      const { type, id } = this.info
       console.log(type, id)
 
       if (type) {
@@ -148,24 +156,25 @@ export default {
     },
     resultHandler(result) {
       console.log(result)
-      const { task_name, sign_id, template_id, send_at,user_id } = result.data.data
+      const { task_name, sign_id, template_id, send_at, user_id } = result.data.data
       this.form = {
         task_name,
         sign_id: sign_id + '',
-        template_id:template_id+'',
-        send_at:send_at,
-        user_id
+        template_id: template_id + '',
+        send_at: send_at * 1000 + '' || '',
+        user_id,
+        timing:send_at?true:false
       }
 
       console.log(this.form)
     },
     submitForm(formName) {
-      const { type, id } = this.$route.query
+      const { type, id } = this.info
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           try {
             if (type == 'edit') {
-              const result = await editSmsTemplate({ id, ...this.form })
+              const result = await editTaskSms({ id, ...this.form })
               this.submitFormResult(result)
             } else {
               // 增加
@@ -185,14 +194,14 @@ export default {
     },
     submitFormResult(result) {
       if (result.data.data.status) {
-        this.resultVisible = true
+        this.$message.success('成功');
+        this.handleClose();
       }
       this.$refs['loadingBtn'].closeLoading()
+      console.log(result);
     },
     fnBack() {
-      this.$router.push({
-        path: `/setting/datamessage/ali_sms/sms_template`
-      })
+      this.handleClose();
     },
     // 获取短信签名下拉列表
     getSmsList() {
@@ -204,12 +213,14 @@ export default {
         this.template_options = res.data.data.list
       })
     },
-    fnKey(item) {
-      const { type } = this.$route.query
-      if (type == 'detail') return
-      console.log(item)
-      this.form.template_content = this.form.template_content + ' ${' + item.var_title + '}' + ' '
-    }
+    dateTimeChange(val){
+      this.form.send_at = val + ''
+    },
+
+    /* 群发短信弹框 */
+    handleClose(){
+      this.$emit('smsMassLogEditHandler')
+    },
   }
 }
 </script>
@@ -248,7 +259,6 @@ export default {
       background: #e4e7ed;
     }
   }
-  padding-bottom: 50px;
   .el-radio-group {
     margin-top: 10px;
     .el-radio {

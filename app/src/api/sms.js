@@ -198,3 +198,21 @@ export function taskSmsDetail(params={}) {
     params
   })
 }
+
+// 修改群发短信
+export function editTaskSms(params={}) {
+  return fetch({
+    url:`/aliyunsms/task/modify`,
+    method:'post',
+    params
+  })
+}
+
+// 撤销删除群发短信
+export function deleteTaskSms(params={}) {
+  return fetch({
+    url:`/aliyunsms/task/revoke`,
+    method:'post',
+    params
+  })
+}

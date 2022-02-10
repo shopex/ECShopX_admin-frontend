@@ -42,7 +42,7 @@ export default (vm) => {
       { name: '定时发送', key: 'send_at', formatter: formatDate, width: '170px' },
       { name: '短信模板', key: 'template_name' },
       {
-        name: '发送状态',
+        name: '任务状态',
         key: 'status',
         width: '100px',
         render: (h, { row }) =>
@@ -108,13 +108,52 @@ export default (vm) => {
         action: {
           type: 'link',
           handler: async (val) => {
-            vm.$router.push({
-              path: vm.matchHidePage('edit'),
-              query: { type: 'detail', id: val[0].id }
-            })
+            vm.visible = true;
+            vm.info = {
+              type:'detail',
+              id:val[0].id
+            }
           }
+        },
+        visible:(val)=>{
+          console.log(val);
+          return val.status != '4'
         }
-      }
+      },
+      {
+        name: '撤销',
+        key: 'delete',
+        type: 'button',
+        buttonType: 'text',
+        action: {
+          type: 'link',
+          handler: async (val) => {
+            vm.deleteSMS(val[0].id)
+          }
+        },
+        visible:(val)=>{
+          return val.status == '1'
+        }
+      },
+      {
+        name: '编辑',
+        key: 'edit',
+        type: 'button',
+        buttonType: 'text',
+        action: {
+          type: 'link',
+          handler: async (val) => {
+            vm.visible = true;
+            vm.info = {
+              type:'edit',
+              id:val[0].id
+            }
+          }
+        },
+        visible:(val)=>{
+          return val.status == '4'
+        }
+      },
     ]
   })
 }
