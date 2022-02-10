@@ -75,7 +75,8 @@
                     >查看</router-link
                   >
                 </el-button>
-                <el-button type="text" v-if="scope.row.activity_status == 'waiting'">
+                <!-- v-if="scope.row.activity_status == 'waiting'" -->
+                <el-button type="text">
                   <router-link
                     :to="{
                       path: matchHidePage('editor'),
@@ -205,8 +206,12 @@ export default {
       getPurchaseList(params)
         .then((res) => {
           if (res.data.data.list.length > 0) {
-            this.cardList = res.data.data.list
-            this.pagers.total = res.data.data.pagers.total
+            this.cardList = res.data.data.list.map((item) => {
+              item.dependents_limitfee = (item.dependents_limitfee / 100).toFixed(2)
+              item.employee_limitfee = (item.employee_limitfee / 100).toFixed(2)
+              return item
+            })
+            this.pagers.total = res.data.data.total_count
             this.loading = false
           } else {
             this.cardList = []
