@@ -23,7 +23,11 @@
            <div> 自动同步：开启自动同步后，总部添加编辑商品会自动同步上架到到店铺，保留开启前的商品状态。关闭同步后将保留已同步的商品数据 </div>
          </el-alert>
       </div>
-
+      <div style="margin-bottom:10px" v-if="$store.getters.login_type === 'merchant'">
+         <el-alert type="info" title="" show-icon >
+           <div> 可在设置-店铺管理员添加店铺端账号，登录地址 【 {{origin}}/shopadmin/login 】</div>
+         </el-alert>
+      </div>
       <el-row class="filter-header" :gutter="20">
         <el-col>
           <el-select v-model="params.is_valid" @change="isValidSelectHandle" placeholder="是否启用">
@@ -56,13 +60,22 @@
           <el-input class="input-m" placeholder="联系人手机号" v-model="params.mobile">
             <el-button slot="append" icon="el-icon-search" @click="numberSearch"></el-button>
           </el-input>
+          <el-select v-model="params.distribution_type" clearable placeholder="选择店铺类型" @change="distribution_typeHandle" v-if="$store.getters.login_type=='normal'">
+            <el-option label="加盟" value='1'>加盟</el-option>
+            <el-option label="自营" value='0'>自营</el-option>
+          </el-select>
+          <el-input class="input-m" placeholder="所属商家" v-model="params.merchant_name" v-if="$store.getters.login_type=='normal'">
+            <el-button slot="append" icon="el-icon-search" @click="merchant_nameSearch"></el-button>
+          </el-input>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col>
           <el-button-group v-if="!is_distributor">
             <el-button type="primary" @click="addDistributorSelf()" v-if="!distributor_self">新增总部自提点</el-button>
-            <el-button type="primary" @click="editDistributorSelf()" v-else>编辑总部自提点</el-button>
+            <template v-else>
+               <el-button type="primary" @click="editDistributorSelf()" v-if="$store.getters.login_type!='merchant'">编辑总部自提点</el-button>
+            </template>
             <el-button
               type="primary"
               v-if="system_mode === 'platform'"
@@ -71,13 +84,14 @@
           </el-button-group>
           <el-button
             v-if="!is_distributor"
+            :disabled="$store.getters.login_type!='merchant'"
             type="primary"
             plain
             icon="el-icon-circle-plus"
             @click="dialogOpen()"
           >添加店铺</el-button>
           <el-button
-            v-if="!is_distributor"
+            v-if="!is_distributor && $store.getters.login_type!='merchant'"
             type="primary"
             icon="el-icon-circle-plus"
             @click="showSettingDistance()"
@@ -107,7 +121,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column width="80" label="是否分账" v-if="isOpen">
+          <!-- <el-table-column width="80" label="是否分账" v-if="isOpen">
             <template slot-scope="scope" v-if="scope.row.is_valid !== 'delete'">
               <el-switch
                 v-model="scope.row.is_open"
@@ -118,7 +132,7 @@
                 @change="switchChangeOpen(scope.$index, scope.row)"
               ></el-switch>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column width="80" label="商品自动上架且总部发货" v-if="system_mode === 'standard'">
             <template slot-scope="scope" v-if="scope.row.is_valid !== 'delete'">
               <el-switch
@@ -188,7 +202,13 @@
               <span v-else class="muted">废弃</span>
             </template>
           </el-table-column>
-          <el-table-column width="80" label="是否默认">
+          <el-table-column label="店铺类型" width="80" v-if="$store.getters.login_type=='normal'">
+               <template slot-scope="scope">
+                 <span v-if="scope.row.distribution_type=='1'">加盟</span>
+                 <span v-else-if="scope.row.distribution_type=='0'">自营</span>
+               </template>
+          </el-table-column>
+          <el-table-column width="80" label="是否默认" v-if="$store.getters.login_type=='normal'">
             <template slot-scope="scope" v-if="scope.row.is_valid !== 'delete'">
               <el-tooltip effect="dark" content="请先启用店铺" placement="top-start">
                 <el-switch
@@ -216,10 +236,15 @@
               </el-tag>
             </template>
           </el-table-column>
+          <el-table-column label="所属商家" width="80" v-if="$store.getters.login_type!='merchant'">
+               <template slot-scope="scope">
+                 <span>{{scope.row.merchant_name || '-'}}</span>
+               </template>
+          </el-table-column>
           <el-table-column width="180" label="操作">
             <template slot-scope="scope">
               <router-link
-                v-if="scope.row.is_valid !== 'delete'"
+                v-if="scope.row.is_valid !== 'delete' && datapass_block=='0'"
                 :to="{ path: matchHidePage('editor'), query: { distributor_id: scope.row.distributor_id}}"
               ><span style="margin-right: 5px">编辑</span></router-link>
               
@@ -438,6 +463,8 @@ function getCascaderObj(val, opt) {
 export default {
   data() {
     return {
+      origin:'',
+      datapass_block:1,
       is_distributor: false,
       dialogVisible: false,
       current: '', // 当前店铺id
@@ -465,6 +492,8 @@ export default {
         province: '',
         city: '',
         area: '',
+        distribution_type:'',
+        merchant_name:'',
       },
       form: {
         distributor_id: null,
@@ -552,8 +581,16 @@ export default {
       this.params.page = 1
       this.getList()
     },
+    distribution_typeHandle(){
+       this.params.page = 1
+       this.getList()
+    },
     numberSearch(e) {
       this.params.page = 1
+      this.getList()
+    },
+    merchant_nameSearch(){
+      this.params.page = 1;
       this.getList()
     },
     handleCurrentChange(page_num) {
@@ -576,13 +613,15 @@ export default {
       this.$router.push({ path: this.matchHidePage('editor'), query: { distributor_type: 'distributor_self', distributor_id: this.distributor_self } })
     },
     getList() {
+      // debugger
       this.loading = true
       getDistributorList(this.params).then((response) => {
-        if (response.data.data.list) {
+        // if (response.data.data.list) {
           this.list = response.data.data.list
           this.total_count = response.data.data.total_count
           this.distributor_self = response.data.data.distributor_self
-        }
+          this.datapass_block = response.data.data.datapass_block;
+        // }
         this.loading = false
       })
     },
@@ -827,6 +866,8 @@ export default {
               type: 'success',
               message: '已修改',
             })
+            this.editValidDialog = false
+
           })
         })
         .catch(() => {
@@ -903,6 +944,7 @@ export default {
     },
     
   mounted() {
+    this.origin = window.location.origin;
     if (store.getters.login_type === 'distributor') {
       this.is_distributor = true
     }

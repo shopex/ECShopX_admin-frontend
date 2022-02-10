@@ -71,6 +71,12 @@ export default {
       let params = {}
       this.loading = true
 
+      if (!this.form.brand_name || !this.form.brand_name.trim()) {
+        this.$message.error('请输入商城名称') 
+        this.loading = false
+        return
+      }
+
       params = {
         intro: this.form.intro,
         logo: this.form.logo,
@@ -129,7 +135,7 @@ export default {
       this.pic = this.wximageurl + res.data.data.logo
       this.form.intro = res.data.data.intro
       this.form.brand_name = res.data.data.brand_name
-      this.remnant = res.data.data.intro.length
+      this.remnant = (res.data.data.intro||"").length
     })
   }
 }

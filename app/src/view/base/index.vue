@@ -367,11 +367,11 @@
         <i class="el-icon-warning icon-wr"></i
         ><span>店铺使用期限即将到期，如需继续使用请点击购买订购产品</span>
       </div>
-      <div class="btn">
+      <!-- <div class="btn">
         <el-button @click="handleBuy" size="mini" type="danger"
           >立即购买</el-button
         >
-      </div>
+      </div> -->
     </div>
     <el-row :gutter="20">
       <el-col :span="20">
@@ -726,14 +726,14 @@
           </div>
         </section>
         <!-- <section class="section-card fn-b-20"><a href="http://wpa.qq.com/msgrd?v=3&uin=714165655&site=qq&menu=yes" target="_blank">QQ客服</a></section> -->
-        <section
+        <!-- <section
           class="section-card fn-b-20 demo-img"
           v-show="activateInfo.source == 'demo'"
           :style="'background:  url(' + img.bcg_1 + ')'"
         >
           <div class="sl-img-hd">扫码体验DEMO</div>
           <img :src="img.demo" alt="" class="img-demo" />
-        </section>
+        </section> -->
         <section
           class="section-card fn-b-20 sl-img"
           v-show="activateInfo.source == 'demo'"
@@ -959,6 +959,7 @@ import {
   getCompanyStatistics,
   ydleadsInfo,
 } from "../../api/company";
+import { version } from '../../../package.json'
  
 
 const phone = require("@/assets/img/saas/phone.png");
@@ -1336,7 +1337,7 @@ export default {
         // this.activateInfo.source = 'demo'
         this.SET_PRODUCTION_CODE({ productionCode: res.data.data.product_code })
 
-        this.activateInfo.vue_ecshopx_verion = process.env.VUE_APP_PRODUCT_MODEL;
+        this.activateInfo.vue_ecshopx_verion = `${process.env.VUE_APP_PRODUCT_MODEL}-${version}`;
       });
       this.getUrl();
       getCompanyStatistics().then((res) => {

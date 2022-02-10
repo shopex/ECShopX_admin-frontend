@@ -30,7 +30,7 @@
           </el-select>
           <el-select v-model="aftersales_type" @change="TypeHandle" placeholder="请选择售后类型">
             <el-option
-              v-for="(item, index) in aftersalesTypeList"
+              v-for="(item, index) in $store.getters.login_type=='merchant'?aftersalesTypeList2:aftersalesTypeList"
               :key="index"
               :label="item.name"
               :value="item.value">
@@ -46,7 +46,7 @@
             content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据">
             <i class="el-icon-question" slot="reference"></i>
           </el-popover>
-          <el-button type="primary" @click="aftersalesRemindAction">售后提醒内容</el-button>
+          <el-button v-if="$store.getters.login_type!='merchant' && $store.getters.login_type!='distributor'" type="primary" @click="aftersalesRemindAction">售后提醒内容</el-button>
         </el-col>
       </el-row>
       <el-card>
@@ -184,6 +184,10 @@
           {name: '仅退款', value: 'ONLY_REFUND'},
           {name: '退货退款', value: 'REFUND_GOODS'},
           {name: '换货', value: 'EXCHANGING_GOODS'}
+        ],
+        aftersalesTypeList2: [
+          {name: '仅退款', value: 'ONLY_REFUND'},
+          {name: '退货退款', value: 'REFUND_GOODS'},
         ],
         aftersales_type: '',
         aftersales_status: '',

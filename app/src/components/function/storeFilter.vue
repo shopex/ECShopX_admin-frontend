@@ -1,25 +1,25 @@
 <template>
   <div>
     <div class="store-picker view-flex view-flex-middle">
-      <div class="store-info view-flex-item" v-if="checked.id && checked.id != '0'">
+      <div class="store-info view-flex-item">
         <div class="store-name">
-          {{ checked.name }}
+          {{ isChangeStore ? (checked.name? checked.name:'总店') : currentStoreName}}
         </div>
         <div class="store-address">
           {{ checked.address }}
         </div>
       </div>
-      <div class="view-flex-item default-store" v-else>总店</div>
+      <!-- <div class="view-flex-item default-store" v-else >总店</div>  -->
       <template v-if="!lock">
         <div
           v-if="checked.id && checked.id != '0'"
           class="iconfont icon-times"
           @click="handleResetClick"
         ></div>
-        <div class="iconfont icon-sync-alt" @click="handleClick"></div>
+        <div class="iconfont icon-sync-alt" @click="handleClick" v-if="isChangeStore"></div>
       </template>
     </div>
-    <storeList :visible="visible" :data="checked" @onClose="handleClose" @change="handleChange" />
+    <storeList :visible="visible" :data="checked" @changeStore="handleChangeStore" @onClose="handleClose" @change="handleChange" />
   </div>
 </template>
 
@@ -36,9 +36,17 @@ export default {
         return {}
       }
     },
+    isChangeStore:{
+      type:Boolean,
+      default:true
+    },
     lock: {
       type: Boolean,
       default: false
+    },
+    isChangeStore:{
+      type:Boolean,
+      default:true
     }
   },
   data() {
@@ -54,7 +62,8 @@ export default {
       total: 0,
       list: [],
       regions: district,
-      checked: {}
+      checked: {},
+      currentStoreName:''
     }
   },
   components: {
@@ -67,6 +76,9 @@ export default {
       } else {
         this.checked = {}
       }
+    },
+    checked(val){
+      console.log("---checked--->",val)
     }
   },
   methods: {
@@ -82,6 +94,11 @@ export default {
     },
     handleClose() {
       this.visible = false
+    },
+    handleChangeStore(list){ 
+      //如果返回只有一个则为店铺端
+      this.currentStoreName=list.length===1?list[0].name:'总店';
+      console.log("==currentStoreName",list,this.currentStoreName)
     }
   },
   mounted() {

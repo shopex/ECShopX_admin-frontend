@@ -12,6 +12,7 @@
         <el-table-column label="是否启用">
           <template slot-scope="scope">
             <el-tag type="success" v-if="scope.row.is_valid == 'true'">启用</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.is_valid == 'delete'">废弃</el-tag>
             <el-tag type="info" v-else>禁用</el-tag>
           </template>
         </el-table-column>
@@ -27,7 +28,7 @@
         </el-table-column>
         <el-table-column label="操作" min-width="100">
           <template slot-scope="scope">
-            <el-button type="text" @click="selectDistributor(scope.row)">进入店铺</el-button>
+            <el-button type="text" @click="selectDistributor(scope.row)" :disabled="scope.row.is_valid=='delete'">进入店铺</el-button>
           </template>
         </el-table-column>
       </el-table>

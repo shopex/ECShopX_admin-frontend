@@ -352,17 +352,20 @@
         rebateTask.forEach((item,index) =>{
             if(succCount > 0){
               if((item.money != '' && item.filter == '')||(item.money == '' && item.filter != '')){
-                errorMsg = '满足条件或返佣金额不能为空'
-              }
-            }else{
-              if(item.money == '' || item.filter == ''){
+                 
                 errorMsg = '满足条件或返佣金额不能为空'
               }
             }
+            // else{
+            //   if(item.money == '' || item.filter == ''){
+            //     debugger
+            //     errorMsg = '满足条件或返佣金额不能为空'
+            //   }
+            // }
               
         })
         if(this.current.rebate_type !='default'){
-            if(errorMsg !=''){
+            if(errorMsg !=''){ 
                 this.$message({
                     type: 'error',
                     message: '满足条件或返佣金额不能为空'

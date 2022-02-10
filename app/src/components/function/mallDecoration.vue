@@ -15,7 +15,13 @@
         class="components-view"
       >
         <div v-for="(item, index) in initData" :key="index" class="component-control">
-          <template v-if="item.name === 'nearbyShop'">
+          <template
+            v-if="
+              item.name === 'nearbyShop' &&
+              system_mode === 'platform' &&
+              $store.getters.login_type !== 'distributor'
+            "
+          >
             <svg class="svg-icon" aria-hidden="true">
               <use xlink:href="#icon-scroll"></use>
             </svg>
@@ -87,7 +93,13 @@
             </svg>
             轮播
           </template>
-          <template v-if="item.name === 'store' && system_mode === 'platform' && $store.getters.login_type !== 'distributor'">
+          <template
+            v-if="
+              item.name === 'store' &&
+              system_mode === 'platform' &&
+              $store.getters.login_type !== 'distributor'
+            "
+          >
             <svg class="svg-icon" aria-hidden="true">
               <use xlink:href="#icon-store"></use>
             </svg>
@@ -191,7 +203,8 @@
                 <nearbyShop
                   v-if="item.name === 'nearbyShop'"
                   :res="item"
-                  :active="index == editorIndex">
+                  :active="index == editorIndex"
+                >
                 </nearbyShop>
                 <coupon
                   v-if="item.name === 'coupon'"
@@ -299,10 +312,7 @@
         </div>
         <template v-else>
           <!-- {{editorData}} -->
-          <nearbyShopEditor
-            :res="editorData"
-            @tagSelectVisibleHandle='tagSelectVisibleHandle'
-          >
+          <nearbyShopEditor :res="editorData" @tagSelectVisibleHandle="tagSelectVisibleHandle">
           </nearbyShopEditor>
           <couponEditor
             :res="editorData"
@@ -360,7 +370,12 @@
           <headlineEditor :res="editorData"></headlineEditor>
           <hotTopicEditor :res="editorData" @bindLinks="showLinks"></hotTopicEditor>
           <imgGifEditor :res="editorData" @bindImgs="showImgs"></imgGifEditor>
-          <storeEditor :res="editorData" @bindGoods="showGoods" @bindImgs="showImgs"  @tagSelectVisibleHandle='tagSelectVisibleHandle'></storeEditor>
+          <storeEditor
+            :res="editorData"
+            @bindGoods="showGoods"
+            @bindImgs="showImgs"
+            @tagSelectVisibleHandle="tagSelectVisibleHandle"
+          ></storeEditor>
         </template>
       </div>
     </section>
@@ -389,6 +404,7 @@
       :lock-store="relStore.id == '0' ? false : true"
       @chooseStore="pickGoods"
       @closeStoreDialog="closeDialog"
+      :isChangeStore="true"
     ></goodsSelect>
     <couponPicker
       :visible="couponsVisible"
@@ -407,13 +423,14 @@
       ></couponPackageSelect>
     </template>
     <template v-if="tagSelectVisible">
-      <TagSelect 
+      <TagSelect
         :visible="tagSelectVisible"
-        :type='tagType' 
+        :type="tagType"
         :seletedTags="editorData.seletedTags"
-        @visibleHandle='tagSelectVisibleHandle'
-        @seletedTagsHandle='seletedTagsHandle'
-        @getOldDateHandle='getData'>
+        :storeID="storeID"
+        @visibleHandle="tagSelectVisibleHandle"
+        @seletedTagsHandle="seletedTagsHandle"
+      >
       </TagSelect>
     </template>
   </el-dialog>
@@ -449,7 +466,7 @@ import floorImgTwo from '@/components/template/floorImg-two'
 import headline from '@/components/template/headline'
 import hotTopic from '@/components/template/hotTopic'
 import imgGif from '@/components/template/img-gif'
-import nearbyShop from '@/components/template/nearby_shop';
+import nearbyShop from '@/components/template/nearby_shop'
 
 // control层组件
 import couponEditor from '@/components/template_editor/coupon'
@@ -469,7 +486,7 @@ import floorImgTwoEditor from '@/components/template_editor/floorImg-two'
 import headlineEditor from '@/components/template_editor/headline'
 import hotTopicEditor from '@/components/template_editor/hotTopic'
 import imgGifEditor from '@/components/template_editor/img-gif'
-import nearbyShopEditor from '@/components/template_editor/nearby_shop';
+import nearbyShopEditor from '@/components/template_editor/nearby_shop'
 
 // 第三方组件
 import draggable from 'vuedraggable'
@@ -479,6 +496,7 @@ import { savePageParams, getParamByTempName } from '@/api/wxa'
 import { getPagesTemplateDetail, savePagesTemplate } from '@/api/template'
 import { getRecommendLikeItemList } from '@/api/promotions'
 import { getItemsList } from '@/api/goods'
+import { forEach } from 'jszip'
 
 export default {
   props: {
@@ -555,11 +573,12 @@ export default {
     // 第三方组件
     draggable
   },
-   
+
   data() {
     return {
-      tagSelectVisible:false,
-      tagType:'',  // nearby_shop || store
+      tagSelectVisible: false,
+      tagType: '', // nearby_shop || store
+      storeID: null,
       couponPackageVisible: false,
       componentHeight: '',
       editorIndex: null,
@@ -587,13 +606,13 @@ export default {
       isSouponPackage: false, //是否为劵包 （用来判断图片选择）
       initData: [
         {
-          name:'nearbyShop',
-          base:{
-            title:'附近商家',
+          name: 'nearbyShop',
+          base: {
+            title: '附近商家',
             padded: true,
-            show_coupon:true,
+            show_coupon: true
           },
-          seletedTags:[],
+          seletedTags: []
         },
         {
           name: 'coupon',
@@ -603,30 +622,30 @@ export default {
             padded: true
           },
           data: [
-            {
-              type: 'cash',
-              id: '',
-              amount: '50',
-              imgUrl: '../../images/coupon_brand_demo.jpg',
-              title: '巴黎欧莱雅',
-              desc: '全场商品满900减50'
-            },
-            {
-              type: 'discount',
-              id: '',
-              amount: '8',
-              imgUrl: '../../images/coupon_brand_demo.jpg',
-              title: '巴黎欧莱雅',
-              desc: '全场商品满900减50'
-            },
-            {
-              type: 'cash',
-              id: '',
-              amount: '100',
-              imgUrl: '../../images/coupon_brand_demo.jpg',
-              title: '巴黎欧莱雅',
-              desc: '全场商品满900减50'
-            }
+            // {
+            //   type: 'cash',
+            //   id: '',
+            //   amount: '50',
+            //   imgUrl: '../../images/coupon_brand_demo.jpg',
+            //   title: '巴黎欧莱雅',
+            //   desc: '全场商品满900减50'
+            // },
+            // {
+            //   type: 'discount',
+            //   id: '',
+            //   amount: '8',
+            //   imgUrl: '../../images/coupon_brand_demo.jpg',
+            //   title: '巴黎欧莱雅',
+            //   desc: '全场商品满900减50'
+            // },
+            // {
+            //   type: 'cash',
+            //   id: '',
+            //   amount: '100',
+            //   imgUrl: '../../images/coupon_brand_demo.jpg',
+            //   title: '巴黎欧莱雅',
+            //   desc: '全场商品满900减50'
+            // }
           ],
           voucher_package: [
             // {
@@ -980,22 +999,27 @@ export default {
   },
   methods: {
     /* ---------------------------------------------选择标签------------------------------------------ */
-    tagSelectVisibleHandle(type){
-      this.tagSelectVisible = !this.tagSelectVisible ;
+    tagSelectVisibleHandle(type) {
+      if (type == 'store') {
+        this.storeID = this.components[this.editorIndex].data[0].id
+      }
+
+      this.tagSelectVisible = !this.tagSelectVisible
       if (this.tagSelectVisible) {
         this.tagType = type
-      }else{
+      } else {
         this.tagType = ''
       }
     },
-    seletedTagsHandle(seletedTags){
-      console.log('this.editorData====================',this.editorData);
-      console.log('this.components==========',this.components[this.editorIndex]);
-      this.editorData.seletedTags = seletedTags; // editor
-      this.components[this.editorIndex].seletedTags = seletedTags; // view
-       
+    seletedTagsHandle(seletedTags) {
+      console.log('this.editorData====================', this.editorData)
+      console.log('this.components==========', this.components[this.editorIndex])
+      this.editorData.seletedTags = seletedTags // editor
+      this.components[this.editorIndex].seletedTags = seletedTags // view
+
       // this.tagSelectVisibleHandle();
     },
+
     /* ---------------------------------------------选择标签------------------------------------------ */
 
     /* ---------------------------------------------劵包组件方法------------------------------------------ */
@@ -1006,8 +1030,6 @@ export default {
       this.couponPackageVisible = false
     },
     seletedDataHandle(seletedCoupon) {
-
-
       // for (let i = 0; i < seletedCoupon.length; i++) {
       //   for (let j = 0; j < this.editorData.voucher_package.length; j++) {
       //     if (this.editorData.voucher_package[j].package_id == seletedCoupon[i].package_id) {
@@ -1015,12 +1037,11 @@ export default {
       //     }
       //   }
       // }
-     
+
       // seletedCoupon = [...this.editorData.voucher_package,...seletedCoupon];
 
-
       this.editorData.voucher_package = seletedCoupon
-      this.components[this.editorIndex].voucher_package = seletedCoupon;
+      this.components[this.editorIndex].voucher_package = seletedCoupon
       // this.closeHandle()
     },
     /* ---------------------------------------------劵包组件方法结束------------------------------------------ */
@@ -1084,21 +1105,25 @@ export default {
         this.components[this.editorIndex].config.imgUrl = data.url
       } else if (
         this.components[this.editorIndex].name === 'floorImg' ||
-        this.components[this.editorIndex].name === 'goodsScroll' 
+        this.components[this.editorIndex].name === 'goodsScroll'
       ) {
         if (this.editorDataIndex == 'backImg') {
           this.components[this.editorIndex].base.backgroundImg = data.url
         } else {
           this.components[this.editorIndex].data[this.editorDataIndex].imgUrl = data.url
         }
-      }else if(this.components[this.editorIndex].name === 'store'){
+      } else if (this.components[this.editorIndex].name === 'store') {
         this.components[this.editorIndex].base.imgUrl = data.url
       } else {
         if (this.isSouponPackage) {
           // this.components[this.editorIndex].voucher_package[this.editorDataIndex].imgUrl = data.url   //无法触发watch。
-          this.$set(this.components[this.editorIndex].voucher_package[this.editorDataIndex],'imgUrl', data.url);
+          this.$set(
+            this.components[this.editorIndex].voucher_package[this.editorDataIndex],
+            'imgUrl',
+            data.url
+          )
         } else {
-          this.components[this.editorIndex].data[this.editorDataIndex].imgUrl = data.url  // 这里却可以。。。
+          this.components[this.editorIndex].data[this.editorDataIndex].imgUrl = data.url // 这里却可以。。。
         }
       }
       this.imgsVisible = false
@@ -1170,7 +1195,7 @@ export default {
       }
 
       if (this.editorDataIndex !== null) {
-        console.log('store.id====',store.id);
+        console.log('store.id====', store.id)
 
         if (!store.id) {
           this.relItemsIds.splice(0)
@@ -1181,6 +1206,18 @@ export default {
           return
         }
       }
+
+      /* 店铺标签逻辑 */
+      if (this.components[this.editorIndex].name == 'store') {
+        const oldStoreID = this.components[this.editorIndex].data[0].id
+        console.log(store.id)
+        if (oldStoreID != store.id) {
+          this.editorData.seletedTags = [] // template
+          this.components[this.editorIndex].seletedTags = [] //view
+        }
+        this.storeID = store.id
+      }
+       /* 店铺标签逻辑结束 */
 
       this.relItemsIds = data
       this.curStore = store
@@ -1206,31 +1243,33 @@ export default {
           // goodsGrid数据结构变化，数据另存到list里面
           let s = this.components[this.editorIndex].base.listIndex
           console.log(this.editorData.list[s].goodsList) // 源数据
-          for (let i = 0; i < this.editorData.list[s].goodsList.length; i++) {
-            for (let j = 0; j < values.length; j++) {
-              if (this.editorData.list[s].goodsList[i].goodsId == values[j].goodsId) {
-                values.splice(j, 1)
+          if (values.length>=this.editorData.list[s].goodsList.length) {
+            for (let i = 0; i < this.editorData.list[s].goodsList.length; i++) {
+              for (let j = 0; j < values.length; j++) {
+                if (this.editorData.list[s].goodsList[i].goodsId == values[j].goodsId) {
+                  values.splice(j, 1)
+                }
               }
             }
+            values = [...this.editorData.list[s].goodsList, ...values]
           }
-          values = [...this.editorData.list[s].goodsList, ...values]
           console.log(values)
           this.editorData.list[s].goodsList = values
           this.components[this.editorIndex].list[s].goodsList = values
         } else {
-          // debugger;
           console.log(values) // 新数据
           console.log(this.editorData.data) // 源数据
-          for (let i = 0; i < this.editorData.data.length; i++) {
-            for (let j = 0; j < values.length; j++) {
-              if (this.editorData.data[i].goodsId == values[j].goodsId) {
-                values.splice(j, 1)
+          if (values.length>=this.editorData.data.length) {
+            for (let i = 0; i < this.editorData.data.length; i++) {
+              for (let j = 0; j < values.length; j++) {
+                if (this.editorData.data[i].goodsId == values[j].goodsId) {
+                  values.splice(j, 1)
+                }
               }
             }
+            values = [...this.editorData.data, ...values]
           }
 
-          values = [...this.editorData.data, ...values]
-          console.log(values)
           this.editorData.data = values
           this.components[this.editorIndex].data = values
         }
@@ -1345,9 +1384,9 @@ export default {
               title: '推荐商铺',
               subtitle: '热门商铺，官方推荐',
               padded: true,
-              backgroundColor:'#13DCCE',
-              borderColor:'#FF6700',
-              imgUrl:'',
+              backgroundColor: '#FFF',
+              borderColor: '#FF6700',
+              imgUrl: ''
             },
             data: [
               {
@@ -1357,7 +1396,7 @@ export default {
                 items: []
               }
             ],
-            seletedTags:[]
+            seletedTags: []
           })
         }
       }
@@ -1390,6 +1429,7 @@ export default {
           }
         })
         this.platformComponents = platformComponents
+
         this.components = shopComponents
       } else {
         this.components = [...this.initData]
@@ -1401,6 +1441,7 @@ export default {
   },
   watch: {
     dialogVisible(newVal, oldVal) {
+      console.log('==================')
       if (newVal) {
         this.curStore = this.relStore
         this.editorData = {}
@@ -1408,7 +1449,7 @@ export default {
         this.getData()
       }
     },
-    
+
     initData: {
       handler(val) {},
       deep: true

@@ -9,6 +9,15 @@
       <template v-if="$store.getters.login_type == 'dealer'">
         <el-tab-pane label="分账导出" name="adapay_tradedata"></el-tab-pane>
       </template>
+      <template v-else-if="$store.getters.login_type == 'merchant'">
+        <el-tab-pane label="主订单导出" name="normal_master_order"></el-tab-pane>
+        <el-tab-pane label="子订单导出" name="normal_order"></el-tab-pane>
+        <el-tab-pane label="待开票订单导出" name="invoice"></el-tab-pane>
+        <el-tab-pane label="售后列表导出" name="aftersale_record_count"></el-tab-pane>
+        <el-tab-pane label="交易单导出" name="tradedata"></el-tab-pane>
+        <el-tab-pane label="退款单导出" name="refund_record_count"></el-tab-pane>
+        <el-tab-pane label="商品统计导出" name="goods_data"></el-tab-pane>
+      </template>
       <template v-else>
         <el-tab-pane label="会员导出" name="member"></el-tab-pane>
         <el-tab-pane label="服务订单导出" name="service_order"></el-tab-pane>
@@ -77,7 +86,8 @@ export default {
   props: ['getStatus'],
   data() {
     return {
-      activeName: this.$store.getters.login_type == 'dealer'?'adapay_tradedata' : 'member',
+      // activeName: this.$store.getters.login_type == 'dealer' ? 'adapay_tradedata' : 'member',
+      activeName: '',
       create_time: '',
       exportLogLists: [],
       loading: false,
@@ -91,10 +101,29 @@ export default {
       }
     }
   },
+  mounted() {
+    this.activeTabHandler();
+    this.getExportLogLists(this.params);
+    
+  },
+
   computed: {
     ...mapGetters(['wheight'])
   },
   methods: {
+    activeTabHandler() {
+      const active = this.$store.getters.login_type
+      console.log(active);
+      if (active == 'dealer') {
+        this.activeName = 'adapay_tradedata'
+      } else if (active == 'merchant') {
+        this.activeName = 'normal_master_order'
+      } else {
+        this.activeName = 'member'
+      }
+      // console.log(active);
+      console.log(this.activeName);
+    },
     // 切换tab
     handleClick(tab, event) {
       this.activeName = tab.name
@@ -146,9 +175,6 @@ export default {
       const dataBlob = new Blob([`\ufeff${encoded}`], { type: 'text/plain;charset=utf-8' }) //返回的格式
       return window.URL.createObjectURL(dataBlob)
     }
-  },
-  mounted() {
-    this.getExportLogLists(this.params)
   },
   watch: {
     getStatus(val) {

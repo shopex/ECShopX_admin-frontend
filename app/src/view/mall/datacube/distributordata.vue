@@ -25,7 +25,10 @@
             placeholder="请选择门店"
             @change="DistributorChange"
           >
-            <el-option label="总店" key="0" value="0">总店</el-option>
+            <el-option v-if="$store.getters.login_type=='merchant'" label="全部" key="2" value="all">全部</el-option>
+            <el-option v-if="$store.getters.login_type!='merchant'"  label="总店" key="0" value="0">总店</el-option>
+            
+
             <el-option
               v-for="item in distributorOption"
               :key="item.distributor_id"
@@ -47,82 +50,133 @@
       type="border-card"
       @tab-click="handleClick"
     >
-      <el-tab-pane label="会员数" name="member">
-        <section>
-          <canvas id="canvas_member" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="售后单数" name="aftersales">
-        <section>
-          <canvas id="canvas_aftersales" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="退款额" name="refunded">
-        <section>
-          <canvas id="canvas_refunded" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="交易额" name="amountPayed">
-        <section>
-          <canvas id="canvas_amountPayed" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="交易额(积分)" name="amountPointPayed">
-        <section>
-          <canvas id="canvas_amountPointPayed" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="订单数" name="order">
-        <section>
-          <canvas id="canvas_order" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="订单数(积分)" name="orderPoint">
-        <section>
-          <canvas id="canvas_orderPoint" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="付款订单数" name="orderPayed">
-        <section>
-          <canvas id="canvas_orderPayed" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="付款订单数(积分)" name="orderPointPayed">
-        <section>
-          <canvas id="canvas_orderPointPayed" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="GMV" name="gmv">
-        <section>
-          <canvas id="canvas_gmv" height="120"></canvas>
-        </section>
-      </el-tab-pane>
-      <el-tab-pane label="GMV(积分)" name="gmvPoint">
-        <section>
-          <canvas id="canvas_gmvPoint" height="120"></canvas>
-        </section>
-      </el-tab-pane>
+      <template v-if="$store.getters.login_type=='merchant'">
+        <el-tab-pane label="订单数" name="order">
+          <section>
+            <canvas id="canvas_order" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="售后单数" name="aftersales">
+          <section>
+            <canvas id="canvas_aftersales" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="退款额" name="refunded">
+          <section>
+            <canvas id="canvas_refunded" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="交易额" name="amountPayed">
+          <section>
+            <canvas id="canvas_amountPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="付款订单数" name="orderPayed">
+          <section>
+            <canvas id="canvas_orderPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="GMV" name="gmv">
+          <section>
+            <canvas id="canvas_gmv" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+      </template>
+      <template v-else>
+        <el-tab-pane label="会员数" name="member">
+          <section>
+            <canvas id="canvas_member" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="售后单数" name="aftersales">
+          <section>
+            <canvas id="canvas_aftersales" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="退款额" name="refunded">
+          <section>
+            <canvas id="canvas_refunded" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="交易额" name="amountPayed">
+          <section>
+            <canvas id="canvas_amountPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="交易额(积分)" name="amountPointPayed">
+          <section>
+            <canvas id="canvas_amountPointPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="订单数" name="order">
+          <section>
+            <canvas id="canvas_order" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="订单数(积分)" name="orderPoint">
+          <section>
+            <canvas id="canvas_orderPoint" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="付款订单数" name="orderPayed">
+          <section>
+            <canvas id="canvas_orderPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="付款订单数(积分)" name="orderPointPayed">
+          <section>
+            <canvas id="canvas_orderPointPayed" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="GMV" name="gmv">
+          <section>
+            <canvas id="canvas_gmv" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+        <el-tab-pane label="GMV(积分)" name="gmvPoint">
+          <section>
+            <canvas id="canvas_gmvPoint" height="120"></canvas>
+          </section>
+        </el-tab-pane>
+      </template>
     </el-tabs>
     <template>
       <el-table :data="allListData" stripe border style="width: 100%">
-        <el-table-column prop="count_date" label="日期" fixed></el-table-column>
-        <el-table-column prop="member_count" label="会员数"></el-table-column>
-        <el-table-column prop="aftersales_count" label="售后单数"></el-table-column>
-        <el-table-column label="退款额">
-          <template slot-scope="scope">￥{{ scope.row.refunded_count / 100 }}</template>
-        </el-table-column>
-        <el-table-column prop="amount_payed_count" label="交易额">
-          <template slot-scope="scope">￥{{ scope.row.amount_payed_count / 100 }}</template>
-        </el-table-column>
-        <el-table-column prop="amount_point_payed_count" label="交易额(积分)"></el-table-column>
-        <el-table-column prop="order_count" label="订单数"></el-table-column>
-        <el-table-column prop="order_point_count" label="订单数(积分)"></el-table-column>
-        <el-table-column prop="order_payed_count" label="付款订单数"></el-table-column>
-        <el-table-column prop="order_point_payed_count" label="付款订单数(积分)"></el-table-column>
-        <el-table-column prop="gmv_count" label="GMV">
-          <template slot-scope="scope">￥{{ scope.row.gmv_count / 100 }}</template>
-        </el-table-column>
-        <el-table-column prop="gmv_point_count" label="GMV(积分)"></el-table-column>
+         <template v-if="$store.getters.login_type=='merchant'">
+           <el-table-column prop="count_date" label="日期" fixed></el-table-column>
+           <el-table-column prop="order_count" label="订单数"></el-table-column>
+           <el-table-column prop="aftersales_count" label="售后单数"></el-table-column>
+            <el-table-column label="退款额">
+              <template slot-scope="scope">￥{{ scope.row.refunded_count / 100 }}</template>
+            </el-table-column>
+            <el-table-column prop="amount_payed_count" label="交易额">
+              <template slot-scope="scope">￥{{ scope.row.amount_payed_count / 100 }}</template>
+            </el-table-column>
+             <el-table-column prop="order_payed_count" label="付款订单数"></el-table-column>
+            <el-table-column prop="gmv_count" label="GMV">
+              <template slot-scope="scope">￥{{ scope.row.gmv_count / 100 }}</template>
+            </el-table-column>
+         </template>
+         <template v-else>
+            <el-table-column prop="count_date" label="日期" fixed></el-table-column>
+            <el-table-column prop="member_count" label="会员数"></el-table-column>
+            <el-table-column prop="aftersales_count" label="售后单数"></el-table-column>
+            <el-table-column label="退款额">
+              <template slot-scope="scope">￥{{ scope.row.refunded_count / 100 }}</template>
+            </el-table-column>
+            <el-table-column prop="amount_payed_count" label="交易额">
+              <template slot-scope="scope">￥{{ scope.row.amount_payed_count / 100 }}</template>
+            </el-table-column>
+            <el-table-column prop="amount_point_payed_count" label="交易额(积分)"></el-table-column>
+            <el-table-column prop="order_count" label="订单数"></el-table-column>
+            <el-table-column prop="order_point_count" label="订单数(积分)"></el-table-column>
+            <el-table-column prop="order_payed_count" label="付款订单数"></el-table-column>
+            <el-table-column prop="order_point_payed_count" label="付款订单数(积分)"></el-table-column>
+            <el-table-column prop="gmv_count" label="GMV">
+              <template slot-scope="scope">￥{{ scope.row.gmv_count / 100 }}</template>
+            </el-table-column>
+            <el-table-column prop="gmv_point_count" label="GMV(积分)"></el-table-column>
+        </template>
       </el-table>
     </template>
   </div>
@@ -133,12 +187,15 @@ import { mapGetters } from 'vuex'
 import chart from 'chart.js'
 import { getDistributorData } from '../../../api/datacube'
 import { getDistributorList } from '../../../api/marketing'
+import templateCpn from '../../wxapp/template.vue'
 export default {
+  components: { templateCpn },
   data() {
     return {
       vdate: '',
       loading: true,
-      activeName: 'member',
+      activeName: this.$store.getters.login_type!=='merchant'?'member':'order',
+      // activeName: '',
       params: {
         start: '',
         end: '',
@@ -162,8 +219,8 @@ export default {
         gmvPointData: []
       },
       tab: {
-        'name': 'member',
-        'label': '新增会员数'
+        'name':  this.$store.getters.login_type!=='merchant'?'member':'order',
+        'label':  this.$store.getters.login_type!=='merchant'?'新增会员数':'订单数',
       },
       chartColors: {
         red: 'rgb(255, 99, 132)',
@@ -231,11 +288,11 @@ export default {
       this.params.distributor = val
     },
     getDistributorData() {
-      getDistributorList().then((res) => {
+      getDistributorList({is_valid:true}).then((res) => {
         this.distributorOption = res.data.data.list
       })
     },
-    getDistributorDataList(isfirst) {
+    getDistributorDataList() {
       this.userTimeArr = []
       this.list.memberData = []
       this.list.aftersalesData = []
@@ -260,6 +317,7 @@ export default {
         .then((res) => {
           this.allListData = res.data.data.list
           let companyDataList = res.data.data.list
+          console.log(companyDataList);
           for (var key in companyDataList) {
             this.userTimeArr.push(companyDataList[key].count_date)
             this.list.memberData.push(companyDataList[key].member_count)
@@ -275,12 +333,14 @@ export default {
             this.list.gmvPointData.push(companyDataList[key].gmv_point_count / 100)
           }
           this.loading = false
+          const name = this.tab.name
           this.$nextTick(() => {
             let params = {
-              id: 'canvas_' + this.tab.name,
+              id: 'canvas_' +name,
               label: this.tab.label,
-              dataName: this.list[this.tab.name + 'Data']
+              dataName: this.list[name + 'Data']
             }
+            console.log(params);
             this.chartInit(params)
           })
         })
@@ -292,6 +352,7 @@ export default {
         })
     },
     chartInit(params) {
+      console.log(params);
       var config = {
         type: 'line',
         data: {
@@ -350,7 +411,10 @@ export default {
       this.is_distributor = true
     }
     if (this.is_distributor === false) {
-      this.getDistributorData()
+      this.$nextTick(()=>{
+         this.getDistributorData()
+      })
+     
     }
     var start = new Date()
     var end = new Date()

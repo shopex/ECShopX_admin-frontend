@@ -17,6 +17,11 @@ export default {
       component: () => import('@/view/base/account/storestaff')
     },
     {
+      path: 'staff/storemanager',
+      name: `账号管理-商户账号管理`, 
+      component: () => import('@/view/mall/marketing/merchantAccount')
+    },
+    {
       path: 'staff/Merchantstaffroles',
       name: `账号管理-店铺员工角色`, 
       component: () => import('@/view/base/account/storeroles')
@@ -117,9 +122,14 @@ export default {
       component: () => import('@/view/mall/trade/omsqueuelog')
     },
     {
-      path: 'shopmenu',
-      name: `菜单管理`, 
+      path: 'menumanage/shopmenus',
+      name: `商城菜单管理`, 
       component: () => import('@/view/menus/shopmenu')
+    },
+    {
+      path: 'menumanage/distributormenu',
+      name: `店铺菜单管理`, 
+      component: () => import('@/view/menus/distributormenu')
     },
     {
       path: 'openscreenad',

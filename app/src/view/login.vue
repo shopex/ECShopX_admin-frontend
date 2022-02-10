@@ -49,9 +49,9 @@
               label-width="0px"
               class="login-log-container"
             >
-              <h3 class="title">
+              <!-- <h3 class="title">
                 <a href="http://yyk.shopex.cn/signup" target="_blank" class="signup">免费注册</a>
-              </h3>
+              </h3> -->
               <el-form-item prop="account">
                 <el-input
                   type="text"
@@ -102,9 +102,9 @@
               label-width="0px"
               class="login-log-container"
             >
-              <h3 class="title">
+              <!-- <h3 class="title">
                 <a href="http://yyk.shopex.cn/signup" target="_blank" class="signup">免费注册</a>
-              </h3>
+              </h3> -->
               <el-form-item prop="account">
                 <el-input
                   type="text"
@@ -316,7 +316,7 @@ export default {
               }
             })
           })
-          console.log("----setmenu----",res.data.data) 
+          console.log("----setmenu----",res.data.data)  
           this.$store.dispatch('setMenu', res.data.data)
         } else {
           this.$message({

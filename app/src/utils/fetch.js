@@ -3,7 +3,7 @@ import Vue from 'vue'
 import qs from 'qs'
 import store from '../store'
 import Router from '../router'
-import { isInSalesCenter,goLink } from '@/utils'
+import { isInSalesCenter,goLink,isInMerchant } from '@/utils'
 
 function resolveGetMethod (inst) {
   const origGetMethod = inst.get
@@ -29,8 +29,9 @@ function resolveGetMethod (inst) {
 
 export function errorToast( data ) {
   console.log(data,'toast数据');
-  const { status_code, message } = data
-  if ( status_code == 40101 || status_code == 403 ) {
+ 
+  const { status_code, message } = data  
+  if ( status_code == 40101 ) {
     Vue.prototype.$message.error( '账号密码错误，请重新登录' )
   } else if ( status_code == 401 ) {
     // Token has expired
@@ -40,7 +41,12 @@ export function errorToast( data ) {
     // Vue.prototype.$message.error( '登录信息已过期，请重新登录' )
     store.commit( 'CLEAR_TOKEN' )
     // Router.push( { path: '/auth/login', replace: true } )
-    window.location.href = '/'
+    // 如果是商家入驻
+    if(isInMerchant()){
+      window.location.href = '/merchant'
+    }else{
+      window.location.href = '/'
+    } 
   } else {
     Vue.prototype.$message.error(message)
   }
@@ -99,7 +105,7 @@ function createAxios (inst, isJson = true) {
         data,
         status,
         config: { showError }
-      } = res
+      } = res 
       if ( status >= 200 && status < 300 ) {
         const resData = data.data
         if (!resData) {
@@ -149,7 +155,8 @@ function createAxios (inst, isJson = true) {
       }
       return Promise.reject(res)
     },
-    (err) => {
+  
+    (err) => { 
       //
       console.log('req-err', err)
       err.response && errorToast(err.response.data.data)

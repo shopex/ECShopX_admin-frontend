@@ -107,7 +107,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="设置标签">
+        <el-form-item label="设置标签" v-if="data[0].id!=0">
           <el-button
             size="mini"
             type="default"

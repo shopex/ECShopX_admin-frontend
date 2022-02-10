@@ -80,7 +80,7 @@ Vue.filter('formatCityData', function(areaValue, district, defaultValue = true) 
 Vue.filter('keepTwoDecimalFull', function(num) {
   var result = parseFloat(num)
   if (isNaN(result)) {
-    console('传递参数错误，请检查！')
+    console.log('传递参数错误，请检查！')
     return false
   }
   result = Math.round(num * 100) / 100
@@ -243,7 +243,7 @@ Vue.prototype.theme = {
   $submenu_text: '#666'
 }
 
-Vue.prototype.companyBrand = '云店新零售系统'
+Vue.prototype.companyBrand = '商派ECShopX'
 Vue.prototype.companyBrandImg = process.env.PRODUCT_MODEL === 'standard' ? 'onex' : 'ecshopx'
 // 动态改变页面的title
 document.title = Vue.prototype.companyBrand

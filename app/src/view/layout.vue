@@ -5,7 +5,20 @@
       <div class="menu-warp view-flex">
         <div class="main-menu">
           <div class="brand-con">
-            <router-link class="brand-link" :to="`${($store.getters.login_type == 'distributor' || $store.getters.login_type == 'dealer') ? $store.getters.menus[0].children[0].url: '/'}`">
+            <div v-if="$store.getters.login_type==='merchant'">
+              <div class="img-wrap">
+                <img :src="brandIco" alt="" />
+              </div>
+            </div>
+            <router-link
+              v-else
+              class="brand-link"
+              :to="`${
+                $store.getters.login_type == 'distributor' || $store.getters.login_type == 'dealer'
+                  ? $store.getters.menus[0].children[0].url
+                  : '/'
+              }`"
+            >
               <div class="img-wrap">
                 <img :src="brandIco" alt="" />
               </div>
@@ -26,14 +39,21 @@
             </el-menu>
           </div>
         </div>
-        <div class="sub-menu" v-if="$route.meta && !$route.meta.hidemenu ">
-          
-          <el-menu :default-active="activeSubIndex" >
+        <div class="sub-menu" v-if="$route.meta && !$route.meta.hidemenu">
+          <el-menu :default-active="activeSubIndex">
             <template v-for="(child, cindex) in submenuList">
-              <el-menu-item-group v-if="child.children && child.children[0].is_menu" class="menu-group" :key="`cmenu-${cindex}`">
+              <el-menu-item-group
+                v-if="child.children && child.children[0].is_menu"
+                class="menu-group"
+                :key="`cmenu-${cindex}`"
+              >
                 <template slot="title">{{ child.name }}</template>
                 <template v-for="sub in child.children" v-if="sub.is_show">
-                  <el-menu-item :key="sub.url" :index="sub.url" :class="{ 'is-active' : sub.url == activeSubIndex }">
+                  <el-menu-item
+                    :key="sub.url"
+                    :index="sub.url"
+                    :class="{ 'is-active': sub.url == activeSubIndex }"
+                  >
                     <router-link :to="sub.url">
                       {{ sub.name }}
                     </router-link>
@@ -41,7 +61,10 @@
                 </template>
               </el-menu-item-group>
               <div v-else-if="child.is_show && child.is_menu" :key="`cmenu-${cindex}`">
-                <el-menu-item :index="child.url" :class="{ 'is-active' : child.url == activeSubIndex }">
+                <el-menu-item
+                  :index="child.url"
+                  :class="{ 'is-active': child.url == activeSubIndex }"
+                >
                   <router-link :to="child.url">{{ child.name }}</router-link>
                 </el-menu-item>
               </div>
@@ -75,23 +98,20 @@
                   <img v-if="avatar" class="user-avatar" :src="avatar" />
                   <i v-else class="user-avatar iconfont icon-user-circle1"></i>
                 </div>
-                <div class="username">
+                <div class="username" >
                   <div>{{ nick_name || name }}</div>
                   <small class="muted">基础信息</small>
                 </div>
               </div>
-              <div class="popover-row exit-system" @click="logout">
-                退出登录
-              </div>
+              <div class="popover-row exit-system" @click="logout">退出登录</div>
 
               <img slot="reference" v-if="avatar" class="user-avatar" :src="avatar" />
               <i v-else slot="reference" class="iconfont icon-user-circle1"></i>
-
             </el-popover>
           </div>
         </div>
       </el-header>
-      <el-main style="position: relative;">
+      <el-main style="position: relative">
         <section id="container" class="content-container">
           <el-col :span="24" class="content-wrapper">
             <transition name="fade" mode="out-in">
@@ -111,7 +131,7 @@ import { log, isInSalesCenter } from '@/utils'
 import store from '@/store'
 export default {
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next((vm) => {
       vm.activeIndex = to.matched[0].path || '/'
     })
   },
@@ -123,7 +143,7 @@ export default {
       homeIndex: '',
       brandIco: '',
       showUserPopover: false,
-      activeIndex: '',
+      activeIndex: ''
     }
   },
   computed: {
@@ -131,10 +151,10 @@ export default {
     ...mapState({
       menuList: (state) => {
         const { menus } = state.menu
-        if(store.getters.login_type == 'distributor') {
-          menus.forEach(menu => {
+        if (store.getters.login_type == 'distributor') {
+          menus.forEach((menu) => {
             const paths = menu.url.match(/\/\w+/g)
-            menu.url = `${paths[0]}${paths[1]}`           
+            menu.url = `${paths[0]}${paths[1]}`
           })
         }
         return menus
@@ -145,10 +165,9 @@ export default {
       const fd = this.menuList.find((item) => {
         // const paths = item.url.match(/\/[a-z]+/g)
         const paths = item.url.match(/\/\w+/g)
-        if(paths && paths[0] == '/shopadmin' || paths &&  paths[0] == '/dealer') {
+        if ((paths && paths[0] == '/shopadmin') || (paths && paths[0] == '/dealer')) {
           // return `${paths[0]}${paths[1]}` == this.activeIndex
           return `${paths[0]}${paths[1]}` == this.$route.matched[0].path
-          
         } else {
           // return item.url == this.activeIndex
           return item.url == this.$route.matched[0].path
@@ -162,7 +181,6 @@ export default {
   },
   mounted() {
     this.getSystemSetting()
-
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
@@ -171,7 +189,7 @@ export default {
     },
     handleSelectMenu(key) {
       const paths = key.match(/\/\w+/g)
-      if(paths && paths[0] == '/shopadmin' || paths && paths[0]=='/dealer') {
+      if ((paths && paths[0] == '/shopadmin') || (paths && paths[0] == '/dealer')) {
         this.activeIndex = `${paths[0]}${paths[1]}`
       } else {
         this.activeIndex = key
@@ -211,21 +229,26 @@ export default {
       })
     },
     handleUserInfo() {
-      // this.$router.push({
-      //   path: '/admininfo'
-      // })
+      // debugger
+      console.log(this.matchInternalRoute('admininfo'));
+      // debugger
       this.$router.push({
-        path:this.matchInternalRoute('admininfo')
+        path: '/admininfo'
       })
+      // this.$router.push({
+      //   path: this.matchInternalRoute('admininfo')
+      // })
     },
     async logout() {
       await this.$api.login.getAuthorizelogout()
       await this.SYSTEM_EXIT()
-      if(this.$store.getters.login_type =='distributor'){
+      if (this.$store.getters.login_type == 'distributor') {
         window.location.href = `/shopadmin/login`
-      }else if(this.$store.getters.login_type =='dealer'){
+      } else if (this.$store.getters.login_type == 'dealer') {
         window.location.href = `/dealer/login`
-      }else{
+      } else if (this.$store.getters.login_type == 'merchant') {
+        window.location.href = `/merchant/login`
+      } else {
         window.location.href = `/login`
       }
     }
@@ -245,7 +268,7 @@ export default {
 }
 .brand-con {
   width: 100%;
-  
+
   padding: 20px;
   .brand-link {
     display: block;
@@ -311,7 +334,7 @@ export default {
       align-items: center;
     }
     .iconfont {
-      color: $dominant_hue;;
+      color: $dominant_hue;
       font-size: 14px;
       width: 14px;
     }
@@ -342,7 +365,6 @@ export default {
       color: #666;
       flex: 1;
       display: flex;
-      
     }
     i {
       color: $dominant_hue;
@@ -370,17 +392,17 @@ export default {
     height: 40px;
     border-radius: 20px;
   }
-
 }
 </style>
 <style>
-  .popover-row.base{
-    padding: 10px;
-  }
-  .popover-row.exit-system {
-    padding: 0px 12px 7px;
-    cursor:pointer;
-    font-size: 12px;
-  
-  }
+.popover-row.base {
+  padding: 10px;
+  cursor:pointer
+}
+.popover-row.exit-system {
+  padding: 0px 12px 7px;
+  font-size: 12px;
+  cursor:pointer
+
+}
 </style>

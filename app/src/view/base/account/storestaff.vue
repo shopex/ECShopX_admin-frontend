@@ -2,7 +2,10 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-button type="primary" icon="plus" @click="addLabels">添加账号</el-button>
+        <el-button type="primary" icon="plus" @click="addLabels">添加账号 </el-button>
+        <el-tooltip style="margin-left:10px" effect="light" :content="'请在【'+ origin +'/shopadmin/login】登录'" placement="top-start">
+          <i class="el-icon-warning-outline"></i>
+        </el-tooltip>
       </el-col>
       <el-col :span="12">
         <el-input placeholder="手机号" v-model="mobile"
@@ -125,6 +128,7 @@
       <DistributorSelect
         :store-visible="DistributorVisible"
         :is-valid="isValid"
+        :get-status="DistributorStatus"
         :rel-data-ids="relDistributors"
         @chooseStore="DistributorChooseAction"
         @closeStoreDialog="closeDialogAction"
@@ -160,12 +164,16 @@ export default {
   },
   data() {
     return {
+      oldData:[],
       isValid: true,
+      oldData:[],
       relDistributors: [],
       DistributorVisible: false,
+      DistributorStatus: false,
       login_type: 'default',
       isEdit: false,
       editVisible: false,
+      origin:'',
       editTitle: '',
       form: {
         operator_type: 'distributor',
@@ -203,14 +211,16 @@ export default {
       this.relDistributors.splice(index, 1)
     },
     addDistributoreAction() {
-      // debugger
+      this.DistributorStatus = true
       this.DistributorVisible = true
+      
+      
     },
     getDistributor(ids) {
       let param = { distributor_id: ids }
       getDistributorList(param).then((res) => {
         this.relDistributors = res.data.data.list
-        this.oldData = res.data.data.list
+        this.oldData = [...res.data.data.list]
       })
     },
     handleCancel() {
@@ -267,8 +277,7 @@ export default {
         this.getDistributor(ids)
       }
     },
-    submitAction() {
-      debugger
+    submitAction() { 
       // 提交物料
       this.form.shop_ids = []
       this.form.distributor_ids = []
@@ -348,20 +357,24 @@ export default {
         this.rolesListData = res.data.data.list
       })
     },
-    DistributorChooseAction(data) {
+    DistributorChooseAction(data) { 
       console.log(data)
-      // debugger
-      // this.DistributorVisible = false
+      this.DistributorVisible = false
       if (data === null || data.length <= 0) return
       this.relDistributors = data
+      this.oldData = data;
     },
     closeDialogAction() {
       this.DistributorVisible = false
+      this.relDistributors = this.oldData;
+      this.DistributorStatus = false
+      
       // this.relDistributors = []
       // this.getDistributor();
     }
   },
   mounted() {
+    this.origin = window.location.origin;
     this.login_type = this.$store.getters.login_type
     this.getAccountListData()
     this.getRolesListData()

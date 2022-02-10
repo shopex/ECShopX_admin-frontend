@@ -23,7 +23,7 @@ const router = new VueRouter({
 
 
 // 动态路由
-router.beforeEach( ( to, from, next ) => {
+router.beforeEach(( to, from, next ) => {  
   NProgress.start();
   // 加载PC模版设计器
   if ( to.path == '/pc/design' ) {
@@ -45,15 +45,16 @@ router.beforeEach( ( to, from, next ) => {
   
   const _token = store.getters.token
   const _menus = store.getters.menus
-  console.log(_menus,'_menus');
+  
   if ( _token ) {
     const curPath = constantRouterMap.RouteAuth.find( item => item.path == to.path )
     if ( curPath || to.path == '/shopadmin/shoplist' || to.path == '/dealer/index') {
       return next()
-    }
+    } 
     if ( _menus.length == 0 ) {
+    
       const shopId = store.getters.shopId
-      const login_type = store.getters.login_type
+      const login_type = store.getters.login_type 
       let permissionParams = {}
       if ( login_type == 'distributor' ) {
         permissionParams['distributor_id'] = shopId
@@ -91,11 +92,13 @@ router.beforeEach( ( to, from, next ) => {
 
         const newRouter = []
         // console.log(Object.keys(constantRouterMap))
-        // console.log('menu:', customRouterUrls)
+        // console.log('menu:', customRouterUrls) 
+        
 
         Object.keys( constantRouterMap ).forEach( ( key ) => {
           if ( key != 'RouteAuth' ) {
-            const route = constantRouterMap[key]
+          
+            const route = constantRouterMap[key] 
             // 二级菜单
             if ( route.children ) {
               const _route = {
@@ -104,7 +107,7 @@ router.beforeEach( ( to, from, next ) => {
               }
               _route.children = route.children.filter( ( item ) => {
                 if ( item.name == 'dashboard' ) {
-                  return customRouterUrls.includes( `/` )
+                  return customRouterUrls.includes( `/` )||customRouterUrls.includes( `/merchant` )
                 } else {
                   return customRouterUrls.includes( `${route.path}/${item.path}` )
                 }
@@ -116,8 +119,7 @@ router.beforeEach( ( to, from, next ) => {
                 // } else {
                 //   return customRouterUrls.includes(`${route.path}/${item.path}`)
                 // }
-              } )
-              // debugger
+              } ) 
               if ( _route.children.length > 0 ) {
                 newRouter.push( _route )
               }
@@ -140,6 +142,7 @@ router.beforeEach( ( to, from, next ) => {
         //   }
         // )
         // log.debug(`newRouter: `, newRouter)
+       
         router.addRoutes(newRouter)
         if ( to.path == '/' ) {
           next( customRouterUrls[0] )
@@ -148,7 +151,7 @@ router.beforeEach( ( to, from, next ) => {
         }
         // next( customRouterUrls[0] )
       })
-    } else {
+    } else { 
       next()
     }
   } else {
@@ -157,6 +160,8 @@ router.beforeEach( ( to, from, next ) => {
     } else {
       if ( to.path.includes('/shopadmin') ) {
         window.location.href = constantRouterMap.RouteAuth[1].path
+      } else if ( to.path.includes('/merchant') ){
+        window.location.href = constantRouterMap.RouteAuth[2].path
       } else {
         // 登录
         window.location.href = constantRouterMap.RouteAuth[0].path
