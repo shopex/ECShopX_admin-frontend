@@ -270,6 +270,9 @@ export default {
         } else {
           item.is_default = false
         }
+        if(item.background_pic_url===''){
+          item.background_pic_url=false
+        }
         // } else {
         //   item.is_default = false
         // }

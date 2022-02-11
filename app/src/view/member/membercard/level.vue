@@ -382,7 +382,7 @@ export default {
       this.curIndex = index
     },
     handleImgDelete(index){
-      this.levelData[index].background_pic_url = 'false'
+      this.levelData[index].background_pic_url = ''
     },
     pickImg(data) {
       this.levelData[this.curIndex].background_pic_url = data.url
