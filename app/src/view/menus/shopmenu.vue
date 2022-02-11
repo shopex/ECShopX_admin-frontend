@@ -250,14 +250,14 @@ export default {
   },
   methods: {
     getMenuTrees() {
-      let params = { 'version': 1 }
+      let params = { 'version': this.version }
       getShopMenu(params).then((res) => {
         this.tableData = res.list
         this.shopmenulist = res.list
       })
     },
     uploadHandleChange(file, fileList) {
-      let params = { isUploadFile: true, file: file.raw }
+      let params = { isUploadFile: true, file: file.raw , version: this.version}
       uploadMenu(params).then((res) => {
         this.getMenuTrees()
       })
@@ -272,10 +272,10 @@ export default {
       }
     },
     handleDownMenu() {
-      downMenu(1)
+      downMenu(this.version)
     },
     handleDownDistributorMenu() {
-      downMenu(1, 'platform')
+      downMenu(this.version, 'platform')
     },
     handleMoveEndCheck(event) {
       if (event.newIndex == event.oldIndex) {
@@ -370,7 +370,7 @@ export default {
     handleAddSubMenu(row) {
       this.isEdit = false
       this.form = {
-        version: 1,
+        version: this.version,
         is_menu: true,
         is_show: true,
         pid: 0,
@@ -395,7 +395,7 @@ export default {
     handleAddMenu() {
       this.isEdit = false
       this.form = {
-        version: 1,
+        version: this.version,
         is_menu: true,
         is_show: true,
         pid: 0,
@@ -432,6 +432,7 @@ export default {
 
   data() {
     return {
+      version: 1,
       dragOptions: {
         animation: 120,
         disabled: true,
@@ -452,18 +453,7 @@ export default {
         is_menu: true,
         apis: ''
       },
-      form: {
-        version: 1,
-        is_menu: true,
-        is_show: true,
-        pid: 0,
-        icon: '',
-        name: '',
-        alias_name: '',
-        menu_type: 'all',
-        url: '',
-        sort: 1
-      },
+      form: {},
       shopmenulist: [],
       tableData: []
     }

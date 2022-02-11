@@ -41,7 +41,7 @@
   margin-right: 20px;
 }
 .sku-image {
-  margin-bottom: 6px;
+  margin: 6px 0 6px 24px;
 }
 .sku-row {
   margin-bottom: 15px;
@@ -137,7 +137,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="原价">
+              <el-form-item label="市场价">
                 <el-input type="number" required min="0" v-model="value.specData.market_price" placeholder=""><template slot="prepend">¥</template></el-input>
               </el-form-item>
             </el-col>
@@ -159,6 +159,7 @@
       <template v-else>
         <div class="sub-label"></div>
         <div class="sub-block">
+          <!-- {{value.skus}} -->
           <div class="sku-row" v-for="(item, index) in value.skus" :key='index'>
             <div class="sku-name">
               {{item.sku_name}}：
@@ -168,17 +169,18 @@
                 @change="handleSkuChange">
                 <div class="sku-select__checkitem" v-for="(value, vn) in item.sku_value" :key="vn">
                   <el-checkbox class="sku-checkbox" :label="value.attribute_value_id">
-                    <imgBox class="sku-image" v-if="value.image_url" :imgUrl="value.image_url" width="50" height="50" />
                     <el-input v-if="item.checked_sku.indexOf(value.attribute_value_id) !== -1" v-model="value.custom_attribute_value" size="mini" style="width: 100px;" 
                     @change="handleSkuName(value, index, vn)"></el-input>
                     <span v-else>{{value.attribute_value}}</span>
                   </el-checkbox>
+                  <imgBox class="sku-image" v-if="value.image_url" :imgUrl="value.image_url" width="50" height="50" />
                 </div>
               </el-checkbox-group>
             </div>
           </div>
         </div>
-        <!-- <div class="sub-label">设置规格图片</div>
+        <div class="sub-label">设置规格图片</div>
+        <!-- {{value.specImages}} -->
         <div class="sub-block">
           <el-table
             :data="value.specImages"
@@ -190,13 +192,21 @@
             </el-table-column>
             <el-table-column label="规格图">
               <template slot-scope="scope">
-                <imgBox style="margin-right:10px;" v-for="(item, index) in scope.row.item_image_url" :key="index" :imgUrl="item" inline removeBtn width="50" height="50" 
-                @remove="handleImgRemove(scope.$index, index)"></imgBox>
+                <template v-for="(item, index) in scope.row.item_image_url">
+                  <imgBox style="margin-right:10px;"
+                    :key="index" 
+                    :imgUrl="item" 
+                    inline 
+                    removeBtn 
+                    width="50" 
+                    height="50" 
+                    @remove="handleImgRemove(scope.$index, index)"></imgBox>
+                </template>
                 <imgBox v-if="scope.row.item_image_url.length < 5" width="50" height="50" inline @click="handleSkuImg(scope.$index)"></imgBox>
               </template>
             </el-table-column>
           </el-table>
-        </div> -->
+        </div>
         <div class="sub-label">设置规格</div>
         <div class="sub-block">
           <el-table
@@ -251,7 +261,7 @@
                 <el-input type="number" required min="0" v-model="scope.row.cost_price" size="mini" placeholder=""></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="原价">
+            <el-table-column label="市场价">
               <template slot-scope="scope">
                 <el-input type="number" required min="0" v-model="scope.row.market_price" size="mini" placeholder=""></el-input>
               </template>
@@ -322,7 +332,7 @@
                 <el-input type="number" required min="0" v-model="scope.row.cost_price" size="mini" placeholder=""></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="原价">
+            <el-table-column label="市场价">
               <template slot-scope="scope">
                 <el-input type="number" required min="0" v-model="scope.row.market_price" size="mini" placeholder=""></el-input>
               </template>
@@ -456,7 +466,7 @@ export default {
     handleSkuImg(index) {
       this.picsDialog = true
       this.isGetPics = true
-      this.multiple = true,
+      this.multiple = true
       this.rowIndex = index
     },
     fillSku() {

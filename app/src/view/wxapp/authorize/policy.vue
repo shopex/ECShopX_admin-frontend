@@ -119,6 +119,7 @@ export default {
   name: '',
   data() {
     return {
+      wxapp_id: '',
       weappName: '',
       privacyList: [],
       privacyDescList: [],
@@ -146,15 +147,21 @@ export default {
     }
   },
   created() {
+    if (this.$route.query && this.$route.query.app_id) {
+      this.wxapp_id = this.$route.query.app_id
+    }
+    if (this.$route.query && this.$route.query.nick_name) {
+      this.weappName = this.$route.query.nick_name
+    }
     this.getPolicyConfig()
   },
   mounted() {
-    this.$nextTick(() => {
-      this.weappName = this.$parent.detail.nick_name
-    })
-  },
-  computed: {
-    ...mapGetters(['wxapp_id'])
+    if (this.$route.query && this.$route.query.app_id) {
+      this.wxapp_id = this.$route.query.app_id
+    }
+    if (this.$route.query && this.$route.query.nick_name) {
+      this.weappName = this.$route.query.nick_name
+    } 
   },
   methods: {
     async getPolicyConfig() {
@@ -288,7 +295,6 @@ export default {
       })
       this.$message.success('保存成功')
       this.$router.go(-1)
-      
     },
     getPrivacyDesc(key) {
       const fd = this.privacyDescList.find(item => item.privacy_key == key)
