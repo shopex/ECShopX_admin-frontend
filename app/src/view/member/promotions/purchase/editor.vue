@@ -83,7 +83,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="每人限购：" v-if="!allHiden">
-          <el-input style="width: 240px" v-model="form.item_limit"
+          <el-input style="width: 240px" v-model="allLimit"
             ><template slot="append">件</template></el-input
           >
         </el-form-item>
@@ -346,6 +346,7 @@ export default {
         { key: 'dependents', name: '家属' }
       ],
       allHiden: false,
+      allLimit: '',
       zdItemHidden: true,
       relItems: [],
       categoryHidden: true,
@@ -430,6 +431,10 @@ export default {
             this.relItems = res.data.data.itemTreeLists
           })
         }
+        if (this.form.item_type === 'all') {
+          this.allHiden = false
+          this.allLimit = this.form.item_limit
+        }
       })
     }
   },
@@ -469,17 +474,17 @@ export default {
       }
       if (val === 'item') {
         this.zdItemHidden = false
-        // this.good.currentGoods = []
+        this.good.currentGoods = []
       } else if (val === 'category') {
         this.categoryHidden = false
-        // this.item_category = []
+        this.item_category = []
       } else if (val === 'tag') {
         this.tagHidden = false
-        // this.tag.currentTags = []
+        this.tag.currentTags = []
         this.showTags()
       } else if (val === 'brand') {
         this.brandHidden = false
-        // this.brand.currentBrands = []
+        this.brand.currentBrands = []
         this.showBrands()
       } else if (val === 'all') {
         this.allHiden = false
@@ -711,6 +716,10 @@ export default {
         })
         this.form.item_limit = newArr
       }
+
+      if (this.form.item_type === 'all') {
+        this.form.item_limit = this.allLimit
+      }
       // console.log('this.form==>', this.form)
       // return
       if (this.form.purchase_id) {
@@ -777,7 +786,6 @@ export default {
         item.limit_fee = limit_fee
       })
       this.$forceUpdate()
-      console.log('???==>', this.dialogForm, currentArr)
       this.dialogFormVisible = false
     }
   }
