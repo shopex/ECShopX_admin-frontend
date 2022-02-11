@@ -400,6 +400,7 @@ export default {
           this.categoryHidden = false
           this.allHiden = true
           this.item_category = this.form.item_limit.map((item) => {
+            item.category_id = item.item_id
             item.category_name = item.name
             return item
           })
@@ -408,6 +409,7 @@ export default {
           this.tagHidden = false
           this.allHiden = true
           this.tag.currentTags = this.form.item_limit.map((item) => {
+            item.tag_id = item.item_id
             item.tag_name = item.name
             return item
           })
@@ -416,6 +418,7 @@ export default {
           this.brandHidden = false
           this.allHiden = true
           this.brand.currentBrands = this.form.item_limit.map((item) => {
+            item.attribute_id = item.name
             item.attribute_name = item.name
             return item
           })
