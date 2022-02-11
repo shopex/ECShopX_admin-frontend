@@ -308,7 +308,7 @@ import imgPicker from '@/components/imageselect'
 import SkuSelector from '@/components/function/skuSelector'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { handleUploadFile, exportUploadTemplate } from '../../../../api/common'
+import { handleUploadFile, exportUploadTemplate } from '@/api/common'
 import { getCategory, getTagList, getGoodsAttr } from '@/api/goods'
 import { createPurchase, editPurchase, getPurchaseInfo } from '@/api/purchase'
 
@@ -418,7 +418,7 @@ export default {
           this.brandHidden = false
           this.allHiden = true
           this.brand.currentBrands = this.form.item_limit.map((item) => {
-            item.attribute_id = item.name
+            item.attribute_id = item.item_id
             item.attribute_name = item.name
             return item
           })
@@ -509,6 +509,7 @@ export default {
      * 上传模板
      * */
     uploadHandleChange(file, fileList) {
+      console.log('file', file)
       let params = { isUploadFile: true, file_type: 'marketing_goods', file: file.raw }
       handleUploadFile(params).then((response) => {
         this.$message({
