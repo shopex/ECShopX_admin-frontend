@@ -311,12 +311,14 @@ export default {
       }
       console.log("==handleStoreChange==",val);
       this.store = val
-      this.$refs.multipleTable.clearSelection()
-      this.selectRows = []
+6
+      // this.selectRows = []
       this.params.distributor_id = val.id;
       this.params.templates_id = ''
       this.getShippingTemplatesList(val.id);
       this.getNewsList()
+
+
     },
     getTemplateRow(index, row) {
       this.selectRows = new Array(row)
@@ -439,6 +441,8 @@ export default {
             this.itemsData = response.data.data.list
             this.total_count = parseInt(response.data.data.total_count)
             this.loading = false
+            // 回显
+            this.toggleSelection(this.relItemsIds)
           }) 
         } else {  
           getDistributorItems(param).then((response) => {
@@ -447,6 +451,15 @@ export default {
             this.loading = false
           })
         }
+      }
+    },
+      toggleSelection(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
       }
     },
     // 获取  运费模板 options
@@ -510,6 +523,7 @@ export default {
   },
   watch: {
     itemsVisible(val) {
+
       console.log("itemsVisible==",val,this.relStore);
        
       if (val) {
@@ -584,6 +598,7 @@ export default {
       }
     },
     relItemsIds(newVal, oldVal) {
+      console.log('==================');
       if (newVal.length > 0) {
         this.multipleSelection = newVal
       }
