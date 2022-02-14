@@ -111,7 +111,7 @@ export default (vm) => {
     ],
     actions: [
       {
-        name: '详情',
+        name: '查看',
         key: 'detail',
         type: 'button',
         buttonType: 'text',

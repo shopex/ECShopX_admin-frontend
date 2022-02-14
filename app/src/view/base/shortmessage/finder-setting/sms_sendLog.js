@@ -66,8 +66,8 @@ export default (vm) => {
               h(
                 'span',
                 {},
-                (row.status == '0' && '发送中') ||
-                  (row.status == '1' && '发送成功') ||
+                (row.status == '1' && '发送中') ||
+                  (row.status == '3' && '发送成功') ||
                   (row.status == '2' && '发送失败 ')
               ),
               row.status == 2 &&
