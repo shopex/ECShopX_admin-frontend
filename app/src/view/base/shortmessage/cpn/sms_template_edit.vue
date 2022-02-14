@@ -88,7 +88,7 @@
         </template>
         <template slot="extra">
           <el-button type="primary" @click="fnBack" size="medium">返回列表</el-button>
-          <el-button v-if="!$route.query.type" size="medium" @click="resultVisible = false"
+          <el-button v-if="!$route.query.type" size="medium" @click="fnAgain"
             >再添加一个模板</el-button
           >
         </template>
@@ -234,6 +234,10 @@ export default {
       this.$router.push({
         path: `/setting/datamessage/ali_sms/sms_template`
       })
+    },
+    fnAgain(){
+      this.resultVisible = false;
+      this.$refs['form'].resetFields();
     },
     /* -------------------------图片选择------------------------- */
     pickImg({ url }) {
