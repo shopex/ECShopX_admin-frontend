@@ -100,7 +100,7 @@
                 </div>
                 <div class="username" >
                   <div>{{ nick_name || name }}</div>
-                  <small class="muted">基础信息</small>
+                  <small class="muted">账号信息</small>
                 </div>
               </div>
               <div class="popover-row exit-system" @click="logout">退出登录</div>
