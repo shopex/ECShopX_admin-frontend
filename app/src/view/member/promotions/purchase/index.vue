@@ -17,8 +17,13 @@
           </el-select>
         </el-col>
         <el-col :span="8">
-          <el-input clearable placeholder="请输入活动名称" v-model="fetchParams.purchase_name">
-            <el-select
+          <el-input
+            clearable
+            placeholder="请输入活动名称"
+            v-model="fetchParams.purchase_name"
+            @change="dataSearch"
+          >
+            <!-- <el-select
               v-model="fetchParams.purchase_name"
               clearable
               slot="prepend"
@@ -33,7 +38,8 @@
                 :value="item.purchase_name"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
+            <template slot="prepend">活动名称</template>
             <el-button slot="append" icon="el-icon-search" @click="dataSearch"></el-button>
           </el-input>
         </el-col>

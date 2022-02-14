@@ -40,12 +40,6 @@
             <el-table-column prop="limit_fee" label="每人额度"> </el-table-column>
           </el-table>
         </el-form-item>
-        <el-form-item label="创建时间：">{{
-          detail.created | datetime('YYYY-MM-DD HH:mm:ss')
-        }}</el-form-item>
-        <el-form-item label="更新时间：">{{
-          detail.updated | datetime('YYYY-MM-DD HH:mm:ss')
-        }}</el-form-item>
       </el-form>
     </div>
   </div>

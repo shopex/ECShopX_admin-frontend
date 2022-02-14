@@ -4,14 +4,14 @@
       <el-form-item label="活动名称：">
         <el-input
           v-model="form.purchase_name"
-          style="width: 240px"
+          style="width: 400px"
           maxlength="30"
           type="textarea"
           show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item label="活动封面：">
-        <div class="frm-tips">建议上传尺寸大小为300*300且格式为png、jpg图片；文件大小为1M内。</div>
+        <div class="frm-tips">建议上传尺寸大小为300*300且格式为png、jpg图片；文件大小为2M内。</div>
         <div>
           <imgBox :imgUrl="form.ad_pic" inline @click="handleImgChange"></imgBox>
         </div>
