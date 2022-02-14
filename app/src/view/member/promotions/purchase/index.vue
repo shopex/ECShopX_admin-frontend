@@ -28,7 +28,7 @@
             >
               <el-option
                 v-for="item in cardList"
-                :key="item.purchase_name"
+                :key="item.purchase_id"
                 :label="item.purchase_name"
                 :value="item.purchase_name"
               >
@@ -38,7 +38,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" icon="el-icon-circle-plus" @click="addCoupon"
+          <el-button type="primary" icon="el-icon-circle-plus" @click="addPurchase"
             >新增活动</el-button
           >
         </el-col>
@@ -169,7 +169,7 @@ export default {
       this.fetchParams.pageSize = val
       this.getPurchaseList()
     },
-    addCoupon() {
+    addPurchase() {
       this.$router.push({ path: this.matchHidePage('editor') })
     },
     deleteCard(id, index) {
