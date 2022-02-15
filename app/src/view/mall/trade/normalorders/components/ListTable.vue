@@ -505,7 +505,6 @@ export default {
       this.$emit('onChangeData', 'deliveryInfo', { order_id })
     },
     handleClick(tab) {
-      console.log(tab.name, 'tab.name')
       this.$emit('onChangeData', 'params', {
         order_status: tab.name == 'all' ? '' : tab.name,
         page: 1
