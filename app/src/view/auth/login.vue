@@ -19,7 +19,7 @@
           :rules="rules"
           ref="form"
           label-position="left"
-          label-width="50px"
+          label-width="100px"
           class="form"
         >
           <div class="box">
