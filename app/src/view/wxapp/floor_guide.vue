@@ -614,7 +614,7 @@ export default {
     },
     handleChange(val) {
       this.editableData[this.curIdx].stores = JSON.parse(JSON.stringify(val))
-      this.curStores = JSON.parse(JSON.stringify(val))
+      this.curStores = JSON.parse(JSON.stringify(val)) 
       let ids = []
       val.map((item) => {
         ids.push(item.id)
