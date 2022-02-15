@@ -43,7 +43,7 @@
             >
             </el-table-column>
             <el-table-column prop="limit_num" label="每人限购"> </el-table-column>
-            <el-table-column prop="limit_fee" label="每人额度"> </el-table-column>
+            <el-table-column prop="limit_fee" label="每人限额"> </el-table-column>
           </el-table>
         </el-form-item>
       </el-form>
