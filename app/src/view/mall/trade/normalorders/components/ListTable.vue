@@ -49,7 +49,7 @@
         </el-table-column>
         <el-table-column prop="mobile" width="120" label="客户手机号">
           <template slot-scope="scope">
-            <template v-if="!scope.row.user_delete">
+            <template v-if="!scope.row.user_delete && $store.getters.login_type!=='merchant'">
               <router-link
                 target="_blank"
                 :to="{
