@@ -107,8 +107,8 @@
 </template>
 <script>
 import { getWechatMaterial } from '../../api/wechat'
-import { getQiniuVideoList,uploadQiniuVideo } from '@/api/qiniu'
-import UploadUtil from '@/utils/uploadUtil' 
+import { getQiniuVideoList, uploadQiniuVideo } from '@/api/qiniu'
+import UploadUtil from '@/utils/uploadUtil'
 export default {
   props: {
     multiple: {
@@ -136,11 +136,11 @@ export default {
         page: 1,
         pageSize: 20
       },
-          postData: {
+      postData: {
         token: '',
         key: '',
         fname: ''
-      }, 
+      },
       videoForm: {
         title: '',
         description: ''
@@ -175,8 +175,8 @@ export default {
     handleVideoSuccess(res, file) {
       let uploadParams = {
         image_cat_id: 2, //视频分类必填,必须为整数
-        image_name: this.videoForm.title, //视频名称必填,不能超过50个字符
-        brief: this.videoForm.description, //视频名称必填,不能超过50个字符
+        image_name: file?.name, //视频名称必填,不能超过50个字符
+        brief: '视频本地上传', //视频名称必填,不能超过50个字符
         image_url: res.key, //视频链接必填
         // image_full_url: res.height,   //视频完整链接必填
         image_type: file.raw.type, //视频分类长度不能超过20个字符
@@ -188,27 +188,12 @@ export default {
           message: '上传成功',
           type: 'success',
           duration: 5 * 1000
-        })  
+        })
         this.fetchLocalVideos()
       })
       // }
     },
     beforeVideoUpload(file) {
-      if (this.videoForm.title.length <= 0) {
-        this.$message({
-          message: '视频标题必填',
-          type: 'error'
-        })
-        return
-      }
-      if (this.videoForm.description.length <= 0) {
-        this.$message({
-          message: '视频描述必填',
-          type: 'error'
-        })
-        return
-      }
-
       const isMP4 = file.type === 'video/mp4'
       const isLt2M = file.size / 1024 / 1024 < 50
 
@@ -222,8 +207,7 @@ export default {
       }
 
       this.postData.fname = file.name
- 
-    }, 
+    },
     showVideos() {
       this.visible = true
       this.temp = this.checked
@@ -371,6 +355,13 @@ export default {
   }
 }
 
+.upload_box {
+  .upload-demo {
+    border-bottom: 1px solid #e5e7e7;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+}
 .upload-box {
   border: 1px dashed #c0ccda;
   border-radius: 6px;
