@@ -243,8 +243,57 @@
           @selection-change="handleSelectionChange"
           v-loading="loading"
         >
+
           <el-table-column type="selection" align="center" label="全选"></el-table-column>
-          <el-table-column type="expand" label="会员标签" width="100">
+          <el-table-column prop="mobile" label="手机号" width="160">
+            <template slot-scope="scope">
+              {{ scope.row.mobile }}
+              <el-tooltip
+                v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+                class="item"
+                effect="dark"
+                content="修改手机号"
+                placement="top-start"
+              >
+                <el-button
+                  class="el-icon-edit"
+                  type="text"
+                  size="mini"
+                  @click="editMobile(scope.row)"
+                ></el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column prop="username" label="姓名" width="140"></el-table-column>
+          <el-table-column prop="sex" label="性别" width="70">
+            <template slot-scope="scope">
+              <span v-if="scope.row.sex == '2'">女</span>
+              <span v-else-if="scope.row.sex == '1'">男</span>
+              <span v-else-if="scope.row.sex == '0'">未知</span>
+              <span v-else>{{ scope.row.sex }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="grade_id" label="会员等级" width="140">
+            <template slot-scope="scope">
+              <!-- <span v-if="scope.row.grade_id == '1'">女</span>
+              <span v-else>{{ scope.row.grade_id }}</span> -->
+              <span>{{ showGrade(scope.row.grade_id)}}</span>
+            </template>
+          </el-table-column>
+           <el-table-column prop="inviter" label="推荐人" width="130"></el-table-column>
+          <el-table-column prop="disabled" label="禁用" width="80">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.disabled"
+                active-value="1"
+                inactive-value="0"
+                @change="acitonDisabled(scope.$index, scope.row)"
+                active-color="#ff4949"
+                inactive-color="#ccc"
+              ></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="会员标签">
             <template slot-scope="scope">
               <template v-if="scope.row.tagList.length > 0">
                 <el-tag
@@ -270,35 +319,10 @@
             label="会员卡编号"
             width="130"
           ></el-table-column>
-          <el-table-column prop="username" label="姓名" width="100"></el-table-column>
-          <el-table-column prop="mobile" label="手机号" width="130">
-            <template slot-scope="scope">
-              {{ scope.row.mobile }}
-              <el-tooltip
-                v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
-                class="item"
-                effect="dark"
-                content="修改手机号"
-                placement="top-start"
-              >
-                <el-button
-                  class="el-icon-edit"
-                  type="text"
-                  size="mini"
-                  @click="editMobile(scope.row)"
-                ></el-button>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column prop="sex" label="性别" width="70">
-            <template slot-scope="scope">
-              <span v-if="scope.row.sex == '2'">女</span>
-              <span v-else-if="scope.row.sex == '1'">男</span>
-              <span v-else-if="scope.row.sex == '0'">未知</span>
-              <span v-else>{{ scope.row.sex }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="inviter" label="推荐人" width="130"></el-table-column>
+         
+
+
+         
           <el-table-column prop="created" v-if="false" label="注册日期" width="120">
             <template slot-scope="scope">
               <el-tooltip placement="top">
@@ -309,19 +333,8 @@
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column prop="disabled" label="禁用" width="80">
-            <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.disabled"
-                active-value="1"
-                inactive-value="0"
-                @change="acitonDisabled(scope.$index, scope.row)"
-                active-color="#ff4949"
-                inactive-color="#ccc"
-              ></el-switch>
-            </template>
-          </el-table-column>
-          <el-table-column label="备注">
+
+          <!-- <el-table-column label="备注">
             <template slot-scope="scope">
               <span v-if="scope.row.remarks">{{ scope.row.remarks }}</span>
               <span v-else class="muted">暂无备注</span>
@@ -334,7 +347,7 @@
                 ></el-button>
               </el-tooltip>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
               <el-button type="text" @click="getDetail(scope.row.user_id)">详情</el-button>
@@ -789,6 +802,7 @@ import { giveCoupons } from '../../../api/promotions'
 import { listVipGrade, batchReceiveMemberCard } from '../../../api/cardticket'
 import { getWxShopsList } from '../../../api/shop'
 import shopSelect from '@/components/shopSelect'
+import { forEach } from 'jszip'
 
 export default {
   components: {
@@ -1167,6 +1181,13 @@ export default {
           this.levelData = response.data.data
         }
       })
+    },
+    showGrade(id){
+      if (this.levelData.length>0) {
+        return this.levelData.filter(element => {
+          return id == element.grade_id
+        })[0].grade_name;
+      }
     },
     getDetail(userid) {
       let isShopadmin = false
