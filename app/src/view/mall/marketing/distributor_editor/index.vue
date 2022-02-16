@@ -240,8 +240,7 @@ export default {
     },
     remoteMerchantList:async function(name){
       this.merchantLoading=true;
-      const {data:{data:{list}}}=await this.getMerchantsList(name);
-      console.log('list',list);
+      const {data:{data:{list}}}=await this.getMerchantsList(name); 
       this.merchantList=list.map(item=>({value:item.id,label:item.merchant_name}))
       this.merchantLoading=false
     },
