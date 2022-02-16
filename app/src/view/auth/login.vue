@@ -21,8 +21,8 @@
         >
           <div class="box">
             <h3>{{ title }}</h3>
-            <el-tabs v-model="activeName" class="tab" v-if="$route.meta.type=='admin'">
-              <el-tab-pane label="管理员账号登录" name="first" >
+            <el-tabs v-model="activeName" class="tab" v-if="$route.meta.type == 'admin'">
+              <el-tab-pane label="管理员账号登录" name="first">
                 <el-form-item label="账户" prop="account">
                   <el-input v-model="form.account"></el-input>
                 </el-form-item>
@@ -47,10 +47,10 @@
                 <el-input type="password" v-model="form.checkPass"></el-input>
               </el-form-item>
             </div>
-            <el-form-item style="margin-top: 40px;margin-bottom:10px" label-wdith='0px'>
+            <el-form-item style="margin-top: 40px; margin-bottom: 10px" label-wdith="0px">
               <loadingBtn class="btn" @clickHandle="fnLogin('form')" ref="loadingBtn" />
             </el-form-item>
-            <p v-if="loginType!='admin'" class="tip">忘记密码，请联系管理员重置</p>
+            <p v-if="loginType != 'admin'" class="tip">忘记密码，请联系管理员重置</p>
           </div>
         </el-form>
       </section>
@@ -59,25 +59,22 @@
 </template>
 
 <script>
-const login_bg_admin = require(`@/assets/img/cover/normal.png`);
-const login_bg_merchant = require(`@/assets/img/cover/merchant.png`);
-const login_bg_shopadmin = require(`@/assets/img/cover/shopadmin.png`);
+const login_bg_admin = require(`@/assets/img/cover/normal.png`)
+const login_bg_merchant = require(`@/assets/img/cover/merchant.png`)
+const login_bg_shopadmin = require(`@/assets/img/cover/shopadmin.png`)
 
-
+import { mapMutations } from 'vuex'
 import { requiredRules, MinRules } from '@/utils/validate'
 import loadingBtn from '@/components/loading-btn'
-import { mapMutations } from 'vuex'
-import fetch from '@/utils/fetch'
-import { getAdminInfo } from '@/api/login'
 
 export default {
   components: {
-    loadingBtn,
+    loadingBtn
   },
   data() {
     return {
-      title:'平台管理中心',
-      login_bg:login_bg_admin,
+      title: '平台管理中心',
+      login_bg: login_bg_admin,
       size: 0,
       activeName: 'first',
       form: {
@@ -100,23 +97,23 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_TOKEN', 'SET_TOKEN_EXP', 'SET_USERINFO', 'SET_LOGIN_TYPE']),
-    init(){
-      this.loginType = this.$route.meta.type;
-      console.log(this.loginType);
-      
+    init() {
+      this.loginType = this.$route.meta.type
+      console.log(this.loginType)
+
       switch (this.loginType) {
         case 'distributor':
           this.title = '店铺管理中心'
           this.login_bg = login_bg_shopadmin
-          break;
+          break
         case 'dealer':
           this.title = '经销商管理中心'
           this.login_bg = login_bg_merchant
-          break;
+          break
         case 'merchant':
           this.title = '商户管理中心'
           this.login_bg = login_bg_merchant
-          break;
+          break
       }
       this.$store.dispatch('setLoginType', this.loginType)
     },
@@ -135,7 +132,6 @@ export default {
             const res = await this.$api.auth.login(params)
             const { token } = res.data.data
             if (token) {
-
               this.loginSuccess(token)
             } else {
               this.$message({
@@ -162,9 +158,9 @@ export default {
       })
       const userInfo = await this.$api.login.getAdminInfo()
       this.SET_USERINFO(userInfo.data.data)
-      if (this.loginType=='distributor') {
+      if (this.loginType == 'distributor') {
         this.$router.push({ path: '/shopadmin/shoplist' })
-      }else if(this.loginType=='dealer'){
+      } else if (this.loginType == 'dealer') {
         const isShow = localStorage.getItem('dealer_isShow')
         if (isShow) {
           this.$router.push({
@@ -173,13 +169,12 @@ export default {
           return
         }
         this.$router.push({ path: '/dealer/index' })
-      }else if(this.loginType=='marchant'){
-           this.$router.push({ path: '/merchant' }) 
-      }else{
+      } else if (this.loginType == 'marchant') {
+        this.$router.push({ path: '/merchant' })
+      } else {
         window.location.href = '/'
       }
-     
-    },
+    }
   }
 }
 </script>
@@ -215,7 +210,7 @@ export default {
           color: #888888;
           text-align: center;
         }
-         
+
         .btn {
           width: 100%;
           padding: 12px;
@@ -226,12 +221,11 @@ export default {
           cursor: pointer;
           border: none;
         }
-        .tip{
+        .tip {
           text-align: center;
           font-size: 12px;
           color: #999;
         }
-        
       }
     }
   }
@@ -264,9 +258,8 @@ export default {
   .el-tabs__active-bar {
     background-color: #cb060f;
   }
-    .el-form-item__content {
-      margin-left: 0px !important;
-    }
-  
+  .el-form-item__content {
+    margin-left: 0px !important;
+  }
 }
 </style>
