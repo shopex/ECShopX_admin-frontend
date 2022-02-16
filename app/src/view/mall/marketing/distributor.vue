@@ -84,7 +84,7 @@
           </el-button-group>
           <el-button
             v-if="!is_distributor"
-            :disabled="$store.getters.login_type!='merchant'"
+            :disabled="$store.getters.login_type!='merchant'&&$store.getters.login_type!='normal'"
             type="primary"
             plain
             icon="el-icon-circle-plus"
@@ -945,6 +945,7 @@ export default {
     },
     
   mounted() {
+    console.log("==store.getters.login_type==",store.getters.login_type)
     this.origin = window.location.origin;
     if (store.getters.login_type === 'distributor') {
       this.is_distributor = true

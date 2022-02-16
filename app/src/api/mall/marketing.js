@@ -162,3 +162,12 @@ export function getMerchantsType(params) {
         params
     })
 }
+
+// 获取商户列表
+export function getMerchantsList(params) {
+    return fetch({
+        url:'/merchant/list',
+        method:'get',
+        params
+    })
+}
