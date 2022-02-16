@@ -517,7 +517,7 @@ export default {
      * */
     uploadHandleChange(file, fileList) {
       console.log('file', file)
-      let params = { isUploadFile: true, file_type: 'marketing_goods', file: file.raw }
+      let params = { isUploadFile: true, file_type: 'purchase_goods', file: file.raw }
       handleUploadFile(params).then((response) => {
         this.$message({
           type: 'success',
@@ -556,7 +556,7 @@ export default {
      * 下载模板
      * */
     uploadHandleTemplate() {
-      let params = { file_type: 'marketing_goods', file_name: '商品模板' }
+      let params = { file_type: 'purchase_goods', file_name: '商品模板' }
       exportUploadTemplate(params).then((response) => {
         let { data } = response.data
         if (data.file) {
