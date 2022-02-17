@@ -171,7 +171,7 @@
 
     <el-dialog
       title="新增模板"
-      :visible.sync="dialogVisible"
+      :visible="dialogVisible"
       :close-on-click-modal="false"
       @closed="closeAddDialog"
       width="50%"
@@ -180,9 +180,9 @@
         <el-form-item label="活动名称" prop="template_title">
           <el-input
             v-model="form.template_title"
-            maxlength="10"
-            show-word-limit
-            style="width: 55%"
+            type="text"
+            :maxlength="10" 
+            style="width: 55%" 
           ></el-input>
         </el-form-item>
         <el-form-item label="模板封面">
@@ -582,6 +582,10 @@ export default {
         })
       })
     },
+    handleInputChange(e){
+      console.log("===handleInputChange",e)
+      this.form.template_title=e;
+    },
     toggleOpenRecommend(val) {
       let params = {
         is_open_recommend: val
@@ -666,7 +670,10 @@ export default {
     resetForm(formName) {
       this.dialogVisible = false
       this.$refs[formName].resetFields()
-      this.form = {}
+      this.form = {
+        template_title: '',
+        template_pic: ''
+      }
       this.dialogType = ''
       this.dialogData = {}
     },
