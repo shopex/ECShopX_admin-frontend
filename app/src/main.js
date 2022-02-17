@@ -42,8 +42,14 @@ initFinder(Vue, {
         delete params.pageSize
         delete params.pageNum
         return params
+      },
+      afterRequest:({status_code,message})=>{
+        if (status_code == 500) {
+         Vue.prototype.$message.error(message)
+        }
       }
-    }
+    },
+    
   }
 })
 
