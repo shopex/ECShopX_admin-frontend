@@ -19,13 +19,18 @@ export default {
         },
         {
           path: 'physicalstoreupload',
-          name: `商品库存导入`,
+          name: `库存导入`,
           component: () => import('@/view/mall/goods/physical/normalGoodsStoreUpload'),
         },
         {
           path: 'physicalprofitupload',
-          name: `商品分润导入`,
+          name: `分润导入`,
           component: () => import('@/view/mall/goods/physical/normalGoodsProfitUpload')
+        },
+        {
+          path: 'physicalupload',
+          name: `商品导入`,
+          component: () => import('@/view/mall/goods/physical/normalGoodsUpload')
         },
       ]
     },
