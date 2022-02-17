@@ -12,7 +12,7 @@
 </style>
 <template>
   <div>
-    <div v-if="$route.path.indexOf('editor') === -1 && $route.path.indexOf('physicalstoreupload') === -1 && $route.path.indexOf('physicalprofitupload') === -1">
+    <div v-if="$route.path.indexOf('editor') === -1 && $route.path.indexOf('physicalstoreupload') === -1 && $route.path.indexOf('physicalprofitupload') === -1 && $route.path.indexOf('physicalupload') === -1">
       <el-row class="filter-header" :gutter="20">
         <el-col>
           <el-input class="input-m" placeholder="商品名称" v-model="params.keywords">
@@ -110,10 +110,13 @@
              </export-tip>
             <el-button size="small" type="primary" @click="syncItems">同步商品数据</el-button>
             <router-link to="/entity/goods/goodsphysical/physicalstoreupload">
-              <el-button size="small" type="primary">商品库存导入</el-button>
+              <el-button size="small" type="primary">库存导入</el-button>
             </router-link>
-            <router-link to="/entity/goods/goodsphysical/physicalprofitupload">
-              <el-button size="small" type="primary">商品分润导入</el-button>
+            <!-- <router-link to="/entity/goods/goodsphysical/physicalprofitupload">
+              <el-button size="small" type="primary">分润导入</el-button>
+            </router-link> -->
+            <router-link to="/entity/goods/goodsphysical/physicalupload">
+              <el-button size="small" type="primary">商品导入</el-button>
             </router-link>
           </el-button-group>
           <el-button size="small" type="primary" icon="el-icon-circle-plus" plain @click="addItems">添加商品</el-button>

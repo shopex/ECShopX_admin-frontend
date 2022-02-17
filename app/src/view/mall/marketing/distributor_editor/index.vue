@@ -53,7 +53,7 @@
 
       <ImageForm ref="imageFormRef" :externalForm="form" />
 
-      <ShopForm :externalForm="form" @onChangeData="handleChangeData" ref="shopFormRef" />
+      <ShopForm :externalForm="form" @initForm="initForm" @onChangeData="handleChangeData" ref="shopFormRef" />
 
       <DadaForm
         :rules="rules"
@@ -97,11 +97,26 @@ export default {
     BaseForm,
     IntroduceForm
   },
+  watch:{
+    form:{
+      handler:function(val){  
+        if(val.merchant_id==0){
+          this.form.merchant_id=undefined
+        }
+      },
+      immediate: true,
+      deep:true
+    }
+  },
   data() {
     return {
       submitLoading: false,
       disabled: false,
       dadaShow: false,
+      form2:{
+        merchant_id:undefined,
+        merchant_name:undefined
+      },
       form: {
         lng: '',
         lat: '',
@@ -137,6 +152,14 @@ export default {
     }, 
   },
   methods: {
+    initForm(form){
+      console.log("===initForm===>",form)
+      this.form2={
+        merchant_id:form.merchant_id,
+        merchant_name:form.merchant_name
+      }
+      this.form.merchant_id=form.merchant_name
+    },
     handleChangeData(changeField, changeValue) {
       if (
         typeof changeValue === 'boolean' ||
@@ -204,8 +227,13 @@ export default {
             hour: this.$refs.baseFormRef.startTime + '-' + this.$refs.baseFormRef.endTime,
             distributor_id: this.distributor_id,
             distribution_type:this.form.distribution_type,
-            merchant_id:this.form.merchant_id
+            merchant_id:this.form.merchant_id==this.form2.merchant_name?this.form2.merchant_id:this.form.merchant_id
           }
+          
+          if(filterParams.distribution_type == 1) {
+            delete filterParams.is_audit_goods
+          }
+
           console.log('filterParams=============', filterParams)
           if (this.dadaShow) {
             nodada = {
