@@ -84,7 +84,7 @@
           </el-button-group>
           <el-button
             v-if="!is_distributor"
-            :disabled="$store.getters.login_type!='merchant'&&$store.getters.login_type!='normal'"
+            :disabled="$store.getters.login_type!='merchant'&&!isLoginTypeNormal"
             type="primary"
             plain
             icon="el-icon-circle-plus"
@@ -547,6 +547,9 @@ export default {
   components: { shopDecoration, pcDecoration,shopSelect },
   computed: {
     ...mapGetters(['wheight']),
+    isLoginTypeNormal(){
+      return this.$store.getters.login_type==='normal' || this.$store.getters.login_type==='admin'
+    }
   },
   methods: {
     async handleClose(tag,{distributor_id},{tag_id}){

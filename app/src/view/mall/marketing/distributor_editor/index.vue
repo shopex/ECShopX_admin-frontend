@@ -133,8 +133,8 @@ export default {
   },
   computed: {
     is_normal: function () {
-      return this.$store.getters.login_type === 'normal'
-    }
+      return this.$store.getters.login_type === 'normal'|| this.$store.getters.login_type==='admin'
+    }, 
   },
   methods: {
     handleChangeData(changeField, changeValue) {
