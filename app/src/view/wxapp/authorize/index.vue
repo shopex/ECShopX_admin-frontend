@@ -122,7 +122,7 @@
             <el-button v-if="system_is_saas == 'false'" type="primary" @click="getdomain"
               >小程序合法域名</el-button
             >
-            <router-link to="/wxapp/manage/editauthorize/policy" style="margin-left: 5px;">
+            <router-link :to="`/wxapp/manage/editauthorize/policy?app_id=${detail.authorizer_appid}&nick_name=${detail.nick_name}`" style="margin-left: 5px;">
               <el-button type="success">用户隐私保护指引</el-button>
             </router-link> 
           </div>
