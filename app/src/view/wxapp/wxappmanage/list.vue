@@ -3,7 +3,7 @@
     <div v-if="$route.path.indexOf('policy') === -1">
       <el-tabs v-model="activeName" type="border-card">
         <el-tab-pane label="微信小程序" name="wechat">
-          <el-table :data="dataLists" style="width: 100%" :height="wheight - 200" v-loading="loading">
+          <el-table :data="dataLists" style="width: 100%" :height="wheight - 200" v-loading="loading" @expand-change="handleExpandChange">
             <el-table-column label="绑定详情" width="80" type="expand" fixed="left">
               <template slot-scope="scope">
                 <el-descriptions title="" :column="2" size="'small'" border class="descriptions"  v-if="scope.row.authorizer && scope.row.authorizer.is_direct == 1" >
@@ -766,7 +766,9 @@ export default {
           })
         })
     },
-
+    handleExpandChange(row,expanded){
+      this.showBindDetail(row); 
+    },
     tryRelease() {
       let params = { wxaAppId: this.detail.authorizer_appid }
       tryRelease(params).then((response) => {
@@ -794,9 +796,10 @@ export default {
     },
     //上架小程序, 上传代码，重新提交代码
     handleAddWxaAction(isOnlySummit) {
+      console.log("===this.detail==>",this.detail)
       this.submitWeappForm.wxaAppId = this.detail.authorizer_appid
       this.submitWeappForm.wxa_name = this.detail.nick_name
-      this.submitWeappForm.templateName = this.detail.weapp.template_name
+      this.submitWeappForm.templateName = this.detail.weapp ? this.detail.weapp.template_name : this.detail.weapp;
       this.submitWeappForm.is_only_commit = isOnlySummit
 
       if (isOnlySummit == 'true') {
