@@ -217,6 +217,11 @@ export default {
             distribution_type:this.form.distribution_type,
             merchant_id:this.form.merchant_id
           }
+          
+          if(filterParams.distribution_type == 1) {
+            delete filterParams.is_audit_goods
+          }
+
           console.log('filterParams=============', filterParams)
           if (this.dadaShow) {
             nodada = {

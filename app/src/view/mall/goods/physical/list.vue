@@ -112,9 +112,9 @@
             <router-link to="/entity/goods/goodsphysical/physicalstoreupload">
               <el-button size="small" type="primary">库存导入</el-button>
             </router-link>
-            <router-link to="/entity/goods/goodsphysical/physicalprofitupload">
+            <!-- <router-link to="/entity/goods/goodsphysical/physicalprofitupload">
               <el-button size="small" type="primary">分润导入</el-button>
-            </router-link>
+            </router-link> -->
             <router-link to="/entity/goods/goodsphysical/physicalupload">
               <el-button size="small" type="primary">商品导入</el-button>
             </router-link>
