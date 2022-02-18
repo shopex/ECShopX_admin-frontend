@@ -1,333 +1,152 @@
 <template>
-  <div>
-    <div class="log-header">
-      <div class="log-container">
-        <div class="brand"><img :src="brand" alt="" /></div>
-        <div class="log-welcome">欢迎登录</div>
-      </div>
-    </div>
-    <div
-      class="log-body"
-      :style="{
-        backgroundImage: 'url(' + login_bg + ')',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }"
-    >
-      <div class="log-container">
-        <el-tabs
-          type="border-card"
-          @tab-click="tabChange"
-          value="admin"
-          style="width: 400px"
-          class="login-type-tab"
+  <div class="login_page">
+    <div class="wrap">
+      <section
+        class="bg"
+        :style="{
+          backgroundImage: 'url(' + login_bg + ')',
+          height: size + 'px',
+          width: size + 'px'
+        }"
+      ></section>
+
+      <section class="content">
+        <el-form
+          :model="form"
+          :rules="rules"
+          ref="form"
+          label-position="left"
+          label-width="100px"
+          class="form"
         >
-          <el-tab-pane v-if="system_is_saas == 'true'" name="admin" label="管理员登录(shopexid)">
-            <div v-loading="isAuto">
-              <iframe
-                :src="autoSrc"
-                frameborder="0"
-                class="login-type-tab-iframe"
-                ref="iframe"
-                id="iframe"
-              >
-              </iframe>
+          <div class="box">
+            <h3>{{ title }}</h3>
+            <el-tabs v-model="activeName" class="tab" v-if="$route.meta.type == 'admin'">
+              <el-tab-pane label="管理员账号登录" name="first">
+                <el-form-item label="账户" prop="account">
+                  <el-input v-model="form.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="checkPass">
+                  <el-input type="password" v-model="form.checkPass"></el-input>
+                </el-form-item>
+              </el-tab-pane>
+              <el-tab-pane label="员工账号登录" name="second">
+                <el-form-item label="账户" prop="account">
+                  <el-input v-model="form.account"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="checkPass">
+                  <el-input type="password" v-model="form.checkPass"></el-input>
+                </el-form-item>
+              </el-tab-pane>
+            </el-tabs>
+            <div class="tab" v-else>
+              <el-form-item label="账户" prop="account">
+                <el-input v-model="form.account"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="checkPass">
+                <el-input type="password" v-model="form.checkPass"></el-input>
+              </el-form-item>
             </div>
-          </el-tab-pane>
-
-          <el-tab-pane
-            v-else-if="system_mode !== 'group'"
-            name="admin"
-            label="管理员登录(shopexid)"
-          >
-            <div class="log-img"></div>
-            <el-form
-              :model="ruleForm1"
-              :rules="rules1"
-              ref="ruleForm1"
-              label-position="left"
-              label-width="0px"
-              class="login-log-container"
-            >
-             <h3 class="title"></h3>
-              <!-- <h3 class="title">
-                <a href="http://yyk.shopex.cn/signup" target="_blank" class="signup">免费注册</a>
-              </h3> -->
-              <el-form-item prop="account">
-                <el-input
-                  type="text"
-                  v-model="ruleForm1.account"
-                  name="account"
-                  auto-complete="off"
-                  placeholder="请输入手机号"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="checkPass">
-                <el-input
-                  type="password"
-                  v-model="ruleForm1.checkPass"
-                  name="password"
-                  auto-complete="off"
-                  placeholder="密码"
-                ></el-input>
-              </el-form-item>
-              <el-form-item class="log-opr clearfix">
-                <el-checkbox v-model="checked" checked class="remember f_l">记住密码</el-checkbox>
-                <a href="https://account.shopex.cn/forget?" target="_blank" class="forget-pwd"
-                  >忘记密码</a
-                >
-              </el-form-item>
-              <el-form-item style="width: 100%">
-                <el-button
-                  type="primary"
-                  style="width: 100%"
-                  @click.native.prevent="handleSubmit"
-                  :loading="logining"
-                  :disabled="submitDisabled"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-
-          <el-tab-pane
-            v-if="system_mode === 'group'"
-            name="localadmin"
-            label="管理员登录(独立账号)"
-          >
-            <div class="log-img"></div>
-            <el-form
-              :model="ruleForm1"
-              :rules="rules1"
-              ref="ruleForm1"
-              label-position="left"
-              label-width="0px"
-              class="login-log-container"
-            >
-              <!-- <h3 class="title">
-                <a href="http://yyk.shopex.cn/signup" target="_blank" class="signup">免费注册</a>
-              </h3> -->
-              <el-form-item prop="account">
-                <el-input
-                  type="text"
-                  v-model="ruleForm1.account"
-                  name="account"
-                  auto-complete="off"
-                  placeholder="请输入手机号"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="checkPass">
-                <el-input
-                  type="password"
-                  v-model="ruleForm1.checkPass"
-                  name="password"
-                  auto-complete="off"
-                  placeholder="密码"
-                ></el-input>
-              </el-form-item>
-              <el-form-item class="log-opr clearfix">
-                <el-checkbox v-model="checked" checked class="remember f_l">记住密码</el-checkbox>
-                <a href="https://account.shopex.cn/forget?" target="_blank" class="forget-pwd"
-                  >忘记密码</a
-                >
-              </el-form-item>
-              <el-form-item style="width: 100%">
-                <el-button
-                  type="primary"
-                  style="width: 100%"
-                  @click.native.prevent="handleSubmit"
-                  :loading="logining"
-                  :disabled="submitDisabled"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane name="staff" label="员工账号登录">
-            <div class="log-img"></div>
-            <el-form
-              :model="ruleForm1"
-              :rules="rules1"
-              ref="ruleForm1"
-              label-position="left"
-              label-width="0px"
-              class="login-log-container"
-            >
-              <h3 class="title"></h3>
-              <el-form-item prop="account">
-                <el-input
-                  type="text"
-                  v-model="ruleForm1.account"
-                  name="account"
-                  auto-complete="off"
-                  placeholder="手机号码"
-                ></el-input>
-              </el-form-item>
-              <el-form-item prop="checkPass">
-                <el-input
-                  type="password"
-                  v-model="ruleForm1.checkPass"
-                  name="password"
-                  auto-complete="off"
-                  placeholder="密码"
-                ></el-input>
-              </el-form-item>
-              <el-form-item v-if="system_is_saas == 'false'" class="log-opr clearfix title">
-                忘记密码，请联系管理员后台重置
-              </el-form-item>
-              <el-form-item v-if="system_is_saas == 'true'" class="log-opr clearfix">
-                <router-link to="/forget" class="forget-pwd">忘记密码</router-link>
-              </el-form-item>
-              <el-form-item style="width: 100%">
-                <el-button
-                  type="primary"
-                  style="width: 100%"
-                  @click.native.prevent="handleSubmit"
-                  :loading="logining"
-                  :disabled="submitDisabled"
-                  >登录</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </div>
-    <div class="log-footer">
-      <span>友情链接：</span>
-      <a href="https://mp.weixin.qq.com/cgi-bin/loginpage?t=wxm2-login&lang=zh_CN" target="_blank"
-        >微信公众平台</a
-      >
-      <span>|</span>
-      <a href="https://www.alipay.com/" target="_blank">支付宝</a>
-      <span>|</span>
-      <a href="http://e.qq.com/ads" target="_blank">腾讯社交广告</a>
-    </div>
-    <div class="beian">
-      <template v-if="BEIAN">
-        ICP证：<a href="http://www.beian.miit.gov.cn">{{ BEIAN }}</a>
-      </template>
+            <el-form-item style="margin-top: 40px; margin-bottom: 10px" label-wdith="0px">
+              <loadingBtn class="btn" @clickHandle="fnLogin('form')" ref="loadingBtn" text='登录'/>
+            </el-form-item>
+            <p v-if="loginType != 'admin'" class="tip">忘记密码，请联系管理员重置</p>
+          </div>
+        </el-form>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
+const login_bg_admin = require(`@/assets/img/cover/normal.png`)
+const login_bg_merchant = require(`@/assets/img/cover/merchant.png`)
+const login_bg_shopadmin = require(`@/assets/img/cover/shopadmin.png`)
+
 import { mapMutations } from 'vuex'
-import { isMobile } from '@/utils/validate'
-    const system = process.env.VUE_APP_PRODUCT_MODEL == 'standard' ? 'onex' : 'ecshopx'
-    const brand = require(`@/assets/img/${system}/logo.jpg`)
-    const login_bg = require(`@/assets/img/${system}/login_bg.jpg`)
-// import fetch from '../utils/fetch'
-// import { login, getAdminInfo, getAuthorizeUrl, getAuthorizeLogin } from '@/api'
+import { requiredRules, MinRules } from '@/utils/validate'
+import loadingBtn from '@/components/loading-btn'
+
 export default {
+  components: {
+    loadingBtn
+  },
   data() {
-    const validateEmail = (rule, value, callback) => {
-      if (!isMobile(value)) {
-        callback(new Error('请输入正确的合法手机号'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位'))
-      } else {
-        callback()
-      }
-    }
-    // const system = process.env.VUE_APP_PRODUCT_MODEL == 'standard' ? 'onex' : 'ecshopx'
-    // const brand = require(`@/assets/img/${system}/logo.jpg`)
-    // const login_bg = require(`@/assets/img/${system}/login_bg.jpg`)
     return {
-      isAuto: false,
-      isIframe: false,
-      autoSrc: '',
-      brand,
-      login_bg,
-      logining: false,
-      ruleForm1: {
+      title: '平台管理中心',
+      login_bg: login_bg_admin,
+      size: 0,
+      activeName: 'first',
+      form: {
         account: '',
-        checkPass: '',
-        loginType: 'admin'
+        checkPass: ''
       },
-      rules1: {
-        account: [{ required: true, trigger: 'blur', validator: validateEmail }],
-        checkPass: [{ required: true, trigger: 'blur', validator: validatePass }]
-      },
-      checked: true,
-      submitDisabled: false,
-      ifWindow: null,
-      bool: false
+      loginType: 'admin',
+      rules: {
+        account: [requiredRules('账户')],
+        checkPass: [requiredRules('密码'), MinRules(6)]
+      }
     }
   },
   mounted() {
-    if (this.system_is_saas == 'true') {
-      this.saasLogin()
+    window.addEventListener('resize', this.fnSize())
+    this.init()
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.fnSize)
+  },
+  watch:{
+    activeName(val){
+      if (val=='second') {
+        this.loginType = 'staff'
+      }else{
+         this.loginType = 'admin'
+      }
     }
-    this.$store.dispatch('setLoginType', 'default')
-    // this.brand = require('@/assets/img/' + this.companyBrandImg + '/logo.svg')
-    // this.login_bg = require('@/assets/img/' + this.companyBrandImg + '/login_bg.jpg')
   },
   methods: {
     ...mapMutations(['SET_TOKEN', 'SET_TOKEN_EXP', 'SET_USERINFO', 'SET_LOGIN_TYPE']),
-    async saasLogin() {
-      let { code } = this.$route.query
-      if (code) {
-        let obj = {
-          code: code,
-          logintype: 'oauthadmin'
-        }
-        this.isAuto = true
-        try {
-          const loginRes = await this.$api.login.getAuthorizeLogin(obj)
-          const { token } = loginRes.data.data
-          if(token) {
-            this.loginSuccess(token)
-          } else {
-            this.submitDisabled = false
-            this.$message({
-              message: '登录失败，请联系管理员',
-              type: 'error',
-              duration: 3 * 1000
-            })
-          }
-          // this.setTokenAndGetRoute(loginRes.data.data.token)
-        } catch(e) {
-          setTimeout(() => {
-            window.location.href = `${window.location.origin}/login`
-          }, 1500)
-        }
-      } else {
-        const res = await this.$api.login.getAuthorizeUrl()
-        this.autoSrc = res.data.data.url
-        this.bool = true
+    init() {
+
+      
+      this.loginType = this.$route.meta.type
+      console.log(this.loginType)
+
+      switch (this.loginType) {
+        case 'distributor':
+          this.title = '店铺管理中心'
+          this.login_bg = login_bg_shopadmin
+          break
+        case 'dealer':
+          this.title = '经销商管理中心'
+          this.login_bg = login_bg_merchant
+          break
+        case 'merchant':
+          this.title = '商户管理中心'
+          this.login_bg = login_bg_merchant
+          break
       }
-    },
 
-    tabChange(e) {
-      this.ruleForm1.loginType = e.name
-      this.ruleForm1.account = ''
-      this.ruleForm1.checkPass = ''
-    },
 
-    handleSubmit() {
-      this.$refs.ruleForm1.validate(async (valid) => {
+      this.$store.dispatch('setLoginType', this.loginType)
+    },
+    fnSize() {
+      this.size = document.body.clientHeight
+    },
+    fnLogin(formName) {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          this.loading = true
-          this.submitDisabled = true
-          var params = {
-            username: this.ruleForm1.account,
-            password: this.ruleForm1.checkPass,
-            logintype: this.ruleForm1.loginType
+          const params = {
+            username: this.form.account,
+            password: this.form.checkPass,
+            logintype: this.loginType
           }
           try {
             const res = await this.$api.auth.login(params)
             const { token } = res.data.data
-            if(token) {
+            if (token) {
               this.loginSuccess(token)
             } else {
-              this.submitDisabled = false
               this.$message({
                 message: '登录失败，请联系管理员',
                 type: 'error',
@@ -335,198 +154,130 @@ export default {
               })
             }
           } catch (e) {
-            this.submitDisabled = false
+            this.$refs['loadingBtn'].closeLoading()
           }
         } else {
-          this.submitDisabled = false
-          return false
+          this.$refs['loadingBtn'].closeLoading()
         }
       })
     },
-
     async loginSuccess(token) {
       this.SET_TOKEN({ token })
       this.SET_TOKEN_EXP({ exp: new Date().getTime() })
+      this.SET_LOGIN_TYPE({ loginType: this.loginType })
       this.$message({
         message: '登录成功',
         type: 'success'
       })
       const userInfo = await this.$api.login.getAdminInfo()
-      this.loading = false
       this.SET_USERINFO(userInfo.data.data)
-      this.SET_LOGIN_TYPE({ loginType: 'normal' })
-      window.location.href = '/'
+      if (this.loginType == 'distributor') {
+        this.$router.push({ path: '/shopadmin/shoplist' })
+      } else if (this.loginType == 'dealer') {
+        const isShow = localStorage.getItem('dealer_isShow')
+        if (isShow) {
+          this.$router.push({
+            path: '/dealer/adapay_member/info'
+          })
+          return
+        }
+        this.$router.push({ path: '/dealer/index' })
+      } else if (this.loginType == 'marchant') {
+        this.$router.push({ path: '/merchant' })
+      } else {
+        window.location.href = '/'
+      }
     }
-
-
-
-    // async setTokenAndGetRoute(token) {
-    //   this.$store.dispatch('setToken', token)
-    //   this.loading = false
-    //   const res = await this.$api.auth.getPermission()
-
-    //   fetch({ url: '/permission', method: 'get' }).then((res) => {
-    //     if (res.data.data) {
-    //       const url = this.path_prefixes
-    //         ? res.data.data[0]['url'] == '/'
-    //           ? `/${this.path_prefixes}`
-    //           : `${this.path_prefixes}${res.data.data[0]['url']}`
-    //         : res.data.data[0]['url']
-    //       getAdminInfo().then((info) => {
-    //         // console.log(info.data.data.logintype)
-    //         // return
-    //         const _self = this
-    //         this.$message({
-    //           message: '登录成功',
-    //           type: 'success',
-    //           duration: 2 * 1000,
-    //           onClose() {
-    //             _self.$store.dispatch('setUser', info.data.data)
-    //             _self.$store.dispatch('setLoginType', info.data.data.logintype)
-    //             _self.$router.push({ path: url })
-    //             _self.$router.go(0)
-    //           }
-    //         })
-    //       })
-    //       this.$store.dispatch('setMenu', res.data.data)
-    //     } else {
-    //       this.$message({
-    //         message: '当前账号没有权限，请联系管理员',
-    //         type: 'error',
-    //         duration: 3 * 1000
-    //       })
-    //       this.submitDisabled = false
-    //     }
-    //   })
-    // }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-body {
-  background: #eaeaea;
-}
-.log-header {
-  padding: 20px 0;
-  background: #fff;
-}
-.brand {
-  display: inline-block;
-  width: 150px;
-  vertical-align: middle;
-}
-.brand img {
-  width: 100%;
-  height: auto;
-}
-.log-welcome {
-  display: inline-block;
-  padding-left: 24px;
-  margin-left: 24px;
-  border-left: 1px solid #efefef;
-  vertical-align: middle;
-}
-.log-body {
-  padding: 118px 0;
-  // background: url(./assets/img/login_bg.jpg) no-repeat center center;
-  background-size: cover;
-}
-.log-img {
-  float: left;
-  width: 360px;
-  padding-top: 5px;
-  padding-left: 50px;
-}
-.log-img img {
-  width: 100%;
-  height: auto;
-}
-.log-container {
-  width: 900px;
-  margin: 0 auto;
-}
-.log-container::after {
-  display: table;
-  clear: both;
-  content: '';
-}
-.login-log-container {
-  /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02)*/
-  float: right;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  background-clip: padding-box;
-  width: 290px;
-  padding: 0px 35px 15px 35px;
-  background: #fff;
-  //border: 1px solid #eaeaea;
-  // .title {
-  //   margin: 0px auto 35px auto;
-  //   text-align: center;
-  //   color: #505458;
-  //   position: relative;
-  //   font-size: 18px;
-  // }
-  .remember {
-    // margin: 0px 0px 35px 0px;
-    float: left;
-  }
-  .log-opr {
-    margin-bottom: 10px;
-  }
-  .signup {
-    color: #ff5000;
-    font-size: 14px;
-    position: absolute;
-    right: 0;
-    line-height: 27px;
-    &:hover {
-      text-decoration: underline;
+.login_page {
+  .wrap {
+    display: flex;
+    width: 100vw;
+    .bg {
+      background-size: cover;
+      background-position: left;
+      background-repeat: no-repeat;
+    }
+    .content {
+      flex: 1;
+      min-width: 500px;
+      //   background: palegreen;
+      position: relative;
+
+      .box {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -60%);
+        min-width: 300px;
+        max-width: 600px;
+        // padding: 50px;
+
+        h3 {
+          margin-bottom: 40px;
+          font-size: 23px;
+          color: #888888;
+          text-align: center;
+        }
+
+        .btn {
+          width: 100%;
+          padding: 12px;
+          height: 40px;
+          background: #cb060f;
+          border-radius: 40px;
+          text-align: center;
+          color: #fff;
+          cursor: pointer;
+          border: none;
+        }
+        .tip {
+          text-align: center;
+          font-size: 12px;
+          color: #999;
+        }
+      }
     }
   }
-  .forget-pwd {
-    float: right;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-.el-form-item {
-  margin-bottom: 30px;
-}
-.log-footer {
-  color: #999;
-  text-align: center;
-  padding: 30px 0 10px 0;
-  a {
-    color: #999;
-    margin: 0 5px;
-    &:hover {
-      color: #ff5000;
-    }
-  }
-}
-.login-type-tab {
-  float: right;
-  .login-type-tab-iframe {
-    width: 100%;
-    height: 320px;
-  }
-}
-.beian {
-  padding-bottom: 30px;
-  text-align: center;
-  font-size: 12px;
 }
 </style>
+
 <style lang="scss">
-.log-body {
-  .el-input {
-    .el-input__inner {
-      height: 38px;
-    }
+.login_page {
+  .el-tabs__header {
+    margin: 0 0 40px;
+  }
+  .el-input__inner {
+    border: 0;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    font-size: 16px;
+  }
+  .el-tabs__nav-wrap::after {
+    background-color: transparent;
+  }
+  .el-form-item__label{
+    color: #888;
+  }
+  .el-tabs__item {
+    color: #999;
+    font-size: 16px;
+    // &:hover {
+    //   color: #000;
+    // }
+  }
+  .el-tabs__item.is-active {
+    color: #cb060f;
+  }
+  .el-tabs__active-bar {
+    background-color: #cb060f;
+  }
+  .el-form-item__content {
+    margin-left: 0px !important;
   }
 }
 </style>

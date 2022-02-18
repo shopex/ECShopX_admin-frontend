@@ -147,6 +147,7 @@ export default {
     }
   },
   created() {
+    debugger
     if (this.$route.query && this.$route.query.app_id) {
       this.wxapp_id = this.$route.query.app_id
     }

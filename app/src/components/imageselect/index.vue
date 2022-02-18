@@ -11,76 +11,7 @@
     <div class="img_pick_panel inner_container_box">
       <el-row>
         <el-col>
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane
-              v-if="$store.getters.login_type != 'distributor'"
-              label="微信上传"
-              name="wechatimages"
-            >
-              <div class="inner_main" v-loading="loading">
-                <div class="img_pick_area">
-                  <div class="sub_title_bar in_dialog">
-                    <div class="upload_box">
-                      <el-upload
-                        class="upload-demo"
-                        action=""
-                        :auto-upload="false"
-                        :show-file-list="false"
-                        :on-change="uploadImage"
-                        :multiple="true"
-                      >
-                        <el-button type="primary">微信上传</el-button>
-                      </el-upload>
-                    </div>
-                  </div>
-
-                  <div class="img_pick_area_inner">
-                    <div class="img_pick">
-                      <div class="img_list">
-                        <div
-                          class="img_item"
-                          v-for="(item, index) in imgList"
-                          :key="index"
-                          @click="checkedImg(item, index)"
-                        >
-                          <div
-                            class="frm_checkbox_label img_item_bd"
-                            :class="
-                              isMost ? { selected: item.selected } : { 'selected': i == index }
-                            "
-                          >
-                            <div class="pic_box">
-                              <img :src="wximageurl + item.url" class="pic" />
-                            </div>
-                            <span class="lbl_content">{{ item.name }}</span>
-                            <div class="selected_mask">
-                              <div class="selected_mask_inner"></div>
-                              <div class="selected_mask_icon el-icon-check"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div v-if="imgData.total_count > params.pageSize" class="pager-wrap tc">
-                  <el-pagination
-                    layout="total, sizes, prev, pager, next"
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="params.page"
-                    :page-sizes="[params.pageSize]"
-                    :total="imgData.total_count"
-                    :page-size="params.pageSize"
-                  >
-                  </el-pagination>
-                </div>
-
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="cancelAction">取 消</el-button>
-                  <el-button type="primary" @click="saveAction">确 定</el-button>
-                </div>
-              </div>
-            </el-tab-pane>
+          <el-tabs v-model="activeName" @tab-click="handleClick"> 
             <el-tab-pane label="本地上传" name="localimages">
               <div class="inner_main" v-loading="loading">
                 <div class="img_pick_area">
@@ -185,7 +116,7 @@ export default {
       },
       showDialog: false,
       frontItem: [],
-      activeName: 'wechatimages',
+      activeName: 'localimages',
       actionPath: 'https://upload-z2.qiniup.com',
       localimage_prefix: '',
       localpostData: {
@@ -249,22 +180,22 @@ export default {
       this.$emit('closeImgDialog')
     },
     getImageList() {
-      let that = this
-      that.loading = true
-      getWechatMaterial(this.params)
-        .then((response) => {
-          that.imgData = response.data.data
-          that.imgList = response.data.data.item
-          if (that.isMost) {
-            that.imgList.forEach((v) => {
-              that.$set(v, 'selected', false)
-            })
-          }
-          that.loading = false
-        })
-        .catch(function (error) {
-          that.loading = false
-        })
+      // let that = this
+      // that.loading = true
+      // getWechatMaterial(this.params)
+      //   .then((response) => {
+      //     that.imgData = response.data.data
+      //     that.imgList = response.data.data.item
+      //     if (that.isMost) {
+      //       that.imgList.forEach((v) => {
+      //         that.$set(v, 'selected', false)
+      //       })
+      //     }
+      //     that.loading = false
+      //   })
+      //   .catch(function (error) {
+      //     that.loading = false
+      //   })
     },
     handleClick(tab, event) {},
     //本地上传
@@ -277,14 +208,14 @@ export default {
       const isJPG = file.type === 'image/jpeg'
       const isPNG = file.type === 'image/png'
       const isGIF = file.type === 'image/gif'
-      const isLt2M = file.size / 1024 / 1024 < 10
+      const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG && !isPNG && !isGIF) {
         this.$message.error('上传图片只能是 JPG 或者 PNG 格式!')
         return
       }
       if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 10MB!')
+        this.$message.error('上传图片大小不能超过 2MB!')
         return
       }
 
@@ -363,7 +294,7 @@ export default {
       }
     },
     // 自定义上传
-    handleUpload: function (e) {
+    handleUpload: function (e) { 
       const upload = new UploadUtil()
       // 上传
       upload

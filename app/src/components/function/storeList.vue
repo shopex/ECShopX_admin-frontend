@@ -101,11 +101,13 @@ export default {
       }
     },
     visible(val) {
-      if (val) {
+      if (val) { 
         this.showModal = val
         this.resetFilter()
-        this.current = [this.data]
-        this.fetch()
+        if(this.data.length>0){
+          this.current = [this.data]
+        } 
+        this.fetch() 
       }
     }
   },
@@ -165,7 +167,7 @@ export default {
     },
     handleItemClick(val) {
       if (this.multiple) {
-        const checkedIdx = this.current.findIndex((item) => item.id === val.id)
+        const checkedIdx = this.current.findIndex((item) => item.id === val.id) 
         if (checkedIdx === -1) {
           this.current.push(val)
         } else {
@@ -173,9 +175,9 @@ export default {
         }
       } else {
         this.current = val
-      }
+      } 
     },
-    handleConfirm() {
+    handleConfirm() { 
       this.$emit('change', this.current)
       this.showModal = false
     },

@@ -144,13 +144,7 @@ export default {
 
       this.postData.fname = file.name
 
-      let tokenParams = { filename: file.name, filesystem: 'video' }
-      // return getUploadQiniuVideoToken(tokenParams).then(response => {
-      //   this.postData.token = response.data.data.token
-      //   this.postData.key = response.data.data.key
-      //   this.image_prefix = response.data.data.domain
-      //   this.actionPath  = `https://upload-${!response.data.data.region ? 'z2' : response.data.data.region}.qiniup.com`
-      // })
+      let tokenParams = { filename: file.name, filesystem: 'video' } 
     },
     handleVideoSuccess(res, file) {
       let uploadParams = {

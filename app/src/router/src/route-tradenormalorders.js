@@ -8,7 +8,7 @@ export default {
   children: [
     {
       path: 'entitytrade/tradenormalorders',
-      name: `实物订单`,
+      name: `全部订单`,
       component: () => import('@/view/mall/trade/normalorders/list'),
       children: [
         {
@@ -43,17 +43,7 @@ export default {
         }
       ]
     },
-    {
-      path: 'entitytrade/shippingtemplates',
-      name: `运费模板`,
-      component: () => import('@/view/mall/trade/shipping/templates'),
-      children: [
-        {
-          path: 'editor/:itemId?',
-          component: () => import( '@/view/mall/trade/shipping/add')
-        }
-      ]
-    },
+    
     {
       path: 'entitytrade/normalordersupload',
       name: `批量发货`,

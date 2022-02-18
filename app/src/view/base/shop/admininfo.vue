@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="never" header="管理员信息">
+  <el-card shadow="never" header="账号信息">
     <el-form ref="form" :model="form" label-position="left" label-width="100px">
       <div class="section-body">
         <el-form-item label="账户">
@@ -8,7 +8,7 @@
         <el-form-item label="昵称">
           <el-input type="text" v-model="form.username" style="width:300px"></el-input>
         </el-form-item>
-        <el-form-item label="大头照">
+        <el-form-item label="头像">
           <imgBox :imgUrl="form.head_portrait" inline @click="handleImgChange"></imgBox>
           <imgPicker
             :dialog-visible="imgDialog"
@@ -35,7 +35,7 @@
               ></i>
             </el-input>
           </el-form-item>
-          <el-form-item label="确认修改密码">
+          <el-form-item label="确认密码">
             <el-input
               :type="input_type"
               v-model="form.repwd"
@@ -50,6 +50,11 @@
                 class="el-icon-view"
               ></i>
             </el-input>
+          </el-form-item>
+        </template>
+        <template v-else>
+          <el-form-item label="修改密码">
+          <span class="frm-tips">超级管理员需通过商派账号中心进行 <a href="https://account.shopex.cn/account/security" target="_blank">修改密码</a></span>
           </el-form-item>
         </template>
       </div>

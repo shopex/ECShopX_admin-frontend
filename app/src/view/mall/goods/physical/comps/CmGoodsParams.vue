@@ -36,6 +36,7 @@
             <el-form-item :label="item.label">
               <el-select v-if="item.children.length > 0" 
                 class="width-full"
+                clearable
                 v-model="item.attribute_value_id" 
                 placeholder="请选择" 
                 @change="(e) => { paramsChange(e, item )}">
@@ -61,15 +62,18 @@ export default {
   props: ['value'],
   data() {
     return {
-
     }
   },
   created() {},
   methods: {
     paramsChange (e, item) {
-      const fd = item.children.find(k => k.value == e)
-      item.attribute_value_name = fd.label
-      this.$emit('input', this.value)
+      if (e) {
+        const fd = item.children.find(k => k.value == e)
+        item.attribute_value_name = fd.label
+        this.$emit('input', this.value)
+      } else {
+        item.attribute_value_name = ''
+      }
     },
   }
 }

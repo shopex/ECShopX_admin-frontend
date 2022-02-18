@@ -12,7 +12,7 @@
       <el-tab-pane label="实体类商品" name="normal"></el-tab-pane>
       <el-tab-pane label="服务类商品" name="services"></el-tab-pane>
     </el-tabs> -->
-    <div v-if="params.item_type === 'normal'" style="margin-bottom: 15px;">
+    <div v-if="params.item_type === 'normal'" style="margin-bottom: 15px">
       <StoreFilter
         v-if="!filter"
         class="store"
@@ -65,6 +65,35 @@
           </el-select>
         </el-col>
         <span class="search-tips" v-if="setSearch">选择商品数量不可超过200件</span>
+        <el-col :span="6">
+          <el-select
+            placeholder="选择品牌"
+            remote
+            filterable
+            :remote-method="getGoodsBranchList"
+            clearable
+            v-model="select_branch_value"
+            @change="searchByKey"
+          >
+            <el-option
+              v-for="item in goodsBranchList"
+              :key="item.attribute_id"
+              :label="item.attribute_name"
+              :value="item.attribute_id"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="6" class='last-col'>
+          <el-cascader
+            placeholder="商品分类"
+            :options="categoryList"
+            :props="{ value: 'category_id', checkStrictly: true }"
+            v-model="select_category_value"
+            clearable
+            @change="searchByKey"
+          >
+          </el-cascader>
+        </el-col>
         <!--<el-col :span="8">
           <el-input placeholder="0" v-model="store_value" class="input-with-select" clearable>
             <el-select v-model="storeSelect" slot="prepend" placeholder="库存筛选" style="width: 110px">
@@ -85,7 +114,7 @@
         </el-col>
       </el-row>
       -->
-     </div>
+    </div>
     <el-table
       ref="multipleTable"
       v-if="singleData"
@@ -94,7 +123,7 @@
       tooltip-effect="dark"
       style="width: 100%"
       v-loading="loading"
-      >
+    >
       <el-table-column label="选择" width="70">
         <template slot-scope="scope">
           <el-radio
@@ -170,7 +199,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import StoreFilter from '@/components/function/storeFilter'
-import { getItemsList, getCategory, getSkuList } from '@/api/goods'
+import { getItemsList, getCategory, getSkuList, getGoodsAttr } from '@/api/goods'
 import { getShippingTemplatesList } from '@/api/shipping'
 import { getDefaultCurrency } from '@/api/company'
 import { getDistributorItems } from '@/api/marketing'
@@ -187,14 +216,14 @@ export default {
     },
     relStore: {
       type: Object,
-      default: function() {
+      default: function () {
         return {}
       }
     },
-     isChangeStore:{
-      type:Boolean, 
-      default:false
-    }, 
+    isChangeStore: {
+      type: Boolean,
+      default: false
+    },
     lockStore: {
       type: Boolean,
       default: false
@@ -205,7 +234,7 @@ export default {
     },
     hiddenData: {
       type: Array,
-      default: function() {
+      default: function () {
         return []
       }
     },
@@ -256,19 +285,29 @@ export default {
       total_count: '',
       activeType: 'first',
       store: {},
-      currentStore:{},
+      currentStore: {},
       params: {
         page: 1,
         pageSize: 30,
-        keywords: "",
-        item_type: "normal",
-        special_type: ["normal", "drug"],
-        approve_status: "onsale",
-        templates_id: "",
-        distributor_id: "",
+        keywords: '',
+        item_type: 'normal',
+        special_type: ['normal', 'drug'],
+        approve_status: 'onsale',
+        templates_id: '',
+        distributor_id: '',
         is_sku: false,
-        audit_status:"approved"
+        audit_status: 'approved'
         // is_gift: false,
+      },
+      categoryList: [],
+      select_category_value: [],
+      select_branch_value: [],
+      goodsBranchList: [],
+      goodsBranchParams: {
+        page: 1,
+        pageSize: 1000,
+        attribute_type: 'brand',
+        attribute_name: ''
       },
       hiddenItem: [],
       storeSelect: '',
@@ -296,7 +335,7 @@ export default {
       cursymbol: '￥',
       templateRadio: ''
     }
-  }, 
+  },
   components: {
     StoreFilter
   },
@@ -304,16 +343,18 @@ export default {
     handleTabClick() {
       this.getNewsList()
     },
-    handleStoreChange(val) { 
+    handleStoreChange(val) {
       if (Object.keys(val).length == 0) {
         // 代表进行了关闭店铺 设置为总店的操作
-        val.id = 0;
+        val.id = 0
       }
-      console.log("==handleStoreChange==",val);
+      console.log('==handleStoreChange==', val)
       this.store = val
-      this.$refs.multipleTable.clearSelection()
-      this.selectRows = []
+      6
+      // this.selectRows = []
       this.params.distributor_id = val.id
+      this.params.templates_id = ''
+      this.getShippingTemplatesList(val.id)
       this.getNewsList()
     },
     getTemplateRow(index, row) {
@@ -340,7 +381,7 @@ export default {
       this.params.pageSize = pageSize
       this.getNewsList()
     },
-    searchByKey() { 
+    searchByKey() {
       this.params.page = 1
       this.getNewsList()
     },
@@ -353,7 +394,7 @@ export default {
         this.params.store_lt = this.store_value
         delete this.params.store_gt
       }
-      this.params.page = 1 
+      this.params.page = 1
       this.getNewsList()
     },
     handleSelectAll(val) {
@@ -418,27 +459,32 @@ export default {
     saveStoreAction() {
       if (this.selectRows.length > this.limitCount) {
         this.$message.error('最多支持选择' + this.limitCount + '件商品！')
-      }else{
+      } else {
         this.$emit('chooseStore', this.selectRows, this.store)
       }
     },
-    getNewsList() { 
+    getNewsList() {
       if (this.getStatus) {
         this.loading = true
         let param = {
           ...this.params
         }
+        param.brand_id = this.select_branch_value
+        const category = [...this.select_category_value]
+        param.category = category.pop()
         if (
           this.system_mode == 'platform' ||
           !this.params.distributor_id ||
           this.params.distributor_id == '0'
-        ) {  
+        ) {
           getItemsList(param).then((response) => {
             this.itemsData = response.data.data.list
             this.total_count = parseInt(response.data.data.total_count)
             this.loading = false
-          }) 
-        } else {  
+            // 回显
+            this.toggleSelection(this.relItemsIds)
+          })
+        } else {
           getDistributorItems(param).then((response) => {
             this.itemsData = response.data.data.list
             this.total_count = parseInt(response.data.data.total_count)
@@ -447,9 +493,19 @@ export default {
         }
       }
     },
-    getShippingTemplatesList() {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    // 获取  运费模板 options
+    getShippingTemplatesList(distributor_id = 0) {
       this.loading = true
-      getShippingTemplatesList(this.templatesParams).then((response) => {
+      getShippingTemplatesList({ distributor_id }).then((response) => {
         this.templatesList = response.data.data.list
       })
     },
@@ -481,6 +537,15 @@ export default {
           break
       }
       this.getNewsList()
+    },
+    getGoodsBranchList(searchVal = '') {
+      // this.loading = true
+      // console.log(searchVal)
+      this.goodsBranchParams.attribute_name = searchVal
+      getGoodsAttr(this.goodsBranchParams).then((response) => {
+        this.goodsBranchList = response.data.data.list
+        // console.log(this.goodsBranchList)
+      })
     }
   },
   mounted() {
@@ -495,6 +560,8 @@ export default {
     }
     this.getShippingTemplatesList()
     this.getCurrencyInfo()
+    this.getGoodsBranchList()
+    this.getCategory()
   },
   computed: {
     showDialog() {
@@ -507,10 +574,7 @@ export default {
   },
   watch: {
     itemsVisible(val) {
-      console.log("itemsVisible==",val,this.relStore);
-       
       if (val) {
-         
         if (this.relStore.id) {
           this.params.distributor_id = this.relStore.id
           this.store = this.relStore
@@ -529,7 +593,7 @@ export default {
         this.loading = true
         this.multipleSelection.forEach((item) => {
           ids.push(item.item_id)
-        })  
+        })
         if (ids.length > 0) {
           let param = JSON.parse(JSON.stringify(this.params))
           param.page = 1
@@ -554,11 +618,11 @@ export default {
                   this.$refs.multipleTable.toggleRowSelection(item)
                 }
               })
-              console.log('sku------------'+ this.selectRows);
+              console.log('sku------------' + this.selectRows)
               this.loading = false
             })
-          } else {  
-            getDistributorItems(param).then((res) => {  
+          } else {
+            getDistributorItems(param).then((res) => {
               const selectRows = res.data.data.list
               this.selectRows = selectRows
               this.$refs.multipleTable.clearSelection()
@@ -581,6 +645,7 @@ export default {
       }
     },
     relItemsIds(newVal, oldVal) {
+      console.log('==================')
       if (newVal.length > 0) {
         this.multipleSelection = newVal
       }
@@ -601,7 +666,7 @@ export default {
           }
         })
       }
-    }, 
+    },
     itemType(newVal, oldVal) {
       if (newVal) {
         this.params.item_type = newVal
@@ -643,7 +708,7 @@ export default {
               })
               this.loading = false
             })
-          } else { 
+          } else {
             getDistributorItems(param).then((res) => {
               const selectRows = res.data.data.list
               this.selectRows = selectRows
@@ -669,7 +734,7 @@ export default {
     relStore(newVal, oldVal) {
       if (newVal.id) {
         this.params.distributor_id = newVal.id
-        this.store = newVal 
+        this.store = newVal
         this.getNewsList()
       }
     },
@@ -684,7 +749,7 @@ export default {
       }
     },
     getStatus(newVal, oldVal) {
-      if (newVal) { 
+      if (newVal) {
         this.getNewsList()
       }
     },
@@ -734,7 +799,10 @@ export default {
     }
   }
 }
-.search-tips{
+.search-tips {
   line-height: 40px;
+}
+.last-col{
+  margin-top:8px;
 }
 </style>

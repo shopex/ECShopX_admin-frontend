@@ -48,7 +48,7 @@
                 :key="`cmenu-${cindex}`"
               >
                 <template slot="title">{{ child.name }}</template>
-                <template v-for="sub in child.children" v-if="sub.is_show">
+                <template v-for="sub in child.children" v-if="sub.is_show && sub.is_menu">
                   <el-menu-item
                     :key="sub.url"
                     :index="sub.url"
@@ -100,7 +100,7 @@
                 </div>
                 <div class="username" >
                   <div>{{ nick_name || name }}</div>
-                  <small class="muted">基础信息</small>
+                  <small class="muted">账号信息</small>
                 </div>
               </div>
               <div class="popover-row exit-system" @click="logout">退出登录</div>
@@ -128,6 +128,7 @@
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { getAuthorizelogout } from '@/api/login'
 import { log, isInSalesCenter } from '@/utils'
+import { micrApp } from '@/utils/micr-app'
 import store from '@/store'
 export default {
   beforeRouteEnter(to, from, next) {
@@ -181,6 +182,7 @@ export default {
   },
   mounted() {
     this.getSystemSetting()
+    micrApp.init()
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
