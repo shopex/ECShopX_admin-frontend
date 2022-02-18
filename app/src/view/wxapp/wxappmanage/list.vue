@@ -607,6 +607,7 @@ export default {
       this.applet_detail = true
       getWxa(data.authorizer.authorizer_appid).then((response) => {
         this.detail = response.data.data
+        this.weappTemplate = this.detail.weappTemplate
         console.log(this.detail)
       })
     },
