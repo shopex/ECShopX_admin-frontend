@@ -60,11 +60,11 @@
           <el-input class="input-m" placeholder="联系人手机号" v-model="params.mobile">
             <el-button slot="append" icon="el-icon-search" @click="numberSearch"></el-button>
           </el-input>
-          <el-select v-model="params.distribution_type" clearable placeholder="选择店铺类型" @change="distribution_typeHandle" v-if="$store.getters.login_type=='normal'">
+          <el-select v-model="params.distribution_type" clearable placeholder="选择店铺类型" @change="distribution_typeHandle" v-if="$store.getters.login_type=='admin'">
             <el-option label="加盟" value='1'>加盟</el-option>
             <el-option label="自营" value='0'>自营</el-option>
           </el-select>
-          <el-input class="input-m" placeholder="所属商家" v-model="params.merchant_name" v-if="$store.getters.login_type=='normal'">
+          <el-input class="input-m" placeholder="所属商家" v-model="params.merchant_name" v-if="$store.getters.login_type=='admin'">
             <el-button slot="append" icon="el-icon-search" @click="merchant_nameSearch"></el-button>
           </el-input>
         </el-col>
@@ -84,7 +84,7 @@
           </el-button-group>
           <el-button
             v-if="!is_distributor"
-            :disabled="$store.getters.login_type!='merchant'"
+            :disabled="$store.getters.login_type!='merchant'&&!isLoginTypeNormal"
             type="primary"
             plain
             icon="el-icon-circle-plus"
@@ -202,13 +202,13 @@
               <span v-else class="muted">废弃</span>
             </template>
           </el-table-column>
-          <el-table-column label="店铺类型" width="80" v-if="$store.getters.login_type=='normal'">
+          <el-table-column label="店铺类型" width="80" v-if="$store.getters.login_type=='admin'">
                <template slot-scope="scope">
                  <span v-if="scope.row.distribution_type=='1'">加盟</span>
                  <span v-else-if="scope.row.distribution_type=='0'">自营</span>
                </template>
           </el-table-column>
-          <el-table-column width="80" label="是否默认" v-if="$store.getters.login_type=='normal'">
+          <el-table-column width="80" label="是否默认" v-if="$store.getters.login_type=='admin'">
             <template slot-scope="scope" v-if="scope.row.is_valid !== 'delete'">
               <el-tooltip effect="dark" content="请先启用店铺" placement="top-start">
                 <el-switch
@@ -547,6 +547,9 @@ export default {
   components: { shopDecoration, pcDecoration,shopSelect },
   computed: {
     ...mapGetters(['wheight']),
+    isLoginTypeNormal(){
+      return this.$store.getters.login_type==='normal' || this.$store.getters.login_type==='admin'
+    }
   },
   methods: {
     async handleClose(tag,{distributor_id},{tag_id}){
@@ -769,6 +772,7 @@ export default {
     handleCancelLabelsDialog() {
       this.editValidDialog = false
       this.tag.dialog = false
+      this.getList()
     },
     tagUpdate(row) {
       this.tag.editItem = [row.itemName]
@@ -845,9 +849,9 @@ export default {
       if (val === 'true') {
         msg = '确定开启店铺？'
       } else if (val === 'false') {
-        msg = '确定禁用店铺？'
+        msg = '禁用后该店铺的订单将无法处理，同时如首页装修有该店铺或店铺商品将无法正常购买，请确认是否禁用？'
       } else if (val === 'delete') {
-        msg = '该店铺废弃后将不可再找回,确定废弃？'
+        msg = '废弃后该店铺的订单将无法处理，同时如首页装修有该店铺或店铺商品将无法正常购买，且该店铺废弃后不可找回，请确认是否废弃？'
       }
       this.$confirm(msg, '提示', {
         confirmButtonText: '确定',
@@ -944,6 +948,7 @@ export default {
     },
     
   mounted() {
+    console.log("==store.getters.login_type==",store.getters.login_type)
     this.origin = window.location.origin;
     if (store.getters.login_type === 'distributor') {
       this.is_distributor = true

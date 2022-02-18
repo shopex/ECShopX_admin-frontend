@@ -386,7 +386,7 @@ export default {
       this.value.pics.splice(index, 1)
       this.value.pics_create_qrcode.splice(index, 1)
     },
-    pickVideo ({ media_id, url }) {
+    pickVideo ({ media_id, url }) { 
       this.value.itemVideo = {
         media_id,
         url

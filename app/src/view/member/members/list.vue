@@ -243,8 +243,57 @@
           @selection-change="handleSelectionChange"
           v-loading="loading"
         >
+
           <el-table-column type="selection" align="center" label="全选"></el-table-column>
-          <el-table-column type="expand" label="会员标签" width="100">
+          <el-table-column prop="mobile" label="手机号" width="160">
+            <template slot-scope="scope">
+              {{ scope.row.mobile }}
+              <el-tooltip
+                v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+                class="item"
+                effect="dark"
+                content="修改手机号"
+                placement="top-start"
+              >
+                <el-button
+                  class="el-icon-edit"
+                  type="text"
+                  size="mini"
+                  @click="editMobile(scope.row)"
+                ></el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column prop="username" label="姓名" width="140"></el-table-column>
+          <el-table-column prop="sex" label="性别" width="70">
+            <template slot-scope="scope">
+              <span v-if="scope.row.sex == '2'">女</span>
+              <span v-else-if="scope.row.sex == '1'">男</span>
+              <span v-else-if="scope.row.sex == '0'">未知</span>
+              <span v-else>{{ scope.row.sex }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="grade_id" label="会员等级" width="140">
+            <template slot-scope="scope">
+              <!-- <span v-if="scope.row.grade_id == '1'">女</span>
+              <span v-else>{{ scope.row.grade_id }}</span> -->
+              <span>{{ showGrade(scope.row.grade_id)}}</span>
+            </template>
+          </el-table-column>
+           <el-table-column prop="inviter" label="推荐人" width="130"></el-table-column>
+          <el-table-column prop="disabled" label="禁用" width="80">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.disabled"
+                active-value="1"
+                inactive-value="0"
+                @change="acitonDisabled(scope.$index, scope.row)"
+                active-color="#ff4949"
+                inactive-color="#ccc"
+              ></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="会员标签">
             <template slot-scope="scope">
               <template v-if="scope.row.tagList.length > 0">
                 <el-tag
@@ -270,35 +319,10 @@
             label="会员卡编号"
             width="130"
           ></el-table-column>
-          <el-table-column prop="username" label="姓名" width="100"></el-table-column>
-          <el-table-column prop="mobile" label="手机号" width="130">
-            <template slot-scope="scope">
-              {{ scope.row.mobile }}
-              <el-tooltip
-                v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
-                class="item"
-                effect="dark"
-                content="修改手机号"
-                placement="top-start"
-              >
-                <el-button
-                  class="el-icon-edit"
-                  type="text"
-                  size="mini"
-                  @click="editMobile(scope.row)"
-                ></el-button>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column prop="sex" label="性别" width="70">
-            <template slot-scope="scope">
-              <span v-if="scope.row.sex == '2'">女</span>
-              <span v-else-if="scope.row.sex == '1'">男</span>
-              <span v-else-if="scope.row.sex == '0'">未知</span>
-              <span v-else>{{ scope.row.sex }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="inviter" label="推荐人" width="130"></el-table-column>
+         
+
+
+         
           <el-table-column prop="created" v-if="false" label="注册日期" width="120">
             <template slot-scope="scope">
               <el-tooltip placement="top">
@@ -309,18 +333,7 @@
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column prop="disabled" label="禁用" width="80">
-            <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.disabled"
-                active-value="1"
-                inactive-value="0"
-                @change="acitonDisabled(scope.$index, scope.row)"
-                active-color="#ff4949"
-                inactive-color="#ccc"
-              ></el-switch>
-            </template>
-          </el-table-column>
+
           <el-table-column label="备注">
             <template slot-scope="scope">
               <span v-if="scope.row.remarks">{{ scope.row.remarks }}</span>
@@ -750,6 +763,9 @@
           </el-form>
         </template>
       </el-dialog>
+      <template v-if="aliyunsmsDialogVisible">
+        <aliyunsmsDialog :exterior='true' :visible='aliyunsmsDialogVisible' :user_id="user_id" :info='aliyunsmsDialogInfo' @smsMassLogEditHandler='switchAliyunsmsDialog'/>
+      </template>
     </div>
     <router-view></router-view>
   </div>
@@ -758,6 +774,7 @@
 <script>
 import store from '@/store'
 import exportTip from '@/components/export_tips'
+import aliyunsmsDialog from '@/view/base/shortmessage/cpn/sms_MassLog_edit.vue'
 import { mapGetters } from 'vuex'
 import {
   getMembers,
@@ -776,6 +793,8 @@ import {
   getMemberRegisterSetting,
   updateMemberBasicInfo
 } from '../../../api/member'
+import { getaliSmsStatus } from '@/api/sms';
+
 import { getGradeList } from '../../../api/membercard'
 import { getSalesmanList, setMemberSalesman, getDistributorEasyList } from '../../../api/marketing'
 import { getEffectiveCardList } from '../../../api/cardticket'
@@ -783,14 +802,22 @@ import { giveCoupons } from '../../../api/promotions'
 import { listVipGrade, batchReceiveMemberCard } from '../../../api/cardticket'
 import { getWxShopsList } from '../../../api/shop'
 import shopSelect from '@/components/shopSelect'
+import { forEach } from 'jszip'
 
 export default {
   components: {
     shopSelect,
-    exportTip
+    exportTip,
+    aliyunsmsDialog
   },
   data() {
     return {
+      aliyunsms_status:false, //ali 短信状态
+      aliyunsmsDialogVisible:false,
+      aliyunsmsDialogInfo:{
+        type:'add'
+      },
+
       panel: {
         search: false
       },
@@ -946,7 +973,53 @@ export default {
   computed: {
     ...mapGetters(['wheight', 'isMicorMall'])
   },
+  mounted() {
+    if (store.getters.login_type === 'distributor') {
+      this.is_distributor = true
+    }
+    if (this.$route.query.salesman_mobile) {
+      this.params.salesman_mobile = this.$route.query.salesman_mobile
+    }
+    if (this.$route.query.wechat_nickname) {
+      this.params.wechat_nickname = this.$route.query.wechat_nickname
+    }
+    this.getParams()
+    if (this.$route.query.mobile) {
+      this.params.mobile = this.$route.query.mobile
+    }
+    if (this.$route.query.orderRecords) {
+      this.params.have_consume = this.$route.query.orderRecords + ''
+    }
+    if (this.$route.query.grade_id) {
+      this.params.grade_id = this.$route.query.grade_id
+    }
+    if (this.$route.query.currentPage) {
+      this.params.page = Number(this.$route.query.currentPage)
+    }
+    this.getMembers(this.params)
+    let param = {
+      page: 1,
+      pageSize: 100,
+      is_disabled: false
+    }
+    this.getGradeList()
+    this.getAllTagLists()
+    this.getVipList()
+    this.getShopsList(param)
+    getMemberRegisterSetting().then((response) => {
+      delete response.data.data.content_agreement
+      this.membersSetting = response.data.data.setting
+    })
+
+    // 获取短信type 
+    this.getAliSMS();
+    
+  },
   methods: {
+    async getAliSMS(){
+      const result = await getaliSmsStatus();
+      this.aliyunsms_status = result.data.data.aliyunsms_status;
+    },
     gradeUpdate(row) {
       this.params.action_type = 'set_grade'
       this.dialogTitle = '修改指定会员等级'
@@ -1108,6 +1181,13 @@ export default {
           this.levelData = response.data.data
         }
       })
+    },
+    showGrade(id){
+      if (this.levelData.length>0) {
+        return this.levelData.filter(element => {
+          return id == element.grade_id
+        })[0].grade_name;
+      }
     },
     getDetail(userid) {
       let isShopadmin = false
@@ -1579,6 +1659,14 @@ export default {
     },
     batchActionDialog(actiontype) {
       this.params.action_type = actiontype
+
+      if (actiontype == 'send_sms' && this.aliyunsms_status) {
+        // 展示阿里短信的
+        this.switchAliyunsmsDialog(true)
+        console.log(this.user_id);
+        return
+      }
+
       this.dialogIsShow = true
       if (actiontype == 'rel_tag') {
         this.dialogTitle = '为会员打标签'
@@ -1607,45 +1695,15 @@ export default {
       } else if (actiontype == 'set_saleman') {
         this.dialogTitle = '设置导购员'
       }
+    },
+
+    /* ali短信 相关 */
+    switchAliyunsmsDialog(val=false){
+      this.aliyunsmsDialogVisible = val
     }
+
+    
   },
-  mounted() {
-    if (store.getters.login_type === 'distributor') {
-      this.is_distributor = true
-    }
-    if (this.$route.query.salesman_mobile) {
-      this.params.salesman_mobile = this.$route.query.salesman_mobile
-    }
-    if (this.$route.query.wechat_nickname) {
-      this.params.wechat_nickname = this.$route.query.wechat_nickname
-    }
-    this.getParams()
-    if (this.$route.query.mobile) {
-      this.params.mobile = this.$route.query.mobile
-    }
-    if (this.$route.query.orderRecords) {
-      this.params.have_consume = this.$route.query.orderRecords + ''
-    }
-    if (this.$route.query.grade_id) {
-      this.params.grade_id = this.$route.query.grade_id
-    }
-    if (this.$route.query.currentPage) {
-      this.params.page = Number(this.$route.query.currentPage)
-    }
-    this.getMembers(this.params)
-    let param = {
-      page: 1,
-      pageSize: 100,
-      is_disabled: false
-    }
-    this.getGradeList()
-    this.getAllTagLists()
-    this.getVipList()
-    this.getShopsList(param)
-    getMemberRegisterSetting().then((response) => {
-      delete response.data.data.content_agreement
-      this.membersSetting = response.data.data.setting
-    })
-  }
+
 }
 </script>

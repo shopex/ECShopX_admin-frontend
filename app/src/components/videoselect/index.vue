@@ -31,42 +31,24 @@
     </div>
     <el-dialog class="video_dialog" title="选择视频" :visible.sync="visible" append-to-body>
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane
-          v-if="$store.getters.login_type != 'distributor'"
-          label="微信上传"
-          name="wechatvideos"
-        >
-          <div>
-            <el-row :gutter="10" v-loading="loading">
-              <el-col
-                :span="6"
-                v-for="(item, index) in videoList"
-                :key="index"
-                class="media-item"
-                :class="{ 'checked': temp.media_id === item.media_id }"
-              >
-                <video-player class="vjs-custom-skin" :options="item.options"> </video-player>
-                <div class="video-caption view-flex view-flex-middle" @click="checkVideo(item)">
-                  <div class="view-flex-item video-name">{{ item.name }}</div>
-                  <div class="check-btn iconfont icon-check"></div>
-                </div>
-              </el-col>
-            </el-row>
-            <el-pagination
-              background
-              layout="total, sizes, prev, pager, next"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-              :current-page.sync="params.page"
-              :page-sizes="[10, 20, 50]"
-              :total="total_count"
-              :page-size="params.pageSize"
-            >
-            </el-pagination>
-          </div>
-        </el-tab-pane>
         <el-tab-pane label="本地上传" name="localvideos">
           <div>
+            <div class="upload_box">
+              <el-upload
+                class="upload-demo"
+                :multiple="true"
+                action=""
+                accept="video/mp4,.mov"
+                :show-file-list="false"
+                :http-request="handleUpload"
+                :on-error="uploadError"
+                :before-upload="beforeVideoUpload"
+                :on-success="handleVideoSuccess"
+              >
+                <el-button type="primary">本地上传</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传mp4文件，且不超过50M</div>
+              </el-upload>
+            </div>
             <el-row :gutter="10" v-loading="localloading">
               <el-col
                 :span="6"
@@ -125,8 +107,8 @@
 </template>
 <script>
 import { getWechatMaterial } from '../../api/wechat'
-import { getQiniuVideoList } from '@/api/qiniu'
-
+import { getQiniuVideoList, uploadQiniuVideo } from '@/api/qiniu'
+import UploadUtil from '@/utils/uploadUtil'
 export default {
   props: {
     multiple: {
@@ -148,11 +130,20 @@ export default {
       localvideoList: [],
       loading: false,
       localloading: false,
-      activeName: 'wechatvideos',
+      activeName: 'localvideos',
       params: {
         type: 'video',
         page: 1,
         pageSize: 20
+      },
+      postData: {
+        token: '',
+        key: '',
+        fname: ''
+      },
+      videoForm: {
+        title: '',
+        description: ''
       },
       localparams: {
         storage: 'videos',
@@ -169,6 +160,54 @@ export default {
     }
   },
   methods: {
+    // 自定义上传
+    handleUpload: function (e) {
+      const upload = new UploadUtil('videos')
+      // 上传
+      upload
+        .uploadImg(e.file, e.file.name)
+        .then(
+          (res) => e.onSuccess(res),
+          (err) => e.onError(err)
+        )
+        .catch((err) => e.onError(err))
+    },
+    handleVideoSuccess(res, file) {
+      let uploadParams = {
+        image_cat_id: 2, //视频分类必填,必须为整数
+        image_name: file?.name, //视频名称必填,不能超过50个字符
+        brief: '视频本地上传', //视频名称必填,不能超过50个字符
+        image_url: res.key, //视频链接必填
+        // image_full_url: res.height,   //视频完整链接必填
+        image_type: file.raw.type, //视频分类长度不能超过20个字符
+        storage: 'videos' //视频id必填
+      }
+      // if (res.key) {
+      uploadQiniuVideo(uploadParams).then((res) => {
+        this.$message({
+          message: '上传成功',
+          type: 'success',
+          duration: 5 * 1000
+        })
+        this.fetchLocalVideos()
+      })
+      // }
+    },
+    beforeVideoUpload(file) {
+      const isMP4 = file.type === 'video/mp4'
+      const isLt2M = file.size / 1024 / 1024 < 50
+
+      if (!isMP4) {
+        this.$message.error('上传视频只能是 mp4 格式!')
+        return
+      }
+      if (!isLt2M) {
+        this.$message.error('上传视频大小不能超过 50MB!')
+        return
+      }
+
+      this.postData.fname = file.name
+    },
     showVideos() {
       this.visible = true
       this.temp = this.checked
@@ -181,32 +220,32 @@ export default {
       }
     },
     fetchVideos() {
-      this.loading = true
-      getWechatMaterial(this.params)
-        .then((response) => {
-          this.videoList = response.data.data.item.map((v) => ({
-            ...v,
-            options: {
-              preload: 'auto',
-              aspectRatio: '16:9',
-              fluid: true,
-              sources: [
-                {
-                  // mp4
-                  type: 'video/mp4',
-                  src: v.url
-                }
-              ],
-              notSupportedMessage: '此视频暂无法播放，请稍后再试',
-              controlBar: false
-            }
-          }))
-          this.loading = false
-          this.total_count = response.data.data.total_count
-        })
-        .catch(function(error) {
-          this.loading = false
-        })
+      // this.loading = true
+      // getWechatMaterial(this.params)
+      //   .then((response) => {
+      //     this.videoList = response.data.data.item.map((v) => ({
+      //       ...v,
+      //       options: {
+      //         preload: 'auto',
+      //         aspectRatio: '16:9',
+      //         fluid: true,
+      //         sources: [
+      //           {
+      //             // mp4
+      //             type: 'video/mp4',
+      //             src: v.url
+      //           }
+      //         ],
+      //         notSupportedMessage: '此视频暂无法播放，请稍后再试',
+      //         controlBar: false
+      //       }
+      //     }))
+      //     this.loading = false
+      //     this.total_count = response.data.data.total_count
+      //   })
+      //   .catch(function(error) {
+      //     this.loading = false
+      //   })
     },
     fetchLocalVideos() {
       this.localloading = true
@@ -215,9 +254,13 @@ export default {
           this.localvideoList = response.data.data.list
           this.localloading = false
         })
-        .catch(function(error) {
+        .catch(function (error) {
           this.localloading = false
         })
+    },
+    // 上传错误回调
+    uploadError: function (e) {
+      console.error(e)
     },
     handleCurrentChange(page_num) {
       this.params.page = page_num
@@ -312,6 +355,13 @@ export default {
   }
 }
 
+.upload_box {
+  .upload-demo {
+    border-bottom: 1px solid #e5e7e7;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+  }
+}
 .upload-box {
   border: 1px dashed #c0ccda;
   border-radius: 6px;
