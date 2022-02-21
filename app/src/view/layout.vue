@@ -112,13 +112,16 @@
         </div>
       </el-header>
       <el-main style="position: relative; background: #F0F2F5;">
-        <section id="container" class="content-container">
+        <div class="content-container">
+          <router-view></router-view>
+        </div>
+        <!-- <section id="container" class="content-container">
           <el-col :span="24" class="content-wrapper">
             <transition name="fade" mode="out-in">
               <router-view></router-view>
             </transition>
           </el-col>
-        </section>
+        </section> -->
         <div id="design-view"></div>
       </el-main>
     </el-container>
@@ -202,9 +205,9 @@ export default {
     },
     // 获取系统配置信息
     async getSystemSetting() {
-      const res = await this.$api.system.getBrandLogo()
-      if (res.data.data.logo) {
-        this.brandIco = res.data.data.logo
+      const { logo } = await this.$api.system.getBrandLogo()
+      if (logo) {
+        this.brandIco = logo
       } else {
         const companyBrandImg =
           process.env.VUE_APP_PRODUCT_MODEL === 'standard' ? 'onex' : 'ecshopx'
@@ -417,9 +420,10 @@ export default {
 
 .el-main {
   padding: 16px;
-  .content-wrapper {
+  .content-container {
     background-color: #fff;
     padding: 16px;
+    border-radius: 0;
   }
 }
 </style>

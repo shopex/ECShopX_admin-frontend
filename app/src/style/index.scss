@@ -73,10 +73,9 @@ a {
 
 /***** action-container *****/
 .action-container {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   button {
-    margin-right: 8px !important;
-    margin-left: 0 !important;
+    margin: 0 8px 8px 0 !important;
   }
 }
 
