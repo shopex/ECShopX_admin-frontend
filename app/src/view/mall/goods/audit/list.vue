@@ -62,12 +62,12 @@
             >
             </el-option>
           </el-select>
-          <shop-select
+          <!-- <shop-select
             distributors
             @update="goodsSearch"
             @init="resetSearch"
             :shopIdDefault="params.distributor_id"
-          ></shop-select>
+          ></shop-select> -->
 
           <SpSelectShop />
           <!--distributors wxshops 需要哪个api传哪个-->

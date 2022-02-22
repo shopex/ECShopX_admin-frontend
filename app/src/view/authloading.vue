@@ -31,7 +31,8 @@ export default {
         if (query.auth_type == 'woa') {
           this.$router.push({path: homePath})
         } else {
-          this.$router.push({path: '/wxapp/manage/editauthorize', query: { newBind: true, wxapp_id: response.data.data.authorizer_appid, nick_name:response.data.data.nick_name}})
+          // this.$router.push({path: '/wxapp/manage/editauthorize', query: { newBind: true, wxapp_id: response.data.data.authorizer_appid, nick_name:response.data.data.nick_name}})
+          this.$router.push({path: '/site/wechat/wxaindex', query: { newBind: true, wxapp_id: response.data.data.authorizer_appid, nick_name:response.data.data.nick_name}})
         }
       })
       .catch(error => {
@@ -44,7 +45,8 @@ export default {
         if (query.auth_type == 'woa') {
           this.$router.push({path: homePath, query: { isBindFail: true }})
         } else {
-          this.$router.push({path: '/wxapp/manage/editauthorize' })
+          // this.$router.push({path: '/wxapp/manage/editauthorize' })
+          this.$router.push({path: '/site/wechat/wxaindex' })
         }
       })
     } else {

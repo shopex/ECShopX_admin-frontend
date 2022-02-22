@@ -26,14 +26,31 @@
         v-model="region"
         :options="district"
         :props="{ checkStrictly: true }"
-        @blur="onBlurCascader"
+        @change="onChangeCascader"
         @visible-change="visibleChange"
       >
       </el-cascader>
       <el-input placeholder="请输入店铺名称搜索"></el-input>
       <el-button type="text">重置</el-button>
     </div>
-    <el-table></el-table>
+    <SpFinder
+      ref="finder"
+      :other-config="{
+        showHeader: false
+      }"
+      :setting="{
+        columns: [
+          { name: '店铺名称', key: 'name' }
+        ]
+      }"
+      @row-click="onRowClick"
+      :hooks="{
+        beforeSearch: beforeSearch,
+        afterSearch: afterSearch
+      }"
+      url="/distributors"
+    >
+    </SpFinder>
   </div>
 </template>
 
@@ -51,9 +68,23 @@ export default {
   },
   created() {},
   methods: {
-    async onBlurCascader() {
-      const { list } = await this.$api.marketing.getDistributorList()
+    beforeSearch({ page, finderId }) {
+      return {
+        page,
+        pageSize: 10,
+        finderId
+      }
+    },
+    afterSearch(response) {
       
+      debugger
+      // return 
+    },
+    onRowClick(e) {
+      debugger
+    },
+    async onChangeCascader() {
+      this.$refs.finder.refresh()
     },
     visibleChange(visible) {
       this.$emit('visible-change', visible)
