@@ -312,19 +312,32 @@ export default {
     }
   },
   mounted: function () {
-    this.addEventListener();
+    this.addUploaderEventListener();
+  },
+  watch:{
+    selectedMainCategory:{
+      handler:function(val){
+        console.log("===selectedMainCategory===>",val)
+        if(val.length>0){
+          this.addUploaderEventListener()
+        }
+      },
+      immediate:true
+    }
   },
   methods: {
     async fetch() {
       const resPointRule = await getPointRule()
       this.baseData.point_access = resPointRule.data.data.access
     },
-    addEventListener() {
-      const self = this
-      const uploaderDom = document.getElementsByClassName('icon iconfont icon-image')[0]
-      uploaderDom.addEventListener('click', () => {
-        self.addImgPreview()
-      })
+    addUploaderEventListener() {
+      const self = this 
+      setTimeout(()=>{
+        const uploaderDom = document.getElementsByClassName('icon iconfont icon-image')[0]
+        uploaderDom && uploaderDom.addEventListener('click', () => {
+          self.addImgPreview()
+        })
+      },0) 
     },
     async fetchOriginData() {
       // 获取产地国
