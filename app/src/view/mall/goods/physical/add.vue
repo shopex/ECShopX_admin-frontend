@@ -309,19 +309,22 @@ export default {
       this.fetchDetail()
     } else {
       this.getMainCategory()
-    } 
+    }
   },
-  mounted:function(){
-    const self=this;
-    const uploaderDom=document.getElementsByClassName('icon iconfont icon-image')[0];
-    uploaderDom.addEventListener('click',()=>{
-      self.addImgPreview()
-    })
+  mounted: function () {
+    this.addEventListener();
   },
   methods: {
     async fetch() {
       const resPointRule = await getPointRule()
       this.baseData.point_access = resPointRule.data.data.access
+    },
+    addEventListener() {
+      const self = this
+      const uploaderDom = document.getElementsByClassName('icon iconfont icon-image')[0]
+      uploaderDom.addEventListener('click', () => {
+        self.addImgPreview()
+      })
     },
     async fetchOriginData() {
       // 获取产地国
