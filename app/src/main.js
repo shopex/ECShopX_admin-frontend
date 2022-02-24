@@ -45,13 +45,15 @@ initFinder(Vue, {
         delete params.pageNum
         return params
       },
-      afterRequest:(response)=>{
-        debugger
+      afterQuery:(response)=>{
         const { status_code, message } = response.data.data
         if (status_code == 500) {
           return Vue.prototype.$message.error(message)
         } else {
-          return response.data.data
+          return {
+            ...response.data.data,
+            count: response.data.data.total_count,
+          }
         }
       }
     },

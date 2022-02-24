@@ -11,14 +11,14 @@
     v-clickoutside="clickOutSide"
     @click="toggleDropDownVisible(true)"
   >
-    <el-input placeholder="请选择"></el-input>
+    <el-input readonly placeholder="请选择" :suffix-icon="`el-icon-${dropDownVisible ? 'arrow-up' : 'arrow-down'}`"></el-input>
     <transition name="el-zoom-in-top" @after-leave="handleDropdownLeave">
       <div
         v-show="dropDownVisible"
         ref="popper"
         :class="['el-popper', 'el-cascader__dropdown']"
       >
-        <SpSelectShopPanel ref="panel" @visible-change="visibleChange"> </SpSelectShopPanel>
+        <SpSelectShopPanel ref="panel" @visible-change="visibleChange" @change="onChange"></SpSelectShopPanel>
       </div>
     </transition>
   </div>
@@ -53,6 +53,9 @@ export default {
   name: 'SpSelectShop',
   directives: { Clickoutside },
   mixins: [PopperMixin],
+  props: {
+    value: Number || String || Object
+  },
   data() {
     return {
       dropDownVisible: false,
@@ -97,6 +100,9 @@ export default {
       } else {
         this.cascaderPanelVisibleDelay = false
       }
+    },
+    onChange(name) {
+      this.$emit('input', name)
     }
   }
 }
