@@ -1370,7 +1370,8 @@ export default {
     async getData() {
       // 当店铺类型为0（自营）时或者为小程序编辑模板时，展示附近商家和推荐店铺，则店铺类型为加盟不展示
       const isHaveStore = this.initData.some((item) => item.name === 'store')
-      if ((this.relStore.id == '0' ||  this.$route.query.distribution_type == '0' && !isHaveStore)) {
+      // if ((this.relStore.id == '0' ||  this.$route.query.distribution_type == '0' && !isHaveStore)) {
+      if (this.system_mode === 'platform' && this.relStore.id == '0' && !isHaveStore) {
         this.initData.push({
           name: 'store',
           base: {
@@ -1393,7 +1394,8 @@ export default {
         })
       }
       const isHaveNearbyShop = this.initData.some((item) => item.name === 'nearbyShop')
-      if ((this.relStore.id == '0' || this.$route.query.distribution_type == '0') && !isHaveNearbyShop) {
+      // if ((this.relStore.id == '0' || this.$route.query.distribution_type == '0') && !isHaveNearbyShop) {
+        if (this.relStore.id == '0' && !isHaveNearbyShop) {
         this.initData.unshift({
           name: 'nearbyShop',
           base: {
