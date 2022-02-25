@@ -34,8 +34,8 @@
 }
 </style>
 <template>
-  <div>
-    <div
+  <div class="page-body">
+    <template
       v-if="
         $route.path.indexOf('editor') === -1 &&
         $route.path.indexOf('physicalstoreupload') === -1 &&
@@ -214,8 +214,8 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" align="center" label="全选"></el-table-column>
-            <el-table-column prop="goods_id" label="商品ID" width="80"></el-table-column>
-            <el-table-column prop="itemName" label="商品">
+            <el-table-column prop="goods_id" label="商品ID"></el-table-column>
+            <el-table-column prop="itemName" label="商品" width="300">
               <template slot-scope="scope">
                 <div class="goods-title">
                   {{ scope.row.item_name }}
@@ -250,19 +250,20 @@
                 </template>
               </template>
             </el-table-column>
-            <el-table-column label="排序编号" width="90">
+            <el-table-column label="排序编号" width="100">
               <template slot-scope="scope">
                 <el-input
-                  v-model="scope.row.sort"
-                  @change="editItemsSort(scope.$index, scope.row)"
                   size="mini"
+                  v-model="scope.row.sort"
+                  style="width: 60px;"
+                  @change="editItemsSort(scope.$index, scope.row)"
                 ></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="store" label="库存" width="80" />
             <el-table-column prop="market_price" label="原价（¥）" width="100" />
             <el-table-column prop="price" label="销售价（¥）" width="100" />
-            <el-table-column label="状态" width="100">
+            <el-table-column label="状态" >
               <template slot-scope="scope">
                 <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
                 <el-popover
@@ -282,7 +283,7 @@
             </el-table-column>
             <el-table-column prop="itemCatName" label="商品分类" width="150"></el-table-column>
 
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <el-button type="text" @click="editItemsAction(scope.$index, scope.row, false)"
                   >编辑</el-button
@@ -687,8 +688,8 @@
           <el-button type="primary" @click="saveItemsStore">确 定</el-button>
         </span>
       </el-dialog>
-    </div>
-    <router-view></router-view>
+    </template>
+    <router-view></router-view>  
   </div>
 </template>
 <script>

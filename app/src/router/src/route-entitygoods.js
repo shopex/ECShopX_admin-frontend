@@ -15,7 +15,10 @@ export default {
       children: [
         {
           path: 'editor/:itemId?',
-          component: () => import('@/view/mall/goods/physical/add')
+          component: () => import('@/view/mall/goods/physical/add'),
+          meta:{
+            footerFixed: true,
+          },
         },
         {
           path: 'physicalstoreupload',

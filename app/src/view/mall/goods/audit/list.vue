@@ -74,43 +74,10 @@
               align="center"
               label="全选"
             ></el-table-column>
-            <el-table-column label="操作" width="100" fixed>
-              <template slot-scope="scope">
-                <el-button type="text" class="btn-gap">
-                  <span @click="editItemsAction(scope.$index, scope.row)"
-                    > 查看 </span
-                  >
-                  <span
-                    v-if="scope.row.audit_status == 'processing'"
-                    @click="batchItemsAudit(scope.row, $event)"
-                    > 审核 </span
-                  >
-
-                </el-button>
-              </template>
-            </el-table-column>
             <el-table-column
               prop="goods_id"
               label="商品ID"
-              width="90"
             ></el-table-column>
-            <el-table-column label="排序编号" width="90">
-              <template slot-scope="scope">
-                <el-input
-                  size="mini"
-                  v-model="scope.row.sort"
-                  @change="editItemsSort(scope.$index, scope.row)"
-                ></el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="规格" width="70">
-              <template slot-scope="scope">
-                <el-tag effect="plain" size="mini" type="success" v-if="!scope.row.nospec"
-                  >多规格</el-tag
-                >
-                <el-tag effect="plain" size="mini" v-else>单规格</el-tag>
-              </template>
-            </el-table-column>
             <el-table-column prop="itemName" label="商品名称">
               <template slot-scope="scope">
                 {{ scope.row.item_name }}
@@ -119,14 +86,31 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column prop="price" label="商品价格">
+            <el-table-column label="排序编号">
+              <template slot-scope="scope">
+                <el-input
+                  size="mini"
+                  style="width: 60px;"
+                  v-model="scope.row.sort"
+                  @change="editItemsSort(scope.$index, scope.row)"
+                ></el-input>
+              </template>
             </el-table-column>
+            <el-table-column label="规格">
+              <template slot-scope="scope">
+                <el-tag effect="plain" size="mini" type="success" v-if="!scope.row.nospec"
+                  >多规格</el-tag
+                >
+                <el-tag effect="plain" size="mini" v-else>单规格</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="market_price" label="原价（¥）" />
+            <el-table-column prop="price" label="销售价（¥）" />
             <el-table-column
               prop="store"
               label="库存"
-              width="80"
             ></el-table-column>
-            <el-table-column label="状态" width="100">
+            <el-table-column label="状态">
               <template slot-scope="scope">
                 <span v-if="scope.row.audit_status == 'processing'"
                   >等待审核</span
@@ -150,6 +134,21 @@
                   >前台仅展示</span
                 >
                 <span v-else>不可销售</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="text" class="btn-gap">
+                  <span @click="editItemsAction(scope.$index, scope.row)"
+                    > 查看 </span
+                  >
+                  <span
+                    v-if="scope.row.audit_status == 'processing'"
+                    @click="batchItemsAudit(scope.row, $event)"
+                    > 审核 </span
+                  >
+
+                </el-button>
               </template>
             </el-table-column>
           </el-table>

@@ -11,8 +11,8 @@
 }
 </style>
 <template>
-  <div>
-    <div v-if="$route.path.indexOf('editor') === -1">
+  <div class="page-body">
+    <template v-if="$route.path.indexOf('editor') === -1">
       <el-row class="filter-header" :gutter="20">
         <el-col>
           <el-input class="input-m" placeholder="商品名称" v-model="params.keywords">
@@ -309,7 +309,7 @@
           <el-button type="primary" @click="saveItemsStore">确 定</el-button>
         </span>
       </el-dialog>
-    </div>
+    </template>
     <router-view></router-view>
   </div>
 </template>

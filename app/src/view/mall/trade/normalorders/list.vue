@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="page-body">
     <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('process') === -1">
       <ListFilterCard
         :loginType="$store.getters.login_type"

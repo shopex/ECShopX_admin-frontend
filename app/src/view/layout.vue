@@ -74,7 +74,7 @@
       </div>
     </el-aside>
 
-    <el-container>
+    <el-container class="app-container">
       <el-header class="header" height="48px" v-if="isShowHeader()">
         <div class="header-left">
           <!-- activeIndex: {{activeIndex}}
@@ -112,9 +112,7 @@
         </div>
       </el-header>
       <el-main style="position: relative; background: #F0F2F5;">
-        <div class="content-container">
-          <router-view></router-view>
-        </div>
+        <router-view class="content-container" :class="{'footer-fixed': $route.meta && $route.meta.footerFixed }"></router-view>
         <!-- <section id="container" class="content-container">
           <el-col :span="24" class="content-wrapper">
             <transition name="fade" mode="out-in">
@@ -186,6 +184,7 @@ export default {
   mounted() {
     this.getSystemSetting()
     micrApp.init()
+    console.log(this.$route)
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
@@ -428,6 +427,9 @@ export default {
     background-color: #fff;
     padding: 16px;
     border-radius: 0;
+    &.footer-fixed {
+      margin-bottom: 57px;
+    }
   }
 }
 </style>
@@ -459,6 +461,12 @@ export default {
   }
   > ul {
     margin-left: 14px;
+  }
+}
+.app-container {
+  // padding-bottom: 50px;
+  .header {
+    background-color: #fff;
   }
 }
 </style>
