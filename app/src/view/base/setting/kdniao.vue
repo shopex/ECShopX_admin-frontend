@@ -3,10 +3,10 @@
     <el-tab-pane label="快递鸟" name="kdniao">
       <el-form ref="form" label-width="100px">
         <el-form-item label="EBusinessID">
-          <el-input v-model="kdniao_form.config.EBusinessID" style="width:300px"></el-input>
+          <el-input v-model="kdniao_form.config.EBusinessID" style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="AppKey">
-          <el-input v-model="kdniao_form.config.appkey" style="width:300px"></el-input>
+          <el-input v-model="kdniao_form.config.appkey" style="width: 300px"></el-input>
         </el-form-item>
         <!--  <el-form-item label="扣量方式选择">
           <el-input v-model="kdniao_form.config.request_type" style="width:300px"></el-input>
@@ -26,7 +26,13 @@
           ></el-switch>
         </el-form-item>
         <el-form-item label="功能说明">
-          <el-link type="primary" href="http://www.kdniao.com/product-track1" :underline="false" target="_blank">快递鸟快递物流跟踪</el-link>
+          <el-link
+            type="primary"
+            href="http://www.kdniao.com/product-track1"
+            :underline="false"
+            target="_blank"
+            >快递鸟快递物流跟踪</el-link
+          >
         </el-form-item>
         <div class="section-footer with-border content-center">
           <el-button type="primary" v-loading="loading" @click="onSubmit">保存</el-button>
@@ -36,10 +42,10 @@
     <el-tab-pane label="快递100" name="kuaidi100" @tab-click="handleClick">
       <el-form ref="form" label-width="100px">
         <el-form-item label="Key">
-          <el-input v-model="form.config.app_key" style="width:300px"></el-input>
+          <el-input v-model="form.config.app_key" style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="Customer">
-          <el-input v-model="form.config.app_secret" style="width:300px"></el-input>
+          <el-input v-model="form.config.app_secret" style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="是否启用">
           <el-switch
@@ -49,7 +55,36 @@
           ></el-switch>
         </el-form-item>
         <el-form-item label="功能说明">
-          <el-link type="primary" href="https://api.kuaidi100.com/product/query/" :underline="false" target="_blank">快递100实时快递查询</el-link>
+          <el-link
+            type="primary"
+            href="https://api.kuaidi100.com/product/query/"
+            :underline="false"
+            target="_blank"
+            >快递100实时快递查询</el-link
+          >
+        </el-form-item>
+        <div class="section-footer with-border content-center">
+          <el-button type="primary" v-loading="loading" @click="onSubmit">保存</el-button>
+        </div>
+      </el-form>
+    </el-tab-pane>
+    <el-tab-pane label="顺丰BSP" name="sfbsp">
+      <el-form ref="form" label-width="100px">
+        <el-form-item label="接入地址">
+          <el-input v-model="sfbsp_form.config.url" style="width: 300px"></el-input>
+        </el-form-item>
+        <el-form-item label="接入编码">
+          <el-input v-model="sfbsp_form.config.accesscode" style="width: 300px"></el-input>
+        </el-form-item>
+        <el-form-item label="Checkword">
+          <el-input v-model="sfbsp_form.config.checkword" style="width: 300px"></el-input>
+        </el-form-item>
+        <el-form-item label="是否启用">
+          <el-switch
+            v-model="sfbsp_form.config.is_open"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          ></el-switch>
         </el-form-item>
         <div class="section-footer with-border content-center">
           <el-button type="primary" v-loading="loading" @click="onSubmit">保存</el-button>
@@ -59,7 +94,7 @@
   </el-tabs>
 </template>
 <script>
-import { getKdniaoSetting, setKdniaoSetting } from '../../../api/trade'
+import { getKdniaoSetting, setKdniaoSetting, getSfbspSetting,seSfbspSetting } from '../../../api/trade'
 export default {
   data() {
     return {
@@ -79,6 +114,14 @@ export default {
         config: {
           app_key: '',
           app_secret: '',
+          is_open: false
+        }
+      },
+      sfbsp_form: {
+        config: {
+          url: '',
+          accesscode: '',
+          checkword: '',
           is_open: false
         }
       }
@@ -104,17 +147,26 @@ export default {
         getKdniaoSetting(query).then((response) => {
           this.form.config = response.data.data
         })
+      } else if (this.activeName === 'sfbsp') {
+        getSfbspSetting(query).then((response) => {
+          const data = response.data.data
+          if (!Array.isArray(data)) {
+            if (data.is_open == 'true') {
+              data.is_open = true
+            } else {
+              data.is_open = false
+            }
+            this.sfbsp_form.config = data
+          }
+        })
       }
     },
     onSubmit() {
       this.loading = true
       let query = {}
-      if (this.activeName === 'kdniao') {
-        query = this.kdniao_form
-      } else {
-        query = this.form
-      }
-      setKdniaoSetting(query)
+      if (this.activeName === 'sfbsp') {
+        query = this.sfbsp_form;
+        seSfbspSetting(query)
         .then((response) => {
           this.$message({
             type: 'success',
@@ -125,6 +177,24 @@ export default {
         .catch((error) => {
           this.loading = false
         })
+      } else {
+        if (this.activeName === 'kdniao') {
+          query = this.kdniao_form
+        } else {
+          query = this.form
+        }
+        setKdniaoSetting(query)
+          .then((response) => {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            this.loading = false
+          })
+          .catch((error) => {
+            this.loading = false
+          })
+      }
     }
   },
   mounted() {
