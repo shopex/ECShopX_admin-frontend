@@ -1,7 +1,12 @@
 <template>
-  <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-    <el-tab-pane label="快递鸟" name="kdniao">
-      <el-form ref="form" label-width="100px">
+  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane
+      v-for="(item, index) in tabList"
+      :key="index"
+      :label="item.name"
+      :name="item.activeName"
+    >
+      <el-form ref="form" label-width="100px" v-if="activeName == 'kdniao'">
         <el-form-item label="EBusinessID">
           <el-input v-model="kdniao_form.config.EBusinessID" style="width: 300px"></el-input>
         </el-form-item>
@@ -38,9 +43,7 @@
           <el-button type="primary" v-loading="loading" @click="onSubmit">保存</el-button>
         </div>
       </el-form>
-    </el-tab-pane>
-    <el-tab-pane label="快递100" name="kuaidi100" @tab-click="handleClick">
-      <el-form ref="form" label-width="100px">
+      <el-form ref="form" label-width="100px" v-if="activeName == 'kuaidi100'">
         <el-form-item label="Key">
           <el-input v-model="form.config.app_key" style="width: 300px"></el-input>
         </el-form-item>
@@ -67,9 +70,7 @@
           <el-button type="primary" v-loading="loading" @click="onSubmit">保存</el-button>
         </div>
       </el-form>
-    </el-tab-pane>
-    <el-tab-pane label="顺丰BSP" name="sfbsp">
-      <el-form ref="form" label-width="100px">
+      <el-form ref="form" label-width="100px" v-if="activeName == 'sfbsp'">
         <el-form-item label="接入地址">
           <el-input v-model="sfbsp_form.config.url" style="width: 300px"></el-input>
         </el-form-item>
@@ -94,7 +95,12 @@
   </el-tabs>
 </template>
 <script>
-import { getKdniaoSetting, setKdniaoSetting, getSfbspSetting,seSfbspSetting } from '../../../api/trade'
+import {
+  getKdniaoSetting,
+  setKdniaoSetting,
+  getSfbspSetting,
+  seSfbspSetting
+} from '../../../api/trade'
 export default {
   data() {
     return {
@@ -124,7 +130,12 @@ export default {
           checkword: '',
           is_open: false
         }
-      }
+      },
+      tabList: [
+        { name: '快递鸟', activeName: 'kdniao' },
+        { name: '快递100', activeName: 'kuaidi100' },
+        { name: '顺丰BSP', activeName: 'sfbsp' }
+      ]
     }
   },
   methods: {
@@ -165,18 +176,18 @@ export default {
       this.loading = true
       let query = {}
       if (this.activeName === 'sfbsp') {
-        query = this.sfbsp_form;
+        query = this.sfbsp_form
         seSfbspSetting(query)
-        .then((response) => {
-          this.$message({
-            type: 'success',
-            message: '保存成功'
+          .then((response) => {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            this.loading = false
           })
-          this.loading = false
-        })
-        .catch((error) => {
-          this.loading = false
-        })
+          .catch((error) => {
+            this.loading = false
+          })
       } else {
         if (this.activeName === 'kdniao') {
           query = this.kdniao_form
