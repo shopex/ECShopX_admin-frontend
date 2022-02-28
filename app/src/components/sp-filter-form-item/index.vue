@@ -5,14 +5,14 @@
 .form-item {
   &__label {
     float: left;
-    width: 80px;
+    width: 90px;
     line-height: 36px;
     padding-right: 8px;
     text-align: right;
     color: #666;
   }
   &__content {
-    margin-left: 80px;
+    margin-left: 90px;
     width: 214px;
     .el-select,
     .el-cascader {

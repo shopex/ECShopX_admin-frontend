@@ -19,6 +19,8 @@ export function isBoolean(val) {
   return isPrimitiveType( val, '[object Boolean]' )
 }
 
+export const STANDARD = process.env.VUE_APP_PRODUCT_MODEL == 'standard'
+ 
 export function isInSalesCenter () {
   if (
     window.self != window.top &&
