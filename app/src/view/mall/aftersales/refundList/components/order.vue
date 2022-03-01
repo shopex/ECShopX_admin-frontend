@@ -408,13 +408,7 @@ export default {
       this.tableList = list
       this.page.total = total_count
       this.loading = false
-    },
-    querySearch(queryString, cb) {
-      var restaurants = this.source_list
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
+    }, 
     createFilter(queryString) {
       return (restaurant) => {
         return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
