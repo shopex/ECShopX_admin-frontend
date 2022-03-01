@@ -1,90 +1,90 @@
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1">
-      <el-row class="filter-header" :gutter="20">
-        <el-col>
-          <el-select
-            v-model="distributor_id"
-            clearable
-            @change="distributorSelectHandle"
-            placeholder="请选择店铺"
+    <el-row class="filter-header" :gutter="20">
+      <el-col>
+        <el-select
+          v-model="distributor_id"
+          clearable
+          @change="distributorSelectHandle"
+          placeholder="请选择店铺"
+        >
+          <el-option
+            v-for="(item, index) in distributorList"
+            :key="index"
+            :label="item.name"
+            :value="item.distributor_id"
           >
-            <el-option
-              v-for="(item, index) in distributorList"
-              :key="index"
-              :label="item.name"
-              :value="item.distributor_id"
-            >
-            </el-option>
-          </el-select>
-          <el-input class="input-m" placeholder="退款单号" v-model="refund_bn">
-            <el-button slot="append" icon="el-icon-search" @click="refundBnSearch"></el-button>
-          </el-input>
-          <el-input class="input-m" placeholder="订单号" v-model="order_id">
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-          </el-input>
-          <el-input class="input-m" placeholder="手机号" v-model="mobile">
-            <el-button slot="append" icon="el-icon-search" @click="mobileSearch"></el-button>
-          </el-input>
-          <el-select
-            v-model="refund_type"
-            @change="refundTypeSelectHandle"
-            placeholder="请选择退款类型"
+          </el-option>
+        </el-select>
+        <el-input class="input-m" placeholder="退款单号" v-model="refund_bn">
+          <el-button slot="append" icon="el-icon-search" @click="refundBnSearch"></el-button>
+        </el-input>
+        <el-input class="input-m" placeholder="订单号" v-model="order_id">
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+        </el-input>
+        <el-input class="input-m" placeholder="手机号" v-model="mobile">
+          <el-button slot="append" icon="el-icon-search" @click="mobileSearch"></el-button>
+        </el-input>
+        <el-select
+          v-model="refund_type"
+          @change="refundTypeSelectHandle"
+          placeholder="请选择退款类型"
+        >
+          <el-option
+            v-for="(item, index) in refundTypeList"
+            :key="index"
+            :label="item.name"
+            :value="item.value"
           >
-            <el-option
-              v-for="(item, index) in refundTypeList"
-              :key="index"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="refund_channel"
-            @change="refundChannelSelectHandle"
-            placeholder="请选择退款方式"
+          </el-option>
+        </el-select>
+        <el-select
+          v-model="refund_channel"
+          @change="refundChannelSelectHandle"
+          placeholder="请选择退款方式"
+        >
+          <el-option
+            v-for="(item, index) in refundChannelList"
+            :key="index"
+            :label="item.name"
+            :value="item.value"
           >
-            <el-option
-              v-for="(item, index) in refundChannelList"
-              :key="index"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="refund_status"
-            @change="refundsStatusSelectHandle"
-            placeholder="请选择退款状态"
+          </el-option>
+        </el-select>
+        <el-select
+          v-model="refund_status"
+          @change="refundsStatusSelectHandle"
+          placeholder="请选择退款状态"
+        >
+          <el-option
+            v-for="(item, index) in refundsStatusList"
+            :key="index"
+            :label="item.name"
+            :value="item.value"
           >
-            <el-option
-              v-for="(item, index) in refundsStatusList"
-              :key="index"
-              :label="item.name"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <el-date-picker
-            v-model="create_time"
-            type="daterange"
-            value-format="yyyy/MM/dd"
-            placeholder="选择日期范围"
-            @change="dateChange"
-          ></el-date-picker>
-          <export-tip @exportHandle='exportData'>
-            <el-button type="primary">导出</el-button>
-          </export-tip>
-          <el-popover
-            placement="top-start"
-            width="200"
-            trigger="hover"
-            content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据"
-          >
-            <i class="el-icon-question" slot="reference"></i>
-          </el-popover>
-        </el-col>
-      </el-row>
+          </el-option>
+        </el-select>
+        <el-date-picker
+          v-model="create_time"
+          type="daterange"
+          value-format="yyyy/MM/dd"
+          placeholder="选择日期范围"
+          @change="dateChange"
+        ></el-date-picker>
+        <export-tip @exportHandle="exportData">
+          <el-button type="primary">导出</el-button>
+        </export-tip>
+        <el-popover
+          placement="top-start"
+          width="200"
+          trigger="hover"
+          content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据"
+        >
+          <i class="el-icon-question" slot="reference"></i>
+        </el-popover>
+      </el-col>
+    </el-row> 
+    <el-form ref="form" label-width="100px">
       <el-card>
         <el-table :data="list" v-loading="loading" element-loading-text="数据加载中">
           <el-table-column prop="refund_bn" min-width="220" label="退款单号">
@@ -105,7 +105,10 @@
               <div>
                 <router-link
                   target="_blank"
-                  :to="{ path: matchHidePage('detail'), query: { refund_bn: scope.row.refund_bn } }"
+                  :to="{
+                    path: matchHidePage('detail'),
+                    query: { refund_bn: scope.row.refund_bn }
+                  }"
                   >{{ scope.row.refund_bn }}</router-link
                 >
                 <el-tooltip effect="dark" content="复制" placement="top-start">
@@ -130,7 +133,10 @@
                 <router-link
                   target="_blank"
                   :to="{
-                    path: `${$store.getters.login_type}` == 'merchant' && '/merchant/order/aftersaleslist/detail' || '/order/entitytrade/aftersaleslist/detail',
+                    path:
+                      (`${$store.getters.login_type}` == 'merchant' &&
+                        '/merchant/order/aftersaleslist/detail') ||
+                      '/order/entitytrade/aftersaleslist/detail',
 
                     query: { aftersales_bn: scope.row.aftersales_bn }
                   }"
@@ -151,23 +157,16 @@
               </div>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="tradeId" min-width="180" label="交易单号">
-            <template slot-scope="scope">
-              <div>
-                {{scope.row.tradeInfo.tradeId}}
-                <el-tooltip effect="dark" content="复制" placement="top-start">
-                  <i v-clipboard:copy="scope.row.tradeInfo.tradeId" v-clipboard:success="onCopy" class="el-icon-document-copy"></i>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column> -->
           <el-table-column min-width="200" label="订单号">
             <template slot-scope="scope">
               <div>
                 <router-link
                   target="_blank"
                   :to="{
-                    path: `${$store.getters.login_type}` == 'merchant' && '/merchant/order/tradenormalorders/detail' || '/order/entitytrade/tradenormalorders/detail',
+                    path:
+                      (`${$store.getters.login_type}` == 'merchant' &&
+                        '/merchant/order/tradenormalorders/detail') ||
+                      '/order/entitytrade/tradenormalorders/detail',
                     query: { orderId: scope.row.order_id }
                   }"
                   >{{ scope.row.order_id }}</router-link
@@ -184,20 +183,22 @@
           </el-table-column>
           <el-table-column min-width="200" label="支付方式">
             <template slot-scope="scope">
-              <span v-if="scope.row.pay_type =='wxpay'|| scope.row.pay_type =='adapay'">微信支付</span>
-              <span v-if="scope.row.pay_type =='wxpayapp'">微信APP支付</span>
-              <span v-if="scope.row.pay_type =='wxpayh5'">微信H5支付</span>
-              <span v-if="scope.row.pay_type =='wxpaypc'">微信POS支付</span>
-              <span v-if="scope.row.pay_type =='wxpaypos'">微信PC支付</span>
-              <span v-if="scope.row.pay_type =='alipayapp'">支付宝APP支付</span>
-              <span v-if="scope.row.pay_type =='alipay'">支付宝支付</span>
-              <span v-if="scope.row.pay_type =='alipayh5'">支付宝H5支付</span>
-              <span v-if="scope.row.pay_type =='alipaypos'">支付宝POS支付</span>
-              <span v-if="scope.row.pay_type =='deposit'">余额支付</span>
-              <span v-if="scope.row.pay_type =='ebuy'">EBUY支付</span>
-              <span v-if="scope.row.pay_type =='point'">积分支付</span>
-              <span v-if="scope.row.pay_type =='pos'">POS银行卡支付</span>
-              <span v-if="scope.row.pay_type =='hfpay'">汇付支付</span>
+              <span v-if="scope.row.pay_type == 'wxpay' || scope.row.pay_type == 'adapay'"
+                >微信支付</span
+              >
+              <span v-if="scope.row.pay_type == 'wxpayapp'">微信APP支付</span>
+              <span v-if="scope.row.pay_type == 'wxpayh5'">微信H5支付</span>
+              <span v-if="scope.row.pay_type == 'wxpaypc'">微信POS支付</span>
+              <span v-if="scope.row.pay_type == 'wxpaypos'">微信PC支付</span>
+              <span v-if="scope.row.pay_type == 'alipayapp'">支付宝APP支付</span>
+              <span v-if="scope.row.pay_type == 'alipay'">支付宝支付</span>
+              <span v-if="scope.row.pay_type == 'alipayh5'">支付宝H5支付</span>
+              <span v-if="scope.row.pay_type == 'alipaypos'">支付宝POS支付</span>
+              <span v-if="scope.row.pay_type == 'deposit'">余额支付</span>
+              <span v-if="scope.row.pay_type == 'ebuy'">EBUY支付</span>
+              <span v-if="scope.row.pay_type == 'point'">积分支付</span>
+              <span v-if="scope.row.pay_type == 'pos'">POS银行卡支付</span>
+              <span v-if="scope.row.pay_type == 'hfpay'">汇付支付</span>
             </template>
           </el-table-column>
           <el-table-column width="180" label="退款金额">
@@ -227,20 +228,6 @@
               >
             </template>
           </el-table-column>
-
-          <!-- <el-table-column width="100" label="退款数据">
-            <template slot-scope="scope">
-              <el-popover placement="left" trigger="click" @show="getRefundOrderInfo(scope.row)">
-                <div v-loading="refundloading">
-                  <pre>{{ refundOrderInfo }}</pre>
-                </div>
-                <div slot="reference" class="name-wrapper">
-                  <el-tag size="mini">查看数据</el-tag>
-                </div>
-              </el-popover>
-            </template>
-          </el-table-column> -->
-
           <!-- 退款状态 -->
           <el-table-column prop="refund_status" width="100" label="退款状态">
             <template slot-scope="scope">
@@ -302,7 +289,10 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <router-link
-                :to="{ path: matchHidePage('detail'), query: { refund_bn: scope.row.refund_bn } }"
+                :to="{
+                  path: matchHidePage('detail'),
+                  query: { refund_bn: scope.row.refund_bn }
+                }"
                 >详情</router-link
               >
             </template>
@@ -321,15 +311,14 @@
         >
         </el-pagination>
       </el-card>
-    </div>
-    <router-view></router-view>
+    </el-form>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getDistributorList } from '../../../api/marketing'
-import { getRefundsList, exportRefundList } from '../../../api/aftersales'
-import { getRefundOrderInfo } from '../../../api/trade'
+import { getDistributorList } from '@/api/marketing'
+import { getRefundsList, exportRefundList } from '@/api/aftersales'
+import { getRefundOrderInfo } from '@/api/trade'
 export default {
   data() {
     return {
@@ -342,6 +331,11 @@ export default {
         page: 1,
         pageSize: 20
       },
+      activeName: 'order',
+      tabList: [
+        { name: '退款单', activeName: 'order' },
+        { name: '退款失败日志', activeName: 'orderlog' }
+      ],
       refundTypeList: [
         { name: '全部', value: '' },
         { name: '售后', value: '0' },
@@ -505,6 +499,7 @@ export default {
             type: 'success',
             message: '已加入执行队列，请在设置-导出列表中下载'
           })
+          this.$export_open('refund_record_count')
           return
         } else if (response.data.data.url) {
           this.downloadUrl = response.data.data.url
