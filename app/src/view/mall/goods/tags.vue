@@ -1,17 +1,16 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col>
-        <el-input class="input-b" placeholder="标签名" v-model="params.tag_name">
-          <el-button slot="append" icon="el-icon-search" @click="searchData"></el-button>
-        </el-input>
-        <el-button type="primary" icon="el-icon-circle-plus" @click="addTemplate"
-          >添加商品标签</el-button
-        >
-      </el-col>
-    </el-row>
-    <el-card>
-      <el-table :data="tagsList" v-loading="loading" element-loading-text="数据加载中">
+    <div class="action-container">
+      <el-button type="primary" icon="el-icon-circle-plus" @click="addTemplate">添加商品标签</el-button>
+    </div>
+
+   <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="tag_name" label="标签名:">
+        <el-input placeholder="请输入标签名" v-model="params.tag_name" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+   
+      <el-table border :data="tagsList" v-loading="loading" element-loading-text="数据加载中">
         <el-table-column prop="tag_id" label="操作" width="100">
           <template slot-scope="scope">
             <el-button type="text" @click="editAction(scope.$index, scope.row)">编辑</el-button>
@@ -20,10 +19,7 @@
         </el-table-column>
         <el-table-column prop="tag_name" label="标签名称" width="250">
           <template slot-scope="scope">
-            <span
-              class="tag"
-              :style="{ color: scope.row.font_color, background: scope.row.tag_color }"
-            >
+            <span class="tag" :style="{ color: scope.row.font_color, background: scope.row.tag_color }">
               {{ scope.row.tag_name }}
             </span>
           </template>
@@ -31,50 +27,22 @@
         <el-table-column prop="description" label="标签描述"></el-table-column>
       </el-table>
       <div class="content-padded content-center">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-          :current-page.sync="params.page"
-          :page-sizes="[10, 20, 50]"
-          :total="total_count"
-          :page-size="params.pageSize"
-        >
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange" @size-change="handleSizeChange" :current-page.sync="params.page" :page-sizes="[10, 20, 50]" :total="total_count" :page-size="params.pageSize">
         </el-pagination>
       </div>
-    </el-card>
     <sideBar :visible.sync="show_sideBar" :title="'新增商品标签'">
       <el-form ref="form" :model="form" class="demo-ruleForm" label-width="100px">
-        <el-form-item
-          class="content-left"
-          label="标签名称"
-          prop="tag_name"
-          :rules="[{ required: true, message: '请输入标签名称', trigger: 'blur' }]"
-        >
+        <el-form-item class="content-left" label="标签名称" prop="tag_name" :rules="[{ required: true, message: '请输入标签名称', trigger: 'blur' }]">
           <el-input placeholder="请输入标签名称" v-model="form.tag_name"></el-input>
         </el-form-item>
         <el-form-item class="content-left" label="标签说明">
-          <el-input
-            type="textarea"
-            :rows="3"
-            placeholder="请输入标签说明"
-            v-model="form.description"
-          ></el-input>
+          <el-input type="textarea" :rows="3" placeholder="请输入标签说明" v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item class="content-left" label="标签颜色">
-          <el-color-picker
-            v-model="form.tag_color"
-            show-alpha
-            :predefine="predefineColors"
-          ></el-color-picker>
+          <el-color-picker v-model="form.tag_color" show-alpha :predefine="predefineColors"></el-color-picker>
         </el-form-item>
         <el-form-item class="content-left" label="字体颜色">
-          <el-color-picker
-            v-model="form.font_color"
-            show-alpha
-            :predefine="predefineColors"
-          ></el-color-picker>
+          <el-color-picker v-model="form.font_color" show-alpha :predefine="predefineColors"></el-color-picker>
         </el-form-item>
         <el-form-item class="content-left" label="前台显示">
           <el-radio-group v-model="form.front_show">
@@ -156,7 +124,7 @@ export default {
       this.dialogVisible = true
       this.dataInfo = row
     },
-    searchData() {
+    onSearch() {
       this.params.page = 1
       this.getDataList()
     },
@@ -166,7 +134,6 @@ export default {
       this.tagsList = response.data.data.list
       this.total_count = response.data.data.total_count
       this.loading = false
-        
     },
     deleteAction(index, row) {
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
@@ -246,5 +213,8 @@ export default {
   border-radius: 3px;
   font-size: 12px;
   line-height: 1;
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 </style>

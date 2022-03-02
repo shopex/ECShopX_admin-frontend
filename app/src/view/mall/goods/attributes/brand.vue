@@ -1,31 +1,19 @@
 <template>
   <div>
-    <el-row :gutter="40">
-      <el-col>
-        <el-input
-          class="input-b"
-          placeholder="品牌名称"
-          v-model="params.attribute_name"
-          @change="brandSearch"
-        >
-          <el-button slot="append" icon="el-icon-search" @click="brandSearch"></el-button>
-        </el-input>
-        <el-button-group>
-          <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew"
-            >新增品牌</el-button
-          >
-          <el-button type="primary" @click="syncBrand">同步品牌</el-button>
-        </el-button-group>
-      </el-col>
-    </el-row>
-    <el-card>
-      <el-table
-        :data="list"
-        :height="wheight - 170"
-        v-loading="loading"
-        element-loading-text="数据加载中"
-        :default-sort="{ prop: 'bind_date', order: 'descending' }"
-      >
+    <div class="action-container">
+      <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增品牌</el-button>
+    </div>
+
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="attribute_name" label="品牌名称:">
+        <el-input placeholder="请输入品牌名称" v-model="params.attribute_name" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" plain @click="syncBrand">同步品牌</el-button>
+    </div>
+      <el-table border :data="list" :height="wheight - 170" v-loading="loading" element-loading-text="数据加载中" :default-sort="{ prop: 'bind_date', order: 'descending' }">
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
@@ -47,26 +35,11 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
     <div class="content-padded content-center">
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-        :current-page.sync="params.page"
-        :page-sizes="[10, 20, 50]"
-        :total="total_count"
-        :page-size="params.pageSize"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next" @current-change="handleCurrentChange" @size-change="handleSizeChange" :current-page.sync="params.page" :page-sizes="[10, 20, 50]" :total="total_count" :page-size="params.pageSize">
       </el-pagination>
     </div>
-    <imgPicker
-      :dialog-visible="imgDialog"
-      :sc-status="isGetImage"
-      @chooseImg="pickImg"
-      @closeImgDialog="closeImgDialog"
-    ></imgPicker>
+    <imgPicker :dialog-visible="imgDialog" :sc-status="isGetImage" @chooseImg="pickImg" @closeImgDialog="closeImgDialog"></imgPicker>
     <sideBar :visible.sync="show_sideBar" :title="'新增品牌'">
       <el-form>
         <el-form-item label="品牌名">
@@ -75,7 +48,7 @@
         <el-form-item label="品牌logo">
           <div class="frm-tips">只能上传jpg/png文件，且不超过2M （建议尺寸：200px * 200px）</div>
           <div @click="handleImgPicker" class="upload-box">
-            <img v-if="form.image_url" :src="form.image_url" class="avatar" width="100%"/>
+            <img v-if="form.image_url" :src="form.image_url" class="avatar" width="100%" />
             <i v-else class="iconfont icon-camera avatar-uploader-icon"></i>
           </div>
         </el-form-item>
@@ -192,7 +165,8 @@ export default {
       })
     },
     // 品牌搜索
-    brandSearch() {
+    onSearch() {
+      this.params.page = 1
       this.getList()
     },
     handleImgChange(data) {
@@ -243,5 +217,8 @@ export default {
   .avatar-uploader-icon {
     line-height: 100px;
   }
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 </style>

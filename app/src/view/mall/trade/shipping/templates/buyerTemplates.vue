@@ -2,6 +2,7 @@
   <div>
     <el-table
       :data="buyerTemplatesList"
+      border
       style="width: 100%"
       :height="wheight - 170"
       v-loading="loading"
