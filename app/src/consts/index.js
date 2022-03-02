@@ -54,6 +54,57 @@ export const ORDER_CATEGORY = [
   { title: '商家订单', value: 'shop' }
 ]
 
+export const REFUND_STATUS = {
+  READY: '待审核',
+  AUDIT_SUCCESS: '审核成功待退款',
+  SUCCESS: '退款成功',
+  SHOP_CHECK_FAILS: '商家审核不通过',
+  CANCEL: '撤销退款',
+  PROCESSING: '已发起退款等待到账',
+  FAILS: '退款失败',
+  WAIT_CHECK: '待审核',
+  WAIT_REFUND: '等待退款'
+}
+
+export const REFUND_PROCESS = {
+  0: '待处理',
+  1: '已取消',
+  2: '退款中',
+  3: '已完成',
+  4: '已驳回'
+}
+
+export const PROFIT_TYPE = {
+  1: '总部分润',
+  2: '自营门店分润',
+  3: '加盟门店分润'
+}
+
+export const PAY_TYPE = {
+  wxpay: '微信支付',
+  amorepay: '微信支付',
+  wxpaypc: '微信PC支付',
+  wxpayh5: '微信H5支付',
+  alipay: '支付宝支付',
+  alipayh5: '支付宝H5支付',
+  deposit: '余额支付',
+  point: '积分支付',
+  pos: 'POS银行卡支付',
+  wxpaypos: '微信扫码支付',
+  alipaypos: '支付宝扫码支付'
+}
+
+export const PAY_STATUS = {
+  SUCCESS: "支付成功",
+  REFUND: "转入退款",
+  CANCEL_CLOSED: "已取消",
+  REFUND_SUCCESS: "退款成功",
+  NOTPAY: "未支付",
+  CLOSED: "已关闭",
+  REVOKED: "已撤销",
+  PAYERROR: "支付失败(其他原因，如银行返回失败)"
+}
+
 export const PICKER_DATE_OPTIONS = {
   shortcuts: [
     {

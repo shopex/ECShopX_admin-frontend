@@ -67,7 +67,7 @@ function createAxios(inst, isJson = true) {
       if (isObject(config.params)) {
         let params = {}
         Object.keys(config.params).forEach((key) => {
-          if (config.params[key]) {
+          if (config.params[key] !== '') {
             params[key] = config.params[key]
           }
         })

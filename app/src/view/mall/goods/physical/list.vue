@@ -1583,7 +1583,11 @@ export default {
       param.item_id = items.item_id
       param.is_sku = true
       this.storeItemsList = []
-      getItemsList(param).then((response) => {
+      getItemsList({
+        ...param,
+        page: this.page.pageIndex,
+        pageSize: this.page.pageSize
+      }).then((response) => {
         let list = response.data.data.list
         let data = {}
         list.forEach((item) => {

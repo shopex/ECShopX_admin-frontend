@@ -15,11 +15,15 @@ export function isObject(val) {
   return isPrimitiveType(val, '[object Object]')
 }
 
+export function isArray(val) {
+  return Array.isArray(val)
+}
+
 export function isBoolean(val) {
   return isPrimitiveType( val, '[object Boolean]' )
 }
 
-export const STANDARD = process.env.VUE_APP_PRODUCT_MODEL == 'standard'
+export const VERSION_STANDARD = process.env.VUE_APP_PRODUCT_MODEL == 'standard'
  
 export function isInSalesCenter () {
   if (

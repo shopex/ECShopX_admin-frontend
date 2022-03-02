@@ -33,8 +33,8 @@
         position: relative;
         top: 1px;
       }
-      .el-input__icon {
-        display: none;
+      .el-range__icon {
+        display: none !important;
       }
       .el-range-input {
         width: 82px;
