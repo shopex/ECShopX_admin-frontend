@@ -450,6 +450,7 @@ export default {
 
       const isDada = receipt_type == 'dada'
       const isLogistics = receipt_type == 'logistics'
+      let btnActions = []
       if (VERSION_STANDARD || distributor_id == 0 || this.login_type == 'distributor') {
         if (
           (isLogistics || is_logistics) &&
@@ -458,10 +459,10 @@ export default {
           delivery_status != 'DONE' &&
           receipt_type != 'ziti'
         ) {
-          this.btnActions.push({ name: '发货', key: 'deliverGoods' })
+          btnActions.push({ name: '发货', key: 'deliverGoods' })
         }
       }
-
+      this.btnActions = btnActions
       this.loading = false
     },
     modifyExpress({ orders_delivery_id }) {

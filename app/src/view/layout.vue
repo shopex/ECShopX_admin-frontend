@@ -113,6 +113,7 @@
       </el-header>
       <el-main style="position: relative; background: #F0F2F5;">
         <router-view class="content-container" :class="{'footer-fixed': $route.meta && $route.meta.footerFixed }"></router-view>
+        <div class="system-release">商品onex官方商城</div>
         <!-- <section id="container" class="content-container">
           <el-col :span="24" class="content-wrapper">
             <transition name="fade" mode="out-in">
@@ -468,5 +469,9 @@ export default {
   .header {
     background-color: #fff;
   }
+}
+.system-release {
+  text-align: center;
+  padding: 16px;
 }
 </style>
