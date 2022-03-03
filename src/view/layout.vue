@@ -5,9 +5,12 @@
       <div class="menu-warp view-flex">
         <div class="main-menu">
           <div class="brand-con">
-            <div v-if="$store.getters.login_type==='merchant'">
+            <div v-if="$store.getters.login_type === 'merchant'">
               <div class="img-wrap">
-                <img :src="brandIco" alt="" />
+                <img
+                  :src="brandIco"
+                  alt=""
+                >
               </div>
             </div>
             <router-link
@@ -20,35 +23,52 @@
               }`"
             >
               <div class="img-wrap">
-                <img :src="brandIco" alt="" />
+                <img
+                  :src="brandIco"
+                  alt=""
+                >
               </div>
             </router-link>
           </div>
           <div class="main-menu__con">
-            <el-menu text-color="#fff" :default-active="activeIndex" @select="handleSelectMenu">
+            <el-menu
+              text-color="#fff"
+              :default-active="activeIndex"
+              @select="handleSelectMenu"
+            >
               <el-menu-item
                 v-for="(item, index) in menuList"
-                :index="item.url"
                 :key="`menu-item__${index}`"
+                :index="item.url"
               >
                 <router-link :to="getMenuUrl(item)">
-                  <i class="iconfont" :class="`icon-${item.icon}`"></i>
+                  <i
+                    class="iconfont"
+                    :class="`icon-${item.icon}`"
+                  />
                   <span>{{ item.name }}</span>
                 </router-link>
               </el-menu-item>
             </el-menu>
           </div>
         </div>
-        <div class="sub-menu" v-if="$route.meta && !$route.meta.hidemenu">
+        <div
+          v-if="$route.meta && !$route.meta.hidemenu"
+          class="sub-menu"
+        >
           <el-menu :default-active="activeSubIndex">
             <template v-for="(child, cindex) in submenuList">
               <el-menu-item-group
                 v-if="child.children && child.children[0].is_menu"
-                class="menu-group"
                 :key="`cmenu-${cindex}`"
+                class="menu-group"
               >
-                <template slot="title"><i class="iconfont icon-shouqijiantouxiao"></i>{{ child.name }}</template>
-                <template v-for="sub in child.children" >
+                <template
+                  slot="title"
+                >
+                  <i class="iconfont icon-shouqijiantouxiao" />{{ child.name }}
+                </template>
+                <template v-for="sub in child.children">
                   <el-menu-item
                     v-if="sub.is_show && sub.is_menu"
                     :key="sub.url"
@@ -61,12 +81,18 @@
                   </el-menu-item>
                 </template>
               </el-menu-item-group>
-              <div class="sub-menu-item" v-else-if="child.is_show && child.is_menu" :key="`cmenu-${cindex}`">
+              <div
+                v-else-if="child.is_show && child.is_menu"
+                :key="`cmenu-${cindex}`"
+                class="sub-menu-item"
+              >
                 <el-menu-item
                   :index="child.url"
                   :class="{ 'is-active': child.url == activeSubIndex }"
                 >
-                  <router-link :to="child.url">{{ child.name }}</router-link>
+                  <router-link :to="child.url">
+                    {{ child.name }}
+                  </router-link>
                 </el-menu-item>
               </div>
             </template>
@@ -76,7 +102,11 @@
     </el-aside>
 
     <el-container class="app-container">
-      <el-header class="header" height="48px" v-if="isShowHeader()">
+      <el-header
+        v-if="isShowHeader()"
+        class="header"
+        height="48px"
+      >
         <div class="header-left">
           <!-- activeIndex: {{activeIndex}}
           activeSubIndex: {{activeSubIndex}} -->
@@ -84,38 +114,70 @@
         <div class="header-right">
           <div class="icon-nav">
             <el-badge v-if="this.$store.getters.login_type == 'distributor'">
-              <i class="iconfont icon-store-alt" @click="handleClickSelectShop"></i>
+              <i
+                class="iconfont icon-store-alt"
+                @click="handleClickSelectShop"
+              />
             </el-badge>
           </div>
           <div class="user-setting">
             <el-popover
+              v-model="showUserPopover"
               placement="bottom"
               trigger="hover"
               popper-class="logout-popper"
-              v-model="showUserPopover"
             >
-              <div class="popover-row base" @click="handleUserInfo">
+              <div
+                class="popover-row base"
+                @click="handleUserInfo"
+              >
                 <div class="avatar">
-                  <img v-if="avatar" class="user-avatar" :src="avatar" />
-                  <i v-else class="user-avatar iconfont icon-user-circle1"></i>
+                  <img
+                    v-if="avatar"
+                    class="user-avatar"
+                    :src="avatar"
+                  >
+                  <i
+                    v-else
+                    class="user-avatar iconfont icon-user-circle1"
+                  />
                 </div>
-                <div class="username" >
+                <div class="username">
                   <div>{{ nick_name || name }}</div>
                   <small class="muted">账号信息</small>
                 </div>
               </div>
-              <div class="popover-row exit-system" @click="logout">退出登录</div>
+              <div
+                class="popover-row exit-system"
+                @click="logout"
+              >
+                退出登录
+              </div>
 
-              <img slot="reference" v-if="avatar" class="user-avatar" :src="avatar" />
-              <i v-else slot="reference" class="iconfont icon-user-circle1"></i>
+              <img
+                v-if="avatar"
+                slot="reference"
+                class="user-avatar"
+                :src="avatar"
+              >
+              <i
+                v-else
+                slot="reference"
+                class="iconfont icon-user-circle1"
+              />
             </el-popover>
           </div>
         </div>
       </el-header>
-      <el-main style="position: relative; background: #F0F2F5;">
-        <router-view class="content-container" :class="{'footer-fixed': $route.meta && $route.meta.footerFixed }"></router-view>
-        <div class="system-release">{{VUE_APP_SYSTEM_NAME}}</div>
-        <div id="design-view"></div>
+      <el-main style="position: relative; background: #f0f2f5">
+        <router-view
+          class="content-container"
+          :class="{ 'footer-fixed': $route.meta && $route.meta.footerFixed }"
+        />
+        <div class="system-release">
+          {{ VUE_APP_SYSTEM_NAME }}
+        </div>
+        <div id="design-view" />
       </el-main>
     </el-container>
   </el-container>
@@ -127,12 +189,12 @@ import { log, isInSalesCenter } from '@/utils'
 import { micrApp } from '@/utils/micr-app'
 import store from '@/store'
 export default {
-  beforeRouteEnter(to, from, next) {
+  beforeRouteEnter (to, from, next) {
     next((vm) => {
       vm.activeIndex = to.matched[0].path || '/'
     })
   },
-  data() {
+  data () {
     return {
       isShowAside: 'false',
       findMenu: false,
@@ -157,7 +219,7 @@ export default {
         return menus
       }
     }),
-    submenuList() {
+    submenuList () {
       let list = []
       const fd = this.menuList.find((item) => {
         // const paths = item.url.match(/\/[a-z]+/g)
@@ -172,21 +234,21 @@ export default {
       })
       return fd ? fd.children : []
     },
-    activeSubIndex() {
+    activeSubIndex () {
       return this.$route.matched.length > 1 ? this.$route.matched[1].path : ''
     }
   },
-  mounted() {
+  mounted () {
     this.getSystemSetting()
     micrApp.init()
     console.log(this.$route)
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
-    isShowHeader() {
+    isShowHeader () {
       return !isInSalesCenter()
     },
-    handleSelectMenu(key) {
+    handleSelectMenu (key) {
       const paths = key.match(/\/\w+/g)
       if ((paths && paths[0] == '/shopadmin') || (paths && paths[0] == '/dealer')) {
         this.activeIndex = `${paths[0]}${paths[1]}`
@@ -198,7 +260,7 @@ export default {
       // this.activeSubIndex = getUrl
     },
     // 获取系统配置信息
-    async getSystemSetting() {
+    async getSystemSetting () {
       const { logo } = await this.$api.system.getBrandLogo()
       if (logo) {
         this.brandIco = logo
@@ -209,7 +271,7 @@ export default {
       }
     },
     // 获取菜单url
-    getMenuUrl(item) {
+    getMenuUrl (item) {
       let url = ''
       if (item.children) {
         if (item.children[0].children) {
@@ -222,14 +284,14 @@ export default {
       }
       return url
     },
-    handleClickSelectShop() {
+    handleClickSelectShop () {
       this.$router.push({
         path: '/shopadmin/shoplist'
       })
     },
-    handleUserInfo() {
+    handleUserInfo () {
       // debugger
-      console.log(this.matchInternalRoute('admininfo'));
+      console.log(this.matchInternalRoute('admininfo'))
       // debugger
       this.$router.push({
         path: '/admininfo'
@@ -238,7 +300,7 @@ export default {
       //   path: this.matchInternalRoute('admininfo')
       // })
     },
-    async logout() {
+    async logout () {
       await this.$api.login.getAuthorizelogout()
       await this.SYSTEM_EXIT()
       if (this.$store.getters.login_type == 'distributor') {
@@ -346,7 +408,7 @@ export default {
 .sub-menu {
   width: 116px;
   overflow-y: auto;
-  background: #F6F7F9;
+  background: #f6f7f9;
   box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.06);
   &::-webkit-scrollbar {
     display: none; /* Chrome Safari */
@@ -355,7 +417,7 @@ export default {
   //   margin-bottom: 20px;
   // }
   .el-menu {
-    background: #F6F7F9;
+    background: #f6f7f9;
     border-right-width: 0;
     margin-top: 8px;
   }
@@ -380,7 +442,7 @@ export default {
     }
     a {
       display: block;
-      color: #545D7A;
+      color: #545d7a;
       // flex: 1;
       // display: flex;
       // padding-left: 24px;
@@ -431,27 +493,26 @@ export default {
 <style lang="scss">
 .popover-row.base {
   padding: 10px;
-  cursor:pointer
+  cursor: pointer;
 }
 .popover-row.exit-system {
   padding: 0px 12px 7px;
   font-size: 12px;
-  cursor:pointer
-
+  cursor: pointer;
 }
 .menu-group {
   .icon-shouqijiantouxiao {
     font-size: 12px;
-    color: #3D4355;
+    color: #3d4355;
     margin-right: 4px;
-    transform: scale(.8);
+    transform: scale(0.8);
     display: inline-block;
   }
   .el-menu-item-group__title {
     padding: 0 0 0 10px !important;
     height: 40px;
     line-height: 40px;
-    color: #3D4355;
+    color: #3d4355;
     font-size: 14px;
   }
   > ul {
@@ -470,5 +531,4 @@ export default {
   color: #cdcbcb;
   margin-top: 16px;
 }
-
 </style>
