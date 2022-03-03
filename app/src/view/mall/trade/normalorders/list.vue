@@ -97,12 +97,12 @@
               <export-tip @exportHandle="exportInvoice">未开票订单</export-tip></el-dropdown-item
             >
             <el-dropdown-item
-              ><export-tip @exportHandle="exportData('normal_order')"
+              ><export-tip @exportHandle="exportDataMaster"
                 >主订单</export-tip
               ></el-dropdown-item
             >
             <el-dropdown-item
-              ><export-tip @exportHandle="exportData('normal_master_order')"
+              ><export-tip @exportHandle="exportDataNormal"
                 >子订单</export-tip
               ></el-dropdown-item
             >
@@ -895,11 +895,12 @@ export default {
       exportInvoice({
         ...this.params,
         type,
-        order_type:'normal'
+        order_type: 'normal'
       }).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+          this.$export_open('invoice')
           return
         } else if (url) {
           window.open(url)
@@ -909,17 +910,24 @@ export default {
         }
       })
     },
+    exportDataNormal(){
+      this.exportData('normal_order')
+    },
+    exportDataMaster(){
+      this.exportData('normal_master_order')
+    },
     exportData(type) { 
-      console.log("====exportData",type)
+      console.log('====exportData', type)
       orderExport({
         ...this.params,
-        order_type:'normal',
+        order_type: 'normal',
         type,
         page: this.page.pageIndex
       }).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+          this.$export_open(type)
           return
         } else if (url) {
           window.open(url)
