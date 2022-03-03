@@ -1,30 +1,25 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <el-button type="primary" icon="plus" @click="addLabels">添加账号 </el-button>
-        <el-tooltip style="margin-left:10px" effect="light" :content="'请在【'+ origin +'/shopadmin/login】登录'" placement="top-start">
-          <i class="el-icon-warning-outline"></i>
-        </el-tooltip>
-      </el-col>
-      <el-col :span="12">
-        <el-input placeholder="手机号" v-model="mobile"
-          ><el-button slot="append" icon="el-icon-search" @click="dataSearch"></el-button
-        ></el-input>
-      </el-col>
-    </el-row>
-    <el-table :data="accountsList" v-loading="loading">
+    <div class="action-container">
+      <el-button type="primary" icon="plus" @click="addLabels">添加账号 </el-button>
+      <el-tooltip style="margin-left:10px" effect="light" :content="'请在【'+ origin +'/shopadmin/login】登录'" placement="top-start">
+        <i class="el-icon-warning-outline"></i>
+      </el-tooltip>
+    </div>
+
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="mobile" label="手机号:">
+        <el-input placeholder="请输入手机号" v-model="params.mobile" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
+    <el-table border :data="accountsList" v-loading="loading">
       <el-table-column prop="login_name" label="登陆账号"></el-table-column>
       <el-table-column prop="mobile" label="手机号"></el-table-column>
       <el-table-column prop="username" label="姓名"></el-table-column>
       <el-table-column prop="roles" label="角色" v-if="login_type == 'distributor'">
         <template slot-scope="scope">
-          <el-tag
-            v-for="item in scope.row.role_data"
-            :key="item.role_id"
-            size="mini"
-            type="warning"
-          >
+          <el-tag v-for="item in scope.row.role_data" :key="item.role_id" size="mini" type="warning">
             {{ item.role_name }}
           </el-tag>
         </template>
@@ -32,20 +27,12 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="editAction(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" @click="deleteAccountAction(scope.$index, scope.row)"
-            >删除</el-button
-          >
+          <el-button size="mini" @click="deleteAccountAction(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div v-if="total_count > params.pageSize" class="content-center content-top-padded">
-      <el-pagination
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
-        :current-page.sync="params.page"
-        :total="total_count"
-        :page-size="params.pageSize"
-      >
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :current-page.sync="params.page" :total="total_count" :page-size="params.pageSize">
       </el-pagination>
     </div>
     <!-- 添加、编辑标识-开始 -->
@@ -54,67 +41,37 @@
         <el-form ref="form" :model="form" class="demo-ruleForm" label-width="120px">
           <el-form-item label="登录账号">
             <el-col :span="10">
-              <el-input
-                v-if="!editLoginName"
-                v-model="form.login_name"
-                :minlength="4"
-                :maxlength="16"
-                placeholder="请输入员工登录账号"
-              ></el-input>
+              <el-input v-if="!editLoginName" v-model="form.login_name" :minlength="4" :maxlength="16" placeholder="请输入员工登录账号"></el-input>
               <el-input v-else v-model="form.login_name" :disabled="true"></el-input>
             </el-col>
             <p class="frm-tips">账号名称4-16位，名称使用字母开头，字符有有字母，数字，下划线</p>
           </el-form-item>
           <el-form-item label="手机号">
             <el-col :span="10">
-              <el-input
-                v-if="!isEdit"
-                v-model="form.mobile"
-                :maxlength="11"
-                placeholder="请输入11位手机号"
-              ></el-input>
+              <el-input v-if="!isEdit" v-model="form.mobile" :maxlength="11" placeholder="请输入11位手机号"></el-input>
               <el-input v-else v-model="editMobile" :disabled="true"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="姓名">
-            <el-col :span="10"
-              ><el-input
-                required
-                v-model="form.username"
-                placeholder="请填写昵称"
-                :disabled="datapass_block == 1"
-              ></el-input
-            ></el-col>
+            <el-col :span="10">
+              <el-input required v-model="form.username" placeholder="请填写昵称" :disabled="datapass_block == 1"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="登录密码">
-            <el-col :span="10"
-              ><el-input :maxlength="255" v-model="form.password"></el-input
-            ></el-col>
+            <el-col :span="10">
+              <el-input :maxlength="255" v-model="form.password"></el-input>
+            </el-col>
           </el-form-item>
           <el-form-item label="所属店铺">
-            <el-tag
-              :key="item.distributor_id"
-              class="new-tag"
-              v-for="(item, index) in relDistributors"
-              closable
-              :disable-transitions="false"
-              @close="DistributoreHandleClose(index)"
-            >
+            <el-tag :key="item.distributor_id" class="new-tag" v-for="(item, index) in relDistributors" closable :disable-transitions="false" @close="DistributoreHandleClose(index)">
               {{ item.name }}
             </el-tag>
-            <el-button size="medium" class="button-new-tag" @click="addDistributoreAction"
-              >+ 点击搜索店铺
+            <el-button size="medium" class="button-new-tag" @click="addDistributoreAction">+ 点击搜索店铺
             </el-button>
           </el-form-item>
           <el-form-item label="角色" v-if="login_type == 'distributor'">
             <el-checkbox-group v-model="form.role_id">
-              <el-checkbox
-                v-for="role in rolesListData"
-                :label="role.role_id"
-                :key="role.role_id"
-                :value="role.role_id"
-                >{{ role.role_name }}</el-checkbox
-              >
+              <el-checkbox v-for="role in rolesListData" :label="role.role_id" :key="role.role_id" :value="role.role_id">{{ role.role_name }}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
@@ -125,15 +82,7 @@
       </div>
     </el-dialog>
     <template v-if="DistributorVisible">
-      <DistributorSelect
-        :store-visible="DistributorVisible"
-        :is-valid="isValid"
-        :get-status="DistributorStatus"
-        :rel-data-ids="relDistributors"
-        @chooseStore="DistributorChooseAction"
-        @closeStoreDialog="closeDialogAction"
-        :oldData="oldData"
-      ></DistributorSelect>
+      <DistributorSelect :store-visible="DistributorVisible" :is-valid="isValid" :get-status="DistributorStatus" :rel-data-ids="relDistributors" @chooseStore="DistributorChooseAction" @closeStoreDialog="closeDialogAction" :oldData="oldData"></DistributorSelect>
     </template>
   </div>
 </template>
@@ -164,16 +113,16 @@ export default {
   },
   data() {
     return {
-      oldData:[],
+      oldData: [],
       isValid: true,
-      oldData:[],
+      oldData: [],
       relDistributors: [],
       DistributorVisible: false,
       DistributorStatus: false,
       login_type: 'default',
       isEdit: false,
       editVisible: false,
-      origin:'',
+      origin: '',
       editTitle: '',
       form: {
         operator_type: 'distributor',
@@ -185,7 +134,7 @@ export default {
         role_id: []
       },
       activeName: 'distributor',
-      mobile: '',
+
       editLoginName: '',
       editMobile: '',
       accountsList: [],
@@ -193,6 +142,7 @@ export default {
       loading: false,
       total_count: 0,
       params: {
+        mobile: '',
         page: 1,
         pageSize: 20,
         operator_type: 'distributor'
@@ -213,8 +163,6 @@ export default {
     addDistributoreAction() {
       this.DistributorStatus = true
       this.DistributorVisible = true
-      
-      
     },
     getDistributor(ids) {
       let param = { distributor_id: ids }
@@ -277,7 +225,7 @@ export default {
         this.getDistributor(ids)
       }
     },
-    submitAction() { 
+    submitAction() {
       // 提交物料
       this.form.shop_ids = []
       this.form.distributor_ids = []
@@ -307,8 +255,7 @@ export default {
         })
       }
     },
-    dataSearch() {
-      this.params.mobile = this.mobile
+    onSearch() {
       this.params.page = 1
       this.getAccountListData()
     },
@@ -357,24 +304,24 @@ export default {
         this.rolesListData = res.data.data.list
       })
     },
-    DistributorChooseAction(data) { 
+    DistributorChooseAction(data) {
       console.log(data)
       this.DistributorVisible = false
       if (data === null || data.length <= 0) return
       this.relDistributors = data
-      this.oldData = data;
+      this.oldData = data
     },
     closeDialogAction() {
       this.DistributorVisible = false
-      this.relDistributors = this.oldData;
+      this.relDistributors = this.oldData
       this.DistributorStatus = false
-      
+
       // this.relDistributors = []
       // this.getDistributor();
     }
   },
   mounted() {
-    this.origin = window.location.origin;
+    this.origin = window.location.origin
     this.login_type = this.$store.getters.login_type
     this.getAccountListData()
     this.getRolesListData()
@@ -433,5 +380,8 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 </style>

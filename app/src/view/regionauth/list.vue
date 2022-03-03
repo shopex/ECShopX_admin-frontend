@@ -1,30 +1,28 @@
 <template>
   <div>
     <!--添加-->
-    <el-row :gutter="40">
-      <el-col>
-        <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增区域</el-button>
-      </el-col>
-    </el-row>
+   <div class="action-container">
+      <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增区域</el-button>
+    </div>
 
-    <el-card>
       <el-table
+        border
         :data="list"
         :height="wheight - 300"
         v-loading="loading"
         element-loading-text="数据加载中"
       >
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button type="text" @click="handleDelete(scope)">删除</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="attribute_name" label="区域" width="150">
+        <el-table-column prop="attribute_name" label="区域" >
           <template slot-scope="scope">
             <div>{{ scope.row.regionauth_name }}</div>
           </template> </el-table-column
-        ><el-table-column prop="attribute_name" label="状态" width="150">
+        ><el-table-column prop="attribute_name" label="状态">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.state === '1' ? true : false"
@@ -33,7 +31,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
 
     <!--分页-->
     <div class="content-padded content-center">

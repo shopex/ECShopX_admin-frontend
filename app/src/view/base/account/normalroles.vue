@@ -1,16 +1,15 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <el-button type="primary" icon="plus" @click="addRoleLabels">添加角色</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-input placeholder="角色名称" v-model="params.role_name"
-          ><el-button slot="append" icon="el-icon-search" @click="roleSearch"></el-button
-        ></el-input>
-      </el-col>
-    </el-row>
-    <el-table :data="rolesList" :height="wheight - 160" v-loading="loading">
+    <div class="action-container">
+      <el-button type="primary" icon="plus" @click="addRoleLabels">添加角色</el-button>
+    </div>
+     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="role_name" label="角色名称:">
+        <el-input placeholder="请输入角色名称" v-model="params.role_name" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
+    <el-table border :data="rolesList" :height="wheight - 160" v-loading="loading">
       <el-table-column prop="role_name" label="角色名称"></el-table-column>
       <el-table-column prop="permission" label="角色权限">
         <template slot-scope="scope">
@@ -21,22 +20,13 @@
         <template slot-scope="scope">
           <div class="operating-icons">
             <i class="iconfont icon-edit1" @click="editRoleAction(scope.$index, scope.row)"></i>
-            <i
-              class="mark iconfont icon-trash-alt1"
-              @click="deleteRoleAction(scope.$index, scope.row)"
-            ></i>
+            <i class="mark iconfont icon-trash-alt1" @click="deleteRoleAction(scope.$index, scope.row)"></i>
           </div>
         </template>
       </el-table-column>
     </el-table>
     <div v-if="total_count > params.pageSize" class="content-center content-top-padded">
-      <el-pagination
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
-        :current-page.sync="params.page"
-        :total="total_count"
-        :page-size="params.pageSize"
-      >
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :current-page.sync="params.page" :total="total_count" :page-size="params.pageSize">
       </el-pagination>
     </div>
     <!-- 添加、编辑标识-开始 -->
@@ -45,22 +35,11 @@
         <el-form ref="form" :model="form" class="demo-ruleForm" label-width="90px">
           <el-form-item label="角色名称">
             <el-col :span="14">
-              <el-input
-                v-model="form.role_name"
-                :maxlength="20"
-                placeholder="订单管理员、商品管理员、等等"
-              ></el-input>
+              <el-input v-model="form.role_name" :maxlength="20" placeholder="订单管理员、商品管理员、等等"></el-input>
             </el-col>
           </el-form-item>
           <el-form-item label="角色权限">
-            <el-tree
-              :data="menu"
-              ref="tree"
-              :default-checked-keys="defaultCheckedKeys"
-              node-key="alias_name"
-              :props="defaultProps"
-              show-checkbox
-            ></el-tree>
+            <el-tree :data="menu" ref="tree" :default-checked-keys="defaultCheckedKeys" node-key="alias_name" :props="defaultProps" show-checkbox></el-tree>
           </el-form-item>
         </el-form>
       </template>
@@ -85,7 +64,7 @@ import {
 export default {
   data() {
     return {
-      menu:[],
+      menu: [],
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -176,7 +155,7 @@ export default {
         })
       }
     },
-    roleSearch() {
+    onSearch() {
       this.params.page = 1
       this.getRolesDataList()
     },
@@ -223,19 +202,19 @@ export default {
   },
   mounted() {
     this.getRolesDataList()
-    
-    const menu = this.$store.getters.menus;
-    menu.forEach((item)=>{
-      if (item.alias_name=='setting') {
-        item.children.forEach((itemy,indexy)=>{
+
+    const menu = this.$store.getters.menus
+    menu.forEach((item) => {
+      if (item.alias_name == 'setting') {
+        item.children.forEach((itemy, indexy) => {
           if (itemy.is_super == 'Y') {
-           item.children.splice(indexy,1);
+            item.children.splice(indexy, 1)
           }
         })
       }
     })
 
-    this.menu = menu;
+    this.menu = menu
   }
 }
 </script>
@@ -265,5 +244,8 @@ export default {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 </style>

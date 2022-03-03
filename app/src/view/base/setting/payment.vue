@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="微信支付配置" name="wxpay" v-if="!isHfpay">
         <wxpayTemplates></wxpayTemplates>
       </el-tab-pane>

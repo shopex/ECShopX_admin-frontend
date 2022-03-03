@@ -1,49 +1,21 @@
 <template>
   <div class="authory-box">
     <div v-if="$route.path.indexOf('approve') === -1">
-      <el-card class="cus-card">
-        <el-form :model="params" :inline="true" ref="myForm">
-          <el-row>
-            <el-col :span="7">
-              <el-form-item label="审批状态">
-                <el-select v-model="params.status" placeholder="请选择审批状态" style="width:230px">
-                  <el-option
-                    v-for="(item, index) in approveStatusList"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="7" :offset="1">
-              <el-form-item label="账户名称">
-                <el-input class="input-m" placeholder="请输入" clearable v-model="params.login_name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8" :offset="1">
-              <el-form-item label="申请日期">
-                <el-date-picker
-                  style="width:270px"
-                  v-model="create_time"
-                  type="daterange"
-                  format='yyyy-MM-dd'
-                  value-format='yyyy-MM-dd'
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="dateChange"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6" :offset="15" style="text-align:right">
-              <el-form-item>
-                <el-button type="primary" size='medium' @click="searchData">搜索</el-button>
-                <el-button size='medium' @click="resetForm('myForm')">重置</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-card>
+
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
+        <SpFilterFormItem prop="status" label="审批状态:">
+          <el-select v-model="params.status" placeholder="请选择审批状态">
+            <el-option v-for="(item, index) in approveStatusList" :key="index" :label="item.name" :value="item.value" />
+          </el-select>
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="login_name" label="账户名称:">
+          <el-input placeholder="请输入账户名称" v-model="params.login_name" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="create_time" label="申请日期:">
+          <el-date-picker style="width:270px" v-model="params.create_time" type="daterange" format='yyyy-MM-dd' value-format='yyyy-MM-dd' start-placeholder="开始日期" end-placeholder="结束日期" @change="dateChange" />
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-card>
         <div class="cus-list" v-for="item in list" :key="item.pass_id">
           <el-row class="cus-row">
@@ -74,15 +46,7 @@
           </el-row>
         </div>
         <div class="content-padded content-center">
-          <el-pagination
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-            :current-page.sync="params.page"
-            :page-sizes="[10,20,50]"
-            :total="total_count"
-            :page-size="params.pageSize">
+          <el-pagination background layout="total, sizes, prev, pager, next, jumper" @current-change="handleCurrentChange" @size-change="handleSizeChange" :current-page.sync="params.page" :page-sizes="[10,20,50]" :total="total_count" :page-size="params.pageSize">
           </el-pagination>
         </div>
       </el-card>
@@ -91,95 +55,105 @@
   </div>
 </template>
 <script>
-  import moment from 'moment'
-  import { mapGetters } from 'vuex'
-  import { encryptList } from '@/api/encrypt'
-  import { getAftersalesList, exportList, getAftersalesRemind, setAftersalesRemind } from '@/api/aftersales'
-  export default {
-    data () {
-      return {
-        loading: true,
-        create_time: '',
-        params: {
-          page: 1,
-          pageSize: 10,
-          login_name: undefined,
-          status: undefined,
-          start_time: undefined,
-          end_time: undefined
-        },
-        approveStatusList: [
-          { name: '全部', value: undefined },
-          { name: '待审批', value: '0' },
-          { name: '已通过', value: '1' },
-          { name: '未通过', value: '2' }
-        ],
-        total_count: 0,
-        list: []
-      }
-    },
-    computed: {
-      ...mapGetters([
-        'wheight'
-      ])
-    },
-    methods: {
-      dateStrToTimeStamp(str) {
-        return Date.parse(new Date(str)) / 1000
+import moment from 'moment'
+import { mapGetters } from 'vuex'
+import { encryptList } from '@/api/encrypt'
+import {
+  getAftersalesList,
+  exportList,
+  getAftersalesRemind,
+  setAftersalesRemind
+} from '@/api/aftersales'
+export default {
+  data() {
+    return {
+      loading: true,
+
+      params: {
+        page: 1,
+        pageSize: 10,
+        login_name: undefined,
+        status: undefined,
+        start_time: undefined,
+        end_time: undefined,
+        create_time: ''
       },
-      dateChange(val) {
-        if (val) {
-          this.params.start_time = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
-          this.params.end_time = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
-        } else {
-          this.params.start_time = ''
-          this.params.end_time = ''
-        }
-        this.params.page = 1
-      },
-      searchData (e) {
-        this.params.page = 1
-        this.getAftersalesList()
-      },
-      handleCurrentChange (val) {
-        this.params.page = val
-        this.loading = false
-        this.getAftersalesList()
-      },
-      handleSizeChange (pageSize) {
-        this.loading = false
-        this.params.page = 1
-        this.params.pageSize = pageSize
-        this.getAftersalesList()
-      },
-      getAftersalesList() {
-        this.loading = true
-        encryptList(this.params).then(response => {
-          this.list = response.data.data.list
-          this.total_count = Number(response.data.data.count)
-          this.loading = false
-        })
-      },
-      resetForm(formName) {
-        this.create_time = ''
-        this.params = {
-          page: 1,
-          pageSize: 10,
-          login_name: undefined,
-          status: undefined,
-          start_time: undefined,
-          end_time: undefined
-        }
-        this.getAftersalesList()
-      },
-      createTimeFilter (time) {
-        return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
-      }
-    },
-    mounted () {
-      this.getAftersalesList()
+      approveStatusList: [
+        { name: '全部', value: undefined },
+        { name: '待审批', value: '0' },
+        { name: '已通过', value: '1' },
+        { name: '未通过', value: '2' }
+      ],
+      total_count: 0,
+      list: []
     }
+  },
+  computed: {
+    ...mapGetters(['wheight'])
+  },
+  methods: {
+    dateStrToTimeStamp(str) {
+      return Date.parse(new Date(str)) / 1000
+    },
+    dateChange(val) {
+      if (val) {
+        this.params.start_time = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
+        this.params.end_time = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
+      } else {
+        this.params.start_time = ''
+        this.params.end_time = ''
+      }
+      this.params.page = 1
+    },
+    onSearch(e) {
+      this.params.page = 1
+      this.getAftersalesList()
+    },
+    onReset() {
+      this.params.start_time = ''
+      this.params.end_time = ''
+      this.onSearch();
+    },
+    handleCurrentChange(val) {
+      this.params.page = val
+      this.loading = false
+      this.getAftersalesList()
+    },
+    handleSizeChange(pageSize) {
+      this.loading = false
+      this.params.page = 1
+      this.params.pageSize = pageSize
+      this.getAftersalesList()
+    },
+    getAftersalesList() {
+      this.loading = true
+      encryptList(this.params).then((response) => {
+        this.list = response.data.data.list
+        this.total_count = Number(response.data.data.count)
+        this.loading = false
+      })
+    },
+
+    // resetForm(formName) {
+    //   this.create_time = ''
+    //   this.params = {
+    //     page: 1,
+    //     pageSize: 10,
+    //     login_name: undefined,
+    //     status: undefined,
+    //     start_time: undefined,
+    //     end_time: undefined
+    //   }
+    //   this.getAftersalesList()
+    // },
+    createTimeFilter(time) {
+      return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+  mounted() {
+    this.getAftersalesList()
   }
+}
 </script>
 <style lang="scss">
 .authory-box {
@@ -224,6 +198,9 @@
       padding-bottom: 0px;
     }
   }
+  .sp-filter-form {
+  margin-bottom: 16px;
+}
 }
 </style>
 
