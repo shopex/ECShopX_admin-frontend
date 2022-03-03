@@ -40,7 +40,7 @@
         <el-form-item label="注册引导跳转路径">
           <div class="uploader-setting">
             <div class="goods-select">
-              <div class="link-content" v-if="JSON.stringify(form.register_jump_path) !== '{}'">
+              <div class="link-content" v-if="JSON.stringify(form.register_jump_path) != '{}' && JSON.stringify(form.register_jump_path) != '[]'">
                 <span @click="handleGoodsChange()">
                   <template v-if="form.register_jump_path.linkPage === 'goods'">商品：</template>
                   <template v-if="form.register_jump_path.linkPage === 'category'">分类：</template>
@@ -56,7 +56,7 @@
                   <i
                     style="color: #f56c6c"
                     class="el-icon-delete"
-                    v-if="JSON.stringify(form.register_jump_path) !== '{}'"
+                    v-if="JSON.stringify(form.register_jump_path) != '{}' && JSON.stringify(form.register_jump_path) != '[]'"
                     @click="clear_pic_url"
                   ></i>
                 </span>

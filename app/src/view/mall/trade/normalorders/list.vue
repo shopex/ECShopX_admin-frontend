@@ -97,12 +97,12 @@
               <export-tip @exportHandle="exportInvoice">未开票订单</export-tip></el-dropdown-item
             >
             <el-dropdown-item
-              ><export-tip @exportHandle="exportData('normal_order')"
+              ><export-tip @exportHandle="exportDataMaster"
                 >主订单</export-tip
               ></el-dropdown-item
             >
             <el-dropdown-item
-              ><export-tip @exportHandle="exportData('normal_master_order')"
+              ><export-tip @exportHandle="exportDataNormal"
                 >子订单</export-tip
               ></el-dropdown-item
             >
@@ -329,6 +329,7 @@ import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
 import { VERSION_STANDARD, isArray } from '@/utils'
+import { exportInvoice, orderExport } from '@/api/trade'
 import moment from 'moment'
 import {
   DISTRIBUTION_TYPE,
@@ -893,36 +894,43 @@ export default {
       this.$emit('onChangeData', 'params', { type })
       exportInvoice({
         ...this.params,
-        type
+        type,
+        order_type: 'normal'
       }).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+          this.$export_open('invoice')
           return
         } else if (url) {
-          this.downloadUrl = url
-          this.downloadName = filename
-          this.downloadView = true
+          window.open(url)
         } else {
           this.$message.error('无内容可导出或执行失败，请检查重试')
           return
         }
       })
     },
-    exportData(type) {
+    exportDataNormal(){
+      this.exportData('normal_order')
+    },
+    exportDataMaster(){
+      this.exportData('normal_master_order')
+    },
+    exportData(type) { 
+      console.log('====exportData', type)
       orderExport({
         ...this.params,
+        order_type: 'normal',
         type,
-        page: 1
+        page: this.page.pageIndex
       }).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+          this.$export_open(type)
           return
         } else if (url) {
-          this.downloadUrl = url
-          this.downloadName = filename
-          this.downloadView = true
+          window.open(url)
         } else {
           this.$message.error('无内容可导出或执行失败，请检查重试')
           return
