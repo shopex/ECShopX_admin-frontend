@@ -4,7 +4,7 @@
   padding: 16px 0 0 0;
   display: flex;
   &.shouqi {
-    height: 120px;
+    max-height: 120px;
     overflow: hidden;
   }
 }
