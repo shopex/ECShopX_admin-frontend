@@ -1,14 +1,36 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <el-row :gutter="20">
-        <el-col :span="4">
+    <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addPurchase"
+        >
+          新增活动
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
+      >
+        <SpFilterFormItem
+          prop="activity_status"
+          label="活动状态:"
+        >
           <el-select
-            v-model="fetchParams.activity_status"
+            v-model="params.activity_status"
             placeholder="请选择活动状态"
             clearable
             style="width: 100%"
-            @change="dataSearch"
           >
             <el-option
               label="全部"
@@ -27,158 +49,124 @@
               value="it_has_ended"
             />
           </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-input
-            v-model="fetchParams.purchase_name"
-            clearable
-            placeholder="请输入活动名称"
-            @change="dataSearch"
-          >
-            <!-- <el-select
-              v-model="fetchParams.purchase_name"
-              clearable
-              slot="prepend"
-              placeholder="活动名称"
-              @change="dataSearch"
-              style="width: 120px"
-            >
-              <el-option
-                v-for="item in cardList"
-                :key="item.purchase_id"
-                :label="item.purchase_name"
-                :value="item.purchase_name"
-              >
-              </el-option>
-            </el-select> -->
-            <template slot="prepend">
-              活动名称
-            </template>
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="dataSearch"
-            />
-          </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus"
-            @click="addPurchase"
-          >
-            新增活动
-          </el-button>
-        </el-col>
-      </el-row>
-      <el-card>
-        <el-table
-          v-loading="loading"
-          :data="cardList"
-          @selection-change="handleSelectionChange"
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="activity_status"
+          label="活动名称:"
         >
-          <el-table-column
-            prop="purchase_id"
-            label="活动ID"
+          <el-input
+            v-model="params.purchase_name"
+            placeholder="请输入活动名称"
           />
-          <el-table-column
-            prop="purchase_name"
-            label="活动名称"
-          />
-          <el-table-column
-            prop="employee_limitfee"
-            label="员工额度"
-          />
-          <el-table-column
-            prop="dependents_limitfee"
-            label="家属额度"
-          />
-          <el-table-column
-            prop="activity_status"
-            label="活动状态"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.activity_status | formatStatus }}
+        </SpFilterFormItem>
+      </SpFilterForm>
+
+      <el-table
+        v-loading="loading"
+        border
+        :data="tableList"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          prop="purchase_id"
+          label="活动ID"
+        />
+        <el-table-column
+          prop="purchase_name"
+          label="活动名称"
+        />
+        <el-table-column
+          prop="employee_limitfee"
+          label="员工额度"
+        />
+        <el-table-column
+          prop="dependents_limitfee"
+          label="家属额度"
+        />
+        <el-table-column
+          prop="activity_status"
+          label="活动状态"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.activity_status | formatStatus }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          width="301"
+          label="活动有效期"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.begin_date }}
+            <template v-if="scope.row.end_date">
+              ~
             </template>
-          </el-table-column>
-          <el-table-column
-            width="301"
-            label="活动有效期"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.begin_date }}
-              <template v-if="scope.row.end_date">
-                ~
-              </template>
-              {{ scope.row.end_date }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            width="150"
-            label="操作"
-          >
-            <template slot-scope="scope">
-              <div class="operating-icons">
-                <el-button type="text">
-                  <router-link
-                    :to="{
-                      path: matchHidePage('detail'),
-                      query: {
-                        id: scope.row.purchase_id
-                      }
-                    }"
-                  >
-                    查看
-                  </router-link>
-                </el-button>
-                <el-button
-                  v-if="scope.row.activity_status == 'waiting'"
-                  type="text"
+            {{ scope.row.end_date }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          width="150"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <div class="operating-icons">
+              <el-button type="text">
+                <router-link
+                  :to="{
+                    path: matchHidePage('detail'),
+                    query: {
+                      id: scope.row.purchase_id
+                    }
+                  }"
                 >
-                  <router-link
-                    :to="{
-                      path: matchHidePage('editor'),
-                      query: { id: scope.row.purchase_id }
-                    }"
-                  >
-                    编辑
-                  </router-link>
-                </el-button>
-                <el-button
-                  v-if="scope.row.activity_status != 'it_has_ended'"
-                  type="text"
-                  @click="deleteCard(scope.row.purchase_id, scope.$index)"
+                  查看
+                </router-link>
+              </el-button>
+              <el-button
+                v-if="scope.row.activity_status == 'waiting'"
+                type="text"
+              >
+                <router-link
+                  :to="{
+                    path: matchHidePage('editor'),
+                    query: { id: scope.row.purchase_id }
+                  }"
                 >
-                  <span style="color: #f56c6c">终止活动</span>
-                </el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="content-padded content-center">
-          <el-pagination
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="pagers.total"
-            :page-size="pageSize"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
-        </div>
-      </el-card>
-    </div>
+                  编辑
+                </router-link>
+              </el-button>
+              <el-button
+                v-if="scope.row.activity_status != 'it_has_ended'"
+                type="text"
+                @click="deleteCard(scope.row.purchase_id, scope.$index)"
+              >
+                <span style="color: #f56c6c">终止活动</span>
+              </el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="content-padded content-center">
+        <el-pagination
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :current-page.sync="page.pageIndex"
+          :page-sizes="[10, 20, 50]"
+          :total="page.total"
+          :page-size="page.pageSize"
+          @current-change="onCurrentChange"
+          @size-change="onSizeChange"
+        />
+      </div>
+    </template>
     <router-view />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getPurchaseList, endPurchase } from '@/api/purchase'
+import { endPurchase } from '@/api/purchase'
+import { pageMixin } from '@/mixins'
 export default {
-  provide () {
-    return {
-      refresh: this.getPurchaseList
-    }
-  },
   filters: {
     formatStatus (status) {
       var str = ''
@@ -196,41 +184,69 @@ export default {
       return str
     }
   },
-  data () {
+  mixins: [pageMixin],
+  provide () {
     return {
+      refresh: this.fetchList
+    }
+  },
+  data () {
+    const initialParams = {
+      activity_status: undefined,
+      purchase_name: undefined
+    }
+    return {
+      initialParams,
+      params: {
+        ...initialParams
+      },
       loading: false,
       loadingbtn: false,
       checkedType: {},
-      cardList: [],
-      pagers: {
-        total: 0
-      },
       typeId: -1,
-      pageSize: 10,
-      currentPage: 1,
-      fetchParams: {
-        activity_status: '',
-        purchase_name: '',
-        page: 1,
-        pageSize: 10
-      },
       multipleSelection: []
     }
   },
-  computed: {
-    ...mapGetters(['wheight'])
-  },
   mounted () {
-    this.getPurchaseList()
+    this.fetchList()
   },
   methods: {
-    handleCurrentChange (val) {
-      this.fetchParams.page = val
-      this.getPurchaseList()
+    getParams () {
+      let params = {
+        ...this.params
+      }
+      return params
     },
-    handleSizeChange (val) {
-      this.fetchParams.pageSize = val
-      this.getPurchaseList()
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
+    },
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
+    },
+    async fetchList () {
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.purchase.getPurchaseList(params)
+      if (list.length > 0) {
+        this.tableList = list.map((item) => {
+          item.dependents_limitfee = (item.dependents_limitfee / 100).toFixed(2)
+          item.employee_limitfee = (item.employee_limitfee / 100).toFixed(2)
+          return item
+        })
+        this.page.total = total_count
+      } else {
+        this.tableList = []
+      }
+      this.loading = false
     },
     addPurchase () {
       this.$router.push({ path: this.matchHidePage('editor') })
@@ -248,7 +264,7 @@ export default {
               type: 'success',
               message: '终止成功',
               onClose () {
-                that.getPurchaseList()
+                that.fetchList()
               }
             })
           }
@@ -256,39 +272,8 @@ export default {
         }
       })
     },
-    getPurchaseList () {
-      this.loading = true
-      var params = {
-        activity_status: this.fetchParams.activity_status,
-        purchase_name: this.fetchParams.purchase_name,
-        page: this.fetchParams.page,
-        pageSize: this.fetchParams.pageSize
-      }
-      getPurchaseList(params)
-        .then((res) => {
-          if (res.data.data.list.length > 0) {
-            this.cardList = res.data.data.list.map((item) => {
-              item.dependents_limitfee = (item.dependents_limitfee / 100).toFixed(2)
-              item.employee_limitfee = (item.employee_limitfee / 100).toFixed(2)
-              return item
-            })
-            this.pagers.total = res.data.data.total_count
-            this.loading = false
-          } else {
-            this.cardList = []
-            this.loading = false
-          }
-        })
-        .catch((error) => {
-          this.loading = false
-        })
-    },
     handleSelectionChange (val) {
       this.multipleSelection = val
-    },
-    dataSearch () {
-      this.fetchParams.page = 1
-      this.getPurchaseList(this.fetchParams)
     }
   }
 }

@@ -365,13 +365,13 @@ export default {
 
       if (this.form.id) {
         updateSpecificcrowddiscount({ ...this.form, ...obj }).then((res) => {
-          this.getDataLists()
+          this.fetchList()
           this.activityItemDialog = false
         })
       } else {
         createSpecificcrowddiscount({ ...this.form, ...obj }).then((res) => {
           this.$message.success('创建成功')
-          this.getDataLists()
+          this.fetchList()
           this.activityItemDialog = false
         })
       }
@@ -422,35 +422,8 @@ export default {
     handleCancel () {
       this.activityItemDialog = false
     },
-    dateChange (val) {
-      if (val.length > 0) {
-        this.params.start_time = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
-        this.params.end_time = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
-      }
-      this.params.page = 1
-      this.getDataLists()
-    },
-    handleCurrentChange (val) {
-      this.params.page = val
-      this.loading = false
-      this.getDataLists()
-    },
-    handleSizeChange (pageSize) {
-      this.params.page = 1
-      this.params.pageSize = pageSize
-      this.getDataLists()
-    },
     dateStrToTimeStamp (str) {
       return Date.parse(new Date(str)) / 1000
-    },
-    getDataLists () {
-      this.loading = true
-      var filter = this.params
-      getListSpecificcrowddiscount(filter).then((response) => {
-        this.list = response.data.data.list
-        this.total_count = Number(response.data.data.total_count)
-        this.loading = false
-      })
     },
 
     updateStatusCommunityAction (row) {
@@ -463,7 +436,7 @@ export default {
           if (action === 'confirm') {
             removeMarketingActivity({ marketing_id: row.marketing_id, isEnd: true }).then(
               (response) => {
-                this.getDataLists()
+                this.fetchList()
                 this.$message({
                   message: '修改活动状态成功',
                   type: 'success',

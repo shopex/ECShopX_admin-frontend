@@ -1,37 +1,44 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <el-row
-        class="content-bottom-padded"
-        :gutter="20"
+    <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addTemplate"
+        >
+          添加模板
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
       >
-        <el-col :span="4">
-          <el-button
-            type="primary"
-            icon="plus"
-            @click="addTemplate"
-          >
-            添加模板
-          </el-button>
-        </el-col>
-        <el-col :span="6">
+        <SpFilterFormItem
+          prop="tem_name"
+          label="模板名称:"
+        >
           <el-input
             v-model="params.tem_name"
             placeholder="模板名称"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchData"
-            />
-          </el-input>
-        </el-col>
-        <el-col :span="6">
+          />
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="tem_type"
+          label="模板类型:"
+        >
           <el-select
             v-model="params.tem_type"
             placeholder="模板类型"
             style="width: 100%"
-            @change="searchData"
           >
             <el-option
               key="basic_entry"
@@ -44,12 +51,13 @@
               value="ask_answer_paper"
             />
           </el-select>
-        </el-col>
-      </el-row>
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-tabs
-        v-model="activeName"
-        type="border-card"
-        @tab-click="handleClick"
+        v-model="params.is_valid"
+        type="card"
+        @tab-click="handleTabClick"
       >
         <el-tab-pane
           v-for="(item, index) in tabList"
@@ -59,7 +67,8 @@
         >
           <el-table
             v-loading="loading"
-            :data="ItemsList"
+            border
+            :data="tableList"
             :height="wheight - 280"
           >
             <el-table-column
@@ -103,13 +112,13 @@
           <div class="content-center content-top-padded">
             <el-pagination
               background
-              layout="total, sizes, prev, pager, next"
-              :current-page.sync="params.page"
+              layout="total, sizes, prev, pager, next, jumper"
+              :current-page.sync="page.pageIndex"
               :page-sizes="[10, 20, 50]"
-              :total="total_count"
-              :page-size="params.pageSize"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
+              :total="page.total"
+              :page-size="page.pageSize"
+              @current-change="onCurrentChange"
+              @size-change="onSizeChange"
             />
           </div>
         </el-tab-pane>
@@ -211,7 +220,7 @@
               >
                 <el-select placeholder="请选择">
                   <el-option
-                    v-for="(item, index) in item.options"
+                    v-for="item in item.options"
                     :key="item.value"
                     :label="item.value"
                     :value="item.value"
@@ -235,46 +244,40 @@
           确认提交
         </el-button>
       </el-dialog>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { Message } from 'element-ui'
-import {
-  getTemplateInfo,
-  getTemplateList,
-  deleteTemplate,
-  restoreTemplate
-} from '../../../api/selfhelpform'
+import { deleteTemplate } from '@/api/selfhelpform'
+import { pageMixin } from '@/mixins'
 export default {
+  mixins: [pageMixin],
   provide () {
     return {
-      refresh: this.getDataList
+      refresh: this.fetchList
     }
   },
   data () {
+    const initialParams = {
+      tem_name: undefined,
+      tem_type: undefined,
+      is_valid: 1
+    }
     return {
-      templateName: '',
+      initialParams,
+      params: {
+        ...initialParams
+      },
       isEdit: false,
       tabList: [
-        { name: '有效模板', value: '1', activeName: 'first' },
-        { name: '弃用模板', value: '2', activeName: 'second' }
+        { name: '有效模板', activeName: 1 },
+        { name: '弃用模板', activeName: 2 }
       ],
-      activeName: 'first',
-      ItemsList: [],
       ItemsDetailVisible: false,
       itemsDetailData: {},
       loading: false,
-      total_count: 0,
-      params: {
-        page: 1,
-        pageSize: 10,
-        tem_name: '',
-        tem_type: '',
-        is_valid: 1
-      },
       dialogVisible: false,
       dialogContent: [],
       headerTitle: '',
@@ -288,22 +291,29 @@ export default {
   watch: {
     getStatus (val) {
       if (val) {
-        this.getDataList()
+        this.fetchList()
       }
     }
   },
   mounted () {
-    this.getDataList()
+    this.fetchList()
   },
   methods: {
-    handleCurrentChange (page_num) {
-      this.params.page = page_num
-      this.getDataList()
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
     },
-    handleSizeChange (pageSize) {
-      this.params.page = 1
-      this.params.pageSize = pageSize
-      this.getDataList()
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
+    },
+    getParams () {
+      let params = {
+        ...this.params
+      }
+      return params
     },
     addTemplate () {
       // 添加商品
@@ -321,17 +331,18 @@ export default {
       this.headerTitle = row.header_title
       this.bottomTitle = row.bottom_title
     },
-    searchData () {
-      this.params.page = 1
-      this.getDataList()
-    },
-    getDataList () {
+    async fetchList () {
       this.loading = true
-      getTemplateList(this.params).then((response) => {
-        this.ItemsList = response.data.data.list
-        this.total_count = response.data.data.total_count
-        this.loading = false
-      })
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.selfhelpform.getTemplateList(params)
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
     },
     deleteAction (index, row) {
       this.$confirm('此操作将废弃该模板, 是否继续?', '提示', {
@@ -342,7 +353,7 @@ export default {
         .then(() => {
           deleteTemplate(row.id)
             .then((response) => {
-              this.ItemsList.splice(index, 1)
+              this.tableList.splice(index, 1)
               this.$message({
                 message: '废弃成功',
                 type: 'success',
@@ -376,14 +387,8 @@ export default {
     getTimeStr (date) {
       return this.getTaskTime(new Date(parseInt(date) * 1000))
     },
-    handleClick (tab, event) {
-      this.params.page = 1
-      if (this.activeName == 'second') {
-        this.params.is_valid = 2
-      } else {
-        this.params.is_valid = 1
-      }
-      this.getDataList()
+    handleTabClick (tab, event) {
+      this.onSearch()
     }
   }
 }

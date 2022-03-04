@@ -1,8 +1,9 @@
 <template>
   <div>
-    <el-card v-if="$route.path.indexOf('detail') === -1">
+    <template v-if="$route.path.indexOf('detail') === -1">
       <el-table
         v-loading="loading"
+        border
         :data="giveLogList"
         :height="wheight - 90"
       >
@@ -54,7 +55,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-    </el-card>
+    </template>
     <router-view />
   </div>
 </template>

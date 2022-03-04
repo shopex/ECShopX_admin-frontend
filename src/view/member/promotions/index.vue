@@ -1,42 +1,38 @@
 <template>
   <el-tabs
     v-model="activeName"
-    type="border-card"
+    type="card"
     @tab-click="handleClick"
   >
     <el-tab-pane
-      label="基础注册促销"
-      name="first"
+      v-for="(item, index) in tabList"
+      :key="index"
+      :label="item.name"
+      :name="item.activeName"
     >
-      <general :get-status="general_status" />
-    </el-tab-pane>
-    <!-- <el-tab-pane label="分销商注册促销" name="second">
-      <distributor :get-status="distributor"></distributor>
-    </el-tab-pane> -->
-    <el-tab-pane
-      label="赠送(付费会员卡)"
-      name="third"
-    >
-      <sale-member-card :get-status="sale_member_card" />
-    </el-tab-pane>
-    <el-tab-pane
-      label="注册送积分"
-      name="fourth"
-    >
-      <point :get-status="point" />
+      <general
+        v-if="activeName === 'first'"
+        :get-status="general_status"
+      />
+      <sale-member-card
+        v-if="activeName === 'third'"
+        :get-status="sale_member_card"
+      />
+      <point
+        v-if="activeName === 'fourth'"
+        :get-status="point"
+      />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
-// import distributor from './distributorIndex'
 import general from './register'
 import saleMemberCard from './saleMemberCard'
 import point from './point'
 
 export default {
   components: {
-    // distributor,
     general,
     saleMemberCard,
     point
@@ -47,7 +43,12 @@ export default {
       general_status: true,
       distributor: false,
       sale_member_card: false,
-      point: false
+      point: false,
+      tabList: [
+        { name: '基础注册促销', activeName: 'first' },
+        { name: '赠送(付费会员卡)', activeName: 'third' },
+        { name: '注册送积分', activeName: 'fourth' }
+      ]
     }
   },
   mounted () {
