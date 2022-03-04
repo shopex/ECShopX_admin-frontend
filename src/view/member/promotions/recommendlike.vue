@@ -1,119 +1,117 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col>
-        <!-- <el-col :span="12">
-          <shop-select  distributors  @update="storeSearch" :shopIdDefault="params.distributor_id"></shop-select>
-      </el-col> -->
-        <el-button-group>
-          <el-button
-            type="primary"
-            @click="DelItemData('true')"
-          >
-            清除所有商品
-          </el-button>
-          <el-button
-            type="primary"
-            @click="AddRecommendLikeItem"
-          >
-            添加商品
-          </el-button>
-        </el-button-group>
-      </el-col>
-    </el-row>
-    <el-card>
-      <el-table
-        ref="multipleItemsTable"
-        v-loading="loading"
-        :data="list"
+    <div class="action-container">
+      <el-button
+        type="primary"
+        icon="iconfont icon-xinzengcaozuo-01"
+        @click="AddRecommendLikeItem"
       >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <!-- <el-table-column prop="itemName" label="商品图片" width="300"></el-table-column> -->
-        <el-table-column
-          prop="itemName"
-          label="商品名称"
-          width="300"
-        />
-        <el-table-column
-          prop="price"
-          label="商品价格"
-          width="120"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.price / 100 }}元
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="sort"
-          label="商品排序"
-          width="120"
-        >
-          <template slot-scope="scope">
-            <el-input
-              v-model="scope.row.sort"
-              @change="editItemSort(scope.$index, scope.row)"
-            >
-              <i
-                slot="suffix"
-                class="el-input__icon el-icon-edit"
-              />
-            </el-input>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="approve_status"
-          label="状态"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <div
-              v-if="scope.row.approve_status === 'onsale'"
-              class="grid-content"
-            >
-              前台可销售
-            </div>
-            <div
-              v-else-if="scope.row.approve_status === 'offline_sale'"
-              class="grid-content"
-            >
-              可线下销售
-            </div>
-            <div
-              v-else
-              class="grid-content"
-            >
-              不可销售
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              @click="DelItemData('false', scope.row)"
-            >
-              删除关联
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div
-        v-if="total_count > params.pageSize"
-        class="content-padded content-center"
+        添加商品
+      </el-button>
+      <el-button
+        type="primary"
+        plain
+        @click="DelItemData('true')"
       >
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :current-page.sync="params.page"
-          :total="total_count"
-          :page-size="params.pageSize"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </el-card>
+        清除所有商品
+      </el-button>
+    </div>
+
+    <el-table
+      ref="multipleItemsTable"
+      v-loading="loading"
+      border
+      :data="tableList"
+    >
+      <el-table-column
+        type="selection"
+        width="55"
+      />
+      <!-- <el-table-column prop="itemName" label="商品图片" width="300"></el-table-column> -->
+      <el-table-column
+        prop="itemName"
+        label="商品名称"
+        width="300"
+      />
+      <el-table-column
+        prop="price"
+        label="商品价格"
+        width="120"
+      >
+        <template slot-scope="scope">
+          {{ scope.row.price / 100 }}元
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="sort"
+        label="商品排序"
+        width="120"
+      >
+        <template slot-scope="scope">
+          <el-input
+            v-model="scope.row.sort"
+            @change="editItemSort(scope.$index, scope.row)"
+          >
+            <i
+              slot="suffix"
+              class="el-input__icon el-icon-edit"
+            />
+          </el-input>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="approve_status"
+        label="状态"
+        width="100"
+      >
+        <template slot-scope="scope">
+          <div
+            v-if="scope.row.approve_status === 'onsale'"
+            class="grid-content"
+          >
+            前台可销售
+          </div>
+          <div
+            v-else-if="scope.row.approve_status === 'offline_sale'"
+            class="grid-content"
+          >
+            可线下销售
+          </div>
+          <div
+            v-else
+            class="grid-content"
+          >
+            不可销售
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            @click="DelItemData('false', scope.row)"
+          >
+            删除关联
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div
+      v-if="page.page > page.pageSize"
+      class="content-padded content-center"
+    >
+      <el-pagination
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :current-page.sync="page.pageIndex"
+        :page-sizes="[10, 20, 50]"
+        :total="page.total"
+        :page-size="page.pageSize"
+        @current-change="onCurrentChange"
+        @size-change="onSizeChange"
+      />
+    </div>
+
     <sideBar
       :visible.sync="show_sideBar"
       title="选择商品"
@@ -244,12 +242,12 @@ import shopSelect from '@/components/shopSelect'
 import {
   saveRecommendLikeItem,
   deleteRecommendLikeItem,
-  getRecommendLikeItemList,
   updateRecommendLikeSort,
   getRecommendLikeItems
 } from '@/api/promotions'
 import GoodsSelect from '@/components/goodsSelect'
 import sideBar from '@/components/element/sideBar'
+import { pageMixin } from '@/mixins'
 
 export default {
   components: {
@@ -257,35 +255,31 @@ export default {
     sideBar,
     GoodsSelect
   },
+  mixins: [pageMixin],
+  provide () {
+    return {
+      refresh: this.fetchList
+    }
+  },
   props: ['isLoad'],
   data () {
     return {
       editItemSortVisible: false,
       itemVisible: false,
+      itemVisible: false,
       setItemStatus: false,
       show_sideBar: false,
       relItemsIds: [],
-      activeName: 'first',
-      total_count: 0,
       loading: false,
       form: {
         items: []
       },
       params: {
-        page: 1,
-        pageSize: 20,
         distributor_id: '',
         is_warning: false,
         keywords: ''
       },
-      list: [],
-      itemsChecked: [],
-      warning_store: 5,
-      editStore: false,
-      itemSkuList: [],
-      itemSkuParam: {
-        is_sku: 'true'
-      }
+      list: []
     }
   },
   computed: {
@@ -294,16 +288,35 @@ export default {
   watch: {
     isLoad (val) {
       if (val) {
-        this.getList()
+        this.fetchList()
         //this.getDistributorItemList()
       }
     }
   },
   mounted () {
     //this.getDistributorItemList()
-    this.getList()
+    this.fetchList()
   },
   methods: {
+    getParams () {
+      let params = {
+        ...this.params
+      }
+      return params
+    },
+    async fetchList () {
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.promotions.getRecommendLikeItemList(params)
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
+    },
     AddRecommendLikeItem () {
       this.show_sideBar = true
       getRecommendLikeItems().then((res) => {
@@ -330,7 +343,7 @@ export default {
         })
           .then(() => {
             deleteRecommendLikeItem(param).then((response) => {
-              this.getList()
+              this.fetchList()
               this.$message({
                 type: 'success',
                 message: '删除成功'
@@ -359,7 +372,7 @@ export default {
     },
     submitActivityAction () {
       saveRecommendLikeItem(this.form).then((res) => {
-        this.getList()
+        this.fetchList()
         this.$message({
           type: 'success',
           message: '保存成功'
@@ -393,10 +406,6 @@ export default {
     closeItemDialogAction () {
       this.itemVisible = false
     },
-    handleCurrentChange (page_num) {
-      this.params.page = page_num
-      this.getList()
-    },
     deleteItemRow (index, rows) {
       rows.splice(index, 1)
       this.form.items = rows
@@ -416,15 +425,6 @@ export default {
             message: '修改成功'
           })
         }
-      })
-    },
-    getList () {
-      getRecommendLikeItemList(this.params).then((response) => {
-        if (response.data.data.list) {
-          this.list = response.data.data.list
-          this.total_count = parseInt(response.data.data.total_count)
-        }
-        this.loading = false
       })
     },
     editItemsStore (index, row) {

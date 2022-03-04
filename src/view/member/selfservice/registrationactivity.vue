@@ -1,23 +1,37 @@
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <el-row :gutter="20">
-        <el-col>
+    <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addElement"
+        >
+          活动添加
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
+      >
+        <SpFilterFormItem
+          prop="field_title"
+          label="标题:"
+        >
           <el-input
             v-model="params.field_title"
-            class="input-m"
             placeholder="标题"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchData"
-            />
-          </el-input>
+          />
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="状态"
+          label="标题:"
+        >
           <el-select
             v-model="params.status"
             placeholder="状态"
-            @change="searchData"
           >
             <el-option
               key="waiting"
@@ -35,86 +49,84 @@
               value="end"
             />
           </el-select>
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="create_time"
+          label="时间:"
+        >
           <el-date-picker
-            v-model="create_time"
+            v-model="params.create_time"
             type="daterange"
             value-format="yyyy/MM/dd"
             placeholder="根据添加时间筛选"
-            @change="dateChange"
           />
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus"
-            @click="addElement"
-          >
-            活动添加
-          </el-button>
-        </el-col>
-      </el-row>
-      <el-card>
-        <el-table
-          v-loading="loading"
-          :data="ItemsList"
+        </SpFilterFormItem>
+      </SpFilterForm>
+
+      <el-table
+        v-loading="loading"
+        border
+        :data="tableList"
+      >
+        <el-table-column
+          prop="activity_id"
+          label="编号"
+          width="50"
+        />
+        <el-table-column
+          prop="activity_name"
+          label="活动名称"
+          width="300"
+        />
+        <el-table-column
+          prop="start_time"
+          label="活动有效期"
+          width="300"
         >
-          <el-table-column
-            prop="activity_id"
-            label="编号"
-            width="50"
-          />
-          <el-table-column
-            prop="activity_name"
-            label="活动名称"
-            width="300"
-          />
-          <el-table-column
-            prop="start_time"
-            label="活动有效期"
-            width="300"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.start_date }} ~ {{ scope.row.end_date }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="total_join_num"
-            label="报名人数"
-            width="100"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.total_join_num || 0 }}
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <router-link
-                class="iconfont icon-edit1"
-                :to="{ path: matchHidePage('editor'), query: { id: scope.row.activity_id } }"
-              />
-              <i
-                class="iconfont icon-search-plus"
-                @click="preview(scope.$index, scope.row)"
-              />
-              <i
-                v-if="scope.row.status == 1"
-                class="mark iconfont icon-trash-alt1"
-                @click="deleteAction(scope.$index, scope.row)"
-              />
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="content-center content-top-padded">
-          <el-pagination
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :current-page.sync="params.page"
-            :page-sizes="[10, 20, 50]"
-            :total="total_count"
-            :page-size="params.pageSize"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-          />
-        </div>
-      </el-card>
+          <template slot-scope="scope">
+            {{ scope.row.start_date }} ~ {{ scope.row.end_date }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="total_join_num"
+          label="报名人数"
+          width="100"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.total_join_num || 0 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <router-link
+              class="iconfont icon-edit1"
+              :to="{ path: matchHidePage('editor'), query: { id: scope.row.activity_id } }"
+            />
+            <i
+              class="iconfont icon-search-plus"
+              @click="preview(scope.$index, scope.row)"
+            />
+            <i
+              v-if="scope.row.status == 1"
+              class="mark iconfont icon-trash-alt1"
+              @click="deleteAction(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="content-center content-top-padded">
+        <el-pagination
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :current-page.sync="page.pageIndex"
+          :page-sizes="[10, 20, 50]"
+          :total="page.total"
+          :page-size="page.pageSize"
+          @current-change="onCurrentChange"
+          @size-change="onSizeChange"
+        />
+      </div>
+
       <el-dialog :visible.sync="dialogVisible">
         <el-form
           ref="dataInfo"
@@ -203,7 +215,7 @@
             >
               <el-select placeholder="请选择">
                 <el-option
-                  v-for="(item, key) in dataInfo.options"
+                  v-for="item in dataInfo.options"
                   :key="item.value"
                   :label="item.value"
                   :value="item.value"
@@ -247,43 +259,35 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import { Message } from 'element-ui'
-import { regActivityList, regActivityDel, regActivityInvalid } from '../../../api/selfhelpform'
+import { regActivityDel, regActivityInvalid } from '@/api/selfhelpform'
+import mixin, { pageMixin } from '@/mixins'
 export default {
+  mixins: [mixin, pageMixin],
   provide () {
     return {
-      refresh: this.getDataList
+      refresh: this.fetchList
     }
   },
   data () {
+    const initialParams = {
+      field_title: undefined,
+      status: 'ongoing',
+      create_time: []
+    }
     return {
-      fieldTitle: '',
-      isEdit: false,
-      imageUrl: '',
-      tabList: [
-        { name: '有效元素', value: '1', activeName: 'first' },
-        { name: '弃用元素', value: '2', activeName: 'second' }
-      ],
-      activeName: 'first',
-      ItemsList: [],
-      ItemsDetailVisible: false,
-      itemsDetailData: {},
-      loading: false,
-      total_count: 0,
+      initialParams,
       params: {
-        page: 1,
-        pageSize: 8,
-        status: 'ongoing'
+        ...initialParams
       },
+      imageUrl: '',
+      loading: false,
       dialogVisible: false,
       dataInfo: {},
-      create_time: [],
       options: [
         {
           value: 'ziyuan',
@@ -306,29 +310,17 @@ export default {
       ]
     }
   },
-  computed: {
-    ...mapGetters(['wheight'])
-  },
   watch: {
     getStatus (val) {
       if (val) {
-        this.getDataList()
+        this.fetchList()
       }
     }
   },
   mounted () {
-    this.getDataList()
+    this.fetchList()
   },
   methods: {
-    handleCurrentChange (page_num) {
-      this.params.page = page_num
-      this.getDataList()
-    },
-    handleSizeChange (pageSize) {
-      this.params.page = 1
-      this.params.pageSize = pageSize
-      this.getDataList()
-    },
     addElement () {
       // 添加商品
       this.$router.push({ path: this.matchHidePage('editor') })
@@ -380,25 +372,42 @@ export default {
       this.dialogVisible = true
       this.dataInfo = row
     },
-    searchData () {
-      this.params.page = 1
-      this.getDataList()
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
     },
-    getDataList () {
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
+    },
+    getParams () {
+      const time = {}
+      const create_time = this.params.create_time
+      if (create_time.length) {
+        time.start_time = this.dateStrToTimeStamp(create_time[0] + ' 00:00:00')
+        time.end_time = this.dateStrToTimeStamp(create_time[1] + ' 00:00:00')
+      }
+      let params = {
+        ...this.params,
+        create_time: [],
+        ...time
+      }
+      return params
+    },
+    async fetchList () {
       this.loading = true
-      regActivityList(this.params)
-        .then((response) => {
-          this.ItemsList = response.data.data.list
-          this.total_count = response.data.data.total_count
-          this.loading = false
-        })
-        .catch((error) => {
-          this.loading = false
-          this.$message({
-            type: 'error',
-            message: '获取列表信息出错'
-          })
-        })
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.selfhelpform.regActivityList(params)
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
     },
     deleteAction (index, row) {
       this.$confirm('此操废弃该元素, 是否继续?', '提示', {
@@ -409,7 +418,7 @@ export default {
         .then(() => {
           deleteSetting(row.activity_id)
             .then((response) => {
-              this.ItemsList.splice(index, 1)
+              this.tableList.splice(index, 1)
               this.$message({
                 message: '废弃成功',
                 type: 'success',
@@ -443,25 +452,8 @@ export default {
     getTimeStr (date) {
       return this.getTaskTime(new Date(parseInt(date) * 1000))
     },
-    handleClick (tab, event) {
-      this.params.page = 1
-      if (this.activeName == 'second') {
-        this.params.is_valid = 2
-      } else {
-        this.params.is_valid = 1
-      }
-      this.getDataList()
-    },
     dateStrToTimeStamp (str) {
       return Date.parse(new Date(str)) / 1000
-    },
-    dateChange (val) {
-      if (val.length > 0) {
-        this.params.start_time = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
-        this.params.end_time = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
-      }
-      this.params.page = 1
-      this.getDataList()
     }
   }
 }
@@ -475,6 +467,9 @@ export default {
   img {
     width: 90%;
   }
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 .el-col {
   border-radius: 4px;

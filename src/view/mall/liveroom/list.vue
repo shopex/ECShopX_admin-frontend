@@ -1,13 +1,24 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div class="zyk_video">
-    <div v-if="$route.path.indexOf('editor') === -1">
-      <el-row :gutter="20">
-        <el-col>
+    <template v-if="$route.path.indexOf('editor') === -1">
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
+      >
+        <SpFilterFormItem
+          prop="wxapp_id"
+          label="针对人群:"
+        >
           <el-select
             v-model="params.wxapp_id"
             placeholder="请选择小程序"
-            style="width: 30%"
-            @change="handleChangeAppId"
           >
             <el-option
               v-for="(item, index) in wxaList"
@@ -16,12 +27,14 @@
               :value="item.authorizer_appid"
             />
           </el-select>
-        </el-col>
-      </el-row>
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-card>
         <el-table
           v-loading="loading"
-          :data="liveroomsList"
+          :data="tableList"
+          border
           element-loading-text="数据加载中"
           :default-sort="{ prop: 'bind_date', order: 'descending' }"
         >
@@ -72,82 +85,101 @@
         </el-table>
       </el-card>
       <div
-        v-if="total_count > params.pageSize"
+        v-if="page.total > page.pageSize"
         class="content-padded content-center"
       >
         <el-pagination
           background
-          layout="total, sizes, prev, pager, next"
-          :current-page.sync="params.page"
+          layout="total, sizes, prev, pager, next, jumper"
+          :current-page.sync="page.pageIndex"
           :page-sizes="[10, 20, 50]"
-          :total="total_count"
-          :page-size="params.pageSize"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
+          :total="page.total"
+          :page-size="page.pageSize"
+          @current-change="onCurrentChange"
+          @size-change="onSizeChange"
         />
       </div>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getLiverooms } from '@/api/promotions'
 import { getWxaAuthList } from '@/api/wxa'
+import { pageMixin } from '@/mixins'
 export default {
-  data () {
+  mixins: [pageMixin],
+  provide () {
     return {
-      currentIndex: '',
-      liveroomsList: [],
-      wxaList: [],
+      refresh: this.fetchList
+    }
+  },
+  data () {
+    const initialParams = {
+      wxapp_id: undefined
+    }
+
+    return {
+      initialParams,
       params: {
-        wxapp_id: '',
-        page: 1,
-        pageSize: 10
+        ...initialParams
       },
+      wxaList: [],
       loading: false,
       imgDialog: false,
       isGetImage: false,
       imgIndex: 0,
       brand_name: '',
-      total_count: 0,
-      show_sideBar: false
+      show_sideBar: false,
+      page: {
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   mounted () {
     this.getWxaList()
-    this.getLiveroomsList()
+    this.fetchList()
   },
   methods: {
-    getLivereplays (row) {
-      this.$router.push({ path: this.matchHidePage('editor/') + row.roomid })
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
     },
-    getLiveroomsList () {
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
+    },
+    getParams () {
+      let params = {
+        ...this.params
+      }
+      return params
+    },
+    async fetchList () {
       if (!this.params.wxapp_id) {
         return false
       }
-      getLiverooms(this.params).then((res) => {
-        this.liveroomsList = res.data.data.list
-        this.total_count = res.data.data.total_count
-      })
-    },
-    handleCurrentChange (page_num) {
-      this.params.page = page_num
-      this.getLiveroomsList()
-    },
-    handleSizeChange (pageSize) {
-      this.params.page = 1
-      this.params.pageSize = pageSize
-      this.getLiveroomsList()
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.promotions.getLiverooms(params)
+      this.tableList = list
+      this.page.total = Number(total_count)
+      this.loading = false
     },
     getWxaList () {
       getWxaAuthList().then((response) => {
         this.wxaList = response.data.data.list
       })
-    },
-    handleChangeAppId (row) {
-      this.getLiveroomsList()
     }
   },
   computed: {

@@ -1,48 +1,45 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
-    <div v-if="$route.path.indexOf('editor') === -1">
-      <!-- <el-row :gutter="20">
-        <el-col :md="12" :lg="12">
-          <shop-select distributors @update="storeSearch"></shop-select>
-        </el-col>
-        <el-col :md="8" :lg="8">
-          <el-date-picker
-            v-model="create_time"
-            type="daterange"
-            value-format="yyyy/MM/dd"
-            placeholder="根据添加时间筛选"
-            style="width: 100%;"
-            @change="dateChange"
-            size="mini"
-          ></el-date-picker>
-        </el-col>
-      </el-row> -->
-      <el-row :gutter="20">
-        <el-col
-          :md="8"
-          :lg="8"
+    <template v-if="$route.path.indexOf('editor') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addActivityData"
+        >
+          添加加价购促销
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
+      >
+        <SpFilterFormItem
+          prop="create_time"
+          label="时间:"
         >
           <el-date-picker
-            v-model="create_time"
+            v-model="params.create_time"
             type="daterange"
             value-format="yyyy/MM/dd"
             placeholder="根据添加时间筛选"
-            style="width: 100%"
-            size="mini"
-            @change="dateChange"
           />
-        </el-col>
-        <el-col
-          :md="4"
-          :lg="8"
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="item_type"
+          label="商品类型:"
         >
           <el-select
             v-model="params.item_type"
             placeholder="商品类型"
-            clearable
-            style="width: 100%"
-            size="mini"
-            @change="itemTypeChange"
           >
             <el-option
               label="全部"
@@ -57,212 +54,192 @@
               value="normal"
             />
           </el-select>
-        </el-col>
-        <el-col
-          :md="4"
-          :lg="8"
-        >
-          <el-button
-            size="mini"
-            type="primary"
-            icon="plus"
-            @click="addActivityData"
-          >
-            添加加价购促销
-          </el-button>
-        </el-col>
-      </el-row>
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-tabs
-        v-model="activeName"
-        type="border-card"
-        @tab-click="handleClick"
+        v-model="params.status"
+        type="card"
+        @tab-click="handleTabClick"
       >
         <el-tab-pane
-          label="全部"
-          name="all"
-        />
-        <el-tab-pane
-          label="待开始"
-          name="waiting"
-        />
-        <el-tab-pane
-          label="进行中"
-          name="ongoing"
-        />
-        <el-tab-pane
-          label="已结束"
-          name="end"
-        />
-        <el-table
-          v-loading="loading"
-          :data="list"
-          style="width: 100%"
-          :height="wheight - 190"
-          element-loading-text="数据加载中"
+          v-for="(item, index) in tabList"
+          :key="index"
+          :label="item.name"
+          :name="item.activeName"
         >
-          <el-table-column type="expand">
-            <template slot-scope="scope">
-              <el-form
-                label-position="left"
-                inline
-                class="demo-table-expand"
-              >
-                <el-form-item label="适用会员">
-                  <el-tag
-                    v-for="(item, index) in scope.row.member_grade"
-                    :key="index"
-                  >
-                    {{
-                      item
-                    }}
-                  </el-tag>
-                </el-form-item>
-                <el-form-item label="创建时间">
-                  <span>{{ scope.row.created_date }}</span>
-                </el-form-item>
-                <el-form-item label="适用商品">
-                  <div
-                    v-for="(item, index) in scope.row.items"
-                    :key="index"
-                  >
-                    {{ item.item_name }}
-                  </div>
-                </el-form-item>
-                <el-form-item label="适用店铺">
-                  <span v-if="scope.row.use_shop">
-                    <div
-                      v-for="(item, index) in scope.row.shops"
+          <el-table
+            v-loading="loading"
+            :data="tableList"
+            style="width: 100%"
+            :height="wheight - 190"
+            border
+            element-loading-text="数据加载中"
+          >
+            <el-table-column type="expand">
+              <template slot-scope="scope">
+                <el-form
+                  label-position="left"
+                  inline
+                  class="demo-table-expand"
+                >
+                  <el-form-item label="适用会员">
+                    <el-tag
+                      v-for="(item, index) in scope.row.member_grade"
                       :key="index"
                     >
-                      {{ item.shop_name }}
+                      {{ item }}
+                    </el-tag>
+                  </el-form-item>
+                  <el-form-item label="创建时间">
+                    <span>{{ scope.row.created_date }}</span>
+                  </el-form-item>
+                  <el-form-item label="适用商品">
+                    <div
+                      v-for="(item, index) in scope.row.items"
+                      :key="index"
+                    >
+                      {{ item.item_name }}
                     </div>
+                  </el-form-item>
+                  <el-form-item label="适用店铺">
+                    <span v-if="scope.row.use_shop">
+                      <div
+                        v-for="(item, index) in scope.row.shops"
+                        :key="index"
+                      >
+                        {{ item.shop_name }}
+                      </div>
+                    </span>
+                    <span v-else> <div>全部店铺</div> </span>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="marketing_id"
+              width="60"
+              label="编号"
+            />
+            <el-table-column
+              prop="marketing_name"
+              min-width="150"
+              label="促销名称"
+            />
+            <el-table-column
+              label="规则"
+              min-width="150"
+            >
+              <template slot-scope="scope">
+                <div
+                  v-for="(item, index) in scope.row.condition_value"
+                  :key="index"
+                >
+                  <span v-if="scope.row.condition_type == 'quantity'">
+                    消费满{{ item.full }}件,加价购(<el-button
+                      type="text"
+                      @click="viewGiftItemList(scope.row)"
+                    >加购商品</el-button>)
                   </span>
-                  <span v-else> <div>全部店铺</div> </span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="marketing_id"
-            width="60"
-            label="编号"
-          />
-          <el-table-column
-            prop="marketing_name"
-            min-width="150"
-            label="促销名称"
-          />
-          <el-table-column
-            label="规则"
-            min-width="150"
-          >
-            <template slot-scope="scope">
-              <div
-                v-for="(item, index) in scope.row.condition_value"
-                :key="index"
-              >
-                <span v-if="scope.row.condition_type == 'quantity'">
-                  消费满{{ item.full }}件,加价购(<el-button
+                  <span v-if="scope.row.condition_type == 'totalfee'">
+                    消费满{{ item.full }}元,加价购(<el-button
+                      type="text"
+                      @click="viewGiftItemList(scope.row)"
+                    >加购商品</el-button>)
+                  </span>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="used_platform"
+              min-width="100"
+              label="适用平台"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.used_platform == 0">全场可用</span>
+                <span v-if="scope.row.used_platform == 1">只用于pc端</span>
+                <span v-if="scope.row.used_platform == 2">小程序端</span>
+                <span v-if="scope.row.used_platform == 3">h5端</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="total_fee"
+              min-width="150"
+              label="有效期"
+            >
+              <template slot-scope="scope">
+                <div>{{ scope.row.start_date }}</div>
+                <div>~</div>
+                <div>{{ scope.row.end_date }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column
+              min-width="70"
+              label="状态"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.status == 'ongoing'">进行中</span>
+                <span v-if="scope.row.status == 'waiting'">未开始</span>
+                <span v-if="scope.row.status == 'end'">已结束</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              min-width="150"
+            >
+              <template slot-scope="scope">
+                <div class="operating-icons">
+                  <el-button
                     type="text"
-                    @click="viewGiftItemList(scope.row)"
-                  >加购商品</el-button>)
-                </span>
-                <span v-if="scope.row.condition_type == 'totalfee'">
-                  消费满{{ item.full }}元,加价购(<el-button
+                    @click="viewItemList(scope.row.marketing_id)"
+                  >
+                    查看商品
+                  </el-button>
+                  <el-button
+                    v-if="scope.row.status !== 'end'"
                     type="text"
-                    @click="viewGiftItemList(scope.row)"
-                  >加购商品</el-button>)
-                </span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="used_platform"
-            min-width="100"
-            label="适用平台"
+                    @click="updateStatusCommunityAction(scope.row)"
+                  >
+                    终止
+                  </el-button>
+                  <el-button
+                    v-if="scope.row.status != 'waiting'"
+                    type="text"
+                    @click="viewDetail(scope.row)"
+                  >
+                    查看详情
+                  </el-button>
+                  <i
+                    v-if="scope.row.status == 'waiting'"
+                    class="iconfont icon-edit1"
+                    @click="editActivityAction(scope.$index, scope.row)"
+                  />
+                  <i
+                    v-if="scope.row.status == 'waiting'"
+                    class="iconfont icon-trash-alt"
+                    @click="deleteActivityAction(scope.row)"
+                  />
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div
+            v-if="page.total > page.pageSize"
+            class="content-padded content-center"
           >
-            <template slot-scope="scope">
-              <span v-if="scope.row.used_platform == 0">全场可用</span>
-              <span v-if="scope.row.used_platform == 1">只用于pc端</span>
-              <span v-if="scope.row.used_platform == 2">小程序端</span>
-              <span v-if="scope.row.used_platform == 3">h5端</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="total_fee"
-            min-width="150"
-            label="有效期"
-          >
-            <template slot-scope="scope">
-              <div>{{ scope.row.start_date }}</div>
-              <div>~</div>
-              <div>{{ scope.row.end_date }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            min-width="70"
-            label="状态"
-          >
-            <template slot-scope="scope">
-              <span v-if="scope.row.status == 'ongoing'">进行中</span>
-              <span v-if="scope.row.status == 'waiting'">未开始</span>
-              <span v-if="scope.row.status == 'end'">已结束</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            min-width="150"
-          >
-            <template slot-scope="scope">
-              <div class="operating-icons">
-                <el-button
-                  type="text"
-                  @click="viewItemList(scope.row.marketing_id)"
-                >
-                  查看商品
-                </el-button>
-                <el-button
-                  v-if="scope.row.status !== 'end'"
-                  type="text"
-                  @click="updateStatusCommunityAction(scope.row)"
-                >
-                  终止
-                </el-button>
-                <el-button
-                  v-if="scope.row.status != 'waiting'"
-                  type="text"
-                  @click="viewDetail(scope.row)"
-                >
-                  查看详情
-                </el-button>
-                <i
-                  v-if="scope.row.status == 'waiting'"
-                  class="iconfont icon-edit1"
-                  @click="editActivityAction(scope.$index, scope.row)"
-                />
-                <i
-                  v-if="scope.row.status == 'waiting'"
-                  class="iconfont icon-trash-alt"
-                  @click="deleteActivityAction(scope.row)"
-                />
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div
-          v-if="total_count > params.pageSize"
-          class="content-padded content-center"
-        >
-          <el-pagination
-            layout="prev, pager, next"
-            :current-page.sync="params.page"
-            :total="total_count"
-            :page-size="params.pageSize"
-            @current-change="handleCurrentChange"
-          />
-        </div>
+            <el-pagination
+              background
+              layout="total, sizes, prev, pager, next, jumper"
+              :current-page.sync="page.pageIndex"
+              :page-sizes="[10, 20, 50]"
+              :total="page.total"
+              :page-size="page.pageSize"
+              @current-change="onCurrentChange"
+              @size-change="onSizeChange"
+            />
+          </div>
+        </el-tab-pane>
       </el-tabs>
-
       <el-dialog
         title="活动商品列表"
         :visible.sync="activityItemDialog"
@@ -361,80 +338,109 @@
           </el-table>
         </template>
       </el-dialog>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import {
-  getMarketingActivityList,
-  getMarketingActivityItemList,
-  removeMarketingActivity
-} from '../../../../api/promotions'
+import { getMarketingActivityItemList, removeMarketingActivity } from '@/api/promotions'
 import shopSelect from '@/components/shopSelect'
+import mixin, { pageMixin } from '@/mixins'
 
 export default {
   provide () {
     return {
-      refresh: this.getFullGiftLists
+      refresh: this.fetchList
     }
   },
   components: {
     shopSelect
   },
+  mixins: [mixin, pageMixin],
   data () {
+    const initialParams = {
+      create_time: [],
+      status: 'all',
+      marketing_type: 'plus_price_buy',
+      item_type: '0'
+    }
     return {
-      activeName: 'all',
+      initialParams,
+      params: {
+        ...initialParams
+      },
       cursymbol: '￥',
       loading: false,
-      create_time: '',
-      params: {
-        page: 1,
-        pageSize: 20,
-        marketing_type: 'plus_price_buy',
-        item_type: '',
-        status: '',
-        start_time: '',
-        end_time: ''
-      },
       activityItemParams: {
         page: 1,
         pageSize: 20
       },
       activityItemTotalCount: 0,
       activityItemListsData: [],
-      total_count: 0,
-      list: [],
       activityItemDialog: false,
       purchaseRulesDialog: false,
       ItemLoading: false,
-      purchaseRules: []
+      purchaseRules: [],
+      tabList: [
+        { name: '全部', activeName: 'all' },
+        { name: '待开始', activeName: 'waiting' },
+        { name: '进行中', activeName: 'ongoing' },
+        { name: '已结束', activeName: 'end' }
+      ]
     }
   },
   computed: {
     ...mapGetters(['wheight'])
   },
   mounted () {
-    this.getFullGiftLists()
+    this.fetchList()
   },
   methods: {
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
+    },
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
+    },
+    dateStrToTimeStamp (str) {
+      return Date.parse(new Date(str)) / 1000
+    },
+    getParams () {
+      const time = {}
+      const create_time = this.params.create_time
+      if (create_time && create_time.length > 0) {
+        time.start_time = this.dateStrToTimeStamp(create_time[0] + ' 00:00:00')
+        time.end_time = this.dateStrToTimeStamp(create_time[1] + ' 23:59:59')
+      }
+      let params = {
+        ...this.params,
+        status: this.params.status === 'all' ? undefined : this.params.status,
+        create_time: [],
+        ...time
+      }
+      return params
+    },
+    async fetchList () {
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.promotions.getMarketingActivityList(params)
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
+    },
     // 切换tab
-    handleClick (tab, event) {
-      this.activeName = tab.name
-      this.params.status = tab.name == 'all' ? '' : tab.name
-      this.params.page = 1
-      this.getFullGiftLists()
-    },
-    storeSearch (val) {
-      val && val.shop_id
-      this.params.store_id = val.shop_id
-      this.params.page = 1
-      this.getFullGiftLists()
-    },
-    itemTypeChange () {
-      this.params.page = 1
-      this.getFullGiftLists()
+    handleTabClick (tab, event) {
+      this.fetchList()
     },
     addActivityData () {
       this.$router.push({ path: this.matchHidePage('editor') })
@@ -445,7 +451,7 @@ export default {
     deleteActivityAction (row) {
       removeMarketingActivity({ marketing_id: row.marketing_id }).then((res) => {
         if (res != undefined && res.data.data.status) {
-          this.getFullGiftLists()
+          this.fetchList()
         }
       })
     },
@@ -485,35 +491,6 @@ export default {
       this.activityItemDialog = false
       this.purchaseRulesDialog = false
     },
-    dateChange (val) {
-      if (!val) {
-        this.params.start_time = ''
-        this.params.end_time = ''
-      }
-      if (val && val.length > 0) {
-        this.params.start_time = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
-        this.params.end_time = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
-      }
-      this.params.page = 1
-      this.getFullGiftLists()
-    },
-    handleCurrentChange (val) {
-      this.params.page = val
-      this.loading = false
-      this.getFullGiftLists()
-    },
-    dateStrToTimeStamp (str) {
-      return Date.parse(new Date(str)) / 1000
-    },
-    getFullGiftLists () {
-      this.loading = true
-      var filter = this.params
-      getMarketingActivityList(filter).then((response) => {
-        this.list = response.data.data.list
-        this.total_count = Number(response.data.data.total_count)
-        this.loading = false
-      })
-    },
     viewGiftItemList (row) {
       this.purchaseRulesDialog = true
       this.purchaseRules = row.gifts
@@ -528,7 +505,7 @@ export default {
           if (action === 'confirm') {
             removeMarketingActivity({ marketing_id: row.marketing_id, isEnd: true }).then(
               (response) => {
-                this.getFullGiftLists()
+                this.fetchList()
                 this.$message({
                   message: '修改活动状态成功',
                   type: 'success',
