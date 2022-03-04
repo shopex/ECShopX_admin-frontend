@@ -194,6 +194,7 @@
       <el-table
         v-loading="loading"
         :data="tableList"
+        border
         @selection-change="handleSelectionChange"
       >
         <el-table-column

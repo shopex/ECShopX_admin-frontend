@@ -1,52 +1,61 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <el-row
-        class="content-bottom-padded"
-        :gutter="20"
+    <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addElement"
+        >
+          表单元素添加
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
       >
-        <el-col :span="4">
-          <el-button
-            type="primary"
-            icon="plus"
-            @click="addElement"
-          >
-            表单元素添加
-          </el-button>
-        </el-col>
-        <el-col :span="6">
+        <SpFilterFormItem
+          prop="form_element"
+          label="表单元素:"
+        >
           <el-select
             v-model="params.form_element"
             placeholder="请选择表单元素"
             style="width: 100%"
-            @change="searchData"
           >
             <el-option
-              v-for="(item, key) in formElement"
+              v-for="item in formElement"
               :key="item.value"
               :label="item.name"
               :value="item.value"
             />
           </el-select>
-        </el-col>
-        <el-col :span="6">
+        </SpFilterFormItem>
+
+        <SpFilterFormItem
+          prop="field_title"
+          label="标题:"
+        >
           <el-input
             v-model="params.field_title"
             placeholder="标题"
             style="width: 100%"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchData"
-            />
-          </el-input>
-        </el-col>
-      </el-row>
+          />
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-tabs
-        v-model="activeName"
-        type="border-card"
-        @tab-click="handleClick"
+        v-model="params.is_valid"
+        type="card"
+        @tab-click="handleTabClick"
       >
         <el-tab-pane
           v-for="(item, index) in tabList"
@@ -56,7 +65,8 @@
         >
           <el-table
             v-loading="loading"
-            :data="ItemsList"
+            border
+            :data="tableList"
             :height="wheight - 280"
           >
             <el-table-column
@@ -112,17 +122,18 @@
           <div class="content-center content-top-padded">
             <el-pagination
               background
-              layout="total, sizes, prev, pager, next"
-              :current-page.sync="params.page"
+              layout="total, sizes, prev, pager, next, jumper"
+              :current-page.sync="page.pageIndex"
               :page-sizes="[10, 20, 50]"
-              :total="total_count"
-              :page-size="params.pageSize"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
+              :total="page.total"
+              :page-size="page.pageSize"
+              @current-change="onCurrentChange"
+              @size-change="onSizeChange"
             />
           </div>
         </el-tab-pane>
       </el-tabs>
+
       <el-dialog :visible.sync="dialogVisible">
         <el-form
           ref="dataInfo"
@@ -211,7 +222,7 @@
             >
               <el-select placeholder="请选择">
                 <el-option
-                  v-for="(item, key) in dataInfo.options"
+                  v-for="item in dataInfo.options"
                   :key="item.value"
                   :label="item.value"
                   :value="item.value"
@@ -255,49 +266,41 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { Message } from 'element-ui'
-import {
-  saveSetting,
-  getSettingList,
-  getSettingInfo,
-  updateSetting,
-  deleteSetting,
-  restoreSetting
-} from '../../../api/selfhelpform'
+import { deleteSetting } from '@/api/selfhelpform'
+import { pageMixin } from '@/mixins'
 export default {
+  mixins: [pageMixin],
   provide () {
     return {
-      refresh: this.getDataList
+      refresh: this.fetchList
     }
   },
   data () {
+    const initialParams = {
+      form_element: undefined,
+      field_title: undefined,
+      is_valid: '1'
+    }
     return {
-      fieldTitle: '',
+      initialParams,
+      params: {
+        ...initialParams
+      },
       isEdit: false,
       imageUrl: '',
       tabList: [
-        { name: '有效元素', value: '1', activeName: 'first' },
-        { name: '弃用元素', value: '2', activeName: 'second' }
+        { name: '有效元素', activeName: '1' },
+        { name: '弃用元素', activeName: '2' }
       ],
-      activeName: 'first',
-      ItemsList: [],
       ItemsDetailVisible: false,
       itemsDetailData: {},
       loading: false,
-      total_count: 0,
-      params: {
-        page: 1,
-        pageSize: 8,
-        field_title: '',
-        form_element: '',
-        is_valid: 1
-      },
       dialogVisible: false,
       dataInfo: {},
       formElement: [
@@ -338,22 +341,23 @@ export default {
   watch: {
     getStatus (val) {
       if (val) {
-        this.getDataList()
+        this.fetchList()
       }
     }
   },
   mounted () {
-    this.getDataList()
+    this.fetchList()
   },
   methods: {
-    handleCurrentChange (page_num) {
-      this.params.page = page_num
-      this.getDataList()
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
     },
-    handleSizeChange (pageSize) {
-      this.params.page = 1
-      this.params.pageSize = pageSize
-      this.getDataList()
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.onSearch()
     },
     addElement () {
       // 添加商品
@@ -368,26 +372,26 @@ export default {
       this.dialogVisible = true
       this.dataInfo = row
     },
-    searchData () {
-      this.params.page = 1
-      this.getDataList()
+    getParams () {
+      let params = {
+        ...this.params
+      }
+      return params
     },
-    getDataList () {
+    async fetchList () {
       this.loading = true
-      getSettingList(this.params)
-        .then((response) => {
-          this.ItemsList = response.data.data.list
-          this.total_count = response.data.data.total_count
-          this.loading = false
-        })
-        .catch((error) => {
-          this.loading = false
-          this.$message({
-            type: 'error',
-            message: '获取列表信息出错'
-          })
-        })
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.selfhelpform.getSettingList(params)
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
     },
+
     deleteAction (index, row) {
       this.$confirm('此操废弃该元素, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -397,7 +401,7 @@ export default {
         .then(() => {
           deleteSetting(row.id)
             .then((response) => {
-              this.ItemsList.splice(index, 1)
+              this.tableList.splice(index, 1)
               this.$message({
                 message: '废弃成功',
                 type: 'success',
@@ -431,14 +435,8 @@ export default {
     getTimeStr (date) {
       return this.getTaskTime(new Date(parseInt(date) * 1000))
     },
-    handleClick (tab, event) {
-      this.params.page = 1
-      if (this.activeName == 'second') {
-        this.params.is_valid = 2
-      } else {
-        this.params.is_valid = 1
-      }
-      this.getDataList()
+    handleTabClick (tab, event) {
+      this.onSearch()
     }
   }
 }
