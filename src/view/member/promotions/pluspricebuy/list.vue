@@ -224,7 +224,7 @@
             </el-table-column>
           </el-table>
           <div
-            v-if="total_count > params.pageSize"
+            v-if="page.total > page.pageSize"
             class="content-padded content-center"
           >
             <el-pagination

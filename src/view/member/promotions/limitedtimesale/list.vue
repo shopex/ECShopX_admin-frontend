@@ -197,19 +197,18 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+
     <router-view />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { Message } from 'element-ui'
-import { getDefaultCurrency } from '../../../../api/company'
+import { getDefaultCurrency } from '@/api/company'
 import {
   seckillActivityGetList,
   seckillActivityUpdateStatus,
-  getSeckillItemList,
   seckillActivityWxcode
-} from '../../../../api/promotions'
+} from '@/api/promotions'
 export default {
   props: ['getStatus'],
   provide () {

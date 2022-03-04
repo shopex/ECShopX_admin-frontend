@@ -1,137 +1,144 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1">
-      <el-row :gutter="20">
-        <el-col>
-          针对人群:
+    <template v-if="$route.path.indexOf('detail') === -1">
+      <div class="action-container">
+        <el-button
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="addActivityData"
+        >
+          添加标签折扣
+        </el-button>
+      </div>
+
+      <SpFilterForm
+        :model="params"
+        @onSearch="onSearch"
+        @onReset="onReset"
+      >
+        <SpFilterFormItem
+          prop="specific"
+          label="针对人群:"
+        >
           <el-autocomplete
-            v-model="specific_name"
-            clearable
+            v-model="params.specific.name"
             :fetch-suggestions="querySearch"
             placeholder="请输入会员标签名称"
-            @select="byTagSearch"
-            @change="byTagSearch"
+            @select="handleSelectStore"
           />
-          <el-button
-            type="primary"
-            icon="el-icon-circle-plus"
-            @click="addActivityData"
-          >
-            添加标签折扣
-          </el-button>
-        </el-col>
-      </el-row>
+        </SpFilterFormItem>
+      </SpFilterForm>
+
       <el-tabs
-        v-model="activeName"
-        type="border-card"
-        @tab-click="handleClick"
+        v-model="params.status"
+        type="card"
+        @tab-click="handleTabClick"
       >
         <el-tab-pane
-          label="全部"
-          name="all"
-        />
-        <el-tab-pane
-          label="暂存"
-          name="1"
-        />
-        <el-tab-pane
-          label="已发布"
-          name="2"
-        />
-        <el-tab-pane
-          label="停用"
-          name="3"
-        />
-        <el-table
-          v-loading="loading"
-          :data="list"
-          style="width: 100%"
-          element-loading-text="数据加载中"
+          v-for="(item, index) in tabList"
+          :key="index"
+          :label="item.name"
+          :name="item.activeName"
         >
-          <el-table-column
-            prop="id"
-            width="60"
-            label="编号"
-          />
-          <el-table-column
-            prop="specific_name"
-            min-width="150"
-            label="适用人群"
-          />
-          <el-table-column
-            label="周期"
-            min-width="200"
+          <el-table
+            v-loading="loading"
+            :data="tableList"
+            border
+            style="width: 100%"
+            element-loading-text="数据加载中"
           >
-            <template slot-scope="scope">
-              <span v-if="scope.row.cycle_type == '1'"> 自然月 </span>
-              <span v-if="scope.row.cycle_type == '2'">
-                {{ scope.row.start_date }} ~ {{ scope.row.end_date }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="discount"
-            min-width="100"
-            label="优惠折扣"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.discount }}%
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="limit_total_money"
-            min-width="150"
-            label="周期内最高优惠限额"
-          >
-            <template slot-scope="scope">
-              {{ scope.row.limit_total_money }}元
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="状态"
-            min-width="200"
-          >
-            <template slot-scope="scope">
-              <span v-if="scope.row.status == '1'">暂存</span>
-              <span v-if="scope.row.status == '2'">已发布</span>
-              <span v-if="scope.row.status == '3'">停用</span>
-              <span v-if="scope.row.status == '4'">过期</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            min-width="150"
-          >
-            <template slot-scope="scope">
-              <div class="operating-icons">
-                <el-button
-                  style="margin-right: 20px"
-                  type="text"
-                  @click="editActivityAction(scope.$index, scope.row)"
-                >
-                  编辑
-                </el-button>
-                <router-link :to="{ path: matchHidePage('detail/') + scope.row.id }">
-                  查看优惠日志
-                </router-link>
-                <!--<i class="iconfont icon-trash-alt" @click="deleteActivityAction(scope.row)"></i> -->
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="content-padded content-center">
-          <el-pagination
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :current-page.sync="params.page"
-            :page-sizes="[10, 20, 50]"
-            :total="total_count"
-            :page-size="params.pageSize"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-          />
-        </div>
+            <el-table-column
+              prop="id"
+              width="60"
+              label="编号"
+            />
+            <el-table-column
+              prop="specific_name"
+              min-width="150"
+              label="适用人群"
+            />
+            <el-table-column
+              label="周期"
+              min-width="200"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.cycle_type == '1'"> 自然月 </span>
+                <span v-if="scope.row.cycle_type == '2'">
+                  {{ scope.row.start_date }} ~ {{ scope.row.end_date }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="discount"
+              min-width="100"
+              label="优惠折扣"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.discount }}%
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="limit_total_money"
+              min-width="150"
+              label="周期内最高优惠限额"
+            >
+              <template slot-scope="scope">
+                {{ scope.row.limit_total_money }}元
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="状态"
+              min-width="200"
+            >
+              <template slot-scope="scope">
+                <span v-if="scope.row.status == '1'">暂存</span>
+                <span v-if="scope.row.status == '2'">已发布</span>
+                <span v-if="scope.row.status == '3'">停用</span>
+                <span v-if="scope.row.status == '4'">过期</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              min-width="150"
+            >
+              <template slot-scope="scope">
+                <div class="operating-icons">
+                  <el-button
+                    style="margin-right: 20px"
+                    type="text"
+                    @click="editActivityAction(scope.$index, scope.row)"
+                  >
+                    编辑
+                  </el-button>
+                  <router-link :to="{ path: matchHidePage('detail/') + scope.row.id }">
+                    查看优惠日志
+                  </router-link>
+                  <!--<i class="iconfont icon-trash-alt" @click="deleteActivityAction(scope.row)"></i> -->
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="content-padded content-center">
+            <el-pagination
+              background
+              layout="total, sizes, prev, pager, next, jumper"
+              :current-page.sync="page.pageIndex"
+              :page-sizes="[10, 20, 50]"
+              :total="page.total"
+              :page-size="page.pageSize"
+              @current-change="onCurrentChange"
+              @size-change="onSizeChange"
+            />
+          </div>
+        </el-tab-pane>
       </el-tabs>
+
       <el-dialog
         title="添加定向促销"
         :visible.sync="activityItemDialog"
@@ -250,40 +257,43 @@
           </el-form>
         </template>
       </el-dialog>
-    </div>
+    </template>
     <router-view />
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import { getTagList } from '@/api/member'
-import {
-  createSpecificcrowddiscount,
-  updateSpecificcrowddiscount,
-  getListSpecificcrowddiscount,
-  getInfoSpecificcrowddiscount
-} from '@/api/promotions'
+import { pageMixin } from '@/mixins'
+import { createSpecificcrowddiscount, updateSpecificcrowddiscount } from '@/api/promotions'
 import shopSelect from '@/components/shopSelect'
 
 export default {
-  provide () {
-    return {
-      refresh: this.getDataLists
-    }
-  },
   components: {
     shopSelect
   },
-  data () {
+  mixins: [pageMixin],
+  provide () {
     return {
-      activeName: 'all',
+      refresh: this.fetchList
+    }
+  },
+  data () {
+    const initialParams = {
+      specific: {
+        name: undefined,
+        id: undefined
+      },
+      status: 'all'
+    }
+    return {
+      initialParams,
+      params: {
+        ...initialParams
+      },
       cursymbol: '￥',
       loading: false,
       create_time: '',
-      params: {
-        page: 1,
-        pageSize: 20
-      },
       activityItemParams: {
         page: 1,
         pageSize: 20
@@ -308,7 +318,13 @@ export default {
       list: [],
       activityItemDialog: false,
       ItemLoading: false,
-      specific_name: ''
+      specific_name: '',
+      tabList: [
+        { name: '全部', activeName: 'all' },
+        { name: '暂存', activeName: '1' },
+        { name: '已发布', activeName: '2' },
+        { name: '停用', activeName: '3' }
+      ]
     }
   },
   computed: {
@@ -316,15 +332,54 @@ export default {
   },
   mounted () {
     this.getAllMemberTagList()
-    this.getDataLists()
+    this.fetchList()
   },
   methods: {
+    onSearch () {
+      this.page.pageIndex = 1
+      this.$nextTick(() => {
+        this.fetchList()
+      })
+    },
+    onReset () {
+      this.params = { ...this.initialParams }
+      this.params = {
+        ...this.params,
+        specific: {
+          id: undefined,
+          name: undefined
+        }
+      }
+      this.onSearch()
+    },
+    handleSelectStore (storeItem) {
+      this.params.specific.id = storeItem.tag_id
+    },
+    getParams () {
+      let params = {
+        ...this.params,
+        specific_id: this.params.specific.id || undefined,
+        specific: undefined,
+        status: this.params.status === 'all' ? undefined : this.params.status
+      }
+      return params
+    },
+    async fetchList () {
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.getParams()
+      }
+      const { list, total_count } = await this.$api.promotions.getListSpecificcrowddiscount(params)
+      this.tableList = list
+      this.page.total = Number(total_count)
+      this.loading = false
+    },
     // 切换tab
-    handleClick (tab, event) {
-      this.activeName = tab.name
-      this.params.status = tab.name == 'all' ? '' : tab.name
-      this.params.page = 1
-      this.getDataLists()
+    handleTabClick (tab, event) {
+      this.onSearch()
     },
     querySearch (queryString, cb) {
       var restaurants = this.memberTagList
@@ -349,11 +404,6 @@ export default {
     },
     selectTag (tagdata) {
       this.form.specific_id = tagdata.tag_id
-    },
-    byTagSearch (tagdata) {
-      this.params.specific_id = tagdata.tag_id
-      this.params.page = 1
-      this.getDataLists()
     },
     submitAction () {
       // this.form.start_time = this.dateStrToTimeStamp(this.form.start_time)
@@ -422,6 +472,7 @@ export default {
     handleCancel () {
       this.activityItemDialog = false
     },
+
     dateStrToTimeStamp (str) {
       return Date.parse(new Date(str)) / 1000
     },

@@ -194,9 +194,7 @@
                     :key="index"
                     :label="3"
                   >
-                    {{
-                      item.value
-                    }}
+                    {{ item.value }}
                   </el-radio>
                 </el-radio-group>
               </el-col>
@@ -263,7 +261,7 @@ export default {
     const initialParams = {
       tem_name: undefined,
       tem_type: undefined,
-      is_valid: 1
+      is_valid: '1'
     }
     return {
       initialParams,
@@ -272,8 +270,8 @@ export default {
       },
       isEdit: false,
       tabList: [
-        { name: '有效模板', activeName: 1 },
-        { name: '弃用模板', activeName: 2 }
+        { name: '有效模板', activeName: '1' },
+        { name: '弃用模板', activeName: '2' }
       ],
       ItemsDetailVisible: false,
       itemsDetailData: {},
