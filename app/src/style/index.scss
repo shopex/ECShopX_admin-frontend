@@ -2,6 +2,7 @@ html,
 body {
   margin: 0;
   height: 100%;
+  background: #F0F2F5;
   #app {
     height: 100%;
   }
@@ -71,6 +72,12 @@ a {
   visibility: hidden;
 }
 
+.page-body {
+  &.has-footer {
+    margin-bottom: 57px;
+  }
+}
+
 /***** action-container *****/
 .action-container {
   margin-bottom: 8px;
@@ -83,4 +90,17 @@ a {
 .filter-container {
   background: #F6F7F9;
   border-radius: 2px;
+}
+
+/***** footer-container *****/
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 208px;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  border-top: 1px solid #efefef;
+  z-index: 2000;
 }

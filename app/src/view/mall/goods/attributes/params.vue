@@ -1,20 +1,16 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col>
-        <el-input
-          class="input-b"
-          placeholder="参数名称"
-          v-model="params.attribute_name"
-          @change="brandSearch"
-        >
-          <el-button slot="append" icon="el-icon-search" @click="brandSearch"></el-button>
-        </el-input>
-        <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增参数</el-button>
-      </el-col>
-    </el-row>
-    <el-card>
+    <div class="action-container">
+       <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增参数</el-button>
+    </div>
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="attribute_name" label="参数名称:">
+        <el-input placeholder="请输入参数名称" v-model="params.attribute_name" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
       <el-table
+      border
         :data="list"
         :height="wheight - 170"
         v-loading="loading"
@@ -58,7 +54,6 @@
         >
         </el-pagination>
       </div>
-    </el-card>
     <sideBar :visible.sync="show_sideBar" :title="'新增参数'">
       <el-form>
         <el-form-item label="参数名称">
@@ -224,7 +219,8 @@ export default {
       })
     },
     // 品牌搜索
-    brandSearch() {
+    onSearch() {
+      this.params.page = 1
       this.getList()
     }
   },
@@ -252,5 +248,8 @@ export default {
   .iconfont {
     color: #999;
   }
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 </style>

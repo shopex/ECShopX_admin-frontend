@@ -11,8 +11,8 @@
 }
 </style>
 <template>
-  <div>
-    <div v-if="$route.path.indexOf('editor') === -1">
+  <div class="page-body">
+    <template v-if="$route.path.indexOf('editor') === -1">
       <el-row class="filter-header" :gutter="20">
         <el-col>
           <el-input class="input-m" placeholder="商品名称" v-model="params.keywords">
@@ -309,7 +309,7 @@
           <el-button type="primary" @click="saveItemsStore">确 定</el-button>
         </span>
       </el-dialog>
-    </div>
+    </template>
     <router-view></router-view>
   </div>
 </template>
@@ -317,8 +317,7 @@
 import { mapGetters } from 'vuex'
 import Treeselect from '@riophae/vue-treeselect'
 import SideBar from '@/components/element/sideBar'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { Message } from 'element-ui'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css' 
 import { getShippingTemplatesList } from '@/api/shipping'
 import { getDefaultCurrency } from '@/api/company'
 import district from '@/common/district.json'
@@ -338,7 +337,7 @@ import {
   getGoodsAttr,
   getGoodsExport,
   exportItemsData
-} from '@/api/pointsmall'
+} from '@/api/pointsmall' 
 
 export default {
   components: {
@@ -433,7 +432,8 @@ export default {
       storeUpdate: false,
       storeItemsList: [],
       show_itemStore: false,
-      itemstore: 0
+      itemstore: 0,
+      exportTab:'pointsmallitems'
     }
   },
   computed: {
@@ -472,6 +472,7 @@ export default {
               type: 'success',
               message: '已加入执行队列，请在设置-导出列表中下载'
             })
+            this.$export_open(this.exportTab);
           } else {
             this.$message({
               type: 'error',
@@ -487,6 +488,7 @@ export default {
               type: 'success',
               message: '已加入执行队列，请在设置-导出列表中下载'
             })
+            this.$export_open(this.exportTab) 
           } else {
             this.$message({
               type: 'error',

@@ -1,41 +1,23 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col>
-        <el-input
-          class="input-b"
-          placeholder="规格名称"
-          v-model="params.attribute_name"
-          @change="brandSearch"
-        >
-          <el-button slot="append" icon="el-icon-search" @click="brandSearch"></el-button>
-        </el-input>
-        <el-button-group>
-          <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew"
-            >新增规格</el-button
-          >
-          <el-button type="primary" @click="syncItemSpec">同步规格</el-button>
-        </el-button-group>
-      </el-col>
-    </el-row>
-    <el-card>
-      <el-table
-        :data="list"
-        :height="wheight - 170"
-        v-loading="loading"
-        element-loading-text="数据加载中"
-        :default-sort="{ prop: 'bind_date', order: 'descending' }"
-      >
+    <div class="action-container">
+      <el-button type="primary" icon="el-icon-circle-plus" @click="handleNew">新增规格</el-button>
+    </div>
+
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="attribute_name" label="规格名称:">
+        <el-input placeholder="请输入规格名称" v-model="params.attribute_name" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+    <div class="action-container">
+      <el-button type="primary" plain @click="syncItemSpec">同步规格</el-button>
+    </div>
+      <el-table border :data="list" :height="wheight - 170" v-loading="loading" element-loading-text="数据加载中" :default-sort="{ prop: 'bind_date', order: 'descending' }">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <span
-              class="sku-value"
-              v-for="(item, index) in props.row.attribute_values.list"
-              :key="index"
-              ><img class="sku-img" v-if="item.image_url" :src="item.image_url" />{{
+            <span class="sku-value" v-for="(item, index) in props.row.attribute_values.list" :key="index"><img class="sku-img" v-if="item.image_url" :src="item.image_url" />{{
                 item.attribute_value
-              }}</span
-            >
+              }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150">
@@ -54,25 +36,10 @@
         <el-table-column prop="attribute_memo" label="规格备注"></el-table-column>
       </el-table>
       <div v-if="total_count > params.pageSize" class="content-padded content-center">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-          :current-page.sync="params.page"
-          :page-sizes="[10, 20, 50]"
-          :total="total_count"
-          :page-size="params.pageSize"
-        >
+        <el-pagination background layout="total, sizes, prev, pager, next" @current-change="handleCurrentChange" @size-change="handleSizeChange" :current-page.sync="params.page" :page-sizes="[10, 20, 50]" :total="total_count" :page-size="params.pageSize">
         </el-pagination>
       </div>
-    </el-card>
-    <imgPicker
-      :dialog-visible="imgDialog"
-      :sc-status="isGetImage"
-      @chooseImg="pickImg"
-      @closeImgDialog="closeImgDialog"
-    ></imgPicker>
+    <imgPicker :dialog-visible="imgDialog" :sc-status="isGetImage" @chooseImg="pickImg" @closeImgDialog="closeImgDialog"></imgPicker>
     <sideBar :visible.sync="show_sideBar" :title="'新增规格'">
       <el-form>
         <el-form-item label="规格名称">
@@ -89,19 +56,12 @@
         </el-form-item>
         <el-form-item label="规格值">
           <div class="clearfix"></div>
-          <div
-            v-for="(item, index) in form.attribute_values"
-            :key="index"
-            class="view-flex view-flex-middle key-item"
-          >
+          <div v-for="(item, index) in form.attribute_values" :key="index" class="view-flex view-flex-middle key-item">
             <div v-if="form.is_image" @click="handleImgPicker(index)" class="upload-box">
               <img v-if="item.image_url" :src="item.image_url" class="avatar" />
               <i v-else class="iconfont icon-camera avatar-uploader-icon"></i>
             </div>
-            <div
-              class="view-flex-item"
-              :class="form.is_image ? 'content-h-padded' : 'content-padded-right'"
-            >
+            <div class="view-flex-item" :class="form.is_image ? 'content-h-padded' : 'content-padded-right'">
               <el-input v-model="item.attribute_value" placeholder="规格值名称"></el-input>
             </div>
             <div class="iconfont icon-trash-alt1" @click="removeItem(index)"></div>
@@ -249,7 +209,8 @@ export default {
       })
     },
     // 品牌搜索
-    brandSearch() {
+    onSearch() {
+      this.params.page = 1
       this.getList()
     },
     handleImgChange(data) {
@@ -298,6 +259,9 @@ export default {
 .sku-value {
   margin-right: 10px;
 }
+.sp-filter-form {
+  margin-bottom: 16px;
+}
 .sku-img {
   display: inline-block;
   width: 24px;
@@ -314,7 +278,7 @@ export default {
 .upload-box {
   width: 50px;
   height: 50px;
-  .avatar{
+  .avatar {
     width: 50px;
     height: 50px;
   }

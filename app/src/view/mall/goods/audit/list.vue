@@ -1,170 +1,106 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('editor') === -1">
-      <el-row class="filter-header" :gutter="20">
-        <el-col>
-          <el-input
-            class="input-m"
-            placeholder="商品名称"
-            v-model="params.keywords"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="goodsSearch"
-            ></el-button>
-          </el-input>
-          <el-input
-            class="input-m"
-            placeholder="商品编号"
-            v-model="params.item_bn"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="goodsSearch"
-            ></el-button>
-          </el-input>
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+        <SpFilterFormItem prop="keywords" label="商品名称:"
+          ><el-input placeholder="请输入商品名称" v-model="params.keywords"
+        /></SpFilterFormItem>
+        <SpFilterFormItem prop="item_bn" label="商品编号:"
+          ><el-input placeholder="请输入商品编号" v-model="params.item_bn"
+        /></SpFilterFormItem>
+        <SpFilterFormItem prop="regions_id" label="商品产地:">
           <el-cascader
-            placeholder="商品产地"
-            :options="regions"
-            v-model="select_regions_value"
             clearable
-            @change="searchAction"
+            placeholder="请选择"
+            v-model="params.regions_id"
+            :options="regions"
           >
           </el-cascader>
-          <el-select
-            v-model="params.approve_status"
-            clearable
-            placeholder="请选择状态"
-            @change="goodsSearch"
-          >
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="approve_status" label="商品状态:">
+          <el-select v-model="params.approve_status" clearable placeholder="请选择">
             <el-option
-              v-for="item in statusOption"
+              v-for="item in salesStatus"
               :key="item.value"
               :label="item.title"
+              size="mini"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
-          <el-select
-            v-model="params.special_type"
-            clearable
-            placeholder="商品类型"
-            @change="searchAction"
-          >
-            <el-option
-              placeholder="商品类型"
-              v-for="item in special_type_list"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="distributor_id" label="店铺:">
+          <SpSelectShop clearable placeholder="请选择" v-model="params.distributor_id" />
+        </SpFilterFormItem>
+      </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" plain @click="Examine">批量审核</el-button>
+        <el-button type="primary" plain @click="batchItemsStatus('onsale')">批量上架</el-button>
+        <el-button type="primary" plain @click="batchItemsStatus('instock')">强制下架</el-button>
+        <el-dropdown>
+          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01"
+            >导出<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <export-tip @exportHandle="exportItemsWxappCode('wxa')"
+                >小程序码</export-tip
+              ></el-dropdown-item
             >
-            </el-option>
-          </el-select>
-          <shop-select
-            distributors
-            @update="goodsSearch"
-            @init="resetSearch"
-            :shopIdDefault="params.distributor_id"
-          ></shop-select>
-          <!--distributors wxshops 需要哪个api传哪个-->
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-button-group>
-            <el-button type="primary" @click="AuditHandle()"
-              >批量审核</el-button
+            <el-dropdown-item
+              ><export-tip @exportHandle="exportItemsWxappCode('h5')"
+                >H5二维码</export-tip
+              ></el-dropdown-item
             >
-            <el-button type="primary" @click="batchItemsStatus('onsale')"
-              >批量上架</el-button
-            >
-            <el-button type="primary" @click="batchItemsStatus('instock')"
-              >强制下架</el-button
-            >
-            <el-button type="primary" @click="exportItemsWxappCode('wxa')"
-              >小程序码</el-button
-            >
-            <el-button type="primary" @click="exportItemsWxappCode('h5')"
-              >H5二维码</el-button
-            >
-          </el-button-group>
-        </el-col>
-      </el-row>
-      <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
+      <el-tabs v-model="params.audit_status" type="card" @tab-click="onSearch">
         <el-tab-pane
           v-for="(item, index) in tabList"
           :key="index"
-          :label="item.name"
-          :name="item.activeName"
+          :label="item.label"
+          :name="item.name"
         >
           <el-table
-            :data="ItemsList"
-            @selection-change="handleSelectionChange"
+            border
             v-loading="loading"
+            :data="tableList"
+            @selection-change="handleSelectionChange"
           >
-            <el-table-column
-              type="selection"
-              align="center"
-              label="全选"
-            ></el-table-column>
-            <el-table-column label="操作" width="100" fixed>
+            <el-table-column type="selection" align="center" label="全选"></el-table-column>
+            <el-table-column prop="goods_id" label="商品ID"></el-table-column>
+            <el-table-column prop="itemName" label="商品名称">
               <template slot-scope="scope">
-                <el-button type="text" class="btn-gap">
-                  <span @click="editItemsAction(scope.$index, scope.row)"
-                    > 查看 </span
-                  >
-                  <span
-                    v-if="scope.row.audit_status == 'processing'"
-                    @click="batchItemsAudit(scope.row, $event)"
-                    > 审核 </span
-                  >
-
-                </el-button>
+                {{ scope.row.item_name }}
+                <el-tag type="danger" v-if="scope.row.special_type == 'drug'">处方药</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="goods_id"
-              label="商品ID"
-              width="90"
-            ></el-table-column>
-            <el-table-column label="排序编号" width="90">
+            <el-table-column label="排序编号">
               <template slot-scope="scope">
                 <el-input
+                  size="mini"
+                  style="width: 60px"
                   v-model="scope.row.sort"
                   @change="editItemsSort(scope.$index, scope.row)"
                 ></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="规格" width="70">
+            <el-table-column label="规格">
               <template slot-scope="scope">
-                <el-tag effect="plain" type="success" v-if="!scope.row.nospec"
+                <el-tag effect="plain" size="mini" type="success" v-if="!scope.row.nospec"
                   >多规格</el-tag
                 >
-                <el-tag effect="plain" v-else>单规格</el-tag>
+                <el-tag effect="plain" size="mini" v-else>单规格</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="itemName" label="商品名称">
+            <el-table-column prop="market_price" label="原价（¥）" />
+            <el-table-column prop="price" label="销售价（¥）" />
+            <el-table-column prop="store" label="库存"></el-table-column>
+            <el-table-column label="状态">
               <template slot-scope="scope">
-                {{ scope.row.item_name }}
-                <el-tag type="danger" v-if="scope.row.special_type == 'drug'"
-                  >处方药</el-tag
-                >
-              </template>
-            </el-table-column>
-            <el-table-column prop="price" label="商品价格">
-            </el-table-column>
-            <el-table-column
-              prop="store"
-              label="库存"
-              width="80"
-            ></el-table-column>
-            <el-table-column label="状态" width="100">
-              <template slot-scope="scope">
-                <span v-if="scope.row.audit_status == 'processing'"
-                  >等待审核</span
-                >
+                <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
                 <el-popover
                   v-else-if="scope.row.audit_status == 'rejected'"
                   placement="top-start"
@@ -174,16 +110,23 @@
                 >
                   <el-button type="text" slot="reference">审核驳回</el-button>
                 </el-popover>
-                <span v-else-if="scope.row.approve_status == 'onsale'"
-                  >前台可销</span
-                >
-                <span v-else-if="scope.row.approve_status == 'offline_sale'"
-                  >可线下销售</span
-                >
-                <span v-else-if="scope.row.approve_status == 'only_show'"
-                  >前台仅展示</span
-                >
+                <span v-else-if="scope.row.approve_status == 'onsale'">前台可销</span>
+                <span v-else-if="scope.row.approve_status == 'offline_sale'">可线下销售</span>
+                <span v-else-if="scope.row.approve_status == 'only_show'">前台仅展示</span>
                 <span v-else>不可销售</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="text" class="btn-gap">
+                  <span @click="editItemsAction(scope.$index, scope.row)"> 查看 </span>
+                  <span
+                    v-if="scope.row.audit_status == 'processing'"
+                    @click="batchItemsAudit(scope.row, $event)"
+                  >
+                    审核
+                  </span>
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -191,22 +134,18 @@
             <el-pagination
               background
               layout="total, sizes, prev, pager, next, jumper"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-              :current-page.sync="params.page"
+              :current-page.sync="page.pageIndex"
               :page-sizes="[10, 20, 50]"
-              :total="total_count"
-              :page-size="params.pageSize"
-            >
-            </el-pagination>
+              :total="page.total"
+              :page-size="page.pageSize"
+              @current-change="onCurrentChange"
+              @size-change="onSizeChange"
+            />
           </div>
         </el-tab-pane>
       </el-tabs>
-      <el-dialog
-        title="批量审核店铺商品"
-        :visible.sync="dialogVisible"
-        width="30%"
-      >
+
+      <el-dialog title="批量审核店铺商品" :visible.sync="dialogVisible" width="30%">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="审核状态">
             <el-radio-group v-model="form.audit_status">
@@ -228,73 +167,56 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import { Message } from "element-ui";
-import shopSelect from "@/components/shopSelect";
-import district from "@/common/district.json";
-import { getItemsList, auditItems, updateItemsStatus } from "@/api/goods";
+import { mapGetters } from 'vuex'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import district from '@/common/district.json'
+import { getItemsList, auditItems, updateItemsStatus } from '@/api/goods'
+import { pageMixin } from '@/mixins'
+import { SALES_STATUS } from '@/consts'
 
 export default {
-  components: {
-    shopSelect,
-  },
-  props: ["getStatus"],
+  props: ['getStatus'],
+  mixins: [pageMixin],
   provide() {
     return {
-      refresh: this.getGoodsList,
-    };
+      refresh: this.fetchList
+    }
   },
   data() {
     return {
       dialogVisible: false,
-      select_regions_value: [],
-      special_type_list: [
-        { value: "normal", name: "普通商品" },
-        { value: "drug", name: "处方药" },
-      ],
       regions: district,
       tabList: [
-        { name: "全部商品", value: null, activeName: "first" },
-        { name: "待审核", value: "processing", activeName: "processing" },
+        { label: '全部商品', name: '' },
+        { label: '待审核', name: 'processing' }
       ],
       form: {
-        audit_status: "approved",
-        audit_reason: "",
+        audit_status: 'approved',
+        audit_reason: ''
       },
-      activeName: "first",
+      activeName: 'first',
       ItemsList: [],
       goods_id: [],
       loading: false,
-      total_count: 0,
       params: {
-        page: 1,
-        pageSize: 20,
-        item_type: "normal",
-        keywords: "",
-        //audit_status: 'processing',
-        is_warning: false,
+        keywords: '',
+        item_bn: '',
+        regions_id: [],
+        approve_status: '',
+        distributor_id: 'all_distributor',
+        audit_status: ''
       },
-      statusOption: [
-        { title: "前台可销售", value: "onsale" },
-        { title: "可线下销售", value: "offline_sale" },
-        { title: "前台仅展示", value: "only_show" },
-        { title: "不可销售", value: "instock" },
-      ],
-    };
+      salesStatus: SALES_STATUS
+    }
   },
   computed: {
-    ...mapGetters(["wheight"]),
+    ...mapGetters(['wheight'])
+  },
+  mounted() {
+    this.fetchList()
   },
   methods: {
-    onSubmit() {
-      this.form.goods_id = this.goods_id;
-      auditItems(this.form).then((res) => {
-        this.$message({ type: "success", message: "保存成功" });
-        this.dialogVisible = false;
-        this.getGoodsList();
-      });
-    },
+    // 导出
     async exportItemsWxappCode(exportType) {
       let params
       if (this.goods_id.length) {
@@ -311,143 +233,111 @@ export default {
         source: 'distributor',
         export_type: exportType
       })
-      if(status) {
-        this.$message.success("已加入执行队列，请在设置-导出列表中下载")
+      if (status) {
+        this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+        this.$export_open('itemcode')
       } else {
         this.$message.error('导出失败')
       }
     },
-    AuditHandle() {
-      console.log(this.goods_id);
+
+    // 批量审批
+    Examine() {
       if (this.goods_id.length === 0) {
-        this.$message({
-          type: "error",
-          message: "请选择至少一个商品",
-        });
-        return false;
+        this.$message.error('请选择至少一个商品')
+        return false
       }
 
-      this.dialogVisible = true;
+      this.dialogVisible = true
     },
+    // 审核确定
+    onSubmit() {
+      this.form.goods_id = this.goods_id
+      auditItems(this.form).then((res) => {
+        this.$message.success('保存成功')
+        this.dialogVisible = false
+        this.fetchList()
+      })
+    },
+
     batchItemsAudit(row, e) {
-      console.log(row);
-      this.goods_id = [row.goods_id];
-      this.dialogVisible = true;
+      console.log(row)
+      this.goods_id = [row.goods_id]
+      this.dialogVisible = true
     },
-    handleClick() {
-      if (this.activeName == "first") {
-        delete this.params.audit_status;
-      } else if (this.activeName == "processing") {
-        this.params.audit_status = "processing";
-      }
-      this.params.page = 1;
-      this.getGoodsList();
-    },
-    searchAction() {
-      this.params.page = 1;
-      if (this.select_regions_value) {
-        this.params.regions_id = this.select_regions_value;
-      }
-      this.getGoodsList();
-    },
-    handleCurrentChange(page_num) {
-      this.params.page = page_num;
-      this.getGoodsList();
-    },
-    handleSizeChange(pageSize) {
-      this.params.page = 1;
-      this.params.pageSize = pageSize;
-      this.getGoodsList();
-    },
+
     handleSelectionChange(val) {
-      let goods_id = [];
+      let goods_id = []
       for (let i in val) {
-        goods_id.push(val[i].goods_id);
+        goods_id.push(val[i].goods_id)
       }
-      this.goods_id = goods_id;
+      this.goods_id = goods_id
     },
+
     editItemsAction(index, row) {
       // 编辑商品弹框
       var routeData = this.$router.push({
-        path: this.matchHidePage("editor/") + row.itemId,
-      });
+        path: this.matchHidePage('editor/') + row.itemId
+      })
     },
-    goodsSearch(val) {
-      this.params.page = 1;
-      val && val.shop_id;
-      this.params.distributor_id = val.shop_id;
-      this.getGoodsList();
-    },
-    resetSearch() {
-      this.select_regions_value = []
-      this.params = {
-        page: 1,
-        pageSize: 20,
-        item_type: "normal",
-        keywords: "",
-        is_warning: false
+
+    async fetchList() {
+      this.loading = true
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        item_type: 'normal',
+        ...this.params
       }
-      this.getGoodsList();
+      const { list, total_count } = await this.$api.goods.getItemsList(params)
+      list.forEach((item) => {
+        item.price = item.price / 100
+        item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
+      })
+      this.tableList = list
+      this.page.total = total_count
+      this.loading = false
     },
-    getGoodsList() {
-      let params = {...this.params}
-      params.distributor_id = params.distributor_id || 'all_distributor';
-      this.loading = true;
-      getItemsList(params).then((response) => {
-        console.log(response);
-        this.ItemsList = response.data.data.list;
-        this.ItemsList.forEach((item) => {
-          item.price = item.price / 100;
-          item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`;
-        });
-        this.total_count = response.data.data.total_count;
-        this.loading = false;
-      });
-    },
+
     batchItemsStatus(status) {
       if (this.goods_id.length === 0) {
-        this.$message({
-          type: "error",
-          message: "请选择至少一个商品",
-        });
-        return false;
+        this.$message.error('请选择至少一个商品')
+        return false
       }
-      this.skuLoading = true;
-      let params = {};
+      this.skuLoading = true
+      let params = {}
       if (this.goods_id.length > 0) {
-        let data = [];
+        let data = []
         this.goods_id.forEach((goods_id) => {
-          data.push({ goods_id: goods_id });
-        });
+          data.push({ goods_id: goods_id })
+        })
         params = {
           items: JSON.stringify(data),
-          status: status,
-        };
+          status: status
+        }
       }
-      this.submitLoading = true;
+      this.submitLoading = true
       updateItemsStatus(params).then((res) => {
         if (res.data.data.status) {
           this.$message({
-            message: "修改成功",
-            type: "success",
-            duration: 2 * 1000,
-          });
-          this.getGoodsList();
+            message: '修改成功',
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.fetchList()
         }
-        this.submitLoading = false;
-        this.skuLoading = false;
-      });
-    },
-  },
-  mounted() {
-    this.getGoodsList();
-  },
-  watch: {
-    $route() {
-      this.getGoodsList();
-    },
-  },
-};
+        this.submitLoading = false
+        this.skuLoading = false
+      })
+    }
+  }
+  // watch: {
+  //   $route() {
+  //     this.getGoodsList();
+  //   },
+  // },
+}
 </script>
 <style scoped lang="scss">
 .el-row {
@@ -458,6 +348,9 @@ export default {
   img {
     width: 90%;
   }
+}
+.sp-filter-form {
+  margin-bottom: 16px;
 }
 .el-col {
   border-radius: 4px;
@@ -527,7 +420,7 @@ export default {
 }
 .copy-btn {
   position: relative;
-  [class^="copy-link"] {
+  [class^='copy-link'] {
     position: absolute;
     left: 0;
     top: 0;

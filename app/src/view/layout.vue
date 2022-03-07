@@ -48,8 +48,9 @@
                 :key="`cmenu-${cindex}`"
               >
                 <template slot="title"><i class="iconfont icon-shouqijiantouxiao"></i>{{ child.name }}</template>
-                <template v-for="sub in child.children" v-if="sub.is_show && sub.is_menu">
+                <template v-for="sub in child.children" >
                   <el-menu-item
+                    v-if="sub.is_show && sub.is_menu"
                     :key="sub.url"
                     :index="sub.url"
                     :class="{ 'is-active': sub.url == activeSubIndex }"
@@ -60,7 +61,7 @@
                   </el-menu-item>
                 </template>
               </el-menu-item-group>
-              <div v-else-if="child.is_show && child.is_menu" :key="`cmenu-${cindex}`">
+              <div class="sub-menu-item" v-else-if="child.is_show && child.is_menu" :key="`cmenu-${cindex}`">
                 <el-menu-item
                   :index="child.url"
                   :class="{ 'is-active': child.url == activeSubIndex }"
@@ -74,7 +75,7 @@
       </div>
     </el-aside>
 
-    <el-container>
+    <el-container class="app-container">
       <el-header class="header" height="48px" v-if="isShowHeader()">
         <div class="header-left">
           <!-- activeIndex: {{activeIndex}}
@@ -112,16 +113,8 @@
         </div>
       </el-header>
       <el-main style="position: relative; background: #F0F2F5;">
-        <div class="content-container">
-          <router-view></router-view>
-        </div>
-        <!-- <section id="container" class="content-container">
-          <el-col :span="24" class="content-wrapper">
-            <transition name="fade" mode="out-in">
-              <router-view></router-view>
-            </transition>
-          </el-col>
-        </section> -->
+        <router-view class="content-container" :class="{'footer-fixed': $route.meta && $route.meta.footerFixed }"></router-view>
+        <!-- <div class="system-release">商派onex官方商城</div> -->
         <div id="design-view"></div>
       </el-main>
     </el-container>
@@ -186,6 +179,7 @@ export default {
   mounted() {
     this.getSystemSetting()
     micrApp.init()
+    console.log(this.$route)
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
@@ -387,14 +381,18 @@ export default {
     a {
       display: block;
       color: #545D7A;
-      flex: 1;
-      display: flex;
-      padding-left: 24px;
+      // flex: 1;
+      // display: flex;
+      // padding-left: 24px;
+      padding: 0 4px;
     }
     i {
       color: $dominant_hue;
     }
   }
+}
+.sub-menu-item {
+  margin-left: 14px;
 }
 .header {
   display: flex;
@@ -424,6 +422,9 @@ export default {
     background-color: #fff;
     padding: 16px;
     border-radius: 0;
+    &.footer-fixed {
+      margin-bottom: 57px;
+    }
   }
 }
 </style>
@@ -453,5 +454,18 @@ export default {
     color: #3D4355;
     font-size: 14px;
   }
+  > ul {
+    margin-left: 14px;
+  }
+}
+.app-container {
+  // padding-bottom: 50px;
+  .header {
+    background-color: #fff;
+  }
+}
+.system-release {
+  text-align: center;
+  padding: 16px;
 }
 </style>

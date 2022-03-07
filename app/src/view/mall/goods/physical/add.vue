@@ -22,20 +22,11 @@
   border-radius: 3px;
   float: right;
 }
-.section-footer {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 208px;
-  background: #fff;
-  text-align: center;
-  border-top: 1px solid #efefef;
-  z-index: 1000;
-}
+
 </style>
 
 <template>
-  <div class="section-page">
+  <div>
     <template v-if="!isEditor">
       <el-card shadow="never" header="选择主类目" v-loading="mainCateLoader">
         <el-cascader
@@ -148,7 +139,7 @@
         </div>
       </div>
 
-      <div class="section-footer">
+      <div class="footer-container">
         <el-button @click.native="handleCancel">取消</el-button>
         <el-button type="primary" @click="handleSave" :loading="submitLoading">{{
           submitLoading ? '提交中' : '保存'
@@ -313,6 +304,7 @@ export default {
   },
   mounted: function () {
     this.addUploaderEventListener();
+    console.log(this.$route)
   },
   watch:{
     selectedMainCategory:{

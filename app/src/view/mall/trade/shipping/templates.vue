@@ -1,12 +1,10 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('editor') === -1">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-button type="primary" icon="plus" @click="addTemplates">新增运费模板</el-button>
-        </el-col>
-      </el-row>
-      <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+      <div class="action-container">
+        <el-button type="primary" icon="plus" @click="addTemplates">新增运费模板</el-button>
+      </div>
+      <el-tabs type="card" v-model="activeName"  @tab-click="handleClick">
         <el-tab-pane label="卖家承担运费" name="first">
           <buyerTemplates :get-status="buyerTemplates" ref="buyerTemplates"></buyerTemplates>
         </el-tab-pane>
@@ -57,7 +55,7 @@ export default {
       priceTemplates: false,
       volumeTemplates: false,
       activeName: 'first',
-      list: []
+      list: [],
     }
   },
   methods: {
