@@ -12,7 +12,7 @@
       </div>
 
       <el-tabs
-        v-model="currentName"
+        v-model="params.date_status"
         type="card"
         @tab-click="handleClick"
       >
@@ -126,9 +126,7 @@
                       </el-row>
                     </div>
                     <el-row :gutter="10">
-                      <el-col
-                        :span="12"
-                      >
+                      <el-col :span="12">
                         <el-button
                           :loading="loadingbtn"
                           type="primary"
@@ -138,9 +136,7 @@
                           确定
                         </el-button>
                       </el-col>
-                      <el-col
-                        :span="12"
-                      >
+                      <el-col :span="12">
                         <el-button
                           style="width: 100%"
                           @click="scope.row.storePop = false"
@@ -294,7 +290,6 @@ export default {
     }
     return {
       initialParams,
-      currentName: '2',
       params: {
         ...initialParams
       },
@@ -303,7 +298,6 @@ export default {
       sendoutVisible: false,
       currSendout: 1,
       checkedType: {},
-      params: {},
       typeId: -1,
       sedoutList: [{ name: '下载二维码', id: 3 }],
       typeFilters: [
@@ -329,7 +323,7 @@ export default {
   },
   mounted () {
     this.params.store_self = false
-    if (this.system_mode === 'platform' && store.getters.login_type !== 'distributor') {
+    if (this.VERSION_PLATFORM && store.getters.login_type !== 'distributor') {
       this.params.store_self = true
     }
     this.fetchList()
@@ -365,7 +359,6 @@ export default {
       this.loading = false
     },
     handleClick (tab, event) {
-      this.params.date_status = tab.name
       this.onSearch()
     },
     addCoupon () {

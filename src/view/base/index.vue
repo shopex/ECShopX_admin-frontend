@@ -461,7 +461,9 @@
                   v-if="activateInfo"
                   class="validity-period"
                 >
-                  <i class="iconfont icon-clock" />{{ activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss') }}
+                  <i class="iconfont icon-clock" />{{
+                    activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss')
+                  }}
                   到期
                 </div>
               </section>
@@ -649,33 +651,23 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="/order/entitytrade/tradenormalorders?tab=notship"
-                      >
-                        待发货订单：{{
-                          staticsData && staticsData.notice_data.wait_delivery_count
-                        }}
+                      <router-link to="/order/entitytrade/tradenormalorders?tab=notship">
+                        待发货订单：{{ staticsData && staticsData.notice_data.wait_delivery_count }}
                       </router-link>
                     </el-col>
                     <el-col
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="order/entitytrade/aftersaleslist"
-                      >
-                        待处理退款：{{
-                          staticsData && staticsData.notice_data.aftersales_count
-                        }}
+                      <router-link to="order/entitytrade/aftersaleslist">
+                        待处理退款：{{ staticsData && staticsData.notice_data.aftersales_count }}
                       </router-link>
                     </el-col>
                     <el-col
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="/order/Refunderrorlogs"
-                      >
+                      <router-link to="/order/Refunderrorlogs">
                         退款失败待处理：{{
                           staticsData && staticsData.notice_data.refund_errorlogs_count
                         }}
@@ -692,9 +684,7 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="/entity/goods/goodsphysical?tab=second"
-                      >
+                      <router-link to="/entity/goods/goodsphysical?tab=second">
                         库存预警商品：{{
                           staticsData && staticsData.notice_data.warning_goods_count
                         }}
@@ -711,9 +701,7 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="/marketing/marketingseckill?status=in_sale"
-                      >
+                      <router-link to="/marketing/marketingseckill?status=in_sale">
                         进行中的秒杀：{{
                           staticsData && staticsData.notice_data.started_seckill_count
                         }}
@@ -723,9 +711,7 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link
-                        to="/marketing/groupsindex?activeName=third"
-                      >
+                      <router-link to="/marketing/groupsindex?activeName=third">
                         进行中的拼团：{{
                           staticsData && staticsData.notice_data.started_gtoups_count
                         }}
@@ -770,6 +756,86 @@
                   />{{ item.text }}
                 </router-link>
               </div>
+            </section>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" v-if="system_is_saas == false">
+          <el-col :span="24">
+            <section class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">
+                  系统信息
+                </div>
+              </div>
+              <el-descriptions :column="3" border size="mini">
+                <el-descriptions-item>
+                  <template slot="label">
+                    company_id
+                  </template>
+                  <el-tag>{{ activateInfo.company_id }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    到期时间
+                  </template>
+                  <el-tag>{{ activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss') }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    管理后台
+                  </template>
+                  <el-tag>{{ activateInfo.vue_ecshopx_verion }}</el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    API端
+                  </template>
+                  <el-tag>{{ activateInfo.version }}</el-tag>
+                </el-descriptions-item>
+
+                <el-descriptions-item>
+                  <template slot="label">
+                    Element-UI组件库
+                  </template>
+                  {{ activateInfo.elementui_version }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    PHP版本
+                  </template>
+                  {{ activateInfo.php_version }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    Lumen框架
+                  </template>
+                  {{ activateInfo.lumen_version }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    OS
+                  </template>
+                  {{ activateInfo.os }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    web服务器
+                  </template>
+                  {{ activateInfo.web_server }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    数据库版本
+                  </template>
+                  {{ activateInfo.db_version }}
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    REDIS版本
+                  </template>
+                  {{ activateInfo.redis_version }}
+                </el-descriptions-item>
+              </el-descriptions>
             </section>
           </el-col>
         </el-row>
@@ -870,9 +936,7 @@
               size="medium"
               disabled
             >
-              {{
-                activateInfo.source == 'demo' ? '使用中' : '已体验'
-              }}
+              {{ activateInfo.source == 'demo' ? '使用中' : '已体验' }}
             </el-button>
           </div>
         </div>
@@ -1076,7 +1140,7 @@
 </template>
 
 <script>
-import { isInSalesCenter } from '@/utils'
+import { isInSalesCenter, VERSION_STANDARD } from '@/utils'
 import Chart from 'chart.js'
 import { mapMutations } from 'vuex'
 import store from '../../store'
@@ -1093,7 +1157,7 @@ import {
   getCompanyStatistics,
   ydleadsInfo
 } from '../../api/company'
-import { version } from '../../../package.json'
+import config from '../../../package.json'
 
 const phone = require('@/assets/img/saas/phone.png')
 const qq = require('@/assets/img/saas/qq.png')
@@ -1469,8 +1533,9 @@ export default {
         }
         // this.activateInfo.source = 'demo'
         this.SET_PRODUCTION_CODE({ productionCode: res.data.data.product_code })
-
-        this.activateInfo.vue_ecshopx_verion = `${process.env.VUE_APP_PRODUCT_MODEL}-${version}`
+        console.log('xiaolu',config);
+        this.activateInfo.vue_ecshopx_verion = `${process.env.VUE_APP_PRODUCT_MODEL}-${config.version}`
+        this.activateInfo.elementui_version = `${config.elementui_version}`
       })
       this.getUrl()
       getCompanyStatistics().then((res) => {
