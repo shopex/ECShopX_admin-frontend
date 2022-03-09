@@ -12,7 +12,7 @@
       </div>
 
       <el-tabs
-        v-model="currentName"
+        v-model="params.date_status"
         type="card"
         @tab-click="handleClick"
       >
@@ -290,7 +290,6 @@ export default {
     }
     return {
       initialParams,
-      currentName: '2',
       params: {
         ...initialParams
       },
@@ -299,7 +298,6 @@ export default {
       sendoutVisible: false,
       currSendout: 1,
       checkedType: {},
-      params: {},
       typeId: -1,
       sedoutList: [{ name: '下载二维码', id: 3 }],
       typeFilters: [
@@ -361,7 +359,6 @@ export default {
       this.loading = false
     },
     handleClick (tab, event) {
-      this.params.date_status = tab.name
       this.onSearch()
     },
     addCoupon () {
