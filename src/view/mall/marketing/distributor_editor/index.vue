@@ -104,9 +104,7 @@
             :loading="submitLoading"
             @click="submitItemsActionConfirm"
           >
-            {{
-              submitLoading ? '提交中' : '保存'
-            }}
+            {{ submitLoading ? '提交中' : '保存' }}
           </el-button>
         </div>
       </GlobalFooter>
@@ -307,7 +305,9 @@ export default {
     },
     getMerchantsList: async (merchant_name) => {
       const list = await getMerchantsList({
-        params: JSON.stringify({ page_size: 10, page: 1, merchant_name })
+        page_size: 10,
+        page: 1,
+        merchant_name
       })
       return list
     },
