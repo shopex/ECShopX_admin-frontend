@@ -110,9 +110,9 @@
 </template>
 
 <script>
-const login_bg_admin = require(`@/assets/img/cover/normal.png`)
-const login_bg_merchant = require(`@/assets/img/cover/merchant.png`)
-const login_bg_shopadmin = require(`@/assets/img/cover/shopadmin.png`)
+const login_bg_admin = require(`@/assets/imgs/login-ecshopx.jpg`)
+const login_bg_merchant = require(`@/assets/imgs/login-merchant.jpg`)
+const login_bg_shopadmin = require(`@/assets/imgs/login-shopadmin.jpg`)
 
 import { mapMutations } from 'vuex'
 import { requiredRules, MinRules } from '@/utils/validate'
@@ -173,6 +173,10 @@ export default {
         case 'merchant':
           this.title = '商户管理中心'
           this.login_bg = login_bg_merchant
+          break
+        default:
+          this.title = '平台管理中心'
+          this.login_bg = require(`@/assets/imgs/login-${this.VUE_APP_SYSTEM.toLowerCase()}.jpg`)
           break
       }
 

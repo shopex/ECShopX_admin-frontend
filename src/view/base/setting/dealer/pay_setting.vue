@@ -301,7 +301,6 @@ export default {
     // 查询开户步骤
     async getStepHandle () {
       const { info } = await this.$api.adapay.getStep()
-      console.log(result)
       const { MerchantResident } = info
       if (MerchantResident.length <= 0) {
         this.processed = '未填'

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { VERSION_STANDARD, VERSION_PLATFORM } from '@/utils'
 import CommonUtil from '@/common/js/util'
+import { SYSTEM_CONFIG } from '@/consts'
 // import moment from 'moment'
 // import district from '@/common/district.json'
 
@@ -224,7 +225,8 @@ Vue.prototype.system_is_saas = process.env.VUE_APP_IS_SAAS || 'false'
 Vue.prototype.system_mode = process.env.VUE_APP_PRODUCT_MODEL
 Vue.prototype.VERSION_STANDARD = VERSION_STANDARD
 Vue.prototype.VERSION_PLATFORM = VERSION_PLATFORM
-Vue.prototype.VUE_APP_SYSTEM_NAME = process.env.VUE_APP_SYSTEM_NAME
+Vue.prototype.VUE_APP_SYSTEM = process.env.VUE_APP_SYSTEM_NAME
+Vue.prototype.VUE_APP_SYSTEM_NAME = SYSTEM_CONFIG[process.env.VUE_APP_SYSTEM_NAME].name
 Vue.prototype.path_prefixes = process.env.VUE_APP_PREFIXES
 Vue.prototype.BASE_API =
   process.env.VUE_APP_BASE_API.indexOf('http') !== -1

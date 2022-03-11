@@ -1,13 +1,9 @@
+// $--color-primary: red;
+// $--tooltip-arrow-size: 20;
+$color-primary: var(--themeColor);
+
 .el-button {
   padding: 10px 16px;
-  // .icon-xinzengcaozuo-01 {
-  //   font-size: 14px;
-  //   margin-right: 4px;
-  // }
-  // .icon-daorucaozuo-01 {
-  //   font-size: 14px;
-  //   margin-right: 4px;
-  // }
   .iconfont {
     font-size: 14px;
     margin-right: 4px;
@@ -15,6 +11,10 @@
   .icon-zhankai {
     transform: scale(0.8);
     display: inline-block;
+  }
+  &--primary {
+    background-color: $color-primary;
+    border-color: $color-primary;
   }
   &.is-plain {
     background-color: #fff;

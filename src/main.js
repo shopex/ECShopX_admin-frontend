@@ -111,5 +111,9 @@ Vue.prototype.$export_open = export_open
 new Vue({
   router,
   store,
+  mounted () {
+    document.body.style.setProperty('--themeColor', '#CB060F')
+    document
+  },
   render: (h) => h(App)
 }).$mount('#app')

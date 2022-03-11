@@ -4,16 +4,20 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 
 const PRODUCT_LIST = [
-  { name: '商派ECShopX平台标准版', model: 'platform', saas: false },
-  { name: '商派ECShopX平台专业版', model: 'platform', saas: false },
-  { name: '商派ECShopX社交零售SaaS版', model: 'standard', saas: true },
-  { name: '商派Onex官方商城标准版', model: 'platform', saas: false },
-  { name: '商派Onex官方商城专业版', model: 'platform', saas: false },
-  { name: '商派Onex官方商城SaaS版', model: 'platform', saas: true },
-  { name: '商派Onex云店标准版', model: 'standard', saas: false },
-  { name: '商派Onex云店专业版', model: 'standard', saas: false },
-  { name: '商派Onex云店集团版', model: 'standard', saas: false },
-  { name: '商派Onex云店SaaS版', model: 'standard', saas: true }
+  { name: 'ecshopx', model: 'platform', saas: false },
+  { name: 'yundian', model: 'standard', saas: false },
+  { name: 'officialMall', model: 'standard', saas: false },
+  { name: 'inPurchasing', model: 'standard', saas: false }
+  // { name: '商派ECShopX平台标准版', model: 'platform', saas: false },
+  // { name: '商派ECShopX平台专业版', model: 'platform', saas: false },
+  // { name: '商派ECShopX社交零售SaaS版', model: 'standard', saas: true },
+  // { name: '商派Onex官方商城标准版', model: 'platform', saas: false },
+  // { name: '商派Onex官方商城专业版', model: 'platform', saas: false },
+  // { name: '商派Onex官方商城SaaS版', model: 'platform', saas: true },
+  // { name: '商派Onex云店标准版', model: 'standard', saas: false },
+  // { name: '商派Onex云店专业版', model: 'standard', saas: false },
+  // { name: '商派Onex云店集团版', model: 'standard', saas: false },
+  // { name: '商派Onex云店SaaS版', model: 'standard', saas: true }
 ]
 
 async function createProject() {

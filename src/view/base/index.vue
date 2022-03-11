@@ -66,6 +66,8 @@
       }
     }
   }
+  &.company {
+  }
 }
 
 .company {
@@ -84,12 +86,16 @@
     font-size: 14px;
   }
   .operate {
-    padding-bottom: 50px;
+    // padding-bottom: 50px;
+    margin-bottom: 10px;
   }
   .validity-period {
     display: flex;
     font-size: 12px;
     color: #999;
+    width: 100%;
+    margin-left: 175px;
+    text-align: left;
     .iconfont {
       margin-right: 10px;
       font-size: 12px;
@@ -759,7 +765,10 @@
             </section>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-if="system_is_saas == false">
+        <el-row
+          v-if="system_is_saas == false"
+          :gutter="20"
+        >
           <el-col :span="24">
             <section class="section-card">
               <div class="section-card-header">
@@ -767,7 +776,11 @@
                   系统信息
                 </div>
               </div>
-              <el-descriptions :column="3" border size="mini">
+              <el-descriptions
+                :column="3"
+                border
+                size="mini"
+              >
                 <el-descriptions-item>
                   <template slot="label">
                     company_id
@@ -1523,7 +1536,6 @@ export default {
       return isInSaleCenter && isSass
     },
     mountedFunc () {
-      console.log('----mountedFunc---')
       getActivateInfo().then((res) => {
         this.activateInfo = res.data.data
         if (!res.data.data.is_valid) {
@@ -1533,7 +1545,6 @@ export default {
         }
         // this.activateInfo.source = 'demo'
         this.SET_PRODUCTION_CODE({ productionCode: res.data.data.product_code })
-        console.log('xiaolu',config);
         this.activateInfo.vue_ecshopx_verion = `${process.env.VUE_APP_PRODUCT_MODEL}-${config.version}`
         this.activateInfo.elementui_version = `${config.elementui_version}`
       })

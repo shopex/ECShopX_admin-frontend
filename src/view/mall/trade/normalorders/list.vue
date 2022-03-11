@@ -16,11 +16,11 @@
           />
         </SpFilterFormItem>
         <SpFilterFormItem
-          prop="item_bn"
+          prop="order_id"
           label="订单号:"
         >
           <el-input
-            v-model="params.item_bn"
+            v-model="params.order_id"
             placeholder="请输入订单号"
           />
         </SpFilterFormItem>
@@ -113,9 +113,9 @@
           label="下单时间:"
         >
           <el-date-picker
+            v-model="params.create_time"
             clearable
             unlink-panels
-            v-model="params.create_time"
             type="daterange"
             align="right"
             format="yyyy-MM-dd"
