@@ -440,7 +440,7 @@
                     去授权
                   </el-button>
                   <el-button
-                    type="danger"
+                    type="primary"
                     size="mini"
                     @click="accountactivate"
                   >

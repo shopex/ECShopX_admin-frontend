@@ -273,7 +273,7 @@ export default {
         width: 100%;
         padding: 12px;
         height: 40px;
-        background: #cb060f;
+        background: $color-primary;
         border-radius: 40px;
         text-align: center;
         color: #fff;
@@ -321,10 +321,10 @@ export default {
     font-size: 16px;
   }
   .el-tabs__item.is-active {
-    color: #cb060f;
+    color: $color-primary;
   }
   .el-tabs__active-bar {
-    background-color: #cb060f;
+    background-color: $color-primary;
   }
   .el-form-item__content {
     margin-left: 0px !important;

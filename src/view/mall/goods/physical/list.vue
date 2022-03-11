@@ -285,23 +285,17 @@
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsTagData"
-              >
+              <export-tip @exportHandle="exportItemsTagData">
                 商品标签
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsWxappCode('wxa')"
-              >
+              <export-tip @exportHandle="exportItemsWxappCode('wxa')">
                 小程序码
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsWxappCode('h5')"
-              >
+              <export-tip @exportHandle="exportItemsWxappCode('h5')">
                 H5二维码
               </export-tip>
             </el-dropdown-item>
@@ -728,9 +722,7 @@
                 prop="item_spec_desc"
                 min-width="120"
               >
-                <template
-                  slot-scope="scope"
-                >
+                <template slot-scope="scope">
                   <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span><span v-else>单规格</span>
                 </template>
               </el-table-column>
@@ -1883,6 +1875,7 @@ export default {
       if (params.category.length > 0) {
         params.category = params.category[params.category.length - 1]
       }
+
       const { list, total_count, warning_store } = await this.$api.goods.getItemsList(params)
       list.forEach((item) => {
         item.price = item.price / 100

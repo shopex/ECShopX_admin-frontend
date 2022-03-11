@@ -426,7 +426,8 @@ export default {
     align-items: center;
     &.is-active {
       > a {
-        background: rgba(20, 128, 227, 0.1);
+        // background: rgba(20, 128, 227, 0.1);
+        background: rgba(var(--themeColorRgb), 0.1);
         border-radius: 2px;
         color: $color-primary;
       }

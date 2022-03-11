@@ -70,13 +70,13 @@ export default {
 </style>
 
 <style lang="scss">
-.dealer_index {
-  .el-step__title.is-success {
-    color: #1890ff;
-  }
-  .el-step__head.is-success {
-    color: #1890ff;
-    border-color: #1890ff;
-  }
-}
+// .dealer_index {
+//   .el-step__title.is-success {
+//     color: #1890ff;
+//   }
+//   .el-step__head.is-success {
+//     color: #1890ff;
+//     border-color: #1890ff;
+//   }
+// }
 </style>

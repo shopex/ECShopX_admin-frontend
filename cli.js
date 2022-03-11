@@ -4,10 +4,10 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 
 const PRODUCT_LIST = [
-  { name: 'ecshopx', model: 'platform', saas: false },
-  { name: 'yundian', model: 'standard', saas: false },
-  { name: 'officialMall', model: 'standard', saas: false },
-  { name: 'inPurchasing', model: 'standard', saas: false }
+  { name: '商派Ecshopx', value: 'ecshopx', model: 'platform', saas: false },
+  { name: '商派Onex云店', value: 'yundian', model: 'standard', saas: false },
+  { name: '商派官方商城', value: 'officialMall', model: 'standard', saas: false },
+  { name: '商派Onex内购', value: 'inPurchasing', model: 'standard', saas: false }
   // { name: '商派ECShopX平台标准版', model: 'platform', saas: false },
   // { name: '商派ECShopX平台专业版', model: 'platform', saas: false },
   // { name: '商派ECShopX社交零售SaaS版', model: 'standard', saas: true },
@@ -29,9 +29,8 @@ async function createProject() {
     choices: PRODUCT_LIST
   })
 
-  const product = PRODUCT_LIST.find((item) => item.name == repo)
-
-  const envTemplate = `VUE_APP_SYSTEM_NAME=${product.name}
+  const product = PRODUCT_LIST.find((item) => item.value == repo)
+  const envTemplate = `VUE_APP_SYSTEM_NAME=${product.value}
 VUE_APP_IS_SAAS=${product.saas}
 VUE_APP_PRODUCT_MODEL=${product.model}
 VUE_APP_BASE_API=https://ecshopx1.shopex123.com/api

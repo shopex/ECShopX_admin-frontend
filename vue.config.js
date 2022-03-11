@@ -12,6 +12,7 @@ const envVars = process.env
 //   node_env: mode
 // })
 
+console.log(process.env.NODE_ENV)
 Object.keys(envVars).forEach((key) => {
   if (key.indexOf('VUE_APP') > -1) {
     console.log(`${key}: ${envVars[key]}`)

@@ -29,6 +29,7 @@ import { initFinder } from '@shopex/finder'
 import '@shopex/finder/lib/finder.css'
 import exportTip from '@/utils/components'
 import { export_open } from '@/utils'
+import { SYSTEM_CONFIG } from '@/consts'
 Vue.use(exportTip)
 initFinder(Vue, {
   fetchLibrary: fetch,
@@ -112,8 +113,12 @@ new Vue({
   router,
   store,
   mounted () {
-    document.body.style.setProperty('--themeColor', '#CB060F')
-    document
+    const { theme } = SYSTEM_CONFIG[process.env.VUE_APP_SYSTEM_NAME]
+    const red = parseInt(theme.replace('#', '').slice(0, 2), 16)
+    const green = parseInt(theme.replace('#', '').slice(2, 4), 16)
+    const blue = parseInt(theme.replace('#', '').slice(4, 6), 16)
+    document.body.style.setProperty('--themeColor', theme)
+    document.body.style.setProperty('--themeColorRgb', [red, green, blue].join(','))
   },
   render: (h) => h(App)
 }).$mount('#app')
