@@ -151,7 +151,7 @@
       </el-form-item>
     </el-form>
 
-    <!-- <div class="clearfix">
+    <div class="clearfix" v-if="VERSION_STANDARD">
       <h2 class="f_l">
         <span>前端店铺展示关闭：</span>
       </h2>
@@ -162,7 +162,7 @@
         <el-switch v-model="form.nostores_status" @change="sendNoStoresChange"></el-switch>
         <span class="frm-tips">用于关闭前端店铺切换功能</span>
       </el-form-item>
-    </el-form> -->
+    </el-form>
 
     <!-- <div class="clearfix">
       <h2 class="f_l">
@@ -265,6 +265,7 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
+import { VERSION_STANDARD } from '@/utils'
 import {
   getRateSetting,
   setRateSetting,
