@@ -618,7 +618,7 @@ export default {
       let btnActions = []
       if (VERSION_STANDARD || distributor_id == 0 || this.login_type == 'distributor') {
         if (
-          (isLogistics || is_logistics) &&
+          isLogistics &&
           !isDada &&
           order_status == 'PAYED' &&
           delivery_status != 'DONE' &&
