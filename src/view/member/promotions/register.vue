@@ -110,7 +110,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="注册送权益：">
+        <!-- <el-form-item label="注册送权益：">
           <el-transfer
             v-model="form.promotions_value.items"
             :titles="['服务类商品', '已选中']"
@@ -135,7 +135,7 @@
               class="transfer-footer"
             />
           </el-transfer>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="注册送优惠券：">
           <el-row>
             <el-col :span="12">

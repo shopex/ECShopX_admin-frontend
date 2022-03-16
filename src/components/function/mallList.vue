@@ -259,10 +259,10 @@
 
     <el-dialog
       title="新增模板"
-      :visible="dialogVisible"
+      :visible.sync="dialogVisible"
       :close-on-click-modal="false"
       width="50%"
-      @closed="closeAddDialog"
+      :before-close="closeAddDialog"
     >
       <el-form
         ref="form"
@@ -776,6 +776,9 @@ export default {
       }
     },
     closeAddDialog () {
+      this.dialogVisible = false
+      this.dialogType = ''
+      this.dialogData = ''
       this.resetForm('form')
     },
     addTemplate (formName) {
