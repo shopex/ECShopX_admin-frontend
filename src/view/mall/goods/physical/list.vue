@@ -302,13 +302,13 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-button
+        <!-- <el-button
           type="primary"
           plain
           @click="syncItems"
         >
           同步商品数据
-        </el-button>
+        </el-button> -->
       </div>
 
       <el-tabs
