@@ -15,6 +15,7 @@
         <SpFilterFormItem
           prop="distributor"
           label="店铺名称:"
+          v-if="!VERSION_B2C"
         >
           <el-autocomplete
             v-model="params.distributor.name"
@@ -401,6 +402,7 @@
 import { mapGetters } from 'vuex'
 import RemarkModal from '@/components/remarkModal'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
+import { VERSION_B2C } from '@/utils'
 export default {
   components: {
     RemarkModal
