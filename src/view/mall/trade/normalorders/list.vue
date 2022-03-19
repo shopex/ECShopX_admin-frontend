@@ -128,6 +128,7 @@
           />
         </SpFilterFormItem>
         <SpFilterFormItem
+          v-if='!VERSION_STANDARD'
           prop="distributor_type"
           label="订单分类:"
         >
