@@ -73,7 +73,8 @@ export default {
           }
           try {
             const { data } = await getRechargeURL(amount)
-            window.location.href = data.data.link
+            window.open(data.data.link)
+            // window.location.href = data.data.link
             // 清空不会触发验证
             this.$refs[formName].resetFields()
           } catch (err) {
