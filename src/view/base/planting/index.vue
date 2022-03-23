@@ -1,51 +1,34 @@
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+</style>
+
 <template>
   <div>
     <div v-if="$route.path.indexOf('editor') === -1">
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-button
-            type="primary"
-            icon="plus"
-            @click="articleAdd"
-          >
-            添加软文
-          </el-button>
-        </el-col>
-        <el-col :span="12">
-          <el-input
-            v-model="searchTitle"
-            placeholder="软文标题"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="titleSearch"
-            />
-          </el-input>
-        </el-col>
-      </el-row>
-      <section
-        v-loading="loading"
-        class="articles"
-      >
+      <div class="action-container">
+        <el-button type="primary" icon="plus" @click="articleAdd"> 添加软文 </el-button>
+      </div>
+
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+        <SpFilterFormItem prop="title" label="软文标题:">
+          <el-input v-model="params.title" placeholder="请输入软文标题" />
+        </SpFilterFormItem>
+      </SpFilterForm>
+
+      <section v-loading="loading" class="articles">
         <el-row :gutter="10">
-          <el-col
-            v-for="(item, index) in list"
-            :key="index"
-            :xs="12"
-            :sm="8"
-            :md="6"
-            :lg="4"
-          >
+          <el-col v-for="(item, index) in tableList" :key="index" :xs="12" :sm="8" :md="6" :lg="4">
             <div class="article-item">
               <router-link :to="{ path: matchHidePage('editor'), query: { id: item.article_id } }">
                 <div
                   class="thumbnail"
                   :style="
                     'background: url(' +
-                      (item.image_url ||
-                        'https://fakeimg.pl/200x180/EFEFEF/CCC/?text=image&font=lobster') +
-                      ') 0% 0% / cover no-repeat;'
+                    (item.image_url ||
+                      'https://fakeimg.pl/200x180/EFEFEF/CCC/?text=image&font=lobster') +
+                    ') 0% 0% / cover no-repeat;'
                   "
                 />
                 <div class="caption">
@@ -68,14 +51,10 @@
               <div class="footer">
                 <div
                   v-clipboard:copy="item.link"
-                  v-clipboard:success="onCopy"
+                  v-clipboard:success="onCopySuccess"
                   class="footer-item copy-btn"
                 >
-                  <input
-                    v-model="item.link"
-                    class="copy-link"
-                    type="text"
-                  >
+                  <input v-model="item.link" class="copy-link" type="text" />
                   <i class="iconfont icon-copy" /> 复制文章链接
                 </div>
               </div>
@@ -87,80 +66,56 @@
                   <template v-if="item.release_status">
                     <i class="iconfont icon-undo-alt" /> 撤回
                   </template>
-                  <template v-else>
-                    <i class="iconfont icon-broadcast-tower" /> 发布
-                  </template>
+                  <template v-else> <i class="iconfont icon-broadcast-tower" /> 发布 </template>
                 </div>
-                <el-popover
-                  v-model="item.visible"
-                  class="footer-item"
-                  placement="top"
-                  width="160"
-                >
+                <el-popover v-model="item.visible" class="footer-item" placement="top" width="160">
                   <div class="content-bottom-padded">
-                    <el-input
-                      v-model="item.sort"
-                      size="mini"
-                      placeholder="请输入排序"
-                    />
+                    <el-input v-model="item.sort" size="mini" placeholder="请输入排序" />
                   </div>
                   <div style="text-align: right; margin: 0">
-                    <el-button
-                      size="mini"
-                      type="text"
-                      @click="item.visible = false"
-                    >
+                    <el-button size="mini" type="text" @click="item.visible = false">
                       取消
                     </el-button>
-                    <el-button
-                      type="primary"
-                      size="mini"
-                      @click="handleSort(item.article_id)"
-                    >
+                    <el-button type="primary" size="mini" @click="handleSort(item.article_id)">
                       确定
                     </el-button>
                   </div>
-                  <div slot="reference">
-                    <i class="iconfont icon-sort-amount-up" /> 排序
-                  </div>
+                  <div slot="reference"><i class="iconfont icon-sort-amount-up" /> 排序</div>
                 </el-popover>
-                <div
-                  class="footer-item"
-                  @click="articleDelete(item.article_id)"
-                >
+                <div class="footer-item" @click="articleDelete(item.article_id)">
                   <i class="iconfont icon-trash-alt" /> 删除
                 </div>
               </div>
             </div>
           </el-col>
         </el-row>
-        <dataPlaceholder
-          :visible.sync="showPlaceholder"
-          height="100%"
-        />
-        <el-pagination
-          v-if="total_count > params.pageSize"
-          class="content-padded content-center"
-          background
-          layout="prev, pager, next"
-          :total="total_count"
-          :page-size="params.pageSize"
-          @current-change="pageChange"
-        />
+        <dataPlaceholder :visible.sync="showPlaceholder" height="100%" />
+        <div v-if="page.total > page.pageSize" class="content-padded content-center">
+          <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :current-page.sync="page.pageIndex"
+            :page-sizes="[10, 20, 50]"
+            :total="page.total"
+            :page-size="page.pageSize"
+            @current-change="onCurrentChange"
+            @size-change="onSizeChange"
+          />
+        </div> 
       </section>
+
     </div>
     <router-view />
   </div>
 </template>
 
 <script>
-import util from '@/common/js/util'
-import { getArticleList, deleteArticle, updateArticleSortOrStatus } from '@/api/article'
-
+import { deleteArticle, updateArticleSortOrStatus } from '@/api/article'
+import mixin,{ pageMixin } from '@/mixins'
 import DataPlaceholder from '@/components/element/dataPlaceholder'
 
 export default {
-  provide () {
+  provide() {
     return {
       refresh: this.fetchList
     }
@@ -168,35 +123,25 @@ export default {
   components: {
     dataPlaceholder: DataPlaceholder
   },
-  data () {
+  mixins: [mixin,pageMixin],
+  data() {
     return {
-      loading: false,
-      searchTitle: '',
-      list: [],
+      loading: false, 
       showPlaceholder: false,
       params: {
         title: '',
-        article_type: 'bring',
-        page: 1,
-        pageSize: 20
-      },
-      total_count: 0
+        article_type: 'bring', 
+      }
     }
   },
-  mounted () {
+  mounted() {
     this.fetchList()
   },
-  methods: {
-    onCopy () {
-      this.$notify.success({
-        message: '复制成功',
-        showClose: true
-      })
-    },
-    articleAdd (id) {
+  methods: { 
+    articleAdd(id) {
       this.$router.push({ path: this.matchHidePage('editor') })
     },
-    articleDelete (id) {
+    articleDelete(id) {
       const _self = this
       this.$confirm('确认删除当前软文吗？').then((_) => {
         deleteArticle(id).then((res) => {
@@ -204,7 +149,7 @@ export default {
             this.$message({
               message: '删除成功',
               type: 'success',
-              onClose () {
+              onClose() {
                 _self.fetchList()
               }
             })
@@ -212,21 +157,15 @@ export default {
         })
       })
     },
-    titleSearch () {
-      this.params.page = 1
-      this.list = []
-      this.params.title = this.searchTitle
-      this.fetchList()
-    },
-    handleSort (id) {
+    handleSort(id) {
       const _self = this
-      let index = this.list.findIndex((item) => item.article_id === id)
-      this.list[index].visible = false
+      let index = this.tableList.findIndex((item) => item.article_id === id)
+      this.tableList[index].visible = false
       let param = {
         inputdata: [
           {
             article_id: id,
-            sort: this.list[index].sort
+            sort: this.tableList[index].sort
           }
         ]
       }
@@ -234,7 +173,7 @@ export default {
         _self.fetchList()
       })
     },
-    handlePublish (id, status) {
+    handlePublish(id, status) {
       let msg = ''
       if (status) {
         msg = '确定撤回本篇软文吗？'
@@ -259,24 +198,25 @@ export default {
         .catch(() => {
           return
         })
-    },
-    pageChange (val) {
-      this.params.page = val
-      this.fetchList()
-    },
-    fetchList () {
+    }, 
+    async fetchList() {
       this.loading = true
-      getArticleList(this.params).then((res) => {
-        if (res.data.data.total_count === 0) {
-          this.showPlaceholder = true
-        }
-        res.data.data.list.forEach((item) => {
-          item.link = `pages/recommend/detail?id=${item.article_id}`
-        })
-        this.list = res.data.data.list
-        this.total_count = res.data.data.total_count
-        this.loading = false
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.params
+      }
+      const { list, total_count } = await this.$api.article.getArticleList(params)
+      if (total_count === 0) {
+        this.showPlaceholder = true
+      } 
+      list.forEach((item) => {
+        item.link = `pages/recommend/detail?id=${item.article_id}`
       })
+      this.tableList = list
+      this.page.total = Number(total_count)
+      this.loading = false
     }
   }
 }
