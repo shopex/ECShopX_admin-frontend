@@ -467,7 +467,7 @@ export default {
       faverite: {
         name: 'faverite_type',
         base: {
-          title: '猜你喜欢',
+          title: '热门推荐',
           subtitle: '',
           padded: true
         },

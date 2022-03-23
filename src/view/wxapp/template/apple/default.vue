@@ -365,7 +365,7 @@
       width="40"
     >
       <el-form label-width="130px">
-        <el-form-item label="开启猜你喜欢">
+        <el-form-item label="开启热门推荐">
           <el-switch
             v-model="isOpenFaverite"
             :active-value="true"
@@ -745,7 +745,7 @@ export default {
       faverite: {
         name: 'faverite_type',
         base: {
-          title: '猜你喜欢',
+          title: '热门推荐',
           subtitle: '',
           padded: true
         },
@@ -829,7 +829,7 @@ export default {
       iconsVisible: false,
       // 开启小程序定位
       isOpenLocation: true,
-      // 开启猜你喜欢
+      // 开启热门推荐
       isOpenFaverite: true,
       // 开启扫码功能
       isOpenScancode: true,

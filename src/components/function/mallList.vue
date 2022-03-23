@@ -321,7 +321,7 @@
       width="20"
     >
       <el-form label-width="120px">
-        <el-form-item label="开启猜你喜欢">
+        <el-form-item label="开启热门推荐">
           <el-switch
             v-model="is_open_recommend"
             :active-value="1"
