@@ -713,7 +713,7 @@ export default {
         this.form.id = response.data.data.id
         this.form.is_open = response.data.data.is_open
         this.form.ad_title = response.data.data.ad_title
-        this.form.register_jump_path = response.data.data.register_jump_path
+        this.form.register_jump_path = response.data.data.register_jump_path || {}
         if (response.data.data.promotions_value) {
           if (response.data.data.promotions_value.items) {
             this.form.promotions_value.items = response.data.data.promotions_value.items

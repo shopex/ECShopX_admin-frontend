@@ -69,7 +69,7 @@
         </el-form-item>
         <el-form-item
           v-if="recorddata.status == 'pending'"
-          label="是否拒绝"
+          label="是否同意"
         >
           <el-switch v-model="form.status" />
         </el-form-item>
