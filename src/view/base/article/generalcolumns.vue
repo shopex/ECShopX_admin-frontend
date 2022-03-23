@@ -1,19 +1,9 @@
 <template>
   <div class="custom-tree-container">
-    <el-row
-      class="content-bottom-padded"
-      style="padding-top: 15px; margin-left: 20px"
-    >
-      <el-col>
-        <el-button
-          type="primary"
-          icon="plus"
-          @click="updateCategory"
-        >
-          保存栏目
-        </el-button>
-      </el-col>
-    </el-row>
+    <div class="action-container">
+      <el-button type="primary" icon="plus" @click="updateCategory"> 保存栏目 </el-button>
+    </div>
+
     <div class="block">
       <ul class="custom-tree-node-title">
         <li>栏目名称</li>
@@ -30,36 +20,20 @@
         default-expand-all
         :expand-on-click-node="false"
       >
-        <ul
-          slot-scope="{ node, data }"
-          class="custom-tree-node"
-        >
+        <ul slot-scope="{ node, data }" class="custom-tree-node">
           <li>
             <i v-if="data.level == 0" /><i v-else>　├─</i>
-            <input
-              v-model="data.category_name"
-              placeholder="栏目名称"
-            >
+            <input v-model="data.category_name" placeholder="栏目名称" />
             <!-- <span class="add-child-category" v-if="data.level == 0"
                   @click="append(data.children, 1)">
             <i class="el-icon-plus"></i>增加子栏目 
           </span> -->
           </li>
           <li>
-            <input
-              v-model="data.sort"
-              placeholder="栏目排序"
-            >
+            <input v-model="data.sort" placeholder="栏目排序" />
           </li>
-          <li
-            v-clipboard:copy="data.link"
-            v-clipboard:success="onCopy"
-          >
-            <input
-              v-model="data.link"
-              class="copy-link"
-              type="text"
-            >
+          <li v-clipboard:copy="data.link" v-clipboard:success="onCopy">
+            <input v-model="data.link" class="copy-link" type="text" />
             <i class="iconfont icon-copy" /> 复制栏目链接
           </li>
           <li v-if="data.created">
@@ -67,10 +41,7 @@
           </li>
           <li v-else />
           <li>
-            <span
-              class="remove-category"
-              @click="deleteCategory(node, data)"
-            >
+            <span class="remove-category" @click="deleteCategory(node, data)">
               <i class="iconfont icon-trash-alt" />
             </span>
           </li>
@@ -101,7 +72,7 @@ export default {
   components: {
     imgPicker
   },
-  data () {
+  data() {
     return {
       loading: false,
       spaceInput: false,
@@ -116,17 +87,17 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.getArticleCategory()
   },
   methods: {
-    onCopy () {
+    onCopy() {
       this.$notify.success({
         message: '复制成功',
         showClose: true
       })
     },
-    getArticleCategory () {
+    getArticleCategory() {
       this.loading = true
       getArticleCategoryList(this.params).then((response) => {
         let list = response.data.data
@@ -138,7 +109,7 @@ export default {
         this.loading = false
       })
     },
-    updateCategory () {
+    updateCategory() {
       for (var i = 0; i < this.categoryList.length; i++) {
         for (var a = 0; a < this.categoryList.length - 1 - i; a++) {
           if (this.categoryList[a].category_name == this.categoryList[a + 1].category_name) {
@@ -181,7 +152,7 @@ export default {
         this.getArticleCategory()
       })
     },
-    deleteCategory (node, data) {
+    deleteCategory(node, data) {
       this.$confirm('此操作将删除该栏目, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -210,7 +181,7 @@ export default {
           })
         })
     },
-    append (data, level = 0) {
+    append(data, level = 0) {
       const newChild = {
         category_name: '',
         sort: 0,
@@ -222,7 +193,7 @@ export default {
       }
       data.push(newChild)
     },
-    catNameCheck (catName) {
+    catNameCheck(catName) {
       let catNameLength = 0
       if (catName) {
         for (var i = 0; i < catName.length; i++) {
@@ -248,12 +219,12 @@ export default {
         return false
       }
     },
-    handleImgChange (data) {
+    handleImgChange(data) {
       this.imgDialog = true
       this.isGetImage = true
       this.current = data
     },
-    pickImg (data) {
+    pickImg(data) {
       if (!this.current.parent_id || this.current.parent_id == 0) {
         const index = this.categoryList.findIndex((d) => d.id === this.current.id)
         this.categoryList[index].image_url = data.url
@@ -264,7 +235,7 @@ export default {
       }
       this.imgDialog = false
     },
-    closeImgDialog () {
+    closeImgDialog() {
       this.imgDialog = false
     }
   }
