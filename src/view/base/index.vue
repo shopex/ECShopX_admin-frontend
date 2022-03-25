@@ -27,8 +27,11 @@
   &.realtime-statics {
     height: 285px;
   }
+  &.purchase-chart-statics {
+    height: 288px;
+  }
   &.chart-statics {
-    height: 318px;
+    height: 368px;
   }
   .section-card-header {
     display: flex;
@@ -608,7 +611,7 @@
                       </div>
                     </div>
                   </el-col>
-                  <el-col :span="12">
+                  <el-col :span="12" v-if="!VERSION_IN_PURCHASE">
                     <div class="view-flex">
                       <div class="view-flex-item">
                         <div class="label">
@@ -698,7 +701,7 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="notices-group">
+                <div class="notices-group" v-if="!VERSION_IN_PURCHASE">
                   <div class="subtitle">
                     营销相关
                   </div>
@@ -731,7 +734,7 @@
           <el-col :span="14">
             <section
               v-loading="userloading"
-              class="section-card chart-statics"
+              :class="VERSION_IN_PURCHASE ? 'section-card purchase-chart-statics' : 'section-card chart-statics'"
             >
               <canvas
                 id="canvas"
@@ -1301,24 +1304,6 @@ export default {
         //   color: "#b992f8",
         //   text: "新增服务商品",
         // },
-        {
-          link: '/marketing/groupsindex/editor',
-          icon: 'comments-dollar',
-          color: '#fa9678',
-          text: '新增拼团活动'
-        },
-        {
-          link: '/marketing/coupon/membermarketing',
-          icon: 'ticket-alt',
-          color: '#fa8084',
-          text: '新增优惠券'
-        },
-        {
-          link: '/marketing/marketingseckill/editor',
-          icon: 'stopwatch',
-          color: '#f9ca6b',
-          text: '新增秒杀活动'
-        },
         // {
         //   link: "/marketing/community/marketingcommunityactivity/editor",
         //   icon: "door-open",
@@ -1336,18 +1321,6 @@ export default {
           icon: 'clipboard-list',
           color: '#7cc0f4',
           text: '订单处理'
-        },
-        {
-          link: '/order/entitytrade/aftersaleslist',
-          icon: 'user-tie',
-          color: '#fa8084',
-          text: '售后处理'
-        },
-        {
-          link: '/marketing/popularize/popularizewithdraw',
-          icon: 'donate',
-          color: '#fa9679',
-          text: '提现处理'
         }
       ]
     }
@@ -1527,6 +1500,57 @@ export default {
           }
         }
       }
+      if (this.VERSION_IN_PURCHASE) {
+        config = {
+        type: 'line',
+        data: {
+          labels: this.userTimeArr,
+          datasets: [
+            {
+              label: '新增人数',
+              backgroundColor: window.chartColors.red,
+              borderColor: window.chartColors.red,
+              data: this.userData,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: true,
+            text: '近7天用户趋势'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: true
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: ''
+                }
+              }
+            ],
+            yAxes: [
+              {
+                display: true,
+                scaleLabel: {
+                  display: false
+                }
+              }
+            ]
+          }
+        }
+      }
+      }
       var ctx = document.getElementById('canvas').getContext('2d')
       window.myLine = new Chart(ctx, config)
     },
@@ -1581,6 +1605,40 @@ export default {
     }
   },
   mounted () {
+    if (!this.VERSION_IN_PURCHASE) {
+      this.links.push(
+        {
+          link: '/marketing/groupsindex/editor',
+          icon: 'comments-dollar',
+          color: '#fa9678',
+          text: '新增拼团活动'
+        },
+        {
+          link: '/marketing/coupon/membermarketing',
+          icon: 'ticket-alt',
+          color: '#fa8084',
+          text: '新增优惠券'
+        },
+        {
+          link: '/marketing/marketingseckill/editor',
+          icon: 'stopwatch',
+          color: '#f9ca6b',
+          text: '新增秒杀活动'
+        },
+        {
+          link: '/order/entitytrade/aftersaleslist',
+          icon: 'user-tie',
+          color: '#fa8084',
+          text: '售后处理'
+        },
+        {
+          link: '/marketing/popularize/popularizewithdraw',
+          icon: 'donate',
+          color: '#fa9679',
+          text: '提现处理'
+        }
+      )
+    }
     this.mountedFunc()
   }
 }
