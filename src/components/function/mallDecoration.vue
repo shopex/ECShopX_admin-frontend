@@ -35,7 +35,7 @@
             </svg>
             附近商家
           </template>
-          <template v-if="item.name === 'coupon'">
+          <template v-if="item.name === 'coupon' && !VERSION_IN_PURCHASE">
             <svg
               class="svg-icon"
               aria-hidden="true"
@@ -744,50 +744,6 @@ export default {
       saveInit: '',
       isSouponPackage: false, //是否为劵包 （用来判断图片选择）
       initData: [
-        {
-          name: 'coupon',
-          base: {
-            title: '到店优惠',
-            subtitle: '游客专享福利',
-            padded: true
-          },
-          data: [
-            // {
-            //   type: 'cash',
-            //   id: '',
-            //   amount: '50',
-            //   imgUrl: '../../images/coupon_brand_demo.jpg',
-            //   title: '巴黎欧莱雅',
-            //   desc: '全场商品满900减50'
-            // },
-            // {
-            //   type: 'discount',
-            //   id: '',
-            //   amount: '8',
-            //   imgUrl: '../../images/coupon_brand_demo.jpg',
-            //   title: '巴黎欧莱雅',
-            //   desc: '全场商品满900减50'
-            // },
-            // {
-            //   type: 'cash',
-            //   id: '',
-            //   amount: '100',
-            //   imgUrl: '../../images/coupon_brand_demo.jpg',
-            //   title: '巴黎欧莱雅',
-            //   desc: '全场商品满900减50'
-            // }
-          ],
-          voucher_package: [
-            // {
-            //   get_num: '0',
-            //   limit_count: '1',
-            //   package_describe: '2112',
-            //   package_id: '8',
-            //   title: '212',
-            //   imgUrl: '../../images/coupon_brand_demo.jpg'
-            // }
-          ]
-        },
         {
           name: 'film',
           base: {
@@ -1557,6 +1513,20 @@ export default {
             show_coupon: true
           },
           seletedTags: []
+        })
+      }
+
+      const isHaveCoupon = this.initData.some((item) => item.name === 'coupon')
+      if (!this.VERSION_IN_PURCHASE  && !isHaveCoupon) {
+        this.initData.unshift({
+          name: 'coupon',
+          base: {
+            title: '到店优惠',
+            subtitle: '游客专享福利',
+            padded: true
+          },
+          data: [],
+          voucher_package: []
         })
       }
 

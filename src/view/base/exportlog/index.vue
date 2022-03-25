@@ -58,6 +58,7 @@
         <el-tab-pane
           label="服务订单导出"
           name="service_order"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="实体主订单导出"
@@ -70,10 +71,12 @@
         <el-tab-pane
           label="发票信息导出"
           name="invoice"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="药品需求单"
           name="drug_order"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="商品统计导出"
@@ -90,10 +93,12 @@
         <el-tab-pane
           label="店铺商品导出"
           name="distributor_items"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="积分商品导出"
           name="pointsmallitems"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="权益导出"
@@ -102,6 +107,7 @@
         <el-tab-pane
           label="权益核销记录导出"
           name="right_consume"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="交易单导出"
@@ -110,10 +116,12 @@
         <el-tab-pane
           label="社区团购-积分提现记录导出"
           name="community_withdraw"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="报名导出"
           name="selform_registration_record"
+          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="售后列表导出"
