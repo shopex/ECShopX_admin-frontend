@@ -149,13 +149,7 @@
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { encryptList } from '@/api/encrypt'
-import { pageMixin } from '@/mixins'
-import {
-  getAftersalesList,
-  exportList,
-  getAftersalesRemind,
-  setAftersalesRemind
-} from '@/api/aftersales'
+import { pageMixin } from '@/mixins' 
 export default {
   mixins: [pageMixin],
   data () {
