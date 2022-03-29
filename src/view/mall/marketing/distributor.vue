@@ -685,7 +685,7 @@
                 min="1"
                 type="number"
                 oninput="value=value.replace(/[^\d.]/g,'')"
-                placeholder="只能是大于0的数字"
+                placeholder="输入大于等于0的数字，为0则显示所有店铺"
                 style="width: 30%"
               />&nbsp;km
             </el-form-item>
