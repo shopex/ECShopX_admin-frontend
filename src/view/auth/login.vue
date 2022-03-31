@@ -155,6 +155,8 @@ export default {
   },
   mounted () {
     window.addEventListener('resize', this.fnSize())
+    this.SET_VERSION_MODE(this.VUE_APP_SYSTEM)
+    console.log(this.VUE_APP_SYSTEM, '----version----')
     this.init()
   },
   destroyed () {
@@ -193,7 +195,6 @@ export default {
       this.$store.dispatch('setLoginType', this.loginType)
     },
     getBgImg () {
-      this.SET_VERSION_MODE(this.VUE_APP_SYSTEM)
       switch (this.VUE_APP_SYSTEM) {
         case 'standard':
           this.title = '云店管理中心'

@@ -241,6 +241,7 @@ export default {
     micrApp.init()
 
     console.log(this.$route)
+    console.log(this.VUE_APP_SYSTEM, '----version----')
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),

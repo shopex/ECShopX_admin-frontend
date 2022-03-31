@@ -24,10 +24,6 @@ export function isBoolean (val) {
   return isPrimitiveType(val, '[object Boolean]')
 }
 
-// export const VERSION_STANDARD = process.env.VUE_APP_PRODUCT_MODEL == 'standard'
-
-// export const VERSION_PLATFORM = process.env.VUE_APP_PRODUCT_MODEL == 'platform'
-
 // 云店
 export const VERSION_STANDARD = store.getters.versionMode == 'standard'
 // ecshopx
