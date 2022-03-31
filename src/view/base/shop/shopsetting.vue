@@ -122,6 +122,7 @@ export default {
             type: 'success'
           })
           this.loading = false
+          this.$store.dispatch('setSysLogo', this.form.logo)
         } else {
           this.$message.error('配置信息失败，请确认是否正确填写内容！')
           this.loading = false

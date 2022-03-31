@@ -5,7 +5,7 @@
       <div class="menu-warp view-flex">
         <div class="main-menu">
           <div class="brand-con">
-            <div v-if="$store.getters.login_type === 'merchant'">
+            <div v-if="login_type === 'merchant'">
               <div class="img-wrap">
                 <img
                   :src="brandIco"
@@ -17,14 +17,14 @@
               v-else
               class="brand-link"
               :to="`${
-                $store.getters.login_type == 'distributor' || $store.getters.login_type == 'dealer'
+                login_type == 'distributor' || login_type == 'dealer'
                   ? $store.getters.menus[0].children[0].url
                   : '/'
               }`"
             >
               <div class="img-wrap">
                 <img
-                  :src="brandIco"
+                  :src="sys_logo"
                   alt=""
                 >
               </div>
@@ -111,7 +111,7 @@
         </div>
         <div class="header-right">
           <div class="icon-nav">
-            <el-badge v-if="this.$store.getters.login_type == 'distributor'">
+            <el-badge v-if="login_type == 'distributor'">
               <i
                 class="iconfont icon-store-alt"
                 @click="handleClickSelectShop"
@@ -204,7 +204,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name', 'nick_name', 'avatar', 'wxapp_id', 'template_name', 'login_type']),
+    ...mapGetters(['name', 'nick_name', 'avatar', 'wxapp_id', 'template_name', 'login_type', 'sys_logo']),
     ...mapState({
       menuList: (state) => {
         const { menus } = state.menu
@@ -274,6 +274,7 @@ export default {
           // this.brandIco = require(`@/assets/logo/logo_inpurchase.png`)
         }
       }
+      this.$store.dispatch('setSysLogo', this.brandIco)
     },
     // 获取菜单url
     getMenuUrl (item) {
@@ -308,11 +309,11 @@ export default {
     async logout () {
       await this.$api.login.getAuthorizelogout()
       await this.SYSTEM_EXIT()
-      if (this.$store.getters.login_type == 'distributor') {
+      if (this.login_type == 'distributor') {
         window.location.href = `/shopadmin/login`
-      } else if (this.$store.getters.login_type == 'dealer') {
+      } else if (this.login_type == 'dealer') {
         window.location.href = `/dealer/login`
-      } else if (this.$store.getters.login_type == 'merchant') {
+      } else if (this.login_type == 'merchant') {
         window.location.href = `/merchant/login`
       } else {
         window.location.href = `/login`

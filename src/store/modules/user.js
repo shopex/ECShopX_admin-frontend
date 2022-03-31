@@ -20,7 +20,8 @@ const user = {
     ali_template_name: '',
     app_type: '',
     color_theme: '',
-    versionMode: 'platform'
+    versionMode: 'platform',
+    sys_logo: ''
   },
 
   mutations: {
@@ -66,6 +67,7 @@ const user = {
       state.app_type = ''
       state.color_theme = ''
       state.versionMode = 'platform'
+      state.sys_logo = ''
     },
     SET_LOGIN_TYPE: (state, payload) => {
       const { loginType } = payload
@@ -129,6 +131,9 @@ const user = {
     },
     setThemeColor: (state, color_theme) => {
       state.color_theme = color_theme
+    },
+    setSysLogo: (state, sys_logo) => {
+      state.sys_logo = sys_logo
     }
   },
 
@@ -195,6 +200,9 @@ const user = {
     },
     setThemeColor: ({ commit }, color_theme) => {
       commit('setThemeColor', color_theme)
+    },
+    setSysLogo: ({ commit }, sys_logo) => {
+      commit('setSysLogo', sys_logo)
     }
   }
 }
