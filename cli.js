@@ -4,10 +4,10 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 
 const PRODUCT_LIST = [
-  { name: '商派Ecshopx', value: 'ecshopx', model: 'platform', saas: false },
-  { name: '商派Onex云店', value: 'yundian', model: 'standard', saas: false },
-  { name: '商派官方商城', value: 'officialMall', model: 'standard', saas: false },
-  { name: '商派Onex内购', value: 'inPurchasing', model: 'standard', saas: false }
+  { name: '商派Ecshopx', value: 'platform', model: 'platform', saas: false },
+  { name: '商派Onex云店', value: 'standard', model: 'standard', saas: false },
+  { name: '商派官方商城', value: 'b2c', model: 'standard', saas: false },
+  { name: '商派Onex内购', value: 'in_purchase', model: 'standard', saas: false }
   // { name: '商派ECShopX平台标准版', model: 'platform', saas: false },
   // { name: '商派ECShopX平台专业版', model: 'platform', saas: false },
   // { name: '商派ECShopX社交零售SaaS版', model: 'standard', saas: true },
