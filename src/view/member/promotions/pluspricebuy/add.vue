@@ -198,6 +198,7 @@
           <el-radio
             v-model="form.use_shop"
             :label="1"
+            v-if="!VERSION_PLATFORM"
           >
             指定店铺可用
           </el-radio>
