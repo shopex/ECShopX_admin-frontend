@@ -53,7 +53,7 @@
           slot="footer"
           class="dialog-footer"
         >
-          <el-button @click="dialog.visible = false">取 消</el-button>
+          <el-button @click="handleCancel">取 消</el-button>
           <el-button
             :loading="dialog.loading"
             type="primary"
@@ -310,6 +310,11 @@ export default {
               }
             })
         }
+      }
+    },
+    handleCancel () {
+      this.dialog = {
+        visible: false
       }
     },
     getCategory () {
