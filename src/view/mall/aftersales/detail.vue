@@ -422,12 +422,7 @@
 
       <!-- 退货退款审核 -->
       <template
-        v-else-if="
-          (aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
-            aftersalesInfo.distributor_id == '0') ||
-            (aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
-              $store.getters.login_type == 'distributor')
-        "
+        v-else-if="aftersalesInfo.aftersales_type == 'REFUND_GOODS'"
       >
         <div class="section-header with-border">
           <h3>商家处理信息</h3>
@@ -552,10 +547,7 @@
     </template>
     <!-- 退货 -->
     <template
-      v-if="
-        (aftersalesInfo.distributor_id == '0' && aftersalesInfo.progress == '0') ||
-          ($store.getters.login_type == 'distributor' && aftersalesInfo.progress == '0')
-      "
+      v-if="aftersalesInfo.progress == '0'"
     >
       <div class="section-header with-border">
         <h3>商家处理信息</h3>
@@ -736,10 +728,7 @@
     </template>
 
     <div
-      v-if="
-        (aftersalesInfo.distributor_id == '0' && aftersalesInfo.progress == '0') ||
-          ($store.getters.login_type == 'distributor' && aftersalesInfo.progress == '0')
-      "
+      v-if="aftersalesInfo.progress == '0'"
       class="section-footer with-border content-center"
     >
       <el-button
