@@ -213,19 +213,6 @@ export default {
         this.loading = false
       })
     },
-
-    // resetForm(formName) {
-    //   this.create_time = ''
-    //   this.params = {
-    //     page: 1,
-    //     pageSize: 10,
-    //     login_name: undefined,
-    //     status: undefined,
-    //     start_time: undefined,
-    //     end_time: undefined
-    //   }
-    //   this.getAftersalesList()
-    // },
     createTimeFilter (time) {
       return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
     }

@@ -67,6 +67,7 @@
           label="售后状态:"
         >
           <el-select
+            clearable
             v-model="params.aftersales_status"
             placeholder="售后状态"
           >
@@ -475,6 +476,9 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.aftersales_status) {
+      this.params.aftersales_status = this.$route.query.aftersales_status
+    }
     //获取所有店铺
     this.getStoreList()
     this.fetchList()

@@ -17,7 +17,7 @@
           />
         </div>
         <div
-          v-if="VERSION_PLATFORM"
+          v-if="VERSION_STANDARD"
           class="option-item"
         >
           <span class="option-item_text">店铺首页</span>

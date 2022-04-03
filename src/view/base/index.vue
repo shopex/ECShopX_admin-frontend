@@ -807,7 +807,7 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link to="order/entitytrade/aftersaleslist">
+                      <router-link to="order/entitytrade/aftersaleslist?aftersales_status=0">
                         待处理退款：{{ staticsData && staticsData.notice_data.aftersales_count }}
                       </router-link>
                     </el-col>
