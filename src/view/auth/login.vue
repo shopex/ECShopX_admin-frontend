@@ -223,7 +223,8 @@ export default {
           const params = {
             username: this.form.account,
             password: this.form.checkPass,
-            logintype: this.loginType
+            logintype: this.loginType,
+            product_model: this.VUE_APP_PRODUCT_MODEL
           }
           try {
             const { token } = await this.$api.auth.login(params)
