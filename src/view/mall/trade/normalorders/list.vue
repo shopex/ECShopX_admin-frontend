@@ -771,7 +771,6 @@ export default {
         order_type: 'normal',
         ...this.params
       }
-
       if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
         params.time_start_begin = this.params.create_time[0]
         params.time_start_end = this.params.create_time[1]
@@ -1071,12 +1070,18 @@ export default {
     },
     exportData (type) {
       console.log('====exportData', type)
-      orderExport({
+      let params = {
         ...this.params,
         order_type: 'normal',
         type,
         page: this.page.pageIndex
-      }).then((response) => {
+      }
+      if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
+        params.time_start_begin = moment(this.params.create_time[0]).unix()
+        params.time_start_end = moment(this.params.create_time[1]).add(1, 'days').unix()
+      }
+      delete params.create_time
+      orderExport(params).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
