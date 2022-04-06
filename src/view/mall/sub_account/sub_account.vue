@@ -87,7 +87,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              label="分账状态"
+              label="是否分账"
               prop="adapay_div_status"
             >
               <el-select
@@ -144,6 +144,26 @@
                 end-placeholder="结束日期"
                 @change="timeHandle"
               />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="分账状态"
+              prop="can_div"
+            >
+              <el-select
+                v-model="form.can_div"
+                style="width: 100%"
+              >
+                <el-option
+                  label="可分账"
+                  value="true"
+                />
+                <el-option
+                  label="不可分账"
+                  value="false"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -260,7 +280,19 @@
               />
               <el-table-column label="支付方式">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.payChannel == 'wx_lite'">微信小程序支付</span>
+                  <span v-if="scope.row.payType == 'wxpay'">微信支付</span>
+                  <span v-if="scope.row.payType == 'wxpayapp'">微信APP支付</span>
+                  <span v-if="scope.row.payType == 'wxpayh5'">微信H5支付</span>
+                  <span v-if="scope.row.payType == 'wxpaypc'">微信PC支付</span>
+                  <span v-if="scope.row.payType == 'wxpaypos'">微信POS支付</span>
+                  <span v-if="scope.row.payType == 'alipayapp'">支付宝APP支付</span>
+                  <span v-if="scope.row.payType == 'alipay'">支付宝支付</span>
+                  <span v-if="scope.row.payType == 'alipayh5'">支付宝H5支付</span>
+                  <span v-if="scope.row.payType == 'alipaypos'">支付宝POS支付</span>
+                  <span v-if="scope.row.payType == 'deposit'">余额支付</span>
+                  <span v-if="scope.row.payType == 'point'">积分支付</span>
+                  <span v-if="scope.row.payType == 'pos'">POS银行卡支付</span>
+                  <span v-if="scope.row.payType == 'adapay' && scope.row.payChannel == 'wx_lite'">微信支付</span>
                 </template>
               </el-table-column>
             </template>
@@ -297,6 +329,18 @@
             <el-table-column label="退款金额">
               <template slot-scope="scope">
                 <span>{{ (scope.row.refundedFee / 100) | formatNumMoney }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="分账类型">
+              <template slot-scope="scope">
+                <span v-if="scope.row.payType == 'adapay'">线上</span>
+                <span v-else>线下</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="分账状态">
+              <template slot-scope="scope">
+                <span v-if="scope.row.canDiv === true">可分账</span>
+                <span v-else>不可分账</span>
               </template>
             </el-table-column>
             <el-table-column label="是否分账">
@@ -381,6 +425,7 @@ export default {
         pay_type: '', //支付方式
         status: '', // 订单状态
         adapay_div_status: '', //分账状态,
+        can_div: '',
         distributor_name: '', // 收款方 （店铺名称）
         adapay_fee_mode: '', //手续费扣费方式
         time: ''
