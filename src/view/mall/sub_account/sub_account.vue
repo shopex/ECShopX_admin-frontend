@@ -340,7 +340,7 @@
             <el-table-column label="分账状态">
               <template slot-scope="scope">
                 <span v-if="scope.row.canDiv === true">可分账</span>
-                <span v-else">不可分账</span>
+                <span v-else>不可分账</span>
               </template>
             </el-table-column>
             <el-table-column label="是否分账">
