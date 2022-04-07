@@ -33,6 +33,7 @@
     // align-items: center;
     padding: 0px 10px;
     text-align: center;
+    cursor: default;
     a {
       cursor: pointer;
       font-size: 12px;
@@ -378,7 +379,7 @@
 .sound-img {
   width: 100%;
   padding: 0px;
-  box-shadow: 0px 0px 2px 0px #DFE7F3;
+  box-shadow: 0px 0px 2px 0px #dfe7f3;
   border-radius: 2px;
   .img-demo {
     width: 100%;
@@ -423,7 +424,8 @@
     width: 140px;
   }
 }
-.produce-dynamic, .produce-manual {
+.produce-dynamic,
+.produce-manual {
   padding: 0px;
   .produce-hd {
     height: 50px;
@@ -461,7 +463,7 @@
     display: inline-block;
     width: 30px;
     text-align: center;
-    color: #F8841F;
+    color: #f8841f;
     font-size: 12px;
     border-radius: 2px;
     margin-right: 5px;
@@ -495,6 +497,22 @@
   }
   .el-row {
     margin-bottom: 0px !important;
+  }
+}
+.dialog-version {
+  .el-dialog__body {
+    padding: 20px;
+    border: 1px solid #f5f5f5;
+  }
+  .update-tip {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .install-desc {
+    font-size: 13px;
+  }
+  a {
+    cursor: default;
   }
 }
 </style>
@@ -540,10 +558,20 @@
                     去绑定
                   </el-button>
                 </div>
-                <div class="bot-tips" v-if="VERSION_PLATFORM && VUE_APP_FREE">
-                  <span>当前版本：{{versionObj.dep_product_name}}</span>
-                  <a v-if="versionObj.upgrade_status" @click="dialogChange">有新版本待更新</a>
-                  <span v-else>已是最新版本</span>
+                <div
+                  v-if="VERSION_PLATFORM && VUE_APP_FREE"
+                  class="bot-tips"
+                >
+                  <div>当前版本：{{ versionObj.dep_product_name }}</div>
+                  <div
+                    v-if="versionObj.upgrade_status"
+                    @click="dialogChange"
+                  >
+                    有新版本待更新
+                  </div>
+                  <div v-else>
+                    已是最新版本
+                  </div>
                 </div>
               </div>
             </template>
@@ -610,10 +638,20 @@
                   }}
                   到期
                 </div>
-                <div class="bot-tips" v-if="VERSION_PLATFORM && VUE_APP_FREE">
-                  <span>当前版本：{{versionObj.dep_product_name}}</span>
-                  <a v-if="versionObj.upgrade_status" @click="dialogChange">有新版本待更新</a>
-                  <span v-else>已是最新版本</span>
+                <div
+                  v-if="VERSION_PLATFORM && VUE_APP_FREE"
+                  class="bot-tips"
+                >
+                  <div>当前版本：{{ versionObj.dep_product_name }}</div>
+                  <div
+                    v-if="versionObj.upgrade_status"
+                    @click="dialogChange"
+                  >
+                    有新版本待更新
+                  </div>
+                  <div v-else>
+                    已是最新版本
+                  </div>
                 </div>
               </section>
             </template>
@@ -751,7 +789,10 @@
                       </div>
                     </div>
                   </el-col>
-                  <el-col :span="12" v-if="!VERSION_IN_PURCHASE">
+                  <el-col
+                    v-if="!VERSION_IN_PURCHASE"
+                    :span="12"
+                  >
                     <div class="view-flex">
                       <div class="view-flex-item">
                         <div class="label">
@@ -841,7 +882,10 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="notices-group" v-if="!VERSION_IN_PURCHASE">
+                <div
+                  v-if="!VERSION_IN_PURCHASE"
+                  class="notices-group"
+                >
                   <div class="subtitle">
                     营销相关
                   </div>
@@ -874,7 +918,11 @@
           <el-col :span="14">
             <section
               v-loading="userloading"
-              :class="VERSION_IN_PURCHASE ? 'section-card purchase-chart-statics' : 'section-card chart-statics'"
+              :class="
+                VERSION_IN_PURCHASE
+                  ? 'section-card purchase-chart-statics'
+                  : 'section-card chart-statics'
+              "
             >
               <canvas
                 id="canvas"
@@ -1020,8 +1068,8 @@
             >
             <span>
               <a
-              href="https://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA1ODI4Ml80OTM4NjNfODAwMDU4MjgyXw"
-              target="_blank"
+                href="https://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA1ODI4Ml80OTM4NjNfODAwMDU4MjgyXw"
+                target="_blank"
               >在线客服</a>
             </span>
           </div>
@@ -1036,8 +1084,8 @@
           <img :src="img.demo" alt="" class="img-demo" />
         </section> -->
         <section
-          class="section-card fn-b-20 sound-img"
           v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 sound-img"
         >
           <img
             :src="img.sound"
@@ -1047,28 +1095,55 @@
           >
         </section>
         <section
-          class="section-card fn-b-20 produce-dynamic"
           v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 produce-dynamic"
         >
-          <el-row type="flex" justify="space-around" class="produce-hd">
-            <el-col class="title"><i class="iconfont icon-dongtai-01" />产品动态</el-col>
+          <el-row
+            type="flex"
+            justify="space-around"
+            class="produce-hd"
+          >
+            <el-col class="title">
+              <i class="iconfont icon-dongtai-01" />产品动态
+            </el-col>
             <el-col class="more">
               <span @click="openUrl(linkList.version_url)">更多</span>
             </el-col>
           </el-row>
-          <el-row type="flex" align="middle" class="row-link" v-for="(item, index) in linkList.versions" :key="index">
-            <el-col :span="4" v-if="index == 0" class="news">NEW</el-col>
-            <el-col :span="20" :class="index == 0 ? 'overflows' : 'margins overflows'">
+          <el-row
+            v-for="(item, index) in linkList.versions"
+            :key="index"
+            type="flex"
+            align="middle"
+            class="row-link"
+          >
+            <el-col
+              v-if="index == 0"
+              :span="4"
+              class="news"
+            >
+              NEW
+            </el-col>
+            <el-col
+              :span="20"
+              :class="index == 0 ? 'overflows' : 'margins overflows'"
+            >
               <span @click="openUrl(item.url)">{{ item.title }}</span>
             </el-col>
           </el-row>
         </section>
         <section
-          class="section-card fn-b-20 produce-manual"
           v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 produce-manual"
         >
-          <el-row type="flex" justify="space-around" class="produce-hd">
-            <el-col class="title"><i class="iconfont icon-caozuoshouce" />产品手册</el-col>
+          <el-row
+            type="flex"
+            justify="space-around"
+            class="produce-hd"
+          >
+            <el-col class="title">
+              <i class="iconfont icon-caozuoshouce" />产品手册
+            </el-col>
             <el-col class="more">
               <span @click="openUrl(linkList.question_url)">查看</span>
             </el-col>
@@ -1091,27 +1166,41 @@
       </el-col>
     </el-row>
     <el-dialog
-      width="30%"
+      class="dialog-version"
+      width="550px"
       :visible.sync="dialogIsShow"
-      :showClose="false"
+      :show-close="false"
     >
-    <div style="text-align:center">{{dialogContent}}</div>
-    <div slot="footer" class="dialog-footer">
-      <el-button
-        class="btn-ft"
-        type="danger"
-        :disabled="updateDisabled"
-        @click="dialogConfirmChange"
-      >
-        更 新
-      </el-button>
-      <el-button
-        class="btn-ft"
-        :disabled="cancelDisabled"
-        @click="dialogCancelChange"
-      >
-        取 消
-      </el-button>
+      <div slot="title">
+        版本更新 {{ versionObj.version }}
+      </div>
+      <div class="version-content">
+        <div class="update-tip">
+          {{ dialogContent }}<a @click="openUrl(linkList.version_url)">具体升级内容，请查看</a>
+        </div>
+        <div class="install-desc">
+          <p>更新成功后您还需要做如下操作(如果对应目录代码无更新可忽略操作)：</p>
+          <p>1、在ecshopx-api目录下执行php的数据库更新命令，具体命令参照安装文档</p>
+          <p>2、在ecshopx-admin目录下执行npm run build，重新编译</p>
+          <p>3、在ecshopx-vshop目录下执行npm run build，重新编译</p>
+          <p>4、小程序需要将代码下载到本地，重新编译，在微信开发者工具提交审核</p>
+        </div>
+      </div>
+      <div slot="footer">
+        <el-button
+          type="primary"
+          :disabled="updateDisabled"
+          @click="dialogConfirmChange"
+        >
+          更 新
+        </el-button>
+        <el-button
+          plain
+          :disabled="cancelDisabled"
+          @click="dialogCancelChange"
+        >
+          取 消
+        </el-button>
       </div>
     </el-dialog>
     <!-- <el-dialog class="industry-dialog" title="提示" :visible="waitingDialog" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
@@ -1559,7 +1648,8 @@ export default {
     },
     dialogChange () {
       this.dialogIsShow = true
-      this.dialogContent = '本次更新包含小程序端更新，如您已对小程序进行开发可能会覆盖已经开发内容，请确认后更新！'
+      this.dialogContent =
+        '本次更新包含小程序端更新，如您已对小程序进行开发可能会覆盖已经开发内容，请确认后更新！'
     },
     dialogCancelChange () {
       this.dialogIsShow = false
@@ -1571,21 +1661,23 @@ export default {
       this.dialogContent = '更新中'
       this.updateDisabled = true
       this.cancelDisabled = true
-      systemUpgrade().then((res) => {
-        this.dialogContent = '更新成功'
-        this.cancelDisabled = false
-      }).catch((error) => {
-        // console.log(error)
-        // this.dialogContent = error
-        this.dialogContent = '更新失败'
-        this.cancelDisabled = false
-      })
+      systemUpgrade()
+        .then((res) => {
+          this.dialogContent = '更新成功'
+          this.cancelDisabled = false
+        })
+        .catch((error) => {
+          // console.log(error)
+          // this.dialogContent = error
+          this.dialogContent = '更新失败'
+          this.cancelDisabled = false
+        })
     },
     systemChangelog () {
       systemChangelog().then((res) => {
         let data = res.data.data
         this.linkList = data
-      })      
+      })
     },
     detectVersion () {
       detectVersion().then((res) => {
@@ -1764,54 +1856,54 @@ export default {
       }
       if (this.VERSION_IN_PURCHASE) {
         config = {
-        type: 'line',
-        data: {
-          labels: this.userTimeArr,
-          datasets: [
-            {
-              label: '新增人数',
-              backgroundColor: window.chartColors.red,
-              borderColor: window.chartColors.red,
-              data: this.userData,
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          title: {
-            display: true,
-            text: '近7天用户趋势'
-          },
-          tooltips: {
-            mode: 'index',
-            intersect: true
-          },
-          hover: {
-            mode: 'nearest',
-            intersect: true
-          },
-          scales: {
-            xAxes: [
+          type: 'line',
+          data: {
+            labels: this.userTimeArr,
+            datasets: [
               {
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: ''
-                }
-              }
-            ],
-            yAxes: [
-              {
-                display: true,
-                scaleLabel: {
-                  display: false
-                }
+                label: '新增人数',
+                backgroundColor: window.chartColors.red,
+                borderColor: window.chartColors.red,
+                data: this.userData,
+                fill: false
               }
             ]
+          },
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: '近7天用户趋势'
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: true
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: ''
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: false
+                  }
+                }
+              ]
+            }
           }
         }
-      }
       }
       var ctx = document.getElementById('canvas').getContext('2d')
       window.myLine = new Chart(ctx, config)
