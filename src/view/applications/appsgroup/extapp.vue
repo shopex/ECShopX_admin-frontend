@@ -52,6 +52,7 @@ export default {
 .content-container {
   background: none !important;
   padding: 0px !important;
+  min-height: 600px;
 }
 .ectapp-content {
   .ectapp-col {
