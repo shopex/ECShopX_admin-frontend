@@ -422,7 +422,13 @@
 
       <!-- 退货退款审核 -->
       <template
-        v-else-if="aftersalesInfo.aftersales_type == 'REFUND_GOODS'"
+        v-else-if="
+          (aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
+            aftersalesInfo.distributor_id == '0' && VERSION_PLATFORM) ||
+            (aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
+              $store.getters.login_type == 'distributor' && VERSION_PLATFORM) ||
+            (aftersalesInfo.aftersales_type == 'REFUND_GOODS' && !VERSION_PLATFORM)
+        "
       >
         <div class="section-header with-border">
           <h3>商家处理信息</h3>
@@ -547,7 +553,11 @@
     </template>
     <!-- 退货 -->
     <template
-      v-if="aftersalesInfo.progress == '0'"
+          v-if="
+        (aftersalesInfo.distributor_id == '0' && aftersalesInfo.progress == '0' && VERSION_PLATFORM) ||
+          ($store.getters.login_type == 'distributor' && aftersalesInfo.progress == '0' && VERSION_PLATFORM) ||
+          (aftersalesInfo.progress == '0' && !VERSION_PLATFORM)
+      "
     >
       <div class="section-header with-border">
         <h3>商家处理信息</h3>
@@ -728,7 +738,11 @@
     </template>
 
     <div
-      v-if="aftersalesInfo.progress == '0'"
+      v-if="
+        (aftersalesInfo.distributor_id == '0' && aftersalesInfo.progress == '0' && VERSION_PLATFORM) ||
+          ($store.getters.login_type == 'distributor' && aftersalesInfo.progress == '0' && VERSION_PLATFORM) ||
+          aftersalesInfo.progress == '0' && !VERSION_PLATFORM
+      "
       class="section-footer with-border content-center"
     >
       <el-button
