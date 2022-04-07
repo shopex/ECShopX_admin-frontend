@@ -552,6 +552,8 @@ export default {
       this.$refs[formName].resetFields()
       this.form.pay_type = ''
       this.form.status = ''
+      this.time.time_start_begin = ''
+      this.time.time_start_end = ''
     },
     async exportFile () {
       const { status } = await this.$api.adapay.exportFileList({
