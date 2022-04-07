@@ -538,7 +538,7 @@ export default {
 }
 .system-release {
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: #cdcbcb;
   margin-top: 16px;
 }

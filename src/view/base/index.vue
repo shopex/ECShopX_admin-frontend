@@ -441,6 +441,7 @@
   .more {
     text-align: right;
     span {
+      color: #999;
       font-size: 12px;
       cursor: pointer;
     }
@@ -473,7 +474,7 @@
     color: #999;
     @include text-overflow();
     span {
-      font-size: 14px;
+      font-size: 12px;
       cursor: pointer;
     }
   }
