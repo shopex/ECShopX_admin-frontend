@@ -89,7 +89,7 @@
                 v-if="item.status == '1'"
                 src="@/assets/img/adapay/pass.png"
                 alt=""
-                style="width: 80px; height: 64px"
+                style="width: 64px; height: 64px"
               >
               <img
                 v-if="item.status == '2'"

@@ -22,7 +22,7 @@
       <img
         v-if="info.status == '1'"
         src="@/assets/img/adapay/pass.png"
-        style="width: 80px; height: 64px"
+        style="width: 64px; height: 64px"
         alt=""
       >
       <img
