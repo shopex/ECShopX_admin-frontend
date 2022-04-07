@@ -525,7 +525,7 @@
               <div class="unbind-box">
                 <div class="content-center">
                   <div
-                    v-if="activateInfo"
+                    v-if="activateInfo && !VUE_APP_FREE"
                     class="validity-period"
                   >
                     {{ activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss') }}
@@ -602,7 +602,7 @@
                   {{ activateInfo.vue_ecshopx_verion }}
                 </div>
                 <div
-                  v-if="activateInfo"
+                  v-if="activateInfo && !VUE_APP_FREE"
                   class="validity-period"
                 >
                   <i class="iconfont icon-clock" />{{
