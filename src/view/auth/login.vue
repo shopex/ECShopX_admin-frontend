@@ -172,47 +172,65 @@ export default {
     ]),
     init () {
       this.loginType = this.$route.meta.type
-      console.log(this.loginType)
+      // console.log(this.loginType)
 
-      switch (this.loginType) {
-        case 'distributor':
-          this.title = '店铺管理中心'
-          this.login_bg = login_bg_shopadmin
-          break
-        case 'dealer':
-          this.title = '经销商管理中心'
-          this.login_bg = login_bg_merchant
-          break
-        case 'merchant':
-          this.title = '商户管理中心'
-          this.login_bg = login_bg_merchant
-          break
-        default:
-          this.getBgImg()
-          break
-      }
-
+      // switch (this.loginType) {
+      //   case 'distributor':
+      //     this.title = '店铺管理中心'
+      //     this.login_bg = login_bg_shopadmin
+      //     break
+      //   case 'dealer':
+      //     this.title = '经销商管理中心'
+      //     this.login_bg = login_bg_merchant
+      //     break
+      //   case 'merchant':
+      //     this.title = '商户管理中心'
+      //     this.login_bg = login_bg_merchant
+      //     break
+      //   default:
+      //     this.getBgImg()
+      //     break
+      // }
+      this.getBgImg()
       this.$store.dispatch('setLoginType', this.loginType)
     },
     getBgImg () {
       switch (this.VUE_APP_PRODUCT_MODEL) {
         case 'standard':
-          this.title = '云店管理中心'
+          this.title = this.getLoginTitle('云店管理中心')
           this.login_bg = login_bg_yundian
           break
         case 'in_purchase':
-          this.title = '内购管理中心'
+          this.title = this.getLoginTitle('内购管理中心')
           this.login_bg = login_bg_inpurchase
           break
         case 'b2c':
-          this.title = '官方商城管理中心'
+          this.title = this.getLoginTitle('官方商城管理中心')
           this.login_bg = login_bg_b2c
           break
         default:
-          this.title = '平台管理中心'
+          this.title = this.getLoginTitle('平台管理中心')
           this.login_bg = this.VUE_APP_FREE ? login_bg_free_ecshopx : login_bg_ecshopx
           break
       }
+    },
+    getLoginTitle (t) {
+      let title
+      switch (this.loginType) {
+        case 'distributor':
+          title = '店铺管理中心'
+          break
+        case 'dealer':
+          title = '经销商管理中心'
+          break
+        case 'merchant':
+          title = '商户管理中心'
+          break
+        default:
+          title = t
+          break
+      }
+      return title
     },
     fnSize () {
       this.size = document.body.clientHeight

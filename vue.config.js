@@ -38,7 +38,7 @@ module.exports = {
   },
   configureWebpack: config => {
     if(process.env.NODE_ENV !== 'production') {
-      config.devtool = 'source-map'
+      config.devtool = 'eval-source-map'
     }
     if ( process.env.VUE_APP_OSS_CDN == 'true' ) {
       config.plugins.push(
