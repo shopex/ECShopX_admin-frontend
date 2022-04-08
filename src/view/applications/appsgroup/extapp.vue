@@ -22,7 +22,7 @@
       </el-row>
       <div class="ectapp-dialog" v-show="visible">
         <div class="close" @click="clickChange(false)" />
-          <img :src="require('@/assets/img/ectapp/alipay_code.png')" class="ectapp-code" >
+        <img :src="require('@/assets/img/ectapp/alipay_code.png')" class="ectapp-code" >
       </div>
     </template>
     <router-view />
@@ -48,11 +48,11 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .content-container {
   background: none !important;
   padding: 0px !important;
-  min-height: 600px;
+  min-height: 600px !important;
 }
 .ectapp-content {
   .ectapp-col {

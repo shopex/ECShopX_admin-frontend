@@ -380,10 +380,18 @@
   padding: 0px;
   box-shadow: 0px 0px 2px 0px #DFE7F3;
   border-radius: 2px;
+  position: relative;
   .img-demo {
     width: 100%;
     margin: 0 auto;
     display: block;
+  }
+  .sound-btn {
+    width: 30%;
+    height: 25%;
+    position: absolute;
+    bottom: 12%;
+    left: 4%;
     cursor: pointer;
   }
 }
@@ -1039,11 +1047,11 @@
           class="section-card fn-b-20 sound-img"
           v-if="VERSION_PLATFORM && VUE_APP_FREE"
         >
+          <div class="sound-btn" @click="openUrl('https://support.qq.com/product/386118')" />
           <img
             :src="img.sound"
             alt=""
             class="img-demo"
-            @click="openUrl('https://support.qq.com/product/386118')"
           >
         </section>
         <section
