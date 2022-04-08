@@ -14,4 +14,3 @@ selenium-debug.log
 .idea/
 release.*
 .husky
-.env
