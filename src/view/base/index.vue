@@ -5,9 +5,17 @@
 }
 .unbind-box {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 285px;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding-bottom: 15px;
+  .content-center {
+    padding: 30px 30px 15px 30px;
+  }
   .iconfont {
     display: block;
     margin-bottom: 20px;
@@ -18,6 +26,26 @@
   p {
     margin-bottom: 20px;
   }
+  .bot-tips {
+    font-size: 12px;
+    padding-top: 5px;
+    // display: flex;
+    // align-items: center;
+    padding: 0px 10px;
+    text-align: center;
+    cursor: default;
+    a {
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+      color: #5ea7ec;
+    }
+    :last-child {
+      font-size: 12px;
+      margin-left: 10px;
+      color: #459ae9;
+    }
+  }
 }
 
 .section-card {
@@ -27,8 +55,11 @@
   &.realtime-statics {
     height: 285px;
   }
+  &.purchase-chart-statics {
+    height: 288px;
+  }
   &.chart-statics {
-    height: 318px;
+    height: 368px;
   }
   .section-card-header {
     display: flex;
@@ -66,6 +97,8 @@
       }
     }
   }
+  &.company {
+  }
 }
 
 .company {
@@ -74,6 +107,10 @@
   align-items: center;
   justify-content: center;
   height: 285px;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px 0px 20px;
   .logo {
     width: 70px;
     height: 70px;
@@ -84,15 +121,33 @@
     font-size: 14px;
   }
   .operate {
-    padding-bottom: 50px;
+    // padding-bottom: 50px;
+    margin-bottom: 10px;
   }
   .validity-period {
     display: flex;
     font-size: 12px;
     color: #999;
+    width: 100%;
+    margin-left: 120px;
+    text-align: left;
     .iconfont {
       margin-right: 10px;
       font-size: 12px;
+    }
+  }
+  .bot-tips {
+    font-size: 12px;
+    padding-top: 5px;
+    // display: flex;
+    // align-items: center;
+    padding: 0px 10px;
+    text-align: center;
+    a {
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 5px;
+      color: #5ea7ec;
     }
   }
 }
@@ -321,6 +376,26 @@
     margin: 0 auto;
   }
 }
+.sound-img {
+  width: 100%;
+  padding: 0px;
+  box-shadow: 0px 0px 2px 0px #dfe7f3;
+  border-radius: 2px;
+  position: relative;
+  .img-demo {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+  .sound-btn {
+    width: 30%;
+    height: 25%;
+    position: absolute;
+    bottom: 12%;
+    left: 4%;
+    cursor: pointer;
+  }
+}
 .sl-img {
   // padding: 0;
   // background: url('@/assets/img/saas/bcg_2.png');
@@ -357,8 +432,98 @@
     width: 140px;
   }
 }
+.produce-dynamic,
+.produce-manual {
+  padding: 0px;
+  .produce-hd {
+    height: 50px;
+    line-height: 50px;
+    border-radius: 2px;
+    background: rgba(203, 6, 15, 0.03);
+    padding: 0px 15px;
+  }
+  .title {
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+  }
+  .more {
+    text-align: right;
+    span {
+      color: #999;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+}
+.produce-dynamic {
+  .icon-dongtai-01 {
+    padding: 2px;
+    font-size: 14px;
+    color: #fff;
+    background: var(--themeColor);
+    border-radius: 2px;
+    font-weight: normal;
+    margin-right: 5px;
+  }
+  .news {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    color: #f8841f;
+    font-size: 12px;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-weight: bold;
+  }
+  .margins {
+    margin-left: 35px;
+  }
+  .overflows {
+    color: #999;
+    @include text-overflow();
+    span {
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+  .row-link {
+    padding: 0px 15px 10px 15px;
+    margin-bottom: 0px !important;
+  }
+}
+.produce-manual {
+  .icon-caozuoshouce {
+    padding: 2px;
+    font-size: 14px;
+    color: #fff;
+    background: var(--themeColor);
+    border-radius: 2px;
+    font-weight: normal;
+    margin-right: 5px;
+  }
+  .el-row {
+    margin-bottom: 0px !important;
+  }
+}
+.dialog-version {
+  .el-dialog__body {
+    padding: 20px;
+    border: 1px solid #f5f5f5;
+  }
+  .update-tip {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .install-desc {
+    font-size: 13px;
+  }
+  a {
+    cursor: default;
+  }
+}
 </style>
-
 <template>
   <div
     v-if="bool"
@@ -379,14 +544,14 @@
       </div> -->
     </div>
     <el-row :gutter="20">
-      <el-col :span="20">
+      <el-col :span="VERSION_PLATFORM && VUE_APP_FREE ? 19 : 20">
         <el-row :gutter="20">
           <el-col :span="7">
             <template v-if="!isBind">
-              <div class="section-card unbind-box">
+              <div class="unbind-box">
                 <div class="content-center">
                   <div
-                    v-if="activateInfo"
+                    v-if="activateInfo && !VUE_APP_FREE"
                     class="validity-period"
                   >
                     {{ activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss') }}
@@ -401,10 +566,25 @@
                     去绑定
                   </el-button>
                 </div>
+                <div
+                  v-if="VERSION_PLATFORM && VUE_APP_FREE"
+                  class="bot-tips"
+                >
+                  <div>当前版本：{{ versionObj.dep_product_name }}</div>
+                  <div
+                    v-if="versionObj.upgrade_status"
+                    @click="dialogChange"
+                  >
+                    有新版本待更新
+                  </div>
+                  <div v-else>
+                    已是最新版本
+                  </div>
+                </div>
               </div>
             </template>
-            <template v-else>
-              <section class="section-card company">
+            <template v-if="isBind">
+              <section class="company">
                 <img
                   v-if="authorizerData"
                   class="logo"
@@ -434,7 +614,7 @@
                     去授权
                   </el-button>
                   <el-button
-                    type="danger"
+                    type="primary"
                     size="mini"
                     @click="accountactivate"
                   >
@@ -458,13 +638,28 @@
                   {{ activateInfo.vue_ecshopx_verion }}
                 </div>
                 <div
-                  v-if="activateInfo"
+                  v-if="activateInfo && !VUE_APP_FREE"
                   class="validity-period"
                 >
                   <i class="iconfont icon-clock" />{{
                     activateInfo.expired_at | datetime('YYYY-MM-DD HH:mm:ss')
                   }}
                   到期
+                </div>
+                <div
+                  v-if="VERSION_PLATFORM && VUE_APP_FREE"
+                  class="bot-tips"
+                >
+                  <div>当前版本：{{ versionObj.dep_product_name }}</div>
+                  <div
+                    v-if="versionObj.upgrade_status"
+                    @click="dialogChange"
+                  >
+                    有新版本待更新
+                  </div>
+                  <div v-else>
+                    已是最新版本
+                  </div>
                 </div>
               </section>
             </template>
@@ -602,7 +797,10 @@
                       </div>
                     </div>
                   </el-col>
-                  <el-col :span="12">
+                  <el-col
+                    v-if="!VERSION_IN_PURCHASE"
+                    :span="12"
+                  >
                     <div class="view-flex">
                       <div class="view-flex-item">
                         <div class="label">
@@ -659,7 +857,7 @@
                       class="notice-item"
                       :span="12"
                     >
-                      <router-link to="order/entitytrade/aftersaleslist">
+                      <router-link to="order/entitytrade/aftersaleslist?aftersales_status=0">
                         待处理退款：{{ staticsData && staticsData.notice_data.aftersales_count }}
                       </router-link>
                     </el-col>
@@ -692,7 +890,10 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="notices-group">
+                <div
+                  v-if="!VERSION_IN_PURCHASE"
+                  class="notices-group"
+                >
                   <div class="subtitle">
                     营销相关
                   </div>
@@ -725,7 +926,11 @@
           <el-col :span="14">
             <section
               v-loading="userloading"
-              class="section-card chart-statics"
+              :class="
+                VERSION_IN_PURCHASE
+                  ? 'section-card purchase-chart-statics'
+                  : 'section-card chart-statics'
+              "
             >
               <canvas
                 id="canvas"
@@ -759,7 +964,10 @@
             </section>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-if="system_is_saas == false">
+        <el-row
+          v-if="system_is_saas == false"
+          :gutter="20"
+        >
           <el-col :span="24">
             <section class="section-card">
               <div class="section-card-header">
@@ -767,7 +975,11 @@
                   系统信息
                 </div>
               </div>
-              <el-descriptions :column="3" border size="mini">
+              <el-descriptions
+                :column="3"
+                border
+                size="mini"
+              >
                 <el-descriptions-item>
                   <template slot="label">
                     company_id
@@ -840,8 +1052,8 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :span="4">
-        <section
+      <el-col :span="VERSION_PLATFORM && VUE_APP_FREE ? 5 : 4">
+        <!-- <section
           v-show="activateInfo.source != 'demo'"
           class="section-card fn-b-20 card-right"
         >
@@ -862,12 +1074,14 @@
               :src="img.qq"
               alt="在线客服"
             >
-            <span><a
-              href="https://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA1ODI4Ml80OTM4NjNfODAwMDU4MjgyXw"
-              target="_blank"
-            >在线客服</a></span>
+            <span>
+              <a
+                href="https://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDA1ODI4Ml80OTM4NjNfODAwMDU4MjgyXw"
+                target="_blank"
+              >在线客服</a>
+            </span>
           </div>
-        </section>
+        </section> -->
         <!-- <section class="section-card fn-b-20"><a href="http://wpa.qq.com/msgrd?v=3&uin=714165655&site=qq&menu=yes" target="_blank">QQ客服</a></section> -->
         <!-- <section
           class="section-card fn-b-20 demo-img"
@@ -878,7 +1092,76 @@
           <img :src="img.demo" alt="" class="img-demo" />
         </section> -->
         <section
-          v-show="activateInfo.source == 'demo'"
+          v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 sound-img"
+        >
+          <div
+            class="sound-btn"
+            @click="openUrl('https://support.qq.com/product/386118')"
+          />
+          <img
+            :src="img.sound"
+            alt=""
+            class="img-demo"
+          >
+        </section>
+        <section
+          v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 produce-dynamic"
+        >
+          <el-row
+            type="flex"
+            justify="space-around"
+            class="produce-hd"
+          >
+            <el-col class="title">
+              <i class="iconfont icon-dongtai-01" />产品动态
+            </el-col>
+            <el-col class="more">
+              <span @click="openUrl(linkList.version_url)">更多</span>
+            </el-col>
+          </el-row>
+          <el-row
+            v-for="(item, index) in linkList.versions"
+            :key="index"
+            type="flex"
+            align="middle"
+            class="row-link"
+          >
+            <el-col
+              v-if="index == 0"
+              :span="4"
+              class="news"
+            >
+              NEW
+            </el-col>
+            <el-col
+              :span="20"
+              :class="index == 0 ? 'overflows' : 'margins overflows'"
+            >
+              <span @click="openUrl(item.url)">{{ item.title }}</span>
+            </el-col>
+          </el-row>
+        </section>
+        <section
+          v-if="VERSION_PLATFORM && VUE_APP_FREE"
+          class="section-card fn-b-20 produce-manual"
+        >
+          <el-row
+            type="flex"
+            justify="space-around"
+            class="produce-hd"
+          >
+            <el-col class="title">
+              <i class="iconfont icon-caozuoshouce" />产品手册
+            </el-col>
+            <el-col class="more">
+              <span @click="openUrl(linkList.question_url)">查看</span>
+            </el-col>
+          </el-row>
+        </section>
+        <section
+          v-if="activateInfo.source == 'demo' && !VUE_APP_FREE"
           class="section-card fn-b-20 sl-img"
           :style="'background:  url(' + img.bcg_2 + ')'"
         >
@@ -893,6 +1176,44 @@
         </section>
       </el-col>
     </el-row>
+    <el-dialog
+      class="dialog-version"
+      width="550px"
+      :visible.sync="dialogIsShow"
+      :show-close="false"
+    >
+      <div slot="title">
+        版本更新 {{ versionObj.version }}
+      </div>
+      <div class="version-content">
+        <div class="update-tip">
+          {{ dialogContent }}<a @click="openUrl(linkList.version_url)">具体升级内容，请查看</a>
+        </div>
+        <div class="install-desc">
+          <p>更新说明：更新成功后您还需要做如下操作(如果对应目录代码无更新可忽略操作)</p>
+          <p>1、在ecshopx-api目录下执行php的数据库更新命令，具体命令参照安装文档</p>
+          <p>2、在ecshopx-admin目录下执行npm run build，重新编译</p>
+          <p>3、在ecshopx-vshop目录下执行npm run build，重新编译</p>
+          <p>4、小程序需要将代码下载到本地，重新编译，在微信开发者工具提交审核</p>
+        </div>
+      </div>
+      <div slot="footer">
+        <el-button
+          type="primary"
+          :disabled="updateDisabled"
+          @click="dialogConfirmChange"
+        >
+          更 新
+        </el-button>
+        <el-button
+          plain
+          :disabled="cancelDisabled"
+          @click="dialogCancelChange"
+        >
+          取 消
+        </el-button>
+      </div>
+    </el-dialog>
     <!-- <el-dialog class="industry-dialog" title="提示" :visible="waitingDialog" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
       <span>请在微信端窗口进行微信公众号授权</span>
       <span slot="footer" class="dialog-footer">
@@ -1155,7 +1476,10 @@ import {
   updateCompanyInfo,
   getResourceList,
   getCompanyStatistics,
-  ydleadsInfo
+  ydleadsInfo,
+  systemChangelog,
+  systemUpgrade,
+  detectVersion
 } from '../../api/company'
 import config from '../../../package.json'
 
@@ -1170,6 +1494,7 @@ const liansuo = require('@/assets/img/saas/liansuo.png')
 const bcg_1 = require('@/assets/img/saas/bcg_1.png')
 const demo = require('@/assets/img/saas/demo.png')
 const biaozun = require('@/assets/img/saas/biaozun.png')
+const sound = require('@/assets/img/saas/sound.jpg')
 
 export default {
   data () {
@@ -1185,7 +1510,8 @@ export default {
         liansuo,
         bcg_1,
         demo,
-        biaozun
+        biaozun,
+        sound
       },
       bool: true,
       userloading: true,
@@ -1288,24 +1614,6 @@ export default {
         //   color: "#b992f8",
         //   text: "新增服务商品",
         // },
-        {
-          link: '/marketing/groupsindex/editor',
-          icon: 'comments-dollar',
-          color: '#fa9678',
-          text: '新增拼团活动'
-        },
-        {
-          link: '/marketing/coupon/membermarketing',
-          icon: 'ticket-alt',
-          color: '#fa8084',
-          text: '新增优惠券'
-        },
-        {
-          link: '/marketing/marketingseckill/editor',
-          icon: 'stopwatch',
-          color: '#f9ca6b',
-          text: '新增秒杀活动'
-        },
         // {
         //   link: "/marketing/community/marketingcommunityactivity/editor",
         //   icon: "door-open",
@@ -1323,20 +1631,14 @@ export default {
           icon: 'clipboard-list',
           color: '#7cc0f4',
           text: '订单处理'
-        },
-        {
-          link: '/order/entitytrade/aftersaleslist',
-          icon: 'user-tie',
-          color: '#fa8084',
-          text: '售后处理'
-        },
-        {
-          link: '/marketing/popularize/popularizewithdraw',
-          icon: 'donate',
-          color: '#fa9679',
-          text: '提现处理'
         }
-      ]
+      ],
+      linkList: {},
+      dialogIsShow: false,
+      dialogContent: '',
+      updateDisabled: false,
+      cancelDisabled: false,
+      versionObj: {}
     }
   },
   methods: {
@@ -1344,6 +1646,55 @@ export default {
     dingHandel (type) {
       this.dialogVisible = true
       this.dingInfo.goods_name = type
+    },
+    openUrl (url) {
+      if (url) {
+        window.open(url, '_blank')
+      } else {
+        this.$message({
+          type: 'error',
+          message: '暂无可跳转路径'
+        })
+      }
+    },
+    dialogChange () {
+      this.dialogIsShow = true
+      this.dialogContent =
+        '本次更新包含小程序端更新，如您已对小程序进行开发可能会覆盖已经开发内容，请确认后更新！'
+    },
+    dialogCancelChange () {
+      this.dialogIsShow = false
+      this.updateDisabled = false
+      this.cancelDisabled = false
+      this.detectVersion()
+    },
+    dialogConfirmChange () {
+      this.dialogContent = '更新中'
+      this.updateDisabled = true
+      this.cancelDisabled = true
+      systemUpgrade()
+        .then((res) => {
+          this.dialogContent = '更新成功'
+          this.cancelDisabled = false
+        })
+        .catch((error) => {
+          // console.log(error)
+          // this.dialogContent = error
+          this.dialogContent = '更新失败'
+          this.cancelDisabled = false
+        })
+    },
+    systemChangelog () {
+      systemChangelog().then((res) => {
+        let data = res.data.data
+        this.linkList = data
+      })
+    },
+    detectVersion () {
+      detectVersion().then((res) => {
+        let data = res.data.data
+        this.versionObj = data
+      })
     },
     submit () {
       let obj = JSON.parse(JSON.stringify(this.dingInfo))
@@ -1514,6 +1865,57 @@ export default {
           }
         }
       }
+      if (this.VERSION_IN_PURCHASE) {
+        config = {
+          type: 'line',
+          data: {
+            labels: this.userTimeArr,
+            datasets: [
+              {
+                label: '新增人数',
+                backgroundColor: window.chartColors.red,
+                borderColor: window.chartColors.red,
+                data: this.userData,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: '近7天用户趋势'
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: true
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: ''
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: false
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
       var ctx = document.getElementById('canvas').getContext('2d')
       window.myLine = new Chart(ctx, config)
     },
@@ -1523,7 +1925,6 @@ export default {
       return isInSaleCenter && isSass
     },
     mountedFunc () {
-      console.log('----mountedFunc---')
       getActivateInfo().then((res) => {
         this.activateInfo = res.data.data
         if (!res.data.data.is_valid) {
@@ -1533,7 +1934,6 @@ export default {
         }
         // this.activateInfo.source = 'demo'
         this.SET_PRODUCTION_CODE({ productionCode: res.data.data.product_code })
-        console.log('xiaolu',config);
         this.activateInfo.vue_ecshopx_verion = `${process.env.VUE_APP_PRODUCT_MODEL}-${config.version}`
         this.activateInfo.elementui_version = `${config.elementui_version}`
       })
@@ -1570,7 +1970,45 @@ export default {
     }
   },
   mounted () {
+    if (!this.VERSION_IN_PURCHASE) {
+      this.links.push(
+        {
+          link: '/marketing/groupsindex/editor',
+          icon: 'comments-dollar',
+          color: '#fa9678',
+          text: '新增拼团活动'
+        },
+        {
+          link: '/marketing/coupon/membermarketing',
+          icon: 'ticket-alt',
+          color: '#fa8084',
+          text: '新增优惠券'
+        },
+        {
+          link: '/marketing/marketingseckill/editor',
+          icon: 'stopwatch',
+          color: '#f9ca6b',
+          text: '新增秒杀活动'
+        },
+        {
+          link: '/order/entitytrade/aftersaleslist',
+          icon: 'user-tie',
+          color: '#fa8084',
+          text: '售后处理'
+        },
+        {
+          link: '/marketing/popularize/popularizewithdraw',
+          icon: 'donate',
+          color: '#fa9679',
+          text: '提现处理'
+        }
+      )
+    }
     this.mountedFunc()
+    if (this.VERSION_PLATFORM && this.VUE_APP_FREE) {
+      this.systemChangelog()
+      this.detectVersion()
+    }
   }
 }
 </script>

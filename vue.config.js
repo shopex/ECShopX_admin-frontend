@@ -12,6 +12,7 @@ const envVars = process.env
 //   node_env: mode
 // })
 
+console.log(process.env.NODE_ENV)
 Object.keys(envVars).forEach((key) => {
   if (key.indexOf('VUE_APP') > -1) {
     console.log(`${key}: ${envVars[key]}`)
@@ -37,7 +38,7 @@ module.exports = {
   },
   configureWebpack: config => {
     if(process.env.NODE_ENV !== 'production') {
-      config.devtool = 'source-map'
+      config.devtool = 'eval-source-map'
     }
     if ( process.env.VUE_APP_OSS_CDN == 'true' ) {
       config.plugins.push(

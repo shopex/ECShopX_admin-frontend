@@ -234,7 +234,7 @@ export default {
         })
         this.getDetail(this.pass_id)
         this.getLog(this.operator_id)
-        this.$parent.getAftersalesList()
+        this.$parent.fetchList()
         this.$refs[ref].closeLoading()
         this.visibleModal = false
         this.visibleContent = ''

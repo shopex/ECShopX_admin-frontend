@@ -8,16 +8,16 @@
           icon="el-icon-circle-plus"
           @click="appendTop(categoryList)"
         >
-          新增主类目
+          添加管理分类
         </el-button>
         <!-- <el-button-group>
           <el-button type="primary" @click="updateCategory" :disabled="isDisable">保存主类目</el-button> -->
-        <el-button
+        <!-- <el-button
           type="primary"
           @click="syncMainCategory"
         >
           同步主类目
-        </el-button>
+        </el-button> -->
         <!-- </el-button-group> -->
       </el-col>
     </el-row>
@@ -60,6 +60,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          v-if="!VERSION_IN_PURCHASE"
           prop="created"
           label="跨境税率"
           width="120"
@@ -120,12 +121,12 @@
             >
               编辑
             </el-button>
-            <el-button
+            <!-- <el-button
               type="text"
               @click="taxRateSet(scope.row)"
             >
               跨境税率设置
-            </el-button>
+            </el-button> -->
             <el-button
               type="text"
               @click="deleteCategory(scope.row)"

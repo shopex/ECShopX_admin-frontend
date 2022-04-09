@@ -21,7 +21,7 @@
             满减券
           </el-radio-button>
           <!-- <el-radio-button label="gift">兑换券</el-radio-button> -->
-          <!-- <el-radio-button label="new_gift">兑换券</el-radio-button> -->
+          <!-- <el-radio-button label="new_gift" v-if="VERSION_STANDARD">兑换券</el-radio-button> -->
         </el-radio-group>
       </div>
       <GiftCoupon
@@ -1500,7 +1500,7 @@ export default {
               showClose: true,
               message: `以下商品编号不存在：${str}`,
               type: 'error',
-              duration: 100000
+              duration: 5000
             })
           }, 1500)
         }

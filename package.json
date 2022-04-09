@@ -1,6 +1,6 @@
 {
   "name": "ecshopx-admin",
-  "version": "2.4.4",
+  "version": "2.6.0",
   "elementui_version": "2.15.6",
   "description": "ecshopx admin",
   "author": "shopex",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.38",
-    "@shopex/finder": "^1.0.20",
+    "@shopex/finder": "^1.0.24",
     "ali-oss": "^6.5.1",
     "aws-sdk": "^2.824.0",
     "axios": "^0.19.2",

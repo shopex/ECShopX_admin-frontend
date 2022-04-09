@@ -89,7 +89,7 @@
                 v-if="item.status == '1'"
                 src="@/assets/img/adapay/pass.png"
                 alt=""
-                style="width: 80px; height: 64px"
+                style="width: 64px; height: 64px"
               >
               <img
                 v-if="item.status == '2'"
@@ -149,13 +149,7 @@
 import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { encryptList } from '@/api/encrypt'
-import { pageMixin } from '@/mixins'
-import {
-  getAftersalesList,
-  exportList,
-  getAftersalesRemind,
-  setAftersalesRemind
-} from '@/api/aftersales'
+import { pageMixin } from '@/mixins' 
 export default {
   mixins: [pageMixin],
   data () {
@@ -219,19 +213,6 @@ export default {
         this.loading = false
       })
     },
-
-    // resetForm(formName) {
-    //   this.create_time = ''
-    //   this.params = {
-    //     page: 1,
-    //     pageSize: 10,
-    //     login_name: undefined,
-    //     status: undefined,
-    //     start_time: undefined,
-    //     end_time: undefined
-    //   }
-    //   this.getAftersalesList()
-    // },
     createTimeFilter (time) {
       return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
     }

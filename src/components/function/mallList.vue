@@ -4,7 +4,7 @@
       v-if="relStore.id == '0'"
       class="shop-header"
     >
-      <div class="shop-left">
+      <div class="shop-left" v-if="!VERSION_B2C">
         <span class="text">小程序模版呈现：</span>
         <div class="option-item">
           <span class="option-item_text">总部首页</span>
@@ -17,7 +17,7 @@
           />
         </div>
         <div
-          v-if="VERSION_PLATFORM"
+          v-if="VERSION_STANDARD"
           class="option-item"
         >
           <span class="option-item_text">店铺首页</span>
@@ -70,7 +70,7 @@
     <el-row
       :gutter="20"
       class="template-list"
-      :class="{ 'is-shop': relStore.id != '0' }"
+      :class="{ 'is-shop': relStore.id != '0' || VERSION_B2C }"
     >
       <el-col
         v-for="(item, index) in templateList"
@@ -113,7 +113,7 @@
             />
           </div>
           <div
-            v-if="relStore.id == '0'"
+            v-if="relStore.id == '0' && !VERSION_B2C"
             class="template-common"
           >
             <span class="temp-label">店铺可编辑挂件</span>
@@ -188,7 +188,7 @@
             >废弃</span>
           </div>
           <div
-            v-if="relStore.id == '0'"
+            v-if="relStore.id == '0' && !VERSION_B2C"
             class="synchronize-btn"
             @click="synchronizeTemplateToShop(index)"
           >
@@ -259,10 +259,10 @@
 
     <el-dialog
       title="新增模板"
-      :visible="dialogVisible"
+      :visible.sync="dialogVisible"
       :close-on-click-modal="false"
       width="50%"
-      @closed="closeAddDialog"
+      :before-close="closeAddDialog"
     >
       <el-form
         ref="form"
@@ -271,7 +271,7 @@
         label-width="100px"
       >
         <el-form-item
-          label="活动名称"
+          label="模板名称"
           prop="template_title"
         >
           <el-input
@@ -321,7 +321,7 @@
       width="20"
     >
       <el-form label-width="120px">
-        <el-form-item label="开启猜你喜欢">
+        <el-form-item label="开启热门推荐">
           <el-switch
             v-model="is_open_recommend"
             :active-value="1"
@@ -423,6 +423,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { VERSION_B2C } from '@/utils'
 
 import DistributorSelect from '@/components/function/distributorSelect'
 import ShopDecoration from '@/components/function/shopDecoration'
@@ -776,6 +777,9 @@ export default {
       }
     },
     closeAddDialog () {
+      this.dialogVisible = false
+      this.dialogType = ''
+      this.dialogData = ''
       this.resetForm('form')
     },
     addTemplate (formName) {

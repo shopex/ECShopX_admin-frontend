@@ -50,6 +50,14 @@
         >
           添加商品
         </el-button>
+        <!-- <el-button
+          v-if="VERSION_PLATFORM && !VUE_APP_FREE && login_type == 'distributor'"
+          type="primary"
+          icon="iconfont icon-xinzengcaozuo-01"
+          @click="selectItems"
+        >
+          选品
+        </el-button> -->
         <el-dropdown>
           <el-button
             type="primary"
@@ -285,23 +293,17 @@
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsTagData"
-              >
+              <export-tip @exportHandle="exportItemsTagData">
                 商品标签
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsWxappCode('wxa')"
-              >
+              <export-tip @exportHandle="exportItemsWxappCode('wxa')">
                 小程序码
               </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
-              <export-tip
-                @exportHandle="exportItemsWxappCode('h5')"
-              >
+              <export-tip @exportHandle="exportItemsWxappCode('h5')">
                 H5二维码
               </export-tip>
             </el-dropdown-item>
@@ -728,9 +730,7 @@
                 prop="item_spec_desc"
                 min-width="120"
               >
-                <template
-                  slot-scope="scope"
-                >
+                <template slot-scope="scope">
                   <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span><span v-else>单规格</span>
                 </template>
               </el-table-column>
@@ -1103,6 +1103,11 @@
           >确 定</el-button>
         </span>
       </el-dialog>
+      <GoodsSelect
+        :items-visible="xpGoodsVisible"
+        @chooseGoods="chooseGoodsAction"
+        @closeGoodsDialog="closeGoodsDialogAction"
+      />
     </template>
     <router-view />
   </div>
@@ -1135,14 +1140,18 @@ import {
   getGoodsProfitPrice,
   saveGoodsProfitPrice,
   syncItems,
-  saveIsGifts
+  saveIsGifts,
+  flowItems
 } from '@/api/goods'
 import mixins from '@/mixins'
+
+import GoodsSelect from './comps/goodsSelect'
 
 export default {
   components: {
     Treeselect,
-    SideBar
+    SideBar,
+    GoodsSelect
   },
   mixins: [mixins],
   props: ['getStatus'],
@@ -1267,7 +1276,9 @@ export default {
       distributorVisible: false,
       setDistributorStatus: false,
       relDistributorIds: '',
-      selections: []
+      selections: [],
+      // showSelectGoods: true,
+      xpGoodsVisible: false
     }
   },
   computed: {
@@ -1291,6 +1302,32 @@ export default {
     console.log(111)
   },
   methods: {
+    selectItems () {
+      this.xpGoodsVisible = true
+    },
+    async chooseGoodsAction (data) {
+      this.xpGoodsVisible = false
+      let list = JSON.parse(JSON.stringify(data))
+      if (list === null || list.length === 0) return
+      const items = list.map((item) => {
+        return {
+          goods_id: item.goods_id
+        }
+      })
+      const params = {
+        items: JSON.stringify(items)
+      }
+      await flowItems(params)
+      this.$message({
+        type: 'success',
+        message: '选品成功'
+      })
+      this.getGoodsList()
+      // console.log('this.items=======', items)
+    },
+    closeGoodsDialogAction () {
+      this.xpGoodsVisible = false
+    },
     async init () {
       if (this.$route.path.split('/')[2] === 'godsphysicalkj') {
         this.params.type = 1

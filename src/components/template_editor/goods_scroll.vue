@@ -262,7 +262,7 @@ export default {
             seckillActivityGetList({
               page: 1,
               pageSize: 20,
-              status: 'valid'
+              status: 'not_end'
             }).then((response) => {
               this.seckill = response.data.data.list
               const id = this.res.config.seckillId

@@ -5,7 +5,7 @@
       <div class="menu-warp view-flex">
         <div class="main-menu">
           <div class="brand-con">
-            <div v-if="$store.getters.login_type === 'merchant'">
+            <div v-if="login_type === 'merchant'">
               <div class="img-wrap">
                 <img
                   :src="brandIco"
@@ -17,14 +17,14 @@
               v-else
               class="brand-link"
               :to="`${
-                $store.getters.login_type == 'distributor' || $store.getters.login_type == 'dealer'
+                login_type == 'distributor' || login_type == 'dealer'
                   ? $store.getters.menus[0].children[0].url
                   : '/'
               }`"
             >
               <div class="img-wrap">
                 <img
-                  :src="brandIco"
+                  :src="sys_logo"
                   alt=""
                 >
               </div>
@@ -111,7 +111,7 @@
         </div>
         <div class="header-right">
           <div class="icon-nav">
-            <el-badge v-if="this.$store.getters.login_type == 'distributor'">
+            <el-badge v-if="login_type == 'distributor'">
               <i
                 class="iconfont icon-store-alt"
                 @click="handleClickSelectShop"
@@ -204,7 +204,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name', 'nick_name', 'avatar', 'wxapp_id', 'template_name', 'login_type']),
+    ...mapGetters(['name', 'nick_name', 'avatar', 'wxapp_id', 'template_name', 'login_type', 'sys_logo']),
     ...mapState({
       menuList: (state) => {
         const { menus } = state.menu
@@ -239,7 +239,9 @@ export default {
   mounted () {
     this.getSystemSetting()
     micrApp.init()
+
     console.log(this.$route)
+    console.log(this.VUE_APP_PRODUCT_MODEL, '----version----')
   },
   methods: {
     ...mapMutations(['SYSTEM_EXIT']),
@@ -263,9 +265,19 @@ export default {
       if (logo) {
         this.brandIco = logo
       } else {
-        const companyBrandImg = VERSION_STANDARD ? 'onex' : 'ecshopx'
-        this.brandIco = require(`@/assets/img/${companyBrandImg}/logo_ico.svg`)
+        if (this.VERSION_STANDARD) {
+          this.brandIco = require(`@/assets/logo/logo_standard.png`)
+        } else if (this.VERSION_B2C) {
+          this.brandIco = require(`@/assets/logo/logo_b2c.png`)
+        } else if (this.VERSION_IN_PURCHASE) {
+          this.brandIco = require(`@/assets/logo/logo_inpurchase.png`)
+        } else if (this.VERSION_PLATFORM && this.VUE_APP_FREE) {
+          this.brandIco = require(`@/assets/logo/logo_free-ecshopx.png`)
+        } else if (this.VERSION_PLATFORM && !this.VUE_APP_FREE) {
+          this.brandIco = require(`@/assets/logo/logo_ecshopx.png`)
+        }
       }
+      this.$store.dispatch('setSysLogo', this.brandIco)
     },
     // 获取菜单url
     getMenuUrl (item) {
@@ -300,11 +312,11 @@ export default {
     async logout () {
       await this.$api.login.getAuthorizelogout()
       await this.SYSTEM_EXIT()
-      if (this.$store.getters.login_type == 'distributor') {
+      if (this.login_type == 'distributor') {
         window.location.href = `/shopadmin/login`
-      } else if (this.$store.getters.login_type == 'dealer') {
+      } else if (this.login_type == 'dealer') {
         window.location.href = `/dealer/login`
-      } else if (this.$store.getters.login_type == 'merchant') {
+      } else if (this.login_type == 'merchant') {
         window.location.href = `/merchant/login`
       } else {
         window.location.href = `/login`
@@ -338,6 +350,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #fff;
   }
   img {
     width: auto;
@@ -426,7 +439,8 @@ export default {
     align-items: center;
     &.is-active {
       > a {
-        background: rgba(20, 128, 227, 0.1);
+        // background: rgba(20, 128, 227, 0.1);
+        background: rgba(var(--themeColorRgb), 0.1);
         border-radius: 2px;
         color: $color-primary;
       }
@@ -524,7 +538,7 @@ export default {
 }
 .system-release {
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: #cdcbcb;
   margin-top: 16px;
 }

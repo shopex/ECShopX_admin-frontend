@@ -8,7 +8,7 @@
           icon="el-icon-circle-plus"
           @click="appendTop(categoryList)"
         >
-          新增商品分类
+          添加销售分类
         </el-button>
       </el-col>
     </el-row>
@@ -53,7 +53,7 @@
           slot="footer"
           class="dialog-footer"
         >
-          <el-button @click="dialog.visible = false">取 消</el-button>
+          <el-button @click="handleCancel">取 消</el-button>
           <el-button
             :loading="dialog.loading"
             type="primary"
@@ -85,7 +85,7 @@
           prop="sort"
           label="分类排序"
           sortable
-          width="80"
+          width="100"
         >
           <template slot-scope="scope">
             <div>{{ scope.row.sort }}</div>
@@ -310,6 +310,11 @@ export default {
               }
             })
         }
+      }
+    },
+    handleCancel () {
+      this.dialog = {
+        visible: false
       }
     },
     getCategory () {

@@ -11,7 +11,7 @@
       <Normal />
     </el-tab-pane>
     <el-tab-pane
-      v-if="!isMicorMall"
+      v-if="!isMicorMall && !VERSION_B2C"
       label="同城配"
       name="city"
     >
@@ -24,6 +24,7 @@
 import City from './city'
 import Normal from './normal'
 import { mapGetters } from 'vuex'
+import { VERSION_B2C } from '@/utils'
 export default {
   components: {
     Normal,

@@ -116,9 +116,9 @@
         <SpFilterFormItem
           prop="tag_id"
           label="标签:"
+          v-if="VERSION_PLATFORM"
         >
           <el-cascader
-            v-if="VERSION_PLATFORM"
             v-model="params.tag_id"
             placeholder="选择标签"
             :options="tag.list"
@@ -138,9 +138,9 @@
         <SpFilterFormItem
           prop="distribution_type"
           label="店铺类型:"
+          v-if="!VERSION_STANDARD"
         >
           <el-select
-            v-if="$store.getters.login_type == 'admin'"
             v-model="params.distribution_type"
             clearable
             placeholder="选择店铺类型"
@@ -162,9 +162,9 @@
         <SpFilterFormItem
           prop="merchant_name"
           label="所属商家:"
+          v-if="!VERSION_STANDARD && $store.getters.login_type == 'admin'"
         >
           <el-input
-            v-if="$store.getters.login_type == 'admin'"
             v-model="params.merchant_name"
             placeholder="所属商家"
           />
@@ -173,7 +173,7 @@
 
       <div class="action-container">
         <el-button
-          v-if="VERSION_PLATFORM"
+          v-if="VERSION_PLATFORM && !is_distributor && $store.getters.login_type != 'merchant'"
           plain
           type="primary"
           @click="addDistributorTag"
@@ -181,7 +181,6 @@
           打标签
         </el-button>
         <el-button
-          v-if="!is_distributor && $store.getters.login_type != 'merchant'"
           type="primary"
           plain
           icon="el-icon-circle-plus"
@@ -331,7 +330,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="$store.getters.login_type == 'admin'"
+          v-if="!VERSION_STANDARD && $store.getters.login_type == 'admin'"
           label="店铺类型"
           width="80"
         >
@@ -386,7 +385,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          v-if="$store.getters.login_type != 'merchant'"
+          v-if="!VERSION_STANDARD && $store.getters.login_type != 'merchant'"
           label="所属商家"
           width="80"
         >
@@ -686,7 +685,7 @@
                 min="1"
                 type="number"
                 oninput="value=value.replace(/[^\d.]/g,'')"
-                placeholder="只能是大于0的数字"
+                placeholder="输入大于等于0的数字，为0则显示所有店铺"
                 style="width: 30%"
               />&nbsp;km
             </el-form-item>

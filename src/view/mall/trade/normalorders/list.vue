@@ -16,16 +16,16 @@
           />
         </SpFilterFormItem>
         <SpFilterFormItem
-          prop="item_bn"
+          prop="order_id"
           label="订单号:"
         >
           <el-input
-            v-model="params.item_bn"
+            v-model="params.order_id"
             placeholder="请输入订单号"
           />
         </SpFilterFormItem>
         <SpFilterFormItem
-          v-if="login_type != 'merchant'"
+          v-if="login_type != 'merchant' && !VERSION_B2C && !VERSION_IN_PURCHASE"
           prop="salesman_mobile"
           label="导购手机号:"
         >
@@ -90,7 +90,7 @@
           </el-select>
         </SpFilterFormItem>
         <SpFilterFormItem
-          v-if="!isMicorMall"
+          v-if="!isMicorMall && !VERSION_IN_PURCHASE"
           prop="is_invoiced"
           label="开票状态:"
         >
@@ -113,9 +113,9 @@
           label="下单时间:"
         >
           <el-date-picker
+            v-model="params.create_time"
             clearable
             unlink-panels
-            v-model="params.create_time"
             type="daterange"
             align="right"
             format="yyyy-MM-dd"
@@ -128,6 +128,7 @@
           />
         </SpFilterFormItem>
         <SpFilterFormItem
+          v-if="!VERSION_STANDARD"
           prop="distributor_type"
           label="订单分类:"
         >
@@ -146,7 +147,7 @@
           </el-select>
         </SpFilterFormItem>
         <SpFilterFormItem
-          v-if="!isMicorMall || login_type != 'distributor'"
+          v-if="(!isMicorMall || login_type != 'distributor') && !VERSION_B2C"
           prop="distributor_id"
           label="店铺:"
         >
@@ -184,6 +185,20 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-upload
+          action=""
+          class="btn-upload"
+          :on-change="uploadHandleChange"
+          :auto-upload="false"
+          :show-file-list="false"
+        >
+          <el-button
+            type="primary"
+            plain
+          >
+            批量发货
+          </el-button>
+        </el-upload>
       </div>
 
       <el-tabs
@@ -461,12 +476,14 @@
 import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
-import { VERSION_STANDARD, isArray } from '@/utils'
+import { VERSION_STANDARD, isArray, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import { exportInvoice, orderExport } from '@/api/trade'
 import moment from 'moment'
 import {
   DISTRIBUTION_TYPE,
   ORDER_STATUS,
+  ORDER_B2C_STATUS,
+  IN_PURCHASE_STATUS,
   ORDER_TYPE,
   INVOICE_STATUS,
   ORDER_CATEGORY,
@@ -498,7 +515,11 @@ export default {
       },
       datapass_block: 1, // 是否为数据脱敏
       distributionType: DISTRIBUTION_TYPE,
-      orderStatus: ORDER_STATUS,
+      orderStatus: VERSION_B2C
+        ? ORDER_B2C_STATUS
+        : VERSION_IN_PURCHASE
+        ? IN_PURCHASE_STATUS
+        : ORDER_STATUS,
       orderType: ORDER_TYPE,
       invoiceStatus: INVOICE_STATUS,
       orderCategory: ORDER_CATEGORY,
@@ -751,7 +772,6 @@ export default {
         order_type: 'normal',
         ...this.params
       }
-
       if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
         params.time_start_begin = this.params.create_time[0]
         params.time_start_end = this.params.create_time[1]
@@ -1051,12 +1071,18 @@ export default {
     },
     exportData (type) {
       console.log('====exportData', type)
-      orderExport({
+      let params = {
         ...this.params,
         order_type: 'normal',
         type,
         page: this.page.pageIndex
-      }).then((response) => {
+      }
+      if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
+        params.time_start_begin = moment(this.params.create_time[0]).unix()
+        params.time_start_end = moment(this.params.create_time[1]).add(1, 'days').unix()
+      }
+      delete params.create_time
+      orderExport(params).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
@@ -1069,6 +1095,16 @@ export default {
           return
         }
       })
+    },
+    async uploadHandleChange (file) {
+      const params = {
+        isUploadFile: true,
+        file_type: 'normal_orders',
+        file: file.raw
+      }
+      await this.$api.common.handleUploadFile(params)
+      this.$message.success('上传成功，等待处理')
+      this.fetchList()
     }
   }
 }

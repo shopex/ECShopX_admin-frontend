@@ -19,7 +19,9 @@ const user = {
     ali_appid: '',
     ali_template_name: '',
     app_type: '',
-    color_theme: ''
+    color_theme: '',
+    versionMode: 'platform',
+    sys_logo: ''
   },
 
   mutations: {
@@ -49,7 +51,23 @@ const user = {
       state.token = ''
       state.exp = ''
       state.name = ''
-      ;(state.is_authorizer = false), (state.license_authorize = '')
+      state.is_authorizer = false
+      state.license_authorize = ''
+      state.route_app = ''
+      state.wxapp_id = ''
+      state.template_name = 'yykweishop'
+      state.login_type = ''
+      state.nick_name = ''
+      state.avatar = ''
+      state.shopid = ''
+      state.isInFrame = false
+      state.product_code = ''
+      state.ali_appid = ''
+      state.ali_template_name = ''
+      state.app_type = ''
+      state.color_theme = ''
+      state.versionMode = 'platform'
+      state.sys_logo = ''
     },
     SET_LOGIN_TYPE: (state, payload) => {
       const { loginType } = payload
@@ -58,6 +76,9 @@ const user = {
     SET_PRODUCTION_CODE: (state, payload) => {
       const { productionCode } = payload
       state.product_code = productionCode
+    },
+    SET_VERSION_MODE: (state, payload) => {
+      state.versionMode = payload
     },
     setUserInfo (state, payload) {
       const { username, head_portrait } = payload
@@ -110,6 +131,9 @@ const user = {
     },
     setThemeColor: (state, color_theme) => {
       state.color_theme = color_theme
+    },
+    setSysLogo: (state, sys_logo) => {
+      state.sys_logo = sys_logo
     }
   },
 
@@ -176,6 +200,9 @@ const user = {
     },
     setThemeColor: ({ commit }, color_theme) => {
       commit('setThemeColor', color_theme)
+    },
+    setSysLogo: ({ commit }, sys_logo) => {
+      commit('setSysLogo', sys_logo)
     }
   }
 }

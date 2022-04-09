@@ -106,16 +106,50 @@
         </div>
       </el-form>
     </div>
+
+    <el-dialog
+      title=""
+      width="800px"
+      :visible.sync="dialogVisible"
+    >
+      <div
+        class="agreement-content"
+        v-html="agreementContent"
+      />
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          plain
+          @click="dialogVisible = false"
+        >
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="handleAgreement"
+        >
+          同 意
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-const login_bg_admin = require(`@/assets/img/cover/normal.png`)
-const login_bg_merchant = require(`@/assets/img/cover/merchant.png`)
-const login_bg_shopadmin = require(`@/assets/img/cover/shopadmin.png`)
+const login_bg_merchant = require(`@/assets/imgs/login-merchant.jpg`)
+const login_bg_shopadmin = require(`@/assets/imgs/login-shopadmin.jpg`)
+
+const login_bg_yundian = require(`@/assets/imgs/login-yundian.jpg`)
+const login_bg_b2c = require(`@/assets/imgs/login-b2c.jpg`)
+const login_bg_inpurchase = require(`@/assets/imgs/login-inpurchase.jpg`)
+const login_bg_ecshopx = require(`@/assets/imgs/login-ecshopx.jpg`)
+const login_bg_free_ecshopx = require(`@/assets/imgs/login-free-ecshopx.jpg`)
 
 import { mapMutations } from 'vuex'
 import { requiredRules, MinRules } from '@/utils/validate'
+import { unescape } from '@/utils'
 import loadingBtn from '@/components/loading-btn'
 
 export default {
@@ -125,7 +159,7 @@ export default {
   data () {
     return {
       title: '平台管理中心',
-      login_bg: login_bg_admin,
+      login_bg: login_bg_ecshopx,
       size: 0,
       activeName: 'first',
       form: {
@@ -136,7 +170,10 @@ export default {
       rules: {
         account: [requiredRules('账户')],
         checkPass: [requiredRules('密码'), MinRules(6)]
-      }
+      },
+      dialogVisible: false,
+      agreementId: null,
+      agreementContent: ''
     }
   },
   watch: {
@@ -150,47 +187,80 @@ export default {
   },
   mounted () {
     window.addEventListener('resize', this.fnSize())
+    this.SET_VERSION_MODE(this.VUE_APP_PRODUCT_MODEL)
+    console.log(this.VUE_APP_PRODUCT_MODEL, '----version----')
     this.init()
   },
   destroyed () {
     window.removeEventListener('resize', this.fnSize)
   },
   methods: {
-    ...mapMutations(['SET_TOKEN', 'SET_TOKEN_EXP', 'SET_USERINFO', 'SET_LOGIN_TYPE']),
+    ...mapMutations([
+      'SET_TOKEN',
+      'SET_TOKEN_EXP',
+      'SET_USERINFO',
+      'SET_LOGIN_TYPE',
+      'SET_VERSION_MODE'
+    ]),
     init () {
       this.loginType = this.$route.meta.type
-      console.log(this.loginType)
-
-      switch (this.loginType) {
-        case 'distributor':
-          this.title = '店铺管理中心'
-          this.login_bg = login_bg_shopadmin
+      this.getBgImg()
+      this.$store.dispatch('setLoginType', this.loginType)
+    },
+    getBgImg () {
+      switch (this.VUE_APP_PRODUCT_MODEL) {
+        case 'standard':
+          this.title = this.getLoginTitle('云店管理中心')
+          this.login_bg = login_bg_yundian
           break
-        case 'dealer':
-          this.title = '经销商管理中心'
-          this.login_bg = login_bg_merchant
+        case 'in_purchase':
+          this.title = this.getLoginTitle('内购管理中心')
+          this.login_bg = login_bg_inpurchase
           break
-        case 'merchant':
-          this.title = '商户管理中心'
-          this.login_bg = login_bg_merchant
+        case 'b2c':
+          this.title = this.getLoginTitle('官方商城管理中心')
+          this.login_bg = login_bg_b2c
+          break
+        default:
+          this.title = this.getLoginTitle('平台管理中心')
+          this.login_bg = this.VUE_APP_FREE ? login_bg_free_ecshopx : login_bg_ecshopx
           break
       }
-
-      this.$store.dispatch('setLoginType', this.loginType)
+    },
+    getLoginTitle (t) {
+      let title
+      switch (this.loginType) {
+        case 'distributor':
+          title = '店铺管理中心'
+          break
+        case 'dealer':
+          title = '经销商管理中心'
+          break
+        case 'merchant':
+          title = '商户管理中心'
+          break
+        default:
+          title = t
+          break
+      }
+      return title
     },
     fnSize () {
       this.size = document.body.clientHeight
     },
-    fnLogin (formName) {
+    fnLogin (formName, agreement_id) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           const params = {
             username: this.form.account,
             password: this.form.checkPass,
-            logintype: this.loginType
+            logintype: this.loginType,
+            product_model: this.VUE_APP_PRODUCT_MODEL,
+            agreement_id
           }
           try {
             const { token } = await this.$api.auth.login(params)
+
             if (token) {
               this.loginSuccess(token)
             } else {
@@ -201,12 +271,26 @@ export default {
               })
             }
           } catch (e) {
+            console.error(e)
             this.$refs['loadingBtn'].closeLoading()
+            if (e.data.data.code == 400401) {
+              this.getAgreementContent()
+              this.dialogVisible = true
+            }
           }
         } else {
           this.$refs['loadingBtn'].closeLoading()
         }
       })
+    },
+    async getAgreementContent () {
+      const { agreement_id, content } = await this.$api.auth.getAgreementContent()
+      this.agreementId = agreement_id
+      this.agreementContent = unescape(content)
+    },
+    async handleAgreement () {
+      this.fnLogin('form', this.agreementId)
+      this.dialogVisible = false
     },
     async loginSuccess (token) {
       this.SET_TOKEN({ token })
@@ -217,7 +301,10 @@ export default {
         type: 'success'
       })
       const userInfo = await this.$api.login.getAdminInfo()
+      const { menu_type } = await this.$api.wechat.getAuthorizerInfo()
+      console.log('menu_type', menu_type)
       this.SET_USERINFO(userInfo)
+      this.SET_VERSION_MODE(menu_type)
       if (this.loginType == 'distributor') {
         this.$router.push({ path: '/shopadmin/shoplist' })
       } else if (this.loginType == 'dealer') {
@@ -269,7 +356,7 @@ export default {
         width: 100%;
         padding: 12px;
         height: 40px;
-        background: #cb060f;
+        background: $color-primary;
         border-radius: 40px;
         text-align: center;
         color: #fff;
@@ -317,10 +404,10 @@ export default {
     font-size: 16px;
   }
   .el-tabs__item.is-active {
-    color: #cb060f;
+    color: $color-primary;
   }
   .el-tabs__active-bar {
-    background-color: #cb060f;
+    background-color: $color-primary;
   }
   .el-form-item__content {
     margin-left: 0px !important;

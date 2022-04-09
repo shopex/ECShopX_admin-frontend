@@ -78,11 +78,27 @@ a {
   }
 }
 
+#nprogress {
+  .bar {
+    background-color: $color-primary;
+  }
+  .peg {
+    box-shadow: 0 0 10px $color-primary, 0 0 5px $color-primary;
+  }
+  .spinner-icon {
+    border-top-color: $color-primary;
+    border-left-color: $color-primary;
+  }
+}
+
 /***** action-container *****/
 .action-container {
   margin-bottom: 8px;
   button {
     margin: 0 8px 8px 0 !important;
+  }
+  .btn-upload {
+    display: inline-block;
   }
 }
 

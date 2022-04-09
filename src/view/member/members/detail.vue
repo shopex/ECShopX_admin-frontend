@@ -91,7 +91,7 @@
             <span v-else>--</span>
           </div>
         </div>
-        <div class="f_r member-right">
+        <div class="f_r member-right" v-if="!VERSION_IN_PURCHASE">
           <div class="right-item point-box">
             <div class="item-title">
               积分
@@ -101,7 +101,7 @@
             </div>
             <span class="item-footer" />
           </div>
-          <div class="right-item point-box">
+          <div class="right-item point-box" v-if="!VERSION_PLATFORM">
             <div class="item-title">
               储值
             </div>
@@ -151,7 +151,7 @@
           :is-load="infoLoad"
         />
       </el-tab-pane>
-      <el-tab-pane
+      <!-- <el-tab-pane
         label="权益"
         name="right"
       >
@@ -160,7 +160,7 @@
           :user-mobile="member.mobile"
           :is-load="quanyiLoad"
         />
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane
         label="交易订单"
         name="order"
@@ -173,13 +173,14 @@
       <el-tab-pane
         label="预存款交易"
         name="deposit"
+        v-if="!VERSION_IN_PURCHASE"
       >
         <deposit-list
           :user-id="user_id"
           :is-load="depositLoad"
         />
       </el-tab-pane>
-      <el-tab-pane
+      <!-- <el-tab-pane
         label="权益转让"
         name="transfer"
       >
@@ -188,8 +189,8 @@
           :user-mobile="member.mobile"
           :is-load="transferLoad"
         />
-      </el-tab-pane>
-      <el-tab-pane
+      </el-tab-pane> -->
+      <!-- <el-tab-pane
         v-if="!isMicorMall"
         label="核销记录"
         name="rightslog"
@@ -198,10 +199,11 @@
           :user-id="user_id"
           :is-load="rightslogLoad"
         />
-      </el-tab-pane>
+      </el-tab-pane> -->
       <el-tab-pane
         label="付费会员卡记录"
         name="membercard"
+        v-if="!VERSION_IN_PURCHASE"
       >
         <membercard-list
           :user-id="user_id"
@@ -212,6 +214,7 @@
       <el-tab-pane
         label="积分记录"
         name="point"
+        v-if="!VERSION_IN_PURCHASE"
       >
         <point-list
           :user-id="user_id"
@@ -219,7 +222,7 @@
           :is-load="pointLoad"
         />
       </el-tab-pane>
-      <el-tab-pane
+      <!-- <el-tab-pane
         v-if="!isMicorMall"
         label="导购员关系变更"
         name="salespersonlogs"
@@ -229,7 +232,7 @@
           :user-mobile="member.mobile"
           :is-load="salespersonLoad"
         />
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -246,6 +249,7 @@ import membercardList from './membercardlist.vue'
 import salespersonLogsList from './salespersonLogsList.vue'
 import pointList from './pointlist.vue'
 import memberInfo from './memberinfo.vue'
+import { VERSION_PLATFORM } from '@/utils'
 export default {
   components: {
     quanyiList,

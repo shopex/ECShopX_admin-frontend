@@ -28,7 +28,7 @@
         >
           <el-input
             v-model="form.ad_title"
-            placeholder="用于门店小程序注册引导入口标题"
+            :placeholder="!VERSION_B2C ? '用于门店小程序注册引导入口标题' : '用于小程序注册引导入口标题'"
             style="width: 340px"
           />
         </el-form-item>
@@ -110,7 +110,7 @@
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="注册送权益：">
+        <!-- <el-form-item label="注册送权益：">
           <el-transfer
             v-model="form.promotions_value.items"
             :titles="['服务类商品', '已选中']"
@@ -135,7 +135,7 @@
               class="transfer-footer"
             />
           </el-transfer>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="注册送优惠券：">
           <el-row>
             <el-col :span="12">
@@ -713,7 +713,7 @@ export default {
         this.form.id = response.data.data.id
         this.form.is_open = response.data.data.is_open
         this.form.ad_title = response.data.data.ad_title
-        this.form.register_jump_path = response.data.data.register_jump_path
+        this.form.register_jump_path = response.data.data.register_jump_path || {}
         if (response.data.data.promotions_value) {
           if (response.data.data.promotions_value.items) {
             this.form.promotions_value.items = response.data.data.promotions_value.items

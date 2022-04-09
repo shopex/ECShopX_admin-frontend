@@ -15,6 +15,7 @@
         <SpFilterFormItem
           prop="distributor"
           label="店铺名称:"
+          v-if="!VERSION_B2C"
         >
           <el-autocomplete
             v-model="params.distributor.name"
@@ -66,6 +67,7 @@
           label="售后状态:"
         >
           <el-select
+            clearable
             v-model="params.aftersales_status"
             placeholder="售后状态"
           >
@@ -401,6 +403,7 @@
 import { mapGetters } from 'vuex'
 import RemarkModal from '@/components/remarkModal'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
+import { VERSION_B2C } from '@/utils'
 export default {
   components: {
     RemarkModal
@@ -473,6 +476,9 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.query.aftersales_status) {
+      this.params.aftersales_status = this.$route.query.aftersales_status
+    }
     //获取所有店铺
     this.getStoreList()
     this.fetchList()

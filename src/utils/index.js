@@ -1,5 +1,6 @@
 import log from './log'
 import CommonUtil from '@/common/js/util'
+import store from '@/store'
 
 const isPrimitiveType = (val, type) => Object.prototype.toString.call(val) === type
 
@@ -23,9 +24,14 @@ export function isBoolean (val) {
   return isPrimitiveType(val, '[object Boolean]')
 }
 
-export const VERSION_STANDARD = process.env.VUE_APP_PRODUCT_MODEL == 'standard'
-
-export const VERSION_PLATFORM = process.env.VUE_APP_PRODUCT_MODEL == 'platform'
+// 云店
+export const VERSION_STANDARD = store.getters.versionMode == 'standard'
+// ecshopx
+export const VERSION_PLATFORM = store.getters.versionMode == 'platform'
+// 官方商城
+export const VERSION_B2C = store.getters.versionMode == 'b2c'
+// 内购
+export const VERSION_IN_PURCHASE = store.getters.versionMode == 'in_purchase'
 
 export function isInSalesCenter () {
   if (window.self != window.top && window.self.location.href.indexOf('iframeLogin') < 0) {
@@ -131,6 +137,20 @@ function export_open (tab) {
   setTimeout(() => {
     window.open(`/setting/baseexport?tab=${tab}`)
   }, 1000)
+}
+
+export function unescape (html) {
+  /* eslint-disable */
+  return html
+    .replace(html ? /&(?!#?\w+;)/g : /&/g, '&amp;')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#8230;/g, '…')
+  /* eslint-enable */
 }
 
 export { log, export_open }

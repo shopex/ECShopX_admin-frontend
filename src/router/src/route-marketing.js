@@ -164,7 +164,7 @@ export default {
     },
     {
       path: 'recommendlike',
-      name: `猜你喜欢`,
+      name: `热门推荐`,
       component: () => import('@/view/member/promotions/recommendlike')
     },
     {

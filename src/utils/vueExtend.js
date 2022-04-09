@@ -1,6 +1,8 @@
 import Vue from 'vue'
-import { VERSION_STANDARD, VERSION_PLATFORM } from '@/utils'
+import { VERSION_STANDARD, VERSION_PLATFORM, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import CommonUtil from '@/common/js/util'
+import { SYSTEM_CONFIG } from '@/consts'
+import store from '@/store'
 // import moment from 'moment'
 // import district from '@/common/district.json'
 
@@ -221,10 +223,13 @@ Vue.prototype.orderType = [
 ]
 // console.log("---process.env.IS_SAAS--",process.env)
 Vue.prototype.system_is_saas = process.env.VUE_APP_IS_SAAS || 'false'
-Vue.prototype.system_mode = process.env.VUE_APP_PRODUCT_MODEL
+Vue.prototype.VUE_APP_FREE = process.env.VUE_APP_FREE == 'true'
 Vue.prototype.VERSION_STANDARD = VERSION_STANDARD
 Vue.prototype.VERSION_PLATFORM = VERSION_PLATFORM
-Vue.prototype.VUE_APP_SYSTEM_NAME = process.env.VUE_APP_SYSTEM_NAME
+Vue.prototype.VERSION_B2C = VERSION_B2C
+Vue.prototype.VERSION_IN_PURCHASE = VERSION_IN_PURCHASE
+Vue.prototype.VUE_APP_PRODUCT_MODEL = process.env.VUE_APP_PRODUCT_MODEL
+Vue.prototype.VUE_APP_SYSTEM_NAME = SYSTEM_CONFIG[store.getters.versionMode].name
 Vue.prototype.path_prefixes = process.env.VUE_APP_PREFIXES
 Vue.prototype.BASE_API =
   process.env.VUE_APP_BASE_API.indexOf('http') !== -1
@@ -257,4 +262,7 @@ Vue.prototype.theme = {
 Vue.prototype.companyBrand = '商派ECShopX'
 Vue.prototype.companyBrandImg = process.env.PRODUCT_MODEL === 'standard' ? 'onex' : 'ecshopx'
 // 动态改变页面的title
-document.title = Vue.prototype.companyBrand
+document.title = Vue.prototype.VUE_APP_SYSTEM_NAME
+
+console.log(`VUE_APP_PRODUCT_MODEL: ${process.env.VUE_APP_PRODUCT_MODEL}`)
+console.log(`VUE_APP_FREE: ${process.env.VUE_APP_FREE}`)

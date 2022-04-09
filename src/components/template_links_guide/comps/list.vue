@@ -289,12 +289,12 @@ export default {
               id: 'pointitems'
             }
           ]
-          if (this.VERSION_PLATFORM) {
-            list.push({
-              title: '楼层引导',
-              id: 'floorguide'
-            })
-          }
+          // if (this.VERSION_PLATFORM) {
+          //   list.push({
+          //     title: '楼层引导',
+          //     id: 'floorguide'
+          //   })
+          // }
           this.list = list
           this.total = 1
           this.loading = false

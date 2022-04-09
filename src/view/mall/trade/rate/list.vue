@@ -292,9 +292,7 @@
                   width="180"
                 />
                 <el-table-column label="成交价格(元)">
-                  <template
-                    slot-scope="scope"
-                  >
+                  <template slot-scope="scope">
                     <span>￥{{ scope.row.total_fee / 100 }}</span>
                   </template>
                 </el-table-column>
@@ -376,9 +374,7 @@
                 评价时间：
               </el-col>
               <el-col :span="20">
-                {{
-                  details.rateInfo.created | datetime('YYYY-MM-DD HH:mm:ss')
-                }}
+                {{ details.rateInfo.created | datetime('YYYY-MM-DD HH:mm:ss') }}
               </el-col>
             </el-row>
             <el-row>
@@ -445,9 +441,7 @@
                 回复时间：
               </el-col>
               <el-col :span="20">
-                {{
-                  details.replyInfo.created | datetime('YYYY-MM-DD HH:mm:ss')
-                }}
+                {{ details.replyInfo.created | datetime('YYYY-MM-DD HH:mm:ss') }}
               </el-col>
             </el-row>
           </div>
@@ -486,12 +480,8 @@
                   label="评论时间"
                   width="160"
                 >
-                  <template
-                    slot-scope="scope"
-                  >
-                    <span>{{
-                      scope.row.created | datetime('YYYY-MM-DD HH:mm:ss')
-                    }}</span>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.created | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -687,6 +677,7 @@ export default {
           item.star = Number(item.star)
         })
         this.total_count = Number(response.data.data.total_count)
+        debugger
         this.loading = false
       })
     }

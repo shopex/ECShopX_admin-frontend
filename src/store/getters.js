@@ -16,6 +16,8 @@ const getters = {
   ali_appid: (state) => state.user.ali_appid,
   ali_template_name: (state) => state.user.ali_template_name,
   app_type: (state) => state.user.app_type,
-  color_theme: (state) => state.user.color_theme
+  color_theme: (state) => state.user.color_theme,
+  versionMode: (state) => state.user.versionMode,
+  sys_logo: (state) => state.user.sys_logo,
 }
 export default getters
