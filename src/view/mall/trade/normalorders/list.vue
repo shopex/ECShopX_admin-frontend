@@ -157,6 +157,20 @@
             placeholder="请选择"
           />
         </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="subDistrict"
+          label="选择街道:"
+        >
+          <el-cascader
+            v-model="params.subDistrict"
+            clearable
+            :props="{
+              value: 'id',
+              checkStrictly: true
+            }"
+            :options="subDistrictList"
+          />
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -511,9 +525,11 @@ export default {
         time_start_begin: '', //
         time_start_end: '',
         distributor_type: '', // 订单分类
-        distributor_id: '' // 店铺
+        distributor_id: '', // 店铺
+        subDistrict: []
       },
       datapass_block: 1, // 是否为数据脱敏
+      subDistrictList: [],
       distributionType: DISTRIBUTION_TYPE,
       orderStatus: VERSION_B2C
         ? ORDER_B2C_STATUS
@@ -761,6 +777,7 @@ export default {
     this.fetchList()
     this.getOrderSourceList()
     this.getLogisticsList()
+    this.getSubDistrictList()
   },
   methods: {
     async fetchList () {
@@ -770,8 +787,12 @@ export default {
         page,
         pageSize,
         order_type: 'normal',
-        ...this.params
+        ...this.params,
+        subdistrict_parent_id: this.params.subDistrict[0], // 街道id
+        subdistrict_id: this.params.subDistrict[1] // 居委id
       }
+      delete params.subDistrict
+
       if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
         params.time_start_begin = this.params.create_time[0]
         params.time_start_end = this.params.create_time[1]
@@ -856,6 +877,11 @@ export default {
       this.page.total = pager ? pager.count : 0
       this.datapass_block = datapass_block
       this.loading = false
+    },
+    async getSubDistrictList () {
+      const res = await this.$api.subdistrict.getSubDistrictList()
+      console.log(`getSubDistrictList:`, res)
+      this.subDistrictList = res
     },
     getOrderType ({ order_class, type }) {
       if (order_class == 'normal') {

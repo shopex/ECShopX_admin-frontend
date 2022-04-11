@@ -10,10 +10,10 @@
       <el-row class="card-panel">
         <el-col
           v-for="(item, index) in infoList"
+          v-if="item.is_show"
           :key="`item__${index}`"
           class="card-panel-item"
           :span="6"
-          v-if='item.is_show'
         >
           <span class="card-panel__label">{{ item.label }}</span>
           <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
@@ -127,9 +127,9 @@
             </template>
           </el-table-column>
           <el-table-column
+            v-if="!VERSION_IN_PURCHASE"
             label="会员优惠（¥）"
             width="120"
-            v-if="!VERSION_IN_PURCHASE"
           >
             <template slot-scope="scope">
               {{ (scope.row.member_discount / 100).toFixed(2) }}
@@ -151,7 +151,10 @@
               {{ (scope.row.discount_fee / 100).toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column label="货币汇率" v-if="!VERSION_IN_PURCHASE">
+          <el-table-column
+            v-if="!VERSION_IN_PURCHASE"
+            label="货币汇率"
+          >
             <template slot-scope="scope">
               <span>{{ scope.row.fee_rate }}</span>
             </template>
@@ -226,10 +229,10 @@
       <el-row class="card-panel">
         <el-col
           v-for="(item, index) in payList"
+          v-if="item.is_show"
           :key="`item__${index}`"
           class="card-panel-item"
           :span="6"
-          v-if="item.is_show"
         >
           <span class="card-panel__label">{{ item.label }}</span>
           <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
@@ -237,7 +240,10 @@
       </el-row>
     </el-card>
 
-    <el-card class="el-card--normal" v-if="!VERSION_IN_PURCHASE">
+    <el-card
+      v-if="!VERSION_IN_PURCHASE"
+      class="el-card--normal"
+    >
       <div slot="header">
         优惠明细
       </div>
@@ -280,6 +286,23 @@
           }}</span>
           <span class="card-panel__value">{{ addressInfo }}</span>
         </div>
+
+        <div
+          v-if="orderInfo.subdistrict_parent"
+          class="card-panel-item"
+        >
+          <span class="card-panel__label">街道：</span>
+          <span class="card-panel__value">{{ orderInfo.subdistrict_parent }}</span>
+        </div>
+
+        <div
+          v-if="orderInfo.subdistrict"
+          class="card-panel-item"
+        >
+          <span class="card-panel__label">社区：</span>
+          <span class="card-panel__value">{{ orderInfo.subdistrict }}</span>
+        </div>
+
         <el-table
           border
           :data="deliveryData"
@@ -315,7 +338,10 @@
       </div>
     </el-card>
 
-    <el-card class="el-card--normal" v-if="!VERSION_IN_PURCHASE">
+    <el-card
+      v-if="!VERSION_IN_PURCHASE"
+      class="el-card--normal"
+    >
       <div slot="header">
         分润信息
       </div>
