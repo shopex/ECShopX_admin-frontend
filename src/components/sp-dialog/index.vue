@@ -109,7 +109,11 @@ export default {
         )
       } else if (item.type == 'radio') {
         return (
-          <el-radio-group v-model={form[item.key]} onChange={item.onChange || Fn}>
+          <el-radio-group
+            v-model={form[item.key]}
+            onChange={item.onChange || Fn}
+            disabled={item.disabled || false}
+          >
             {item.options.map((op) => (
               <el-radio label={op.label}>{op.name}</el-radio>
             ))}

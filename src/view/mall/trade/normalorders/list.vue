@@ -642,6 +642,7 @@ export default {
           label: '发货类型:',
           key: 'delivery_type',
           type: 'radio',
+          disabled: false,
           options: [
             { label: 'batch', name: '整单发货' },
             { label: 'sep', name: '拆分发货' }
@@ -983,7 +984,10 @@ export default {
         }
       })
     },
-    async handleAction ({ order_id, distributor_remark, items, delivery_type }, { key }) {
+    async handleAction (
+      { order_id, distributor_remark, items, delivery_type, delivery_status },
+      { key }
+    ) {
       if (key == 'remark') {
         this.$refs['remarkDialogRef'].resetForm()
         this.remarkForm.orderId = order_id
@@ -1003,6 +1007,15 @@ export default {
           }
         })
         this.deliverGoodsForm.type = delivery_type
+        // 部分发货
+        if (delivery_status == 'PARTAIL') {
+          this.deliverGoodsForm.delivery_type = 'sep'
+          this.deliverGoodsFormList[0].disabled = true
+          this.deliverGoodsFormList[1].options[4].isShow = true
+        } else {
+          this.deliverGoodsFormList[0].disabled = false
+          this.deliverGoodsFormList[1].options[4].isShow = false
+        }
         this.deliverGoodsDialog = true
       } else if (key == 'writeOff') {
         this.$refs['writeOffDialogRef'].resetForm()

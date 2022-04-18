@@ -387,6 +387,7 @@
     <SpDialog
       ref="deliverGoodsDialogRef"
       v-model="deliverGoodsDialog"
+      width="1000px"
       :title="`发货【订单:${deliverGoodsForm.order_id}】`"
       :form="deliverGoodsForm"
       :form-list="deliverGoodsFormList"
@@ -476,10 +477,18 @@ export default {
           label: '发货类型:',
           key: 'delivery_type',
           type: 'radio',
+          disabled: false,
           options: [
             { label: 'batch', name: '整单发货' },
             { label: 'sep', name: '拆分发货' }
-          ]
+          ],
+          onChange: (e) => {
+            if (e == 'sep') {
+              this.deliverGoodsFormList[1].options[4].isShow = true
+            } else {
+              this.deliverGoodsFormList[1].options[4].isShow = false
+            }
+          }
         },
         {
           label: '',
@@ -489,7 +498,27 @@ export default {
             { title: '商品名', key: 'item_name' },
             { title: '数量', key: 'num', width: 60 },
             { title: '已发货数量', key: 'delivery_item_num', width: 100 },
-            { title: '总支付价（¥）', key: 'price', width: 120 }
+            { title: '总支付价（¥）', key: 'price', width: 120 },
+            {
+              title: '发货数量',
+              key: 'item_num',
+              width: 160,
+              render: (row, column, cell) => {
+                if (row.num - row.delivery_item_num == 0) {
+                  return '已完成'
+                } else {
+                  return (
+                    <el-input-number
+                      size='mini'
+                      v-model={row.delivery_num}
+                      min={1}
+                      max={row.num - row.delivery_item_num}
+                    ></el-input-number>
+                  )
+                }
+              },
+              isShow: false
+            }
           ]
         },
         {
@@ -687,7 +716,7 @@ export default {
       this.deliverGoodsFormList[2].options = options
     },
     handleAction ({ key }) {
-      const { order_id, items, delivery_type } = this.orderInfo
+      const { order_id, items, delivery_type, delivery_status } = this.orderInfo
       if (key == 'deliverGoods') {
         this.$refs['deliverGoodsDialogRef'].resetForm()
         this.deliverGoodsForm.order_id = order_id
@@ -698,17 +727,31 @@ export default {
           }
         })
         this.deliverGoodsForm.type = delivery_type
+        // 部分发货
+        if (delivery_status == 'PARTAIL') {
+          this.deliverGoodsForm.delivery_type = 'sep'
+          this.deliverGoodsFormList[0].disabled = true
+          this.deliverGoodsFormList[1].options[4].isShow = true
+        } else {
+          this.deliverGoodsFormList[0].disabled = false
+          this.deliverGoodsFormList[1].options[4].isShow = false
+        }
         this.deliverGoodsDialog = true
       }
     },
     async deliverGoodsSubmit () {
-      const { order_id, delivery_type, delivery_corp, delivery_code, type } = this.deliverGoodsForm
+      const { order_id, delivery_type, delivery_corp, delivery_code, type, items } =
+        this.deliverGoodsForm
       const params = {
         order_id,
         delivery_type,
         delivery_corp,
         delivery_code,
         type
+      }
+      // 拆单发货
+      if (delivery_type == 'sep') {
+        params['sepInfo'] = JSON.stringify(items.filter((item) => item.delivery_num))
       }
       const { delivery_status } = await this.$api.trade.delivery(params)
       this.deliverGoodsDialog = false
