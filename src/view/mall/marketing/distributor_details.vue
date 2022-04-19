@@ -50,7 +50,7 @@
       </el-card>
       <el-card>
         <el-tabs v-model="activeName" class="cus-details-tabs"  @tab-click="tabChange">
-          <el-tab-pane v-if="loginType === 'normal'" label="基本信息" name="first">
+          <el-tab-pane v-if="loginType === 'admin'" label="基本信息" name="first">
             <BaseModal :span="20" :labelList="baseInfo" :info="infoList" title="地理位置" />
             <BaseModal
               :span="20"
@@ -78,7 +78,7 @@
             />
             <BaseModal
               :span="7"
-              v-if="loginType === 'normal'"
+              v-if="loginType === 'admin'"
               :labelList="
                 is_rel_dealer && is_openAccount && member_type === 'corp'
                   ? enterSplitAccountList
@@ -103,7 +103,7 @@
                 </el-row>
               </div>
             </el-card>
-            <div class="btn" v-if="datapass_block != 1 &&  loginType != 'normal'">
+            <div class="btn" v-if="datapass_block != 1 &&  loginType != 'admin'">
               <el-button type="primary" @click="editHandle" v-if="accountInfo.audit_state != 'A'">编辑</el-button>
               <el-button v-if="accountInfo.audit_state == 'A'">审核中</el-button>
             </div>
@@ -117,7 +117,7 @@
               <span style="color: #ccc">--暂无开户信息--</span>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane v-if="loginType === 'normal'" label="操作记录" name="third">
+          <el-tab-pane v-if="loginType === 'admin'" label="操作记录" name="third">
             <el-timeline :reverse="false" class="cus-timeline">
               <el-timeline-item
                 v-for="(item, index) in logList"
@@ -140,7 +140,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
-      <el-row v-if="is_rel_dealer && loginType === 'normal'" class="cus-details-bot">
+      <el-row v-if="is_rel_dealer && loginType === 'admin'" class="cus-details-bot">
         <el-button type="primary" @click="handleModalClick(true, is_openAccount)" size="small" plain
           >解除关联</el-button
         >

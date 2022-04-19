@@ -9,7 +9,7 @@
           <div style="margin-right: 50px">
             <div style="margin-left: 30px; margin-bottom: 20px; color: #333">
               <span>可提现金额：￥{{ (cash_balance / 100) | formatNumMoney }}</span>
-              <span v-if="$store.getters.login_type != 'normal'" style="margin-left: 30px">暂冻金额：￥{{ (cash_limit / 100) | formatNumMoney }}</span>
+              <span v-if="$store.getters.login_type != 'admin'" style="margin-left: 30px">暂冻金额：￥{{ (cash_limit / 100) | formatNumMoney }}</span>
             </div>
             <el-form
               v-if="auto_draw_cash == 'N'"
@@ -54,12 +54,12 @@
               </el-form-item>
             </el-form>
           </div>
-          <div class="tips" v-if="$store.getters.login_type == 'normal' && auto_draw_cash == 'N'">
-            <p v-if="$store.getters.login_type == 'normal' && auto_draw_cash == 'N'">
+          <div class="tips" v-if="$store.getters.login_type == 'admin' && auto_draw_cash == 'N'">
+            <p v-if="$store.getters.login_type == 'admin' && auto_draw_cash == 'N'">
               *
               分销员提现佣金选择类型为银行卡时，将从可提现金额进行转账，为避免分销员提现时资金不足导致提现失败，请提现时预留部分资金；
             </p>
-            <template v-if="$store.getters.login_type != 'normal' && auto_draw_cash == 'Y'">
+            <template v-if="$store.getters.login_type != 'admin' && auto_draw_cash == 'Y'">
               <p>提现规则：</p>
               <p>提现将在每月10号进行；</p>
               <p>当余额大于10000元时可提现;</p>
