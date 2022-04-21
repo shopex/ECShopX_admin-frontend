@@ -238,6 +238,20 @@
             </el-button>
           </el-upload>
         </el-tooltip>
+        <el-upload
+          action=""
+          class="btn-upload"
+          :on-change="uploadHandlePatchCancel"
+          :auto-upload="false"
+          :show-file-list="false"
+        >
+          <el-button
+            type="primary"
+            plain
+          >
+            批量取消
+          </el-button>
+        </el-upload>
       </div>
 
       <el-tabs
@@ -1217,6 +1231,16 @@ export default {
       const params = {
         isUploadFile: true,
         file_type: 'normal_orders',
+        file: file.raw
+      }
+      await this.$api.common.handleUploadFile(params)
+      this.$message.success('上传成功，等待处理')
+      this.fetchList()
+    },
+    async uploadHandlePatchCancel (file) {
+      const params = {
+        isUploadFile: true,
+        file_type: 'normal_orders_cancel',
         file: file.raw
       }
       await this.$api.common.handleUploadFile(params)
