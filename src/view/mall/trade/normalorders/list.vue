@@ -1133,6 +1133,7 @@ export default {
       } else {
         this.$message.error('自提订单核销失败!')
       }
+      this.writeOffDialog = false
     },
     async refundSubmit () {
       const { order_id, check_cancel, shop_reject_reason } = this.refundForm
@@ -1148,6 +1149,7 @@ export default {
       } else {
         this.$message.error('审核失败!')
       }
+      this.refundDialog = false
     },
     exportInvoice () {
       let type = 'normal'
