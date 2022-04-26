@@ -488,3 +488,19 @@ export function detectVersion () {
     method: 'post'
   })
 }
+
+export function setDianwuShowStatus (query) {
+  return fetch({
+    url: '/dianwu/setting',
+    method: 'post',
+    params: query
+  })
+}
+
+export function getDianwuStatus (query) {
+  return fetch({
+    url: '/dianwu/setting',
+    method: 'get',
+    params: query
+  })
+}
