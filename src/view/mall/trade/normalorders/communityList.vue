@@ -322,13 +322,31 @@
           >
             <template slot-scope="scope">
               <div>
-                名称：{{ scope.row.community_info.activity_name  }}
+                所属团长：{{ scope.row.community_info.chief_name  }}
+              </div>
+              <div>
+                团名称：{{ scope.row.community_info.activity_name  }}
               </div>
               <div>
                 跟团号：{{ scope.row.community_info.activity_trade_no  }}
               </div>
             </template>
           </el-table-column>
+          <el-table-column
+            width="220"
+            prop="order_id"
+            label="收件人信息"
+          >
+            <template slot-scope="scope">
+              <div>
+                收件人：{{ scope.row.community_info.ziti_contact_user  }}
+              </div>
+              <div>
+                手机号：{{ scope.row.community_info.ziti_contact_mobile  }}
+              </div>
+            </template>
+          </el-table-column>
+
           <el-table-column
             prop="total_fee"
             width="120"
