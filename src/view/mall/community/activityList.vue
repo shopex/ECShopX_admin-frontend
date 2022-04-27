@@ -269,26 +269,50 @@ export default {
       return Date.parse(new Date(str)) / 1000
     },
     exportCommunityOrder () {
-      communityOrderExport(this.params).then((response) => {
-        if (response.data.data.status) {
-          this.$message({
-            type: 'success',
-            message: '已加入执行队列，请在设置-导出列表中下载'
-          })
-          this.$export_open('member')
-          return
-        } else if (response.data.data.url) {
-          this.downloadUrl = response.data.data.url
-          this.downloadName = response.data.filename
-          this.downloadView = true
-        } else {
-          this.$message({
-            type: 'error',
-            message: '无内容可导出 或 执行失败，请检查重试'
-          })
-          return
-        }
-      })
+      if (this.item_id.length) {
+        this.exportData.activity_id = Object.assign({}, this.activity_id)
+        communityOrderExport(this.exportData).then((response) => {
+          if (response.data.data.status) {
+            this.$message({
+              type: 'success',
+              message: '已加入执行队列，请在设置-导出列表中下载'
+            })
+            this.$export_open('normal_community_order')
+            return
+          } else if (response.data.data.url) {
+            this.downloadUrl = response.data.data.url
+            this.downloadName = response.data.filename
+            this.downloadView = true
+          } else {
+            this.$message({
+              type: 'error',
+              message: '无内容可导出 或 执行失败，请检查重试'
+            })
+            return
+          }
+        })
+      } else {
+        communityOrderExport(this.params).then((response) => {
+          if (response.data.data.status) {
+            this.$message({
+              type: 'success',
+              message: '已加入执行队列，请在设置-导出列表中下载'
+            })
+            this.$export_open('normal_community_order')
+            return
+          } else if (response.data.data.url) {
+            this.downloadUrl = response.data.data.url
+            this.downloadName = response.data.filename
+            this.downloadView = true
+          } else {
+            this.$message({
+              type: 'error',
+              message: '无内容可导出 或 执行失败，请检查重试'
+            })
+            return
+          }
+        })
+      }
     },
     handleSelectionChange (rows) {
       this.activity_id = []

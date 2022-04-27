@@ -69,6 +69,10 @@
           name="normal_order"
         />
         <el-tab-pane
+          label="社区团购销售数据导出"
+          name="normal_community_order"
+        />
+        <el-tab-pane
           label="发票信息导出"
           name="invoice"
           v-if="!VERSION_IN_PURCHASE"
