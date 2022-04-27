@@ -36,7 +36,7 @@
         </SpFilterFormItem>
         <SpFilterFormItem
           prop="is_success"
-          label="是否成团:"
+          label="仅成团订单:"
         >
           <el-select
             v-model="params.is_success"
