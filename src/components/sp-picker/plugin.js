@@ -4,9 +4,10 @@ export default {
   install (Vue, options = {}) {
     const Ctor = Vue.extend(Main)
 
-    const fn = ({ value }) => {
+    const fn = (value) => {
       const data = {
-        value
+        value,
+        isShow: true
       }
       return new Promise((resolve, reject) => {
         const vm = new Ctor({
@@ -18,7 +19,7 @@ export default {
     }
 
     const $picker = {
-      image: (args) => fn({ ...args, comp: 'pickerImage' }),
+      image: (args) => fn({ ...args, type: 'pickerImage' }),
       goods: fn,
       path: fn
     }

@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px;
+  margin: 12px 10px;
   .cell-label {
     width: 80px;
     color: #888;

@@ -41,6 +41,10 @@ export default {
     value: false,
     formList: Array,
     form: Object,
+    modal: {
+      type: Boolean,
+      default: true
+    },
     width: {
       type: String,
       default: '800px'
@@ -68,7 +72,7 @@ export default {
     }
   },
   render () {
-    const { title, value, form, formList, width } = this
+    const { title, value, form, formList, width, modal } = this
     const Fn = () => {}
     const getComponentByType = (item) => {
       if (item.type == 'textarea') {
@@ -152,6 +156,7 @@ export default {
         title={title}
         visible={value}
         width={width}
+        modal={modal}
         onclose={this.handleCancel}
       >
         <el-form

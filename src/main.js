@@ -30,6 +30,7 @@ import '@shopex/finder/lib/finder.css'
 import exportTip from '@/utils/components'
 import { export_open } from '@/utils'
 import { SYSTEM_CONFIG } from '@/consts'
+import { SpPickerPlugin } from '@/components/sp-picker'
 Vue.use(exportTip)
 initFinder(Vue, {
   fetchLibrary: fetch,
@@ -82,6 +83,10 @@ const installComponent = (Vue) => {
   const baseContext = require.context('./components', true, /index(\.vue|\.js)$/)
   const components = {}
 
+  const plugins = {
+    SpPickerPlugin
+  }
+
   function resloveModule (mod) {
     Object.keys(mod).forEach((key) => {
       mod[key].name && (components[mod[key].name] = mod[key])
@@ -93,10 +98,15 @@ const installComponent = (Vue) => {
     resloveModule(mod)
   })
 
-  console.log('components:', components)
+  console.log('components:', components, plugins)
   Object.keys(components).forEach((key) => {
     const comp = components[key]
     Vue.component(comp.name, comp)
+  })
+
+  Object.keys(plugins).forEach((name) => {
+    const plugin = plugins[name]
+    Vue.use(plugin)
   })
 }
 

@@ -3,7 +3,13 @@ export default {
   name: 'WgtSliderAttr',
   props: ['value'],
   methods: {
-    handleClickAdd () {
+    async handleClickAdd () {
+      console.log(this)
+      await this.$picker.image({
+        data: {
+          value: 100
+        }
+      })
       debugger
     }
   },
@@ -22,7 +28,7 @@ export default {
           {value.data.map((item) => (
             <View></View>
           ))}
-          <el-button plain full on-click={this.handleClickAdd}>
+          <el-button plain full on-click={this.handleClickAdd.bind(this)}>
             添加背景
           </el-button>
         </div>
