@@ -258,7 +258,7 @@
                   :res="item"
                 />
                 <store
-                  v-if="item.name === 'store' && VERSION_PLATFORM"
+                  v-if="item.name === 'store' && system_mode === 'platform'"
                   :res="item"
                 />
               </div>
@@ -360,7 +360,7 @@
                   :active="index == editorIndex"
                 />
                 <store
-                  v-if="item.name === 'store' && VERSION_PLATFORM"
+                  v-if="item.name === 'store' && system_mode === 'platform'"
                   :res="item"
                   :active="index == editorIndex"
                 />

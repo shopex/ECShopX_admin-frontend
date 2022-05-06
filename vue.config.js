@@ -52,7 +52,7 @@ module.exports = {
     }
     config.plugins.push(
       new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, "./newpc"),
+        from: path.resolve(__dirname, process.env.VUE_APP_PRODUCT_MODEL == 'platform' ? "./newpc_bbc" : './newpc_b2c' ),
         to: path.resolve(__dirname, "./dist/newpc"),
         ignore: [".*"],
       }])
