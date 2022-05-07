@@ -24,8 +24,12 @@ export default {
     {
       path: 'community/activity',
       name: `活动管理`,
-      component: () => import('@/view/mall/community/activityList'),
-      
+      component: () => import('@/view/mall/community/activityList')
+    },
+    {
+      path: 'community/communitygoods',
+      name: `活动商品`,
+      component: () => import('@/view/mall/community/communitygoods')
     },
     {
       path: 'community/order',
@@ -41,6 +45,6 @@ export default {
           component: () => import('@/view/mall/trade/order/process')
         }
       ]
-    },
+    }
   ]
 }
