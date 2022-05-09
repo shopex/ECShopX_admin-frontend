@@ -22,7 +22,10 @@
           <el-radio label="1">
             短信通知（0.045元 / 条）
           </el-radio>
-          <el-radio label="2" v-if="!VERSION_IN_PURCHASE">
+          <el-radio
+            v-if="!VERSION_IN_PURCHASE"
+            label="2"
+          >
             推广短信（0.055元 / 条）
           </el-radio>
         </el-radio-group>
@@ -235,6 +238,7 @@ export default {
     },
     async 'form.scene_id' (id) {
       console.log(id, `============`)
+      if (!id) return
       const result = await getTemplateContentLabel({ id })
       this.variables = result.data.data.variables
       if (this.$route.query.type == 'edit' || this.$route.query.type == 'detail') {

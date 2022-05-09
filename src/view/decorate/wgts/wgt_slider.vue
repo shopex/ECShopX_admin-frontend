@@ -18,7 +18,10 @@
           :key="index"
           class="slider-item"
         >
-          <SpImage />
+          <SpImage
+            :width="375"
+            :height="375"
+          />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -134,7 +137,32 @@ export default {
     //   padded: false, // 轮播的内间距
     //   content: true
     // },
-    data: []
+    data: [
+      {
+        content: '',
+        id: '',
+        imgUrl: '',
+        linkPage: '',
+        template: '',
+        title: ''
+      },
+      {
+        content: '',
+        id: '',
+        imgUrl: '',
+        linkPage: '',
+        template: '',
+        title: ''
+      },
+      {
+        content: '',
+        id: '',
+        imgUrl: '',
+        linkPage: '',
+        template: '',
+        title: ''
+      }
+    ]
   },
   props: {
     value: [Object, Array]

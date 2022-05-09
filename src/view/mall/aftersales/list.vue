@@ -13,9 +13,9 @@
         @onReset="onReset"
       >
         <SpFilterFormItem
+          v-if="!VERSION_B2C"
           prop="distributor"
           label="店铺名称:"
-          v-if="!VERSION_B2C"
         >
           <el-autocomplete
             v-model="params.distributor.name"
@@ -67,8 +67,8 @@
           label="售后状态:"
         >
           <el-select
-            clearable
             v-model="params.aftersales_status"
+            clearable
             placeholder="售后状态"
           >
             <el-option
@@ -156,6 +156,19 @@
                   class="el-icon-document-copy"
                 />
               </el-tooltip>
+            </div>
+            <div
+              v-if="scope.row.distributor_id !== '0'"
+              class="order-store"
+            >
+              <el-tooltip
+                effect="dark"
+                content="店铺名"
+                placement="top-start"
+              >
+                <i class="el-icon-office-building" />
+              </el-tooltip>
+              {{ scope.row.distributor_info.name }}
             </div>
             <div class="order-time">
               <el-tooltip

@@ -12,15 +12,15 @@ export default {
   methods: {
     onCurrentChange (pageIndex) {
       this.page.pageIndex = pageIndex
-      this.fetchList()
+      this.fetchList(this.page)
     },
     onSizeChange (pageSize) {
       this.page.pageSize = pageSize
-      this.fetchList()
+      this.fetchList(this.page)
     },
     onSearch () {
       this.page.pageIndex = 1
-      this.fetchList()
+      this.fetchList(this.page)
     }
   }
 }

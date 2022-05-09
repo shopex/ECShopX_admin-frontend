@@ -44,7 +44,7 @@
         >
           <div class="weapp-template">
             <div class="weapp-header" />
-            <div>
+            <div class="weapp-body">
               <div
                 v-for="(wgt, index) in comps"
                 :key="`wgt-render-item__${index}`"

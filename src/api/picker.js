@@ -8,6 +8,7 @@ export function getImageList (params) {
   })
 }
 
+// 添加图片分组
 export function addImageCatgory (params) {
   return fetch({
     url: '/espier/image/cat',
@@ -16,6 +17,7 @@ export function addImageCatgory (params) {
   })
 }
 
+// 获取图片分组
 export function getImageAllCatgory (params) {
   return fetch({
     url: `/espier/image/cat/children`,

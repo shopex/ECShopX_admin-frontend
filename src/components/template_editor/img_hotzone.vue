@@ -42,9 +42,8 @@
             </div>
           </div>
         </el-form-item>
-        <!-- res: {{res.data}} -->
+        <!-- res: {{res}} -->
         <el-form-item label="热区">
-          <!-- {{data}} -->
           <hotzone
             class="hotzone"
             :image="config.imgUrl"
@@ -59,8 +58,14 @@
             class="setting-item slider"
           >
             <div class="uploader-setting">
-              {{ item }}
-              <el-radio-group v-model="item.linkType">
+              <el-radio-group
+                v-model="item.linkType"
+                @change="
+                  (val) => {
+                    onChangeLinkType(val, index)
+                  }
+                "
+              >
                 <el-radio :label="0">
                   选择路径
                 </el-radio>
@@ -114,6 +119,7 @@
                 <el-input
                   v-model="item.linkUrl"
                   placeholder="请输入自定义链接"
+                  @change="onInputChange"
                 />
               </div>
             </div>
@@ -125,6 +131,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import hotzone from 'vue-hotzone'
 
 export default {
@@ -147,15 +154,15 @@ export default {
     }
   },
   watch: {
-    // res: {
-    //   deep: true,
-    //   handler (value) {
-    //     console.log('img hotzone watch...')
-    //     if (value) {
-    //       this.setData(value)
-    //     }
-    //   }
-    // }
+    res: {
+      deep: true,
+      handler (value) {
+        console.log('img hotzone watch...')
+        if (value) {
+          this.setData(value)
+        }
+      }
+    }
   },
   mounted () {
     this.setData(this.res)
@@ -186,33 +193,41 @@ export default {
       this.$emit('bindLinks', index)
     },
     handleAdd (item) {
-      console.log('handle add:', item)
-      this.data.push({
-        ...item,
-        linkPage: '',
-        title: '',
-        id: '',
-        linkType: 0,
-        linkUrl: ''
-      })
+      // console.log('handle add:',item)
+      // this.data.push({
+      //   ...item,
+      //   linkPage: '',
+      //   title: '',
+      //   id: '',
+      //   linkType: 0,
+      //   linkUrl: ''
+      // })
     },
     handleChange (zone) {
       console.log('handle change, ', zone)
       zone.forEach((item, index) => {
-        if (item.leftPer && this.data[index] && typeof this.data[index].id != 'undefined') {
-          this.data[index] = {
-            ...this.data[index],
-            heightPer: item.heightPer,
-            leftPer: item.leftPer,
-            topPer: item.topPer,
-            widthPer: item.widthPer
-          }
-          console.log('new:', this.data[index])
+        const obj = {
+          linkType: 0,
+          linkUrl: '',
+          ...this.data[index],
+          heightPer: item.heightPer,
+          leftPer: item.leftPer,
+          topPer: item.topPer,
+          widthPer: item.widthPer
         }
+        Vue.set(this.data, index, obj)
+        console.log('new:', this.data[index])
       })
+      this.$emit('onHotZoneChange', this.data)
     },
     handleRemove (index) {
       this.data.splice(index, 1)
+    },
+    onInputChange () {
+      this.$emit('onHotZoneChange', this.data)
+    },
+    onChangeLinkType (val, index) {
+      this.$emit('onChangeLinkType', val, index)
     }
   }
 }

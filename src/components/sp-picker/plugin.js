@@ -6,21 +6,32 @@ export default {
 
     const fn = (value) => {
       const data = {
-        value,
+        ...value,
         isShow: true
       }
+      console.log('sp-picker data:', data)
       return new Promise((resolve, reject) => {
         const vm = new Ctor({
           propsData: data,
-          create () {}
+          created () {
+            const teardown = () => {
+              this.$destroy()
+              this.$el.remove()
+            }
+            this.$once('close', teardown)
+            this.$once('input', (val) => {
+              resolve(val)
+              teardown()
+            })
+          }
         }).$mount()
         document.body.appendChild(vm.$el)
       })
     }
 
     const $picker = {
-      image: (args) => fn({ ...args, type: 'pickerImage' }),
-      goods: fn,
+      image: (args) => fn({ value: { ...args }, type: 'pickerImage' }),
+      goods: (args) => fn({ value: { ...args }, type: 'pickerGoods', width: '1110px' }),
       path: fn
     }
 

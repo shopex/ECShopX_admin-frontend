@@ -93,6 +93,7 @@ export default {
             clearable
             type='text'
             placeholder={item.placeholder || '请输入内容'}
+            disabled={item.disabled || false}
             v-model={form[item.key]}
           />
         )

@@ -122,7 +122,10 @@
                 <el-form-item label="总金额：">
                   <span>{{ scope.row.curFeeSymbol }}{{ scope.row.totalFee / 100 }}</span>
                 </el-form-item>
-                <el-form-item label="优惠金额：" v-if='!VERSION_IN_PURCHASE'>
+                <el-form-item
+                  v-if="!VERSION_IN_PURCHASE"
+                  label="优惠金额："
+                >
                   <el-popover
                     v-if="scope.row.discountInfo"
                     trigger="hover"
@@ -176,6 +179,19 @@
                     class="el-icon-document-copy"
                   />
                 </el-tooltip>
+              </div>
+              <div
+                v-if="scope.row.distributorId !== '0'"
+                class="order-store"
+              >
+                <el-tooltip
+                  effect="dark"
+                  content="店铺名"
+                  placement="top-start"
+                >
+                  <i class="el-icon-office-building" />
+                </el-tooltip>
+                {{ scope.row.distributor_name }}
               </div>
               <div class="order-time">
                 <el-tooltip

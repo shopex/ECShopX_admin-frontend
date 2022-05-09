@@ -17,6 +17,7 @@
       v-if="isLocalShow"
       ref="picker"
       :value="value"
+      :type="type"
       v-bind="extra"
       @close="handleToggle(false)"
     />
@@ -28,7 +29,7 @@
       <el-button @click="isLocalShow = false">取 消</el-button>
       <el-button
         type="primary"
-        @click="isLocalShow = false"
+        @click="handleConfirm"
       >确 定</el-button>
     </span>
   </el-dialog>
@@ -44,6 +45,7 @@ export default {
 
   props: {
     value: Object,
+    type: String,
     width: {
       default: '1008px'
     },
@@ -52,8 +54,7 @@ export default {
   },
 
   data () {
-    const { type } = this.value
-    const { title } = PickerType.resolvePickerConfig(type)
+    const { title } = PickerType.resolvePickerConfig(this.type)
 
     return {
       title,
@@ -81,6 +82,7 @@ export default {
     },
     handleConfirm () {
       const val = this.$refs.picker.getVal()
+      this.isLocalShow = false
       this.$emit('input', val)
     }
   }

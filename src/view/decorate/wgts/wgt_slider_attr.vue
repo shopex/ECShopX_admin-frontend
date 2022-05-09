@@ -4,11 +4,9 @@ export default {
   props: ['value'],
   methods: {
     async handleClickAdd () {
-      console.log(this)
-      await this.$picker.image({
-        data: {
-          value: 100
-        }
+      const { data } = await this.$picker.image({
+        data: 100
+        // multiple: true
       })
       debugger
     }
@@ -23,7 +21,7 @@ export default {
         {value.config.map((item) => (
           <CompCell info={item} v-model={item.value} />
         ))}
-        <div class>
+        <div class=''>
           <div>轮播项</div>
           {value.data.map((item) => (
             <View></View>
