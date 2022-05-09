@@ -32,19 +32,24 @@
             <div class="wgt-name">
               {{ wgt.wgtName }}
             </div>
+            <div class="wgt-placeholder">
+              <div class="placholder-txt">
+                放置区域
+              </div>
+            </div>
           </div>
         </draggable>
       </div>
       <div class="center-container">
-        <draggable
-          :list="comps"
-          group="easyview"
-          class="components-wrap"
-          @change="log2"
-        >
-          <div class="weapp-template">
-            <div class="weapp-header" />
-            <div class="weapp-body">
+        <div class="weapp-template">
+          <div class="weapp-header" />
+          <div class="weapp-body">
+            <draggable
+              :list="comps"
+              group="easyview"
+              class="components-wrap"
+              @change="log2"
+            >
               <div
                 v-for="(wgt, index) in comps"
                 :key="`wgt-render-item__${index}`"
@@ -60,9 +65,9 @@
                   :value="transform(wgt)"
                 />
               </div>
-            </div>
+            </draggable>
           </div>
-        </draggable>
+        </div>
       </div>
       <div class="right-container">
         <div v-if="activeComp">
@@ -145,6 +150,7 @@ export default {
       // if (evt.target.className === 'components-view' && evt.to.className === 'components-wrap') {
       //   this.initData.splice(evt.oldIndex, 0, JSON.parse(this.saveInit))
       // }
+      // debugger
     },
     log1: function (evt) {
       window.console.log('log1:', evt)

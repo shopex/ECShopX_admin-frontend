@@ -59,7 +59,6 @@
     .weapp-template {
       width: 375px;
       margin: 40px auto;
-      min-height: 803px;
       box-shadow: 0 0 14px 0 rgb(0 0 0 / 10%);
     }
     .weapp-header {
@@ -94,6 +93,19 @@
       }
     }
   }
+  .components-wrap {
+    min-height: 750px;
+    .sortable-ghost {
+      // display: none;
+      .wgt-icon,
+      .wgt-name {
+        display: none;
+      }
+      .wgt-placeholder {
+        display: block;
+      }
+    }
+  }
   .right-container {
     background: #fff;
     width: 380px;
@@ -111,9 +123,17 @@
       border-bottom: 1px solid #f5f5f5;
     }
   }
-  .components-view-chosen {
+  .wgt-placeholder {
+    height: 100px;
+    line-height: 100px;
+    background: #b2cefd;
+    text-align: center;
     display: none;
+    .placeholder-txt {
+      font-size: 13px;
+    }
   }
+
   .wgt-render-item {
     // height: 200px;
     position: relative;
