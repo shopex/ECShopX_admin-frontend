@@ -13,8 +13,8 @@
             pull: 'clone',
             put: false
           }"
-          :clone="cloneDog"
           :sort="false"
+          :clone="cloneDefaultField"
           @start="onStart"
           @end="onEnd"
           @change="log1"
@@ -54,11 +54,21 @@
                 v-for="(wgt, index) in comps"
                 :key="`wgt-render-item__${index}`"
                 class="wgt-render-item"
-                @click="handleClickWgtItem(wgt)"
+                :class="{ active: activeCompIndex == index }"
+                @click="handleClickWgtItem(index)"
               >
                 <!-- {{wgt}} -->
                 <div class="wgt-tip">
                   {{ wgt.wgtName }}
+                </div>
+                <div
+                  class="wgt-tools"
+                  :class="{ active: activeCompIndex == index }"
+                >
+                  <i class="iconfont icon-arrow-alt-circle-up1" />
+                  <i class="iconfont icon-arrow-alt-circle-dow1" />
+                  <i class="iconfont icon-copy1" />
+                  <i class="iconfont icon-trash-alt1" />
                 </div>
                 <component
                   :is="wgt.name"
@@ -70,14 +80,13 @@
         </div>
       </div>
       <div class="right-container">
-        <div v-if="activeComp">
-          <!-- {{activeComp}} -->
+        <div v-if="activeCompIndex !== null && hackReset">
           <div class="wgt-name">
-            {{ activeComp.wgtName }}
+            {{ comps[activeCompIndex].wgtName }}
           </div>
           <component
-            :is="`${activeComp.wgtId}Attr`"
-            :value="activeComp"
+            :is="`${comps[activeCompIndex].name}Attr`"
+            :value="comps[activeCompIndex].config"
           />
           <!-- <div class="">
             <div class="wgt-name">{{activeComp.wgtName}}</div>
@@ -110,7 +119,9 @@ export default {
     return {
       widgets: [],
       comps: [],
-      activeComp: null
+      activeComp: null,
+      activeCompIndex: null,
+      hackReset: false
     }
   },
   created () {
@@ -158,21 +169,23 @@ export default {
     log2: function (evt) {
       window.console.log('log2:', evt)
     },
-    cloneDog ({ name, wgtName, wgtIcon, config }) {
-      return {
-        name,
-        wgtName,
-        wgtIcon,
-        config
-      }
+    cloneDefaultField (e) {
+      return JSON.parse(JSON.stringify(e))
     },
-    handleClickWgtItem ({ name, config, wgtName }) {
-      console.log(`handleClickWgtItem:`, config, wgtName)
-      this.activeComp = {
-        ...config,
-        wgtId: name,
-        wgtName
-      }
+    // handleClickWgtItem ({ name, config, wgtName }) {
+    //   console.log(`handleClickWgtItem:`, config, wgtName)
+    //   this.activeComp = {
+    //     ...config,
+    //     wgtId: name,
+    //     wgtName
+    //   }
+    // },
+    handleClickWgtItem (index) {
+      this.activeCompIndex = index
+      this.hackReset = false
+      this.$nextTick(() => {
+        this.hackReset = true // 重建组件
+      })
     },
     transform (wgt) {
       let temp = {}

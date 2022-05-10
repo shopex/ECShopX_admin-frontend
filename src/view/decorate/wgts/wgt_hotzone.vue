@@ -12,13 +12,24 @@
 export default {
   name: 'WgtHotzone',
   wgtName: '热区图',
-  wgtIcon: 'icon-slider',
+  wgtIcon: 'icon-hotzone',
   config: {
     name: 'hotzone',
     base: [
       { title: '标题', key: 'title', type: 'text', value: '标题' },
-      { title: '副标题', key: 'subtitle', type: 'text', value: '副标题' }
+      { title: '副标题', key: 'subtitle', type: 'text', value: '副标题' },
+      {
+        title: '组件间距',
+        key: 'padded',
+        type: 'radio-group',
+        value: true,
+        option: [
+          { label: '宽', value: true },
+          { label: '窄', value: false }
+        ]
+      }
     ],
+    config: [{ title: '图片', key: 'imgUrl', type: 'text', value: '' }],
     // config: {
     //   current: 0,
     //   interval: 3000,

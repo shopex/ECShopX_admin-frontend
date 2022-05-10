@@ -687,6 +687,15 @@ export default {
       isSouponPackage: false, //是否为劵包 （用来判断图片选择）
       initData: [
         {
+          name: 'nearbyShop',
+          base: {
+            title: '附近商家',
+            padded: true,
+            show_coupon: true
+          },
+          seletedTags: []
+        },
+        {
           name: 'coupon',
           base: {
             title: '到店优惠',
@@ -968,6 +977,26 @@ export default {
             openBackImg: false
           },
           data: []
+        },
+        {
+          name: 'store',
+          base: {
+            title: '推荐商铺',
+            subtitle: '热门商铺，官方推荐',
+            padded: true,
+            backgroundColor: '#FFF',
+            borderColor: '#FF6700',
+            imgUrl: ''
+          },
+          data: [
+            {
+              id: '',
+              name: '',
+              logo: '',
+              items: []
+            }
+          ],
+          seletedTags: []
         },
         // {
         //   name: "floorImg-two", //楼层图片默认数据2

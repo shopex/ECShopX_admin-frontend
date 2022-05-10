@@ -92,6 +92,19 @@
         position: absolute;
       }
     }
+    .wgt-tools {
+      position: absolute;
+      right: -24px;
+      flex-direction: column;
+      line-height: 24px;
+      display: none;
+      &.active {
+        display: flex;
+      }
+      .iconfont {
+        color: #888;
+      }
+    }
   }
   .components-wrap {
     min-height: 750px;
@@ -137,14 +150,28 @@
   .wgt-render-item {
     // height: 200px;
     position: relative;
+    &.active {
+      &:before {
+        border: 2px solid #155bd4 !important;
+        content: '';
+        position: absolute;
+        width: 375px;
+        height: 100%;
+        left: 0px;
+        top: 0;
+        box-sizing: border-box;
+        z-index: 99;
+        cursor: move;
+      }
+    }
     &:hover {
       &:before {
         border: 1px dashed #155bd4;
         content: '';
         position: absolute;
-        width: 377px;
+        width: 375px;
         height: 100%;
-        left: -1px;
+        left: 0px;
         top: 0;
         box-sizing: border-box;
         z-index: 99;
