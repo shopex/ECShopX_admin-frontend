@@ -62,7 +62,7 @@
 
 <template>
   <div>
-    <div v-if="$route.path.indexOf('detail') === -1">
+    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('chiefupload') === -1">
       <SpFilterForm
         :model="params"
         @onSearch="onSearch"
@@ -271,20 +271,13 @@
           </el-button>
         </export-tip>
 
-        <el-upload
-          style="margin-right: 10px; display: inline-block"
-          action=""
-          :on-change="uploadHandleChange"
-          :auto-upload="false"
-          :show-file-list="false"
+        <el-button
+          type="primary"
+          plain
+          @click="chiefupload"
         >
-          <el-button
-            type="primary"
-            plain
-          >
-            团长导入
-          </el-button>
-        </el-upload>
+          团长导入
+        </el-button>
       </div>
 
       <!-- <el-row>
@@ -1338,6 +1331,13 @@ export default {
     this.getAliSMS()
   },
   methods: {
+    chiefupload () {
+      if (this.login_type == 'distributor') {
+        this.$router.push({ path: `/shopadmin/member/member/chiefupload` })
+      } else {
+        this.$router.push({ path: `/member/member/chiefupload` })
+      }
+    },
     async getAliSMS () {
       const { aliyunsms_status } = await this.$api.sms.getaliSmsStatus()
       this.aliyunsms_status = aliyunsms_status
@@ -1986,21 +1986,6 @@ export default {
     /* ali短信 相关 */
     switchAliyunsmsDialog (val = false) {
       this.aliyunsmsDialogVisible = val
-    },
-
-    async uploadHandleChange (file, fileList) {
-      let params = {
-        isUploadFile: true,
-        file_type: 'community_chief',
-        file: file.raw,
-        distributor_id: this.$store.getters.shopId
-      }
-      await this.$api.common.handleUploadFile(params)
-      this.$message({
-        type: 'success',
-        message: '上传成功，等待处理'
-      })
-      this.onSearch()
     }
   }
 }
