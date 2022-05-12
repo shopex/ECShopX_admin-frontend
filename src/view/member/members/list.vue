@@ -363,7 +363,6 @@
             />
           </template>
         </el-table-column>
-
         <!-- <el-table-column
           prop="is_chief"
           label="是否团长"
