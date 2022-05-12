@@ -354,6 +354,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.is_chief"
+              disabled
               active-value="1"
               inactive-value="0"
               active-color="#ff4949"
