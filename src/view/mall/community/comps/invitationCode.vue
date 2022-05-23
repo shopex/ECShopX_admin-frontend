@@ -11,10 +11,11 @@
 </style>
 <template>
   <div class="invitation-code">
-    <SpImage />
+    <SpImage :src="info" />
     <a
       class="download-link"
-      @click="handleDownload"
+      download
+      :href="info"
     >下载邀请码</a>
   </div>
 </template>
@@ -22,13 +23,17 @@
 <script>
 export default {
   name: 'InvitationCode',
+  props: {
+    info: String
+  },
   data () {
     return {}
   },
   created () {},
   methods: {
     handleDownload () {
-      console.log('handleDownload')
+      console.log('handleDownload: ', this.info)
+      window.open(this.info)
     }
   }
 }

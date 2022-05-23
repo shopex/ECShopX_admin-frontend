@@ -57,8 +57,7 @@ export default {
     const Fn = () => {}
     const getComponentByType = (item) => {
       if (typeof item.component != 'undefined') {
-        // debugger
-        console.log(item.component)
+        // console.log(item.component)
         // Vue.component(item.component)
         return item.component()
         // return <component is={item.component} ref='com' />

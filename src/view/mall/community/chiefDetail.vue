@@ -18,6 +18,7 @@ export default {
       name: '',
       mobile: '',
       extraData: {},
+      approve_status: 0,
       btnActions: [{ name: '审批', key: 'resolve' }],
       resloveDialog: false,
       resloveForm: {
@@ -31,10 +32,10 @@ export default {
           type: 'radio',
           options: [
             { label: 1, name: '同意' },
-            { label: 0, name: '不同意' }
+            { label: 2, name: '不同意' }
           ],
           onChange: (e) => {
-            if (e == 0) {
+            if (e == 2) {
               this.resloveFormList[1].isShow = true
             } else {
               this.resloveFormList[1].isShow = false
@@ -48,7 +49,7 @@ export default {
           placeholder: '请输入拒绝原因',
           isShow: false,
           validator: (rule, value, callback) => {
-            if (this.refundFormList.check_cancel == '0' && !value) {
+            if (this.resloveForm.approve_status == 2 && !value) {
               callback(new Error('不能为空'))
             } else {
               callback()
@@ -64,12 +65,12 @@ export default {
   methods: {
     async fetchDetail () {
       const { apply_id } = this.$route.params
-      const { chief_name, chief_mobile, extra_data } = await this.$api.community.getChiefDetail(
-        apply_id
-      )
+      const { chief_name, chief_mobile, approve_status, extra_data } =
+        await this.$api.community.getChiefDetail(apply_id)
       this.name = chief_name
       this.mobile = chief_mobile
       this.extraData = extra_data
+      this.approve_status = approve_status
     },
     renderComp ({ type, value }) {
       if (type == FORM_COMP.IMAGE) {
@@ -93,16 +94,18 @@ export default {
     },
     async onResloveSubmit () {
       const { apply_id } = this.$route.params
-      const { approve_status, refuse_reason } = this
+      const { approve_status, refuse_reason } = this.resloveForm
       await this.$api.community.approveChief(apply_id, {
         approve_status,
         refuse_reason
       })
       this.resloveDialog = false
+      this.fetchDetail()
     }
   },
   render () {
-    const { name, mobile, extraData, btnActions } = this
+    const { name, mobile, extraData, btnActions, approve_status } = this
+    console.log('approve_status', approve_status)
     return (
       <div>
         <el-card class='el-card--normal'>
@@ -131,18 +134,20 @@ export default {
           ))}
         </el-card>
 
-        <div class='footer-container'>
-          {btnActions.map((btn, index) => (
-            <el-button
-              key={`btn-item__${index}`}
-              type='primary'
-              plain
-              on-click={this.handleAction.bind(this, btn)}
-            >
-              {btn.name}
-            </el-button>
-          ))}
-        </div>
+        {this.approve_status == 0 && (
+          <div class='footer-container'>
+            {btnActions.map((btn, index) => (
+              <el-button
+                key={`btn-item__${index}`}
+                type='primary'
+                plain
+                on-click={this.handleAction.bind(this, btn)}
+              >
+                {btn.name}
+              </el-button>
+            ))}
+          </div>
+        )}
 
         <SpDialog
           ref='resloveDialogRef'

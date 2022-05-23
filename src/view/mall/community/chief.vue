@@ -123,7 +123,7 @@ export default {
           {
             name: '审批状态',
             key: 'approve_status',
-            render: (h, { row }) => h('span', {}, row.approve_status == '0' ? '未审批' : '已审批')
+            render: (h, { row }) => h('span', {}, this.getApproveStatus(row.approve_status))
           },
           {
             name: '申请时间',
@@ -146,10 +146,10 @@ export default {
           type: 'radio',
           options: [
             { label: 1, name: '同意' },
-            { label: 0, name: '不同意' }
+            { label: 2, name: '不同意' }
           ],
           onChange: (e) => {
-            if (e == 0) {
+            if (e == 2) {
               this.resloveFormList[1].isShow = true
             } else {
               this.resloveFormList[1].isShow = false
@@ -163,7 +163,7 @@ export default {
           placeholder: '请输入拒绝原因',
           isShow: false,
           validator: (rule, value, callback) => {
-            if (this.refundFormList.check_cancel == '0' && !value) {
+            if (this.resloveForm.approve_status == 2 && !value) {
               callback(new Error('不能为空'))
             } else {
               callback()
@@ -187,13 +187,22 @@ export default {
     },
     afterSearch () {},
     async onResloveSubmit () {
-      const { apply_id, approve_status, refuse_reason } = this
+      const { apply_id, approve_status, refuse_reason } = this.resloveForm
       await this.$api.community.approveChief(apply_id, {
         approve_status,
         refuse_reason
       })
       this.resloveDialog = false
       this.$refs.finder.refresh()
+    },
+    getApproveStatus (status) {
+      if (status == '0') {
+        return '未审核'
+      } else if (status == '1') {
+        return '已审核'
+      } else if (status == '2') {
+        return '已拒绝'
+      }
     }
   }
 }

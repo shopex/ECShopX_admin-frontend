@@ -360,3 +360,12 @@ export function approveChief (apply_id, params) {
     params
   })
 }
+
+// 获取小程序码
+export function getChiefWxCode (params) {
+  return fetch({
+    url: `/community/chief/apply/wxaCode`,
+    method: 'get',
+    params
+  })
+}

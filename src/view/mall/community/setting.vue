@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { createSetting } from '@shopex/finder'
 import invitationCode from './comps/invitationCode'
 export default {
@@ -84,7 +85,7 @@ export default {
         {
           label: '团长邀请码',
           key: 'invitation_code',
-          component: () => <invitationCode />
+          component: () => <invitationCode info={this.wxCode} />
           // component: () => import("./comps/invitationCode.vue")
         },
         {
@@ -270,13 +271,18 @@ export default {
           required: true,
           message: '不能为空'
         }
-      ]
+      ],
+      wxCode: ''
     }
+  },
+  computed: {
+    ...mapGetters(['shopId'])
   },
   created () {},
   mounted () {
     this.getActivitySetting()
     this.getCommunityChiefApplyFields()
+    this.getChiefWxCode()
   },
   methods: {
     async onSaveConfig () {
@@ -316,6 +322,15 @@ export default {
       }
       this.registerDialog = false
       this.$refs.finder.refresh()
+    },
+    async getChiefWxCode () {
+      const params = {
+        // wxaAppId: 'wx3e1c17c88abf3e45',
+        distributor_id: this.shopId,
+        path: 'subpages/community/apply-chief'
+      }
+      const { base64Image } = await this.$api.community.getChiefWxCode(params)
+      this.wxCode = base64Image
     }
   }
 }
