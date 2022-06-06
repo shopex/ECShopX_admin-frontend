@@ -6,7 +6,11 @@
       <span class="sub-title">{{ value.subtitle }}</span>
     </div>
     <div class="wgt-bd">
-      <el-carousel
+      <SpImage
+        :src="value.data.length > 1 ? value.data[0].imgUrl : null"
+        :width="375"
+      />
+      <!-- <el-carousel
         class="sliderimg"
         arrow="never"
         height="375px"
@@ -23,7 +27,7 @@
             :height="375"
           />
         </el-carousel-item>
-      </el-carousel>
+      </el-carousel> -->
     </div>
   </div>
 </template>
@@ -138,30 +142,30 @@ export default {
     //   content: true
     // },
     data: [
-      {
-        content: '',
-        id: '',
-        imgUrl: '',
-        linkPage: '',
-        template: '',
-        title: ''
-      },
-      {
-        content: '',
-        id: '',
-        imgUrl: '',
-        linkPage: '',
-        template: '',
-        title: ''
-      },
-      {
-        content: '',
-        id: '',
-        imgUrl: '',
-        linkPage: '',
-        template: '',
-        title: ''
-      }
+      // {
+      //   content: '',
+      //   id: '',
+      //   imgUrl: '',
+      //   linkPage: '',
+      //   template: '',
+      //   title: ''
+      // },
+      // {
+      //   content: '',
+      //   id: '',
+      //   imgUrl: '',
+      //   linkPage: '',
+      //   template: '',
+      //   title: ''
+      // },
+      // {
+      //   content: '',
+      //   id: '',
+      //   imgUrl: '',
+      //   linkPage: '',
+      //   template: '',
+      //   title: ''
+      // }
     ]
   },
   props: {

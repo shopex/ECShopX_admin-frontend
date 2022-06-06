@@ -1,7 +1,9 @@
 <style lang="scss" src="./index.scss"></style>
 <template>
   <div class="page-decorate-index">
-    <div class="decorate-hd" />
+    <div class="decorate-hd">
+      <el-button>保存</el-button>
+    </div>
     <div class="decorate-bd">
       <div class="left-container">
         <draggable
@@ -191,7 +193,8 @@ export default {
       let temp = {}
       const { name, base, data } = wgt.config
       temp = {
-        name
+        name,
+        data
       }
       base.forEach((item) => {
         temp[item.key] = item.value

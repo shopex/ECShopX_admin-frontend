@@ -5,9 +5,15 @@ export default {
   methods: {
     async handleClickAdd () {
       const { data } = await this.$picker.image({
-        data: 100
-        // multiple: true
+        data: [],
+        multiple: true
       })
+      this.value.data = data.map((item) => {
+        return {
+          imgUrl: item.url
+        }
+      })
+      console.log(this.value.data)
       debugger
     }
   },
@@ -24,7 +30,10 @@ export default {
         <div class=''>
           <div>轮播项</div>
           {value.data.map((item) => (
-            <View></View>
+            <div class='slider-item'>
+              <SpImagePicker img={item} />
+              <CompPickerLink />
+            </div>
           ))}
           <el-button plain full on-click={this.handleClickAdd.bind(this)}>
             添加背景
@@ -35,3 +44,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.wgt-slider-attr {
+  .slider-item {
+    display: flex;
+  }
+}
+</style>
