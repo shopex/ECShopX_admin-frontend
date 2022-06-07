@@ -24,12 +24,30 @@
       @onReset="onSearch"
     >
       <SpFilterFormItem
+        prop="login_name"
+        label="登录账号:"
+      >
+        <el-input
+          v-model="params.login_name"
+          placeholder="请输入账号名"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
         prop="mobile"
         label="手机号:"
       >
         <el-input
           v-model="params.mobile"
           placeholder="请输入手机号"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="username"
+        label="姓名:"
+      >
+        <el-input
+          v-model="params.username"
+          placeholder="请输入姓名"
         />
       </SpFilterFormItem>
     </SpFilterForm>
@@ -41,7 +59,7 @@
     >
       <el-table-column
         prop="login_name"
-        label="登陆账号"
+        label="登录账号"
       />
       <el-table-column
         prop="mobile"
