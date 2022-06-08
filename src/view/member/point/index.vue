@@ -142,7 +142,7 @@
                 style="width: 120px"
                 :min="1"
                 :max="100"
-              /> %1<=x<=%100
+              />% 上限范围：1<=x<=100
             </el-form-item>
             <el-form-item label="抵扣比例：">
               <el-input
