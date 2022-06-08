@@ -106,11 +106,10 @@
               说明：可设置订单中运费部分金额是否可获取积分
             </p>
           </el-form-item>
-          <!-- <el-form-item label="积分获取限制：">
-                      每月最多获取<el-input  type="number"  v-model="form.gain_limit" placeholder="" style="width: 120px;" :min="1" :max="9999999"/>积分
-                      <div class="frm-tips">不限制请填写999999</div>
-                  </el-form-item> -->
-
+          <el-form-item label="积分获取限制：">
+              每月最多获取<el-input  type="number"  v-model="form.gain_limit" placeholder="" style="width: 120px;" :min="1" :max="9999999"/>积分
+              <div class="frm-tips">不限制请填写999999</div>
+          </el-form-item>
           <el-form-item label="获取时间：">
             订单完成<el-input
               v-model="form.gain_time"
@@ -143,7 +142,7 @@
                 style="width: 120px"
                 :min="1"
                 :max="100"
-              />% 1 <= x <= 100
+              /> %1<=x<=%100
             </el-form-item>
             <el-form-item label="抵扣比例：">
               <el-input
@@ -153,7 +152,7 @@
                 style="width: 120px"
                 :min="1"
                 :max="9999999"
-              />积分 抵扣1元人民币
+              /> 积分 抵扣1元人民币
             </el-form-item>
             <el-form-item label="积分规则：">
               <vue-html5-editor
