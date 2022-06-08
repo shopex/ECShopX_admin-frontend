@@ -6,7 +6,7 @@
         icon="plus"
         @click="addLabels"
       >
-        添加账号
+        添加店铺管理员
       </el-button>
       <el-tooltip
         style="margin-left: 10px"
@@ -24,12 +24,30 @@
       @onReset="onSearch"
     >
       <SpFilterFormItem
+        prop="login_name"
+        label="登录账号:"
+      >
+        <el-input
+          v-model="params.login_name"
+          placeholder="请输入账号名"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
         prop="mobile"
         label="手机号:"
       >
         <el-input
           v-model="params.mobile"
           placeholder="请输入手机号"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="username"
+        label="姓名:"
+      >
+        <el-input
+          v-model="params.username"
+          placeholder="请输入姓名"
         />
       </SpFilterFormItem>
     </SpFilterForm>
@@ -41,7 +59,7 @@
     >
       <el-table-column
         prop="login_name"
-        label="登陆账号"
+        label="登录账号"
       />
       <el-table-column
         prop="mobile"
@@ -203,6 +221,9 @@
             >
               + 点击搜索店铺
             </el-button>
+            <p class="frm-tips">
+              一个店铺只能有一个超级管理员
+            </p>
           </el-form-item>
           <el-form-item
             v-if="login_type == 'distributor'"
@@ -258,6 +279,7 @@
         :get-status="DistributorStatus"
         :rel-data-ids="relDistributors"
         :old-data="oldData"
+        :is-single="isSingle"
         @chooseStore="DistributorChooseAction"
         @closeStoreDialog="closeDialogAction"
       />
@@ -294,6 +316,7 @@ export default {
   },
   data () {
     return {
+      isSingle: true,
       oldData: [],
       isValid: true,
       oldData: [],
@@ -388,7 +411,7 @@ export default {
     addLabels () {
       // 添加物料弹框
       this.handleCancel()
-      this.editTitle = '添加账号信息'
+      this.editTitle = '添加店铺管理员'
       this.editVisible = true
       this.isEdit = false
       this.form.username = ''
@@ -402,7 +425,7 @@ export default {
     editAction (index, row) {
       // 编辑物料弹框
       this.handleCancel()
-      this.editTitle = '编辑账号信息'
+      this.editTitle = '编辑店铺管理员'
       this.editVisible = true
       this.isEdit = true
       this.form.username = row.username
@@ -542,6 +565,14 @@ export default {
       console.log(data)
       this.DistributorVisible = false
       if (data === null || data.length <= 0) return
+      if (data.length > 1) {
+        this.$message({
+          message: '最多选择一个店铺',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+
       this.relDistributors = data
       this.oldData = data
     },
