@@ -172,7 +172,6 @@
                 v-model="form.username"
                 required
                 placeholder="请填写姓名"
-                :disabled="datapass_block == 1"
               />
             </el-col>
           </el-form-item>
