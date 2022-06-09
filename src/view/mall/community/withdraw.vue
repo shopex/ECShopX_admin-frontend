@@ -22,10 +22,20 @@
           prop="status"
           label="提现状态:"
         >
-          <el-input
-            v-model="formQuery.name"
+          <!-- <el-input v-model="formQuery.name" placeholder="请选择" /> -->
+          <el-select
+            v-model="formQuery.status"
+            clearable
             placeholder="请选择"
-          />
+          >
+            <el-option
+              v-for="item in withDrawStatusList"
+              :key="item.value"
+              size="mini"
+              :label="item.title"
+              :value="item.value"
+            />
+          </el-select>
         </SpFilterFormItem>
         <SpFilterFormItem
           prop="mobile"
@@ -44,7 +54,7 @@
             佣金总额（¥）
           </div>
           <div class="total-value">
-            100
+            {{ rebate_total / 100 }}
           </div>
         </el-col>
         <el-col :span="6">
@@ -52,7 +62,7 @@
             已提现总额（¥）
           </div>
           <div class="total-value">
-            100
+            {{ payed_rebate / 100 }}
           </div>
         </el-col>
         <el-col :span="6">
@@ -60,7 +70,7 @@
             待处理金额（¥）
           </div>
           <div class="total-value">
-            100
+            {{ freeze_cash_withdrawal_rebate / 100 }}
           </div>
         </el-col>
         <el-col :span="6">
@@ -68,7 +78,7 @@
             申请提现人数
           </div>
           <div class="total-value">
-            100
+            {{ apply_chief_num }}
           </div>
         </el-col>
       </el-row>
@@ -87,7 +97,7 @@
       <SpDialog
         ref="resloveDialogRef"
         v-model="resloveDialog"
-        :title="`审批`"
+        :title="`提现确认`"
         :form="resloveForm"
         :form-list="resloveFormList"
         @onSubmit="onResloveSubmit"
@@ -100,6 +110,14 @@
 <script>
 import { createSetting } from '@shopex/finder'
 import moment from 'moment'
+
+const withDrawStatusList = [
+  { title: '待处理', value: 'apply' },
+  { title: '拒绝', value: 'reject' },
+  { title: '提现成功', value: 'success' },
+  { title: '处理中', value: 'process' },
+  { title: '提现失败', value: 'failed' }
+]
 export default {
   name: '',
   data () {
@@ -114,60 +132,117 @@ export default {
             name: '打款',
             key: 'detail',
             type: 'button',
-            buttonType: 'text'
+            buttonType: 'text',
+            action: {
+              handler: async ([row]) => {
+                // const { path } = this.$route
+                // await this.$api.community.getPayInfo(row.id)
+                this.resloveForm = {
+                  id: row.id,
+                  account_name: row.account_name,
+                  pay_type: this.getPayType(row.pay_type),
+                  bank_name: row.bank_name,
+                  pay_account: row.pay_account,
+                  cash_withdrawal_rebate: row.cash_withdrawal_rebate / 100,
+                  money: row.money / 100
+                }
+                this.resloveDialog = true
+              }
+            }
           },
           {
             name: '拒绝',
             key: 'apply',
             type: 'button',
-            buttonType: 'text'
+            buttonType: 'text',
+            action: {
+              handler: async ([row]) => {
+                try {
+                  const res = await this.$confirm('拒绝提现？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消'
+                  })
+                  await this.$api.community.withdrawApply(row.id, {
+                    process_type: 'reject'
+                  })
+                  this.$refs.finder.refresh()
+                } catch (e) {
+                  console.error(e)
+                }
+              }
+            }
           }
         ],
         columns: [
           { name: '申请时间', key: 'created_date' },
-          { name: '打款方式', key: 'pay_type' },
+          {
+            name: '打款方式',
+            key: 'pay_type',
+            render: (h, { row }) => h('span', {}, this.getPayType(row.pay_type))
+          },
           { name: '团长手机号', key: 'mobile' },
-          { name: '申请提现金额（¥）', key: 'money' },
-          { name: '提现状态', key: 'status' }
+          {
+            name: '申请提现金额（¥）',
+            key: 'money',
+            render: (h, { row }) => h('span', {}, row.money / 100)
+          },
+          {
+            name: '提现状态',
+            key: 'status',
+            render: (h, { row }) => h('span', {}, this.renderWithdrawStatu(row.status))
+          }
           // { name: '打款记录', key: 'chief_mobile' }
         ]
       }),
+      // 申请人数
+      apply_chief_num: 0,
+      // 待处理金额
+      freeze_cash_withdrawal_rebate: 0,
+      // 已提现总额
+      payed_rebate: 0,
+      // 佣金总额
+      rebate_total: 0,
+      withDrawStatusList,
       resloveDialog: false,
       resloveForm: {
-        apply_id: '',
-        approve_status: 1,
-        refuse_reason: ''
+        id: '',
+        account_name: '',
+        pay_type: '',
+        bank_name: '',
+        pay_account: '',
+        cash_withdrawal_rebate: '',
+        money: ''
       },
       resloveFormList: [
         {
-          label: '审批:',
-          key: 'approve_status',
-          type: 'radio',
-          options: [
-            { label: 1, name: '同意' },
-            { label: 2, name: '不同意' }
-          ],
-          onChange: (e) => {
-            if (e == 2) {
-              this.resloveFormList[1].isShow = true
-            } else {
-              this.resloveFormList[1].isShow = false
-            }
-          }
+          label: '团长姓名:',
+          key: 'account_name',
+          type: 'text'
         },
         {
-          label: '拒绝原因:',
-          key: 'refuse_reason',
-          type: 'input',
-          placeholder: '请输入拒绝原因',
-          isShow: false,
-          validator: (rule, value, callback) => {
-            if (this.resloveForm.approve_status == 2 && !value) {
-              callback(new Error('不能为空'))
-            } else {
-              callback()
-            }
-          }
+          label: '提现方式:',
+          key: 'pay_type',
+          type: 'text'
+        },
+        {
+          label: '银行名称:',
+          key: 'bank_name',
+          type: 'text'
+        },
+        {
+          label: '银行卡号:',
+          key: 'pay_account',
+          type: 'text'
+        },
+        {
+          label: '可提现金额:',
+          key: 'cash_withdrawal_rebate',
+          type: 'text'
+        },
+        {
+          label: '申请提现:',
+          key: 'money',
+          type: 'text'
         }
       ]
     }
@@ -185,25 +260,31 @@ export default {
       return { ...params, ...formQuery }
     },
     afterSearch (response) {
-      debugger
+      const { apply_chief_num, freeze_cash_withdrawal_rebate, payed_rebate, rebate_total } =
+        response.data.data.count
+      this.apply_chief_num = apply_chief_num
+      ;(this.freeze_cash_withdrawal_rebate = freeze_cash_withdrawal_rebate),
+        (this.payed_rebate = payed_rebate),
+        (this.rebate_total = rebate_total)
+    },
+    getPayType (type) {
+      const payType = {
+        bankcard: '银行卡',
+        alipay: '支付宝',
+        wechat: '微信'
+      }
+      return payType[type]
+    },
+    renderWithdrawStatu (state) {
+      return withDrawStatusList.find((item) => item.value == state).title
     },
     async onResloveSubmit () {
-      const { apply_id, approve_status, refuse_reason } = this.resloveForm
-      await this.$api.community.approveChief(apply_id, {
-        approve_status,
-        refuse_reason
+      const { id } = this.resloveForm
+      await this.$api.community.withdrawApply(id, {
+        process_type: 'argee'
       })
       this.resloveDialog = false
       this.$refs.finder.refresh()
-    },
-    getApproveStatus (status) {
-      if (status == '0') {
-        return '未审核'
-      } else if (status == '1') {
-        return '已审核'
-      } else if (status == '2') {
-        return '已拒绝'
-      }
     }
   }
 }
