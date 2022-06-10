@@ -16,12 +16,30 @@
       @onReset="onSearch"
     >
       <SpFilterFormItem
+        prop="login_name"
+        label="登录账号:"
+      >
+        <el-input
+          v-model="params.login_name"
+          placeholder="请输入账号名"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
         prop="mobile"
         label="手机号:"
       >
         <el-input
           v-model="params.mobile"
           placeholder="请输入手机号"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="username"
+        label="姓名:"
+      >
+        <el-input
+          v-model="params.username"
+          placeholder="请输入姓名"
         />
       </SpFilterFormItem>
     </SpFilterForm>
@@ -34,7 +52,7 @@
     >
       <el-table-column
         prop="login_name"
-        label="登陆账号"
+        label="登录账号"
       />
       <el-table-column
         prop="mobile"
@@ -153,8 +171,7 @@
               <el-input
                 v-model="form.username"
                 required
-                placeholder="请填写昵称"
-                :disabled="datapass_block == 1"
+                placeholder="请填写姓名"
               />
             </el-col>
           </el-form-item>
@@ -297,7 +314,7 @@ export default {
       },
       operator_id: 0,
       rolesListData: [],
-      datapass_block: 1
+      datapass_block: 0
     }
   },
   computed: {

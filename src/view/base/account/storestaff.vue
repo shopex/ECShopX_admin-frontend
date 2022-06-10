@@ -6,23 +6,30 @@
         icon="plus"
         @click="addLabels"
       >
-        添加账号
+        添加店铺管理员
       </el-button>
-      <el-tooltip
-        style="margin-left: 10px"
-        effect="light"
-        :content="'请在【' + origin + '/shopadmin/login】登录'"
-        placement="top-start"
-      >
-        <i class="el-icon-warning-outline" />
-      </el-tooltip>
     </div>
-
+    <tips class="action-container">
+      <ul>
+        <li>1. 平台管理后台仅可给平台自营店铺添加超级管理员，如需给入驻商户的店铺添加超级管理员，请使用商户超级管理员账号登录商户管理后台操作。前往：<el-link :href="origin + '/merchant/login'" target="_blank" type="primary">商户后台</el-link>。</li>
+        <li>2. 每个店铺仅可设置一个超级管理员账号，但一个账号可以同时是多个店铺的超级管理员。</li>
+        <li>3. 店铺超级管理员拥有店铺所有权限，可登录店铺管理后台为店铺添加子管理员，并通过角色控制子管理员权限范围。前往：<el-link :href="origin + '/shopadmin/login'" target="_blank" type="primary">店铺后台</el-link>。</li>
+      </ul>
+    </tips>
     <SpFilterForm
       :model="params"
       @onSearch="onSearch"
       @onReset="onSearch"
     >
+      <SpFilterFormItem
+        prop="login_name"
+        label="登录账号:"
+      >
+        <el-input
+          v-model="params.login_name"
+          placeholder="请输入账号名"
+        />
+      </SpFilterFormItem>
       <SpFilterFormItem
         prop="mobile"
         label="手机号:"
@@ -32,6 +39,15 @@
           placeholder="请输入手机号"
         />
       </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="username"
+        label="姓名:"
+      >
+        <el-input
+          v-model="params.username"
+          placeholder="请输入姓名"
+        />
+      </SpFilterFormItem>
     </SpFilterForm>
 
     <el-table
@@ -39,10 +55,14 @@
       border
       :data="accountsList"
     >
-      <el-table-column
-        prop="login_name"
-        label="登陆账号"
-      />
+      <el-table-column label="登陆账号">
+        <template slot-scope="scope">
+          {{ scope.row.login_name }}
+          <el-tag size="mini" type="danger" v-if="scope.row.is_distributor_main">
+            管理员
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="mobile"
         label="手机号"
@@ -83,7 +103,7 @@
         label="禁用"
         width="80"
       >
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="login_type != 'distributor' || scope.row.is_distributor_main==false">
           <el-switch
             v-model="scope.row.is_disable"
             active-value=1
@@ -155,15 +175,9 @@
           <el-form-item label="手机号">
             <el-col :span="10">
               <el-input
-                v-if="!isEdit"
                 v-model="form.mobile"
                 :maxlength="11"
                 placeholder="请输入11位手机号"
-              />
-              <el-input
-                v-else
-                v-model="editMobile"
-                :disabled="true"
               />
             </el-col>
           </el-form-item>
@@ -172,8 +186,7 @@
               <el-input
                 v-model="form.username"
                 required
-                placeholder="请填写昵称"
-                :disabled="datapass_block == 1"
+                placeholder="请填写姓名"
               />
             </el-col>
           </el-form-item>
@@ -203,9 +216,12 @@
             >
               + 点击搜索店铺
             </el-button>
+            <p class="frm-tips">
+              一个店铺只能有一个超级管理员
+            </p>
           </el-form-item>
           <el-form-item
-            v-if="login_type == 'distributor'"
+            v-if="login_type == 'distributor' && is_distributor_main!=true"
             label="角色"
           >
             <el-checkbox-group v-model="form.role_id">
@@ -258,6 +274,8 @@
         :get-status="DistributorStatus"
         :rel-data-ids="relDistributors"
         :old-data="oldData"
+        :is-single="isSingle"
+        :distribution_type="distributionType"
         @chooseStore="DistributorChooseAction"
         @closeStoreDialog="closeDialogAction"
       />
@@ -267,6 +285,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
+import tips from '@/components/tips'
 import {
   createAccount,
   getAccountInfo,
@@ -283,7 +302,8 @@ import { changeOperatorStatus } from '@/api/login'
 import DistributorSelect from '@/components/function/distributorSelect'
 export default {
   components: {
-    DistributorSelect
+    DistributorSelect,
+    tips
   },
   mixins: [pageMixin],
   props: {
@@ -294,6 +314,7 @@ export default {
   },
   data () {
     return {
+      isSingle: false,
       oldData: [],
       isValid: true,
       oldData: [],
@@ -305,6 +326,7 @@ export default {
       editVisible: false,
       origin: '',
       editTitle: '',
+      distributionType: '0',
       form: {
         operator_type: 'distributor',
         mobile: '',
@@ -319,7 +341,6 @@ export default {
       activeName: 'distributor',
       subDistrictList: [],
       editLoginName: '',
-      editMobile: '',
       accountsList: [],
       detailData: {},
       loading: false,
@@ -330,8 +351,9 @@ export default {
       },
       operator_id: 0,
       rolesListData: [],
-      datapass_block: 1,
-      isHead: false
+      datapass_block: 0,
+      isHead: false,
+      is_distributor_main: false,
     }
   },
   computed: {
@@ -388,13 +410,12 @@ export default {
     addLabels () {
       // 添加物料弹框
       this.handleCancel()
-      this.editTitle = '添加账号信息'
+      this.editTitle = '添加店铺管理员'
       this.editVisible = true
       this.isEdit = false
       this.form.username = ''
       this.form.login_name = ''
       this.editLoginName = ''
-      this.editMobile = ''
       this.operator_id = ''
       this.form.password = ''
       this.form.role_id = []
@@ -402,14 +423,16 @@ export default {
     editAction (index, row) {
       // 编辑物料弹框
       this.handleCancel()
-      this.editTitle = '编辑账号信息'
+      this.editTitle = '编辑店铺管理员'
       this.editVisible = true
       this.isEdit = true
       this.form.username = row.username
       this.form.login_name = row.login_name
+      this.form.mobile = row.mobile
       this.editLoginName = row.login_name
-      this.editMobile = row.mobile
       this.operator_id = row.operator_id
+      this.is_distributor_main = row.is_distributor_main
+      console.log(1111111,row)
       this.form.password = ''
       row.role_data.forEach((item) => {
         this.form.role_id.push(item.role_id)
@@ -542,6 +565,7 @@ export default {
       console.log(data)
       this.DistributorVisible = false
       if (data === null || data.length <= 0) return
+
       this.relDistributors = data
       this.oldData = data
     },
