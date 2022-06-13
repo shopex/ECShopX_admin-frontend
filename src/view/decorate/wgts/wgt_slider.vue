@@ -7,7 +7,7 @@
     </div>
     <div class="wgt-bd">
       <SpImage
-        :src="value.data.length > 1 ? value.data[0].imgUrl : null"
+        :src="value.data.length > 1 ? value.data[0].url : null"
         :width="375"
       />
       <!-- <el-carousel

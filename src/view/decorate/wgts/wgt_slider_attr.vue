@@ -8,13 +8,11 @@ export default {
         data: [],
         multiple: true
       })
-      this.value.data = data.map((item) => {
-        return {
-          imgUrl: item.url
-        }
-      })
+      this.value.data = data
       console.log(this.value.data)
-      debugger
+    },
+    onChangeSliderItem (index, val) {
+      this.$set(this.value.data, index, val)
     }
   },
   render () {
@@ -27,16 +25,15 @@ export default {
         {value.config.map((item) => (
           <CompCell info={item} v-model={item.value} />
         ))}
-        <div class=''>
-          <div>轮播项</div>
-          {value.data.map((item) => (
+        <div class='slider-items'>
+          {value.data.map((item, index) => (
             <div class='slider-item'>
-              <SpImagePicker img={item} />
+              <SpImagePicker value={item} on-onChange={this.onChangeSliderItem.bind(this, index)} />
               <CompPickerLink />
             </div>
           ))}
-          <el-button plain full on-click={this.handleClickAdd.bind(this)}>
-            添加背景
+          <el-button class='btn btn-add' plain on-click={this.handleClickAdd.bind(this)}>
+            添加图片(0/5)
           </el-button>
         </div>
       </div>
@@ -47,8 +44,24 @@ export default {
 
 <style lang="scss">
 .wgt-slider-attr {
+  .slider-items {
+    padding: 10px;
+    background-color: #f5f5f5;
+  }
+  .btn-add {
+    width: 100%;
+  }
   .slider-item {
     display: flex;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    .sp-image-picker {
+      margin-right: 10px;
+    }
+    .comp-picker-link {
+      flex: 1;
+    }
   }
 }
 </style>

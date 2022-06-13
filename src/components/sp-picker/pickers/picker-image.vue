@@ -529,14 +529,20 @@ export default {
       this.refresh(true)
     },
     handleClickItem (item) {
+      // console.log('picker-image:', item)
+      const { image_id, url } = item
+      const _item = {
+        image_id,
+        url
+      }
       if (!this.multiple) {
-        this.selected = item
+        this.selected = _item
       } else {
         const fdx = this.selected.findIndex((s) => s.image_id == item.image_id)
         if (fdx > -1) {
           this.selected.splice(fdx, 1)
         } else {
-          this.selected.push(item)
+          this.selected.push(_item)
         }
       }
       this.updateVal(this.selected)

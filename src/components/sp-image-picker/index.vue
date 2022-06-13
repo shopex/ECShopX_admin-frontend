@@ -2,7 +2,7 @@
 .sp-image-picker {
   width: 80px;
   height: 80px;
-  border: 1px solid #cecece;
+  border: 1px solid #d9d9d9;
   position: relative;
   .placeholder {
     height: 80px;
@@ -46,9 +46,9 @@
 <template>
   <div class="sp-image-picker">
     <img
-      v-if="img && img.url"
+      v-if="value && value.url"
       class="img-content"
-      :src="img.url"
+      :src="value.url"
     >
     <div
       v-else
@@ -59,7 +59,7 @@
       <p>添加图片</p>
     </div>
     <span
-      v-if="img && img.url"
+      v-if="value && value.url"
       class="image-meta"
       @click="handleSelectImage"
     >更换图片</span>
@@ -69,19 +69,15 @@
 <script>
 export default {
   name: 'SpImagePicker',
-  props: {},
-  data () {
-    return {
-      img: null
-    }
-  },
+  props: ['info', 'value'],
   created () {},
   methods: {
     async handleSelectImage () {
       const { data } = await this.$picker.image({
-        data: this.img
+        data: this.value
       })
-      this.img = data
+      this.$emit('input', data)
+      this.$emit('onChange', data)
     }
   }
 }

@@ -130,8 +130,8 @@ export default {
     this.regsiterWgts()
   },
   mounted () {
-    document.body.style.setProperty('--themeColor', '#409EFF')
-    document.body.style.setProperty('--themeColorRgb', [64, 158, 255].join(','))
+    document.body.style.setProperty('--themeColor', '#155bd4')
+    document.body.style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
   },
   methods: {
     regsiterWgts () {
