@@ -71,9 +71,14 @@ export default {
             buttonType: 'primary is-plain',
             action: {
               handler: async (val) => {
-                this.registerForm.id = ''
-                this.$refs.registerDialogRef.resetForm()
-                this.registerDialog = true
+                const formQuery = JSON.parse(JSON.stringify(this.formQuery))
+                if (formQuery.cycleTime.length > 0) {
+                  formQuery['start_time'] = moment(formQuery.cycleTime[0]).unix()
+                  formQuery['end_time'] = moment(formQuery.cycleTime[1]).unix()
+                  delete formQuery.cycleTime
+                }
+                await this.$api.financial.exportData(formQuery)
+                this.$message.success('导出成功')
               }
             }
           }

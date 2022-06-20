@@ -295,6 +295,7 @@ export default {
         delete formQuery.cycleTime
       }
       await this.$api.financial.exportData(formQuery)
+      this.$message.success('导出成功')
     },
     remoteMerchantList: async function (name) {
       this.merchantLoading = true
