@@ -73,14 +73,14 @@
           name="normal_community_order"
         />
         <el-tab-pane
+          v-if="!VERSION_IN_PURCHASE"
           label="发票信息导出"
           name="invoice"
-          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
+          v-if="!VERSION_IN_PURCHASE"
           label="药品需求单"
           name="drug_order"
-          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="商品统计导出"
@@ -95,14 +95,14 @@
           name="normal_items_tag"
         />
         <el-tab-pane
+          v-if="!VERSION_IN_PURCHASE"
           label="店铺商品导出"
           name="distributor_items"
-          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
+          v-if="!VERSION_IN_PURCHASE"
           label="积分商品导出"
           name="pointsmallitems"
-          v-if="!VERSION_IN_PURCHASE"
         />
         <!-- <el-tab-pane
           label="权益导出"
@@ -123,9 +123,9 @@
           v-if="!VERSION_IN_PURCHASE"
         /> -->
         <el-tab-pane
+          v-if="!VERSION_IN_PURCHASE"
           label="报名导出"
           name="selform_registration_record"
-          v-if="!VERSION_IN_PURCHASE"
         />
         <el-tab-pane
           label="售后列表导出"
@@ -166,6 +166,10 @@
         <el-tab-pane
           label="商品码导出"
           name="itemcode"
+        />
+        <el-tab-pane
+          label="结算单"
+          name="statements"
         />
       </template>
 

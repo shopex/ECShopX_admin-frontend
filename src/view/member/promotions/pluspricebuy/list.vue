@@ -417,11 +417,12 @@ export default {
       return Date.parse(new Date(str)) / 1000
     },
     endActionVisible ({ status, source_id }) {
-      if (status == 'end') {
+      if (status != 'end') {
         if (this.IS_ADMIN && source_id == '0') {
           return true
-        } else {
-          return false
+        }
+        if (this.IS_DISTRIBUTOR) {
+          return true
         }
       }
       return false

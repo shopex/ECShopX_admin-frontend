@@ -43,3 +43,12 @@ export function confirmStatement (id) {
     method: 'post'
   })
 }
+
+// 导出
+export function exportData (params) {
+  return fetch({
+    url: `/statement/summarized/export`,
+    method: 'post',
+    params
+  })
+}

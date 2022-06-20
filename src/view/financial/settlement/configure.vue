@@ -115,6 +115,8 @@ export default {
                   cycle: '',
                   unit: ''
                 }
+                this.addFormList[0].isShow = true
+                this.addFormList[1].isShow = false
                 this.addDialog = true
               }
             }
@@ -132,6 +134,9 @@ export default {
                   cycle: row.period[0],
                   unit: row.period[1]
                 }
+                this.addForm.distributor_name = row.distributor_name
+                this.addFormList[0].isShow = false
+                this.addFormList[1].isShow = true
                 this.addDialog = true
               }
             }
@@ -154,6 +159,7 @@ export default {
       addForm: {
         id: '',
         distributor_id: '',
+        distributor_name: '',
         cycleData: {
           cycle: '',
           unit: ''
@@ -166,8 +172,22 @@ export default {
           component: () => (
             <SpSelectShop v-model={this.addForm.distributor_id} clearable placeholder='请选择' />
           ),
-          required: true,
-          message: '不能为空'
+          // required: true,
+          validator: (rule, value, callback) => {
+            const { id, distributor_id } = this.addForm
+            if (!id && !distributor_id) {
+              callback(new Error('不能为空'))
+            } else {
+              callback()
+            }
+          },
+          isShow: true
+        },
+        {
+          label: '店铺:',
+          key: 'distributor_name',
+          type: 'text',
+          isShow: false
         },
         {
           label: '结算周期:',
@@ -207,13 +227,14 @@ export default {
       this.$message.success('保存成功')
     },
     async onAddSubmit () {
-      const { distributor_id, cycleData } = this.addForm
+      const { id, distributor_id, cycleData } = this.addForm
       const { cycle, unit } = cycleData
       await this.$api.financial.savePeriodSetting({
+        id,
         distributor_id,
         period: [cycle, unit]
       })
-      this.$message.success('添加成功')
+      this.$message.success(id ? '保存成功' : '添加成功')
       this.addDialog = false
       this.$refs.finder.refresh()
     },
