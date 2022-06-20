@@ -94,6 +94,11 @@
             <span class="text-muted">{{ scope.row.description }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="店铺">
+          <template slot-scope="scope">
+            {{ getDistributorInfo(scope.row.distributor_info) }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="activity_release_date"
           label="预告时间"
@@ -144,7 +149,7 @@
         >
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.status !== 'it_has_ended'"
+              v-if="scope.row.status !== 'it_has_ended' && scope.row.distributor_info.length == 0"
               type="text"
               @click="updateStatusCommunityAction(scope.row)"
             >
@@ -297,6 +302,11 @@ export default {
     this.getCurrencyInfo()
   },
   methods: {
+    getDistributorInfo (distributor_info) {
+      if (distributor_info.length > 0) {
+        return distributor_info[0].store_name
+      }
+    },
     onSearch () {
       this.page.pageIndex = 1
       this.$nextTick(() => {
