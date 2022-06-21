@@ -39,7 +39,7 @@
               label="组合促销名称"
             />
             <el-table-column
-              prop="source_id"
+              prop="source_name"
               label="店铺"
             />
             <el-table-column

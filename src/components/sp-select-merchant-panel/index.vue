@@ -29,6 +29,13 @@
     margin: 8px;
     text-align: center;
   }
+  .el-table__row {
+    &.active {
+      td {
+        color: var(--themeColor);
+      }
+    }
+  }
 }
 </style>
 
@@ -52,9 +59,10 @@
         v-loading="loading"
         :data="list"
         :show-header="false"
+        :row-class-name="getRowActive"
         @row-click="onRowClick"
       >
-        <el-table-column width="30">
+        <!-- <el-table-column width="30">
           <template slot-scope="scope">
             <el-radio
               :value="getRadioValue(scope.row)"
@@ -62,7 +70,7 @@
               @click.native.stop
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column
           prop="merchant_name"
@@ -122,6 +130,15 @@ export default {
     this.fetch()
   },
   methods: {
+    getRowActive ({ row, rowIndex }) {
+      if (!this.selectMerchant.selectValue) {
+        return ''
+      } else if (this.selectMerchant.selectValue.value == row.id) {
+        return 'active'
+      } else {
+        return ''
+      }
+    },
     async fetch () {
       this.loading = true
       const params = {

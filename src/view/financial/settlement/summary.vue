@@ -220,11 +220,17 @@ export default {
             render: (h, { row }) => h('span', {}, row.freight_fee / 100)
           },
           {
-            name: '分销佣金（¥）',
-            key: 'rebate_fee',
+            name: '实付金额（¥）',
+            key: 'total_fee',
             width: 120,
-            render: (h, { row }) => h('span', {}, row.rebate_fee / 100)
+            render: (h, { row }) => h('span', {}, row.total_fee / 100)
           },
+          // {
+          //   name: '分销佣金（¥）',
+          //   key: 'rebate_fee',
+          //   width: 120,
+          //   render: (h, { row }) => h('span', {}, row.rebate_fee / 100)
+          // },
           {
             name: '退款金额（¥）',
             key: 'refund_fee',
