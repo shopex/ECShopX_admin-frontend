@@ -94,11 +94,11 @@ export default {
             key: 'total_fee',
             render: (h, { row }) => h('span', {}, row.total_fee / 100)
           },
-          {
-            name: '分销佣金（¥）',
-            key: 'rebate_fee',
-            render: (h, { row }) => h('span', {}, row.rebate_fee / 100)
-          },
+          // {
+          //   name: '分销佣金（¥）',
+          //   key: 'rebate_fee',
+          //   render: (h, { row }) => h('span', {}, row.rebate_fee / 100)
+          // },
           {
             name: '退款金额（¥）',
             key: 'refund_fee',
