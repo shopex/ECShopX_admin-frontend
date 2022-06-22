@@ -94,6 +94,18 @@ export default {
             key: 'total_fee',
             render: (h, { row }) => h('span', {}, row.total_fee / 100)
           },
+          {
+            name: '运费（¥）',
+            key: 'freight_fee',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.freight_fee / 100)
+          },
+          {
+            name: '同城配（¥）',
+            key: 'intra_city_freight_fee',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.intra_city_freight_fee / 100)
+          },
           // {
           //   name: '分销佣金（¥）',
           //   key: 'rebate_fee',

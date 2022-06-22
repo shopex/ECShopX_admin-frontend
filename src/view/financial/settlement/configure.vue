@@ -50,6 +50,9 @@
           ref="finder"
           no-selection
           :setting="setting"
+          :hooks="{
+            beforeSearch: beforeSearch
+          }"
           url="/statement/period/distributor/setting"
         />
       </el-tab-pane>
@@ -218,7 +221,12 @@ export default {
         }
       }
     },
-    onSearch () {},
+    onSearch () {
+      this.$refs.finder.refresh()
+    },
+    beforeSearch (params) {
+      return { ...params, ...this.formQuery }
+    },
     async onSaveConfig () {
       const { cycle, unit } = this.form.cycleData
       await this.$api.financial.savePeriodSetting({

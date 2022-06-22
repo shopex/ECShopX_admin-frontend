@@ -220,6 +220,12 @@ export default {
             render: (h, { row }) => h('span', {}, row.freight_fee / 100)
           },
           {
+            name: '同城配（¥）',
+            key: 'intra_city_freight_fee',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.intra_city_freight_fee / 100)
+          },
+          {
             name: '实付金额（¥）',
             key: 'total_fee',
             width: 120,
