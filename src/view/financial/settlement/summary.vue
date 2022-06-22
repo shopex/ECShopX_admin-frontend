@@ -200,14 +200,16 @@ export default {
           }
         ],
         columns: [
-          { name: '账单编号', key: 'statement_no' },
+          { name: '账单编号', key: 'statement_no', width: 160 },
           {
             name: '商家',
-            key: 'merchant_name'
+            key: 'merchant_name',
+            width: 160
           },
           {
             name: '店铺',
-            key: 'distributor_name'
+            key: 'distributor_name',
+            width: 160
           },
           {
             name: '订单数量',

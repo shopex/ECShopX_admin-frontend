@@ -84,10 +84,11 @@ export default {
           }
         ],
         columns: [
-          { name: '订单号', key: 'order_id' },
+          { name: '订单号', key: 'order_id', width: 160 },
           {
             name: '店铺',
-            key: 'merchant_name'
+            key: 'distributor_name',
+            width: 160
           },
           {
             name: '订单实付（¥）',
