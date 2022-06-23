@@ -56,7 +56,7 @@ export function exportData (params) {
 // 导出明细
 export function exportDetialData (params) {
   return fetch({
-    url: `/statement/detail/exoprt`,
+    url: `/statement/detail/export`,
     method: 'post',
     params
   })
