@@ -49,6 +49,10 @@
           label="商品统计导出"
           name="goods_data"
         />
+        <el-tab-pane
+          label="结算单"
+          name="statements"
+        />
       </template>
       <template v-else>
         <el-tab-pane
