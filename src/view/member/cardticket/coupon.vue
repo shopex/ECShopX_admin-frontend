@@ -87,6 +87,7 @@
                 <span v-else>0</span>
                 <el-popover
                   v-if="scope.row.edit_btn === 'Y'"
+                  :ref="`popover-${scope.row.card_id}`"
                   v-model="scope.row.storePop"
                   placement="bottom"
                   width="300"
@@ -308,7 +309,7 @@ export default {
         {
           text: '满减券',
           value: 'cash'
-        },
+        }
         // {
         //   text: '兑换券',
         //   value: 'new_gift'

@@ -56,16 +56,12 @@
           v-if="$route.meta && !$route.meta.hidemenu"
           class="sub-menu"
         >
-          <el-menu
-            :default-active="activeSubIndex"
-            :default-openeds="[0]"
-            unique-opened
-          >
+          <el-menu :default-active="activeSubIndex">
             <template v-for="(child, cindex) in submenuList">
               <el-submenu
                 v-if="child.children && child.children[0].is_menu"
                 :key="`cmenu-${cindex}`"
-                :index="cindex"
+                :index="`${cindex}`"
                 class="menu-group"
               >
                 <template slot="title">
@@ -202,6 +198,21 @@ export default {
       vm.activeIndex = to.matched[0].path || '/'
     })
   },
+  beforeRouteUpdate (to, from, next) {
+    console.log('beforeRouteUpdate', to, from, this.submenuList)
+    this.submenuList.forEach((menu, index) => {
+      if (typeof menu.children == 'undefined') {
+        if (menu.url == to.path) {
+          this.menuOpeneds = [`${index}`]
+        }
+      } else {
+        if (menu.children.find((item) => item.url == to.path)) {
+          this.menuOpeneds = [`${index}`]
+        }
+      }
+    })
+    next()
+  },
   data () {
     return {
       isShowAside: 'false',
@@ -210,7 +221,8 @@ export default {
       homeIndex: '',
       brandIco: '',
       showUserPopover: false,
-      activeIndex: ''
+      activeIndex: '',
+      menuOpeneds: []
     }
   },
   computed: {
