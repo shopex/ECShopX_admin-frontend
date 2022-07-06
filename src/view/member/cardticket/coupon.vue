@@ -367,6 +367,7 @@ export default {
     },
     async onEditSubmit () {
       await this.$api.cardticket.updateStore(this.editForm)
+      this.editDialog = false
       this.fetchList()
     },
     getParams () {
