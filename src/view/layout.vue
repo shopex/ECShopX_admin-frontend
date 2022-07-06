@@ -447,7 +447,7 @@ export default {
   }
 }
 .sub-menu {
-  min-width: 120px;
+  width: 130px;
   overflow-y: auto;
   background: #f6f7f9;
   box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.06);
