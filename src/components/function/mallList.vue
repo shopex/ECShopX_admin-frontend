@@ -5,7 +5,7 @@
       class="shop-header"
     >
       <div
-        v-if="!VERSION_B2C"
+        v-if="!VERSION_B2C && !VERSION_IN_PURCHASE"
         class="shop-left"
       >
         <span class="text">小程序模版呈现：</span>
@@ -197,7 +197,7 @@
             >废弃</span>
           </div>
           <div
-            v-if="relStore.id == '0' && !VERSION_B2C && !VERSION_PLATFORM"
+            v-if="relStore.id == '0' && !VERSION_B2C && !VERSION_PLATFORM && !VERSION_IN_PURCHASE"
             class="synchronize-btn"
             @click="synchronizeTemplateToShop(index)"
           >
@@ -216,7 +216,8 @@
           :class="{
             'template-item': true,
             'add-btn': true,
-            'sync-template': relStore.id == '0' && !VERSION_B2C && !VERSION_PLATFORM
+            'sync-template':
+              relStore.id == '0' && !VERSION_B2C && !VERSION_PLATFORM && !VERSION_IN_PURCHASE
           }"
           @click="AddOrEditDialog('add')"
         >

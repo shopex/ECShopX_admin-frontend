@@ -82,7 +82,7 @@
           </el-table>
         </el-form-item>
         <el-form-item label="单笔订单最低金额：">
-          {{ detail.dependents_limit }}
+          {{ detail.minimum_amount }}
         </el-form-item>
       </el-form>
     </div>
