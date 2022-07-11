@@ -37,7 +37,7 @@ export default {
           break
         case 'radio-group':
           return (
-            <el-radio-group v-model={this.compValue} size='small'>
+            <el-radio-group v-model={this.compValue} disabled size='mini'>
               {option.map((item) => (
                 <el-radio-button label={item.label} />
               ))}

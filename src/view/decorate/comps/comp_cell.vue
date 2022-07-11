@@ -31,7 +31,8 @@
 <script>
 export default {
   name: 'CompCell',
-  props: ['info', 'value'],
+  props: ['info', 'value', 'scope'],
+  inject: ['scope'],
   data () {
     return {
       compValue: null
@@ -46,7 +47,7 @@ export default {
     }
   },
   render () {
-    const { title, key, type, option } = this.info
+    const { title, key, type, disabled = false, option } = this.info
     const renderComp = (type) => {
       switch (type) {
         case 'text':
@@ -61,7 +62,12 @@ export default {
           break
         case 'radio-group':
           return (
-            <el-radio-group v-model={this.compValue} size='small' on-change={this.onCompChange}>
+            <el-radio-group
+              v-model={this.compValue}
+              size='small'
+              disabled={disabled(this.scope)}
+              on-change={this.onCompChange}
+            >
               {option.map((item) => (
                 <el-radio-button label={item.value}>{item.label}</el-radio-button>
               ))}

@@ -2,6 +2,11 @@
 export default {
   name: 'WgtSliderAttr',
   props: ['value'],
+  provide () {
+    return {
+      scope: this
+    }
+  },
   methods: {
     async handleClickAdd () {
       const { data } = await this.$picker.image({

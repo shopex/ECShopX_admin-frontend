@@ -1,33 +1,69 @@
 <style lang="scss" src="./wgt_slider.scss"></style>
 <template>
-  <div class="wgt-slider">
+  <div
+    :class="{
+      'wgt-slider': true,
+      'padded': value.padded
+    }"
+  >
     <div class="wgt-hd">
       <span class="title">{{ value.title }}</span>
       <span class="sub-title">{{ value.subtitle }}</span>
     </div>
-    <div class="wgt-bd">
+    <div
+      class="wgt-bd"
+      :class="{
+        'spaced': value.spaced
+      }"
+    >
+      <!-- {{JSON.stringify(value.data)}} -->
       <SpImage
+        class="placeholder-item"
         :src="value.data.length > 1 ? value.data[0].url : null"
-        :width="375"
+        :width="'100%'"
       />
-      <!-- <el-carousel
-        class="sliderimg"
+      <el-carousel
+        class="slider-container"
         arrow="never"
-        height="375px"
         indicator-position="none"
-        :interval="100000"
+        :interval="value.interval"
+        @change="
+          (e) => {
+            this.currentIndex = e
+          }
+        "
       >
         <el-carousel-item
-          v-for="(item, index) in [1, 2, 3]"
+          v-for="(item, index) in value.data.length > 0 ? value.data : [1]"
           :key="index"
           class="slider-item"
+          :class="{
+            'rounded': value.rounded
+          }"
         >
           <SpImage
-            :width="375"
-            :height="375"
+            :class="{
+              'rounded': value.rounded
+            }"
+            :width="'100%'"
+            :src="item.url"
           />
         </el-carousel-item>
-      </el-carousel> -->
+      </el-carousel>
+      <div :class="['slider-pagination', value.dotLocation, value.shape, value.dotColor, {}]">
+        <template v-if="value.dot">
+          <div class="dot-item">
+            {{ `${currentIndex}/${value.data.length > 0 ? value.data.length : 1}` }}
+          </div>
+        </template>
+        <template v-else>
+          <div
+            v-for="(item, index) in value.data.length > 0 ? value.data : [1]"
+            :key="`pagination-item__${index}`"
+            class="pagination-item"
+          />
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -36,7 +72,7 @@
 export default {
   name: 'WgtSlider',
   wgtName: '轮播',
-  wgtIcon: 'icon-slider',
+  wgtIcon: 'wgt-slider',
   config: {
     name: 'slider',
     base: [
@@ -67,7 +103,7 @@ export default {
       },
       {
         title: '图片间隔',
-        key: 'rounded',
+        key: 'spaced',
         type: 'radio-group',
         value: true,
         option: [
@@ -77,7 +113,7 @@ export default {
       },
       {
         title: '指示点样式',
-        key: 'rounded',
+        key: 'dot',
         type: 'radio-group',
         value: true,
         option: [
@@ -86,8 +122,19 @@ export default {
         ]
       },
       {
+        title: '指示点形状',
+        key: 'shape',
+        type: 'radio-group',
+        value: 'circle',
+        disabled: () => {},
+        option: [
+          { label: '圆形', value: 'circle' },
+          { label: '长方形', value: 'rectangle' }
+        ]
+      },
+      {
         title: '指示点覆盖',
-        key: 'rounded',
+        key: 'dotCover',
         type: 'radio-group',
         value: true,
         option: [
@@ -97,7 +144,7 @@ export default {
       },
       {
         title: '指示点位置',
-        key: 'rounded',
+        key: 'dotLocation',
         type: 'radio-group',
         value: 'right',
         option: [
@@ -107,23 +154,13 @@ export default {
         ]
       },
       {
-        title: '指示点形状',
-        key: 'rounded',
-        type: 'radio-group',
-        value: true,
-        option: [
-          { label: '圆形', value: true },
-          { label: '长方形', value: false }
-        ]
-      },
-      {
         title: '指示点颜色',
-        key: 'rounded',
+        key: 'dotColor',
         type: 'radio-group',
-        value: true,
+        value: 'dark',
         option: [
-          { label: '深色', value: true },
-          { label: '亮色', value: false }
+          { label: '深色', value: 'dark' },
+          { label: '亮色', value: 'light' }
         ]
       }
     ],
@@ -170,6 +207,14 @@ export default {
   },
   props: {
     value: [Object, Array]
+  },
+  data () {
+    return {
+      currentIndex: 0
+    }
+  },
+  computed: {
+    sliderHeight () {}
   },
   created () {},
   methods: {}

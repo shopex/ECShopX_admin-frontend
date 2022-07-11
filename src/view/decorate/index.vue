@@ -2,7 +2,9 @@
 <template>
   <div class="page-decorate-index">
     <div class="decorate-hd">
-      <el-button>保存</el-button>
+      <el-button @click="onSaveTemplate">
+        保存
+      </el-button>
     </div>
     <div class="decorate-bd">
       <div class="left-container">
@@ -27,10 +29,11 @@
             class="wgt-item"
             :data-name="wgt.name"
           >
-            <i
+            <!-- <i
               class="wgt-icon iconfont"
               :class="wgt.wgtIcon"
-            />
+            /> -->
+            <div :class="['wgt-icon', wgt.wgtIcon]" />
             <div class="wgt-name">
               {{ wgt.wgtName }}
             </div>
@@ -47,13 +50,13 @@
           <div class="weapp-header" />
           <div class="weapp-body">
             <draggable
-              :list="comps"
+              :list="contentComps"
               group="easyview"
               class="components-wrap"
               @change="log2"
             >
               <div
-                v-for="(wgt, index) in comps"
+                v-for="(wgt, index) in contentComps"
                 :key="`wgt-render-item__${index}`"
                 class="wgt-render-item"
                 :class="{ active: activeCompIndex == index }"
@@ -84,11 +87,11 @@
       <div class="right-container">
         <div v-if="activeCompIndex !== null && hackReset">
           <div class="wgt-name">
-            {{ comps[activeCompIndex].wgtName }}
+            {{ contentComps[activeCompIndex].wgtName }}
           </div>
           <component
-            :is="`${comps[activeCompIndex].name}Attr`"
-            :value="comps[activeCompIndex].config"
+            :is="`${contentComps[activeCompIndex].name}Attr`"
+            :value="contentComps[activeCompIndex].config"
           />
           <!-- <div class="">
             <div class="wgt-name">{{activeComp.wgtName}}</div>
@@ -120,7 +123,7 @@ export default {
   data () {
     return {
       widgets: [],
-      comps: [],
+      contentComps: [],
       activeComp: null,
       activeCompIndex: null,
       hackReset: false
@@ -128,6 +131,7 @@ export default {
   },
   created () {
     this.regsiterWgts()
+    this.getTemplateDetial()
   },
   mounted () {
     document.body.style.setProperty('--themeColor', '#155bd4')
@@ -191,7 +195,7 @@ export default {
     },
     transform (wgt) {
       let temp = {}
-      const { name, base, data } = wgt.config
+      const { name, base, config, data } = wgt.config
       temp = {
         name,
         data
@@ -199,7 +203,37 @@ export default {
       base.forEach((item) => {
         temp[item.key] = item.value
       })
+      config.forEach((item) => {
+        temp[item.key] = item.value
+      })
       return temp
+    },
+    async getTemplateDetial () {
+      const { id } = this.$route.query
+      const { template_content } = await this.$api.template.getPagesTemplateDetail({
+        pages_template_id: id
+      })
+
+      template_content.config.map((item) => {
+        Object.keys(wgts).forEach((key) => {
+          if (wgts[key].name.indexOf('Attr') == -1) {
+            if (wgts[key].config.name == item.name) {
+              const { base, config } = wgts[key].config
+              base.forEach((b) => {
+                b.value = item.base[b.key] || b.value
+              })
+              config.forEach((c) => {
+                c.value = item.config[c.key] || c.value
+              })
+              this.contentComps.push(JSON.parse(JSON.stringify(wgts[key])))
+            }
+          }
+        })
+      })
+      console.log(this.contentComps)
+    },
+    onSaveTemplate () {
+      console.log('onSaveTemplate:', this.contentComps)
     }
   }
 }

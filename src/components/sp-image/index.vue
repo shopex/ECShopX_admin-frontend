@@ -7,28 +7,25 @@
 
 <script>
 import dImage from '@/assets/imgs/default.jpg'
+import { isNumber, isString } from '@/utils'
 export default {
   name: 'SpImage',
   props: {
     src: String,
-    width: {
-      type: Number,
-      default: 120
-    },
-    height: {
-      type: Number
-      // default: 120
-    }
+    width: [Number, String],
+    height: [Number, String]
   },
   render () {
     const { src, width, height } = this
+    const _width = isString(width) ? width : `${width}px`
+    const _height = isString(height) ? height : `${height}px`
     return (
       <img
-        class='sp-image'
+        class={'sp-image'}
         src={src || dImage}
         style={{
-          width: `${width}px`,
-          height: `${height}px`
+          width: _width,
+          height: _height
         }}
       />
     )

@@ -15,7 +15,7 @@
 export default {
   name: 'WgtHotzone',
   wgtName: '热区图',
-  wgtIcon: 'icon-hotzone',
+  wgtIcon: 'wgt-hotzone',
   config: {
     name: 'hotzone',
     base: [
