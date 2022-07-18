@@ -198,7 +198,7 @@ export default {
           key: 'dianwu_show_status',
           type: 'switch',
           tip: '移动端会员中心是否展示店务端入口',
-          isShow: !VERSION_IN_PURCHASE,
+          // isShow: !VERSION_IN_PURCHASE,
           onChange: async (e) => {
             const { dianwu_show_status } = this.form
             await this.$api.company.setDianwuShowStatus({
