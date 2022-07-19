@@ -331,7 +331,7 @@
         </el-table-column>
         <el-table-column
           prop="username"
-          label="姓名"
+          label="昵称"
           width="140"
         />
         <el-table-column

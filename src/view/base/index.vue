@@ -797,7 +797,7 @@
                       </div>
                     </div>
                   </el-col>
-                  <el-col
+                  <!-- <el-col
                     v-if="!VERSION_IN_PURCHASE"
                     :span="12"
                   >
@@ -822,7 +822,7 @@
                         </div>
                       </div>
                     </div>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
               </div>
             </section>
