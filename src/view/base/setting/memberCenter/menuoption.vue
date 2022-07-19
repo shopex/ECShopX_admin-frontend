@@ -19,12 +19,18 @@
         >
           <el-switch v-model="form.data.group" />
         </el-form-item>
-        <!-- <el-form-item label="是否展示助力活动：">
-          <el-switch v-model="form.data.boost_activity"></el-switch>
+        <el-form-item
+          v-if="VERSION_STANDARD"
+          label="是否展示助力活动："
+        >
+          <el-switch v-model="form.data.boost_activity" />
         </el-form-item>
-        <el-form-item label="是否展示助力订单：">
-          <el-switch v-model="form.data.boost_order"></el-switch>
-        </el-form-item> -->
+        <el-form-item
+          v-if="VERSION_STANDARD"
+          label="是否展示助力订单："
+        >
+          <el-switch v-model="form.data.boost_order" />
+        </el-form-item>
         <!-- <el-form-item label="是否展示投诉记录：">
           <el-switch v-model="form.data.complaint"></el-switch>
         </el-form-item> -->

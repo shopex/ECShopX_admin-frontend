@@ -87,6 +87,11 @@
 <script>
 import { activate, getActivateInfo } from '@/api/company'
 import { VERSION_STANDARD } from '@/utils'
+const login_bg_yundian = require(`@/assets/imgs/login-yundian.jpg`)
+const login_bg_b2c = require(`@/assets/imgs/login-b2c.jpg`)
+const login_bg_inpurchase = require(`@/assets/imgs/login-inpurchase.jpg`)
+const login_bg_ecshopx = require(`@/assets/imgs/login-ecshopx.jpg`)
+const login_bg_free_ecshopx = require(`@/assets/imgs/login-free-ecshopx.jpg`)
 export default {
   data () {
     return {
@@ -102,8 +107,20 @@ export default {
   },
   mounted () {
     this.loginType = this.$store.getters.login_type
-    const system = VERSION_STANDARD ? 'onex' : 'ecshopx'
-    this.logoIcon = require(`@/assets/img/${system}/logo.jpg`)
+    switch (this.VUE_APP_PRODUCT_MODEL) {
+      case 'standard':
+        this.logoIcon = login_bg_yundian
+        break
+      case 'in_purchase':
+        this.logoIcon = login_bg_inpurchase
+        break
+      case 'b2c':
+        this.logoIcon = login_bg_b2c
+        break
+      default:
+        this.logoIcon = this.VUE_APP_FREE ? login_bg_free_ecshopx : login_bg_ecshopx
+        break
+    }
   },
   methods: {
     activetionAction () {
