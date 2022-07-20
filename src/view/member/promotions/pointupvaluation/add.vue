@@ -131,6 +131,7 @@
         prop="upvaluation"
         :rules="{ required: true, message: '升值倍数必填', trigger: 'blur' }"
       >
+        活动期内，每个积分升值为
         <el-input
           v-model="form.upvaluation"
           :maxlength="30"
@@ -158,9 +159,7 @@
             :key="grade.grade_id"
             :label="grade.grade_id"
           >
-            {{
-              grade.grade_name
-            }}
+            {{ grade.grade_name }}
           </el-checkbox>
           <el-checkbox
             v-for="vipdata in vipGrade"
@@ -178,9 +177,7 @@
             :key="key"
             :label="key"
           >
-            {{
-              value
-            }}
+            {{ value }}
           </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
