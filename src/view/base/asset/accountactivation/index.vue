@@ -91,6 +91,7 @@ const login_bg_yundian = require(`@/assets/imgs/active_standard.png`)
 const login_bg_b2c = require(`@/assets/imgs/active_b2c.png`)
 const login_bg_inpurchase = require(`@/assets/imgs/active_inpurchase.png`)
 const login_bg_ecshopx = require(`@/assets/imgs/active_platform.png`)
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -104,9 +105,12 @@ export default {
       loginType: 'default'
     }
   },
+  computed: {
+    ...mapGetters(['versionMode'])
+  },
   mounted () {
     this.loginType = this.$store.getters.login_type
-    switch (this.VUE_APP_PRODUCT_MODEL) {
+    switch (this.versionMode) {
       case 'standard':
         this.logoIcon = login_bg_yundian
         break
