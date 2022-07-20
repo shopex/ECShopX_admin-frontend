@@ -75,7 +75,7 @@ export default {
           label: '评论设置',
           key: 'rate_status',
           type: 'switch',
-          isShow: !VERSION_IN_PURCHASE,
+          // isShow: !VERSION_IN_PURCHASE,
           onChange: async (e) => {
             const { rate_status } = this.form
             await this.$api.company.setRateSetting({
@@ -87,7 +87,7 @@ export default {
           label: '提货码设置',
           key: 'pickupcode_status',
           type: 'switch',
-          isShow: !this.isMicorMall && !VERSION_IN_PURCHASE,
+          isShow: !this.isMicorMall,
           onChange: async (e) => {
             const { pickupcode_status } = this.form
             await this.$api.company.setPickupcodeSetting({
