@@ -89,7 +89,7 @@
         <SpFilterFormItem
           v-if="!VERSION_IN_PURCHASE"
           prop="vip_grade"
-          label="会员类型:"
+          label="会员身份:"
         >
           <el-select
             v-model="params.vip_grade"
@@ -1321,8 +1321,8 @@ export default {
       this.page.pageIndex = Number(currentPage)
     }
     this.getMembers()
-    this.getGradeList()
     this.getAllTagLists()
+    this.getGradeList()
     this.getVipList()
     this.getShopsList()
     getMemberRegisterSetting().then((response) => {

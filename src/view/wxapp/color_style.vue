@@ -75,9 +75,9 @@
             <el-form-item label="辅色调">
               <el-color-picker v-model="form.data[0].accent" />
             </el-form-item>
-            <el-form-item label="会员色">
+            <!-- <el-form-item label="会员色">
               <el-color-picker v-model="form.data[0].marketing" />
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
           <el-button
             class="btn-save"
