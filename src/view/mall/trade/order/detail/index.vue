@@ -690,13 +690,15 @@ export default {
         memberGrade,
         memberDiscount,
         discount_info: discount_info
-          .filter((item) => item.discount_fee > 0)
-          .map((item) => {
-            return {
-              ...item,
-              discount_fee: item.discount_fee / 100
-            }
-          }),
+          ? discount_info
+              .filter((item) => item.discount_fee > 0)
+              .map((item) => {
+                return {
+                  ...item,
+                  discount_fee: item.discount_fee / 100
+                }
+              })
+          : [],
         profit_type: PROFIT_TYPE[profit.profit_type],
         profit_totalPrice: `¥${profit.total_fee / 100}`,
         ...tradeInfo,
@@ -732,7 +734,9 @@ export default {
       //   receipt_type == 'ziti'
       //     ? `${distributor.store_name} ${distributor.store_address}`
       //     :
-      this.addressInfo = `${receiver_name} ${receiver_mobile} ${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
+      this.addressInfo = receipt_type
+        ? `${receiver_name} ${receiver_mobile} ${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
+        : '-- --'
       this.deliveryData = deliveryData
 
       const isDada = receipt_type == 'dada'
