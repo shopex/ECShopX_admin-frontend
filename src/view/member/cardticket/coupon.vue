@@ -416,11 +416,11 @@ export default {
     },
     filterTag (value) {
       if (value.type) {
-        this.fetchParams.card_type = value.type[0]
+        this.params.card_type = value.type[0]
         this.fetchList()
       }
       if (value.status) {
-        this.fetchParams.status = value.status
+        this.params.status = value.status
         this.fetchList()
       }
     },
