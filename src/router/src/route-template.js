@@ -37,6 +37,11 @@ export default {
       name: `会员中心设置`,
       component: () => import('@/view/wxapp/member_center_setting')
     },
+    {
+      path: 'manage/wxshopsetting',
+      name: `商城基本信息`,
+      component: () => import('@/view/base/shop/shopsetting')
+    },
 
     // PC商城
     {
