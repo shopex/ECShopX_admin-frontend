@@ -606,7 +606,6 @@ export default {
         type: '',
         items: []
       },
-      btnActions: []
       btnActions: [],
       invoice: null,
       // 发票信息个人
@@ -677,7 +676,6 @@ export default {
         distributor_id,
         order_status,
         delivery_status,
-        community_info
         community_info,
         invoice,// 发票信息对象
         is_invoiced,
@@ -779,7 +777,6 @@ export default {
         payTypeTxt: PAY_TYPE[tradeInfo.payType],
         tradeStateTxt: PAY_STATUS[tradeInfo.tradeState],
         timeStart: moment(tradeInfo.timeStart * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        timeExpire: moment(tradeInfo.timeExpire * 1000).format('YYYY-MM-DD HH:mm:ss')
         timeExpire: moment(tradeInfo.timeExpire * 1000).format('YYYY-MM-DD HH:mm:ss'),
         invoiceType: invoiceType == 'individual' ? '个人' : '企业',
         invoiceContent,
