@@ -421,6 +421,10 @@ import {
 export default {
   mixins: [mixin, pageMixin],
   data () {
+    const orderType = ORDER_TYPE
+    if (this.VERSION_STANDARD) {
+      orderType.push({ title: '兑换订单', value: 'excard' })
+    }
     return {
       loading: false,
       defaultTime: ['00:00:00', '23:59:59'],
@@ -448,9 +452,7 @@ export default {
         : VERSION_IN_PURCHASE
         ? IN_PURCHASE_STATUS
         : ORDER_STATUS,
-      orderType: this.VERSION_STANDARD
-        ? ORDER_TYPE.concat([{ title: '兑换订单', value: 'excard' }])
-        : ORDER_TYPE,
+      orderType: orderType,
       invoiceStatus: INVOICE_STATUS,
       orderCategory: ORDER_CATEGORY,
       pickerOptions: PICKER_DATE_OPTIONS,
