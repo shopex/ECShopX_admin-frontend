@@ -81,7 +81,7 @@
       >
         <template slot-scope="props">
           <!-- {{ JSON.parse(props.row.is_image) ? '图片' : '文字' }} -->
-          {{ props.row.is_image == '1' ? '图片' : '文字' }}
+          {{ props.row.is_image == 'true' ? '图片' : '文字' }}
         </template>
       </el-table-column>
       <el-table-column
