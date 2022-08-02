@@ -476,6 +476,12 @@
             >
               微信支付配置
             </el-button>
+            <el-button
+              type="text"
+              @click="showSettingChinaumspay(scope.row.distributor_id)"
+            >
+              银联商务支付配置
+            </el-button>
             <!-- <router-link
               v-if="scope.row.is_valid !== 'delete' && datapass_block == '0'"
               :to="{
@@ -723,6 +729,60 @@
         </div>
       </el-dialog>
       <!-- 编辑距离-结束 -->
+
+      <!-- 银联商务支付配置-开始 -->
+      <el-dialog
+        title="银联商务支付配置"
+        width="50%"
+        :visible.sync="setChinaumspayVisible"
+        :before-close="handleChinaumspayCancel"
+      >
+        <template>
+          <el-form
+            ref="chinaumspayForm"
+            :model="chinaumspayForm"
+            class="demo-ruleForm"
+            label-width="90px"
+          >
+            <el-form-item label="商户号">
+              <el-input
+                v-model="chinaumspayForm.mid"
+                placeholder="请输入内容"
+                style="width: 30%"
+              />
+            </el-form-item>
+            <el-form-item label="终端号">
+              <el-input
+                v-model="chinaumspayForm.tid"
+                placeholder="请输入内容"
+                style="width: 30%"
+              />
+            </el-form-item>
+            <el-form-item label="企业用户号">
+              <el-input
+                v-model="chinaumspayForm.enterpriseid"
+                placeholder="请输入内容"
+                style="width: 30%"
+              />
+            </el-form-item>
+          </el-form>
+        </template>
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button @click.native="handleChinaumspayCancel">
+            取消
+          </el-button>
+          <el-button
+            type="primary"
+            @click="handleSubmitChinaumspay"
+          >
+            保存
+          </el-button>
+        </div>
+      </el-dialog>
+      <!-- 银联商务支付配置-结束 -->
     </template>
     <router-view />
   </div>
@@ -837,6 +897,13 @@ export default {
       setDistanceDialog: false,
       distanceForm: {
         distance: ''
+      },
+      setChinaumspayVisible: false,
+      chinaumspayForm: {
+        distributor_id: 0,
+        mid: '',
+        tid: '',
+        enterpriseid: ''
       },
       isOpen: false
     }
@@ -1254,6 +1321,40 @@ export default {
           message: '提交成功'
         })
         this.handleDistanceCancel()
+      })
+    },
+    showSettingChinaumspay (distributor_id) {
+      // 设置银联商务支付配置
+      this.setChinaumspayVisible = true
+      let that = this
+      let query = { pay_type: 'chinaumspay', distributor_id: distributor_id }
+      getPaymentSetting(query).then((response) => {
+        that.chinaumspayForm = response.data.data
+        that.chinaumspayForm.distributor_id = query.distributor_id
+      })
+      console.log(this.chinaumspayForm)
+    },
+    handleChinaumspayCancel () {
+      // 银联商务支付设置窗口关闭
+      this.setChinaumspayVisible = false
+      this.chinaumspayForm.mid = ''
+      this.chinaumspayForm.tid = ''
+    },
+    handleSubmitChinaumspay () {
+      // 提交银联支付配置
+      let params = {
+        pay_type: 'chinaumspay',
+        distributor_id: this.chinaumspayForm.distributor_id,
+        mid: this.chinaumspayForm.mid,
+        tid: this.chinaumspayForm.tid,
+        enterpriseid: this.chinaumspayForm.enterpriseid
+      }
+      setPaymentSetting(params).then((response) => {
+        this.$message({
+          type: 'success',
+          message: '提交成功'
+        })
+        this.handleChinaumspayCancel()
       })
     },
     handleSizeChange (pageSize) {
