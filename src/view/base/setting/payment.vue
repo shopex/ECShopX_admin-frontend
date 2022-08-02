@@ -35,12 +35,12 @@
         name="adapay"
       >
         <adapayTemplates />
-        <el-tab-pane
+      </el-tab-pane>
+      <el-tab-pane
         label="银联商务支付配置"
         name="chinaumspay"
       >
         <chinaumspayTemplates />
-      </el-tab-pane>
       </el-tab-pane>
     </el-tabs>
   </div>
