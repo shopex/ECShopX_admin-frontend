@@ -36,6 +36,12 @@
       >
         <adapayTemplates />
       </el-tab-pane>
+      <el-tab-pane
+        label="银联商务支付配置"
+        name="chinaumspay"
+      >
+        <chinaumspayTemplates />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -45,6 +51,7 @@ import wxpayTemplates from './payment/wxpay'
 import ebuypayTemplates from './payment/ebuypay'
 import hfpayTemplates from './payment/hfpay'
 import adapayTemplates from './payment/adapay'
+import chinaumspayTemplates from './payment/chinaumspay'
 
 import { hfpayVersionStatus } from '@/api/fenzhang'
 
@@ -54,7 +61,8 @@ export default {
     wxpayTemplates,
     ebuypayTemplates,
     hfpayTemplates,
-    adapayTemplates
+    adapayTemplates,
+    chinaumspayTemplates
   },
   data () {
     return {

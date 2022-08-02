@@ -124,7 +124,8 @@ export const PAY_TYPE = {
   point: '积分支付',
   pos: 'POS银行卡支付',
   wxpaypos: '微信扫码支付',
-  alipaypos: '支付宝扫码支付'
+  alipaypos: '支付宝扫码支付',
+  chinaums: '微信支付-银联'
 }
 
 export const PAY_STATUS = {

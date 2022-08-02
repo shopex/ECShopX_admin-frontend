@@ -49,6 +49,11 @@ export default {
       ]
     },
     {
+      path: 'chinaumsdivisionlist',
+      name: `分账单`,
+      component: () => import('@/view/mall/chinaums/divisionList')
+    },
+    {
       path: 'shippingtemplates',
       name: `运费模板`,
       component: () => import('@/view/mall/trade/shipping/templates'),

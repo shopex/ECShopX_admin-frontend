@@ -66,6 +66,7 @@ import Mallrecharge from '@/view/mall/storeddeposit/index' // 会员账户储值
 import Aftersaleslist from '@/view/mall/aftersales/list' // 售后单管理
 import Aftersalesrefundlist from '@/view/mall/aftersales/refundList' // 退款单管理
 import Aftersalesrefundlist_detail from '@/view/mall/aftersales/refundDetail' // 退款单详情
+import Chinaumsdivisionlist from '@/view/mall/chinaums/divisionList' // 银联商务分账管理
 import Fapiaolist from '@/view/mall/fapiao/list' //发票列表
 import Fapiao_set from '@/view/mall/fapiao/set' // 发票设置
 import Fapiao_set_detail from '@/view/mall/fapiao/add' //添加发票
@@ -472,6 +473,7 @@ export default {
   Aftersaleslist_detail,
   Aftersalesrefundlist,
   Aftersalesrefundlist_detail,
+  Chinaumsdivisionlist,
   Fapiaolist,
   Fapiaolist_detail,
   Fapiao_set,

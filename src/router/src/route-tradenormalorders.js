@@ -94,6 +94,11 @@ export default {
       component: () => import('@/view/mall/trade/refunderrorlogs')
     },
     {
+      path: 'chinaumsdivisionlist',
+      name: `分账单`,
+      component: () => import('@/view/mall/chinaums/divisionList')
+    },
+    {
       path: 'servicetrade/tradeservice',
       name: `服务订单`,
       component: () => import('@/view/mall/trade/order/list'),

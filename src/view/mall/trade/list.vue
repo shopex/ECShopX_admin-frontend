@@ -118,6 +118,7 @@
                   <span v-if="scope.row.payType == 'point'">积分支付</span>
                   <span v-if="scope.row.payType == 'pos'">POS银行卡支付</span>
                   <span v-if="scope.row.payType == 'hfpay'">汇付支付</span>
+                  <span v-if="scope.row.payType == 'chinaums'">微信支付-银联</span>
                 </el-form-item>
                 <el-form-item label="总金额：">
                   <span>{{ scope.row.curFeeSymbol }}{{ scope.row.totalFee / 100 }}</span>
@@ -269,6 +270,7 @@
               <span v-if="scope.row.payType == 'point'">积分支付</span>
               <span v-if="scope.row.payType == 'pos'">POS银行卡支付</span>
               <span v-if="scope.row.payType == 'hfpay'">汇付支付</span>
+              <span v-if="scope.row.payType == 'chinaums'">微信支付-银联</span>
             </template>
           </el-table-column>
 

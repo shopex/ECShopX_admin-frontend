@@ -477,3 +477,50 @@ export function editLogisticsList (orders_delivery_id, query) {
     params: query
   })
 }
+
+export function chinaumsDivisionList (query) {
+  return fetch({
+    url: '/division/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function chinaumsDivisionDetailList (query) {
+  return fetch({
+    url: '/division/detail/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function chinaumsDivisionErrorlogList (query) {
+  return fetch({
+    url: '/division/errorlog/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function chinaumsDivisionErrorlogResubmit (id) {
+  return fetch({
+    url: '/division/errorlog/resubmit/' + id,
+    method: 'put'
+  })
+}
+
+export function chinaumsDivisionExportData (query) {
+  return fetch({
+    url: '/division/exportdata',
+    method: 'get',
+    params: query
+  })
+}
+
+export function chinaumsDivisionDetailExportData (query) {
+  return fetch({
+    url: '/division/detail/exportdata',
+    method: 'get',
+    params: query
+  })
+}
