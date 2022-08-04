@@ -295,6 +295,7 @@
             <span v-if="scope.row.pay_type == 'point'">积分支付</span>
             <span v-if="scope.row.pay_type == 'pos'">POS银行卡支付</span>
             <span v-if="scope.row.pay_type == 'hfpay'">汇付支付</span>
+            <span v-if="scope.row.pay_type == 'chinaums'">微信支付-银联</span>
           </template>
         </el-table-column>
         <el-table-column

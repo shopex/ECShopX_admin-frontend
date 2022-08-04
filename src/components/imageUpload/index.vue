@@ -60,6 +60,7 @@ export default {
           (err) => e.onError(err)
         )
         .catch((err) => {
+          console.error(err)
           this.loading = false
           this.$message.error('请重新上传')
         })
