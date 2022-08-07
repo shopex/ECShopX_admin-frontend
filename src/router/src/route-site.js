@@ -89,11 +89,11 @@ export default {
       name: `分享设置`,
       component: () => import('@/view/base/setting/sharesetting')
     },
-    {
-      path: 'wxshopsetting',
-      name: `商城基本信息`,
-      component: () => import('@/view/base/shop/shopsetting')
-    },
+    // {
+    //   path: 'wxshopsetting',
+    //   name: `商城基本信息`,
+    //   component: () => import('@/view/base/shop/shopsetting')
+    // },
     //{
     //  path: 'wechat/wxaindex',
     //  name: `服务号管理-授权管理`,

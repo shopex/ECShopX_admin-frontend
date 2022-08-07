@@ -123,17 +123,17 @@ router.beforeEach((to, from, next) => {
             }
           }
         })
-        // newRouter.push(
-        //   {
-        //     path: '/404',
-        //     component: ErrorPage
-        //   },
-        //   {
-        //     path: '*',
-        //     redirect: '/404'
-        //   }
-        // )
-        // log.debug(`newRouter: `, newRouter)
+        newRouter.push(
+          {
+            path: '/404',
+            component: ErrorPage
+          },
+          {
+            path: '*',
+            redirect: '/404'
+          }
+        )
+        log.debug(`newRouter: `, newRouter)
 
         router.addRoutes(newRouter)
         if (to.path == '/') {

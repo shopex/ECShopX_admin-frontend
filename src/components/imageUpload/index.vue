@@ -60,6 +60,7 @@ export default {
           (err) => e.onError(err)
         )
         .catch((err) => {
+          console.error(err)
           this.loading = false
           this.$message.error('请重新上传')
         })
@@ -73,7 +74,7 @@ export default {
       console.log(val)
     },
     handleAvatarSuccess (res, file) {
-      this.$emit('successHandle', res.data.data)
+      this.$emit('successHandle', res)
       this.loading = false
     },
     beforeAvatarUpload (file) {

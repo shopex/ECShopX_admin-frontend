@@ -1,6 +1,6 @@
 export const SALES_STATUS = [
   { title: '前台可销售', value: 'onsale' },
-  { title: '可线下销售', value: 'offline_sale' },
+  { title: '前台不展示', value: 'offline_sale' },
   { title: '前台仅展示', value: 'only_show' },
   { title: '不可销售', value: 'instock' }
 ]
@@ -64,6 +64,15 @@ export const ORDER_TYPE = [
   // { title: "兑换订单", value: "excard"}
 ]
 
+export const ORDER_TYPE_STANDARD = [
+  { title: '全部', value: '' },
+  { title: '团购订单', value: 'groups' },
+  { title: '秒杀订单', value: 'seckill' },
+  { title: '普通订单', value: 'normal' },
+  { title: '社区团购订单', value: 'community' },
+  { title: '兑换订单', value: 'excard' }
+]
+
 export const INVOICE_STATUS = [
   { title: '全部', value: '' },
   { title: '未开票', value: 0 },
@@ -115,7 +124,8 @@ export const PAY_TYPE = {
   point: '积分支付',
   pos: 'POS银行卡支付',
   wxpaypos: '微信扫码支付',
-  alipaypos: '支付宝扫码支付'
+  alipaypos: '支付宝扫码支付',
+  chinaums: '微信支付-银联'
 }
 
 export const PAY_STATUS = {
