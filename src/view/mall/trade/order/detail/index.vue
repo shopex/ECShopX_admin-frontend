@@ -596,17 +596,17 @@ export default {
               })
           : [],
         profit_type: PROFIT_TYPE[profit.profit_type],
-        profit_totalPrice: `¥${profit.total_fee / 100}`,
+        profit_totalPrice: profit.total_fee? `¥${profit.total_fee / 100}` : '￥0.00',
         ...tradeInfo,
         goodsPrice:
           orderInfo.order_type != 'bargain'
-            ? `¥${(orderInfo.item_fee / 100).toFixed(2)}`
-            : `¥${(orderInfo.item_price / 100).toFixed(2)}`,
-        freightFee: `¥${(orderInfo.freight_fee / 100).toFixed(2)}`,
-        memberDiscountPrice: `-¥${(orderInfo.member_discount / 100).toFixed(2)}`,
-        couponDiscount: `-¥${(orderInfo.coupon_discount / 100).toFixed(2)}`,
-        totalDiscount: `-¥${(orderInfo.discount_fee / 100).toFixed(2)}`,
-        totalPrice: `¥${(orderInfo.total_fee / 100).toFixed(2)}`,
+            ? orderInfo.item_fee ? `¥${(orderInfo.item_fee / 100).toFixed(2)}` : '￥0.00'
+            : orderInfo.item_price ? `¥${(orderInfo.item_price / 100).toFixed(2)}` : '￥0.00',
+        freightFee: orderInfo.freight_fee ? `¥${(orderInfo.freight_fee / 100).toFixed(2)}` : '￥0.00',
+        memberDiscountPrice: orderInfo.member_discount ? `-¥${(orderInfo.member_discount / 100).toFixed(2)}` : '￥0.00',
+        couponDiscount: orderInfo.coupon_discount ?`-¥${(orderInfo.coupon_discount / 100).toFixed(2)}` : '￥0.00',
+        totalDiscount: orderInfo.discount_fee ? `-¥${(orderInfo.discount_fee / 100).toFixed(2)}`: '￥0.00',
+        totalPrice: orderInfo.total_fee ? `¥${(orderInfo.total_fee / 100).toFixed(2)}` : '￥0.00',
         realPrice: (() => {
           let returnValue = ''
           if (tradeInfo.payType === 'point') {
@@ -614,7 +614,7 @@ export default {
           } else if (tradeInfo.tradeState === 'NOTPAY') {
             returnValue = `￥0`
           } else {
-            returnValue = `¥${(orderInfo.total_fee / 100).toFixed(2)}`
+            returnValue =  orderInfo.total_fee ? `¥${(orderInfo.total_fee / 100).toFixed(2)}` : '￥0.00'
           }
           return returnValue
         })(),
