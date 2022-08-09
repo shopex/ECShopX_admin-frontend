@@ -583,8 +583,8 @@ export default {
           label,
           field_type,
           alert_required_message,
-          is_required,
-          is_edit,
+          is_required: 0,
+          is_edit: 1,
           range,
           radio_list: [...validate_condition]
         }
