@@ -539,7 +539,7 @@ export default {
     background-color: #fff;
     padding: 16px;
     border-radius: 0;
-    min-height: 600px;
+    min-height: calc(100vh - 70px);
     &.footer-fixed {
       margin-bottom: 57px;
     }
@@ -629,8 +629,5 @@ export default {
 }
 .system-image {
   height: 22px;
-  position: fixed;
-  bottom: 2%;
-  left: 50%;
 }
 </style>
