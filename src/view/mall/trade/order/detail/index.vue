@@ -731,7 +731,7 @@ export default {
       if (orderInfo.order_class == 'excard') {
         this.addressInfo = `${distributor.province}${distributor.city}${distributor.area}${distributor.address}`
       } else if (orderInfo.order_class == 'shopadmin') {
-        this.addressInfo = orderInfo.distributor_name
+        this.addressInfo = `${distributor.store_address}（${distributor.store_name}）`
       } else {
         this.addressInfo = receipt_type
           ? `${receiver_name} ${receiver_mobile} ${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
