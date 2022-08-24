@@ -71,7 +71,7 @@ export const ORDER_TYPE_STANDARD = [
   { title: '普通订单', value: 'normal' },
   { title: '社区团购订单', value: 'community' },
   { title: '兑换订单', value: 'excard' },
-  { title: '线下订单', value: 'shopadmin' }
+  { title: '门店订单', value: 'shopadmin' }
 ]
 
 export const INVOICE_STATUS = [
