@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.2.0...v3.2.1) (2022-08-25)
+
+
+### Bug Fixes
+
+* router ([306aa44](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/306aa4400f005c637a6fd33f282cbbf092218519))
+* 店铺路由404 ([6010319](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/6010319ef54a0c120cfc3a3b373806420b45042e))
+
 ## [3.2.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.1.0...v3.2.0) (2022-08-04)
 
 
