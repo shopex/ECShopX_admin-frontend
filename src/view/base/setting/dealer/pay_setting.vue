@@ -8,26 +8,14 @@
       label-width="130px"
       :rules="rules"
     >
-      <el-card
-        class="box-card"
-        shadow="never"
-      >
-        <div
-          slot="header"
-          class="clearfix"
-        >
+      <el-card class="box-card" shadow="never">
+        <div slot="header" class="clearfix">
           <span>支付渠道信息</span>
         </div>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item
-              label="费率类型"
-              prop="fee_type"
-            >
-              <el-select
-                v-model="form.fee_type"
-                style="width: 100%"
-              >
+            <el-form-item label="费率类型" prop="fee_type">
+              <el-select v-model="form.fee_type" style="width: 100%">
                 <el-option
                   v-for="value in fee_type_options"
                   :key="value.code"
@@ -37,19 +25,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col
-            v-if="form.fee_type"
-            :span="12"
-          >
-            <el-form-item
-              label="经营类目"
-              prop="wx_category"
-            >
-              <el-select
-                v-model="form.wx_category"
-                placeholder="请选择"
-                style="width: 100%"
-              >
+          <el-col v-if="form.fee_type" :span="12">
+            <el-form-item label="经营类目" prop="wx_category">
+              <el-select v-model="form.wx_category" placeholder="请选择" style="width: 100%">
                 <el-option
                   v-for="value in category_options"
                   :key="value.id"
@@ -59,19 +37,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col
-            v-if="form.wx_category"
-            :span="12"
-          >
-            <el-form-item
-              label="商户种类"
-              prop="mer_type"
-            >
-              <el-select
-                v-model="form.mer_type"
-                placeholder="请选择活动区域"
-                style="width: 100%"
-              >
+          <el-col v-if="form.wx_category" :span="12">
+            <el-form-item label="商户种类" prop="mer_type">
+              <el-select v-model="form.mer_type" placeholder="请选择活动区域" style="width: 100%">
                 <el-option
                   v-for="value in mer_type_options"
                   :key="value.code"
@@ -82,15 +50,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              label="入驻模式"
-              prop="model_type"
-            >
-              <el-select
-                v-model="form.model_type"
-                placeholder="请选择"
-                style="width: 100%"
-              >
+            <el-form-item label="入驻模式" prop="model_type">
+              <el-select v-model="form.model_type" placeholder="请选择" style="width: 100%">
                 <el-option
                   v-for="value in model_type_options"
                   :key="value.code"
@@ -101,10 +62,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              label="地区"
-              prop="select_regions_value"
-            >
+            <el-form-item label="地区" prop="select_regions_value">
               <el-cascader
                 v-model="form.select_regions_value"
                 style="width: 100%"
@@ -121,22 +79,10 @@
             </el-form-item>
           </el-col> -->
           <el-col :span="12">
-            <el-form-item
-              label="手续费扣费方式"
-              prop="adapay_fee_mode"
-            >
-              <el-select
-                v-model="form.adapay_fee_mode"
-                style="width: 100%"
-              >
-                <el-option
-                  label="内扣"
-                  value="I"
-                />
-                <el-option
-                  label="外扣"
-                  value="O"
-                />
+            <el-form-item label="手续费扣费方式" prop="adapay_fee_mode">
+              <el-select v-model="form.adapay_fee_mode" style="width: 100%">
+                <el-option label="内扣" value="I" />
+                <el-option label="外扣" value="O" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -192,12 +138,9 @@
         </el-row>
       </el-card>
       <el-form-item style="text-align: center; margin: 50px 0; margin-right: 130px">
-        <el-button
-          type="primary"
-          @click="submitForm"
-        >
-          提交审核
-        </el-button>
+        <el-button type="primary" @click="submitForm">
+提交审核
+</el-button>
       </el-form-item>
     </el-form>
     <Result-cpn
@@ -338,7 +281,7 @@ export default {
       }
     },
     nextPage () {
-      this.$router.push('/setting/adapay_merchant/picture')
+      this.$router.push('/applications/adapay/adapay_merchant/picture')
     },
     // 获取options
     async getOptions () {

@@ -56,13 +56,17 @@
                     v-model="form.mer_start_valid_date_type"
                     @change="dateTypeHandle($event, 'mer')"
                   >
-                    <el-radio label="长期">长期有效</el-radio>
-                    <el-radio label="短期">时间节点</el-radio>
+                    <el-radio label="长期">
+长期有效
+</el-radio>
+                    <el-radio label="短期">
+时间节点
+</el-radio>
                   </el-radio-group>
                 </div>
               </el-form-item>
             </el-col>
-            <el-col :span="8" v-if="form.mer_start_valid_date_type == '短期'">
+            <el-col v-if="form.mer_start_valid_date_type == '短期'" :span="8">
               <el-form-item prop="mer_valid_date_full" label="商户有效日期">
                 <el-date-picker
                   v-model="form.mer_valid_date_full"
@@ -77,7 +81,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="8" v-if="form.mer_start_valid_date_type == '长期'">
+            <el-col v-if="form.mer_start_valid_date_type == '长期'" :span="8">
               <el-form-item prop="mer_valid_date_start" label="商户有效期开始日期">
                 <el-date-picker
                   v-model="form.mer_valid_date_start"
@@ -136,12 +140,16 @@
                   v-model="form.legal_id_expires_type"
                   @change="dateTypeHandle($event, 'legal')"
                 >
-                  <el-radio label="长期">长期有效</el-radio>
-                  <el-radio label="短期">时间节点</el-radio>
+                  <el-radio label="长期">
+长期有效
+</el-radio>
+                  <el-radio label="短期">
+时间节点
+</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :span="8" v-if="form.legal_id_expires_type == '短期'">
+            <el-col v-if="form.legal_id_expires_type == '短期'" :span="8">
               <el-form-item prop="legal_id_expires_full" label="请选择法人/负责人证件有效期">
                 <el-date-picker
                   v-model="form.legal_id_expires_full"
@@ -156,7 +164,7 @@
                 />
               </el-form-item>
             </el-col>
-            <el-col :span="8" v-if="form.legal_id_expires_type == '长期'">
+            <el-col v-if="form.legal_id_expires_type == '长期'" :span="8">
               <el-form-item
                 prop="legal_id_expires_start"
                 label="请选择法人/负责人证件有效期开始日期"
@@ -222,7 +230,7 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item label="联系人姓名" prop="cont_name">
-              <el-input style="width: 100%" v-model="form.cont_name" />
+              <el-input v-model="form.cont_name" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -273,8 +281,12 @@
           <el-col :span="8">
             <el-form-item label="结算银行账户类型" prop="bank_acct_type">
               <el-radio-group v-model="form.bank_acct_type">
-                <el-radio label="1">对公</el-radio>
-                <el-radio label="2">对私</el-radio>
+                <el-radio label="1">
+对公
+</el-radio>
+                <el-radio label="2">
+对私
+</el-radio>
               </el-radio-group>
               <el-tooltip
                 :style="{ 'margin-left': 30 + 'px' }"
@@ -333,7 +345,9 @@
         </div>
       </el-card> -->
       <el-form-item style="text-align: center; margin: 50px 0; margin-right: 280px">
-        <el-button type="primary" @click="submitForm">提交审核</el-button>
+        <el-button type="primary" @click="submitForm">
+提交审核
+</el-button>
         <!-- <loading-btn
           ref="loadingBtn"
           size="medium"
@@ -345,7 +359,7 @@
     </el-form>
     <Result-cpn
       v-if="processed == '已填'"
-      :currentStatus="currentStatus"
+      :current-status="currentStatus"
       @nextPage="nextPage"
       @processedHandle="processedHandle"
     />
@@ -673,7 +687,7 @@ export default {
       this.processed = '未填'
     },
     nextPage () {
-      this.$router.push('/setting/adapay_merchant/pay_setting')
+      this.$router.push('/applications/adapay/adapay_merchant/pay_setting')
     },
     // 有效日期类型
     dateTypeHandle (value, type) {
@@ -721,7 +735,7 @@ export default {
       return true
     },
     /* ----------------------------------checkBox start----------------------------------- */
-    async checkBoxConfirmHandle(data) {
+    async checkBoxConfirmHandle (data) {
       try {
         const { status } = await this.$api.adapay.accountCreate({ ...this.form, ...data })
         if (status) {
