@@ -250,11 +250,9 @@ export default {
       this.loading = true
       const result = await getScenarioList(this.query)
       if (type == 'serch') {
-        let new_arr = result.data.data.list.filter(el => el.scene_name !== '订单提货码')
-        this.smsScenarioList = new_arr
+        this.smsScenarioList = result.data.data.list
       } else {
-        let new_arr = result.data.data.list.filter(el => el.scene_name !== '订单提货码')
-        this.smsScenarioList = [...this.smsScenarioList, ...new_arr]
+        this.smsScenarioList = [...this.smsScenarioList, ...result.data.data.list]
       }
       this.count = result.data.data.count
       this.loading = false
@@ -332,6 +330,7 @@ export default {
     // 下拉加载
     load () {
       this.query.page = this.query.page + 1
+      console.log(this.noMore, 'this.noMore')
       if (!this.noMore) {
         this.loading = true
         this.init()
