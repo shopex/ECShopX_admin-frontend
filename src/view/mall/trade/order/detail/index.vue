@@ -127,7 +127,7 @@
               {{ (scope.row.discount_fee / 100).toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column v-if="!VERSION_IN_PURCHASE" label="货币汇率">
+          <el-table-column v-if="!VERSION_IN_PURCHASE && !VERSION_STANDARD" label="货币汇率">
             <template slot-scope="scope">
               <span>{{ scope.row.fee_rate }}</span>
             </template>
@@ -727,15 +727,15 @@ export default {
       //     ? `${distributor.store_name} ${distributor.store_address}`
       //     :
 
-      // 兑换券
-      if (orderInfo.order_class == 'excard') {
+      if (orderInfo.order_class == 'excard') { // 兑换订单
         this.addressInfo = `${distributor.province}${distributor.city}${distributor.area}${distributor.address}`
-      } else if (orderInfo.order_class == 'shopadmin') {
+      } else if (orderInfo.order_class == 'shopadmin') { // 门店订单
         this.addressInfo = `${distributor.store_address}（${distributor.store_name}）`
-      } else {
-        this.addressInfo = receipt_type
+      } else { // 普通订单配送方式是自提时，展示门店地址，非自提展示收货地址
+        this.addressInfo = distributor.store_address && receipt_type == 'ziti' ? `${distributor.store_address}（${distributor.store_name}）`
+          : (receipt_type != 'ziti'
           ? `${receiver_name} ${receiver_mobile} ${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
-          : '-- --'
+          : '-- --')
       }
       this.deliveryData = deliveryData
 

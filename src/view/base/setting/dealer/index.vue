@@ -41,12 +41,12 @@ export default {
         // this.$router.push('/setting/adapay_merchant/pay_setting')
       } else if (this.active == 2) {
         if (!SubmitLicense.audit_status) {
-          this.$router.push('/setting/adapay_merchant/pay_setting')
+          this.$router.push('/applications/adapay/adapay_merchant/pay_setting')
           return
         }
-        this.$router.push('/setting/adapay_merchant/picture')
+        this.$router.push('/applications/adapay/adapay_merchant/picture')
       } else if (this.active == 3) {
-        this.$router.push('/setting/adapay_merchant/netin')
+        this.$router.push('/applications/adapay/adapay_merchant/netin')
         this.active = 4
       }
     }
