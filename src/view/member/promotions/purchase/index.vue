@@ -81,7 +81,7 @@
         />
         <el-table-column
           prop="dependents_limitfee"
-          label="家属额度"
+          label="亲友额度"
         />
         <el-table-column
           prop="activity_status"
