@@ -157,7 +157,7 @@ export default {
         })
       } else {
         this.$router.push({
-          path: '/financial/adapay_merchant_info'
+          path: '/applications/adapay/adapay_merchant_info'
         })
       }
     }
