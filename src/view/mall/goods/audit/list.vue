@@ -222,7 +222,7 @@ export default {
         item_bn: '',
         regions_id: [],
         approve_status: '',
-        distributor_id: '0',
+        distributor_id: 'all_distributor',
         audit_status: ''
       },
       salesStatus: SALES_STATUS
