@@ -265,7 +265,7 @@ export default {
         return {
           item_id: item.item_id,
           total_fee: item.change_discount
-            ? item.item_fee * item.change_discount
+            ? item.total_fee * item.change_discount
             : item.total_fee * 100
         }
       })
