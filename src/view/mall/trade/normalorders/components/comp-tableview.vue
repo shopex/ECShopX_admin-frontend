@@ -80,9 +80,10 @@
       </el-table-column>
       <el-table-column prop="price" label="单价（¥）" width="100" />
       <el-table-column prop="num" label="数量" width="80" />
-      <el-table-column prop="point" label="积分抵扣" width="100" />
-      <el-table-column prop="item_fee" label="总计（¥）" width="100" />
-      <el-table-column width="160">
+      <el-table-column prop="discount_fee" label="优惠（¥）" width="100" />
+      <el-table-column prop="point" label="积分抵扣（¥）" width="120" />
+      <el-table-column prop="total_fee" label="总计（¥）" width="100" />
+      <el-table-column width="150">
         <template #header>
           <el-dropdown @command="toggleChangePriceType">
             <span class="el-dropdown-link">
@@ -122,7 +123,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="total_fee" label="商品应付金额（¥）" width="160" />
+      <el-table-column prop="total" label="商品应付金额（¥）" width="150" />
     </el-table>
     <div class="tableview-ft">
       <div class="ft-l">
@@ -207,10 +208,12 @@ export default {
           price: item.price / 100,
           item_fee: item.item_fee / 100,
           num: item.num,
+          discount_fee: 0 - item.discount_fee / 100,
           point: item.point,
           total_fee: item.total_fee / 100,
           change_discount: item.change_discount,
-          change_price: item.change_price
+          change_price: item.change_price,
+          total: item.total
         }
       })
     },
@@ -228,7 +231,7 @@ export default {
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       const length = this.tableData.length
-      if (columnIndex === 6) {
+      if (columnIndex === 7) {
         if (rowIndex % length === 0) {
           return {
             rowspan: length,
@@ -250,7 +253,7 @@ export default {
       const items = this.tableData.map((item) => {
         return {
           item_id: item.item_id,
-          total_fee: item.change_price * 100
+          total_fee: item.change_price ? item.change_price * 100 : item.total_fee * 100
         }
       })
       this.downType = 'items'
@@ -261,7 +264,9 @@ export default {
       const items = this.tableData.map((item) => {
         return {
           item_id: item.item_id,
-          total_fee: item.item_fee * item.change_discount
+          total_fee: item.change_discount
+            ? item.item_fee * item.change_discount
+            : item.total_fee * 100
         }
       })
       this.downType = 'items'

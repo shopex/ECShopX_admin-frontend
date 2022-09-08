@@ -874,7 +874,9 @@ export default {
 
           actionBtns.push({ name: '备注', key: 'remark' })
         }
-        actionBtns.push({ name: '改价', key: 'changePrice' })
+        if (!VERSION_IN_PURCHASE && pay_status == 'NOTPAY') {
+          actionBtns.push({ name: '改价', key: 'changePrice' })
+        }
         return {
           ...item,
           actionBtns
@@ -1078,7 +1080,8 @@ export default {
           return {
             ...item,
             change_discount: '',
-            change_price: ''
+            change_price: '',
+            total: total_fee / 100
           }
         })
         console.log('this.changePriceForm.items:', this.changePriceForm.items)
@@ -1271,7 +1274,8 @@ export default {
         return {
           ...item,
           change_discount: '',
-          change_price: ''
+          change_price: '',
+          total: total_fee / 100
         }
       })
     }
