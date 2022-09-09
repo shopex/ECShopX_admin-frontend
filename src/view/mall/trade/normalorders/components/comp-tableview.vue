@@ -338,7 +338,7 @@ export default {
     },
     // 一键改价
     async handleChangePrice() {
-      if (this.globalChangePrice.length > 0) {
+      if (!isNaN(parseFloat(this.globalChangePrice))) {
         this.downType = 'total'
         this.calcOrder([])
       }
@@ -373,8 +373,7 @@ export default {
       if (this.globalChangePrice) {
         params['total_fee'] = this.globalChangePrice * 100
       }
-
-      if (this.globalFreightFee >= 0) {
+      if (!isNaN(parseFloat(this.globalFreightFee))) {
         params['freight_fee'] = this.globalFreightFee * 100
       }
 
