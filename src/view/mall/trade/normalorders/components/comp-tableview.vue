@@ -381,7 +381,7 @@ export default {
         params['total_fee'] = this.globalChangePrice * 100
       }
 
-      if (this.globalFreightFee) {
+      if (this.globalFreightFee >= 0) {
         params['freight_fee'] = this.globalFreightFee * 100
       }
 

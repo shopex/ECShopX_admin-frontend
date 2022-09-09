@@ -1169,7 +1169,7 @@ export default {
         order_id,
         down_type: 'items'
       }
-      if (freightFee) {
+      if (freightFee >= 0) {
         params['freight_fee'] = freightFee * 100
       }
       if (items.length > 0) {
