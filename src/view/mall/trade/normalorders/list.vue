@@ -1164,13 +1164,13 @@ export default {
       this.refundDialog = false
     },
     async changePriceSubmit() {
-      const { items, freightFee, order_id } = this.changePriceForm
+      const { items, freightFee, order_id, pointFreightFee } = this.changePriceForm
       let params = {
         order_id,
         down_type: 'items'
       }
       if (freightFee >= 0) {
-        params['freight_fee'] = freightFee * 100
+        params['freight_fee'] = (freightFee - pointFreightFee) * 100
       }
       if (items.length > 0) {
         params['items'] = items.map((item) => {
