@@ -734,9 +734,12 @@ export default {
           component: () => (
             <CompTableView
               value={this.changePriceForm.items}
-              itemFee={this.changePriceForm.itemFee}
+              orderId={this.changePriceForm.order_id}
+              // itemFee={this.changePriceForm.itemFee}
+              receiptType={this.changePriceForm.receipt_type}
               freightFee={this.changePriceForm.freightFee}
               orderFee={this.changePriceForm.orderFee}
+              on-onChange={this.onChangeTableView}
             />
           )
         }
@@ -750,8 +753,10 @@ export default {
         receive_address: '',
         loading: false,
         items: [],
-        // 商品应付金额
-        itemFee: 0,
+        // 配送类型
+        receipt_type: '',
+        // // 商品应付金额
+        // itemFee: 0,
         // 邮费
         freightFee: 0,
         // 订单应付金额
@@ -872,7 +877,9 @@ export default {
 
           actionBtns.push({ name: '备注', key: 'remark' })
         }
-        actionBtns.push({ name: '改价', key: 'changePrice' })
+        if (!VERSION_IN_PURCHASE && order_status == 'NOTPAY') {
+          actionBtns.push({ name: '改价', key: 'changePrice' })
+        }
         return {
           ...item,
           actionBtns
@@ -1046,7 +1053,8 @@ export default {
           order_class,
           total_fee,
           freight_fee,
-          item_fee_new
+          item_fee_new,
+          receipt_type
         } = orderInfo
         const { username, mobile } = await this.$api.member.getMember({
           user_id: user_id
@@ -1068,7 +1076,8 @@ export default {
           this.changePriceForm.receive_mobile = receiver_mobile
           this.changePriceForm.receive_address = `${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
         }
-        this.changePriceForm.itemFee = item_fee_new / 100
+        this.changePriceForm.receipt_type = receipt_type
+        // this.changePriceForm.itemFee = item_fee_new / 100
         this.changePriceForm.freightFee = freight_fee / 100
         this.changePriceForm.orderFee = total_fee / 100
 
@@ -1077,10 +1086,10 @@ export default {
             ...item,
             change_discount: '',
             change_price: '',
-            total: total_fee
+            total: total_fee / 100
           }
         })
-        console.log('this.changePriceForm.items:', this.changePriceForm.items)
+        console.log('this.changePriceForm:', this.changePriceForm)
       }
     },
     async onRemarkSubmit() {
@@ -1146,7 +1155,27 @@ export default {
       }
       this.refundDialog = false
     },
-    changePriceSubmit() {},
+    async changePriceSubmit() {
+      const { items, freightFee, order_id } = this.changePriceForm
+      let params = {
+        order_id,
+        down_type: 'items'
+      }
+      if (freightFee) {
+        params['freight_fee'] = freightFee
+      }
+      if (items.length > 0) {
+        params['items'] = items.map((item) => {
+          return {
+            item_id: item.item_id,
+            total_fee: item.total_fee
+          }
+        })
+      }
+      await this.$api.trade.changePriceConfirm(params)
+      this.changePriceDialog = false
+      this.fetchList()
+    },
     exportInvoice() {
       let type = 'normal'
       this.$emit('onChangeData', 'params', { type })
@@ -1239,6 +1268,20 @@ export default {
         placeholder: '请输入提货码',
         required: true,
         message: '不能为空'
+      })
+    },
+    onChangeTableView({ items, item_fee_new, freight_fee, total_fee }) {
+      // this.changePriceForm.itemFee = item_fee_new / 100
+      this.changePriceForm.freightFee = freight_fee / 100
+      this.changePriceForm.orderFee = total_fee / 100
+
+      this.changePriceForm.items = items.map((item) => {
+        return {
+          ...item,
+          change_discount: '',
+          change_price: '',
+          total: total_fee / 100
+        }
       })
     }
   }
