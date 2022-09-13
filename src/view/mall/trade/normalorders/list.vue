@@ -720,11 +720,15 @@ export default {
                 {`${this.changePriceForm.buy_member} | ${this.changePriceForm.buy_mobile}`}
               </div>
               <div class='receive-item'>
-                <label class='item-label'>收货人：</label>
+                <label class='item-label'>{`${
+                  this.changePriceForm.isZiti ? '提货人：' : '收货人：'
+                }`}</label>
                 {`${this.changePriceForm.receive_name} | ${this.changePriceForm.receive_mobile}`}
               </div>
               <div class='receive-item'>
-                <label class='item-label'>收货地址：</label>
+                <label class='item-label'>
+                  `${this.changePriceForm.isZiti ? '自提地址：' : '收货地址：'}`
+                </label>
                 {this.changePriceForm.receive_address}
               </div>
             </div>
@@ -753,6 +757,7 @@ export default {
         receive_mobile: '',
         receive_address: '',
         loading: false,
+        isZiti: false,
         items: [],
         // 配送类型
         receipt_type: '',
@@ -1076,10 +1081,12 @@ export default {
           this.changePriceForm.receive_name = username
           this.changePriceForm.receive_mobile = mobile
           this.changePriceForm.receive_address = `${store_address}（${store_name}）`
+          this.changePriceForm.isZiti = true
         } else {
           this.changePriceForm.receive_name = receiver_name
           this.changePriceForm.receive_mobile = receiver_mobile
           this.changePriceForm.receive_address = `${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
+          this.changePriceForm.isZiti = false
         }
         this.changePriceForm.receipt_type = receipt_type
         // this.changePriceForm.itemFee = item_fee_new / 100
@@ -1164,13 +1171,13 @@ export default {
       this.refundDialog = false
     },
     async changePriceSubmit() {
-      const { items, freightFee, order_id } = this.changePriceForm
+      const { items, freightFee, order_id, pointFreightFee } = this.changePriceForm
       let params = {
         order_id,
         down_type: 'items'
       }
-      if (freightFee) {
-        params['freight_fee'] = freightFee * 100
+      if (freightFee >= 0) {
+        params['freight_fee'] = (freightFee - pointFreightFee) * 100
       }
       if (items.length > 0) {
         params['items'] = items.map((item) => {

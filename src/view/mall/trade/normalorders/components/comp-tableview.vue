@@ -172,7 +172,7 @@
         </div>
         <div v-if="pointFreightFee" class="l-item">
           <div class="freight-point-discount">
-            积分抵扣运费：{{ `${(0 - pointFreightFee).toFixed(2)}` }}
+            积分抵扣运费：{{ `${pointFreightFee.toFixed(2)}` }}
           </div>
         </div>
       </div>
@@ -192,7 +192,7 @@
       </div>
     </div>
     <div class="dialog-tip">
-      <p>订单应付金额 = 商品应付金额 + 运费；总运费 ＝ 运费 - 积分抵扣运费。</p>
+      <p>订单应付金额 = 商品应付金额 + 运费；总运费 ＝ 运费 + 积分抵扣运费。</p>
       <p>
         一键改价后的金额为商品总价，该金额会按商品单价的金额比例分摊到每个商品，不会分摊到优惠和运费。
       </p>
@@ -237,15 +237,15 @@ export default {
           item_id: item.item_id,
           item_name: item.item_name,
           item_spec_desc: item.item_spec_desc || '单规格',
-          price: item.price / 100,
-          item_fee: item.item_fee / 100,
+          price: (item.price / 100).toFixed(2),
+          item_fee: (item.item_fee / 100).toFixed(2),
           num: item.num,
-          discount_fee: 0 - item.discount_fee / 100,
-          point: 0 - item.point,
-          total_fee: item.total_fee / 100,
+          discount_fee: (0 - item.discount_fee / 100).toFixed(2),
+          point: (0 - item.point).toFixed(2),
+          total_fee: (item.total_fee / 100).toFixed(2),
           change_discount: item.change_discount,
           change_price: item.change_price,
-          total: item.total
+          total: item.total.toFixed(2)
         }
       })
       this.dItemTotalFee = this.itemTotalFee
@@ -310,7 +310,7 @@ export default {
     },
     // 按直接改价
     onChangeItemPrice({ change_price, total_fee }) {
-      if (change_price >= total_fee) {
+      if (parseFloat(change_price) >= parseFloat(total_fee)) {
         this.$message.error('不能高于原订单金额')
         return
       }
@@ -338,20 +338,13 @@ export default {
     },
     // 一键改价
     async handleChangePrice() {
-      if (this.globalChangePrice.length > 0) {
+      if (!isNaN(parseFloat(this.globalChangePrice))) {
         this.downType = 'total'
         this.calcOrder([])
       }
     },
     // 运费改价
     onChangeFreightFee() {
-      if (this.globalFreightFee.length == 0) {
-        return
-      }
-      if (this.globalFreightFee < this.pointFreightFee) {
-        this.$message.error('运费不能小于积分抵扣')
-        return
-      }
       const items = this.tableData.map((item) => {
         let total_fee
         if (this.changeType == 'change_price') {
@@ -380,8 +373,7 @@ export default {
       if (this.globalChangePrice) {
         params['total_fee'] = this.globalChangePrice * 100
       }
-
-      if (this.globalFreightFee) {
+      if (!isNaN(parseFloat(this.globalFreightFee))) {
         params['freight_fee'] = this.globalFreightFee * 100
       }
 
