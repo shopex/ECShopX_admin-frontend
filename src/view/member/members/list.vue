@@ -1411,6 +1411,7 @@ export default {
             })
             this.clearParams()
             this.getGradeList()
+            this.getMembers()
           }
         })
       } else {
@@ -1429,6 +1430,7 @@ export default {
                   message: res.data.data.msg
                 })
                 this.getGradeList()
+                this.getMembers()
               }
               this.params.tag_ids = []
               this.params.couponsids = []
