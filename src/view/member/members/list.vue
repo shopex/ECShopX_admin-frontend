@@ -423,8 +423,8 @@
         <template v-if="params.action_type == 'rel_tag'">
           <div class="selected-tags view-flex">
             <div class="label">
-已选中标签：
-</div>
+              已选中标签：
+            </div>
             <div class="view-flex-item">
               <el-tag
                 v-for="(tag, index) in tag.currentTags"
