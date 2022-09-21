@@ -3,16 +3,10 @@
     <el-form ref="form" :rules="rules" :model="form" label-width="110px">
       <div v-if="!form.card_id && showTab" class="content-center content-bottom-padded">
         <el-radio-group v-model="form.card_type" @change="handleTypeChange">
-          <el-radio-button label="discount">
-折扣券
-</el-radio-button>
-          <el-radio-button label="cash">
-满减券
-</el-radio-button>
+          <el-radio-button label="discount"> 折扣券 </el-radio-button>
+          <el-radio-button label="cash"> 满减券 </el-radio-button>
           <!-- <el-radio-button label="gift">兑换券</el-radio-button> -->
-          <el-radio-button v-if="VERSION_STANDARD" label="new_gift">
-兑换券
-</el-radio-button>
+          <el-radio-button label="new_gift"> 兑换券 </el-radio-button>
         </el-radio-group>
       </div>
       <GiftCoupon v-if="form.card_type === 'new_gift'" @haddleShowTab="haddleShowTab" />
@@ -82,9 +76,7 @@
               @change="conditionChange"
             >
               <template v-if="form.card_type != 'cash'">
-                <el-radio :label="1">
-不限制
-</el-radio>
+                <el-radio :label="1"> 不限制 </el-radio>
               </template>
               <template v-if="form.card_type !== 'gift'">
                 <el-radio :label="2">
@@ -174,9 +166,7 @@
                         : false
                     "
                   >
-                    <template slot="append">
-天
-</template>
+                    <template slot="append"> 天 </template>
                   </el-input>
                   <!-- <el-select
                   v-model="form.days"
@@ -246,9 +236,7 @@
               min="1"
               oninput="value=value.replace(/[^\d.]/g,'')"
             />
-            <p class="frm-tips">
-每个用户领券上限，如不填，则默认为1。
-</p>
+            <p class="frm-tips">每个用户领券上限，如不填，则默认为1。</p>
           </el-form-item>
           <el-form-item v-if="is_distributor == false && form.card_type == 'gift'" label="适用平台">
             <el-radio-group
@@ -256,12 +244,8 @@
               :disabled="form.card_id != ''"
               @change="usePlatformChange"
             >
-              <el-radio v-if="is_distributor == false" label="store">
-门店专用
-</el-radio>
-              <el-radio v-if="form.card_type != 'gift'" label="mall">
-线上商城专用
-</el-radio>
+              <el-radio v-if="is_distributor == false" label="store"> 门店专用 </el-radio>
+              <el-radio v-if="form.card_type != 'gift'" label="mall"> 线上商城专用 </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item
@@ -289,12 +273,8 @@
           </el-form-item>
           <el-form-item v-if="form.use_scenes == 'SELF'" label="验证码">
             <el-radio-group v-model="self_rcode" :disabled="form.card_id != ''">
-              <el-radio label="1">
-启用验证码
-</el-radio>
-              <el-radio label="0">
-不启用验证码
-</el-radio>
+              <el-radio label="1"> 启用验证码 </el-radio>
+              <el-radio label="0"> 不启用验证码 </el-radio>
             </el-radio-group>
             <br>
             <el-input
@@ -314,21 +294,11 @@
         >
           <el-form-item label="适用商品">
             <el-radio-group v-model="form.use_all_items" @change="itemTypeChange">
-              <el-radio label="true">
-全部商品适用
-</el-radio>
-              <el-radio label="false">
-指定商品适用
-</el-radio>
-              <el-radio label="category">
-指定分类适用
-</el-radio>
-              <el-radio label="tag">
-指定商品标签适用
-</el-radio>
-              <el-radio label="brand">
-指定品牌适用
-</el-radio>
+              <el-radio label="true"> 全部商品适用 </el-radio>
+              <el-radio label="false"> 指定商品适用 </el-radio>
+              <el-radio label="category"> 指定分类适用 </el-radio>
+              <el-radio label="tag"> 指定商品标签适用 </el-radio>
+              <el-radio label="brand"> 指定品牌适用 </el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -342,9 +312,7 @@
                 :auto-upload="false"
                 :show-file-list="false"
               >
-                <el-button type="primary">
-批量上传
-</el-button>
+                <el-button type="primary"> 批量上传 </el-button>
               </el-upload>
               <el-button style="margin-left: 10px" type="primary" @click="uploadHandleTemplate()">
                 下载模板
@@ -365,9 +333,7 @@
           </el-col>
           <template v-if="!tagHidden">
             <div class="selected-tags view-flex">
-              <div class="label">
-已选中标签：
-</div>
+              <div class="label">已选中标签：</div>
               <div class="view-flex-item">
                 <el-tag
                   v-for="(tag, index) in tag.currentTags"
@@ -397,9 +363,7 @@
           </template>
           <template v-if="!brandHidden">
             <div class="selected-tags view-flex">
-              <div class="label">
-已选中品牌：
-</div>
+              <div class="label">已选中品牌：</div>
               <div class="view-flex-item">
                 <el-tag
                   v-for="(brand, index) in brand.currentBrands"
@@ -435,18 +399,12 @@
         >
           <el-form-item label="适用门店">
             <el-radio-group v-model="form.use_all_shops" @change="shopTypeChange">
-              <el-radio label="true">
-全部门店适用
-</el-radio>
-              <el-radio label="false">
-指定门店适用
-</el-radio>
+              <el-radio label="true"> 全部门店适用 </el-radio>
+              <el-radio label="false"> 指定门店适用 </el-radio>
             </el-radio-group>
           </el-form-item>
           <div v-if="!zdShopHidden">
-            <el-button type="primary" @click="addStoreAction">
-选择门店
-</el-button>
+            <el-button type="primary" @click="addStoreAction"> 选择门店 </el-button>
             <el-table v-if="relStores.length > 0" :data="relStores" style="line-height: normal">
               <el-table-column label="ID" prop="wxShopId" width="60" />
               <el-table-column label="名称" prop="storeName" />
@@ -467,18 +425,12 @@
         >
           <el-form-item label="适用店铺">
             <el-radio-group v-model="form.use_all_shops" @change="shopTypeChange">
-              <el-radio label="true">
-全部店铺适用
-</el-radio>
-              <el-radio label="false">
-指定店铺适用
-</el-radio>
+              <el-radio label="true"> 全部店铺适用 </el-radio>
+              <el-radio label="false"> 指定店铺适用 </el-radio>
             </el-radio-group>
           </el-form-item>
           <div v-if="!zdShopHidden">
-            <el-button type="primary" @click="addDistributorAction">
-选择店铺
-</el-button>
+            <el-button type="primary" @click="addDistributorAction"> 选择店铺 </el-button>
             <el-table
               v-if="distributor_info.length > 0"
               :data="distributor_info"
@@ -499,9 +451,7 @@
           </div>
         </el-card>
         <div class="content-center">
-          <el-button @click="cancelSubmit">
-取消
-</el-button>
+          <el-button @click="cancelSubmit"> 取消 </el-button>
           <el-button type="primary" :disabled="submitDisabled" @click="submitForm('form')">
             提交
           </el-button>
@@ -551,7 +501,7 @@ export default {
     Treeselect,
     GiftCoupon
   },
-  data () {
+  data() {
     let tempDays = [{ text: '当天', value: 0 }]
     let tempRemainDays = []
     for (let i = 1; i <= 90; i++) {
@@ -660,7 +610,7 @@ export default {
     }
     return {
       pickerOptions: {
-        disabledDate (time) {
+        disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7
         }
       },
@@ -791,7 +741,7 @@ export default {
       showTab: true
     }
   },
-  mounted () {
+  mounted() {
     if (store.getters.login_type === 'distributor') {
       this.is_distributor = true
       this.form.is_distributor = true
@@ -912,24 +862,24 @@ export default {
     }
   },
   methods: {
-    getItems (data) {
+    getItems(data) {
       let ids = []
       data.forEach((item) => {
         ids.push(item.itemId)
       })
       this.form.rel_item_ids = ids
     },
-    usePlatformChange (val) {
+    usePlatformChange(val) {
       if (val == 'mall') {
         this.form.use_scenes = 'ONLINE'
       } else {
         this.form.use_scenes = 'QUICK'
       }
     },
-    checkColor (e) {
+    checkColor(e) {
       this.form.color = e.target.dataset.color
     },
-    changeDatetime (val) {
+    changeDatetime(val) {
       if (val === 'DATE_TYPE_FIX_TIME_RANGE') {
         this.datetimeStatus = true
       } else {
@@ -938,7 +888,7 @@ export default {
         this.begin_time = 0
       }
     },
-    handleTypeChange (val) {
+    handleTypeChange(val) {
       if (val === 'gift') {
         this.form.use_scenes = 'SELF'
         this.form.use_platform = 'store'
@@ -949,7 +899,7 @@ export default {
         this.form.use_platform = 'mall'
       }
     },
-    shopTypeChange (val) {
+    shopTypeChange(val) {
       this.zdShopHidden = true
       if (val === 'false') {
         this.zdShopHidden = false
@@ -959,7 +909,7 @@ export default {
         this.form.distributor_info = []
       }
     },
-    itemTypeChange (val) {
+    itemTypeChange(val) {
       this.zdItemHidden = true
       this.categoryHidden = true
       this.tagHidden = true
@@ -990,10 +940,10 @@ export default {
         this.showBrands()
       }
     },
-    cancelSubmit () {
+    cancelSubmit() {
       this.$router.go(-1)
     },
-    submitForm (formName) {
+    submitForm(formName) {
       if (this.form.days <= 0) {
         this.$message.error('有效天数必须大于0')
         return
@@ -1068,7 +1018,7 @@ export default {
                     message: '更新成功',
                     type: 'success',
                     duration: 2 * 1000,
-                    onClose () {
+                    onClose() {
                       that.refresh()
                       that.$router.go(-1)
                     }
@@ -1090,7 +1040,7 @@ export default {
                     message: '添加成功',
                     type: 'success',
                     duration: 2 * 1000,
-                    onClose () {
+                    onClose() {
                       that.refresh()
                       that.$router.go(-1)
                     }
@@ -1110,18 +1060,18 @@ export default {
         }
       })
     },
-    addStoreAction () {
+    addStoreAction() {
       this.storeVisible = true
       this.setStatus = true
       this.relShopIds = this.form.rel_shops_ids
       console.log(this.form.rel_shops_ids)
     },
-    addDistributorAction () {
+    addDistributorAction() {
       this.distributorVisible = true
       this.setDistributorStatus = true
       this.relDistributorIds = this.form.distributor_id
     },
-    chooseStoreAction (data) {
+    chooseStoreAction(data) {
       console.warn('data', data)
       this.storeVisible = false
       this.form.rel_shops_ids = []
@@ -1134,7 +1084,7 @@ export default {
       }
     },
 
-    chooseDistributorAction (data) {
+    chooseDistributorAction(data) {
       this.distributorVisible = false
       if (!data || data === null || data.length <= 0) {
         this.distributor_info = []
@@ -1147,13 +1097,13 @@ export default {
         this.form.distributor_id.push(Number(id))
       }
     },
-    closeStoreDialogAction () {
+    closeStoreDialogAction() {
       this.storeVisible = false
     },
-    closeDistributorDialogAction () {
+    closeDistributorDialogAction() {
       this.distributorVisible = false
     },
-    deleteRow (index) {
+    deleteRow(index) {
       this.setStatus = false
       this.relStores.splice(index, 1)
       //this.form.rel_shops_ids = []
@@ -1164,7 +1114,7 @@ export default {
         }
       }
     },
-    deleteDistritutorRow (index) {
+    deleteDistritutorRow(index) {
       this.distributor_info.splice(index, 1)
       let shopDatas = this.distributor_info
       this.form.distributor_id = []
@@ -1175,16 +1125,16 @@ export default {
       }
       this.relDistributorIds = this.form.distributor_id
     },
-    giftChange (value) {
+    giftChange(value) {
       this.inputValue.gift_length = this.getValueLength(value)
     },
-    titleChange (value) {
+    titleChange(value) {
       this.inputValue.title_length = this.getValueLength(value)
     },
-    descriptionChange (value) {
+    descriptionChange(value) {
       this.inputValue.description_length = this.getValueLength(value)
     },
-    getValueLength (value) {
+    getValueLength(value) {
       let realLength = 0,
         charCode = -1,
         count = 0
@@ -1204,7 +1154,7 @@ export default {
       }
       return realLength
     },
-    conditionChange (val) {
+    conditionChange(val) {
       if (val == 1) {
         this.form.least_cost = 0
       }
@@ -1212,12 +1162,12 @@ export default {
         this.form.most_cost = 999999
       }
     },
-    fetchMainCate () {
+    fetchMainCate() {
       getCategory({ is_main_category: true, ignore_none: true }).then((response) => {
         this.categoryList = response.data.data
       })
     },
-    addItemTag () {
+    addItemTag() {
       this.tag.currentTags = []
       if (this.item_id.length) {
         this.showTags()
@@ -1229,7 +1179,7 @@ export default {
         })
       }
     },
-    showTags () {
+    showTags() {
       this.tag.tags = [...this.tag.list]
       let active_tags = [] //可选标签
       this.tag.tags.forEach((item, index) => {
@@ -1238,7 +1188,7 @@ export default {
       })
       this.tag.tags = active_tags
     },
-    tagRemove (index) {
+    tagRemove(index) {
       this.tag.tags.unshift(this.tag.currentTags[index])
       this.tag.currentTags.splice(index, 1)
       this.form.tag_ids = []
@@ -1246,7 +1196,7 @@ export default {
         this.form.tag_ids.push(item.tag_id)
       })
     },
-    tagAdd (item, index) {
+    tagAdd(item, index) {
       let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
       if (isInArr == -1) {
         this.tag.currentTags.push(item)
@@ -1257,7 +1207,7 @@ export default {
         this.form.tag_ids.push(item.tag_id)
       })
     },
-    getAllTagLists () {
+    getAllTagLists() {
       let params = {
         page: 1,
         pageSize: 500
@@ -1268,7 +1218,7 @@ export default {
       })
     },
     // 获取品牌列表
-    getBrandList (searchVal = '', isInit = false) {
+    getBrandList(searchVal = '', isInit = false) {
       const list = []
       getGoodsAttr({
         page: 1,
@@ -1284,7 +1234,7 @@ export default {
         this.showBrands()
       })
     },
-    showBrands () {
+    showBrands() {
       this.brand.brands = [...this.brand.list]
       let active_brands = []
       this.brand.brands.forEach((item, index) => {
@@ -1294,7 +1244,7 @@ export default {
       })
       this.brand.brands = active_brands
     },
-    brandAdd (item, index) {
+    brandAdd(item, index) {
       let isInArr = this.brand.currentBrands.findIndex((n) => n.attribute_id == item.attribute_id)
       if (isInArr == -1) {
         this.brand.currentBrands.push(item)
@@ -1305,7 +1255,7 @@ export default {
         this.form.brand_ids.push(item.attribute_id)
       })
     },
-    brandRemove (index) {
+    brandRemove(index) {
       this.brand.brands.unshift(this.brand.currentBrands[index])
       this.brand.currentBrands.splice(index, 1)
       this.form.brand_ids = []
@@ -1316,7 +1266,7 @@ export default {
     /**
      * 下载模板
      * */
-    uploadHandleTemplate () {
+    uploadHandleTemplate() {
       let params = { file_type: 'marketing_goods', file_name: '商品模板' }
       exportUploadTemplate(params).then((response) => {
         let { data } = response.data
@@ -1338,7 +1288,7 @@ export default {
     /**
      * 上传模板
      * */
-    uploadHandleChange (file, fileList) {
+    uploadHandleChange(file, fileList) {
       let params = { isUploadFile: true, file_type: 'marketing_goods', file: file.raw }
       handleUploadFile(params).then((response) => {
         this.$message({
@@ -1374,7 +1324,7 @@ export default {
         })
       })
     },
-    haddleShowTab (value) {
+    haddleShowTab(value) {
       this.showTab = value
     }
   }
