@@ -135,7 +135,7 @@
               <el-input v-model="value.brief" :maxlength="30" placeholder="" />
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="运费模板" required>
               <el-select v-model="value.templatesId" class="width-full" placeholder="请选择">
                 <el-option
@@ -146,10 +146,10 @@
                 />
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item label="品牌" required>
               <el-select
                 v-model="value.brandId"
@@ -168,7 +168,7 @@
                 />
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="8">
             <el-form-item label="计量单位">
               <el-input v-model="value.itemUnit" :maxlength="60" placeholder="" />
@@ -226,7 +226,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="16">
             <el-form-item label="商品分类" required>
               <treeselect
@@ -239,7 +239,7 @@
               />
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="商品图" required>
