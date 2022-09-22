@@ -32,11 +32,11 @@ export function deleteMenu (id) {
   })
 }
 
-export function downMenu (version, menu_type = 'standard') {
+export function downMenu (version) {
   var data = fetch({
     url: '/shopmenu/down',
     method: 'get',
-    params: { version: version, menu_type: menu_type }
+    params: { version: version, menu_type: process.env.VUE_APP_PRODUCT_MODEL }
   })
   return data.then((res) => {
     var a = document.createElement('a')
