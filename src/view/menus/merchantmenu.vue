@@ -526,7 +526,7 @@ export default {
 
   data () {
     return {
-      version: 3,
+      version: 6,
       dragOptions: {
         animation: 120,
         disabled: true,
@@ -582,7 +582,7 @@ export default {
       downMenu(this.version)
     },
     // handleDownDistributorMenu () {
-    //   downMenu(this.version, 'platform')
+    //   downMenu(this.version, 'merchant')
     // },
     handleMoveEndCheck (event) {
       if (event.newIndex == event.oldIndex) {

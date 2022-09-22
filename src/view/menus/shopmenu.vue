@@ -24,7 +24,7 @@
           }}
         </el-button>
         <el-button
-          v-else="dragOptions.disabled"
+          v-else
           type="success"
           @click="handleDraggableDisabled"
         >
@@ -36,14 +36,14 @@
           type="primary"
           @click="handleDownMenu"
         >
-          下载标准版配置<i class="el-icon-download el-icon--right" />
+          下载版本配置<i class="el-icon-download el-icon--right" />
         </el-button>
-        <el-button
+        <!-- <el-button
           type="primary"
           @click="handleDownDistributorMenu"
         >
           下载平台版配置<i class="el-icon-download el-icon--right" />
-        </el-button>
+        </el-button> -->
         <el-upload
           style="margin-right: 10px; float: right"
           action=""
@@ -191,7 +191,7 @@
       >
         <transition-group tag="div">
           <div
-            v-for="(item, index) in tableData"
+            v-for="item in tableData"
             :key="item.shopmenu_id"
             class=""
           >
@@ -581,9 +581,9 @@ export default {
     handleDownMenu () {
       downMenu(this.version)
     },
-    handleDownDistributorMenu () {
-      downMenu(this.version, 'ECX')
-    },
+    // handleDownDistributorMenu () {
+    //   downMenu(this.version, 'ECX')
+    // },
     handleMoveEndCheck (event) {
       if (event.newIndex == event.oldIndex) {
         return
