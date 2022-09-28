@@ -988,7 +988,7 @@ export default {
         distributor_ids: distributorIds,
         item_ids: this.item_id,
         // 是否同步并上架
-        is_can_sale: true
+        is_can_sale: false
       })
       this.$message.success('操作成功')
     },
