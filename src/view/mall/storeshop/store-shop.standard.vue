@@ -25,7 +25,7 @@
 <template>
   <div class="">
     <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onSearch">
-      <SpFilterFormItem prop="keywords" label="店铺:">
+      <SpFilterFormItem prop="distributor_id" label="店铺:">
         <SpSelectShop
           ref="selectShop"
           v-model="formData.distributor_id"
@@ -85,7 +85,7 @@
       :title="`编辑商品【${itemSkuForm.itemName}】`"
       :form="itemSkuForm"
       :form-list="itemSkuFormList"
-      @onSubmit="onItemSkuSubmit"
+      @onSubmit="onItemSkuFormSubmit"
     />
   </div>
 </template>
@@ -183,7 +183,7 @@ export default {
                       item_id: row.item_id,
                       is_total_store: !e
                     })
-                    row.is_total_store = !e
+                    this.$refs.finder.refresh()
                   }
                 }
               })
@@ -290,16 +290,8 @@ export default {
         this.$message.success('已加入执行队列，请在设置-导出列表中下载')
       }
     },
-    onItemSkuSubmit() {},
-    skuFinderbeforeSearch(params) {
-      debugger
-      const formData = this.formData
-      params = {
-        ...params,
-        ...formData,
-        is_can_sale: '_all'
-      }
-      return params
+    onItemSkuFormSubmit() {
+      this.itemSkuDialog = false
     }
   }
 }

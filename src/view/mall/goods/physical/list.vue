@@ -283,7 +283,14 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column prop="store" label="库存" width="80" />
+            <el-table-column prop="store" label="库存" width="80">
+              <template slot-scope="scope">
+                <span>{{ row.store }}</span>
+                <el-button type="text" @click="editCouponStore(scope.row.card_id)">
+                  <i class="el-icon-edit" />
+                </el-button>
+              </template>
+            </el-table-column>
             <el-table-column prop="market_price" label="市场价（¥）" width="100" />
             <el-table-column prop="price" label="销售价（¥）" width="100" />
             <el-table-column label="状态">

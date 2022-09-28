@@ -1,17 +1,9 @@
 <template>
   <el-card header="基础信息">
-    <el-form
-      ref="form"
-      :model="form"
-      label-width="auto"
-    >
+    <el-form ref="form" :model="form" label-width="auto">
       <el-row>
         <el-col :span="8">
-          <el-form-item
-            label="店铺号"
-            prop="shop_code"
-            :rules="rules.shop_code"
-          >
+          <el-form-item label="店铺号" prop="shop_code" :rules="rules.shop_code">
             <el-input
               v-model="form.shop_code"
               :maxlength="10"
@@ -21,21 +13,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item
-            label="店铺名称"
-            :rules="rules.name"
-          >
-            <el-input
-              v-model="form.name"
-              placeholder="请输入店铺名称"
-            />
+          <el-form-item label="店铺名称" :rules="rules.name">
+            <el-input v-model="form.name" placeholder="请输入店铺名称" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item
-            label="联系人姓名"
-            :rules="rules.contact"
-          >
+          <el-form-item label="联系人姓名" :rules="rules.contact">
             <el-input
               v-model="form.contact"
               placeholder="请输入联系人姓名"
@@ -46,10 +29,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item
-            label="联系方式"
-            :rules="rules.mobile"
-          >
+          <el-form-item label="联系方式" :rules="rules.mobile">
             <el-input
               v-model="form.mobile"
               placeholder="请输入联系人手机号"
@@ -59,10 +39,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="固定座机">
-            <el-input
-              v-model="form.contract_phone"
-              placeholder="请输入联系人座机号"
-            />
+            <el-input v-model="form.contract_phone" placeholder="请输入联系人座机号" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -110,23 +87,16 @@
           </el-form-item>
         </el-col>
 
-        <el-col
-          v-if="!distributor_type"
-          :span="8"
-        >
+        <el-col v-if="!distributor_type" :span="8">
           <el-form-item label="是否快递">
-            <el-switch
-              v-model="form.is_delivery"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            />
+            <el-switch v-model="form.is_delivery" active-color="#13ce66" inactive-color="#ff4949" />
           </el-form-item>
         </el-col>
         <el-col
           v-if="
             $store.getters.login_type != 'merchant' &&
-              externalForm.distribution_type != '0' &&
-              !VERSION_STANDARD
+            externalForm.distribution_type != '0' &&
+            !VERSION_STANDARD
           "
           :span="8"
         >
@@ -136,34 +106,29 @@
               inactive-color="#ff4949"
               active-color="#13ce66"
             />
-            <div class="frm-tips">
-              开启后，店铺添加的自有商品，需要平台审核通过后才可以上架
-            </div>
+            <div class="frm-tips">开启后，店铺添加的自有商品，需要平台审核通过后才可以上架</div>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item
             v-if="
               VERSION_STANDARD &&
-                this.$store.getters.login_type != 'distributor' &&
-                !distributor_type
+              this.$store.getters.login_type != 'distributor' &&
+              !distributor_type
             "
-            label="商品自动上架且总部发货"
+            label="自动同步商品至店铺"
           >
             <el-switch
               v-model="form.auto_sync_goods"
               inactive-color="#ff4949"
               active-color="#13ce66"
             />
-            <div class="frm-tips">
+            <!-- <div class="frm-tips">
               开启后，创建店铺时自动上架所有总部商品且总部发货（同步总部库存），后续总部新上商品在店铺自动上架且总部发货；该按钮不影响已手动操作过的店铺商品。
-            </div>
+            </div> -->
           </el-form-item>
         </el-col>
-        <el-col
-          v-if="!distributor_type"
-          :span="8"
-        >
+        <el-col v-if="!distributor_type" :span="8">
           <el-form-item label="下单是否需要选择街道居委">
             <el-switch
               v-model="form.is_require_subdistrict"
@@ -172,10 +137,7 @@
             />
           </el-form-item>
         </el-col>
-        <el-col
-          v-if="!distributor_type"
-          :span="8"
-        >
+        <el-col v-if="!distributor_type" :span="8">
           <el-form-item label="下单是否需要填写楼号房号">
             <el-switch
               v-model="form.is_require_building"
@@ -193,7 +155,7 @@
 <script>
 export default {
   props: ['disabled', 'distributor_type', 'externalForm'],
-  data () {
+  data() {
     return {
       form: {
         shop_code: '',
@@ -231,7 +193,7 @@ export default {
   },
   watch: {
     externalForm: {
-      handler (val) {
+      handler(val) {
         console.log(val, 'val')
         if (val.lng) {
           this.form.lng = val.lng
@@ -284,7 +246,7 @@ export default {
       deep: true
     }
   },
-  mounted () {
+  mounted() {
     this.distributor_id = this.$route.query.distributor_id
   },
   methods: {}
