@@ -95,7 +95,11 @@ import JSZip from 'jszip'
 import FileSaver from 'file-saver'
 import { createSetting } from '@shopex/finder'
 import { getFileBlob } from '@/api/common'
+import skuFinder from './comps/skuFinder'
 export default {
+  components: {
+    skuFinder
+  },
   data() {
     return {
       formData: {
@@ -119,44 +123,15 @@ export default {
             action: {
               handler: async ([row]) => {
                 this.itemSkuForm.itemName = row.itemName
+                this.itemSkuForm.itemId = row.itemId
                 this.itemSkuDialog = true
-                // this.$router.push({
-                //   path: `${this.$route.path}/detail?id=${row.id}`
-                // })
               }
             }
           }
-          // {
-          //   name: this.IS_ADMIN ? '结算' : '确认',
-          //   key: 'settlement',
-          //   type: 'button',
-          //   buttonType: 'text',
-          //   visible: (row) => {
-          //     if (this.IS_ADMIN && row.statement_status == 'confirmed') {
-          //       return true
-          //     }
-          //     if (this.IS_DISTRIBUTOR && row.statement_status == 'ready') {
-          //       return true
-          //     }
-          //     return false
-          //   },
-          //   action: {
-          //     handler: async ([row]) => {
-          //       await this.$confirm(`结算单号【${row.statement_no}】，确认是否结算？`, '提示', {
-          //         confirmButtonText: '确定',
-          //         cancelButtonText: '取消'
-          //       })
-          //       await this.$api.financial.confirmStatement(row.id)
-          //       this.$message.success('操作成功')
-          //       this.onSearch()
-          //     }
-          //   }
-          // }
         ],
         columns: [
           {
             name: '上下架操作',
-            // key: 'is_can_sale',
             render: (h, { row }) =>
               h('el-switch', {
                 props: {
@@ -229,67 +204,12 @@ export default {
       itemSkuFormList: [
         {
           key: 'invitation_code',
-          component: () => {
-            return (
-              <SpFinder
-                ref='skuFinder'
-                no-selection
-                fixed-row-action
-                url='/distributor/items'
-                setting={createSetting({
-                  columns: [
-                    {
-                      name: '商品编码',
-                      key: 'item_bn',
-                      width: 160
-                    },
-                    {
-                      name: '规格',
-                      key: 'item_spec_desc'
-                    },
-                    {
-                      name: '库存',
-                      key: 'store',
-                      width: 100
-                    },
-                    {
-                      name: '商品价格（¥）',
-                      key: 'price',
-                      width: 160,
-                      render: (h, { row }) => h('span', {}, row.price / 100)
-                    },
-                    {
-                      name: '状态',
-                      key: 'approve_status',
-                      render: (h, { row }) =>
-                        h('span', {}, this.getApproveStatus(row.approve_status))
-                    },
-                    {
-                      name: '上下架操作',
-                      render: (h, { row }) =>
-                        h('el-switch', {
-                          props: {
-                            'value': row.is_can_sale,
-                            'active-value': true,
-                            'inactive-value': false
-                          },
-                          on: {
-                            change: async (e) => {
-                              await this.$api.marketing.updateDistributorItem({
-                                distributor_id: this.formData.distributor_id,
-                                item_id: row.item_id,
-                                is_can_sale: e
-                              })
-                              row.is_can_sale = e
-                            }
-                          }
-                        })
-                    }
-                  ]
-                })}
-              />
-            )
-          }
+          component: () => (
+            <skuFinder
+              itemId={this.itemSkuForm.itemId}
+              distributorId={this.formData.distributor_id}
+            />
+          )
         }
       ]
     }
