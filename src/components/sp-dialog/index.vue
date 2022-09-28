@@ -60,7 +60,9 @@ export default {
   data() {
     return {}
   },
-  created() {},
+  created() {
+    console.log('sp-dialog. created')
+  },
   methods: {
     handleCancel() {
       this.$emit('input', false)

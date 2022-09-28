@@ -7,6 +7,20 @@
     margin-bottom: 0;
   }
 }
+.sku-dialog {
+  .el-dialog__body {
+    padding: 0;
+  }
+  .el-form {
+    margin-right: 0 !important;
+  }
+  .el-form-item {
+    margin-bottom: 0 !important;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
+}
 </style>
 <template>
   <div class="">
@@ -31,8 +45,8 @@
     </SpFilterForm>
 
     <div class="action-container">
-      <el-button type="primary" plain> 从店铺移除 </el-button>
-      <el-button type="primary" plain> 变更状态 </el-button>
+      <el-button type="primary" plain @click="removeItemFromShop"> 从店铺移除 </el-button>
+      <!-- <el-button type="primary" plain> 变更状态 </el-button> -->
       <el-button type="primary" plain @click="handleBatchDownload"> 商品码下载 </el-button>
       <export-tip @exportHandle="handleExport">
         <el-button type="primary" plain> 导出 </el-button>
@@ -58,6 +72,20 @@
       :data="finderData"
       :url="finderUrl"
       @selection-change="onSelectionChange"
+    />
+
+    <!-- 商品sku配置 -->
+    <SpDialog
+      v-if="itemSkuDialog"
+      ref="itemSkuRef"
+      v-model="itemSkuDialog"
+      class="sku-dialog"
+      width="1100px"
+      destroy-on-close
+      :title="`编辑商品【${itemSkuForm.itemName}】`"
+      :form="itemSkuForm"
+      :form-list="itemSkuFormList"
+      @onSubmit="onItemSkuSubmit"
     />
   </div>
 </template>
@@ -90,9 +118,11 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                this.$router.push({
-                  path: `${this.$route.path}/detail?id=${row.id}`
-                })
+                this.itemSkuForm.itemName = row.itemName
+                this.itemSkuDialog = true
+                // this.$router.push({
+                //   path: `${this.$route.path}/detail?id=${row.id}`
+                // })
               }
             }
           }
@@ -190,7 +220,78 @@ export default {
             render: (h, { row }) => h('span', {}, this.getApproveStatus(row.approve_status))
           }
         ]
-      })
+      }),
+      itemSkuDialog: false,
+      itemSkuForm: {
+        itemName: '',
+        itemId: ''
+      },
+      itemSkuFormList: [
+        {
+          key: 'invitation_code',
+          component: () => {
+            return (
+              <SpFinder
+                ref='skuFinder'
+                no-selection
+                fixed-row-action
+                url='/distributor/items'
+                setting={createSetting({
+                  columns: [
+                    {
+                      name: '商品编码',
+                      key: 'item_bn',
+                      width: 160
+                    },
+                    {
+                      name: '规格',
+                      key: 'item_spec_desc'
+                    },
+                    {
+                      name: '库存',
+                      key: 'store',
+                      width: 100
+                    },
+                    {
+                      name: '商品价格（¥）',
+                      key: 'price',
+                      width: 160,
+                      render: (h, { row }) => h('span', {}, row.price / 100)
+                    },
+                    {
+                      name: '状态',
+                      key: 'approve_status',
+                      render: (h, { row }) =>
+                        h('span', {}, this.getApproveStatus(row.approve_status))
+                    },
+                    {
+                      name: '上下架操作',
+                      render: (h, { row }) =>
+                        h('el-switch', {
+                          props: {
+                            'value': row.is_can_sale,
+                            'active-value': true,
+                            'inactive-value': false
+                          },
+                          on: {
+                            change: async (e) => {
+                              await this.$api.marketing.updateDistributorItem({
+                                distributor_id: this.formData.distributor_id,
+                                item_id: row.item_id,
+                                is_can_sale: e
+                              })
+                              row.is_can_sale = e
+                            }
+                          }
+                        })
+                    }
+                  ]
+                })}
+              />
+            )
+          }
+        }
+      ]
     }
   },
   created() {
@@ -231,6 +332,12 @@ export default {
       }
       return approveStatus[status] || '不可销售'
     },
+    // 删除商品
+    removeItemFromShop() {
+      if (this.selectItems.length == 0) {
+        return this.$message.error('请至少选择一个商品')
+      }
+    },
     // 批量下载商品码
     handleBatchDownload(val) {
       if (this.selectItems.length == 0) {
@@ -262,6 +369,17 @@ export default {
       if (status) {
         this.$message.success('已加入执行队列，请在设置-导出列表中下载')
       }
+    },
+    onItemSkuSubmit() {},
+    skuFinderbeforeSearch(params) {
+      debugger
+      const formData = this.formData
+      params = {
+        ...params,
+        ...formData,
+        is_can_sale: '_all'
+      }
+      return params
     }
   }
 }
