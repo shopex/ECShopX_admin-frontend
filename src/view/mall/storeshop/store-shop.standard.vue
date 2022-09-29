@@ -303,6 +303,7 @@ export default {
     },
     onItemSkuFormSubmit() {
       this.itemSkuDialog = false
+      this.$refs.finder.refresh()
     }
   }
 }
