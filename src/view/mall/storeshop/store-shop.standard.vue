@@ -137,7 +137,7 @@ export default {
             render: (h, { row }) =>
               h('el-switch', {
                 props: {
-                  'value': row.is_can_sale,
+                  'value': row.goods_can_sale,
                   'active-value': true,
                   'inactive-value': false
                 },
@@ -148,7 +148,7 @@ export default {
                       item_id: row.item_id,
                       is_can_sale: e
                     })
-                    row.is_can_sale = e
+                    row.goods_can_sale = e
                   }
                 }
               })
