@@ -136,7 +136,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <!-- {{value.templatesId}} -->
             <el-form-item label="运费模板" required>
               <el-select v-model="value.templatesId" class="width-full" placeholder="请选择">
                 <el-option
