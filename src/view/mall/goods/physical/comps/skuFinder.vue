@@ -6,6 +6,13 @@
     }
   }
 }
+
+.popover-edit {
+  display: flex;
+  .edit-input {
+    margin-right: 10px;
+  }
+}
 </style>
 <template>
   <SpFinder
@@ -46,15 +53,50 @@ export default {
             name: '库存',
             key: 'store',
             width: 100,
-            showType: 'editable',
-            componentProps: {
-              change: async (v, row) => {
-                await this.$api.marketing.updateDistributorItem({
-                  distributor_id: this.distributorId,
-                  item_id: row.item_id,
-                  store: v
-                })
-                this.$refs.skuFinder.refresh()
+            // showType: 'editable',
+            // componentProps: {
+            //   change: async (v, row) => {
+            //     await this.$api.marketing.updateDistributorItem({
+            //       distributor_id: this.distributorId,
+            //       item_id: row.item_id,
+            //       store: v
+            //     })
+            //     this.$refs.skuFinder.refresh()
+            //   }
+            // },
+            render: (h, { row }) => {
+              if (row.is_total_store) {
+                return <span>{row.store}</span>
+              } else {
+                return (
+                  <div>
+                    <span>{row.store}</span>
+                    <el-popover
+                      placement='top'
+                      trigger='hover'
+                      on-show={() => this.onShowPopover(row)}
+                    >
+                      <div class='popover-edit'>
+                        <el-input
+                          v-model={this.skuEditInput}
+                          class='edit-input'
+                          placeholder='请输入库存'
+                        />
+                        <el-button
+                          type='primary'
+                          size='mini'
+                          on-click={this.onModifyItemSku.bind(this, row)}
+                        >
+                          确定
+                        </el-button>
+                      </div>
+
+                      <el-button slot='reference' type='text'>
+                        <i class='el-icon-edit' />
+                      </el-button>
+                    </el-popover>
+                  </div>
+                )
               }
             }
           },
@@ -91,7 +133,8 @@ export default {
           //     })
           // }
         ]
-      })
+      }),
+      skuEditInput: ''
     }
   },
   created() {},
@@ -111,6 +154,17 @@ export default {
         offline_sale: '前台不展示'
       }
       return approveStatus[status] || '不可销售'
+    },
+    onShowPopover({ store }) {
+      this.skuEditInput = store
+    },
+    async onModifyItemSku({ item_id }) {
+      await this.$api.marketing.updateDistributorItem({
+        distributor_id: this.distributorId,
+        item_id: item_id,
+        store: this.skuEditInput
+      })
+      this.$refs.skuFinder.refresh()
     }
   }
 }
