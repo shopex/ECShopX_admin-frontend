@@ -145,7 +145,7 @@ export default {
                   change: async (e) => {
                     await this.$api.marketing.updateDistributorItem({
                       distributor_id: this.formData.distributor_id,
-                      item_id: row.item_id,
+                      goods_id: row.goods_id,
                       is_can_sale: e
                     })
                     row.goods_can_sale = e
@@ -182,7 +182,7 @@ export default {
                   change: async (e) => {
                     await this.$api.marketing.updateDistributorItem({
                       distributor_id: this.formData.distributor_id,
-                      item_id: row.item_id,
+                      goods_id: row.goods_id,
                       is_total_store: !e
                     })
                     this.$refs.finder.refresh()
