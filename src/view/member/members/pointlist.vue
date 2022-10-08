@@ -33,6 +33,7 @@
     <el-row
       class="content-bottom-padded"
       :gutter="20"
+      v-if="this.$store.getters.login_type != 'staff' "
     >
       <el-col :span="3">
         <el-button

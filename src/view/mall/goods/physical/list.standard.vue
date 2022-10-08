@@ -31,6 +31,28 @@
     }
   }
 }
+.popover-edit {
+  display: flex;
+  .edit-input {
+    margin-right: 10px;
+  }
+}
+</style>
+<style lang="scss">
+.sku-dialog {
+  .el-dialog__body {
+    padding: 0;
+  }
+  .el-form {
+    margin-right: 0 !important;
+  }
+  .el-form-item {
+    margin-bottom: 0 !important;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
+}
 </style>
 <template>
   <div class="page-body">
@@ -42,29 +64,6 @@
         $route.path.indexOf('physicalupload') === -1
       "
     >
-      <div class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">
-          添加商品
-        </el-button>
-        <!-- <el-button
-          v-if="VERSION_PLATFORM && !VUE_APP_FREE && login_type == 'distributor'"
-          type="primary"
-          icon="iconfont icon-xinzengcaozuo-01"
-          @click="selectItems"
-        >
-          选品
-        </el-button> -->
-        <el-dropdown @command="handleImport">
-          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
-            导入<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="physicalupload"> 商品导入 </el-dropdown-item>
-            <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品名称:">
           <el-input v-model="params.keywords" placeholder="请输入商品名称" />
@@ -93,8 +92,8 @@
             :options="regions"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="approve_status" label="商品状态:">
-          <el-select v-model="params.approve_status" clearable placeholder="请选择">
+        <SpFilterFormItem prop="is_can_sale" label="商品状态:">
+          <el-select v-model="params.is_can_sale" clearable placeholder="请选择">
             <el-option
               v-for="item in statusOption"
               :key="item.value"
@@ -150,69 +149,7 @@
       </SpFilterForm>
 
       <div class="action-container">
-        <el-button type="primary" plain @click="addCategory"> 更改商品分类 </el-button>
-        <el-button type="primary" plain @click="addTemplates"> 更改运费模板 </el-button>
-        <el-button type="primary" plain @click="addItemTag"> 打标签 </el-button>
-        <el-button type="primary" plain @click="batchItemsStore"> 统一库存 </el-button>
         <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
-        <!-- <el-button
-          type="primary"
-          plain
-          @click="batchItemsStatus('onsale')"
-        >
-          上架
-        </el-button>
-        <el-button
-          type="primary"
-          plain
-          @click="batchItemsStatus('instock')"
-        >
-          下架
-        </el-button> -->
-        <el-button type="primary" plain @click="batchGifts('true')"> 设为赠品 </el-button>
-        <el-button type="primary" plain @click="batchGifts('false')"> 设为非赠品 </el-button>
-
-        <el-dropdown>
-          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
-            导出<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsData"> 商品信息 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsTagData"> 商品标签 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <el-dropdown v-if="VERSION_STANDARD">
-          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
-            同步商品<i class="el-icon-arrow-down el-icon--right" />
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <span @click="() => syncToShop()">同步至店铺</span>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <span @click="syncToShop('all')"> 同步至所有店铺 </span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <!-- <el-button
-          type="primary"
-          plain
-          @click="syncItems"
-        >
-          同步商品数据
-        </el-button> -->
       </div>
 
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -283,108 +220,51 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column prop="store" label="库存" width="80" />
+            <el-table-column prop="store" label="库存" width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.store }}</span>
+
+                <el-popover
+                  v-if="scope.row.nospec && !scope.row.is_total_store"
+                  placement="top"
+                  trigger="hover"
+                  @show="() => onShowPopover(scope.row)"
+                >
+                  <div class="popover-edit">
+                    <el-input v-model="skuEditInput" class="edit-input" placeholder="请输入库存" />
+                    <el-button type="primary" size="mini" @click="onModifyItemSku(scope.row)">
+                      确定
+                    </el-button>
+                  </div>
+
+                  <el-button slot="reference" type="text">
+                    <i class="el-icon-edit" />
+                  </el-button>
+                </el-popover>
+                <el-button
+                  v-if="!scope.row.nospec && !scope.row.is_total_store"
+                  type="text"
+                  @click="onModifyItemSku(scope.row)"
+                >
+                  <i class="el-icon-edit" />
+                </el-button>
+              </template>
+            </el-table-column>
             <el-table-column prop="market_price" label="市场价（¥）" width="100" />
             <el-table-column prop="price" label="销售价（¥）" width="100" />
-            <el-table-column label="状态">
+            <el-table-column label="状态" width="160">
               <template slot-scope="scope">
-                <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
-                <el-popover
-                  v-else-if="scope.row.audit_status == 'rejected'"
-                  placement="top-start"
-                  width="200"
-                  trigger="hover"
-                  :content="scope.row.audit_reason"
-                >
-                  <el-button slot="reference" type="text"> 审核驳回 </el-button>
-                </el-popover>
-                <span v-else-if="scope.row.approve_status == 'onsale'">前台可销</span>
-                <span v-else-if="scope.row.approve_status == 'offline_sale'">前台不展示 </span>
-                <span v-else-if="scope.row.approve_status == 'only_show'">前台仅展示</span>
-                <span v-else>不可销售</span>
+                <span v-if="scope.row.is_can_sale">前台可售</span>
+                <span v-else>前台不可售</span>
               </template>
             </el-table-column>
             <el-table-column prop="itemCatName" label="商品分类" width="150" />
 
-            <el-table-column fixed="left" label="操作" width="200">
+            <el-table-column fixed="left" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button type="text" @click="editItemsAction(scope.$index, scope.row, false)">
-                  编辑
+                  详情
                 </el-button>
-                <el-popover v-if="appID" placement="top" width="200" trigger="click">
-                  <div>
-                    <img class="page-code" :src="appCodeUrl">
-                    <div class="page-btns">
-                      <el-button
-                        type="primary"
-                        plain
-                        size="mini"
-                        @click="handleDownload(scope.row.item_name)"
-                      >
-                        下载码
-                      </el-button>
-                      <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini">
-                        复制链接
-                      </el-button>
-                    </div>
-                  </div>
-                  <el-button
-                    slot="reference"
-                    style="width: 45px"
-                    type="text"
-                    @click="handleShow(scope.row.goods_id)"
-                  >
-                    投放
-                  </el-button>
-                </el-popover>
-                <el-button
-                  type="text"
-                  class="btn-gap"
-                  @click="deleteItemsAction(scope.$index, scope.row)"
-                >
-                  删除
-                </el-button>
-                <el-popover placement="right" width="450" trigger="hover">
-                  <div class="operating-icons">
-                    <el-button type="text" @click="editItemsAction(scope.$index, scope.row, true)">
-                      添加相似
-                    </el-button>
-                    <el-button type="text" @click="handlePrice(scope.row)"> 设置价格 </el-button>
-                    <!--el-button v-if="popularizeSetting.isOpenPopularize == 'true'" type="text" @click="handleRebateConf(scope.row)" >分销配置</el-button-->
-                    <el-button type="text" @click="handleProfitPrice(scope.row)">
-                      分润配置
-                    </el-button>
-                    <el-button type="text" @click="tagUpdate(scope.row)"> 标签 </el-button>
-                    <el-button type="text" @click="updateItemsStore(scope.row)">
-                      更改库存
-                    </el-button>
-                    <el-button
-                      v-clipboard:copy="scope.row.link"
-                      v-clipboard:success="onCopySuccess"
-                      class="copy-btn"
-                      type="text"
-                    >
-                      <input v-model="scope.row.link" class="copy-link" type="text">复制链接
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.approve_status == 'onsale'"
-                      type="text"
-                      @click="updateItemStatus(scope.row)"
-                    >
-                      下架
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.approve_status == 'instock'"
-                      type="text"
-                      @click="updateItemStatus(scope.row)"
-                    >
-                      上架
-                    </el-button>
-                  </div>
-                  <el-button slot="reference" type="text">
-                    更多<i class="iconfont icon-angle-double-right" />
-                  </el-button>
-                </el-popover>
               </template>
             </el-table-column>
           </el-table>
@@ -749,6 +629,20 @@
         :form-list="batchChangeStateFormList"
         @onSubmit="onBatchChangeStateSubmit"
       />
+
+      <!-- 商品sku配置 -->
+      <SpDialog
+        v-if="itemSkuDialog"
+        ref="itemSkuRef"
+        v-model="itemSkuDialog"
+        class="sku-dialog"
+        width="1100px"
+        destroy-on-close
+        :title="`编辑商品【${itemSkuForm.itemName}】`"
+        :form="itemSkuForm"
+        :form-list="itemSkuFormList"
+        @onSubmit="onItemSkuFormSubmit"
+      />
     </template>
     <router-view />
   </div>
@@ -789,12 +683,14 @@ import { VERSION_IN_PURCHASE } from '@/utils'
 import mixins from '@/mixins'
 
 import GoodsSelect from './comps/goodsSelect'
+import skuFinder from './comps/skuFinder'
 
 export default {
   components: {
     Treeselect,
     SideBar,
-    GoodsSelect
+    GoodsSelect,
+    skuFinder
   },
   mixins: [mixins],
   props: ['getStatus'],
@@ -807,20 +703,10 @@ export default {
     const loginType = this.$store.getters.login_type
 
     let statusOption
-    if (loginType == 'distributor') {
+    if (this.IS_DISTRIBUTOR) {
       statusOption = [
-        { title: '审核驳回', value: 'rejected' },
-        { title: '等待审核', value: 'processing' },
-        { title: '前台可销售', value: 'onsale' },
-        { title: '前台不展示', value: 'offline_sale' },
-        { title: '前台仅展示', value: 'only_show' },
-        { title: '不可销售', value: 'instock' }
-      ]
-    } else if (VERSION_IN_PURCHASE) {
-      statusOption = [
-        { title: '前台可销售', value: 'onsale' },
-        { title: '前台仅展示', value: 'only_show' },
-        { title: '不可销售', value: 'instock' }
+        { title: '前台可售', value: true },
+        { title: '前台不可售', value: false }
       ]
     } else {
       statusOption = [
@@ -906,7 +792,6 @@ export default {
         is_gift: false,
         type: 0,
         barcode: '',
-        distributor_id: 0,
         regions_id: [],
         brand_id: ''
       },
@@ -948,11 +833,25 @@ export default {
       ],
       batchChangeStateForm: {
         status: ''
-      }
+      },
+      skuEditInput: '',
+      itemSkuDialog: false,
+      itemSkuForm: {
+        itemName: '',
+        itemId: ''
+      },
+      itemSkuFormList: [
+        {
+          key: 'invitation_code',
+          component: () => (
+            <skuFinder itemId={this.itemSkuForm.itemId} distributorId={this.shopId} />
+          )
+        }
+      ]
     }
   },
   computed: {
-    ...mapGetters(['wheight', 'login_type'])
+    ...mapGetters(['wheight', 'login_type', 'shopId'])
   },
   watch: {
     '$route'(to, from) {
@@ -973,6 +872,28 @@ export default {
     console.log(111)
   },
   methods: {
+    onItemSkuFormSubmit() {
+      this.itemSkuDialog = false
+      this.getGoodsList()
+    },
+    onShowPopover({ store }) {
+      this.skuEditInput = store
+    },
+    // 修改库存
+    async onModifyItemSku({ item_id, nospec, itemName }) {
+      if (nospec) {
+        await this.$api.marketing.updateDistributorItem({
+          distributor_id: this.shopId,
+          item_id,
+          store: this.skuEditInput
+        })
+        this.getGoodsList()
+      } else {
+        this.itemSkuForm.itemName = itemName
+        this.itemSkuForm.itemId = item_id
+        this.itemSkuDialog = true
+      }
+    },
     // 同步至店铺
     async syncToShop(isAll) {
       if (this.item_id.length == 0) {
@@ -988,7 +909,7 @@ export default {
         distributor_ids: distributorIds,
         item_ids: this.item_id,
         // 是否同步并上架
-        is_can_sale: false
+        is_can_sale: true
       })
       this.$message.success('操作成功')
     },
@@ -1652,19 +1573,23 @@ export default {
       let params = {
         page,
         pageSize,
-        ...this.params
+        ...this.params,
+        distributor_id: this.shopId
       }
       if (params.category.length > 0) {
         params.category = params.category[params.category.length - 1]
       }
-      const { list, total_count, warning_store } = await this.$api.goods.getItemsList(params)
+      // const { list, total_count, warning_store } = await this.$api.goods.getItemsList(params)
+      const { list, total_count, warning_store } = await this.$api.marketing.getDistributorItems(
+        params
+      )
       list.forEach((item) => {
         item.price = item.price / 100
         item.market_price = item.market_price / 100
         item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
       })
       this.ItemsList = list
-      this.page.total = total_count
+      this.page.total = parseInt(total_count)
       this.warning_store = warning_store
       this.loading = false
     },
@@ -1740,41 +1665,23 @@ export default {
       }
       this.batchChangeStateDialog = true
     },
-    onBatchChangeStateSubmit() {
-      this.skuLoading = true
-      let params = {}
-      if (this.goods_id.length > 0) {
-        let data = []
-        this.goods_id.forEach((goods_id) => {
-          data.push({ goods_id: goods_id })
-        })
-        params = {
-          'items': JSON.stringify(data),
-          'status': this.batchChangeStateForm.status
-        }
-      }
-      this.submitLoading = true
-      updateItemsStatus(params).then((res) => {
-        if (res.data.data.status) {
-          this.$message({
-            message: '修改成功',
-            type: 'success',
-            duration: 2 * 1000
-          })
-          this.getGoodsList()
-        }
-        this.submitLoading = false
-        this.skuLoading = false
-        this.batchChangeStateDialog = false
-        this.batchChangeStateForm.status = ''
+    async onBatchChangeStateSubmit() {
+      await this.$api.marketing.updateDistributorItem({
+        distributor_id: this.shopId,
+        goods_id: this.goods_id,
+        is_can_sale: this.batchChangeStateForm.status
       })
+
+      this.$message.success('修改成功')
+      this.getGoodsList()
+      this.batchChangeStateDialog = false
     },
     updateItemStatus(items) {
       this.loading = true
       let params = {}
       params = {
         'items': [{ 'goods_id': items.goods_id }],
-        'status': items.approve_status === 'instock' ? 'onsale' : 'instock'
+        'status': items.is_can_sale === 'instock' ? 'onsale' : 'instock'
       }
       updateItemsStatus(params).then((res) => {
         if (res.data.data.status) {

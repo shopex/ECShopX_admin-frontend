@@ -419,12 +419,12 @@ export default {
         })
       }
 
-      if (this.form.use_bound != 'all') {
-        if (this.form.item_ids && this.form.item_ids.length <= 0) {
-          this.$message.error('参加活动的商品必填!')
-          return false
-        }
-      }
+      // if (this.form.use_bound != 'all') {
+      //   if (this.form.item_ids && this.form.item_ids.length <= 0) {
+      //     this.$message.error('参加活动的商品必填!')
+      //     return false
+      //   }
+      // }
       //this.use_bound = 1
 
       if (this.form.marketing_id) {

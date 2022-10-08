@@ -1,5 +1,6 @@
 import fetch from '../utils/fetch'
 import { Message } from 'element-ui'
+import store from '@/store'
 
 export function getShopMenu (query) {
   console.log(query)
@@ -32,11 +33,11 @@ export function deleteMenu (id) {
   })
 }
 
-export function downMenu (version, menu_type = 'standard') {
+export function downMenu (version) {
   var data = fetch({
     url: '/shopmenu/down',
     method: 'get',
-    params: { version: version, menu_type: menu_type }
+    params: { version: version, menu_type: store.getters.versionMode }
   })
   return data.then((res) => {
     var a = document.createElement('a')

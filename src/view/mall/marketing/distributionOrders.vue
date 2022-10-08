@@ -32,17 +32,17 @@
             <el-option
               v-for="(item, index) in order_class_array"
               :key="index"
-              :label="item.name"
+              :label="item.title"
               :value="item.value"
             />
           </el-select>
-          <el-autocomplete
+          <!-- <el-autocomplete
             v-model="source_name"
             class="inline-input"
             :fetch-suggestions="querySearch"
             placeholder="请输入来源"
             @select="sourceSearch"
-          />
+          /> -->
           <el-select
             v-model="distributor_id"
             placeholder="请选择店铺"
@@ -91,7 +91,6 @@
         >
           <el-table-column
             prop="order_id"
-            width="280"
             label="订单号"
           >
             <template slot-scope="scope">
@@ -135,7 +134,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="80"
             label="运费"
           >
             <template slot-scope="scope">
@@ -151,7 +149,6 @@
           -->
           <el-table-column
             prop="total_fee"
-            width="100"
             label="订单金额"
           >
             <template slot-scope="scope">
@@ -160,7 +157,6 @@
           </el-table-column>
           <el-table-column
             prop="mobile"
-            width="160"
             label="联系手机"
           >
             <template slot-scope="scope">
@@ -181,13 +177,10 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="90"
-            label="类型"
+            label="订单类型"
           >
             <template slot-scope="scope">
-              <span v-if="scope.row.order_class == 'normal'">普通订单</span>
-              <span v-if="scope.row.order_class == 'groups'">团购订单</span>
-              <span v-if="scope.row.order_class == 'seckill'">秒杀订单</span>
+              {{ getOrderType(scope.row) }}
             </template>
           </el-table-column>
           <!--
@@ -199,7 +192,6 @@
           </el-table-column>
           -->
           <el-table-column
-            width="140"
             label="状态"
           >
             <template slot-scope="scope">
@@ -270,12 +262,11 @@
               </template>
             </template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="source_name"
             label="来源"
-          />
+          /> -->
           <el-table-column
-            width="90"
             label="操作"
           >
             <template slot-scope="scope">
@@ -410,6 +401,10 @@ import { getOrderList, getOrderDetail, delivery } from '../../../api/trade'
 import { getSourcesList } from '../../../api/datacube'
 import hqbdlycorp from '../../../common/hqbdlycorp.json'
 import { getDistributorList } from '../../../api/marketing'
+import {
+  ORDER_TYPE,
+  ORDER_TYPE_STANDARD
+} from '@/consts'
 
 export default {
   data () {
@@ -421,11 +416,7 @@ export default {
         page: 1,
         pageSize: 20
       },
-      order_class_array: [
-        { name: '全部订单', value: '' },
-        { name: '团购订单', value: 'groups' },
-        { name: '秒杀订单', value: 'seckill' }
-      ],
+      order_class_array: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
       order_status: '',
       time_start_begin: '',
       time_start_end: '',
@@ -608,6 +599,16 @@ export default {
           this.distributorList = response.data.data.list
         }
       })
+    },
+    getOrderType({ order_class, type }) {
+      if (order_class == 'normal') {
+        return type == '1' ? '跨境订单' : '普通订单'
+      }
+      const _orderType = this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE
+      const fd = _orderType.find((item) => item.value == order_class)
+      if (fd) {
+        return fd.title
+      }
     }
   }
 }
