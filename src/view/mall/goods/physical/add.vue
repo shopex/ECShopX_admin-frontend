@@ -140,12 +140,7 @@
 
       <div class="footer-container">
         <el-button @click.native="handleCancel"> 取消 </el-button>
-        <el-button
-          v-if="!IS_DISTRIBUTOR"
-          type="primary"
-          :loading="submitLoading"
-          @click="handleSave"
-        >
+        <el-button type="primary" :loading="submitLoading" @click="handleSave">
           {{ submitLoading ? '提交中' : '保存' }}
         </el-button>
       </div>
