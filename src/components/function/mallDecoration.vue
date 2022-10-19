@@ -153,7 +153,7 @@
                 ') no-repeat bottom; background-size: 100% auto;'
               "
             >
-              <span>标题</span>
+              <span v-if="pageData">{{ pageData.base.title }}</span>
             </div>
           </div>
 
@@ -1387,7 +1387,7 @@ export default {
       let template = res.data.data
       this.element_edit_status = template.element_edit_status
       this.pageData = template.template_content.config.find((item) => item.name == 'page')
-      let templateContent = template.template_content.config.find((item) => item.name != 'page')
+      let templateContent = template.template_content.config.filter((item) => item.name != 'page')
       if (templateContent.length > 0) {
         let platformComponents = []
         let shopComponents = []

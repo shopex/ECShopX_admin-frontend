@@ -59,7 +59,10 @@
               <el-radio label="2"> 图片背景 </el-radio>
             </el-radio-group>
             <div>
-              <el-color-picker v-if="base.pageBackgroundStyle == '1'" />
+              <el-color-picker
+                v-if="base.pageBackgroundStyle == '1'"
+                v-model="base.pageBackgroundColor"
+              />
               <SpImagePicker v-else v-model="base.pageBackgroundImage" />
             </div>
           </div>
