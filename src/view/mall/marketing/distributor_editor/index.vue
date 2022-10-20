@@ -289,7 +289,9 @@ export default {
       })
     },
     async submitItemsActionConfirm() {
-      await this.formValidate()
+      if (this.is_normal) {
+        await this.formValidate()
+      }
       await this.$refs['baseFormRef'].validate()
       await this.$refs['dadaFormRef'].validate()
       this.submitLoading = true
