@@ -1073,13 +1073,18 @@ export default {
       })
     },
     showSettingDistance() {
+
+
       // 设置距离参数
       this.setDistanceVisible = true
       let that = this
-      getDistance().then((response) => {
+
+      // distributor_id
+      getDistance(that.distributor_id).then((response) => {
         that.distanceForm.distance = response.data.data.distance
       })
-      console.log(this.distanceForm)
+      console.log('this.distributor_id', that.distributor_id)
+      console.log('showSettingDistance', that.distanceForm)
     },
     handleDistanceCancel() {
       // 距离设置窗口关闭
@@ -1089,7 +1094,8 @@ export default {
     handleSubmitDistance() {
       // 提交距离配置
       let params = {
-        distance: this.distanceForm.distance
+        distance: this.distanceForm.distance,
+        distributor_id:this.distributor_id
       }
       setDistance(params).then((response) => {
         this.$message({

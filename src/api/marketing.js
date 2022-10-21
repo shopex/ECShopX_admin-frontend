@@ -444,9 +444,9 @@ export function deleteRole(id, query) {
 }
 
 // 获取距离信息
-export function getDistance() {
+export function getDistance(distributor_id) {
   return fetch({
-    url: 'distribution/getdistance',
+    url: `distribution/getdistance?distributor_id=${distributor_id}`,
     method: 'get'
   })
 }
