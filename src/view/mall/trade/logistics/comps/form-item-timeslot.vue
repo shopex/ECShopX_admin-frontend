@@ -32,8 +32,8 @@
           :class="keyClass(`time-${index}_start`)"
           :picker-options="{
             start: '00:00',
-            step: '00:30',
-            end: '24:00'
+            step: '00:01',
+            end: '23:59'
           }"
         />
         <span class="separator">~</span>
@@ -43,18 +43,17 @@
           :class="keyClass(`time-${index}_end`)"
           :picker-options="{
             start: '00:00',
-            step: '00:30',
-            end: '24:00'
+            step: '00:01',
+            end: '23:59'
           }"
         />
-        <el-button class="btn-add" type="text" @click="addTimeSlot(index)">添加时间段</el-button>
-        <el-button v-if="index > 0" class="btn-delete" type="text" @click="deleteTimeSlot(index)"
-          >
-删除
-</el-button
-        >
+
+        <el-button v-if="index > 0" class="btn-delete" type="text" @click="deleteTimeSlot(index)">
+          删除
+        </el-button>
       </div>
     </div>
+    <div><el-button class="btn-add" type="text" @click="addTimeSlot()">添加时间段</el-button></div>
   </div>
 </template>
 
@@ -82,7 +81,8 @@ export default {
   },
   methods: {
     addTimeSlot(index) {
-      this.data.splice(index + 1, 0, [null, null])
+      // this.data.splice(index + 1, 0, [null, null])
+      this.data.push([null, null])
     },
     deleteTimeSlot(index) {
       this.data.splice(index, 1)
