@@ -1083,8 +1083,8 @@ export default {
       getDistance(that.distributor_id).then((response) => {
         that.distanceForm.distance = response.data.data.distance
       })
-      console.log('this.distributor_id', that.distributor_id)
-      console.log('showSettingDistance', that.distanceForm)
+      // console.log('this.distributor_id', that.distributor_id)
+      // console.log('showSettingDistance', that.distanceForm)
     },
     handleDistanceCancel() {
       // 距离设置窗口关闭
