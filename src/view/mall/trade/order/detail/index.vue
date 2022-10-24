@@ -727,10 +727,10 @@ export default {
         this.addressInfo = `${distributor.store_address}（${distributor.store_name}）`
       } else {
         // 普通订单配送方式是自提时，展示自提点，非自提展示收货地址
-        const { province, city, area, name: zitiName } = ziti_info || {}
+        const { province, city, area, address, name: zitiName } = ziti_info || {}
         this.addressInfo =
           distributor.store_address && receipt_type == 'ziti'
-            ? `${province}${city}${area}（${zitiName}）`
+            ? `${province}${city}${area}${address}（${zitiName}）`
             : receipt_type != 'ziti'
             ? `${receiver_name} ${receiver_mobile} ${receiver_state}${receiver_city}${receiver_district}${receiver_address}`
             : '-- --'

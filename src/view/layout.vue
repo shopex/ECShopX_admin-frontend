@@ -163,7 +163,7 @@ export default {
     })
   },
   beforeRouteUpdate(to, from, next) {
-    console.log('beforeRouteUpdate', to, from, this.submenuList)
+    // console.log('beforeRouteUpdate', to, from, this.submenuList)
     this.submenuList.forEach((menu, index) => {
       if (typeof menu.children == 'undefined') {
         if (menu.url == to.path) {

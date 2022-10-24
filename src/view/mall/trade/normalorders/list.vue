@@ -813,6 +813,10 @@ export default {
     this.getLogisticsList()
     this.getSubDistrictList()
     this.getPickupcodeSetting()
+
+    this.$EventBus.$on('event.tradelist.refresh', () => {
+      this.fetchList()
+    })
   },
   methods: {
     async fetchList() {

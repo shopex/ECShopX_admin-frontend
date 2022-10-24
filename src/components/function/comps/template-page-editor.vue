@@ -13,12 +13,12 @@
     <div class="section-header with-border">页面设置</div>
     <div class="section-body">
       <el-form label-width="100px">
-        <el-form-item label="页面名称">
+        <!-- <el-form-item label="页面名称">
           <el-input v-model="base.title" type="text" />
         </el-form-item>
         <el-form-item label="页面说明">
           <el-input v-model="base.desc" type="textarea" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="顶部导航">
           <div>
             <el-radio-group v-model="base.navigateStyle">
@@ -41,7 +41,10 @@
               <el-radio label="2"> 图片 </el-radio>
             </el-radio-group>
             <div>
-              <el-color-picker v-if="base.titleStyle == '1'" v-model="base.titleColor" />
+              <div v-if="base.titleStyle == '1'">
+                <div>页面标题请在管理后台装修-商城信息中填写。</div>
+                <el-color-picker v-model="base.titleColor" />
+              </div>
               <SpImagePicker v-else v-model="base.titleBackgroundImage" />
             </div>
           </div>

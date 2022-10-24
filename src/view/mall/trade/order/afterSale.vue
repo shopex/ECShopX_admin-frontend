@@ -60,6 +60,13 @@
 import CompReceiveInfo from '../normalorders/components/comp-receiveInfo'
 import CompGoodsList from './comps/comp-goodsList'
 import CompRefundAmount from './comps/comp-refundAmount'
+
+const REASONS = [
+  { title: '收到残次品', value: '1' },
+  { title: '商品有污渍', value: '2' },
+  { title: '包装破损导致商品损坏', value: '3' },
+  { title: '七天无理由退货', value: '4' }
+]
 export default {
   name: '',
   data() {
@@ -67,12 +74,12 @@ export default {
       orderInfo: null,
       form: {
         order_id: '',
-        aftersales_type: '1',
+        aftersales_type: 'ONLY_REFUND',
         reason: '1',
-        goods_returned: '1',
+        goods_returned: false,
         items: [],
         refund_fee: '',
-        cancel_reason: '',
+        description: '',
         pic: null
       },
       formList: [
@@ -88,11 +95,11 @@ export default {
           key: 'aftersales_type',
           type: 'radio',
           options: [
-            { label: '1', name: '仅退款（无需退货）' },
-            { label: '2', name: '退货退款' }
+            { label: 'ONLY_REFUND', name: '仅退款（无需退货）' },
+            { label: 'REFUND_GOODS', name: '退货退款' }
           ],
           onChange: (e) => {
-            if (e == '2') {
+            if (e == 'REFUND_GOODS') {
               this.formList[5].isShow = true
             } else {
               this.formList[5].isShow = false
@@ -104,21 +111,7 @@ export default {
           key: 'reason',
           placeholder: '请选择退款原因',
           type: 'select',
-          options: [
-            { title: '收到残次品', value: '1' },
-            { title: '商品有污渍', value: '2' },
-            { title: '包装破损导致商品损坏', value: '3' },
-            { title: '七天无理由退货', value: '4' }
-          ]
-          // required: true,
-          // message: '不能为空',
-          // onChange: (e) => {
-          //   if (e == 12) {
-          //     this.cancelOrderFormList[3].isShow = true
-          //   } else {
-          //     this.cancelOrderFormList[3].isShow = false
-          //   }
-          // }
+          options: REASONS
         },
         {
           label: '退款商品',
@@ -165,14 +158,14 @@ export default {
           key: 'goods_returned',
           type: 'radio',
           options: [
-            { label: '1', name: '快递发货' },
-            { label: '2', name: '到店退货（店员已验货）' }
+            { label: false, name: '快递发货' },
+            { label: true, name: '到店退货（店员已验货）' }
           ],
           isShow: false
         },
         {
           label: '补充描述',
-          key: 'cancel_reason',
+          key: 'description',
           type: 'textarea',
           required: true,
           message: '描述信息不能为空'
@@ -197,8 +190,25 @@ export default {
     onLoad({ orderInfo }) {
       this.orderInfo = orderInfo
     },
-    onSubmit() {
-      debugger
+    async onSubmit() {
+      const { id: order_id } = this.$route.params
+      const reason = REASONS.find((item) => item.value == this.form.reason).title
+      const params = {
+        order_id,
+        aftersales_type: this.form.aftersales_type,
+        goods_returned: this.form.goods_returned,
+        reason,
+        detail: JSON.stringify(this.form.items),
+        refund_fee: this.form.refund_fee * 100,
+        description: this.form.description,
+        pic: this.form.pic.url
+      }
+      await this.$api.trade.salesAfterApply(params)
+      this.$message.success('售后申请提交成功')
+      this.$EventBus.$emit('event.tradelist.refresh')
+      setTimeout(() => {
+        this.$router.go(-1)
+      }, 1000)
     }
   }
 }

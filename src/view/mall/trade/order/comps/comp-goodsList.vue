@@ -64,8 +64,7 @@ export default {
       this.items = val.items.map((item) => {
         return {
           ...item,
-          checked: false,
-          num: 10
+          checked: false
         }
       })
     }

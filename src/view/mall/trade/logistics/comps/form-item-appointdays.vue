@@ -62,6 +62,11 @@ export default {
       isErrorKey: ''
     }
   },
+  watch: {
+    value: function (val) {
+      this.data = val
+    }
+  },
   created() {
     this.data = this.value
   },

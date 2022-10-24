@@ -1,10 +1,22 @@
 <style lang="scss" scoped>
+.ziti-tip {
+  border: 1px solid #7db3f2;
+  border-radius: 4px;
+  color: #0d4888;
+  padding: 4px 6px;
+  background-color: #e6f0ff;
+  font-size: 12px;
+}
 .action-container {
   margin-bottom: 0;
+  margin-top: 10px;
 }
 </style>
 <template>
   <div class="ziti-list">
+    <div class="ziti-tip">
+      一个自提点仅可被一个店铺绑定使用；每个店铺可绑定多个自提点，绑定至同一店铺的自提点共享该店铺库存。
+    </div>
     <div class="action-container">
       <el-button type="primary" @click="createZitiAddress"> 新增自提点 </el-button>
     </div>
@@ -91,11 +103,24 @@ export default {
           {
             name: '联系电话',
             key: 'contract_phone'
+          },
+          {
+            name: '绑定店铺',
+            key: 'store',
+            render: (h, { row }) => {
+              return (
+                <div>
+                  <el-button
+                    slot='reference'
+                    type='text'
+                    onClick={this.onSelectStore.bind(this, row)}
+                  >
+                    <i class='iconfont icon-link' />
+                  </el-button>
+                </div>
+              )
+            }
           }
-          // {
-          //   name: '绑定店铺',
-          //   key: 'created_at'
-          // }
         ]
       })
     }
@@ -127,6 +152,23 @@ export default {
       this.$router.push({
         path: '/order/entitytrade/logistics/addziti'
       })
+    },
+    onShowPopover() {},
+    onBindStore() {},
+    async onSelectStore({ id }) {
+      const { data } = await this.$picker.shop({
+        data: this.value,
+        multiple: false
+      })
+      if (data.length > 0) {
+        const [distributor] = data
+        const { distributor_id } = distributor
+        distributor_id
+        await this.$api.pickuplocation.bindZitiLocation({
+          id,
+          rel_distributor_id: distributor_id
+        })
+      }
     }
   }
 }
