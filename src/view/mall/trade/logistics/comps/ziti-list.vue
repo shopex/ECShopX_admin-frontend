@@ -106,10 +106,12 @@ export default {
           },
           {
             name: '绑定店铺',
-            key: 'store',
+            key: 'rel_distributor_name',
             render: (h, { row }) => {
               return (
                 <div>
+                  <span>{row.rel_distributor_name || ''}</span>
+                  {/* {!row.rel_distributor_name && ( */}
                   <el-button
                     slot='reference'
                     type='text'
@@ -117,6 +119,7 @@ export default {
                   >
                     <i class='iconfont icon-link' />
                   </el-button>
+                  {/* )} */}
                 </div>
               )
             }
@@ -168,6 +171,7 @@ export default {
           id,
           rel_distributor_id: distributor_id
         })
+        this.$refs['finder'].refresh()
       }
     }
   }

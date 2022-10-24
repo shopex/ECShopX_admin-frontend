@@ -37,7 +37,8 @@
             render: (h, { row }) =>
               h('span', {}, `${row.province}${row.city}${row.area}${row.address}`)
           },
-          { name: '联系电话', key: 'contract_phone' }
+          { name: '联系电话', key: 'contract_phone' },
+          { name: '绑定店铺', key: 'rel_distributor_name' }
         ]
       }"
       :hooks="{

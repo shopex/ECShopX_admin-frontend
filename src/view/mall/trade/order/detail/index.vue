@@ -252,13 +252,28 @@
           <span class="card-panel__value">{{ addressInfo }}</span>
         </div>
 
+        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+          <span class="card-panel__label">提货人:</span>
+          <span class="card-panel__value">{{ orderInfo.receiver_name }}</span>
+        </div>
+        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+          <span class="card-panel__label">提货时间:</span>
+          <span class="card-panel__value">{{
+            `${orderInfo.ziti_info.pickup_date} ${orderInfo.ziti_info.pickup_time.join('~')}`
+          }}</span>
+        </div>
+        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+          <span class="card-panel__label">联系电话:</span>
+          <span class="card-panel__value">{{ orderInfo.receiver_mobile }}</span>
+        </div>
+
         <div v-if="orderInfo.subdistrict_parent" class="card-panel-item">
-          <span class="card-panel__label">街道：</span>
+          <span class="card-panel__label">街道:</span>
           <span class="card-panel__value">{{ orderInfo.subdistrict_parent }}</span>
         </div>
 
         <div v-if="orderInfo.subdistrict" class="card-panel-item">
-          <span class="card-panel__label">社区：</span>
+          <span class="card-panel__label">社区:</span>
           <span class="card-panel__value">{{ orderInfo.subdistrict }}</span>
         </div>
 
@@ -282,7 +297,7 @@
       </div>
     </el-card>
 
-    <el-card v-if="!VERSION_IN_PURCHASE && !VERSION_PLATFORM" class="el-card--normal">
+    <!-- <el-card v-if="!VERSION_IN_PURCHASE && !VERSION_PLATFORM" class="el-card--normal">
       <div slot="header">分润信息</div>
       <el-row class="card-panel">
         <el-col
@@ -295,7 +310,7 @@
           <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
         </el-col>
       </el-row>
-    </el-card>
+    </el-card> -->
 
     <div v-if="btnActions.length > 0" class="footer-container">
       <el-button

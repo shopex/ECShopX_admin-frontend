@@ -38,6 +38,12 @@
         <el-option label="2" value="2" />
         <el-option label="3" value="3" />
         <el-option label="4" value="4" />
+        <el-option label="5" value="5" />
+        <el-option label="6" value="6" />
+        <el-option label="7" value="7" />
+        <el-option label="8" value="8" />
+        <el-option label="9" value="9" />
+        <el-option label="10" value="10" />
       </el-select>
       <span>天内订单</span>
     </div>
