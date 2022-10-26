@@ -72,21 +72,24 @@ export default {
         item_fee_new,
         item_total_fee,
         receipt_type,
-        point_freight_fee
+        point_freight_fee,
+        ziti_info
       } = orderInfo
       const { username, mobile } = await this.$api.member.getMember({
         user_id: user_id
       })
       this.buy_member = username
       this.buy_mobile = mobile
-      if (
-        order_class == 'excard' ||
-        order_class == 'shopadmin' ||
-        (order_class == 'normal' && receipt_type == 'ziti')
-      ) {
+      if (order_class == 'excard' || order_class == 'shopadmin') {
         this.receive_name = username
         this.receive_mobile = mobile
         this.receive_address = `${store_address}（${store_name}）`
+        this.isZiti = true
+      } else if (receipt_type == 'ziti') {
+        const { province, city, area, address, pickup_date, pickup_time } = ziti_info
+        this.receive_name = receiver_name
+        this.receive_mobile = receiver_mobile
+        this.receive_address = `${province}${city}${area}${address}`
         this.isZiti = true
       } else {
         this.receive_name = receiver_name

@@ -60,6 +60,7 @@
 import CompReceiveInfo from '../normalorders/components/comp-receiveInfo'
 import CompGoodsList from './comps/comp-goodsList'
 import CompRefundAmount from './comps/comp-refundAmount'
+import CompRefundPoint from './comps/comp-refundPoint'
 
 const REASONS = [
   { title: '收到残次品', value: '1' },
@@ -78,6 +79,7 @@ export default {
         reason: '1',
         goods_returned: false,
         items: [],
+        refund_point: '',
         refund_fee: '',
         description: '',
         pic: null
@@ -100,9 +102,9 @@ export default {
           ],
           onChange: (e) => {
             if (e == 'REFUND_GOODS') {
-              this.formList[5].isShow = true
+              this.formList[6].isShow = true
             } else {
-              this.formList[5].isShow = false
+              this.formList[6].isShow = false
             }
           }
         },
@@ -131,6 +133,18 @@ export default {
               callback('请选择售后商品')
             }
           }
+        },
+        {
+          label: '退积分',
+          key: 'refund_point',
+          component: () => (
+            <CompRefundPoint
+              value={this.orderInfo}
+              on-onChange={(e) => {
+                this.form.refund_point = e
+              }}
+            />
+          )
         },
         {
           label: '退款金额',
@@ -201,14 +215,38 @@ export default {
         detail: JSON.stringify(this.form.items),
         refund_fee: this.form.refund_fee * 100,
         description: this.form.description,
-        pic: this.form.pic.url
+        pic: this.form.pic ? this.form.pic.url : ''
       }
       await this.$api.trade.salesAfterApply(params)
-      this.$message.success('售后申请提交成功')
-      this.$EventBus.$emit('event.tradelist.refresh')
-      setTimeout(() => {
-        this.$router.go(-1)
-      }, 1000)
+
+      const h = this.$createElement
+      let msgTxt = ''
+      if (params.aftersales_type == 'ONLY_REFUND') {
+        msgTxt = '请耐心等待系统退款'
+      } else if (params.aftersales_type == 'REFUND_GOODS' && !params.goods_returned) {
+        msgTxt = '请通知买家尽快寄回商品'
+      } else if (params.aftersales_type == 'REFUND_GOODS' && params.goods_returned) {
+        msgTxt = '请耐心等待系统退款'
+      }
+      this.$msgbox({
+        title: '申请售后',
+        message: h('p', null, [
+          h('i', {
+            class: 'iconfont icon-check-circle',
+            style: 'color: var(--themeColor); margin-right: 4px;'
+          }),
+          h('span', { style: 'color: #333' }, '售后申请提交成功'),
+          h('div', { style: 'color: #999; font-size: 13px; margin-left: 20px;' }, msgTxt)
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then((action) => {
+        this.$EventBus.$emit('event.tradelist.refresh')
+        setTimeout(() => {
+          this.$router.go(-1)
+        }, 1000)
+      })
     }
   }
 }
