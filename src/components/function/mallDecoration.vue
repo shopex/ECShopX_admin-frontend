@@ -153,7 +153,7 @@
                 ') no-repeat bottom; background-size: 100% auto;'
               "
             >
-              <span v-if="pageData">{{ pageData.base.title }}</span>
+              <span v-if="pageData">页面标题</span>
             </div>
           </div>
 
