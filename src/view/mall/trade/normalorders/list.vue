@@ -858,6 +858,7 @@ export default {
           is_invoiced,
           invoice,
           order_status,
+          order_status_des,
           ziti_status,
           dada,
           delivery_status,
@@ -925,7 +926,10 @@ export default {
             actionBtns.push({ name: '改价', key: 'changePrice' })
           }
         }
-        if (order_status == 'WAIT_BUYER_CONFIRM') {
+        if (
+          order_status == 'WAIT_BUYER_CONFIRM' ||
+          (order_status == 'PAYED' && order_status_des == 'PAYED_PARTAIL')
+        ) {
           actionBtns.push({ name: '申请售后', key: 'salesAfter' })
         }
 
