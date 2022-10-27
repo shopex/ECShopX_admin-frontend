@@ -492,6 +492,7 @@ export default {
           )
         },
         {
+          label: '',
           component: () => (
             <CompReceiveInfo
               orderId={this.cancelOrderForm.order_id}
@@ -1400,8 +1401,7 @@ export default {
 }
 .dialog-cancelorder {
   .el-form-item {
-    &:nth-child(1),
-    &:nth-child(2) {
+    &:nth-child(1) {
       .el-form-item__content {
         margin-left: 0 !important;
       }
