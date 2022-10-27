@@ -117,7 +117,7 @@ export default {
                     type='text'
                     onClick={this.onSelectStore.bind(this, row)}
                   >
-                    <i class='iconfont icon-link' />
+                    <i class='el-icon-edit' />
                   </el-button>
                   {/* )} */}
                 </div>

@@ -187,14 +187,14 @@ export default {
         {
           label: '上传凭证',
           key: 'pic',
-          component: () => <SpImagePicker v-model={this.form.pic} />,
-          validator: (rule, value, callback) => {
-            if (this.form.pic) {
-              callback()
-            } else {
-              callback('请上传凭证')
-            }
-          }
+          component: () => <SpImagePicker v-model={this.form.pic} />
+          // validator: (rule, value, callback) => {
+          //   if (this.form.pic) {
+          //     callback()
+          //   } else {
+          //     callback('请上传凭证')
+          //   }
+          // }
         }
       ]
     }
@@ -214,6 +214,7 @@ export default {
         reason,
         detail: JSON.stringify(this.form.items),
         refund_fee: this.form.refund_fee * 100,
+        refund_point: this.form.refund_point,
         description: this.form.description,
         pic: this.form.pic ? this.form.pic.url : ''
       }
