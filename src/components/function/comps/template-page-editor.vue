@@ -6,6 +6,11 @@
   .el-textarea {
     width: 300px;
   }
+  .btn-reset {
+    margin-left: 10px;
+    position: relative;
+    top: -15px;
+  }
 }
 </style>
 <template>
@@ -26,10 +31,21 @@
               <el-radio label="2"> 图片背景 </el-radio>
             </el-radio-group>
             <div>
-              <el-color-picker
-                v-if="base.navigateStyle == '1'"
-                v-model="base.navigateBackgroundColor"
-              />
+              <div v-if="base.navigateStyle == '1'">
+                <el-color-picker v-model="base.navigateBackgroundColor" />
+                <el-button
+                  class="btn-reset"
+                  type="text"
+                  @click="
+                    () => {
+                      this.base.navigateBackgroundColor = '#fff'
+                    }
+                  "
+                  >
+重置
+</el-button
+                >
+              </div>
               <SpImagePicker v-else v-model="base.navigateBackgroundImage" />
             </div>
           </div>
@@ -43,7 +59,21 @@
             <div>
               <div v-if="base.titleStyle == '1'">
                 <div>页面标题请在管理后台装修-商城信息中填写。</div>
-                <el-color-picker v-model="base.titleColor" />
+                <div>
+                  <el-color-picker v-model="base.titleColor" />
+                  <el-button
+                    class="btn-reset"
+                    type="text"
+                    @click="
+                      () => {
+                        this.base.titleColor = '#1a1a1a'
+                      }
+                    "
+                    >
+重置
+</el-button
+                  >
+                </div>
               </div>
               <SpImagePicker v-else v-model="base.titleBackgroundImage" />
             </div>
@@ -62,10 +92,21 @@
               <el-radio label="2"> 图片背景 </el-radio>
             </el-radio-group>
             <div>
-              <el-color-picker
-                v-if="base.pageBackgroundStyle == '1'"
-                v-model="base.pageBackgroundColor"
-              />
+              <div v-if="base.pageBackgroundStyle == '1'">
+                <el-color-picker v-model="base.pageBackgroundColor" />
+                <el-button
+                  class="btn-reset"
+                  type="text"
+                  @click="
+                    () => {
+                      this.base.pageBackgroundColor = '#fafafa'
+                    }
+                  "
+                  >
+重置
+</el-button
+                >
+              </div>
               <SpImagePicker v-else v-model="base.pageBackgroundImage" />
             </div>
           </div>
