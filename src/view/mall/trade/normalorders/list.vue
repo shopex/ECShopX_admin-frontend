@@ -1406,6 +1406,11 @@ export default {
         margin-left: 0 !important;
       }
     }
+    &:nth-child(2) {
+      .el-form-item__content {
+        margin-left: 26px !important;
+      }
+    }
   }
 }
 .dialog-changeprice {
