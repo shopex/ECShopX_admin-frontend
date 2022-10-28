@@ -27,8 +27,12 @@ export default {
   created() {},
   methods: {
     getTotalFee() {
-      const { items } = this.value || {}
-      const leftFee = items.reduce((total, current) => total + current.remain_fee, 0)
+      const { items = [] } = this.value || {}
+
+      const leftFee = items
+        .filter((item) => item.checked)
+        .reduce((total, current) => total + current.remain_fee, 0)
+
       return (leftFee / 100).toFixed(2)
     },
     onChangeFee() {

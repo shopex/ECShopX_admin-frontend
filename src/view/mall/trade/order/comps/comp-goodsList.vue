@@ -32,14 +32,21 @@
 <template>
   <div v-if="value" class="comp-goods-list">
     <div v-for="(item, index) in items" :key="`goods-item-${index}`" class="goods-item">
-      <el-checkbox v-model="item.checked" class="item-checkbox" @change="onChangeItem" />
+      <el-checkbox
+        v-model="item.checked"
+        :disabled="!item.left_aftersales_num"
+        class="item-checkbox"
+        @change="onChangeItem"
+      />
       <el-image class="item-image" :src="item.pic" fit="fit" />
       <div class="item-info">
         <div class="'item-name'">{{ item.item_name }}</div>
+        <div class="'item-price'">{{ `¥${item.total_fee / 100}` }}</div>
         <div v-if="item.item_spec_desc" class="spec-desc">{{ `规格：${item.item_spec_desc}` }}</div>
         <el-input-number
           v-model="item.left_aftersales_num"
           size="mini"
+          :disabled="!item.left_aftersales_num"
           :step="1"
           :min="1"
           :max="item.left_aftersales_num"

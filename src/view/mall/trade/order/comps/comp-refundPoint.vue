@@ -24,7 +24,7 @@ export default {
   created() {},
   methods: {
     getTotalFee() {
-      const { items } = this.value || {}
+      const { items = [] } = this.value || {}
       const leftPoint = items.reduce((total, current) => total + current.remain_point, 0)
       return leftPoint
     },
