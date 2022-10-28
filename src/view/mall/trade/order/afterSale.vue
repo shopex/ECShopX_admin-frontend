@@ -123,6 +123,7 @@ export default {
               value={this.orderInfo}
               on-onChange={(e) => {
                 this.form.items = e
+                this.$refs['compRefundRef'].getTotalFee()
               }}
             />
           ),
@@ -158,6 +159,7 @@ export default {
           key: 'refund_fee',
           component: () => (
             <CompRefundAmount
+              ref='compRefundRef'
               value={this.orderInfo}
               on-onChange={(e) => {
                 this.form.refund_fee = e
@@ -207,6 +209,13 @@ export default {
   created() {},
   methods: {
     onLoad({ orderInfo }) {
+      orderInfo.items = orderInfo.items.map((item) => {
+        return {
+          ...item,
+          checked: false
+        }
+      })
+
       this.orderInfo = orderInfo
     },
     async onSubmit() {

@@ -68,12 +68,13 @@ export default {
   },
   watch: {
     value: function (val) {
-      this.items = val.items.map((item) => {
-        return {
-          ...item,
-          checked: false
-        }
-      })
+      this.items = val.items
+      // this.items = val.items.map((item) => {
+      //   return {
+      //     ...item,
+      //     // checked: false
+      //   }
+      // })
     }
   },
   created() {},

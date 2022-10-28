@@ -9,7 +9,7 @@
   <div class="comp-refund-amount">
     <el-input v-model="fee" type="text" @change="onChangeFee" />
     <div class="refund-amount-tip">
-      实际可退金额：{{ getTotalFee() }}
+      实际可退金额：{{ refundFee }}
       <el-button type="text" @click="refundAll">全部退款</el-button>
     </div>
   </div>
@@ -21,7 +21,8 @@ export default {
   props: ['value'],
   data() {
     return {
-      fee: ''
+      fee: '',
+      refundFee: 0
     }
   },
   created() {},
@@ -31,9 +32,8 @@ export default {
 
       const leftFee = items
         .filter((item) => item.checked)
-        .reduce((total, current) => total + current.remain_fee, 0)
-
-      return (leftFee / 100).toFixed(2)
+        .reduce((total, current) => total + current.total_fee, 0)
+      this.refundFee = (leftFee / 100).toFixed(2)
     },
     onChangeFee() {
       this.$emit('onChange', this.fee)
