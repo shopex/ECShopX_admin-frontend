@@ -862,7 +862,8 @@ export default {
           ziti_status,
           dada,
           delivery_status,
-          pay_status
+          pay_status,
+          can_apply_aftersales
         } = item
         const isDada = receipt_type == 'dada'
         const isLogistics = receipt_type == 'logistics'
@@ -926,10 +927,7 @@ export default {
             actionBtns.push({ name: '改价', key: 'changePrice' })
           }
         }
-        if (
-          order_status == 'WAIT_BUYER_CONFIRM' ||
-          (order_status == 'PAYED' && order_status_des == 'PAYED_PARTAIL')
-        ) {
+        if (can_apply_aftersales == 1) {
           actionBtns.push({ name: '申请售后', key: 'salesAfter' })
         }
 
