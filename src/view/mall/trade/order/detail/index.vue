@@ -252,17 +252,17 @@
           <span class="card-panel__value">{{ addressInfo }}</span>
         </div>
 
-        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
           <span class="card-panel__label">提货人:</span>
           <span class="card-panel__value">{{ orderInfo.receiver_name }}</span>
         </div>
-        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
           <span class="card-panel__label">提货时间:</span>
           <span class="card-panel__value">{{
             `${orderInfo.ziti_info.pickup_date} ${orderInfo.ziti_info.pickup_time.join('~')}`
           }}</span>
         </div>
-        <div v-if="orderInfo.receipt_type == 'ziti'" class="card-panel-item">
+        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
           <span class="card-panel__label">联系电话:</span>
           <span class="card-panel__value">{{ orderInfo.receiver_mobile }}</span>
         </div>
