@@ -1,8 +1,6 @@
 <template>
   <div class="section-white" style="padding-bottom: 70px">
-    <h3 class="title">
-售后详情
-</h3>
+    <h3 class="title">售后详情</h3>
     <div class="section-header with-border flex">
       <h3>售后信息</h3>
       <el-button
@@ -23,25 +21,19 @@
     </div>
     <div class="section-body">
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-售后单号:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 售后单号: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.aftersales_bn }}
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-订单号:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 订单号: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.order_id }}
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-售后类型:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 售后类型: </el-col>
         <el-col :span="20">
           <span v-if="aftersalesInfo.aftersales_type == 'ONLY_REFUND'">仅退款 </span>
           <span v-if="aftersalesInfo.aftersales_type == 'REFUND_GOODS'">退货退款 </span>
@@ -49,33 +41,23 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-应退总金额:
-</el-col>
-        <el-col :span="20">
-￥{{ aftersalesInfo.refund_fee / 100 }}
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 应退总金额: </el-col>
+        <el-col :span="20"> ￥{{ aftersalesInfo.refund_fee / 100 }} </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-应退总积分:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 应退总积分: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.refund_point }}
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-申请时间:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 申请时间: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-售后状态:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 售后状态: </el-col>
         <el-col :span="20">
           <span v-if="aftersalesInfo.aftersales_status == '0'"> 等待商家处理</span>
           <span v-else-if="aftersalesInfo.aftersales_status == '1'"> 商家处理中</span>
@@ -85,9 +67,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-处理进度:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 处理进度: </el-col>
         <el-col :span="20">
           <span v-if="aftersalesInfo.progress == '0'"> 等待商家处理</span>
           <span v-else-if="aftersalesInfo.progress == '1'">商家接受申请，等待消费者回寄</span>
@@ -102,9 +82,7 @@
         </el-col>
       </el-row>
       <el-row v-if="aftersalesInfo.refuse_reason">
-        <el-col :span="3" class="col-3 content-right">
-商家处理申请说明:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 商家处理申请说明: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.refuse_reason }}
         </el-col>
@@ -112,9 +90,7 @@
     </div>
     <div class="remark_footer">
       <el-row style="width: 100%">
-        <el-col :span="3" class="remark_footer_title col-3 content-right">
-商家备注:
-</el-col>
+        <el-col :span="3" class="remark_footer_title col-3 content-right"> 商家备注: </el-col>
         <el-col :span="20">
           <div class="remark_footer_content">
             {{ aftersalesInfo.distributor_remark }}
@@ -157,25 +133,19 @@
     </div>
     <div class="section-body">
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-退货理由:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 退货理由: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.reason }}
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="3" class="col-3 content-right">
-问题描述:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 问题描述: </el-col>
         <el-col :span="20">
           {{ aftersalesInfo.description }}
         </el-col>
       </el-row>
       <el-row v-if="aftersalesInfo.evidence_pic">
-        <el-col :span="3" class="col-3 content-right">
-图片信息:
-</el-col>
+        <el-col :span="3" class="col-3 content-right"> 图片信息: </el-col>
         <el-col :span="20">
           <ul v-if="aftersalesInfo.evidence_pic[0]">
             <li
@@ -202,17 +172,13 @@
       </div>
       <div class="section-body">
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-退款金额:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 退款金额: </el-col>
           <el-col :span="20">
             {{ refundInfo.refund_fee }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-退款状态:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 退款状态: </el-col>
           <el-col :span="20">
             <span v-if="refundInfo.refund_status == 'SUCCESS'"> 退款成功 </span>
             <span v-else-if="refundInfo.refund_status == 'REFUNDCLOSE'"> 退款关闭。 </span>
@@ -221,9 +187,7 @@
           </el-col>
         </el-row>
         <el-row v-if="refundInfo.refunds_memo">
-          <el-col :span="3" class="col-3 content-right">
-退款备注:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 退款备注: </el-col>
           <el-col :span="20">
             {{ refundInfo.refunds_memo }}
           </el-col>
@@ -238,17 +202,13 @@
       </div>
       <div class="section-body">
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-物流公司:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 物流公司: </el-col>
           <el-col :span="20">
             {{ dlycorpskn[aftersalesInfo.sendback_data.corp_code] }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-物流单号:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 物流单号: </el-col>
           <el-col :span="20">
             {{ aftersalesInfo.sendback_data.logi_no }}
           </el-col>
@@ -263,17 +223,13 @@
       </div>
       <div class="section-body">
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-物流公司:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 物流公司: </el-col>
           <el-col :span="20">
             {{ dlycorpskn[aftersalesInfo.sendconfirm_data.corp_code] }}
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="3" class="col-3 content-right">
-物流单号:
-</el-col>
+          <el-col :span="3" class="col-3 content-right"> 物流单号: </el-col>
           <el-col :span="20">
             {{ aftersalesInfo.sendconfirm_data.logi_no }}
           </el-col>
@@ -290,26 +246,20 @@
         </div>
         <div>
           <el-row class="agreen-info">
-            <el-col :span="2" class="col-3 agreen-right">
-物流公司:
-</el-col>
+            <el-col :span="2" class="col-3 agreen-right"> 物流公司: </el-col>
             <el-col :span="8">
               <el-input v-model="corp_code" type="text" placeholder="请输入物流公司" clearable />
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="2" class="col-3 agreen-right">
-物流单号:
-</el-col>
+            <el-col :span="2" class="col-3 agreen-right"> 物流单号: </el-col>
             <el-col :span="8">
               <el-input v-model="logi_no" type="text" placeholder="请输入物流单号" clearable />
             </el-col>
           </el-row>
         </div>
         <div class="section-footer with-border content-center">
-          <el-button type="primary" @click="sendBackAction">
-确认发货
-</el-button>
+          <el-button type="primary" @click="sendBackAction"> 确认发货 </el-button>
         </div>
       </template>
 
@@ -331,25 +281,15 @@
         <div class="section-body">
           <template>
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-处理结果:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 处理结果: </el-col>
               <el-col :span="20">
                 <template v-if="IsBind && login_type != 'distributor'">
-                  <el-radio v-model="check_refund" label="0" disabled>
-不同意
-</el-radio>
-                  <el-radio v-model="check_refund" label="1" disabled>
-同意
-</el-radio>
+                  <el-radio v-model="check_refund" label="0" disabled> 不同意 </el-radio>
+                  <el-radio v-model="check_refund" label="1" disabled> 同意 </el-radio>
                 </template>
                 <template v-else>
-                  <el-radio v-model="check_refund" label="0">
-不同意
-</el-radio>
-                  <el-radio v-model="check_refund" label="1">
-同意
-</el-radio>
+                  <el-radio v-model="check_refund" label="0"> 不同意 </el-radio>
+                  <el-radio v-model="check_refund" label="1"> 同意 </el-radio>
                 </template>
               </el-col>
             </el-row>
@@ -357,9 +297,7 @@
               v-if="aftersalesInfo.aftersales_type != 'EXCHANGING_GOODS' && check_refund == '1'"
             >
               <el-row v-if="'point' != orderInfo.pay_type">
-                <el-col :span="3" class="col-3 content-right">
-退款金额:
-</el-col>
+                <el-col :span="3" class="col-3 content-right"> 退款金额: </el-col>
                 <el-col :span="8">
                   <el-input
                     v-model="refund_fee"
@@ -373,18 +311,14 @@
                 </el-col>
               </el-row>
               <el-row v-else>
-                <el-col :span="3" class="col-3 content-right">
-退款积分:
-</el-col>
+                <el-col :span="3" class="col-3 content-right"> 退款积分: </el-col>
                 <el-col :span="8">
                   <el-input v-model="refund_point" type="number" min="0" :max="orderInfo.point" />
                 </el-col>
               </el-row>
             </template>
             <el-row v-if="this.check_refund == '0'">
-              <el-col :span="2" class="col-3 agreen-right">
-拒绝原因:
-</el-col>
+              <el-col :span="2" class="col-3 agreen-right"> 拒绝原因: </el-col>
               <el-col :span="12">
                 <el-input
                   v-model="refuse_reason"
@@ -403,9 +337,7 @@
               >
                 确认
               </el-button>
-              <el-button v-else type="primary" @click="refundAction">
-确认
-</el-button>
+              <el-button v-else type="primary" @click="refundAction"> 确认 </el-button>
             </div>
           </template>
         </div>
@@ -429,33 +361,21 @@
       <div class="section-body">
         <template>
           <el-row>
-            <el-col :span="3" class="col-3 content-right">
-处理结果:
-</el-col>
+            <el-col :span="3" class="col-3 content-right"> 处理结果: </el-col>
             <el-col :span="20">
               <template v-if="IsBind && login_type != 'distributor'">
-                <el-radio v-model="is_approved" label="0" disabled>
-不同意
-</el-radio>
-                <el-radio v-model="is_approved" label="1" disabled>
-同意
-</el-radio>
+                <el-radio v-model="is_approved" label="0" disabled> 不同意 </el-radio>
+                <el-radio v-model="is_approved" label="1" disabled> 同意 </el-radio>
               </template>
               <template v-else>
-                <el-radio v-model="is_approved" label="0">
-不同意
-</el-radio>
-                <el-radio v-model="is_approved" label="1">
-同意
-</el-radio>
+                <el-radio v-model="is_approved" label="0"> 不同意 </el-radio>
+                <el-radio v-model="is_approved" label="1"> 同意 </el-radio>
               </template>
             </el-col>
           </el-row>
           <template v-if="aftersalesInfo.aftersales_type == 'ONLY_REFUND' && is_approved == '1'">
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-退款金额:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 退款金额: </el-col>
               <el-col :span="8">
                 <el-input
                   v-model="refund_fee"
@@ -467,9 +387,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-退款积分:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 退款积分: </el-col>
               <el-col :span="8">
                 <el-input
                   v-model="refund_point"
@@ -481,9 +399,7 @@
             </el-row>
           </template>
           <el-row v-if="this.is_approved == '0'">
-            <el-col :span="2" class="col-3 agreen-right">
-拒绝原因:
-</el-col>
+            <el-col :span="2" class="col-3 agreen-right"> 拒绝原因: </el-col>
             <el-col :span="12">
               <el-input
                 v-model="refuse_reason"
@@ -497,15 +413,19 @@
       </div>
     </template>
 
-    <template v-if="aftersalesInfo.aftersales_type == 'REFUND_GOODS' && this.is_approved == '1'">
+    <template
+      v-if="
+        aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
+        ((aftersalesInfo.progress == '0' && this.is_approved == '1') ||
+          aftersalesInfo.progress == '1')
+      "
+    >
       <div class="section-header with-border">
         <h3>回寄信息</h3>
         <div class="section-body">
           <template>
-            <el-row>
-              <el-col :span="2" class="col-3 agreen-right">
-售后地址:
-</el-col>
+            <el-row v-if="aftersalesInfo.progress == '0'">
+              <el-col :span="2" class="col-3 agreen-right"> 售后地址: </el-col>
               <el-col :span="12">
                 <el-button icon="el-icon-circle" @click="handleChangeAddress">
                   选择售后地址
@@ -517,25 +437,19 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-联系人:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 联系人: </el-col>
               <el-col :span="8">
                 <el-input v-model="aftersales_contact" type="text" disabled />
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-电话:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 电话: </el-col>
               <el-col :span="8">
                 <el-input v-model="aftersales_mobile" type="text" disabled />
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="3" class="col-3 content-right">
-回寄地址:
-</el-col>
+              <el-col :span="3" class="col-3 content-right"> 回寄地址: </el-col>
               <el-col :span="8">
                 <el-input v-model="aftersales_address" type="text" disabled />
               </el-col>
@@ -721,7 +635,7 @@ import remarkMixin from '@/mixins/remarkMixin'
 import { mapGetters } from 'vuex'
 
 // 取选中地区的值
-function getCascaderObj (val, opt) {
+function getCascaderObj(val, opt) {
   return val.map(function (value, index, array) {
     for (var itm of opt) {
       if (itm.value === value) {
@@ -738,7 +652,7 @@ export default {
     RemarkModal
   },
   mixins: [remarkMixin],
-  data () {
+  data() {
     return {
       aftersales_bn: '',
       aftersalesInfo: {},
@@ -796,7 +710,7 @@ export default {
   computed: {
     ...mapGetters(['login_type'])
   },
-  mounted () {
+  mounted() {
     if (this.$route.query.aftersales_bn) {
       this.aftersales_bn = this.$route.query.aftersales_bn
     }
@@ -805,7 +719,7 @@ export default {
     this.aftersaleInfo()
   },
   methods: {
-    aftersaleInfo () {
+    aftersaleInfo() {
       getAftersalesDetail(this.aftersales_bn).then((response) => {
         let data = response.data.data
         this.aftersalesInfo = data
@@ -818,6 +732,11 @@ export default {
         // if(data.refundInfo) {
         //   this.refundInfo = data.refundInfo
         // }
+        if (data.aftersales_address) {
+          this.aftersales_address = data.aftersales_address.aftersales_address
+          this.aftersales_contact = data.aftersales_address.aftersales_contact
+          this.aftersales_mobile = data.aftersales_address.aftersales_mobile
+        }
         if (data.sendback_data.length == 0) {
           this.aftersalesInfo.sendback_data = null
         }
@@ -828,10 +747,10 @@ export default {
         this.loading = false
       })
     },
-    onRemarksDone (remark) {
+    onRemarksDone(remark) {
       this.aftersalesInfo.distributor_remark = remark
     },
-    reviewSubmit () {
+    reviewSubmit() {
       this.reviewData.aftersales_bn = this.aftersales_bn
       this.reviewData.is_approved = this.is_approved
       if (this.is_approved == 1) {
@@ -880,7 +799,7 @@ export default {
         }
       })
     },
-    sendBackAction () {
+    sendBackAction() {
       this.exchangeSendBack.aftersales_bn = this.aftersales_bn
       this.exchangeSendBack.corp_code = this.corp_code
       this.exchangeSendBack.logi_no = this.logi_no
@@ -897,7 +816,7 @@ export default {
         }
       })
     },
-    refundAction () {
+    refundAction() {
       this.refundData.aftersales_bn = this.aftersales_bn
       this.refundData.check_refund = this.check_refund
       this.refundData.refunds_memo = this.refuse_reason
@@ -925,13 +844,13 @@ export default {
       })
     },
 
-    getStatus () {
+    getStatus() {
       isBind().then((response) => {
         this.IsBind = response.data.data.result
       })
     },
 
-    handleChangeAddress (val) {
+    handleChangeAddress(val) {
       this.relShop.relShopVisible = true
       const queryData = {}
       queryData['page'] = this.relShop.params.page
@@ -939,14 +858,14 @@ export default {
       queryData['distributor_id'] = this.distributor_id
       this.getAftersalesaddressList(queryData)
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       const queryData = {}
       queryData['page'] = val
       queryData['page_size'] = this.relShop.params.page_size
       queryData['distributor_id'] = this.distributor_id
       this.getAftersalesaddressList(queryData)
     },
-    getAftersalesaddressList (queryData) {
+    getAftersalesaddressList(queryData) {
       getAftersalesAddressList(queryData).then((response) => {
         if (response.data.data.list) {
           this.relShop.list = response.data.data.list
@@ -954,10 +873,10 @@ export default {
         }
       })
     },
-    handleCancel () {
+    handleCancel() {
       this.relShop.relShopVisible = false
     },
-    handleSelectAftersalesAddress () {
+    handleSelectAftersalesAddress() {
       const fd = this.relShop.list.find((item) => item.address_id == this.aftersales_select)
       if (fd) {
         this.aftersales_address_id = fd.address_id
@@ -967,10 +886,10 @@ export default {
       }
       this.relShop.relShopVisible = false
     },
-    handleRowClick (row, col, event) {
+    handleRowClick(row, col, event) {
       this.aftersales_select = row.address_id
     },
-    handleClose () {
+    handleClose() {
       this.dialogVisible = false
     },
     handleRegionChange: function (value) {
@@ -993,7 +912,7 @@ export default {
         this.searchRegion = this.form.regions[0] + this.form.regions[1] + this.form.regions[2]
       }
     },
-    createAddress () {
+    createAddress() {
       const queryData = {}
       const ids = []
       if (this.aftersalesInfo.distributor_id) {
@@ -1033,7 +952,7 @@ export default {
 }
 
 // 两个浮点数相乘
-function accMul (num1, num2) {
+function accMul(num1, num2) {
   var m = 0,
     s1 = num1.toString(),
     s2 = num2.toString()
