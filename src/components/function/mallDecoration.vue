@@ -1155,17 +1155,19 @@ export default {
 
       if (data.length > 0) {
         data.forEach((item) => {
-          let obj = {
-            imgUrl: item.pics[0],
-            title: item.itemName,
-            goodsId: item.itemId,
-            brand: item.brand_logo,
-            price: item.price,
-            distributor_id: item.distributor_id,
-            itemEnName: item.item_en_name,
-            promotionActivity: item.promotion_activity
+          if (item.itemId) {
+            let obj = {
+              imgUrl: item.pics[0],
+              title: item.itemName,
+              goodsId: item.itemId,
+              brand: item.brand_logo,
+              price: item.price,
+              distributor_id: item.distributor_id,
+              itemEnName: item.item_en_name,
+              promotionActivity: item.promotion_activity
+            }
+            values.push(obj)
           }
-          values.push(obj)
         })
       }
       if (!this.editorDataIndex && this.editorDataIndex !== 0) {

@@ -1175,9 +1175,11 @@ export default {
       this.couponsVisible = false
     },
     showLinks(index) {
-      console.log('showLinks')
+      console.log('showLinks:', index)
       this.linksVisible = true
-      this.editorDataIndex = index
+      if (index !== undefined) {
+        this.editorDataIndex = index
+      }
     },
     // 链接选择器绑定事件
     setLink(data, type) {

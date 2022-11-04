@@ -203,7 +203,6 @@ export default {
       this.data.splice(evt.newIndex, 0, this.temp)
     },
     handleMoreLink() {
-      debugger
       this.$emit('bindLinks')
     }
   }
