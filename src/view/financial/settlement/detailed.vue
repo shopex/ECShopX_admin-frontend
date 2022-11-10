@@ -169,8 +169,8 @@ export default {
       this.feeDone = total_statement_fee_done
       this.feeReady = total_statement_fee_ready
     },
-    getPayment (tyep1, type2) {
-      return tyep1 ? PAY_TYPE[tyep1] : PAY_TYPE[type2]
+    getPayment (pay_channel, pay_type) {
+      return pay_channel ? PAY_TYPE[pay_channel] : PAY_TYPE[pay_type]
     },
     remoteMerchantList: async function (name) {
       this.merchantLoading = true
