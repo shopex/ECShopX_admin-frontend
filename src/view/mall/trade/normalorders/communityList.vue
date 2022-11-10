@@ -1093,6 +1093,7 @@ export default {
           progress,
           fee_symbol,
           total_fee,
+          pay_channel,
           pay_type,
           cancel_reason
         } = await this.$api.trade.getCancelOrderInfo(order_id, { order_type: 'normal' })
@@ -1104,7 +1105,7 @@ export default {
           refundStatus: REFUND_STATUS[refund_status],
           process: REFUND_PROCESS[progress],
           refundPrice: `${fee_symbol}${total_fee / 100}`,
-          payType: PAY_TYPE[pay_type],
+          payType: pay_channel ? PAY_TYPE[pay_channel] : PAY_TYPE[pay_type],
           reason: cancel_reason
         }
       } else if (key == 'waitInvoice') {
