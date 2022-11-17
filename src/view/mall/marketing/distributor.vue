@@ -338,6 +338,7 @@
               <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
             </el-button>
             <el-button type="text" @click="linkWxpaysettting(scope.row)"> 微信支付配置 </el-button>
+            <el-button type="text" @click="linkAlipaysettting(scope.row)"> 支付宝配置 </el-button>
             <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
               银联商务支付配置
             </el-button>
@@ -761,6 +762,13 @@ export default {
       const { distributor_id, name } = distributor
       this.$router.push({
         path: this.matchHidePage('wxpaysetting'),
+        query: { distributor_id, name }
+      })
+    },
+    linkAlipaysettting(distributor) {
+      const { distributor_id, name } = distributor
+      this.$router.push({
+        path: this.matchHidePage('alipaysetting'),
         query: { distributor_id, name }
       })
     },
