@@ -25,7 +25,7 @@
                 </el-form-item>
           
                 <el-form-item label="退货点地址" prop="name" class="range-select">
-                  <el-cascader class="regions" v-model="content.baseForm.offline_aftersales_address['region_id']" :options="regions" />
+                  <el-cascader class="regions" v-model="content.baseForm.offline_aftersales_address['regions_id']" :options="regions" />
                   <el-input v-model="content.baseForm.offline_aftersales_address['address']" placeholder="请填写退货点的具体地址，最短5字，最长120字" />
                 </el-form-item>
           
@@ -72,8 +72,13 @@
                 <SpFinder
                   :data="finderData"
                   no-selection
+                  url="/distributors/aftersales"
                   ref="finder"
                   :setting="setting"
+                  :hooks="{
+                    beforeSearch: beforeSearch,
+                    afterSearch: afterSearch
+                  }"
                 />
               </el-form-item>
       
@@ -110,7 +115,7 @@
                   this.finderData.splice(index, 1)
                   this.$nextTick(() => {
                     this.$refs['finder'].refresh()
-                })
+                  })
               }
             }
           }
@@ -124,16 +129,26 @@
     created () {
       const { distributor_id } = this.$route.query
       this.distributor_id = distributor_id
-      this.finderData = this.content.baseForm.offline_aftersales_distributor_id
     },
     methods: {
+      beforeSearch(params) {
+        params = {
+          ...params,
+          is_selected: 1,
+          distributor_id: this.distributor_id
+        }
+        return params
+      },
+      afterSearch(response) {
+        const { list } = response.data.data
+        this.finderData = list
+      },
       async onSelectShop() {
         const { data } = await this.$picker.aftersalesList({
           data: this.finderData.map((item) => item.id),
           distributor_id: this.distributor_id
         })
         if (data) {
-          this.finderData = data
           this.content.baseForm.offline_aftersales_distributor_id = data.map((item) => item.id)
         }
         this.$refs['finder'].refresh()

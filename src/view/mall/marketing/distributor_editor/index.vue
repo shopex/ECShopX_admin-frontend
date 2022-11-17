@@ -274,6 +274,8 @@ export default {
       if (distributor_id || IS_DISTRIBUTOR) {
         const res = await this.$api.marketing.getDistributorInfo({ distributor_id })
         const [startTime, endTime] = res.hour.split('-')
+        const [offline_startTime, offline_endTime] = res.offline_aftersales_address.hours ? res.offline_aftersales_address.hours.split('-') : ['' , '']
+        const [area_code, mobile] = res.offline_aftersales_address.mobile ? res.offline_aftersales_address.mobile.split('-') : ['' , '']
         this.baseForm = {
           ...this.baseForm,
           distribution_type: res.distribution_type,
@@ -302,7 +304,23 @@ export default {
           business: res.business,
           is_ziti: res.is_ziti,
           introduce: res.introduce,
-          offline_aftersales_distributor_id: res.offline_aftersales_distributor_id
+          offline_aftersales_distributor_id: res.offline_aftersales_distributor_id,
+          offline_aftersales: res.offline_aftersales === 1,
+          offline_aftersales_other: res.offline_aftersales_other === 1,
+          offline_aftersales_address: {
+            name: res.offline_aftersales_address.name,
+            province: res.offline_aftersales_address.province,
+            city: res.offline_aftersales_address.city,
+            area: res.offline_aftersales_address.area,
+            address: res.offline_aftersales_address.address,
+            regions: res.offline_aftersales_address.regions,
+            regions_id: res.offline_aftersales_address.regions_id,
+            area_code: area_code,
+            mobile: mobile,
+            hours: res.offline_aftersales_address.hours,
+            startTime: offline_startTime,
+            endTime: offline_endTime,
+          }
         }
         await this.remoteMerchantList(res.merchant_name)
         this.baseForm.merchant_id = res.merchant_id
@@ -367,14 +385,14 @@ export default {
       this.submitLoading = true
       const { distributor_id, distributor_type } = this.$route.query
       const aftersales = this.baseForm.offline_aftersales_address
-      const aftersales_regions =  getRegionNameById(aftersales.region_id, district)
+      const aftersales_regions =  getRegionNameById(aftersales.regions_id, district)
       const params = {
         ...this.baseForm,
         regions: getRegionNameById(this.baseForm.regions_id, district),
         hour: `${this.baseForm.startTime}-${this.baseForm.endTime}`,
         offline_aftersales_address: {
           ...aftersales,
-          region: aftersales_regions,
+          regions: aftersales_regions,
           hours: `${aftersales.startTime}-${aftersales.endTime}`,
           province: aftersales_regions[0],
           city: aftersales_regions[1],
