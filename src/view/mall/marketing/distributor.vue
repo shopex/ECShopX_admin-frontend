@@ -29,7 +29,8 @@
         $route.path.indexOf('editor') === -1 &&
         $route.path.indexOf('details') === -1 &&
         $route.path.indexOf('template') === -1 &&
-        $route.path.indexOf('wxpay') === -1
+        $route.path.indexOf('wxpay') === -1 &&
+        $route.path.indexOf('alipay') === -1
       "
     >
       <div v-if="VERSION_STANDARD" class="content-bottom-padded">
