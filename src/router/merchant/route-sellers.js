@@ -26,6 +26,10 @@ export default {
         {
           path: 'wxpaysetting',
           component: () => import('@/view/mall/marketing/distributor_wxpaysetting')
+        },
+        {
+          path: 'alipaysetting',
+          component: () => import('@/view/mall/marketing/distributor_alipaysetting')
         }
       ]
     },
