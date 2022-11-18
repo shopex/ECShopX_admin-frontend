@@ -713,7 +713,7 @@ export default {
             <div class='kf-link'>
               <el-input type='text' placeholder='请输入客服链接' v-model={this.keFuForm.common} />
               <div class='tips'>
-                仅未支付订单可修改价格，改价后请联系买家刷新订单并核实订单金额后再支付。
+                如实际运营中有多个客服人员接待咨询，建议配置为美洽客服组链接，在美洽客服组内添加客服人员坐席。
               </div>
             </div>
           ),
