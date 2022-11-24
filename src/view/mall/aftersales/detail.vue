@@ -69,7 +69,8 @@
       <el-row>
         <el-col :span="3" class="col-3 content-right"> 处理进度: </el-col>
         <el-col :span="20">
-          <span v-if="aftersalesInfo.progress == '0'"> 等待商家处理</span>
+          {{ aftersalesInfo.app_info.progress_msg }}
+          <!-- <span v-if="aftersalesInfo.progress == '0'"> 等待商家处理</span>
           <span v-else-if="aftersalesInfo.progress == '1'">商家接受申请，等待消费者回寄</span>
           <span v-else-if="aftersalesInfo.progress == '2'">消费者回寄，等待商家收货确认</span>
           <span v-else-if="aftersalesInfo.progress == '3'">售后已驳回</span>
@@ -78,7 +79,7 @@
           <span v-else-if="aftersalesInfo.progress == '6'">退款已处理</span>
           <span v-else-if="aftersalesInfo.progress == '7'">售后关闭</span>
           <span v-else-if="aftersalesInfo.progress == '8'">商家确认收货</span>
-          <span v-else-if="aftersalesInfo.progress == '9'">退款处理中</span>
+          <span v-else-if="aftersalesInfo.progress == '9'">退款处理中</span> -->
         </el-col>
       </el-row>
       <el-row v-if="aftersalesInfo.refuse_reason">
@@ -154,7 +155,8 @@
               class="artical-item"
             >
               <el-image
-                style="width: 200px"
+                style="width: 120px; height: 120px"
+                fit="cover"
                 :src="pic"
                 :preview-src-list="aftersalesInfo.evidence_pic"
               />
@@ -649,6 +651,13 @@ img {
   }
   &_content {
   }
+}
+.artical-item {
+  display: inline-block;
+  margin-right: 20px;
+  width: 120px;
+  height: 120px;
+  object-fit: container;
 }
 </style>
 

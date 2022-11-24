@@ -12,7 +12,6 @@
     <div class="tip-item">
       <span class="title">密码：</span>
       <span class="password">{{ password }}</span>
-      <el-button type="primary" @click="$emit('getInfo')">重新获取</el-button>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="copyInfo">复制登录信息</el-button>
