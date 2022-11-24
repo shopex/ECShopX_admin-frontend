@@ -17,7 +17,6 @@
             <el-input
               v-model="content.baseForm.offline_aftersales_address['name']"
               placeholder="请填写退货点名称便于买家理解和管理"
-              :maxlength="10"
             />
           </el-form-item>
 
