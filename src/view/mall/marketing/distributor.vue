@@ -15,6 +15,11 @@
 .sp-filter-form {
   margin-bottom: 16px;
 }
+.tips {
+  font-size: 12px;
+  color: #777;
+  line-height: initial;
+}
 </style>
 
 <template>
@@ -24,7 +29,8 @@
         $route.path.indexOf('editor') === -1 &&
         $route.path.indexOf('details') === -1 &&
         $route.path.indexOf('template') === -1 &&
-        $route.path.indexOf('wxpay') === -1
+        $route.path.indexOf('wxpay') === -1 &&
+        $route.path.indexOf('alipay') === -1
       "
     >
       <div v-if="VERSION_STANDARD" class="content-bottom-padded">
@@ -338,6 +344,7 @@
               <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
             </el-button>
             <el-button type="text" @click="linkWxpaysettting(scope.row)"> 微信支付配置 </el-button>
+            <el-button type="text" @click="linkAlipaysettting(scope.row)"> 支付宝配置 </el-button>
             <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
               银联商务支付配置
             </el-button>
@@ -462,34 +469,6 @@
           </el-radio-group>
         </template>
       </el-dialog>
-      <!-- 添加、编辑标识-开始 -->
-      <el-dialog
-        title="设置美洽参数"
-        width="50%"
-        :visible.sync="setMeiQiaVisible"
-        :before-close="handleMeiQiaCancel"
-      >
-        <template>
-          <el-form ref="meiqia_form" :model="meiqia_form" class="demo-ruleForm" label-width="90px">
-            <el-form-item label="企业ID">
-              <el-col :span="14">
-                <el-input v-model="meiqia_form.meiqia_id" placeholder="企业ID" />
-              </el-col>
-            </el-form-item>
-            <el-form-item label="客服token">
-              <el-col :span="14">
-                <el-input v-model="meiqia_form.meiqia_token" placeholder="toekn" />
-              </el-col>
-            </el-form-item>
-          </el-form>
-        </template>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="handleMeiQiaCancel"> 取消 </el-button>
-          <el-button type="primary" @click="handleSubmitMeiQia"> 保存 </el-button>
-        </div>
-      </el-dialog>
-      <!-- 添加、编辑基础物料-结束 -->
-
       <!-- 编辑距离-开始 -->
       <el-dialog
         title="店铺范围配置"
@@ -558,6 +537,17 @@
         </div>
       </el-dialog>
       <!-- 银联商务支付配置-结束 -->
+
+      <!-- 添加分组 -->
+      <SpDialog
+        ref="kfRef"
+        v-model="keFuDialog"
+        title="设置客服"
+        :modal="false"
+        :form="keFuForm"
+        :form-list="keFuFormList"
+        @onSubmit="onKeFuFormSubmit"
+      />
     </template>
     <router-view />
   </div>
@@ -603,6 +593,19 @@ export default {
       is_valid: undefined,
       distributor_id: undefined,
       tag_id: []
+    }
+
+    const validateLink = (rule, value, callback) => {
+      const { channel, wxapp, h5, app, aliapp, pc } = this.keFuForm
+      if (channel == 'multi') {
+        if (wxapp || h5 || app || aliapp || pc) {
+          callback()
+        } else {
+          callback(new Error('至少一项不能为空'))
+        }
+      } else {
+        callback()
+      }
     }
     return {
       initialParams,
@@ -681,7 +684,97 @@ export default {
         tid: '',
         enterpriseid: ''
       },
-      isOpen: false
+      isOpen: false,
+      keFuDialog: false,
+      keFuForm: {
+        distributor_id: '',
+        channel: 'single', // single、multi
+        common: '',
+        wxapp: '',
+        h5: '',
+        app: '',
+        aliapp: '',
+        pc: ''
+      },
+      keFuFormList: [
+        {
+          label: '店铺客服:',
+          key: 'channel',
+          type: 'radio',
+          options: [
+            { label: 'single', name: '按店铺配置' },
+            { label: 'multi', name: '按店铺和渠道配置' }
+          ]
+        },
+        {
+          label: '客服链接',
+          key: 'common',
+          component: () => (
+            <div class='kf-link'>
+              <el-input type='text' placeholder='请输入客服链接' v-model={this.keFuForm.common} />
+              <div class='tips'>
+                如实际运营中有多个客服人员接待咨询，建议配置为美洽客服组链接，在美洽客服组内添加客服人员坐席。
+              </div>
+            </div>
+          ),
+          validator: (rule, value, callback) => {
+            const { channel, common } = this.keFuForm
+            if (channel == 'single' && !common) {
+              callback(new Error('客服链接不能为空'))
+            } else {
+              callback()
+            }
+          },
+          isShow: () => {
+            return this.keFuForm.channel == 'single'
+          }
+        },
+        {
+          label: '微信小程序',
+          key: 'wxapp',
+          type: 'input',
+          validator: validateLink,
+          isShow: () => {
+            return this.keFuForm.channel == 'multi'
+          }
+        },
+        {
+          label: 'H5商城',
+          key: 'h5',
+          type: 'input',
+          validator: validateLink,
+          isShow: () => {
+            return this.keFuForm.channel == 'multi'
+          }
+        },
+        {
+          label: 'APP商城',
+          key: 'app',
+          type: 'input',
+          validator: validateLink,
+          isShow: () => {
+            return this.keFuForm.channel == 'multi'
+          }
+        },
+        {
+          label: '支付宝小程序',
+          key: 'aliapp',
+          type: 'input',
+          validator: validateLink,
+          isShow: () => {
+            return this.keFuForm.channel == 'multi'
+          }
+        },
+        {
+          label: 'PC网页版',
+          key: 'pc',
+          type: 'input',
+          validator: validateLink,
+          isShow: () => {
+            return this.keFuForm.channel == 'multi'
+          }
+        }
+      ]
     }
   },
   computed: {
@@ -761,6 +854,13 @@ export default {
       const { distributor_id, name } = distributor
       this.$router.push({
         path: this.matchHidePage('wxpaysetting'),
+        query: { distributor_id, name }
+      })
+    },
+    linkAlipaysettting(distributor) {
+      const { distributor_id, name } = distributor
+      this.$router.push({
+        path: this.matchHidePage('alipaysetting'),
         query: { distributor_id, name }
       })
     },
@@ -1040,37 +1140,39 @@ export default {
           })
         })
     },
-    showSettingMeiQia(distributor_id) {
-      // 设置美洽参数
-      this.setMeiQiaVisible = true
-      let that = this
-      getDistributorMeiQia(distributor_id).then((response) => {
-        that.meiqia_form.meiqia_id = response.data.data.meiqia_id
-        that.meiqia_form.meiqia_token = response.data.data.meiqia_token
-      })
-      that.meiqia_form.distributor_id = distributor_id
-      console.log(this.meiqia_form)
-    },
-    handleMeiQiaCancel() {
-      // 美洽设置窗口关闭
-      this.setMeiQiaVisible = false
-      this.meiqia_form.distributor_id = ''
-      this.meiqia_form.meiqia_id = ''
-      this.meiqia_form.meiqia_token = ''
-    },
-    handleSubmitMeiQia() {
-      // 提交美洽配置
-      let params = {
-        meiqia_id: this.meiqia_form.meiqia_id,
-        meiqia_token: this.meiqia_form.meiqia_token
+    async showSettingMeiQia(distributor_id) {
+      this.keFuForm.distributor_id = distributor_id
+      this.keFuDialog = true
+      const {
+        channel,
+        meiqia_url: { aliapp, app, common, h5, pc, wxapp }
+      } = await this.$api.im.getDistributorMeiQia(distributor_id)
+
+      this.keFuForm = {
+        ...this.keFuForm,
+        channel,
+        common,
+        wxapp,
+        h5,
+        app,
+        aliapp,
+        pc
       }
-      setDistributorMeiQia(this.meiqia_form.distributor_id, params).then((response) => {
-        this.$message({
-          type: 'success',
-          message: '已提交'
-        })
-        this.handleMeiQiaCancel()
-      })
+    },
+    async onKeFuFormSubmit() {
+      const { channel, common, wxapp, h5, app, aliapp, pc } = this.keFuForm
+      const params = {
+        channel,
+        common,
+        wxapp,
+        h5,
+        app,
+        aliapp,
+        pc
+      }
+      await this.$api.im.setDistributorMeiQia(this.keFuForm.distributor_id, params)
+      this.keFuDialog = false
+      this.$message.success('保存成功')
     },
     showSettingDistance() {
       // 设置距离参数

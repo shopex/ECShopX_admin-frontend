@@ -1,15 +1,8 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('detail') === -1">
-      <SpFilterForm
-        :model="params"
-        @onSearch="onSearch"
-        @onReset="onReset"
-      >
-        <SpFilterFormItem
-          prop="create_time"
-          label="日期范围:"
-        >
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
+        <SpFilterFormItem prop="create_time" label="日期范围:">
           <el-date-picker
             v-model="params.create_time"
             type="daterange"
@@ -19,33 +12,14 @@
             @change="dateChange"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem
-          prop="item_id"
-          label="商品ID:"
-        >
-          <el-input
-            v-model="params.item_id"
-            placeholder="请输入商品ID"
-          />
+        <SpFilterFormItem prop="item_id" label="商品ID:">
+          <el-input v-model="params.item_id" placeholder="请输入商品ID" />
         </SpFilterFormItem>
-        <SpFilterFormItem
-          prop="order_id"
-          label="订单号:"
-        >
-          <el-input
-            v-model="params.order_id"
-            placeholder="请输入订单号"
-          />
+        <SpFilterFormItem prop="order_id" label="订单号:">
+          <el-input v-model="params.order_id" placeholder="请输入订单号" />
         </SpFilterFormItem>
-        <SpFilterFormItem
-          prop="rate_status"
-          label="是否评价:"
-        >
-          <el-select
-            v-model="params.rate_status"
-            clearable
-            placeholder="请选择是否评价"
-          >
+        <SpFilterFormItem prop="rate_status" label="是否评价:">
+          <el-select v-model="params.rate_status" clearable placeholder="请选择是否评价">
             <el-option
               v-for="(item, index) in rateStatusList"
               :key="index"
@@ -64,26 +38,12 @@
         :height="wheight - 140"
         element-loading-text="数据加载中"
       >
-        <el-table-column
-          prop="star"
-          min-width="250"
-          label="评价"
-        >
+        <el-table-column prop="star" min-width="250" label="评价">
           <template slot-scope="scope">
-            <el-rate
-              v-model="scope.row.star"
-              disabled
-            />
-            <div
-              class="order-time"
-              style="padding: 8px 0 2px 0"
-            >
+            <el-rate v-model="scope.row.star" disabled />
+            <div class="order-time" style="padding: 8px 0 2px 0">
               <span class="content-right-margin">
-                <el-tooltip
-                  effect="dark"
-                  content="评价人"
-                  placement="top-start"
-                >
+                <el-tooltip effect="dark" content="评价人" placement="top-start">
                   <i class="el-icon-user" />
                 </el-tooltip>
                 <router-link
@@ -92,41 +52,27 @@
                     path: matchInternalRoute('member_detail'),
                     query: { user_id: scope.row.user_id }
                   }"
-                >{{ scope.row.username }}</router-link>
+                  >{{ scope.row.username }}</router-link
+                >
               </span>
-              <el-tooltip
-                effect="dark"
-                content="评价时间"
-                placement="top-start"
-              >
+              <el-tooltip effect="dark" content="评价时间" placement="top-start">
                 <i class="el-icon-time" />
               </el-tooltip>
               {{ scope.row.created | datetime('YYYY-MM-DD HH:mm:ss') }}
             </div>
             <div class="view-flex">
               <div class="order-time">
-                <el-tooltip
-                  effect="dark"
-                  content="评价内容"
-                  placement="top-start"
-                >
+                <el-tooltip effect="dark" content="评价内容" placement="top-start">
                   <i class="el-icon-chat-line-square" />
                 </el-tooltip>
               </div>
-              <div
-                class="view-flex-item"
-                style="padding-left: 4px"
-              >
+              <div class="view-flex-item" style="padding-left: 4px">
                 {{ scope.row.content }}
               </div>
             </div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="order_id"
-          width="220"
-          label="订单"
-        >
+        <el-table-column prop="order_id" width="220" label="订单">
           <template slot-scope="scope">
             <div class="order-num">
               <router-link
@@ -138,11 +84,7 @@
               >
                 {{ scope.row.order_id }}
               </router-link>
-              <el-tooltip
-                effect="dark"
-                content="复制"
-                placement="top-start"
-              >
+              <el-tooltip effect="dark" content="复制" placement="top-start">
                 <i
                   v-clipboard:copy="scope.row.order_id"
                   v-clipboard:success="onCopy"
@@ -150,59 +92,27 @@
                 />
               </el-tooltip>
             </div>
-            <div class="order-time">
-              商品：{{ scope.row.item_name }}
-            </div>
+            <div class="order-time">商品：{{ scope.row.item_name }}</div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="is_reply"
-          width="160"
-          label="评价状态"
-        >
+        <el-table-column prop="is_reply" width="160" label="评价状态">
           <template slot-scope="scope">
             <!-- 订单状态 -->
             <span>
-              <el-tag
-                v-if="scope.row.is_reply"
-                type="success"
-                size="mini"
-              >已回复</el-tag>
-              <el-tag
-                v-else
-                type="danger"
-                size="mini"
-              >未回复</el-tag>
+              <el-tag v-if="scope.row.is_reply == '1'" type="success" size="mini">已回复</el-tag>
+              <el-tag v-else type="danger" size="mini">未回复</el-tag>
             </span>
-            <el-tag
-              v-if="scope.row.disabled"
-              type="danger"
-              size="mini"
-            >
-              已删除
-            </el-tag>
+            <el-tag v-if="scope.row.disabled == '1'" type="danger" size="mini"> 已删除 </el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          width="140"
-          label="操作"
-        >
+        <el-table-column width="140" label="操作">
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              @click="detailsDialog(scope.row)"
-            >
-              详情
-            </el-button>
-            <el-button
-              v-if="!scope.row.is_reply"
-              type="text"
-              @click="replyDialog(scope.row)"
-            >
+            <el-button type="text" @click="detailsDialog(scope.row)"> 详情 </el-button>
+            <el-button v-if="scope.row.is_reply == '0'" type="text" @click="replyDialog(scope.row)">
               回复
             </el-button>
             <el-button
-              v-if="!scope.row.disabled"
+              v-if="scope.row.disabled == '0'"
               type="text"
               @click="rateDelete(scope.row.rate_id)"
             >
@@ -229,21 +139,10 @@
         width="35%"
         :before-close="handleClose"
       >
-        <el-input
-          v-model="form.content"
-          type="textarea"
-          :rows="3"
-          placeholder="请输入内容"
-        />
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+        <el-input v-model="form.content" type="textarea" :rows="3" placeholder="请输入内容" />
+        <span slot="footer" class="dialog-footer">
           <el-button @click="replyDialogVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="replySubmit"
-          >确 定</el-button>
+          <el-button type="primary" @click="replySubmit">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -253,15 +152,8 @@
         :visible.sync="detailsDialogVisible"
         :before-close="handleClose"
       >
-        <el-dialog
-          width="45%"
-          :visible.sync="imgVisible"
-          append-to-body
-        >
-          <img
-            width="100%"
-            :src="Dialogpic"
-          >
+        <el-dialog width="45%" :visible.sync="imgVisible" append-to-body>
+          <img width="100%" :src="Dialogpic">
         </el-dialog>
         <div class="section-white">
           <div class="section-header with-border">
@@ -269,28 +161,13 @@
           </div>
           <div class="section-body">
             <el-row>
-              <el-table
-                :data="details.itemInfo"
-                style="width: 100%"
-              >
-                <el-table-column
-                  class="goods-img"
-                  prop="pic"
-                  label="商品图片"
-                >
+              <el-table :data="details.itemInfo" style="width: 100%">
+                <el-table-column class="goods-img" prop="pic" label="商品图片">
                   <template slot-scope="scope">
-                    <img
-                      :src="scope.row.pics[0]"
-                      :alt="scope.row.item_name"
-                      width="100"
-                    >
+                    <img :src="scope.row.pics[0]" :alt="scope.row.item_name" width="100">
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="item_name"
-                  label="商品名称"
-                  width="180"
-                />
+                <el-table-column prop="item_name" label="商品名称" width="180" />
                 <el-table-column label="成交价格(元)">
                   <template slot-scope="scope">
                     <span>￥{{ scope.row.total_fee / 100 }}</span>
@@ -304,41 +181,20 @@
           </div>
           <div class="section-body">
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                评价星级：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 评价星级： </el-col>
               <el-col :span="20">
-                <el-rate
-                  v-model="details.rateInfo.star"
-                  disabled
-                />
+                <el-rate v-model="details.rateInfo.star" disabled />
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                评价内容：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 评价内容： </el-col>
               <el-col :span="20">
                 {{ details.rateInfo.content }}
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                评价图：
-              </el-col>
-              <el-col
-                v-if="details.rateInfo.rate_pic"
-                :span="20"
-              >
+              <el-col :span="4" class="col-3 content-right"> 评价图： </el-col>
+              <el-col v-if="details.rateInfo.rate_pic" :span="20">
                 <img
                   v-for="pic in details.rateInfo.rate_pic"
                   :src="pic"
@@ -348,12 +204,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                评价人：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 评价人： </el-col>
               <el-col :span="20">
                 <router-link
                   target="_blank"
@@ -367,55 +218,27 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                评价时间：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 评价时间： </el-col>
               <el-col :span="20">
                 {{ details.rateInfo.created | datetime('YYYY-MM-DD HH:mm:ss') }}
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                是否回复：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 是否回复： </el-col>
               <el-col :span="20">
-                <el-tag
-                  v-if="details.rateInfo.is_reply"
-                  type="success"
-                  size="mini"
-                >
+                <el-tag v-if="details.rateInfo.is_reply" type="success" size="mini">
                   已回复
                 </el-tag>
-                <el-tag
-                  v-else
-                  type="danger"
-                  size="mini"
-                >
-                  未回复
-                </el-tag>
+                <el-tag v-else type="danger" size="mini"> 未回复 </el-tag>
               </el-col>
             </el-row>
           </div>
           <div class="section-header with-border">
             <h3>管理员回复信息</h3>
           </div>
-          <div
-            v-if="details.replyInfo"
-            class="section-body"
-          >
+          <div v-if="details.replyInfo" class="section-body">
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                回复内容：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 回复内容： </el-col>
               <el-col :span="20">
                 <el-tag type="success">
                   {{ details.replyInfo.content }}
@@ -423,23 +246,13 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                回复人：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 回复人： </el-col>
               <el-col :span="20">
                 {{ details.replyInfo.operator_name }}
               </el-col>
             </el-row>
             <el-row>
-              <el-col
-                :span="4"
-                class="col-3 content-right"
-              >
-                回复时间：
-              </el-col>
+              <el-col :span="4" class="col-3 content-right"> 回复时间： </el-col>
               <el-col :span="20">
                 {{ details.replyInfo.created | datetime('YYYY-MM-DD HH:mm:ss') }}
               </el-col>
@@ -450,15 +263,8 @@
           </div>
           <div class="section-body">
             <el-row>
-              <el-table
-                :data="details.userReply"
-                style="width: 100%"
-              >
-                <el-table-column
-                  prop="username"
-                  label="评论人"
-                  width="120"
-                >
+              <el-table :data="details.userReply" style="width: 100%">
+                <el-table-column prop="username" label="评论人" width="120">
                   <template slot-scope="scope">
                     <router-link
                       target="_blank"
@@ -471,15 +277,8 @@
                     </router-link>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="content"
-                  label="评论内容"
-                />
-                <el-table-column
-                  prop="created"
-                  label="评论时间"
-                  width="160"
-                >
+                <el-table-column prop="content" label="评论内容" />
+                <el-table-column prop="created" label="评论时间" width="160">
                   <template slot-scope="scope">
                     <span>{{ scope.row.created | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
                   </template>
@@ -513,7 +312,7 @@ import {
 import { pageMixin } from '@/mixins'
 export default {
   mixins: [pageMixin],
-  data () {
+  data() {
     return {
       loading: false,
       create_time: '',
@@ -554,11 +353,11 @@ export default {
   computed: {
     ...mapGetters(['wheight'])
   },
-  mounted () {
+  mounted() {
     this.fetchList()
   },
   methods: {
-    onCopy () {
+    onCopy() {
       this.$notify({
         message: '复制成功',
         type: 'success'
@@ -590,7 +389,7 @@ export default {
     //     console.log(res)
     //   })
     // },
-    rateDelete (id) {
+    rateDelete(id) {
       const _self = this
       this.$confirm('确认删除当前评价吗？').then((_) => {
         deleteRate(id).then((res) => {
@@ -604,19 +403,19 @@ export default {
         })
       })
     },
-    showImg (pic) {
+    showImg(pic) {
       this.imgVisible = true
       this.Dialogpic = pic
     },
-    handleClose () {
+    handleClose() {
       this.replyDialogVisible = false
       this.detailsDialogVisible = false
     },
-    replyDialog (row) {
+    replyDialog(row) {
       this.form.rate_id = row.rate_id
       this.replyDialogVisible = true
     },
-    replySubmit () {
+    replySubmit() {
       replyTradeRate(this.form).then((res) => {
         this.$message({
           type: 'success',
@@ -626,19 +425,19 @@ export default {
         this.fetchList()
       })
     },
-    detailsDialog (row) {
+    detailsDialog(row) {
       getTradeRateDetails(row.rate_id).then((res) => {
         this.details = res.data.data
         console.log(this.details)
       })
       this.detailsDialogVisible = true
     },
-    onReset () {
+    onReset() {
       this.dateChange()
       this.onSearch()
     },
 
-    dateChange (val) {
+    dateChange(val) {
       console.log(val)
       if (!val) {
         this.params.time_start_begin = ''
@@ -660,10 +459,10 @@ export default {
     //   this.params.item_id = this.item_id
     //   this.params.order_id = this.order_id
     // },
-    dateStrToTimeStamp (str) {
+    dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
     },
-    fetchList () {
+    fetchList() {
       this.loading = true
       const { pageIndex: page, pageSize } = this.page
       let params = {

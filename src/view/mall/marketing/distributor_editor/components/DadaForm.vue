@@ -77,6 +77,7 @@ export default {
       }, [])
       console.log('typeList', this.typeList)
       this.show = is_open === '1'
+      this.$emit('onChange', this.show)
     },
     validate() {
       return new Promise((resolve, reject) => {

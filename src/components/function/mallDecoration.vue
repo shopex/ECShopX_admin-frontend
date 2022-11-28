@@ -296,7 +296,7 @@
         <template v-if="editorIndex == -1">
           <TemplatePageEditor v-model="pageData" />
         </template>
-        <template v-else>
+        <template v-if="editorIndex != -1 && editorIndex != null">
           <!-- {{editorData}} -->
 
           <nearbyShopEditor :res="editorData" @tagSelectVisibleHandle="tagSelectVisibleHandle" />
@@ -1033,7 +1033,6 @@ export default {
       }
     },
     pickImg(data) {
-      // debugger
       console.log(this.isSouponPackage)
       if (this.components[this.editorIndex].name === 'imgHotzone') {
         this.components[this.editorIndex].config.imgUrl = data.url
@@ -1113,7 +1112,6 @@ export default {
 
     pickGoods(data, store) {
       // console.log(data)
-      // debugger
 
       // 如果是平台版本推荐店铺组件且店铺为总店（店铺id 0）
       if (this.editorData.name === 'store' && this.VERSION_PLATFORM && Number(store.id) === 0) {
@@ -1155,17 +1153,19 @@ export default {
 
       if (data.length > 0) {
         data.forEach((item) => {
-          let obj = {
-            imgUrl: item.pics[0],
-            title: item.itemName,
-            goodsId: item.itemId,
-            brand: item.brand_logo,
-            price: item.price,
-            distributor_id: item.distributor_id,
-            itemEnName: item.item_en_name,
-            promotionActivity: item.promotion_activity
+          if (item.itemId) {
+            let obj = {
+              imgUrl: item.pics[0],
+              title: item.itemName,
+              goodsId: item.itemId,
+              brand: item.brand_logo,
+              price: item.price,
+              distributor_id: item.distributor_id,
+              itemEnName: item.item_en_name,
+              promotionActivity: item.promotion_activity
+            }
+            values.push(obj)
           }
-          values.push(obj)
         })
       }
       if (!this.editorDataIndex && this.editorDataIndex !== 0) {

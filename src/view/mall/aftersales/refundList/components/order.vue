@@ -66,9 +66,7 @@
 
     <div class="action-container">
       <export-tip @exportHandle="exportData">
-        <el-button type="primary" plain>
-导出
-</el-button>
+        <el-button type="primary" plain> 导出 </el-button>
       </export-tip>
     </div>
 
@@ -224,9 +222,7 @@
         <!-- 退款方式 -->
         <el-table-column prop="refund_channel" width="80" label="退款方式">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.refund_channel == 'offline'" size="mini">
-线下退款
-</el-tag>
+            <el-tag v-if="scope.row.refund_channel == 'offline'" size="mini"> 线下退款 </el-tag>
             <el-tag v-if="scope.row.refund_channel == 'original'" type="success" size="mini">
               原路返回
             </el-tag>
@@ -331,7 +327,7 @@ import { exportRefundList } from '@/api/aftersales'
 import mixin, { pageMixin } from '@/mixins'
 export default {
   mixins: [mixin, pageMixin],
-  data () {
+  data() {
     const initialParams = {
       distributor: {
         id: undefined,
@@ -379,7 +375,7 @@ export default {
     ...mapGetters(['wheight'])
   },
   watch: {
-    $route (to, from) {},
+    $route(to, from) {},
     'params.distributor': {
       handler: function (val) {
         if (!val.name && val.id) {
@@ -392,16 +388,16 @@ export default {
       deep: true
     }
   },
-  mounted () {
+  mounted() {
     //获取店铺
     this.getDistributorList()
     this.fetchList()
   },
   methods: {
-    handleSelectStore (storeItem) {
+    handleSelectStore(storeItem) {
       this.params.distributor.id = storeItem.distributor_id
     },
-    dateTransfer (val) {
+    dateTransfer(val) {
       let time_start_begin = undefined
       let time_start_end = undefined
       if (val.length > 0) {
@@ -413,7 +409,10 @@ export default {
         time_start_end
       }
     },
-    getParams () {
+    dateStrToTimeStamp(str) {
+      return Date.parse(new Date(str)) / 1000
+    },
+    getParams() {
       let params = {
         distributor_id: this.params.distributor.id || undefined,
         ...this.dateTransfer(this.params.create_time),
@@ -426,13 +425,13 @@ export default {
       }
       return params
     },
-    onSearch () {
+    onSearch() {
       this.page.pageIndex = 1
       this.$nextTick(() => {
         this.fetchList()
       })
     },
-    onReset () {
+    onReset() {
       this.params = { ...this.initialParams }
       this.params = {
         ...this.params,
@@ -443,7 +442,7 @@ export default {
       }
       this.onSearch()
     },
-    async fetchList () {
+    async fetchList() {
       this.loading = true
       const { pageIndex: page, pageSize } = this.page
       let params = {
@@ -456,18 +455,18 @@ export default {
       this.page.total = total_count
       this.loading = false
     },
-    createFilter (queryString) {
+    createFilter(queryString) {
       return (restaurant) => {
         return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
       }
     },
-    queryStoreSearch (queryString, cb) {
+    queryStoreSearch(queryString, cb) {
       var restaurants = this.shopList
       var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
       // 调用 callback 返回建议列表的数据
       cb(results)
     },
-    async exportData () {
+    async exportData() {
       const { status, url, filename } = await exportRefundList({
         ...this.getParams()
       })
@@ -489,7 +488,7 @@ export default {
         })
       }
     },
-    async getDistributorList () {
+    async getDistributorList() {
       var params = { page: 1, pageSize: 500 }
       const { list } = await this.$api.marketing.getDistributorList(params)
       if (list) {

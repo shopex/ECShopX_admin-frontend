@@ -45,6 +45,15 @@ export const IS_DISTRIBUTOR = (() => {
   return login_type == 'distributor'
 })()
 
+// 平台端、店铺端、经销商端路由跳转封装
+export const getUrlPathByLoginType = (path) => {
+  if (IS_ADMIN) {
+    return path
+  } else if (IS_DISTRIBUTOR) {
+    return `/shopadmin${path}`
+  }
+}
+
 export function isInSalesCenter() {
   if (window.self != window.top && window.self.location.href.indexOf('iframeLogin') < 0) {
     return true
@@ -193,7 +202,7 @@ export function getRegionNameById(region, district) {
       }
     }
   }
-  if (region.length > 0) {
+  if (Array.isArray(region) && region.length > 0) {
     getRegionName(district, 0)
   }
   return result

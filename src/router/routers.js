@@ -42,6 +42,7 @@ import Marketingdistributor_editor from '@/view/mall/marketing/distributor_edito
 import Marketingdistributor_template from '@/view/mall/marketing/distributor_template' // 店铺编辑Marketing
 import Marketingdistribution_orders from '@/view/mall/marketing/distributionOrders' // 店铺订单
 import Marketingdistributor_wxpaysetting from '@/view/mall/marketing/distributor_wxpaysetting' // 店铺微信支付配置
+import Marketingdistributor_alipaysetting from '@/view/mall/marketing/distributor_alipaysetting' // 店铺支付宝配置
 import Distributortags from '@/view/mall/marketing/distributortags' // 商品标签
 import Distributorrel_items from '@/view/mall/marketing/distributorRelItems' // 店铺关联商品
 // import Distributoraftersalesaddress from '@/view/mall/marketing/distributorAftersalesAddress' //店铺售后地址
@@ -450,6 +451,7 @@ export default {
   Marketingdistribution_orders,
   Marketingdistribution_orders_detail,
   Marketingdistributor_wxpaysetting,
+  Marketingdistributor_alipaysetting,
   Distributortags,
   Distributorrel_items,
   Distributoraftersalesaddress,
