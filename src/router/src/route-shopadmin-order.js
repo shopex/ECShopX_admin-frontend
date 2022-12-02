@@ -74,22 +74,6 @@ export default {
       component: () => import('@/view/mall/trade/logistics/normal')
     },
     {
-      path: 'adapay_trades',
-      name: '分账',
-      component: () => import('@/view/mall/sub_account/sub_account'),
-      children: [
-        {
-          path: 'detail/:order_id',
-          component: () => import('@/view/mall/sub_account/detail')
-        }
-      ]
-    },
-    {
-      path: 'adapay_cash',
-      name: '提现',
-      component: () => import('@/view/mall/withdraw/withdraw')
-    },
-    {
       path: 'subdistrict',
       name: '街道社区配置',
       component: () => import('@/view/mall/subdistrict/list')
