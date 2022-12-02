@@ -8,6 +8,7 @@
 
 <template>
   <div>
+    <SpPlatformTip h5 app aliapp />
     <SpForm
       ref="form"
       v-model="form"
@@ -49,6 +50,7 @@ export default {
 
     return {
       form: {
+        is_open: false,
         channel: 'single', // single、multi
         common: '',
         wxapp: '',
@@ -60,6 +62,15 @@ export default {
       },
       formList: [
         {
+          label: '美洽客服',
+          type: 'group'
+        },
+        {
+          label: '美洽客服',
+          key: 'is_open',
+          type: 'switch'
+        },
+        {
           label: '平台客服',
           type: 'group'
         },
@@ -68,7 +79,7 @@ export default {
           key: 'channel',
           type: 'radio',
           options: [
-            { label: 'single', name: '按店铺配置' },
+            { label: 'single', name: '统一配置' },
             { label: 'multi', name: '按渠道配置' }
           ]
         },
@@ -146,9 +157,11 @@ export default {
   },
   methods: {
     async fetch() {
-      const { channel, is_distributor_open, meiqia_url } = await this.$api.im.getMeiqiaInfo()
+      const { channel, is_distributor_open, meiqia_url, is_open } =
+        await this.$api.im.getMeiqiaInfo()
       const { common, wxapp, h5, app, aliapp, pc } = meiqia_url
       this.form = {
+        is_open,
         channel,
         common,
         wxapp,
