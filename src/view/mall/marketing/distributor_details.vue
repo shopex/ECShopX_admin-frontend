@@ -398,7 +398,7 @@ export default {
   },
   mounted () {
     if (this.$route.query.distributor_id || this.$store.getters.login_type === 'distributor') {
-      this.distributor_id = this.$route.query.distributor_id
+      this.distributor_id = this.$route.query.distributor_id ? this.$route.query.distributor_id : 0
       this.loginType = this.$store.getters.login_type
       if (this.$store.getters.login_type === 'distributor' || this.is_openAccount) {
         this.activeName = 'second'
