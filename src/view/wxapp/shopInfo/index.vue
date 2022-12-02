@@ -1,6 +1,6 @@
-/* eslint-disable */
 <template>
-  <el-card shadow="never" header="基本信息">
+  <div>
+    <SpPlatformTip h5 app alipay />
     <el-form ref="form" :model="form" label-position="left" label-width="100px">
       <div class="section-body">
         <el-form-item label="商城名称">
@@ -35,7 +35,7 @@
         <el-button v-loading="loading" type="primary" @click="onSubmit"> 保存 </el-button>
       </div>
     </el-form>
-  </el-card>
+  </div>
 </template>
 
 <script>

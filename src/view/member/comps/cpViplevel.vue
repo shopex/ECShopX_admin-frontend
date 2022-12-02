@@ -3,29 +3,15 @@
     <template v-for="(item, index) in levelData">
       <div :key="index" class="level-item">
         <div class="section-header with-border clearfix">
-          <h3 class="f_l">
-            <span v-if="index == 0">第一等级（最低等级）</span
-            ><span v-else>第{{ index | numberToCharacter }}等级</span>
-          </h3>
+          <h3 class="f_l"><span v-if="item.lv_type == 'vip'">VIP</span><span v-else>SVIP</span></h3>
           <span
-            v-if="!item.default_grade && item.member_count == 0 && levelData.length - 1 == index"
+            v-if="index != 0 && levelData.length - 1 == index"
             class="el-icon-close f_r"
             @click="remove(index)"
           />
         </div>
         <div class="item-box clearfix">
-          <div class="preview-box f_l">
-            <!-- <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-change="previewImgChange"
-              :auto-upload="false"
-              :class="{'disabled': item.member_count > 0, noborder: item.background_pic_url != ''}">
-              <img v-if="item.background_pic_url" :src="wximageurl + item.background_pic_url" class="avatar">
-              <i v-else class="iconfont icon-upload avatar-uploader-icon"></i>
-            </el-upload> -->
-
+          <div class="preview-box f_l" @click="getIndex(index)">
             <div>
               <div class="upload-box" @click="handleImgChange(item, index)">
                 <HoverDelete v-if="item.background_pic_url" @delete="handleImgDelete(index)">
@@ -44,27 +30,27 @@
           </div>
           <div class="item-content f_l">
             <div>
-              <span class="txt">等级名称</span
-              ><el-input
+              <span class="txt">等级名称</span>
+              <el-input
                 v-model="item.grade_name"
+                style="width: 380px"
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
+              <el-input v-model="item.lv_type" type="hidden" :name="index + ''" />
             </div>
             <div class="clearfix">
-              <span class="txt f_l">升级条件</span>
-              <span v-if="item.default_grade" class="txt-none">无</span>
-              <template v-else>
+              <span class="txt f_l">购买金额</span>
+              <template>
                 <div class="f_l">
                   <template>
-                    <div style="margin-bottom: 5px">
-                      累积消费金额&nbsp;<el-input
-                        v-model="item.promotion_condition.total_consumption"
+                    <div v-for="(list, i) in item.price_list" :key="i" style="margin-bottom: 5px">
+                      {{ list.desc }}&nbsp;<el-input
+                        v-model="list.price"
                         style="width: 80px"
                         :name="index + ''"
-                        @blur="promotionConditionsBlur"
                       />&nbsp;元
                     </div>
                   </template>
@@ -75,10 +61,9 @@
               <span class="txt f_l">会员折扣</span>
               <div class="f_l">
                 <template>
-                  <div style="margin-bottom: 5px">
-                    <!-- <el-checkbox v-model="item.discount_checked">会员折扣</el-checkbox>&nbsp;  --><el-input
+                  <div>
+                    <el-input
                       v-model="item.privileges.discount"
-                      style="width: 80px"
                       :name="index + ''"
                       @blur="discountBlur"
                     />&nbsp;折
@@ -86,23 +71,7 @@
                 </template>
               </div>
             </div>
-            <div class="clearfix">
-              <span class="txt f_l">等级说明</span>
-              <div class="f_l">
-                <template>
-                  <div style="margin-bottom: 5px">
-                    <el-input
-                      v-model="item.description"
-                      type="textarea"
-                      style="width: 400px"
-                      :rows="3"
-                      placeholder="请输入等级说明"
-                    />
-                  </div>
-                </template>
-              </div>
-            </div>
-            <!-- ----------------------------------------------卷包功能-------------------------------------------- -->
+            <!------------------------------------- 卷包功能 -------------------------------------->
             <div class="clearfix">
               <div class="f_l">
                 <template>
@@ -129,16 +98,51 @@
                 </template>
               </div>
             </div>
-            <!-- ----------------------------------------------卷包功能-------------------------------------------- -->
+            <!------------------------------------- 卷包功能 -------------------------------------->
 
-            <div v-if="item.crm_open == 'true'" class="clearfix">
-              <span class="txt f_l">等级ID</span>
+            <div class="clearfix">
+              <span class="txt f_l">购买引导文本</span>
               <div class="f_l">
-                <template>
-                  <div style="margin-bottom: 5px">
-                    <el-input v-model="item.third_data" style="width: 150px" :name="index + ''" />
-                  </div>
-                </template>
+                <el-input
+                  v-model="item.guide_title"
+                  style="width: 380px"
+                  type="textarea"
+                  :rows="3"
+                  placeholder="请输入内容"
+                  :name="index + ''"
+                />&nbsp;<span class="frm-tips">30</span>
+              </div>
+            </div>
+            <div class="clearfix">
+              <span class="txt f_l">详细说明</span>
+              <div class="f_l">
+                <el-input
+                  v-model="item.description"
+                  style="width: 380px"
+                  type="textarea"
+                  :rows="5"
+                  placeholder="请输入内容"
+                  :name="index + ''"
+                />
+              </div>
+            </div>
+            <div class="clearfix">
+              <span class="txt f_l">默认展示</span>
+              <div class="f_l">
+                <el-radio
+                  v-model="IsDefault"
+                  style="width: 380px"
+                  :label="item.lv_type"
+                  @change="radioChange"
+                >
+                  {{ item.grade_name }}
+                </el-radio>
+              </div>
+            </div>
+            <div class="clearfix">
+              <span class="txt f_l">是否禁用</span>
+              <div class="f_l">
+                <el-switch v-model="item.is_disabled" />
               </div>
             </div>
           </div>
@@ -155,18 +159,18 @@
         :seleted-coupon-package="levelData"
         :visible="visible"
         :is-model="true"
-        :type="'grade'"
+        :type="'vip_grade'"
+        @oldDataHandle="getListVipGrade"
         @openHandle="pickHanle"
         @closeHandle="closeHandle"
         @seletedDataHandle="seletedDataHandle"
-        @oldDataHandle="getGradeList"
       />
     </template>
   </div>
 </template>
 <script>
 import { pushNewsImage } from '../../../api/wechat'
-import { getGradeList, updateGrade } from '@/api/membercard'
+import { saveVipGrade, listVipGrade } from '../../../api/cardticket'
 import imgPicker from '../../../components/imageselect'
 import couponSelect from '@/components/couponPackageSelect'
 // import model from './cpn/model.vue'
@@ -182,52 +186,53 @@ export default {
           return '二'
         case 2:
           return '三'
-        case 3:
-          return '四'
-        case 4:
-          return '五'
-        case 5:
-          return '六'
-        case 6:
-          return '七'
-        case 7:
-          return '八'
+        // case 3:
+        //   return '四'
+        // case 4:
+        //   return '五'
+        // case 5:
+        //   return '六'
+        // case 6:
+        //   return '七'
+        // case 7:
+        //   return '八'
       }
     }
   },
   data() {
     return {
-      gradeId: 1,
-      params: {},
       visible: false,
       packageId: '',
+      gradeId: 1,
+      params: {},
+      modelInfo: '',
+      modelVisible: false,
       curIndex: -1,
       levelData: [
         {
-          grade_id: '',
+          vip_grade_id: '',
+          is_default: false,
+          guide_title: '',
           grade_name: '',
           background_pic_url: '',
-          promotion_condition: {
-            total_consumption: 0
-          },
-          privileges: {
-            discount: ''
-          },
-          default_grade: true,
-          discount_checked: true,
-          member_count: 0,
-          third_data: '',
-          voucher_package: [], // 劵包信息
-          description: 'test'
+          price_list: [
+            { name: 'monthly', price: 0, day: 30, desc: '30天' },
+            { name: 'quarter', price: 0, day: 90, desc: '90天' },
+            { name: 'year', price: 0, day: 365, desc: '365天' }
+          ],
+          privileges: { discount: '' },
+          lv_type: 'vip',
+          description: '',
+          is_disabled: false
         }
       ],
+      IsDefault: 'svip',
       imgDialog: false,
       isGetImage: false
     }
   },
-
   mounted() {
-    this.getGradeList()
+    this.getListVipGrade()
   },
   methods: {
     pickHanle(packageId) {
@@ -238,68 +243,79 @@ export default {
       this.visible = false
     },
     seletedDataHandle(seletedCoupon, packageId) {
+      // debugger
       this.levelData[packageId].voucher_package = seletedCoupon
-
+      // console.log(this.levelData[packageId].voucher_package);
       console.log('seletedCoupon', seletedCoupon)
     },
+
+    isInArray(arr, value) {
+      for (var i = 0; i < arr.length; i++) {
+        if (value === arr[i].is_disabled) {
+          return true
+        }
+      }
+      return false
+    },
+    closeModel() {
+      this.modelVisible = false
+    },
+    radioChange(val) {
+      if (val) {
+        this.IsDefault = val
+      }
+    },
     saveGrade() {
+      console.log(this.levelData)
       var result = this.isEmptyChecked()
       if (result) {
         return
       }
-      console.log(this.levelData)
-      this.params.grade_info = JSON.stringify(this.levelData)
-
-      updateGrade(this.params).then((res) => {
-        if (res.data.data.status) {
-          this.$message.success('保存成功')
+      var check = this.isInArray(this.levelData, true)
+      let canSaveResult = true
+      this.levelData.forEach((item) => {
+        // if (check === true) {
+        if (item.lv_type == this.IsDefault) {
+          if (!item.guide_title) {
+            this.$message({ message: '购买引导必填', type: 'error' })
+            canSaveResult = false
+            return
+          }
+          if (item.is_disabled) {
+            this.$message({ message: '设为默认的等级，不能禁用', type: 'error' })
+            canSaveResult = false
+            return
+          }
+          item.is_default = true
+        } else {
+          item.is_default = false
         }
+        if (item.background_pic_url === '') {
+          item.background_pic_url = false
+        }
+        // } else {
+        //   item.is_default = false
+        // }
       })
+      this.params.grade_info = this.levelData
+      if (!canSaveResult) {
+        return
+      }
+      saveVipGrade(this.params).then(
+        (res) => {
+          if (res.data.data.status) {
+            this.$message.success('保存成功')
+          }
+        },
+        () => {
+          this.getListVipGrade()
+        }
+      )
     },
-    // previewImgChange(file, fileList) {
-    //   this.levelData[this.curIndex].background_pic_url = URL.createObjectURL(file.raw)
-    //   const isJPG = file.raw.type === 'image/jpeg'
-    //   const isPNG = file.raw.type === 'image/png'
-    //   const isLt2M = file.raw.size / 1024 / 1024 <= 5
-    //   if (!isJPG && !isPNG) {
-    //     this.$message.error('上传头像图片只能是 JPG、PNG 格式!')
-    //     return
-    //   }
-    //   if (!isLt2M) {
-    //     this.$message.error('上传头像图片大小不能超过 5MB!')
-    //     return
-    //   }
-    //   let params = {isUploadFile: true, file: file.raw}
-    //   pushNewsImage(params).then(res => {
-    //     this.levelData[this.curIndex].background_pic_url = res.data.data.url
-    //   })
-    // },
     nameblur(e) {
       if (e.target.value == '') {
         this.$message({ message: '请输入等级名称', type: 'error' })
         return
-      }
-    },
-
-    promotionConditionsBlur(e) {
-      let value = e.target.value
-      let index = Number(e.target.name)
-      var reg = /(^[1-9]\d*$)/
-      if (index > 0) {
-        if (value == '') {
-          this.$message({ message: '请输入升级条件', type: 'error' })
-          return
-        }
-        if (!reg.test(value)) {
-          this.$message({ message: '累积消费金额为大于0的正整数', type: 'error' })
-          return
-        }
-        if (
-          Number(value) <= Number(this.levelData[index - 1].promotion_condition.total_consumption)
-        ) {
-          this.$message({ message: '累积消费金额不能小于等于上一级消费金额', type: 'error' })
-          return
-        }
       }
     },
     discountBlur(e) {
@@ -324,25 +340,31 @@ export default {
         }
       }
     },
+    // getIndex (index) {
+    //   this.curIndex = index
+    // },
     addGrade() {
-      if (this.levelData.length >= 5) {
-        this.$message({ message: '最多添加5个等级', type: 'error' })
+      if (this.levelData.length >= 2) {
+        this.$message({ message: '最多添加2个等级', type: 'error' })
         return
       }
-      let crmopen = this.levelData[0].crm_open
-      this.levelData.push({
-        grade_id: '',
+      var arr = {
+        vip_grade_id: '',
         grade_name: '',
+        is_default: false,
+        guide_title: '',
         background_pic_url: '',
-        promotion_condition: { total_consumption: 0 },
+        price_list: [
+          { name: 'monthly', price: 0, day: 30, desc: '30天' },
+          { name: 'quarter', price: 0, day: 90, desc: '90天' },
+          { name: 'year', price: 0, day: 365, desc: '365天' }
+        ],
         privileges: { discount: '' },
-        default_grade: false,
-        member_count: 0,
-        discount_checked: true,
-        crm_open: crmopen,
-        third_data: '',
-        voucher_package: [] // 劵包信息
-      })
+        lv_type: 'svip',
+        description: '',
+        is_disabled: false
+      }
+      this.levelData.push(arr)
     },
     remove(index) {
       this.levelData.splice(index, 1)
@@ -364,45 +386,44 @@ export default {
           this.$message({ message: '请输入等级名称', type: 'error' })
           break
         }
-        if (i > 0) {
-          if (this.levelData[i].promotion_condition.total_consumption == '') {
-            isflag = true
-            this.$message({ message: '请输入升级条件', type: 'error' })
-            break
-          } else if (!conditionReg.test(this.levelData[i].promotion_condition.total_consumption)) {
-            isflag = true
-            this.$message({ message: '累积消费金额为大于0的正整数', type: 'error' })
-            break
-          } else if (
-            Number(this.levelData[i].promotion_condition.total_consumption) <=
-            Number(this.levelData[i - 1].promotion_condition.total_consumption)
-          ) {
-            isflag = true
-            this.$message({ message: '累积消费金额不能小于等于上一级消费金额', type: 'error' })
-            break
+        if (this.levelData[i].privileges.discount == '') {
+          isflag = true
+          this.$message({ message: '请输入会员折扣', type: 'error' })
+          break
+        } else if (!discountReg.test(this.levelData[i].privileges.discount)) {
+          isflag = true
+          this.$message({
+            message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
+            type: 'error'
+          })
+          break
+        } else if (
+          i > 0 &&
+          Number(this.levelData[i].privileges.discount) >
+            Number(this.levelData[i - 1].privileges.discount)
+        ) {
+          isflag = true
+          this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
+          break
+        }
+
+        var priceList = this.levelData[i].price_list
+        var count = priceList.length
+        var isAllNot = true
+
+        for (var j = 0; j < count; j++) {
+          if (priceList[j].price) {
+            isAllNot = false
           }
         }
-        if (this.levelData[i].discount_checked) {
-          if (this.levelData[i].privileges.discount == '') {
-            isflag = true
-            this.$message({ message: '请输入会员折扣', type: 'error' })
-            break
-          } else if (!discountReg.test(this.levelData[i].privileges.discount)) {
-            isflag = true
-            this.$message({
-              message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
-              type: 'error'
-            })
-            break
-          } else if (
-            i > 0 &&
-            Number(this.levelData[i].privileges.discount) >=
-              Number(this.levelData[i - 1].privileges.discount)
-          ) {
-            isflag = true
-            this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
-            break
-          }
+
+        if (isAllNot) {
+          isflag = true
+          this.$message({
+            message: '购买金额：30天 、90天 、 365天 请至少填写一项金额',
+            type: 'error'
+          })
+          break
         }
       }
       return isflag
@@ -423,18 +444,23 @@ export default {
     closeImgDialog() {
       this.imgDialog = false
     },
-    getGradeList() {
-      getGradeList().then((response) => {
+    getListVipGrade() {
+      listVipGrade().then((response) => {
+        // this.IsDefault = 'svip'
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           var result = response.data.data
           if (result) {
             for (var i = 0; i < result.length; i++) {
-              if (
-                !result[i].promotion_condition &&
-                !result[i].promotion_condition.total_consumption
-              ) {
-                result[i].promotion_condition = {
-                  total_consumption: ''
+              if (result[i].is_default) {
+                this.IsDefault = result[i].lv_type
+              }
+              var priceList = result[i].price_list
+              var count = priceList.length
+              var isAllNot = true
+
+              for (var j = 0; j < count; j++) {
+                if (!priceList[j].price) {
+                  result[i].price_list[j].price = 0
                 }
               }
               if (!result[i].privileges && !result[i].privileges.discount) {
@@ -485,21 +511,6 @@ export default {
 .avatar-uploader .el-upload:hover {
   border-color: #ff5000;
 }
-.avatar-uploader-icon {
-  display: block;
-  font-size: 28px;
-  width: 200px;
-  height: 125px;
-  line-height: 125px;
-  font-size: 38px;
-  color: #ccc;
-  text-align: center;
-}
-.avatar {
-  width: 200px;
-  height: 125px;
-  display: block;
-}
 .item-box {
   padding-top: 10px;
 }
@@ -531,8 +542,7 @@ export default {
   }
 }
 .section-footer {
-  margin-top: 80px;
-  margin-bottom: 30px;
+  margin-top: 20px;
 }
 .noborder {
   border: 0;
@@ -552,16 +562,15 @@ export default {
   width: 200px;
   height: 125px;
   .avatar {
-    max-width: 100%;
+    width: 100%;
     max-height: 100%;
   }
   .avatar-uploader-icon {
     width: 100%;
     height: 100%;
     line-height: 125px;
-  }
-  .avatar-uploader-icon {
     font-size: 38px;
   }
 }
 </style>
+<style></style>

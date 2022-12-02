@@ -69,7 +69,7 @@ export default {
     {
       path: 'appsgroup/extapp',
       name: `扩展应用`,
-      component: () => import('@/view/applications/appsgroup/extapp')
+      component: () => import('@/view/applications/plugin')
     }
   ]
 }

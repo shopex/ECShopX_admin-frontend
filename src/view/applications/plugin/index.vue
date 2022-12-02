@@ -1,59 +1,28 @@
 <template>
   <div>
     <template v-if="!VERSION_IN_PURCHASE">
-      <el-row
-        class="ectapp-content"
-        type="flex"
-        justify="space-between"
-      >
-        <el-col
-          :span="12"
-          class="ectapp-col"
-        >
-          <el-row
-            style="width: 100%"
-            class="ectapp-box"
-          >
-            <img
-              :src="require('@/assets/img/ectapp/alipay.jpg')"
-              class="ectapp-avatar"
-            >
+      <el-row class="ectapp-content" type="flex" justify="space-between">
+        <el-col :span="12" class="ectapp-col">
+          <el-row style="width: 100%" class="ectapp-box">
+            <img :src="require('@/assets/img/ectapp/alipay.jpg')" class="ectapp-avatar">
             <div>
-              <div class="ectapp-title">
-                Adapay支付分账<span class="ectapp-icons">优</span>
-              </div>
+              <div class="ectapp-title">Adapay支付分账<span class="ectapp-icons">优</span></div>
               <div class="ectapp-cont">
                 商派ECShopX集成汇付分账，作为合规、安全、灵活的聚合支付解决方案，通过多级账户管理、聚合支付、高效结算等多维度助力电商实现平台化、数字化。
               </div>
 
-              <el-button
-                v-if="!status && !loading"
-                plain
-                @click.native="clickChange(true)"
-              >
+              <el-button v-if="!status && !loading" plain @click.native="clickChange(true)">
                 立即订购
               </el-button>
 
-              <span
-                v-if="status && !loading"
-                class="app-opened"
-              >已开通</span>
+              <span v-if="status && !loading" class="app-opened">已开通</span>
             </div>
           </el-row>
         </el-col>
       </el-row>
-      <div
-        v-show="visible"
-        class="ectapp-dialog"
-      >
-        <div
-          class="close"
-          @click="clickChange(false)"
-        />
-        <img
-          :src="require('@/assets/img/ectapp/alipay_code.png')"
-          class="ectapp-code"
-        >
+      <div v-show="visible" class="ectapp-dialog">
+        <div class="close" @click="clickChange(false)" />
+        <img :src="require('@/assets/img/ectapp/alipay_code.png')" class="ectapp-code">
       </div>
     </template>
     <router-view />
@@ -65,22 +34,22 @@ import store from '@/store'
 import { getQRcode, removeCard, updateStore } from '@/api/cardticket'
 
 export default {
-  data () {
+  data() {
     return {
       loading: true,
       visible: false,
       status: false
     }
   },
-  created () {
+  created() {
     this.fetch()
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    clickChange (visible) {
+    clickChange(visible) {
       this.visible = visible
     },
-    async fetch () {
+    async fetch() {
       this.loading = true
       const { status } = await this.$api.application.adapayIsOpen()
       this.loading = false

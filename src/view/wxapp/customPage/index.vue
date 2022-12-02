@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('detail') === -1">
+      <SpPlatformTip h5 app alipay />
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="primary" icon="plus" @click="openDialog()"> 添加页面 </el-button>
@@ -32,15 +33,12 @@
                     plain
                     size="mini"
                     @click="handleDownload(scope.row.page_name)"
-                    >
-下载码
-</el-button
                   >
-                  <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini"
-                    >
-复制链接
-</el-button
-                  >
+                    下载码
+                  </el-button>
+                  <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini">
+                    复制链接
+                  </el-button>
                 </div>
               </div>
               <el-button
@@ -48,10 +46,9 @@
                 style="width: 45px"
                 type="text"
                 @click="handleClick(scope.row.id)"
-                >
-投放
-</el-button
               >
+                投放
+              </el-button>
             </el-popover>
             <el-button type="text">
               <a href="javascript:void(0)" @click="delPage(scope.row.id)"> 删除 </a>
