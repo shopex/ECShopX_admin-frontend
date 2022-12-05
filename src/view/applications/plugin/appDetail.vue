@@ -3,11 +3,11 @@
   display: flex;
 }
 .app-logo {
-  width: 200px;
-  height: 200px;
+  width: 160px;
+  height: 160px;
 }
 .container-rg {
-  margin-right: 20px;
+  margin-left: 20px;
 }
 .app-name {
   font-size: 15px;
@@ -33,6 +33,9 @@
     margin-top: 36px;
   }
 }
+.app-image {
+  margin-top: 20px;
+}
 </style>
 <style lang="scss">
 .dialog-app {
@@ -52,7 +55,7 @@
       <div class="app-action">
         <el-button type="primary" plain @click="onClickItem">立即订购</el-button>
       </div>
-      <div class="app-image">
+      <div v-if="id != 'miaosha'" class="app-image">
         <el-image class="desc-image" :src="require(`@/assets/img/ectapp/${id}_detail.png`)" />
       </div>
     </div>

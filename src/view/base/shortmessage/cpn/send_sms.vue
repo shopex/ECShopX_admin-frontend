@@ -24,7 +24,6 @@
           :fetch-suggestions="querySearch"
           placeholder="请选择短信场景"
           @select="handleSelect"
-          @change="changeSelect"
         />
       </div>
       <section v-for="item in smsScenarioList" :key="item.id" class="card">
@@ -130,7 +129,6 @@
 import tips from '@/components/tips'
 import { requiredRules } from '@/utils/validate'
 import {
-  getScenarioList,
   offDisablingSms,
   onDisablingSms,
   deletedDisablingSms,
@@ -147,8 +145,8 @@ export default {
     return {
       smsScenarioList: [],
       query: {
-        page_size: 3,
-        page: 1,
+        pageSize: 3,
+        pageIndex: 1,
         scene_name: ''
       },
       count: 24,
@@ -179,25 +177,18 @@ export default {
     }
   },
   mounted() {
-    this.getSerchNameList()
     this.init()
   },
   methods: {
-    async getSerchNameList() {
-      const result = await getScenarioList({ page_size: 24 })
-      this.serchNameList = result.data.data.list.map((item) => {
-        return { value: item.scene_name }
-      })
-    },
     async init(type) {
       this.loading = true
-      const result = await getScenarioList(this.query)
-      if (type == 'serch') {
-        this.smsScenarioList = result.data.data.list
+      const { list, total_count } = await this.$api.sms.getScenarioList(this.query)
+      if (type == 'search') {
+        this.smsScenarioList = list
       } else {
-        this.smsScenarioList = [...this.smsScenarioList, ...result.data.data.list]
+        this.smsScenarioList = [...this.smsScenarioList, ...list]
       }
-      this.count = result.data.data.count
+      this.count = total_count
       this.loading = false
     },
     // 添加短信
@@ -206,7 +197,6 @@ export default {
       this.activeScene_name = scene_name
       // 获取选项
       this.form.scene_id = id
-      console.log(id)
     },
     async getSMSTemplateList(query) {
       const { list } = await this.$api.sms.getSmsTemplateList({
@@ -234,7 +224,7 @@ export default {
           this.initQuery(this.activeScene_name)
           this.activeScene_name = ''
           this.handleClose()
-          this.init('serch')
+          this.init('search')
         }
       })
     },
@@ -257,18 +247,17 @@ export default {
           const result = await onDisablingSms({ id })
           this.$message.success('已启用')
           this.initQuery(scene_name)
-          this.init('serch')
+          this.init('search')
         } else {
           const result = await offDisablingSms({ id })
           this.$message.success('已停用')
           this.initQuery(scene_name)
-          this.init('serch')
+          this.init('search')
         }
       })
     },
 
     async deteleSms(id, scene_name) {
-      console.log(scene_name)
       const message =
         '移除后，该短信将不在当前场景。如果移除的是已启用的短信，移除后当前场景可不会触发短信。'
       this.$confirm(message, '', {
@@ -278,14 +267,13 @@ export default {
       }).then(async () => {
         const result = await deletedDisablingSms(id)
         this.initQuery(scene_name)
-        this.init('serch')
+        this.init('search')
         this.$message.success('删除成功')
       })
     },
     // 下拉加载
     load() {
-      this.query.page = this.query.page + 1
-      console.log(this.noMore, 'this.noMore')
+      this.query.pageSize = this.query.pageSize + 1
       if (!this.noMore) {
         this.loading = true
         this.init()
@@ -295,11 +283,11 @@ export default {
     /* 搜索相关 */
     handleSelect({ value }) {
       this.query = {
-        page_size: 3,
-        page: 1,
+        pageSize: 3,
+        pageIndex: 1,
         scene_name: value
       }
-      this.init('serch')
+      this.init('search')
     },
     initQuery(scene_name = '') {
       // 初始化一下 （修改状态）
@@ -309,24 +297,16 @@ export default {
         scene_name: scene_name
       }
     },
-    changeSelect(val) {
-      if (val !== '') return
-      // 清空会执行 肯定是空值
-      this.smsScenarioList = [] // 有可能会存在上一次搜索的值 所以先清空
-      this.init()
-    },
-    querySearch(queryString = '', cb) {
-      var restaurants = this.serchNameList
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      // 调用 callback 返回建议列表的数据
-
-      cb(results)
-    },
-    createFilter(queryString) {
-      console.log(queryString)
-      return (restaurant) => {
-        return restaurant.value.indexOf(queryString) === 0
-      }
+    async querySearch(queryString = '', cb) {
+      const { list } = await this.$api.sms.getScenarioList({
+        pageSize: 10,
+        pageIndex: 1,
+        scene_name: queryString
+      })
+      const _list = list.map((item) => {
+        return { value: item.scene_name }
+      })
+      cb(_list)
     }
   }
 }
