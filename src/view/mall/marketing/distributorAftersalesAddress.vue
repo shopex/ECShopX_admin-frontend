@@ -148,7 +148,7 @@
               :key="item.name"
               :disable-transitions="false"
               closable
-              @close="storeClose(rel_distributor_ids, index)"
+              @close="storeClose(index)"
             >
               {{ item.name }}
             </el-tag>
@@ -610,6 +610,9 @@ export default {
           this.fetchList()
         }
       })
+    },
+    storeClose(index){
+      this.rel_distributor_ids.splice(index,1)
     }
   }
 }
