@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.6.1...v3.7.0) (2022-11-24)
+
+
+### Bug Fixes
+
+* bug ([406056a](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/406056a5294a37324a3536c659f56f8df6ed769f))
+* bug ([6ae16fb](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/6ae16fb2f6fbc8c65284b70b6e17a19f6746aa8f))
+* bug ([2959180](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2959180504d3b8aef4d14d2237e07548617bd73a))
+* bug修复 ([109a160](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/109a160c7d307e03bb80838196f0e109057db8a6))
+* max length ([3f387ca](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3f387ca2ce68c36a54fece2dc67bd3ec311fab42))
+* mieqia ([0d0b587](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/0d0b5879820b043c293bc5ca0f05d60828486215))
+* 售后优化 ([7de5fcd](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/7de5fcdc5e6a03f47ea67256cb1647852dbb62fd))
+* 地址显示修改 ([f4f2dd8](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f4f2dd82d32cff3866481b41b34d07f1f000ff46))
+* 文案修改 ([d8206af](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d8206afdaa237068349e2f7a9ecf5542d78abf5a))
+
 ## [3.6.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.5.0...v3.6.0) (2022-10-28)
 
 
