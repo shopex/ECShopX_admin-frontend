@@ -196,7 +196,7 @@ export default {
         pageBackgroundStyle: '1', // 1=颜色背景；2=图片背景
         pageBackgroundColor: '#f5f5f5',
         pageBackgroundImage: '',
-        alipayTitleColor:'#ffffff'
+        // alipayTitleColor:'#ffffff'
       },
 
     }
