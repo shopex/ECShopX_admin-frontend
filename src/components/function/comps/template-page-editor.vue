@@ -124,7 +124,7 @@
               </el-radio-group>
             </div>
           </div>
-          <div class="tab">
+          <!-- <div class="tab">
             <div>支付宝小程序</div>
             <div class="prompt">页面标题文字请在管理后台装修-商城信息中填写。</div>
             <div class="alipay-color">
@@ -138,7 +138,7 @@
                 </el-radio>
               </el-radio-group>
             </div>
-          </div>
+          </div> -->
         </el-form-item>
         <!-- <el-form-item label="标题位置">
           <el-radio-group v-model="base.titlePosition">
