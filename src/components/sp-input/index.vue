@@ -1,5 +1,8 @@
 <style lang="scss">
 .sp-input {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
   .el-input {
     margin: 0 8px;
   }
