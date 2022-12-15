@@ -509,11 +509,7 @@
       "
       class="section-footer with-border content-center"
     >
-      <el-button
-        type="primary"
-        :disabled="$store.getters.login_type != 'distributor' || submitDisabled"
-        @click="reviewSubmit"
-      >
+      <el-button type="primary" :disabled="submitDisabled" @click="reviewSubmit">
         提交审核
       </el-button>
     </div>
