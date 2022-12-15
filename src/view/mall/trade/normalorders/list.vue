@@ -910,8 +910,7 @@ export default {
             !isDada &&
             order_status == 'PAYED' &&
             delivery_status != 'DONE' &&
-            receipt_type != 'ziti' &&
-            !this.isBindOMS
+            receipt_type != 'ziti'
           ) {
             actionBtns.push({ name: '发货', key: 'deliverGoods' })
           }
@@ -1025,6 +1024,10 @@ export default {
         this.cancelOrderForm.loading = true
         this.cancelOrderDialog = true
       } else if (key == 'deliverGoods') {
+        if (this.isBindOMS) {
+          return this.$message.info('请至OMS处理订单发货')
+        }
+
         this.$refs['deliverGoodsDialogRef'].resetForm()
         this.deliverGoodsForm.order_id = order_id
         this.deliverGoodsForm.items = items.map((item) => {
