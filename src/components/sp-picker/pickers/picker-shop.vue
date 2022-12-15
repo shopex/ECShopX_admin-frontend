@@ -71,6 +71,7 @@
         afterSearch: afterSearch
       }"
       @select="onSelect"
+      @selection-change="onSelectionChange"
     />
   </div>
 </template>
@@ -142,17 +143,19 @@ export default {
     },
     onSelect(selection, row) {
       if (this.multiple) {
-        this.updateVal(selection)
+        // this.updateVal(selection)
       } else {
         const { finderTable } = this.$refs.finder.$refs
         console.log('finderTable:', finderTable)
         finderTable.clearSelection()
         setTimeout(() => {
-          debugger
           finderTable.$refs.finderTable.setSelection([row])
-          this.updateVal([row])
+          // this.updateVal([row])
         })
       }
+    },
+    onSelectionChange(selection) {
+      this.updateVal(selection)
     }
   }
 }
