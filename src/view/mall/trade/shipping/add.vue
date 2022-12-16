@@ -698,7 +698,7 @@
       <div class="section-footer with-border content-center clearfix">
         <el-button type="primary" @click="submitSaveAction"> 保存 </el-button>
       </div>
-      <el-dialog title="选择区域" :visible.sync="dialogAreaFormVisible" width="960px">
+      <el-dialog title="选择区域1" :visible.sync="dialogAreaFormVisible" width="960px">
         <el-row>
           <el-col :span="6">
             <el-row class="province-list">
@@ -706,6 +706,7 @@
               <el-col
                 v-for="(item, index) in areaInfo"
                 :key="'province' + index"
+                class="province-item"
                 :style="provinceIndex == index ? 'background: #ddd' : ''"
               >
                 <el-checkbox
@@ -1832,6 +1833,9 @@ export default {
   line-height: 30px;
   text-align: center;
   vertical-align: middle;
+  float: right;
+  position: relative;
+  top: -4px;
 }
 .nopost {
   text-align: center;

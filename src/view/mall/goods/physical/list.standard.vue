@@ -314,7 +314,7 @@
       </el-dialog>
       <!-- 选择运费模板-结束 -->
       <!-- 选择商品分类-开始 -->
-      <el-dialog title="更改商品分类" :visible.sync="addCategorydialogVisible" width="30%">
+      <el-dialog title="更改销售分类" :visible.sync="addCategorydialogVisible" width="30%">
         <treeselect
           v-model="category_id"
           :options="categoryList"
@@ -466,7 +466,7 @@
               <span>
                 <el-alert
                   title="导购分润计算类型: 【默认】"
-                  description="计算方式：默认按照 主类目分润配置优先,导购分润配置计算其次"
+                  description="计算方式：默认按照 管理分类分润配置优先,导购分润配置计算其次"
                   type="info"
                   close-text=" "
                   class="alert-text"
