@@ -688,7 +688,7 @@ export default {
       }).then((res) => {
         var rebateSpecItems = []
         res.data.data.list.forEach((item) => {
-          if (item.rebate_conf.length === 0) {
+          if (!item.rebate_conf) {
             item.rebate_conf = {}
             item.rebate_conf.type = 'money'
             item.rebate_conf.rebate_task_type = 'money'
@@ -733,7 +733,7 @@ export default {
         this.itemsList.forEach((item) => {
           item.rebate_audit = ''
           item.rebate_audit = item.rebate
-          item.rebate = item.rebate === 1 ? true : false
+          item.rebate = item.rebate === '1' ? true : false
         })
         console.log(this.itemsList)
         this.total_count = response.data.data.total_count
