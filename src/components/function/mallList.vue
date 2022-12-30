@@ -197,7 +197,7 @@
             >废弃</span>
           </div>
           <div
-            v-if="relStore.id == '0' && !VERSION_B2C && !VERSION_PLATFORM && !VERSION_IN_PURCHASE"
+            v-if="relStore.id == '0' && !VERSION_B2C && !VERSION_IN_PURCHASE"
             class="synchronize-btn"
             @click="synchronizeTemplateToShop(index)"
           >
@@ -404,7 +404,7 @@
             :style="index === currentTab ? `color:${tabs.config.selectedColor}` : ''"
           >
             <use :xlink:href="`#icon-${item.name}`"></use>
-            
+
           </svg> -->
 
           <template v-else>
