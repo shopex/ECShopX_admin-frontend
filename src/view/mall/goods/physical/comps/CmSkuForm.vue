@@ -225,7 +225,6 @@ m³
         </el-form>
       </template>
       <template v-else>
-        123
         <div class="sub-label" />
         <div class="sub-block">
           <!-- {{value.skus}} -->
