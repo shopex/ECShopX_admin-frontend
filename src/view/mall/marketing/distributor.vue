@@ -33,6 +33,7 @@
         $route.path.indexOf('alipay') === -1
       "
     >
+      <SpPlatformTip h5 app alipay />
       <div v-if="VERSION_STANDARD" class="content-bottom-padded">
         <el-alert type="info" title="操作说明" show-icon>
           <div>
@@ -121,7 +122,7 @@
         >
           打标签
         </el-button>
-        <el-button type="primary" plain icon="el-icon-circle-plus" @click="showSettingDistance()">
+        <el-button v-if="IS_ADMIN" type="primary" plain icon="el-icon-circle-plus" @click="showSettingDistance()">
           店铺范围配置
         </el-button>
       </div>
@@ -570,6 +571,7 @@ import { getSetting } from '@/api/fenzhang'
 import { setPaymentSetting, getPaymentSetting } from '@/api/trade'
 import shopSelect from '@/components/shopSelect'
 import mixin, { pageMixin } from '@/mixins'
+import { IS_ADMIN } from '@/utils'
 
 import store from '@/store'
 // 取选中地区的值

@@ -83,7 +83,7 @@
         <el-col :span="6" class="last-col">
           <el-cascader
             v-model="select_category_value"
-            placeholder="商品分类"
+            placeholder="商品销售分类"
             :options="categoryList"
             :props="{ value: 'category_id', checkStrictly: true }"
             clearable
@@ -275,8 +275,8 @@ export default {
         templates_id: '',
         distributor_id: '',
         is_sku: false,
-        audit_status: 'approved'
-        // is_gift: false,
+        audit_status: 'approved',
+        is_gift: false
       },
       categoryList: [],
       select_category_value: [],
@@ -467,6 +467,9 @@ export default {
         this.loading = true
         let param = {
           ...this.params
+        }
+        if(this.unwantedGift){
+          delete param.is_gift
         }
         param.brand_id = this.select_branch_value
         const category = [...this.select_category_value]

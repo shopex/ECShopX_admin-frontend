@@ -52,11 +52,15 @@ export default {
           value: 'store'
         },
         {
-          label: '分类',
-          value: 'category'
+          label: '销售分类',
+          value: 'sale_category'
         },
         {
-          label: '标签',
+          label: '管理分类',
+          value: 'management_category'
+        },
+        {
+          label: '商品标签',
           value: 'tag'
         },
         {
