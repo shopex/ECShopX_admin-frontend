@@ -406,7 +406,9 @@ export default {
         specImages: goodsDetail.spec_images,
         specItems: goodsDetail.spec_items,
         itemSpecDesc: goodsDetail.item_spec_desc,
-        itemSpecList: categoryInfoDetail.goods_spec
+        itemSpecList: categoryInfoDetail.goods_spec,
+        isShowSpecimg : goodsDetail.is_show_specimg
+
       }
 
       this.getGoodsParams(goodsDetail.item_params_list, goodsDetail.item_params)
@@ -419,6 +421,18 @@ export default {
         })
         this.getGoodsSkus(categoryInfoDetail.goods_spec, goodsDetail.spec_items)
         this.getSkuItems()
+
+        goodsDetail.spec_items.forEach(item => {
+          item['sku_id'] = item.custom_spec_id
+          item['spec_name'] = item.custom_spec_name
+        })
+        
+        this.skuData.specItems = this.skuData.specItems.concat(goodsDetail.spec_items)
+
+        this.skuData.specItems = this.skuData.specItems.filter((item, index) => {
+          return this.skuData.specItems.indexOf(item) === index
+        })
+
       } else {
         this.skuData.specData = {
           approve_status: goodsDetail.approve_status,
@@ -621,7 +635,7 @@ export default {
     //
     getSpecName(keys) {
       const specNames = []
-      var fd; 
+      var fd;
       keys.forEach((key, index) => {
         this.skuData.itemSpecList.forEach(outerItem => {
           var sub_fd = outerItem.attribute_values.list.find(
