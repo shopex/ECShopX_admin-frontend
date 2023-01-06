@@ -1,3 +1,5 @@
+import AttrSliderItem from './attr-slider-item'
+
 export default {
   name: 'slider',
   setting: [
@@ -12,7 +14,59 @@ export default {
       min: 1000,
       max: 5000,
       step: 1000
+    },
+    { label: '组件间距', key: 'padded', component: 'switch', value: false },
+    { label: '圆角图片', key: 'rounded', component: 'switch', value: false },
+    {
+      label: '指示点样式',
+      key: 'dot',
+      component: 'radio',
+      options: [
+        { name: '点', label: true },
+        { name: '数字', label: false }
+      ],
+      value: true
+    },
+    { label: '指示点覆盖', key: 'dotCover', component: 'switch', value: false },
+    {
+      label: '指示点位置',
+      key: 'dotLocation',
+      component: 'radio',
+      options: [
+        { name: '居左', label: 'left' },
+        { name: '居中', label: 'center' },
+        { name: '居右', label: 'right' }
+      ],
+      value: 'right'
+    },
+    {
+      label: '指示点形状',
+      key: 'shape',
+      component: 'radio',
+      options: [
+        { name: '圆形', label: 'circle' },
+        { name: '长方型', label: 'rectangle' }
+      ],
+      value: 'circle'
+    },
+    {
+      label: '指示点颜色',
+      key: 'dotColor',
+      component: 'radio',
+      options: [
+        { name: '深色', label: 'dark' },
+        { name: '亮色', label: 'light' }
+      ],
+      value: 'dark'
+    },
+    { label: '图片描述', key: 'content', component: 'switch', value: true },
+    {
+      label: '轮播项',
+      key: 'data',
+      component: function (h, { key }) {
+        return <AttrSliderItem v-model={this.value[key]} />
+      },
+      value: []
     }
-    // { label: '', key: 'subtitle', component: 'text', value: '' }
   ]
 }

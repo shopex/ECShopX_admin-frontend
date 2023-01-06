@@ -1,6 +1,7 @@
 <style lang="scss" src="./attr_panel.scss"></style>
 
 <script>
+import { isFunction } from '@/utils'
 export default {
   name: 'AttrPanel',
   props: {
@@ -22,32 +23,52 @@ export default {
     _renderInput({ key }) {
       return <el-input type='text' v-model={this.value[key]} size='small' />
     },
+
     _renderColor({ key }) {
       return <el-color-picker v-model={this.value[key]} size='small' />
     },
+
     _renderNumber({ key, min, max, step }) {
       return (
         <el-input-number v-model={this.value[key]} size='small' min={min} max={max} step={step} />
       )
+    },
+    _renderSwitch({ key }) {
+      return <el-switch v-model={this.value[key]} />
+    },
+    _renderRadio({ key, options }) {
+      return (
+        <el-radio-group v-model={this.value[key]}>
+          {options.map((op) => (
+            <el-radio label={op.label}>{op.name}</el-radio>
+          ))}
+        </el-radio-group>
+      )
     }
   },
-  render() {
+  render(h) {
     const { wgtName, setting } = this.info
 
     const renderComp = (item) => {
+      if (isFunction(item.component)) {
+        console.log('this1:', this)
+        return item.component.call(this, h, item)
+        // return <el-input v-model={this.value[item.key]} />
+      }
+
       const renderItem = {
         // 'textarea': this._renderTextArea,
         'input': this._renderInput,
         'color': this._renderColor,
-        'number': this._renderNumber
+        'number': this._renderNumber,
         // 'text': this._renderText,
         // 'select': this._renderSelect,
-        // 'radio': this._renderRadio,
+        'radio': this._renderRadio,
         // 'checkbox': this._renderCheckbox,
         // 'table': this._renderTable,
         // 'richText': this._renderRichText,
         // 'image': this._renderImage,
-        // 'switch': this._renderSwitch
+        'switch': this._renderSwitch
       }
       return renderItem[item.component](item)
     }
