@@ -17,9 +17,9 @@
       }"
     >
       <!-- {{JSON.stringify(value.data)}} -->
-      <!-- <SpImage
+      <SpImage
         class="placeholder-item"
-        :src="value.data.length > 1 ? value.data[0].url : null"
+        :src="value.data.length > 1 ? value.data[0].imgUrl : null"
         :width="'100%'"
       />
       <el-carousel
@@ -46,7 +46,7 @@
               'rounded': value.rounded
             }"
             :width="'100%'"
-            :src="item.url"
+            :src="item.imgUrl"
           />
         </el-carousel-item>
       </el-carousel>
@@ -63,7 +63,7 @@
             class="pagination-item"
           />
         </template>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -80,7 +80,7 @@ export default {
   },
   data() {
     return {
-      currentIndex: 0
+      currentIndex: 1
     }
   },
   computed: {

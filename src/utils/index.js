@@ -2,6 +2,7 @@ import log from './log'
 import CommonUtil from '@/common/js/util'
 import _pickBy from 'lodash/pickBy'
 import store from '@/store'
+import { isEmpty } from 'lodash'
 
 const isPrimitiveType = (val, type) => Object.prototype.toString.call(val) === type
 
@@ -230,6 +231,6 @@ export function getRegionIdByName(region, district) {
   return result
 }
 
-export { log, export_open }
+export { log, export_open, isEmpty }
 
 export default {}

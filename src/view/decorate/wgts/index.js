@@ -1,11 +1,7 @@
 import WgtSlider from './wgt_slider'
-// import WgtSliderAttr from './wgt_slider_attr'
-// import WgtHotzone from './wgt_hotzone'
-// import WgtHotzoneAttr from './wgt_hotzone_attr'
+import WgtGoodsGrid from './wgt_goodsGrid'
 
 export default {
-  WgtSlider
-  // WgtSliderAttr,
-  // WgtHotzone,
-  // WgtHotzoneAttr
+  WgtSlider,
+  WgtGoodsGrid
 }

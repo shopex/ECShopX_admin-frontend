@@ -2,10 +2,12 @@
 <template>
   <div>
     <div v-for="(item, index) in value" :key="`slider-item__${index}`" class="slider-item">
-      <SpImagePicker />
-      <CompPickerLink />
+      <SpImagePicker v-model="item.imgUrl" />
+      <!-- <CompPickerLink /> -->
     </div>
-    <el-button class="btn btn-add" plain @click="handleClickAdd"> 添加图片(0/5) </el-button>
+    <el-button class="btn btn-add" plain @click="handleClickAdd">
+      {{ `添加图片(${value.length}/5)` }}
+    </el-button>
   </div>
 </template>
 
@@ -30,7 +32,20 @@ export default {
         data: [],
         multiple: true
       })
-      this.localValue = data
+
+      this.localValue = data.map((item) => {
+        return {
+          button: '',
+          content: '',
+          id: '',
+          imgUrl: item.url,
+          linkPage: '',
+          mainTitle: '',
+          subtitle: '',
+          subtitleTow: '',
+          template: ''
+        }
+      })
     }
   }
 }
