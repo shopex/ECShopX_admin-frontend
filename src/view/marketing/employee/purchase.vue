@@ -136,7 +136,7 @@
       </el-button>
       <el-button
         type="primary"
-        disabled="activityStatus == 'cancel' || activityStatus == 'over'"
+        :disabled="activityStatus == 'cancel' || activityStatus == 'over'"
         @click="onSubmitForm"
       >
         保存
