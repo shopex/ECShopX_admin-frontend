@@ -107,6 +107,7 @@
 <template>
   <div class="marketing-employee-purchase">
     <el-card class="el-card--normal" header="基础信息">
+      formBase: {{ formBase }}
       <SpForm
         ref="formBase"
         v-model="formBase"
@@ -565,7 +566,7 @@ export default {
         name,
         title,
         linkHome: { pages_template_id },
-        pic: { url }
+        pic
       } = this.formBase
       const {
         companyList,
@@ -579,7 +580,7 @@ export default {
         name,
         title,
         pages_template_id,
-        share_pic: url,
+        share_pic: pic,
         enterprise_id: companyList.map((item) => item.id),
         display_time: moment(preheatTime).unix(),
         employee_begin_time: moment(employeeDateTime[0]).unix(),
