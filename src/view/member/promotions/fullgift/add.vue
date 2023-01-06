@@ -140,7 +140,7 @@
             </el-table-column>
           </el-table>
           <GoodsSelect
-            unwanted-gift
+            :unwanted-gift="true"
             :items-visible="giftVisible"
             :get-status="setGiftStatus"
             :rel-items-ids="relGifts"
@@ -414,7 +414,7 @@
       <el-button
         v-if="hasSaveButton"
         type="primary"
-        @click="submitActivityAction()"
+        v-debounce="submitActivityAction"
       >
         保存
       </el-button>
@@ -678,7 +678,7 @@ export default {
             this.$message({
               message: '更新成功',
               type: 'success',
-              duration: 2 * 1000,
+              duration: 5 * 100,
               onClose () {
                 that.refresh()
                 that.$router.go(-1)
@@ -696,7 +696,7 @@ export default {
             this.$message({
               message: '添加成功',
               type: 'success',
-              duration: 2 * 1000,
+              duration: 5 * 100,
               onClose () {
                 that.refresh()
                 that.$router.go(-1)
