@@ -27,6 +27,10 @@ export default {
         {
           path: 'goods/:id',
           component: () => import('@/view/marketing/employee/addGoods')
+        },
+        {
+          path: 'dependents/:id',
+          component: () => import('@/view/marketing/employee/dependents')
         }
       ]
     },

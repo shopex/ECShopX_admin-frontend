@@ -158,8 +158,7 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                Object.keys(this.companyForm).forEach((key) => (this.companyForm[key] = row[key]))
-                this.addDialog = true
+                this.$router.push({ path: `/marketing/employee/purchase/dependents/${row.id}` })
               }
             }
           },
@@ -170,8 +169,7 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                Object.keys(this.companyForm).forEach((key) => (this.companyForm[key] = row[key]))
-                this.addDialog = true
+                this.$router.push({ path: `/order/entitytrade/purchase?activity_id=${row.id}` })
               }
             }
           },

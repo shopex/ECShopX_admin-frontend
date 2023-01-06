@@ -411,6 +411,7 @@ export default {
         }
       ],
       navForm: {
+        pages_template_id: '',
         theme: {
           backgroundColor: '#ffffff',
           color: '#333333',
@@ -576,7 +577,17 @@ export default {
     this.getList()
   },
   methods: {
-    handleClickNav() {
+    async handleClickNav(templateId) {
+      const { tab_bar } = await this.$api.template.getPagesTemplateSetInfo({
+        pages_template_id: templateId
+      })
+      this.navForm = this.$options.data().navForm
+      this.navForm.pages_template_id = templateId
+      if (tab_bar) {
+        const { config, data } = JSON.parse(tab_bar)
+        this.navForm.theme = config
+        this.navForm.tabList = data
+      }
       this.navDrawerShow = true
     },
     async getTemplateSetInfo() {
@@ -811,6 +822,7 @@ export default {
       const { config, name, data } = this.globalTabbar || {}
       const { backgroundColor, color, selectedColor } = config || {}
       this.navForm = {
+        pages_template_id: '',
         theme: {
           backgroundColor: backgroundColor ?? '#ffffff',
           color: color ?? '#333333',
@@ -839,14 +851,21 @@ export default {
       this.navForm.tabList[index].name = name
     },
     async onSubmitTabList() {
-      const { theme, tabList } = this.navForm
-      await this.$api.template.setPagesTemplate({
+      const { pages_template_id, theme, tabList } = this.navForm
+      let params = {
         tab_bar: JSON.stringify({
           name: 'tabs',
           config: theme,
           data: tabList
         })
-      })
+      }
+      if (pages_template_id) {
+        params = {
+          ...params,
+          pages_template_id
+        }
+      }
+      await this.$api.template.setPagesTemplate(params)
       this.navDrawerShow = false
       this.$message.success('操作成功')
     }
