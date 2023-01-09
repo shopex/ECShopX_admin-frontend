@@ -9,10 +9,8 @@
 <template>
   <div>
     <el-button plain size="small" @click="onSetHotZone">
-{{
-      `热区设置 (${value.data.length})`
-    }}
-</el-button>
+      {{ `热区设置 (${value.data.length})` }}
+    </el-button>
 
     <el-dialog
       :visible="dialog"
@@ -97,7 +95,9 @@ export default {
     async onSelectImage() {
       const {
         data: { url }
-      } = await this.$picker.image()
+      } = await this.$picker.image({
+        data: { url: this.value.imgUrl }
+      })
       this.localValue.imgUrl = url
     },
     handleChange(zone) {

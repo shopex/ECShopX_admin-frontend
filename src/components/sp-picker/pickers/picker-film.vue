@@ -1,5 +1,5 @@
 <style lang="scss">
-.picker-image {
+.picker-film {
   &-hd {
     padding: 10px;
     display: flex;
@@ -54,11 +54,18 @@
     height: 120px;
     box-sizing: border-box;
     background: 50% 50% / cover no-repeat rgb(221, 221, 221);
+    &-video {
+      width: 100%;
+      height: 100%;
+    }
     &:hover {
       .image-meta {
         display: block;
       }
       .icon-link {
+        display: block;
+      }
+      .icon-play-circle1 {
         display: block;
       }
     }
@@ -71,13 +78,20 @@
       background-color: rgba(0, 0, 0, 0.4);
       display: none;
     }
-    .icon-link {
-      position: absolute;
-      top: 2px;
-      left: 4px;
-      display: none;
-      color: #666;
-    }
+  }
+  .icon-link {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    display: none;
+    color: #666;
+  }
+  .icon-play-circle1 {
+    position: absolute;
+    top: 2px;
+    left: 26px;
+    display: none;
+    color: #666;
   }
   .image-title-wrap {
     width: 120px;
@@ -147,8 +161,8 @@
 }
 </style>
 <template>
-  <div class="picker-image">
-    <div class="picker-image-hd">
+  <div class="picker-film">
+    <div class="picker-film-hd">
       <div class="btn-actions">
         <el-upload
           class="btn-upload"
@@ -161,56 +175,14 @@
           :on-success="handleAvatarSuccess"
           :on-error="uploadError"
         >
-          <el-button>上传图片</el-button>
+          <el-button>上传视频</el-button>
         </el-upload>
-        <!-- <el-button
-          @click="
-            () => {
-              this.groupDialog = true
-            }
-          "
-        >
-          添加分组
-        </el-button>
-        <el-button :disabled="disabledDeleteGroup">
-          删除分组
-        </el-button>
-        <el-button
-          :disabled="disabledBtnCropper"
-          @click="handleCropper"
-        >
-          裁剪
-        </el-button>
-        <el-button
-          :disabled="disabledBtnEdit"
-          @click="handleEdit"
-        >
-          编辑
-        </el-button>
-        <el-button
-          :disabled="disabledBtnDelete"
-          @click="handleEdit"
-        >
-          删除
-        </el-button>
-        <el-button
-          :disabled="disabledBtnDownload"
-          @click="handleEdit"
-        >
-          下载
-        </el-button>
-        <el-button
-          :disabled="disabledBtnCancel"
-          @click="handleCancelAll"
-        >
-          全部取消
-        </el-button> -->
       </div>
-      <div>
+      <!-- <div>
         <el-input size="small" placeholder="请输入图片名称" suffix-icon="el-icon-search" />
-      </div>
+      </div> -->
     </div>
-    <div class="picker-image-bd">
+    <div class="picker-film-bd">
       <!-- <div class="lf-container">
         <div
           v-for="(item, index) in catgoryList"
@@ -232,10 +204,15 @@
             class="image-item-wrap"
             @click="handleClickItem(item)"
           >
-            <div class="image-item" :style="{ color: '#fff', backgroundImage: `url(${item.url})` }">
+            <!-- <div class="image-item" :style="{ color: '#fff', backgroundImage: `url(${item.url})` }">
               <i class="iconfont icon-link" @click.stop="handleCopy(item.url)" />
-              <!-- <span class="image-meta">800*800</span> -->
+            </div> -->
+            <div class="image-item">
+              <video :src="item.url" class="image-item-video" />
+              <i class="iconfont icon-link" @click.stop="handleCopy(item.url)" />
+              <i class="iconfont icon-play-circle1" @click.stop="handleCopy(item.url)" />
             </div>
+
             <div class="image-title-wrap" :title="item.image_name">
               <p class="image-title-wrap__title">
                 {{ item.image_name }}
@@ -282,52 +259,19 @@
       :form-list="editFormList"
       @onSubmit="onEditFormSubmit"
     />
-
-    <!-- 图片裁剪 -->
-    <el-dialog
-      class="cropper-dialog"
-      title="图片裁剪"
-      :modal="false"
-      :visible.sync="cropperDialogShow"
-      width="500px"
-    >
-      <div class="cropper-container">
-        <vueCropper
-          ref="cropper"
-          :img="option.img"
-          :output-size="option.size"
-          :output-type="option.outputType"
-          :auto-crop="option.autoCrop"
-        />
-        <div class="cropper-actions">
-          <i class="iconfont icon-search-minus" @click="handleCropperAction('minus')" />
-          <i class="iconfont icon-search-plus" @click="handleCropperAction('plus')" />
-          <i class="iconfont icon-undo-alt" @click="handleCropperAction('rotateRight')" />
-          <i class="iconfont icon-redo-alt" @click="handleCropperAction('rotateLeft')" />
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cropperDialogShow = false">取 消</el-button>
-        <el-button type="primary" @click="cropperDialogShow = false">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { VueCropper } from 'vue-cropper'
 import UploadUtil from '@/utils/uploadUtil'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
 export default {
   name: 'PickerImage',
-  components: {
-    VueCropper
-  },
   extends: BasePicker,
   mixins: [PageMixin],
   config: {
-    title: '我的图片'
+    title: '我的视频'
   },
   props: ['value'],
   data() {
@@ -450,15 +394,9 @@ export default {
     },
     async fetch({ page_no, page_size }) {
       let params = {
-        type: 'image',
+        storage: 'videos',
         page: page_no,
         pageSize: page_size
-      }
-      if (this.selectCatgory != '-1') {
-        params = {
-          ...params,
-          image_cat_id: this.selectCatgory
-        }
       }
       const { list, total_count } = await this.$api.picker.getImageList(params)
       this.list = list
@@ -488,7 +426,7 @@ export default {
       this.refresh(true)
     },
     handleClickItem(item) {
-      // console.log('picker-image:', item)
+      // console.log('picker-film:', item)
       const { image_id, url } = item
       const _item = {
         image_id,

@@ -1,6 +1,7 @@
 <script>
 import {
   PickerImage,
+  PickerFilm,
   PickerGoods,
   PickerShop,
   PickerPath,
@@ -12,6 +13,8 @@ function resolvePicker(type) {
   switch (type) {
     case 'pickerImage':
       return PickerImage
+    case 'pickerFilm':
+      return PickerFilm
     case 'pickerGoods':
       return PickerGoods
     case 'pickerShop':

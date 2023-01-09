@@ -14,7 +14,7 @@
 </style>
 <template>
   <div>
-    <el-radio-group v-model="localValue.linkType" class="linktype-radio">
+    <el-radio-group v-model="localValue.linkType" class="linktype-radio" @change="onChangeLinkType">
       <el-radio :label="0"> 选择路径 </el-radio>
       <el-radio :label="1"> 自定义链接 </el-radio>
     </el-radio-group>
@@ -22,7 +22,12 @@
       {{ getLabelName() }}
     </div>
     <div v-else>
-      <el-input v-model="localValue.linkUrl" type="text" placeholder="请填写自定义链接" />
+      <el-input
+        v-model="localValue.linkUrl"
+        type="text"
+        placeholder="请填写自定义链接"
+        @change="onChangeLinkUrl"
+      />
     </div>
   </div>
 </template>
@@ -37,13 +42,22 @@ export default {
     return {
       localValue: {
         linkType: 0,
-        linkUrl: ''
+        linkUrl: '',
+        linkPage: '',
+        id: '',
+        title: ''
       }
     }
   },
   watch: {
-    value(nVal, oVal) {
-      this.localValue = nVal
+    value: {
+      immediate: true,
+      handler(nVal) {
+        this.localValue = {
+          ...this.localValue,
+          ...nVal
+        }
+      }
     }
   },
   // created() {
@@ -57,10 +71,16 @@ export default {
       })
       this.$emit('change', res)
     },
+    onChangeLinkType() {
+      this.$emit('change', this.localValue)
+    },
+    onChangeLinkUrl() {
+      this.$emit('change', this.localValue)
+    },
     getLabelName() {
       const { linkPage, title } = this.localValue
       if (linkPage) {
-        return `${LINK_PATH[linkPage]}:${title}`
+        return `${LINK_PATH[linkPage]}：${title}`
       } else {
         return '选择路径'
       }

@@ -16,16 +16,29 @@
         'spaced': value.spaced
       }"
     >
-      <el-image v-if="value.data.imgUrl" :src="value.data.imgUrl" :width="'100%'" />
+      film
+      <!-- <video-player
+        :options="{
+          aspectRatio: aspectRatio,
+          sources: [
+            {
+              type: 'video/mp4',
+              src: data[0].url
+            }
+          ],
+          notSupportedMessage: '无可播放媒体资源',
+          controlBar: false
+        }"
+      /> -->
     </div>
   </div>
 </template>
 
 <script>
-import config from './config'
+import config, { proportions } from './config'
 export default {
-  name: 'HotZone',
-  wgtName: '热区图',
+  name: 'Film',
+  wgtName: '视频',
   wgtIcon: 'wgt-slider',
   config: config,
   props: {
