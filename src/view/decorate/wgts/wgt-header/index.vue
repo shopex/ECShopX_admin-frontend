@@ -15,8 +15,7 @@
     padding: 0 30px;
     line-height: 32px;
     .title-image {
-      max-height: 100%;
-      max-width: 64px;
+      height: 100%;
       display: inline-block;
     }
   }
@@ -26,8 +25,8 @@
   <div class="wgt-header" :style="headerStyle" @click="handleClickHeader">
     <div class="wgt-header-content" :style="contentStyle">
       <div v-if="value" class="header-container" :style="containerStyle">
-        <span v-if="value.pageBackgroundStyle == '1'">{{ value.wgtName }}</span>
-        <sp-image v-else class="title-image" :src="value.pageBackgroundImage" />
+        <span v-if="value.titleStyle == '1'">{{ value.wgtName }}</span>
+        <sp-image v-else class="title-image" :src="value.titleBackgroundImage" />
       </div>
     </div>
   </div>
@@ -76,10 +75,10 @@ export default {
       }
     },
     containerStyle() {
-      const { titlePosition, pageBackgroundColor } = this.value || {}
+      const { titlePosition, titleColor } = this.value || {}
       return {
         'text-align': titlePosition,
-        'color': pageBackgroundColor
+        'color': titleColor
       }
     }
   },

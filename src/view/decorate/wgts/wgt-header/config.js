@@ -35,7 +35,7 @@ export default {
     },
     {
       label: '页面标题',
-      key: 'pageBackgroundStyle',
+      key: 'titleStyle',
       component: 'radio',
       options: [
         { name: '文字', label: '1' },
@@ -45,23 +45,23 @@ export default {
     },
     {
       label: '',
-      key: 'pageBackgroundColor',
+      key: 'titleColor',
       component: 'color',
       value: '#333',
       isShow: function () {
-        return this.value.pageBackgroundStyle == '1'
+        return this.value.titleStyle == '1'
       },
       tip: '页面标题文字请在管理后台装修-商城信息中填写。'
     },
     {
       label: '',
-      key: 'pageBackgroundImage',
+      key: 'titleBackgroundImage',
       component: function (h, { key }) {
         return <SpImagePicker v-model={this.value[key]} size='small' />
       },
       value: '',
       isShow: function () {
-        return this.value.pageBackgroundStyle == '2'
+        return this.value.titleStyle == '2'
       }
     },
     {
@@ -73,11 +73,41 @@ export default {
         { name: '居中', label: 'center' }
       ],
       value: 'left'
+    },
+    {
+      label: '页面背景',
+      key: 'pageBackgroundStyle',
+      component: 'radio',
+      options: [
+        { name: '颜色背景', label: '1' },
+        { name: '图片背景', label: '2' }
+      ],
+      value: '1'
+    },
+    {
+      label: '',
+      key: 'pageBackgroundColor',
+      component: 'color',
+      value: '#fff',
+      isShow: function () {
+        return this.value.pageBackgroundStyle == '1'
+      }
+    },
+    {
+      label: '',
+      key: 'pageBackgroundImage',
+      component: function (h, { key }) {
+        return <SpImagePicker v-model={this.value[key]} size='small' />
+      },
+      value: '',
+      isShow: function () {
+        return this.value.pageBackgroundStyle == '2'
+      }
     }
   ],
   transformIn: (v) => {
     const { name, base } = v
-    let { navigateBackgroundImage, titleBackgroundImage } = base || {}
+    let { navigateBackgroundImage, titleBackgroundImage, pageBackgroundImage } = base || {}
     if (isObject(navigateBackgroundImage)) {
       const { url } = navigateBackgroundImage
       navigateBackgroundImage = url
@@ -86,11 +116,16 @@ export default {
       const { url } = titleBackgroundImage
       titleBackgroundImage = url
     }
+    if (isObject(pageBackgroundImage)) {
+      const { url } = pageBackgroundImage
+      pageBackgroundImage = url
+    }
     return {
       name,
       ...base,
       navigateBackgroundImage,
-      titleBackgroundImage
+      titleBackgroundImage,
+      pageBackgroundImage
     }
   },
   transformOut: (v) => {

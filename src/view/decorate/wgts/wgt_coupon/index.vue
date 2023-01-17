@@ -1,5 +1,5 @@
 <style lang="scss">
-.wgt-hotzone {
+.wgt-coupon {
   &.padded {
     padding: 10px 0;
   }
@@ -15,26 +15,12 @@
       margin-left: 4px;
     }
   }
-  .wgt-bd {
-    position: relative;
-    &.spaced {
-      padding: 0 10px;
-      .slider-container {
-        right: 10px;
-        left: 10px;
-      }
-      .slider-pagination {
-        right: 10px;
-        left: 10px;
-      }
-    }
-  }
 }
 </style>
 <template>
   <div
     :class="{
-      'wgt-hotzone': true,
+      'wgt-coupon': true,
       'padded': value.padded
     }"
   >
@@ -48,7 +34,7 @@
         'spaced': value.spaced
       }"
     >
-      <el-image v-if="value.data.imgUrl" :src="value.data.imgUrl" :width="'100%'" />
+      coupon
     </div>
   </div>
 </template>
@@ -56,10 +42,10 @@
 <script>
 import config from './config'
 export default {
-  name: 'ImgHotzone',
-  wgtName: '热区图',
+  name: 'Coupon',
+  wgtName: '优惠券',
   wgtDesc: '',
-  wgtIcon: 'wgt-hotzone',
+  wgtIcon: 'wgt-coupon',
   config: config,
   props: {
     value: [Object, Array]
@@ -70,7 +56,10 @@ export default {
     }
   },
   computed: {
-    sliderHeight() {}
+    sourceUrl() {
+      const { data } = this.value
+      return data?.url || ''
+    }
   },
   created() {},
   methods: {}

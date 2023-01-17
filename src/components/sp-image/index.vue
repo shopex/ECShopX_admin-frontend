@@ -19,9 +19,10 @@ export default {
     const { src, width, height } = this
     const _width = isString(width) ? width : `${width}px`
     const _height = isString(height) ? height : `${height}px`
+    // console.log('sp-image render src:', src);
     return (
       <el-image class={'sp-image'} src={src || dImage} fit='cover'>
-        <template slot='error'>xxx</template>
+        <template slot='error'>图片加载错误</template>
       </el-image>
       // <img
       //   class={'sp-image'}

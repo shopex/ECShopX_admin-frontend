@@ -40,10 +40,10 @@
       </div>
       <div class="center-container">
         <!-- {{ contentComps }} -->
-        {{ headerData }}
+        <!-- {{ headerData }} -->
         <div class="weapp-template">
           <Header :value="headerData" @change="handleClickHeader" />
-          <div class="weapp-body">
+          <div class="weapp-body" :style="weappBodyStyle">
             <draggable :list="contentComps" group="easyview" class="components-wrap">
               <div
                 v-for="(wgt, index) in contentComps"
@@ -111,6 +111,23 @@ export default {
       headerAttr: null
     }
   },
+  computed: {
+    weappBodyStyle() {
+      const { pageBackgroundStyle, pageBackgroundColor, pageBackgroundImage } =
+        this.headerData || {}
+      if (pageBackgroundStyle == '1') {
+        return {
+          'background-color': pageBackgroundColor
+        }
+      } else {
+        return {
+          'background-image': `url(${pageBackgroundImage})`,
+          'background-size': 'cover',
+          'background-position': 'center'
+        }
+      }
+    }
+  },
   created() {
     this.regsiterWgts()
     this.getTemplateDetial()
@@ -147,7 +164,7 @@ export default {
       setting.forEach((item) => {
         compData[item.key] = item.value
       })
-      console.log('compData', compData)
+      // console.log('compData', compData)
       return compData
     },
     handleClickHeader() {
@@ -194,7 +211,6 @@ export default {
           ...headParams
         }
       }
-      debugger
       this.headerData = headerData
       this.headerAttr = {
         wgtName: Header.wgtName,
@@ -205,7 +221,7 @@ export default {
         // 是否存在挂件
         const wgt = this.widgets.find((item) => item.name.toLowerCase() == li.name.toLowerCase())
         if (wgt) {
-          console.log('getTemplateDetial wgt:', wgt)
+          // console.log('getTemplateDetial wgt:', wgt)
           const wgtInitParams = this.cloneDefaultField(wgt)
           const params = wgt.config.transformIn(li.params)
           this.contentComps.push({

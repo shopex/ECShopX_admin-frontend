@@ -32,6 +32,7 @@ export default {
     const $picker = {
       image: (args) => fn({ value: { ...args }, type: 'pickerImage', width: '788px' }),
       film: (args) => fn({ value: { ...args }, type: 'pickerFilm', width: '788px' }),
+      coupon: (args) => fn({ value: { ...args }, type: 'pickerCoupon' }),
       goods: (args) => fn({ value: { ...args }, type: 'pickerGoods', width: '1110px' }),
       shop: (args) => fn({ value: { ...args }, type: 'pickerShop' }),
       path: (args) => fn({ value: { ...args }, type: 'pickerPath' }),

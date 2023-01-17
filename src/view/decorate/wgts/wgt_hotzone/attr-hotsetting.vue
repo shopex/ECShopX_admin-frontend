@@ -87,7 +87,9 @@ export default {
       }
     }
   },
-  created() {},
+  created() {
+    this.localValue = cloneDeep(this.value)
+  },
   methods: {
     onSetHotZone() {
       this.dialog = true

@@ -1,37 +1,27 @@
-import AttrHotSetting from './attr-hotsetting'
+import CouponItem from './coupon-item'
 
 export default {
-  name: 'imgHotzone',
+  name: 'coupon',
   setting: [
     { label: '标题', key: 'title', component: 'input', value: '标题' },
     { label: '副标题', key: 'subtitle', component: 'input', value: '副标题' },
     { label: '组件间距', key: 'padded', component: 'switch', value: false },
     {
-      label: '热区设置',
+      label: '添加优惠券',
       key: 'data',
       component: function (h, { key }) {
-        return <AttrHotSetting v-model={this.value[key]} />
+        return <CouponItem v-model={this.value[key]} />
       },
-      value: { imgUrl: '', data: [] }
+      value: {}
     }
   ],
   transformIn: (v) => {
-    const {
-      name,
-      base,
-      config: { imgUrl },
-      data
-    } = v
+    const { name, base, data } = v
     return {
       name,
       ...base,
-      data: {
-        imgUrl,
-        data
-      }
+      data
     }
   },
-  transformOut: (v) => {
-    return v
-  }
+  transformOut: (v) => {}
 }

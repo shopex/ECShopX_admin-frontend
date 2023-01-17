@@ -1,5 +1,6 @@
 export { default as PickerImage } from './picker-image'
 export { default as PickerFilm } from './picker-film'
+export { default as PickerCoupon } from './picker-coupon'
 export { default as PickerGoods } from './picker-goods'
 export { default as PickerShop } from './picker-shop'
 export { default as PickerPath } from './picker-path'

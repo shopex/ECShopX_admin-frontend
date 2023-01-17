@@ -1,0 +1,149 @@
+<style lang="scss">
+.picker-coupon {
+  .sp-filter-form {
+    margin-bottom: 0;
+    .filter-form__bd {
+      margin-left: 16px;
+    }
+  }
+  .filter-tools {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    .el-cascader,
+    .el-input {
+      width: 196px;
+      margin-right: 8px;
+    }
+  }
+  .sp-finder-hd {
+    display: none;
+  }
+  .sp-finder {
+    &.no-multiple {
+      .sp-finder-bd {
+        .el-table__fixed-header-wrapper {
+          table thead {
+            tr {
+              th {
+                &:nth-child(1) {
+                  .el-checkbox {
+                    display: none;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="picker-coupon">
+    <!-- multiple：{{ multiple }}, {{ value }} -->
+    <!-- <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="region">
+        <el-cascader
+          ref="region"
+          v-model="formData.region"
+          filterable
+          clearable
+          placeholder="选择地区筛选店铺"
+          :options="district"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="keywords">
+        <el-input v-model="formData.keywords" placeholder="请输入店铺名称搜索" />
+      </SpFilterFormItem>
+    </SpFilterForm> -->
+
+    <SpFinder
+      ref="finder"
+      :class="['shop-finder', { 'no-multiple': !multiple }]"
+      url="/discountcard/list"
+      :fixed-row-action="true"
+      :setting="{
+        columns: [
+          { name: '优惠券', key: 'name' },
+          { name: '店铺地址', key: 'store_address' }
+        ]
+      }"
+      :hooks="{
+        beforeSearch: beforeSearch,
+        afterSearch: afterSearch
+      }"
+      @select="onSelect"
+      @selection-change="onSelectionChange"
+    />
+  </div>
+</template>
+
+<script>
+import district from '@/common/district.json'
+import BasePicker from './base'
+import PageMixin from '../mixins/page'
+export default {
+  name: 'PickerShop',
+  extends: BasePicker,
+  mixins: [PageMixin],
+  config: {
+    title: '选择店铺'
+  },
+  props: ['value'],
+  data() {
+    return {
+      formData: {
+        region: [],
+        keywords: ''
+      },
+      district,
+      regionArea: [],
+      loading: false,
+      multiple: this.value?.multiple ?? true
+    }
+  },
+  created() {
+    // this.fetch()
+  },
+  methods: {
+    beforeSearch(params) {
+      let _params = {
+        page_no: params.page,
+        page_size: params.pageSize,
+        end_date: 1,
+        from: 'btn'
+      }
+      return _params
+    },
+    afterSearch(response) {
+      const { list } = response.data.data
+      const selectRows = list.filter((item) => this.value?.data.includes(item.distributor_id))
+      const { finderTable } = this.$refs.finder.$refs
+      setTimeout(() => {
+        finderTable.$refs.finderTable.setSelection(selectRows)
+      })
+    },
+    onSearch() {
+      this.$refs.finder.refresh()
+    },
+    onSelect(selection, row) {
+      if (this.multiple) {
+        // this.updateVal(selection)
+      } else {
+        const { finderTable } = this.$refs.finder.$refs
+        console.log('finderTable:', finderTable)
+        finderTable.clearSelection()
+        setTimeout(() => {
+          finderTable.$refs.finderTable.setSelection([row])
+          // this.updateVal([row])
+        })
+      }
+    },
+    onSelectionChange(selection) {
+      this.updateVal(selection)
+    }
+  }
+}
+</script>
