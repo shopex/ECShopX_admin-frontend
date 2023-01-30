@@ -66,8 +66,45 @@
       :fixed-row-action="true"
       :setting="{
         columns: [
-          { name: '优惠券', key: 'name' },
-          { name: '店铺地址', key: 'store_address' }
+          {
+            name: '卡券类型',
+            key: 'card_type',
+            width: '100px',
+            render: (h, { row }) =>
+              h(
+                'el-tag',
+                {
+                  props: {
+                    size: 'mini'
+                  }
+                },
+                cardTypeFormatter(row)
+              )
+          },
+          { name: '卡券名称', key: 'title' },
+          {
+            name: '卡券有效期',
+            formatter: (value, { takeEffect, begin_time, end_time }, col) => {
+              if (takeEffect) {
+                return takeEffect
+              } else {
+                return getCardValidate(begin_time, end_time)
+              }
+            }
+          },
+          {
+            name: '可领取库存',
+            formatter: (value, { quantity, get_num }, col) => {
+              if (quantity > get_num) {
+                return quantity - get_num
+              } else {
+                return 0
+              }
+            },
+            width: '100px'
+          },
+          { name: '领取量', key: 'get_num', width: '80px' },
+          { name: '使用量', key: 'use_num', width: '80px' }
         ]
       }"
       :hooks="{
@@ -82,6 +119,8 @@
 
 <script>
 import district from '@/common/district.json'
+import { CARD_TYPE } from '@/consts'
+import moment from 'moment'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
 export default {
@@ -89,7 +128,7 @@ export default {
   extends: BasePicker,
   mixins: [PageMixin],
   config: {
-    title: '选择店铺'
+    title: '选择优惠券'
   },
   props: ['value'],
   data() {
@@ -109,21 +148,30 @@ export default {
   },
   methods: {
     beforeSearch(params) {
-      let _params = {
+      // params = {
+      //   page_no: params.page,
+      //   page_size: params.pageSize,
+      //   end_date: 1,
+      //   from: 'btn'
+      // }
+      params = {
         page_no: params.page,
         page_size: params.pageSize,
         end_date: 1,
         from: 'btn'
       }
-      return _params
+      // params = {
+      //   ...params
+      // }
+      return params
     },
     afterSearch(response) {
-      const { list } = response.data.data
-      const selectRows = list.filter((item) => this.value?.data.includes(item.distributor_id))
-      const { finderTable } = this.$refs.finder.$refs
-      setTimeout(() => {
-        finderTable.$refs.finderTable.setSelection(selectRows)
-      })
+      // const { list } = response.data.data
+      // const selectRows = list.filter((item) => this.value?.data.includes(item.distributor_id))
+      // const { finderTable } = this.$refs.finder.$refs
+      // setTimeout(() => {
+      //   finderTable.$refs.finderTable.setSelection(selectRows)
+      // })
     },
     onSearch() {
       this.$refs.finder.refresh()
@@ -143,6 +191,14 @@ export default {
     },
     onSelectionChange(selection) {
       this.updateVal(selection)
+    },
+    cardTypeFormatter({ card_type }) {
+      return CARD_TYPE[card_type]
+    },
+    getCardValidate(beginDate, endDate) {
+      return `${moment(beginDate * 1000).format('YYYY-MM-DD HH:mm:ss')} ~ ${moment(
+        endDate * 1000
+      ).format('YYYY-MM-DD HH:mm:ss')}`
     }
   }
 }

@@ -39,7 +39,7 @@
         </draggable>
       </div>
       <div class="center-container">
-        <!-- {{ contentComps }} -->
+        {{ contentComps }}
         <!-- {{ headerData }} -->
         <div class="weapp-template">
           <Header :value="headerData" @change="handleClickHeader" />

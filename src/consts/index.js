@@ -213,3 +213,9 @@ export const LINK_PATH = {
   'liverooms': '直播',
   'other_wxapp': '外部小程序'
 }
+
+export const CARD_TYPE = {
+  'discount': '折扣券',
+  'cash': '满减券',
+  'new_gift': '兑换券'
+}
