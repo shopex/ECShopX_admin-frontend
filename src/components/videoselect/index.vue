@@ -86,8 +86,7 @@ export default {
       default: false
     },
     data: {
-      type: Object,
-      default: () => []
+      type: [Object,Array]
     }
   },
   data() {
@@ -131,7 +130,14 @@ export default {
   watch: {
     data: {
       handler(val) {
-        this.checked = [JSON.parse(JSON.stringify(val))]
+        this.isArray = Object.prototype.toString.call(val).slice(8,-1) === 'Array';
+        if(this.isArray){
+          this.checked = JSON.parse(JSON.stringify(val))
+          return
+        }else{
+          this.checked = [val]
+        }
+       
       },
       immediate: true
     }
@@ -290,7 +296,7 @@ export default {
           }
         })
         this.checked = arr
-        this.$emit('change', this.checked[0])
+        this.$emit('change', this.isArray?this.checked:this.checked[0]) //判断传入进来的是数组还是对象再传递出去对应的数据
       } else {
         this.$message('请选择视频')
       }
