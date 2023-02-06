@@ -197,7 +197,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="获取积分">
+      <!-- <el-table-column label="获取积分">
         <template slot-scope="scope">
           <el-input
             v-model="scope.row.point_num"
@@ -208,7 +208,7 @@
             placeholder=""
           />
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column width="80">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="onFillSpecItems"> 填充 </el-button>
