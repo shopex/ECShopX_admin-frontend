@@ -680,7 +680,7 @@ export default {
           let t = {
             skuId: attribute_id,
             skuName: attribute_name,
-            isImage: Boolean(is_image),
+            isImage: JSON.parse(is_image),
             skuValue: list.map(
               ({ attribute_value_id, custom_attribute_value, attribute_value }) => {
                 if (specValueIds.find(({ spec_value_id }) => spec_value_id == attribute_value_id)) {

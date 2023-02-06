@@ -39,7 +39,6 @@
 </style>
 <template>
   <div class="cm-sku-params">
-    <!-- {{ value.skus }} -->
     <el-form label-width="100px">
       <el-form-item
         v-for="(item, index) in value.skus"
@@ -375,9 +374,13 @@ export default {
       this.getSkuItems(spec_items)
     },
     getSkuItemImages(value) {
-      const { skuValue, checkedSku } = JSON.parse(JSON.stringify(this.value.skus))
-        .reverse()
-        .find((item) => item.isImage)
+      const { skuValue = [], checkedSku = [] } =
+        JSON.parse(JSON.stringify(this.value.skus))
+          .reverse()
+          .find((item) => item.isImage) || {}
+      if (!skuValue) {
+        return
+      }
       this.value.skuItemImages = skuValue
         .filter(({ attribute_value_id }) => checkedSku.includes(attribute_value_id))
         .map((item) => {
