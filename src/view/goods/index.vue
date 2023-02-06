@@ -55,7 +55,7 @@
 <script>
 import _uniqBy from 'lodash/uniqBy'
 import richTextEditor from '@/components/function/richTextEditor'
-import { isObject } from '@/utils'
+import { isObject, isArray } from '@/utils'
 import CmGoodsParams from './comps/CmGoodsParams'
 import CmSpecParams from './comps/CmSpecParams'
 import CmSkuParams from './comps/CmSkuParams'
@@ -284,7 +284,7 @@ export default {
           onChange: () => {},
           isShow: (item, { isSpecs }) => {
             const { itemId } = this.$route.params
-            return (!isSpecs && itemId) || !itemId
+            return !itemId
           }
         },
         {
@@ -393,15 +393,17 @@ export default {
         {
           label: '',
           key: 'content',
-          component: ({ key }, value) => (
-            <richTextEditor
-              data={value[key]}
-              control={['film', 'slider', 'heading', 'writing']}
-              on-change={(data) => {
-                value[key] = data
-              }}
-            />
-          ),
+          component: ({ key }, value) => {
+            return (
+              <richTextEditor
+                data={value[key]}
+                control={['film', 'slider', 'heading', 'writing']}
+                on-change={(data) => {
+                  value[key] = data
+                }}
+              />
+            )
+          },
           isShow: (item, { mode }) => {
             return mode == 'component'
           }
@@ -561,8 +563,9 @@ export default {
         this.form.mate_description = mate_description
         this.form.mate_keywords = mate_keywords
       }
-      if (isObject(intro)) {
+      if (isArray(intro)) {
         this.form.mode = 'component'
+        this.form.content = intro
       } else {
         this.form.intro = intro
       }
