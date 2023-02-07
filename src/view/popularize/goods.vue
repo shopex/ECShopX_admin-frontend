@@ -65,12 +65,6 @@
             label="返佣状态"
             width="160"
             column-key="rebate"
-            :filters="[
-              { text: '支持返佣', value: '1' },
-              { text: '不支持返佣', value: '0' },
-              { text: '等待审核', value: '2' },
-              { text: '拒绝加入', value: '3' }
-            ]"
             :filter-multiple="false"
           >
             <template slot-scope="scope">
@@ -658,7 +652,7 @@ export default {
       }).then((res) => {
         var rebateSpecItems = []
         res.data.data.list.forEach((item) => {
-          if (item.rebate_conf.length === 0) {
+          if (!item.rebate_conf) {
             item.rebate_conf = {}
             item.rebate_conf.type = 'money'
             item.rebate_conf.rebate_task_type = 'money'
@@ -703,7 +697,7 @@ export default {
         this.itemsList.forEach((item) => {
           item.rebate_audit = ''
           item.rebate_audit = item.rebate
-          item.rebate = item.rebate === 1 ? true : false
+          item.rebate = item.rebate === '1' ? true : false
         })
         console.log(this.itemsList)
         this.total_count = response.data.data.total_count

@@ -150,7 +150,7 @@ export default {
           break
         default:
           this.title = this.getLoginTitle('平台管理中心')
-          this.login_bg = this.VUE_APP_FREE ? login_bg_free_ecshopx : login_bg_ecshopx
+          this.login_bg = login_bg_ecshopx
           break
       }
     },
@@ -245,7 +245,7 @@ export default {
           return
         }
         this.$router.push({ path: '/dealer/index' })
-      } else if (this.loginType == 'marchant') {
+      } else if (this.loginType == 'merchant') {
         this.$router.push({ path: '/merchant' })
       } else {
         window.location.href = '/'

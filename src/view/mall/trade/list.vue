@@ -107,7 +107,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="交易单" width="270">
+          <el-table-column label="交易单" width="180">
             <template slot-scope="scope">
               <div class="order-num">
                 {{ scope.row.tradeId }}
@@ -125,15 +125,20 @@
                 </el-tooltip>
                 {{ scope.row.distributor_name }}
               </div>
-              <div class="order-time">
+              <!-- <div class="order-time">
                 <el-tooltip effect="dark" content="创建时间" placement="top-start">
                   <i class="el-icon-time" />
                 </el-tooltip>
                 {{ scope.row.timeStart | datetime('YYYY-MM-DD HH:mm:ss') }}
-              </div>
+              </div> -->
             </template>
           </el-table-column>
-          <el-table-column label="订单信息" min-width="300">
+          <el-table-column label="交易时间" width="160">
+            <template slot-scope="scope">
+              {{ scope.row.timeStart | datetime('YYYY-MM-DD HH:mm:ss') }}
+            </template>
+          </el-table-column>
+          <el-table-column label="订单信息">
             <template slot-scope="scope">
               <div class="order-num">
                 <el-tooltip effect="dark" content="联系方式" placement="top-start">
@@ -154,6 +159,10 @@
                 </el-tooltip>
               </div>
               <div class="order-time">商品：{{ scope.row.body }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="实付" width="180">
+            <template slot-scope="scope">
               <div>
                 实付：<span v-if="scope.row.payType == 'point'" class="mark"
                   >{{ scope.row.payFee }} 积分</span
@@ -165,7 +174,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column min-width="200" label="支付方式">
+          <el-table-column label="支付方式">
             <template slot-scope="scope">
               <span>{{ fitlerPayType(scope.row.payChannel, scope.row.payType) }}</span>
               <!-- <span v-if="scope.row.payType == 'wxpay' || scope.row.payType == 'wxpayjs'"
@@ -254,7 +263,7 @@
             background
             layout="total, sizes, prev, pager, next"
             :current-page.sync="page.pageIndex"
-            :page-sizes="[10, 20, 50]"
+            :page-sizes="[20, 30, 50]"
             :total="page.total"
             :page-size="params.pageSize"
             @current-change="onCurrentChange"
@@ -267,14 +276,10 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import shopSelect from '@/components/shopSelect'
 import mixin, { pageMixin } from '@/mixins'
 import { PAY_TYPE } from '@/consts'
 
 export default {
-  components: {
-    shopSelect
-  },
   mixins: [mixin, pageMixin],
   data() {
     const initialParams = {
@@ -412,6 +417,7 @@ export default {
 <style scoped lang="scss">
 .demo-table-expand {
   font-size: 0;
+  padding: 0 20px;
 }
 .demo-table-expand label {
   width: 90px;

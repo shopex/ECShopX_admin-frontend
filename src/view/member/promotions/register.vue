@@ -138,7 +138,7 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="员工激活礼： 员工注册后，手机号与导入的员工手机号相同，即会触发送礼">
+        <!-- <el-form-item label="员工激活礼： 员工注册后，手机号与导入的员工手机号相同，即会触发送礼">
           <el-row>
             <el-col :span="12">
               <div class="promotion-card">
@@ -167,7 +167,7 @@
               </div>
             </el-col>
           </el-row>
-        </el-form-item>
+        </el-form-item> -->
       </div>
       <div class="section-footer with-border content-center">
         <el-button type="primary" @click="save"> 保 存 </el-button>

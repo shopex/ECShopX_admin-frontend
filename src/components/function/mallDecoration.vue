@@ -950,7 +950,9 @@ export default {
   },
   methods: {
     handleClickTempHeader() {
+      // if(this.relStore.id == '0'){
       this.editorIndex = -1
+      // }
     },
     /* ---------------------------------------------选择标签------------------------------------------ */
     tagSelectVisibleHandle(type) {

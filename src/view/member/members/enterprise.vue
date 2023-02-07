@@ -161,7 +161,6 @@ export default {
             type: 'success',
             message: '更新成功!'
           })
-          // this.$refs.finder.refresh()
           this.fetchList()
           this.resetData()
         }
