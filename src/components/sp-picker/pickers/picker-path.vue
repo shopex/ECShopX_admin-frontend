@@ -27,7 +27,9 @@
       <el-tab-pane label="营销">定时任务补偿</el-tab-pane>
       <el-tab-pane label="活动报名">定时任务补偿</el-tab-pane>
       <el-tab-pane label="秒杀">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="自定义页面">定时任务补偿</el-tab-pane>
+      <el-tab-pane label="自定义页面" name="pages">
+        <PickerPages ref="pages" :value="value" />
+      </el-tab-pane>
       <el-tab-pane label="直播">定时任务补偿</el-tab-pane>
       <el-tab-pane label="外部小程序" name="wxapp">
         <PickerWxApp ref="wxapp" :value="value" />
@@ -42,12 +44,14 @@ import { pickBy } from '@/utils'
 import BasePicker from './base'
 import PickerGoods from './picker-goods'
 import PickerShop from './picker-shop'
+import PickerPages from './picker-pages'
 import PickerWxApp from './picker-wxapp'
 export default {
   name: 'PickerPath',
   components: {
     PickerGoods,
     PickerShop,
+    PickerPages,
     PickerWxApp
   },
   // extends: BasePicker,

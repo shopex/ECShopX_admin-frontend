@@ -1,5 +1,5 @@
 <style lang="scss">
-.picker-wxapp {
+.picker-pages {
   .sp-filter-form {
     padding: 8px 8px 0px 8px;
   }
@@ -32,18 +32,12 @@
 }
 </style>
 <template>
-  <div class="picker-wxapp">
+  <div class="picker-pages">
     <SpFilterForm :model="formData" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="region">
-        <el-select v-model="formData.approve_status" clearable placeholder="请选择小程序">
-          <el-option
-            v-for="item in wxappList"
-            :key="item.value"
-            :label="item.title"
-            size="mini"
-            :value="item.value"
-          />
-        </el-select>
+        <SpFilterFormItem prop="keywords">
+          <el-input v-model="formData.keywords" placeholder="请输入页面名称" />
+        </SpFilterFormItem>
       </SpFilterFormItem>
     </SpFilterForm>
     <SpFinder
@@ -52,14 +46,13 @@
       :other-config="{
         height: 460
       }"
-      url="/wxexternalconfigroutes/list"
+      url="/wxa/customizepage/list"
       :fixed-row-action="true"
       :setting="{
         columns: [
-          { name: '小程序名称', key: 'app_name' },
-          { name: 'appid', key: 'app_id' },
-          { name: '页面名称', key: 'route_name' },
-          { name: '页面路径', key: 'route_info' }
+          { name: '页面ID', key: 'id' },
+          { name: '页面名称', key: 'page_name' },
+          { name: '页面描述', key: 'page_description' }
         ]
       }"
       :hooks="{
@@ -85,7 +78,9 @@ export default {
     this.getOtherWxapp()
   },
   methods: {
-    beforeSearch() {},
+    beforeSearch(params) {
+      return params
+    },
     afterSearch() {},
     onSearch() {
       this.$refs.finder.refresh(true)

@@ -1,21 +1,21 @@
 <style lang="scss">
 .picker-shop {
   .sp-filter-form {
-    padding: 8px 8px 8px 8px;
-    .filter-form__bd {
-      margin-left: 16px;
-    }
+    padding: 8px 8px 0px 8px;
+    // .filter-form__bd {
+    //   margin-left: 16px;
+    // }
   }
-  .filter-tools {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    .el-cascader,
-    .el-input {
-      width: 196px;
-      margin-right: 8px;
-    }
-  }
+  // .filter-tools {
+  //   display: flex;
+  //   align-items: center;
+  //   padding: 8px;
+  //   .el-cascader,
+  //   .el-input {
+  //     width: 196px;
+  //     margin-right: 8px;
+  //   }
+  // }
   .sp-finder-hd {
     display: none;
   }
@@ -38,12 +38,16 @@
       }
     }
   }
+  .el-pagination {
+    margin: 0;
+    padding: 10px;
+  }
 }
 </style>
 <template>
   <div class="picker-shop">
     <!-- multiple：{{ multiple }}, {{ value }} -->
-    <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onSearch">
+    <SpFilterForm :model="formData" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="region">
         <el-cascader
           ref="region"
@@ -62,7 +66,7 @@
       ref="finder"
       :class="['shop-finder', { 'no-multiple': !multiple }]"
       :other-config="{
-        height: 440
+        height: 460
       }"
       url="/distributors"
       :fixed-row-action="true"
