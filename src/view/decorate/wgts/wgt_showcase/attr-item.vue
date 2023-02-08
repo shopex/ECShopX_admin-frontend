@@ -12,9 +12,9 @@
       <SpImagePicker v-model="item.imgUrl" size="small" />
       <CompPickerLink :value="item" @change="(e) => onChangeLink(e, index)" />
     </div>
-    <el-button class="btn btn-add" size="small" plain @click="handleClickAdd">
+    <!-- <el-button class="btn btn-add" size="small" plain @click="handleClickAdd">
       {{ `添加图片(${value.length}/5)` }}
-    </el-button>
+    </el-button> -->
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
       const { data } = await this.$picker.image({
         data: [],
         multiple: true,
-        num: 5
+        num: 3
       })
 
       this.localValue = data.map((item) => {
