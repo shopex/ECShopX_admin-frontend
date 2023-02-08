@@ -10,8 +10,7 @@
 </style>
 <template>
   <div class="picker-path">
-    {{ value }}
-
+    <!-- {{ value }} -->
     <el-tabs v-model="tabValue" :tab-position="'left'">
       <el-tab-pane label="商品" name="goods">
         <PickerGoods ref="goods" :value="value" />
@@ -30,7 +29,9 @@
       <el-tab-pane label="秒杀">定时任务补偿</el-tab-pane>
       <el-tab-pane label="自定义页面">定时任务补偿</el-tab-pane>
       <el-tab-pane label="直播">定时任务补偿</el-tab-pane>
-      <el-tab-pane label="外部小程序">定时任务补偿</el-tab-pane>
+      <el-tab-pane label="外部小程序" name="wxapp">
+        <PickerWxApp ref="wxapp" :value="value" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -41,11 +42,13 @@ import { pickBy } from '@/utils'
 import BasePicker from './base'
 import PickerGoods from './picker-goods'
 import PickerShop from './picker-shop'
+import PickerWxApp from './picker-wxapp'
 export default {
   name: 'PickerPath',
   components: {
     PickerGoods,
-    PickerShop
+    PickerShop,
+    PickerWxApp
   },
   // extends: BasePicker,
   config: {

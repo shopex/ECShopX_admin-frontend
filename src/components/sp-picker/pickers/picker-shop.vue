@@ -1,7 +1,7 @@
 <style lang="scss">
 .picker-shop {
   .sp-filter-form {
-    margin-bottom: 0;
+    padding: 8px 8px 8px 8px;
     .filter-form__bd {
       margin-left: 16px;
     }
@@ -55,12 +55,15 @@
         />
       </SpFilterFormItem>
       <SpFilterFormItem prop="keywords">
-        <el-input v-model="formData.keywords" placeholder="请输入店铺名称搜索" />
+        <el-input v-model="formData.keywords" placeholder="请输入店铺名称" />
       </SpFilterFormItem>
     </SpFilterForm>
     <SpFinder
       ref="finder"
       :class="['shop-finder', { 'no-multiple': !multiple }]"
+      :other-config="{
+        height: 440
+      }"
       url="/distributors"
       :fixed-row-action="true"
       :setting="{
