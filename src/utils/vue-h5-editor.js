@@ -151,7 +151,7 @@ const options = {
             })
             let imgHtml = ''
             data.forEach(({ url }) => {
-              imgHtml += `<img src=${url} style='display: block;'/>`
+              imgHtml += `<img src=${url} style='display: block;width: 100%;'/>`
             })
             this.$parent.execCommand('insertHTML', imgHtml)
           }
