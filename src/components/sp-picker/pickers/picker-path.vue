@@ -18,7 +18,9 @@
       <el-tab-pane label="店铺" name="store">
         <PickerShop v-if="tabValue == 'store'" ref="store" :value="value" />
       </el-tab-pane>
-      <el-tab-pane label="销售分类" name="salesCategory">角色管理</el-tab-pane>
+      <el-tab-pane label="销售分类" name="salesCategory">
+        <PickerSaleCategory v-if="tabValue == 'salesCategory'" ref="salesCategory" :value="value" />
+      </el-tab-pane>
       <el-tab-pane label="管理分类" name="category">角色管理</el-tab-pane>
       <el-tab-pane label="商品标签" name="tag">定时任务补偿</el-tab-pane>
       <el-tab-pane label="文章" name="article">定时任务补偿</el-tab-pane>
@@ -47,6 +49,7 @@ import { cloneDeep } from 'lodash'
 import { pickBy } from '@/utils'
 import BasePicker from './base'
 import PickerGoods from './picker-goods'
+import PickerSaleCategory from './picker-saleCategory'
 import PickerShop from './picker-shop'
 import PickerSeckill from './picker-seckill'
 import PickerRegactivity from './picker-regactivity'
@@ -56,6 +59,7 @@ export default {
   name: 'PickerPath',
   components: {
     PickerGoods,
+    PickerSaleCategory,
     PickerShop,
     PickerSeckill,
     PickerRegactivity,

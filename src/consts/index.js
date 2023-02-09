@@ -200,7 +200,7 @@ export const SYSTEM_CONFIG = {
 export const LINK_PATH = {
   'goods': '商品',
   'store': '店铺',
-  'salesCategory': '销售分类',
+  'sale_category': '销售分类',
   'category': '管理分类',
   'tag': '商品标签',
   'article': '文章',
