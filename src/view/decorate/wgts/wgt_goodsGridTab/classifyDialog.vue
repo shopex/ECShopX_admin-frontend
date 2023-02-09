@@ -127,7 +127,7 @@
 import draggable from 'vuedraggable'
 import { getItemsList } from '@/api/goods'
 export default {
-  name: 'AttrSelectGoods',
+  name: 'ClassifyDialog',
   components: {
     draggable
   },

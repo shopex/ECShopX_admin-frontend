@@ -12,6 +12,7 @@
 import CompPickerLink from '../../comps/comp-pickerLink'
 
 export default {
+  name: 'GoodsLink',
   components:{CompPickerLink},
   props: ['value'],
   data() {

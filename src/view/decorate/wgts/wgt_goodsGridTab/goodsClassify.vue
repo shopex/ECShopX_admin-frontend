@@ -14,7 +14,7 @@
 import { useDialog } from "@shopex/finder"
 import classifyDialog from "./classifyDialog.vue"
 export default {
-  name: 'AttrSelectGoods',
+  name: 'GoodsClassify',
   components: { classifyDialog },
   props: ['value'],
   data() {
