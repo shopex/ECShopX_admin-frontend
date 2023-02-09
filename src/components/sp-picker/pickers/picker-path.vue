@@ -18,11 +18,15 @@
       <el-tab-pane label="店铺" name="store">
         <PickerShop v-if="tabValue == 'store'" ref="store" :value="value" />
       </el-tab-pane>
-      <el-tab-pane label="销售分类" name="salesCategory">
-        <PickerSaleCategory v-if="tabValue == 'salesCategory'" ref="salesCategory" :value="value" />
+      <el-tab-pane label="销售分类" name="sale_category">
+        <PickerSaleCategory v-if="tabValue == 'sale_category'" ref="sale_category" :value="value" />
       </el-tab-pane>
-      <el-tab-pane label="管理分类" name="category">角色管理</el-tab-pane>
-      <el-tab-pane label="商品标签" name="tag">定时任务补偿</el-tab-pane>
+      <el-tab-pane label="管理分类" name="category">
+        <PickerCategory v-if="tabValue == 'category'" ref="category" :value="value" />
+      </el-tab-pane>
+      <el-tab-pane label="商品标签" name="tag">
+        <PickerTag v-if="tabValue == 'tag'" ref="tag" :value="value" />
+      </el-tab-pane>
       <el-tab-pane label="文章" name="article">定时任务补偿</el-tab-pane>
       <el-tab-pane label="软文">定时任务补偿</el-tab-pane>
       <el-tab-pane label="页面">定时任务补偿</el-tab-pane>
@@ -50,6 +54,8 @@ import { pickBy } from '@/utils'
 import BasePicker from './base'
 import PickerGoods from './picker-goods'
 import PickerSaleCategory from './picker-saleCategory'
+import PickerCategory from './picker-category'
+import PickerTag from './picker-tag'
 import PickerShop from './picker-shop'
 import PickerSeckill from './picker-seckill'
 import PickerRegactivity from './picker-regactivity'
@@ -60,6 +66,8 @@ export default {
   components: {
     PickerGoods,
     PickerSaleCategory,
+    PickerCategory,
+    PickerTag,
     PickerShop,
     PickerSeckill,
     PickerRegactivity,
@@ -103,6 +111,24 @@ export default {
           return pickBy(data, {
             id: 'distributor_id',
             title: 'name'
+          })
+        },
+        sale_category: () => {
+          return pickBy(data, {
+            id: 'id',
+            title: 'title'
+          })
+        },
+        category: () => {
+          return pickBy(data, {
+            id: 'id',
+            title: 'title'
+          })
+        },
+        tag: () => {
+          return pickBy(data, {
+            id: 'tag_id',
+            title: 'tag_name'
           })
         },
         seckill: () => {

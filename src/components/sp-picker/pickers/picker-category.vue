@@ -44,7 +44,7 @@ export default {
   extends: BasePicker,
   mixins: [PageMixin],
   config: {
-    title: '选择销售分类'
+    title: '选择管理分类'
   },
   props: ['value'],
   data() {
@@ -66,7 +66,9 @@ export default {
   methods: {
     async fetch() {
       const { data } = this.value
-      const res = await this.$api.goods.getCategory()
+      const res = await this.$api.goods.getCategory({
+        is_main_category: true
+      })
       this.options = res
       this.localValue = this.findPathById(res, data)
     },
