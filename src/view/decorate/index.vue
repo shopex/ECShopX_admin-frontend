@@ -136,6 +136,7 @@ export default {
   mounted() {
     document.body.style.setProperty('--themeColor', '#155bd4')
     document.body.style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
+    console.log(123,this.widgets)
   },
   methods: {
     regsiterWgts() {
