@@ -80,14 +80,14 @@
 <template>
   <el-dialog title="商品分类" :visible.sync="dialogVisible" width="820px">
     <div class="goods-classify">
-      <div class="goods-classify-edit-goods">
+      <div v-if="editableTabsValue.replace('tab','')<=list.length&&list.length>0" class="goods-classify-edit-goods">
         <el-button size="mini" type="default" class="iconfont icon-cog banner-button-uploader" @click="setGoods">
           编辑商品
         </el-button>
         <span style="font-size: 12px; margin-left: 20px">最多可选择100件商品；左侧实时预览内仅展示前50件；下方商品拖动以排序。</span>
       </div>
       <el-tabs v-model="editableTabsValue" type="card" closable editable @edit="handleAddTab">
-        <el-tab-pane v-for="(item, index) in list" :key="index" :label="item.tabTitle" :name="'tab' + index">
+        <el-tab-pane v-for="(item, index) in list" :key="index" :label="item.tabTitle" :name="'tab' + (index + 1)">
           <span slot="label"> {{ item.tabTitle }}
             <el-popover placement="top" width="400">
               <el-input v-model="item.tabTitle" size="small" clearable maxlength="10" show-word-limit />
@@ -126,6 +126,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { getItemsList } from '@/api/goods'
+import { cloneDeep } from 'lodash'
 export default {
   name: 'ClassifyDialog',
   components: {
@@ -141,14 +142,16 @@ export default {
         forceFallback: false,
         scroll: true
       },
-      editableTabsValue: 'tab0',
+      editableTabsValue: 'tab1',
       dialogVisible: false,
     }
   },
   watch: {
     dialogVisible: {
       handler(val) {
-        this.list = this.value?JSON.parse(JSON.stringify(this.value)):[]
+        if(val){
+          this.list = this.value ? cloneDeep(this.value) : []
+        }
       },
       immediate: true
     }
@@ -171,16 +174,15 @@ export default {
     },
     handleAddTab(targetName, action) {
       if (action === 'add') {
-        let newTabName = this.list.length
         let item = {
           tabTitle: 'newTab',
           goodsList: []
         }
         this.list.push(item)
+        let newTabName = this.list.length
         this.editableTabsValue = 'tab' + newTabName
       }
       if (action === 'remove') {
-        console.log(targetName, this.editableTabsValue, activeName)
         let tabs = this.list
         let activeName = this.editableTabsValue
         if (activeName === targetName) {
@@ -194,8 +196,9 @@ export default {
             }
           })
         }
-        this.editableTabsValue = activeName
-        this.list = tabs.filter((tab, index) => 'tab' + index !== targetName);
+        const i = activeName.replace('tab','');
+        this.list = tabs.filter((tab, index) => 'tab' + (index + 1) !== targetName);
+        this.editableTabsValue = this.list.length>=i?activeName:'tab' + (i - 1)
       }
     },
 
@@ -212,7 +215,7 @@ export default {
       // this.data.splice(evt.newIndex, 0, this.temp)
     },
     async setGoods() {
-      const index = this.editableTabsValue.replace('tab', '');
+      const index = this.editableTabsValue.replace('tab', '') - 1;
       const { data } = await this.$picker.goods()
       let values = []
       data && data.forEach((item) => {
@@ -230,6 +233,7 @@ export default {
           values.push(obj)
         }
       })
+      console.log(this.list)
       this.list[index].goodsList = values
     },
     removeItem(index, i) {

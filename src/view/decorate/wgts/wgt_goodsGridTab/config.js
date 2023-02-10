@@ -14,7 +14,7 @@ export default {
     }, value: false },
     {label:'查看更多',key:'moreLink', component:  function (h, { key }) {
       return <GoodsLink  v-model={this.value[key]} />
-    }, value: false },
+    } },
   ],
   transformIn: (v) => {
     const { name, base, config, data, list } = v
