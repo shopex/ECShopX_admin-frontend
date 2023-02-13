@@ -1,6 +1,9 @@
 <style lang="scss">
 .wgt-floorImg {
-  min-height: 120px;
+  width: 100%;
+  overflow: scroll;
+  /* border: red 1px solid; */
+  /* background-color: red; */
   &.padded {
     padding: 10px 0;
   }
@@ -19,18 +22,21 @@
   .wgt-bd {
     position: relative;
     display: flex;
-    padding: 10px 30px;
+    padding: 10px ;
+    width: 100%;
     &.spaced {
       padding: 0 10px;
-      .img-item {
-        flex: 1;
+    }
+    .img-item {
+      margin-right: 20px;
         .title-image {
-        height: 100%;
-        width: 120px;
+          img{
+            height: 120px !important;
+            width: 120px !important ;
+          }
         display: inline-block;
     }
       }
-    }
   }
 }
 </style>
@@ -53,10 +59,8 @@
       }"
     >
       <div v-for="(item, index) in value.data" :key="index" class="img-item">
-        <div>
           <sp-image :src="item.imgUrl" class="title-image"  />
-          {{ item.text }}
-        </div>
+          {{ item.title }}
       </div>
     </div>
   </div>
