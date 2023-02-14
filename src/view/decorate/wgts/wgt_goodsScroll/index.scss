@@ -1,0 +1,48 @@
+.wgt-goods-scroll {
+  &.padded {
+    padding: 10px 0;
+  }
+  .wgt-hd {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    .sub-title {
+      color: #666;
+      margin-left: 4px;
+    }
+  }
+  .wgt-bd {
+    position: relative;
+    &.spaced {
+      padding: 0 10px;
+    }
+  }
+  &-timer {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 11px;
+    .timer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 3px;
+      background: #333;
+      color: #fff;
+      border-radius: 2px;
+      font-size: 10px;
+      font-family: sans-serif;
+    }
+    .dot {
+      padding: 0 2px;
+    }
+  }
+}
+
