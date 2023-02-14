@@ -220,6 +220,7 @@ export default {
       let values = []
       data && data.forEach((item) => {
         if (item.itemId) {
+      console.log(JSON.stringify(item))
           let obj = {
             imgUrl: item.pics[0],
             title: item.itemName,

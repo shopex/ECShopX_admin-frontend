@@ -162,28 +162,28 @@
 <template>
   <div :class="{
     'wgt-goods-grid-tab': true,
-    'padded': value.padded
+    'padded': data.padded
   }">
-    <div v-if="value.title || value.subtitle" class="wgt-hd">
-      <span class="title">{{ value.title }}</span>
-      <span class="sub-title">{{ value.subtitle }}</span>
+    <div v-if="data.title || data.subtitle" class="wgt-hd">
+      <span class="title">{{ data.title }}</span>
+      <span class="sub-title">{{ data.subtitle }}</span>
     </div>
     <div class="wgt-goods-grid-tabs-header">
-      <div v-for="(item, index) in value.list" :key="index" class="wgt-goods-grid-tabs-header-item"
+      <div v-for="(item, index) in data.list" :key="index" class="wgt-goods-grid-tabs-header-item"
         :style="checkde == index ? `color: ${colorPrimary}` : ''" :class="checkde == index ? 'checked' : ''"
         @click="handleClick(index)">
         {{ item.tabTitle }}
       </div>
     </div>
-    <div v-if="value.list && value.list[checkde] && value.list[checkde].goodsList.length > 0"
+    <div v-if="data.list && data.list[checkde] && data.list[checkde].goodsList.length > 0"
       class="wgt-goods-grid-tabs-pane">
-      <div v-for="(item, index) in value.list[checkde].goodsList.slice(0, 50)" :key="index"
+      <div v-for="(item, index) in data.list[checkde].goodsList.slice(0, 50)" :key="index"
         class="wgt-goods-grid-tabs-pane-item">
         <div class="wgt-goods-grid-tabs-item-img">
           <SpImage class="goods-img" :src="item.imgUrl ? wximageurl + item.imgUrl : ''" />
         </div>
         <div class="wgt-goods-grid-tabs-item-info">
-          <SpImage v-if="value.brand && value.style !== 'grids'" class="goods-brand" :src="
+          <SpImage v-if="data.brand && data.style !== 'grids'" class="goods-brand" :src="
             item.brand
               ? wximageurl + item.brand
               : 'https://fakeimg.pl/60x60/EFEFEF/CCC/?text=brand&font=lobster'
@@ -194,7 +194,7 @@
           <div class="goods-title">
             {{ item.itemEnName }}
           </div>
-          <div v-if="value.showPrice" class="price">
+          <div v-if="data.showPrice" class="price">
             <span class="cur">¥</span>{{ item.price / 100 }}
           </div>
           <div class="activity-label">
@@ -212,7 +212,26 @@
         </div>
       </div>
     </div>
-    <el-empty v-else description="暂无商品" />
+    <div v-else class="wgt-goods-grid-tabs-pane">
+      <div v-for="(item) in 4" :key="item" class="wgt-goods-grid-tabs-pane-item">
+        <div class="wgt-goods-grid-tabs-item-img">
+          <SpImage class="goods-img" src="" />
+        </div>
+        <div class="wgt-goods-grid-tabs-item-info">
+          <SpImage v-if="data.brand && data.style !== 'grids'" class="goods-brand"
+            src="https://fakeimg.pl/60x60/EFEFEF/CCC/?text=brand&font=lobster" />
+          <div class="goods-title">
+            商品名称
+          </div>
+          <div class="goods-title">
+            商品副标题
+          </div>
+          <div v-if="data.showPrice" class="price">
+            <span class="cur">¥</span>0.00
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="goods-more">
       <p class="more-btn">
         查看更多
@@ -222,7 +241,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { cloneDeep } from 'lodash'
 import config from './config'
 export default {
   name: 'GoodsGridTab',
@@ -238,16 +257,29 @@ export default {
       currentIndex: 1,
       checkde: 0,
       goodsGridTabDeep: {},
-      colorPrimary: ''
+      colorPrimary: '',
+      data: null
+    }
+  },
+  watch: {
+    value: {
+      handler(val) {
+        let data = val
+        const { list } = data
+        if (!list || list.length === 0) {
+          data.list = [{ tabTitle: 'newTable', goodsList: [] }]
+        }
+        this.data = data;
+      },
+      immediate:true,
+      deep:true
     }
   },
   mounted() {
     this.colorPrimary = this.$store.getters.color_theme.primary
   },
   methods: {
-
     handleClick(i) {
-      console.log(i)
       this.checkde = i
     }
   }
