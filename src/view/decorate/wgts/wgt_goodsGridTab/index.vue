@@ -117,27 +117,41 @@
         }
 
       }
+
+      .activity-label {
+        display: flex;
+        flex-wrap: wrap;
+
+        p {
+          border-radius: 4px;
+          padding: 0px 4px;
+          font-size: 10px;
+          line-height: 16px;
+          margin: 0px 2px 2px 0px;
+        }
+      }
     }
   }
 
   .goods-more {
-      display: flex;
-      justify-content: center;
-      margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
 
-      .more-btn {
-        text-align: center;
-        font-size: 14px;
-        line-height: 34px;
-        font-weight: 500;
-        color: #00081c;
-        letter-spacing: 2px;
-        width: 140px;
-        height: 34px;
-        border-radius: 2px;
-        border: 1px solid #00081c;
-      }
+    .more-btn {
+      text-align: center;
+      font-size: 14px;
+      line-height: 34px;
+      font-weight: 500;
+      color: #00081c;
+      letter-spacing: 2px;
+      width: 140px;
+      height: 34px;
+      border-radius: 2px;
+      border: 1px solid #00081c;
     }
+  }
+
   // .wgt-goods-grid-tab-item {
   //   float: left;
   //   background-size: cover;
@@ -155,23 +169,25 @@
       <span class="sub-title">{{ value.subtitle }}</span>
     </div>
     <div class="wgt-goods-grid-tabs-header">
-      <div v-for="(item, index) in value.list" :key="index" class="wgt-goods-grid-tabs-header-item" :style="checkde == index ? `color: ${colorPrimary}` : ''"
-        :class="checkde == index ? 'checked' : ''" @click="handleClick(index)">
+      <div v-for="(item, index) in value.list" :key="index" class="wgt-goods-grid-tabs-header-item"
+        :style="checkde == index ? `color: ${colorPrimary}` : ''" :class="checkde == index ? 'checked' : ''"
+        @click="handleClick(index)">
         {{ item.tabTitle }}
       </div>
     </div>
-    <div v-if="value.list" class="wgt-goods-grid-tabs-pane">
+    <div v-if="value.list && value.list[checkde] && value.list[checkde].goodsList.length > 0"
+      class="wgt-goods-grid-tabs-pane">
       <div v-for="(item, index) in value.list[checkde].goodsList.slice(0, 50)" :key="index"
         class="wgt-goods-grid-tabs-pane-item">
         <div class="wgt-goods-grid-tabs-item-img">
-          <img class="goods-img" :src="wximageurl + item.imgUrl">
+          <SpImage class="goods-img" :src="item.imgUrl ? wximageurl + item.imgUrl : ''" />
         </div>
         <div class="wgt-goods-grid-tabs-item-info">
-          <img v-if="value.brand && value.style !== 'grids'" class="goods-brand" :src="
+          <SpImage v-if="value.brand && value.style !== 'grids'" class="goods-brand" :src="
             item.brand
               ? wximageurl + item.brand
               : 'https://fakeimg.pl/60x60/EFEFEF/CCC/?text=brand&font=lobster'
-          ">
+          " />
           <div class="goods-title">
             {{ item.title }}
           </div>
@@ -196,11 +212,12 @@
         </div>
       </div>
     </div>
-      <div class="goods-more">
-        <p class="more-btn">
-          查看更多
-        </p>
-      </div>
+    <el-empty v-else description="暂无商品" />
+    <div class="goods-more">
+      <p class="more-btn">
+        查看更多
+      </p>
+    </div>
   </div>
 </template>
 

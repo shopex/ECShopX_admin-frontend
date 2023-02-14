@@ -80,7 +80,7 @@
 <template>
   <el-dialog title="商品分类" :visible.sync="dialogVisible" width="820px">
     <div class="goods-classify">
-      <div v-if="editableTabsValue.replace('tab','')<=list.length&&list.length>0" class="goods-classify-edit-goods">
+      <div v-if="editableTabsValue.replace('tab', '') <= list.length && list.length > 0" class="goods-classify-edit-goods">
         <el-button size="mini" type="default" class="iconfont icon-cog banner-button-uploader" @click="setGoods">
           编辑商品
         </el-button>
@@ -101,7 +101,7 @@
               <el-col v-for="(item_y, index_y) in item.goodsList" :key="index_y" :span="6"
                 class="setting-item item-selected" @mouseover.native="mouseoverHandle(index_y)"
                 @mouseleave.native="mouseleaveHandle()">
-                <img class="thumbnail" :src="wximageurl + item_y.imgUrl" alt="">
+                <SpImage class="thumbnail" :src="item_y.imgUrl ? wximageurl + item_y.imgUrl : ''" />
                 <div class="title">
                   {{ item_y.title }}
                 </div>
@@ -149,7 +149,7 @@ export default {
   watch: {
     dialogVisible: {
       handler(val) {
-        if(val){
+        if (val) {
           this.list = this.value ? cloneDeep(this.value) : []
         }
       },
@@ -196,9 +196,9 @@ export default {
             }
           })
         }
-        const i = activeName.replace('tab','');
+        const i = activeName.replace('tab', '');
         this.list = tabs.filter((tab, index) => 'tab' + (index + 1) !== targetName);
-        this.editableTabsValue = this.list.length>=i?activeName:'tab' + (i - 1)
+        this.editableTabsValue = this.list.length >= i ? activeName : 'tab' + (i - 1)
       }
     },
 
