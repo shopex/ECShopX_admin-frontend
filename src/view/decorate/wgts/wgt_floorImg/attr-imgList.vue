@@ -23,7 +23,7 @@
         <div class="img-title">
         <span class="title-text">标题:</span>
         <el-input
-          v-model="localValue.ImgTitle"
+          v-model="item.ImgTitle"
           type="text"
           placeholder="请填写图片标题"
           class="title-input"
@@ -70,20 +70,18 @@ export default {
         multiple: true,
         num: 5
       })
-
+      console.log(2,data)
       this.localValue = data.map((item) => {
         return {
-          button: '',
-          content: '',
+          ImgTitle: '',
+          title: '',
           id: '',
           imgUrl: item.url,
           linkPage: '',
-          mainTitle: '',
-          subtitle: '',
-          subtitleTow: '',
-          template: ''
+
         }
       })
+      console.log(2,data,this.localValue)
     },
     onChangeTitile() {
       console.log(123,this.localValue)

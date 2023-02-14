@@ -1,7 +1,7 @@
 <style lang="scss">
 .wgt-floorImg {
-  width: 100%;
-  overflow: scroll;
+  // width: 100%;
+  overflow-x: auto;
   /* border: red 1px solid; */
   /* background-color: red; */
   &.padded {
@@ -22,21 +22,22 @@
   .wgt-bd {
     position: relative;
     display: flex;
-    padding: 10px ;
-    width: 100%;
+    padding: 10px;
+
     &.spaced {
       padding: 0 10px;
     }
     .img-item {
       margin-right: 20px;
-        .title-image {
-          img{
-            height: 120px !important;
-            width: 120px !important ;
-          }
+      text-align: center;
+      .title-image {
+        img {
+          height: 120px !important;
+          width: 120px !important ;
+        }
         display: inline-block;
-    }
       }
+    }
   }
 }
 </style>
@@ -46,21 +47,27 @@
       'wgt-floorImg': true,
       'padded': value.padded
     }"
-    :style="{ backgroundImage: `url(${value.openBackImg && value.pageBackgroundImage})` }"
   >
-    <div v-if="value.title || value.subtitle" class="wgt-hd">
-      <span class="title">{{ value.title }}</span>
-      <span class="sub-title">{{ value.subtitle }}</span>
-    </div>
-    <div
-      class="wgt-bd"
-      :class="{
-        'spaced': value.spaced
-      }"
-    >
-      <div v-for="(item, index) in value.data" :key="index" class="img-item">
-          <sp-image :src="item.imgUrl" class="title-image"  />
-          {{ item.title }}
+    <div :style="{ backgroundImage: `url(${value.openBackImg && value.backgroundImg})` }">
+      <div v-if="value.title || value.subtitle" class="wgt-hd">
+        <span class="title">{{ value.title }}</span>
+        <span class="sub-title">{{ value.subtitle }}</span>
+      </div>
+      <div
+        class="wgt-bd"
+        :class="{
+          'spaced': value.spaced
+        }"
+      >
+        <div
+          v-for="(item, index) in value.data"
+          :key="index"
+          class="img-item"
+          :style="{ color: `${value.WordColor}` }"
+        >
+          <sp-image :src="item.imgUrl" class="title-image" />
+          {{ item.ImgTitle }}
+        </div>
       </div>
     </div>
   </div>

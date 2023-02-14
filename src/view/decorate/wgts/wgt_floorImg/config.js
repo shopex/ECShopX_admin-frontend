@@ -11,7 +11,7 @@ export default {
     { label: '显示背景图', key: 'openBackImg', component: 'switch', value: false },
     {
       label: '背景图片',
-      key: 'pageBackgroundImage',
+      key: 'backgroundImg',
       component: function (h, { key }) {
         return <SpImagePicker v-model={this.value[key]} size='small' />
       },
@@ -34,6 +34,19 @@ export default {
     return v
   },
   transformOut: (v) => {
-    return v
+    return pickBy(v, {
+      name: 'name',
+      base: (v) => {
+        return pickBy(v, {
+          title: 'title',
+          subtitle: 'subtitle',
+          padded: 'padded',
+          WordColor:'WordColor',
+          openBackImg:'openBackImg',
+          backgroundImg:'backgroundImg'
+        })
+      },
+      data: 'data'
+    })
   }
 }
