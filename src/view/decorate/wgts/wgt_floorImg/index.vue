@@ -1,9 +1,6 @@
 <style lang="scss">
 .wgt-floorImg {
-  // width: 100%;
-  overflow-x: auto;
-  /* border: red 1px solid; */
-  /* background-color: red; */
+  overflow-x: auto ;
   &.padded {
     padding: 10px 0;
   }
@@ -23,7 +20,6 @@
     position: relative;
     display: flex;
     padding: 10px;
-
     &.spaced {
       padding: 0 10px;
     }
@@ -32,10 +28,10 @@
       text-align: center;
       .title-image {
         img {
-          height: 120px !important;
-          width: 120px !important ;
+          height: 120px;
+          width: 120px;
         }
-        display: inline-block;
+        // display: inline-block;
       }
     }
   }
@@ -66,7 +62,7 @@
           :style="{ color: `${value.WordColor}` }"
         >
           <sp-image :src="item.imgUrl" class="title-image" />
-          {{ item.ImgTitle }}
+          <div>{{ item.ImgTitle }}</div>
         </div>
       </div>
     </div>
@@ -88,7 +84,7 @@ export default {
     return {}
   },
   computed: {
-    sliderHeight() {}
+    // sliderHeight() {}
   },
   created() {
     console.log(123, this.value)
