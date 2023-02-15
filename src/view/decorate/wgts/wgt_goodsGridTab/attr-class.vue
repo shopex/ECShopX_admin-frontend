@@ -3,12 +3,15 @@
   .comp-todolist {
     margin-bottom: 10px;
   }
+
   .cate-item {
     display: flex;
   }
+
   .comp-button {
     min-width: 80px;
   }
+
   .cate-name {
     width: 120px;
     margin-right: 10px;
@@ -17,36 +20,12 @@
 </style>
 <template>
   <div class="attr-class">
-    <!-- <div v-for="(item, index) in list" :key="index" class="goods-classify">
-      <el-input v-model="item.tabTitle" class="cate-name" size="small" />
-      <CompButton
-        :clearable="item.goodsList.length > 0"
-        @click="setGoods(index)"
-        @remove="onRemove"
-      >
-        {{ item.goodsList.length > 0 ? `已选: ${item.goodsList.length}` : `选择商品` }}
-      </CompButton>
-      <el-button size="mini" plain @click="setGoods(index)">
-        {{ `添加商品(${item.goodsList.length}/100)` }}
-      </el-button>
-      <el-button
-        v-if="list.length > 1"
-        class="close"
-        type="text"
-        icon="iconfont el-icon-close"
-        @click="removeItem(index)"
-      />
-    </div> -->
-    <!-- {{ localValue }} -->
-    <CompTodoList v-model="localValue" @onAddItem="handleAddTabs">
+    <CompTodoList v-model="localValue" :max="20" @onAddItem="handleAddTabs">
       <template slot="myslot" slot-scope="scope">
         <div class="cate-item">
           <el-input v-model="scope.data.tabTitle" class="cate-name" size="small" />
-          <CompButton
-            :clearable="scope.data.goodsList.length > 0"
-            @click="handleSelectGoods(scope.$index)"
-            @remove="onRemoveItem"
-          >
+          <CompButton :clearable="scope.data.goodsList.length > 0"
+            @click="handleSelectGoods(scope.data.goodsList, scope.index)" @remove="onRemoveItem(scope.index)">
             {{
               scope.data.goodsList.length > 0 ? `已选: ${scope.data.goodsList.length}` : `选择商品`
             }}
@@ -54,8 +33,6 @@
         </div>
       </template>
     </CompTodoList>
-
-    <!-- <classifyDialog ref="classify" :value="value" @submit="handleSubmit" /> -->
   </div>
 </template>
 
@@ -70,21 +47,24 @@ export default {
   props: ['value'],
   data() {
     return {
-      list: null,
       localValue: []
     }
   },
   watch: {
-    localValue: function (nVal, oVal) {
-      this.$emit('input', nVal)
+    localValue: {
+      handler(nVal) {
+        this.$emit('input', nVal)
+      },
+      deep: true
     }
   },
   created() {
     this.localValue = cloneDeep(this.value)
   },
   methods: {
-    async handleSelectGoods(index) {
+    async handleSelectGoods(items, index) {
       const { data } = await this.$picker.goods({
+        data: items,
         multiple: true
       })
       let values = []
@@ -105,13 +85,13 @@ export default {
             values.push(obj)
           }
         })
-      this.list[index].goodsList = values
+      this.localValue[index].goodsList = values
     },
     handleAddTabs() {
       this.localValue.push({ tabTitle: '标签', goodsList: [] })
     },
     onRemoveItem(index) {
-      this.list.splice(index, 1)
+      this.localValue[index].goodsList = []
     }
   }
 }
