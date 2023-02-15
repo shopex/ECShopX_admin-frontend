@@ -1,5 +1,5 @@
-import GoodsClassify from './goodsClassify.vue'
-import GoodsLink from './goodsLink.vue'
+import AttrClass from './attr-class'
+import GoodsLink from './goodsLink'
 import { pickBy, isObject } from '@/utils'
 
 export default {
@@ -14,20 +14,20 @@ export default {
       label: '商品分类',
       key: 'list',
       component: function (h, { key }) {
-        return <GoodsClassify v-model={this.value[key]} />
+        return <AttrClass v-model={this.value[key]} />
       },
-      value: false
-    },
-    {
-      label: '查看更多',
-      key: 'moreLink',
-      component: function (h, { key }) {
-        return <GoodsLink v-model={this.value[key]} />
-      }
+      value: [{ tabTitle: '标签', goodsList: [] }]
     }
+    // {
+    //   label: '查看更多',
+    //   key: 'moreLink',
+    //   component: function (h, { key }) {
+    //     return <GoodsLink v-model={this.value[key]} />
+    //   }
+    // }
   ],
   transformIn: (v) => {
-    const { name, base, config, data, list,distributor_id } = v
+    const { name, base, config, data, list, distributor_id } = v
     return {
       name,
       ...base,
@@ -58,7 +58,7 @@ export default {
       },
       list: 'list',
       data: 'data',
-      distributor_id:'distributor_id'
+      distributor_id: 'distributor_id'
     })
     return obj
   }

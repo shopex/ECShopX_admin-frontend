@@ -1,6 +1,6 @@
 <style lang="scss">
 .comp-button {
-  padding: 10px !important;
+  padding: 8px !important;
   .icon-times-circle1 {
     position: relative;
     top: 1px;
