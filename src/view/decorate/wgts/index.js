@@ -7,6 +7,8 @@ import WgtShowCase from './wgt_showcase'
 import WgtGoodsGridTab from './wgt_goodsGridTab'
 import WgtStore from './wgt_store'
 import wgtGoodsScroll from './wgt_goodsScroll'
+import WgtMarquees from './wgt_marquees'
+
 
 export default {
   WgtSlider,
@@ -17,5 +19,6 @@ export default {
   WgtShowCase,
   WgtGoodsGridTab,
   WgtStore,
-  wgtGoodsScroll
+  wgtGoodsScroll,
+  WgtMarquees
 }
