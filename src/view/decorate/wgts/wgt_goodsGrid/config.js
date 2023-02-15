@@ -1,5 +1,8 @@
-import GoodsLink from '../wgt_goodsGridTab/goodsLink.vue'
+
+import { pickBy } from '@/utils'
 import AttrGoods from './attr-goods'
+import AttrLink from './attr-link.vue'
+
 export default {
   name: 'goodsGrid',
   setting: [
@@ -24,63 +27,51 @@ export default {
       component: function (h, { key }) {
         return <AttrGoods v-model={this.value[key]} />
       },
-      // component: function (h, { key }) {
-      //   const handleSelectGoodsDialog = async () =>{
-      //     const { data } = await this.$picker.goods({
-      //       multiple: true
-      //     })
-      //     const values = []
-      //     data?.length && data.forEach((item) => {
-      //       if (item.itemId) {
-      //         const obj = {
-      //           imgUrl: item.pics[0],
-      //           title: item.itemName,
-      //           goodsId: item.itemId,
-      //           brand: item.brand_logo,
-      //           price: item.price,
-      //           distributor_id: item.distributor_id,
-      //           itemEnName: item.item_en_name,
-      //           promotionActivity: item.promotion_activity
-      //         }
-      //         values.push(obj)
-      //       }
-      //     })
-      //     this.value[key] = values
-      //   }
-      //   return (
-      //     <el-button plain size="small" onClick={ handleSelectGoodsDialog }>选择商品</el-button>
-      //   )
-
-      // },
-      value: []
+      value: [
+        { imgUrl: '', linkPage: '', content: '', title: '', id: '' },
+        { imgUrl: '', linkPage: '', content: '', title: '', id: '' },
+        { imgUrl: '', linkPage: '', content: '', title: '', id: '' },
+        { imgUrl: '', linkPage: '', content: '', title: '', id: '' }
+      ]
     },
     {
       label: '查看更多',
       key: 'moreLink',
       component: function (h, { key }) {
-        return <GoodsLink v-model={this.value[key]} />
+        return <AttrLink v-model={this.value[key]} />
       }
     }
   ],
   transformIn: (v) => {
-    const {
-      name,
-      base,
-      config: { brand, showPrice, style, moreLink },
-      data
-    } = v
-    const { id: linkId, title: linkTitle, linkPage } = moreLink
+    const { name, base, config, data, list, distributor_id } = v
     return {
       name,
       ...base,
-      brand,
-      showPrice,
-      style,
-      linkId,
-      linkTitle,
-      linkPage,
-      data
+      ...config,
+      data,
+      list,
+      distributor_id
     }
   },
-  transformOut: (v) => {}
+  transformOut: (v) => {
+    return pickBy(v, {
+      name: 'name',
+      base: (v) => {
+        return pickBy(v, {
+          title: 'title',
+          subtitle: 'subtitle',
+          padded: 'padded'
+        })
+      },
+      config: (v) => {
+        return pickBy(v, {
+          brand: 'brand',
+          showPrice: 'showPrice',
+          style: 'style',
+          moreLink: 'moreLink'
+        })
+      },
+      data: 'data'
+    })
+  }
 }

@@ -2,13 +2,13 @@
   display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
-  justify-content: space-between;
   padding: 10px;
   &-item {
     width: calc(50% - 5px);
     min-width: calc(50% - 5px);
     max-width: calc(50% - 5px);
     margin-top: 10px;
+    margin-right: 3px;
     border-radius: 5px;
     overflow: hidden;
     border: 1px solid #ddd;
@@ -58,5 +58,12 @@
       }
 
     }
+  }
+}
+.wgt-goods-grid-goods-three-inrow{
+  .wgt-goods-grid-goods-item {
+    width: calc(33% - 5px);
+    min-width: calc(33% - 5px);
+    max-width: calc(33% - 5px);
   }
 }
