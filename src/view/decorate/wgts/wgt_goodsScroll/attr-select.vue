@@ -19,7 +19,7 @@ import { cloneDeep } from 'lodash'
 import { seckillActivityGetList } from '@/api/promotions'
 
 export default {
-  name: 'CopmSelect',
+  name: 'AttrSelect',
   data() {
     return {
       moreLink: null,

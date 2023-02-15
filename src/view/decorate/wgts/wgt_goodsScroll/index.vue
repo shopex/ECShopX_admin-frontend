@@ -21,7 +21,83 @@
       <span v-else class="sub-title">{{ value.subtitle }}</span>
     </div>
     <div class="wgt-bd" :class="{'spaced': value.spaced}">
-      <SpImage v-model="value.backgroundImg" :width="96" :height="96" />
+      <div class="goods-list">
+        <div v-if="value.data && value.data.length > 0" class="scroll-goods">
+          <div
+            v-for="(item, index) in value.data"
+            :key="`scroll-item__${index}`"
+            class="scroll-item"
+          >
+            <div
+              v-if="value.leaderboard && value.type == 'goods'"
+              class="goods-leaderboard"
+            >
+              <div class="goods-leaderboard-text">
+                NO.{{ index + 1 }}
+              </div>
+              <SpImage :src="subscriptImg" :width="40" :height="40" />
+            </div>
+            <div class="goods-imgs">
+              <SpImage :src="item.imgUrl" :width="145" :height="145" />
+            </div>
+            <div class="goods-title">{{item.title}}</div>
+            <div v-if="item.itemEnName" class="goods-title">{{item.itemEnName}}</div>
+            <div v-if="value.showPrice" class="goods-caption" >
+              <template v-if="value.type !== 'goods'">
+                <span class="cur">¥</span>{{ item.act_price ? item.act_price / 100 : '0.00' }}
+                <span class="marketing-price">{{ item.price ? item.price / 100 : '0.00' }}</span>
+              </template>
+              <template v-else>
+                <span class="cur">¥</span>{{ item.price ? item.price / 100 : '0.00' }}
+              </template>
+            </div>
+            <div class="activity-label">
+              <p
+                v-for="(s, i) in item.promotionActivity"
+                :key="i"
+                :style="`color: ${colorPrimary};border: 1px solid ${colorPrimary}`"
+              >
+                {{ s.tag_type == 'single_group' ? '团购' : '' }}
+                {{ s.tag_type == 'full_minus' ? '满减' : '' }}
+                {{ s.tag_type == 'full_discount' ? '满折' : '' }}
+                {{ s.tag_type == 'full_gift' ? '满赠' : '' }}
+                {{ s.tag_type == 'normal' ? '秒杀' : '' }}
+                {{ s.tag_type == 'limited_time_sale' ? '限时特惠' : '' }}
+              </p>
+            </div>
+          </div>
+          <div v-if="value.backgroundImg" class="scroll-item" >
+            <div class="goods-more">
+              <SpImage :src="value.backgroundImg" :width="145" :height="145" />
+              <div>查看更多</div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="scroll-goods">
+          <div
+            v-for="(item, index) in [1, 2, 3, 4]"
+            :key="`scroll-item__${index}`"
+            class="scroll-item"
+          >
+            <div
+              v-if="value.leaderboard && value.type == 'goods'"
+              class="goods-leaderboard"
+            >
+              <div class="goods-leaderboard-text">
+                NO.{{ index + 1 }}
+              </div>
+              <SpImage :src="subscriptImg" :width="40" :height="40" />
+            </div>
+            <div class="goods-imgs">
+              <SpImage :width="145" :height="145" />
+            </div>
+            <div class="goods-title">标题</div>
+            <div v-if="value.showPrice" class="goods-caption">
+              <span class="cur">¥0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
       {{JSON.stringify(value)}}
     </div>
   </div>
@@ -58,7 +134,6 @@ export default {
   watch: {
     value: {
       handler (val) {
-        this.time = 0
         this.data = val.data
         this.seckillId = val.seckillId
       },
@@ -68,6 +143,7 @@ export default {
     seckillId: {
       handler (value) {
         if (value) {
+          this.time = 0
           getSeckillItemList({
             seckill_id: value,
             page: 1,
@@ -104,7 +180,8 @@ export default {
           })
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   mounted () {
