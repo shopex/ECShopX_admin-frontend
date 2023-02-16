@@ -2,7 +2,7 @@
   <div :class="{'wgt-goods-scroll': true, 'padded': value.padded}">
     <div v-if="value.title || value.subtitle" class="wgt-hd">
       <span class="title">{{ value.title }}</span>
-      <countdown v-if="value.type !== 'goods'" :end-time="time" :end-text="'活动已结束'" :callback="function () {}">
+      <countdown v-if="value.goodsSetting.type !== 'goods'" :end-time="time" :end-text="'活动已结束'" :callback="function () {}">
         <template slot-scope="scope">
           <div v-if="!scope.content" class="wgt-goods-scroll-timer">
             <div class="timer">{{ scope.day ? scope.day : '00' }} </div>
@@ -22,14 +22,14 @@
     </div>
     <div class="wgt-bd" :class="{'spaced': value.spaced}">
       <div class="goods-list">
-        <div v-if="value.data && value.data.length > 0" class="scroll-goods">
+        <div v-if="value.goodsSetting.data && value.goodsSetting.data.length > 0" class="scroll-goods">
           <div
-            v-for="(item, index) in value.data"
+            v-for="(item, index) in value.goodsSetting.data"
             :key="`scroll-item__${index}`"
             class="scroll-item"
           >
             <div
-              v-if="value.leaderboard && value.type == 'goods'"
+              v-if="value.leaderboard && value.goodsSetting.type == 'goods'"
               class="goods-leaderboard"
             >
               <div class="goods-leaderboard-text">
@@ -43,7 +43,7 @@
             <div class="goods-title">{{item.title}}</div>
             <div v-if="item.itemEnName" class="goods-title">{{item.itemEnName}}</div>
             <div v-if="value.showPrice" class="goods-caption" >
-              <template v-if="value.type !== 'goods'">
+              <template v-if="value.goodsSetting.type !== 'goods'">
                 <span class="cur">¥</span>{{ item.act_price ? item.act_price / 100 : '0.00' }}
                 <span class="marketing-price">{{ item.price ? item.price / 100 : '0.00' }}</span>
               </template>
@@ -75,12 +75,12 @@
         </div>
         <div v-else class="scroll-goods">
           <div
-            v-for="(item, index) in [1, 2, 3, 4]"
+            v-for="(item, index) in [1, 2]"
             :key="`scroll-item__${index}`"
             class="scroll-item"
           >
             <div
-              v-if="value.leaderboard && value.type == 'goods'"
+              v-if="value.leaderboard && value.goodsSetting.type == 'goods'"
               class="goods-leaderboard"
             >
               <div class="goods-leaderboard-text">
@@ -96,6 +96,12 @@
               <span class="cur">¥0.00</span>
             </div>
           </div>
+          <!-- <div v-if="value.backgroundImg" class="scroll-item" >
+            <div class="goods-more">
+              <SpImage :src="value.backgroundImg" :width="145" :height="145" />
+              <div>查看更多</div>
+            </div>
+          </div> -->
         </div>
       </div>
       {{JSON.stringify(value)}}
@@ -128,28 +134,35 @@ export default {
       time: 0,
       subscriptImg: subscript,
       colorPrimary: '',
-      data: []
+      data: [],
+      type: ''
     }
   },
   watch: {
     value: {
-      handler (val) {
-        this.data = val.data
-        this.seckillId = val.seckillId
+      handler (nVal) {
+        this.data = nVal.goodsSetting.data
+        this.seckillId = nVal.goodsSetting.seckillId
+        this.type = nVal.goodsSetting.type
       },
       deep: true,
       immediate: true
     },
+    type: {
+      handler (nVal) {
+        this.time = 0
+      }
+    },
     seckillId: {
-      handler (value) {
-        if (value) {
+      handler (nVal) {
+        if (nVal) {
           this.time = 0
           getSeckillItemList({
-            seckill_id: value,
+            seckill_id: nVal,
             page: 1,
             pageSize: 10,
             is_sku: 0,
-            seckill_type: this.value.type === 'limitTimeSale' ? 'limited_time_sale' : ''
+            seckill_type: this.value.goodsSetting.type === 'limitTimeSale' ? 'limited_time_sale' : ''
           }).then((res) => {
             let data = res.data.data
             if (data.activity.status === 'in_sale') {

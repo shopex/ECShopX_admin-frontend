@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-scroll-select">
+  <div>
     <el-select
       v-model="selectValue"
       placeholder="请选择活动"
@@ -22,7 +22,6 @@ export default {
   name: 'AttrSelect',
   data() {
     return {
-      moreLink: null,
       selectList: [],
       selectValue: ''
     }
@@ -37,19 +36,21 @@ export default {
       immediate: true
     },
     type: {
-      handler(val) {
-        if (val === 'seckill') {
+      handler(nVal, oVal) {
+        if (nVal === 'seckill') {
           this.getSeckillActivityList()
-        } else if (val === 'limitTimeSale') {
+        } else if (nVal === 'limitTimeSale') {
           this.getLimitTimeSaleList()
         }
-        this.$emit('input', '')
+        if (oVal && nVal != oVal) {
+          this.$emit('input', '')
+        }
       },
       deep: true,
       immediate: true
     },
-    selectValue: function (nVal, oVal) {
-      if (nVal) {
+    selectValue: {
+      handler (nVal) {
         this.$emit('input', nVal)
       }
     }

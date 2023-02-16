@@ -16,41 +16,17 @@ export default {
       component: 'switch',
       value: true,
       isShow: function () {
-        return this.value.type == 'goods'
+        return this.value.goodsSetting.type == 'goods'
       }
     },
     {
       label: '商品类型',
-      key: 'type',
-      component: 'radio',
-      options: [
-        { name: '单商品', label: 'goods' },
-        { name: '秒杀活动', label: 'seckill' },
-        { name: '限时特惠', label: 'limitTimeSale' }
-      ],
-      value: 'goods'
-    },
-    {
-      label: '选择活动',
-      key: 'seckillId',
+      key: 'goodsSetting',
       component: function (h, { key }) {
-        return (<AttrSelect type={this.value.type} v-model={this.value[key]} />)
+        console.log(this.value)
+        return <AttrGoods type={this.value[key].type} v-model={this.value[key]}/>
       },
-      value: '',
-      isShow: function () {
-        return this.value.type != 'goods'
-      }
-    },
-    {
-      label: '选择商品',
-      key: 'data',
-      isShow: function () {
-        return this.value.type == 'goods'
-      },
-      component: function (h, { key }) {
-        return <AttrGoods v-model={this.value[key]}/>
-      },
-      value: []
+      value: { data: [], type: 'goods', seckillId: '' }
     },
     {
       label:'更多链接',
@@ -74,7 +50,7 @@ export default {
       name,
       ...base,
       ...config,
-      data
+      goodsSetting: { type: config.type, seckillId: config.seckillId, data }
     }
   },
   transformOut: (v) => {
@@ -92,12 +68,12 @@ export default {
         return pickBy(v, {
           leaderboard: 'leaderboard',
           moreLink: 'moreLink',
-          seckillId: 'seckillId',
+          seckillId: 'goodsSetting.seckillId',
           showPrice: 'showPrice',
-          type: 'type'
+          type: 'goodsSetting.type'
         })
       },
-      data: 'data'
+      data: 'goodsSetting.data'
     })
   }
 }
