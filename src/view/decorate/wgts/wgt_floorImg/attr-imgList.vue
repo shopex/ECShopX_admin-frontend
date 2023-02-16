@@ -75,7 +75,8 @@ export default {
           title: '',
           id: '',
           imgUrl: item.url,
-          linkPage: ''
+          linkPage: '',
+          linkType: 0,
         }
       })
       // console.log(2, data, this.localValue)
