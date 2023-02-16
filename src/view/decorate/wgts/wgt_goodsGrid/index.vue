@@ -12,17 +12,22 @@
     </div>
     <div class="wgt-bd">
       <!-- 自定义部分 -->
-      <div class="wgt-goods-grid-goods">
+      <div
+        :class="{
+          'wgt-goods-grid-goods': true,
+          'wgt-goods-grid-goods-three-inrow': value.style === 'grids'
+        }"
+      >
         <div
-          v-for="(item, index) in value.goodsList.slice(0, 50)"
+          v-for="(item, index) in value.data.slice(0, 50)"
           :key="index"
           class="wgt-goods-grid-goods-item"
         >
           <div class="wgt-goods-grid-goods-item-img">
-            <img class="goods-img" :src="wximageurl + item.imgUrl">
+            <SpImage class="goods-img" :src="wximageurl + item.imgUrl" />
           </div>
           <div class="wgt-goods-grid-goods-item-info">
-            <img
+            <SpImage
               v-if="value.brand && value.style !== 'grids'"
               class="goods-brand"
               :src="
@@ -30,7 +35,7 @@
                   ? wximageurl + item.brand
                   : 'https://fakeimg.pl/60x60/EFEFEF/CCC/?text=brand&font=lobster'
               "
-            >
+            />
             <div class="goods-title">
               {{ item.title }}
             </div>
@@ -79,14 +84,6 @@ export default {
     }
   },
   computed: {},
-  watch: {
-    value: {
-      deep: true,
-      handler: (val) => {
-        // console.log(1111111, val)
-      }
-    }
-  },
   created() {},
   mounted() {
     this.colorPrimary = this.$store.getters.color_theme.primary
