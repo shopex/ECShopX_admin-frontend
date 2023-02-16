@@ -1,4 +1,6 @@
-<style lang="scss"></style>
+<style lang="scss">
+
+</style>
 <template>
   <div class="goods-select">
     <CompPickerLink :value="localValue" @change="(e) => onChangeLink(e)" />
@@ -10,7 +12,7 @@ import CompPickerLink from '../../comps/comp-pickerLink'
 import { cloneDeep } from 'lodash'
 
 export default {
-  name: 'GoodsLink',
+  name: 'AttrLink',
   components: { CompPickerLink },
   props: ['value'],
   data() {
@@ -18,20 +20,14 @@ export default {
       localValue: null
     }
   },
-
-  watch: {
-    value: {
-      handler(val) {
-        this.localValue = val
-          ? cloneDeep(val)
-          : { 'linkType': 0, 'linkUrl': '', 'linkPage': '', 'id': '', 'title': '' }
-      },
-      deep: true,
-      immediate: true
-    }
+  created() {
+    this.localValue = this.value
+      ? cloneDeep(this.value)
+      : { 'linkType': 0, 'linkUrl': '', 'linkPage': '', 'id': '', 'title': '' }
   },
   methods: {
     async onChangeLink(e) {
+      this.localValue = e
       this.$emit('input', e)
     }
   }

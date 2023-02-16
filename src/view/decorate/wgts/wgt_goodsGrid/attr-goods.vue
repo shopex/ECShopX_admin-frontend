@@ -19,7 +19,10 @@ import CompButton from '../../comps/comp-button'
 export default {
   name: 'AttrGoods',
   components: { CompButton },
-  props: ['value', 'distributor'],
+  props: {
+    value: Array,
+    distributor: Object
+  },
   data() {
     return {
       localValue: []
@@ -37,14 +40,25 @@ export default {
     async handleClickAdd() {
       const ids = this.value.map(({ goodsId }) => goodsId)
       const { data } = await this.$picker.goods({
-        data: ids,
-        params: {
-          distributor_id: this.distributor.id
-        },
-        paramsFieldExclude: ['distributor_id'],
         multiple: true
       })
-      this.localValue = data
+      const values = []
+      data?.length && data.forEach((item) => {
+        if (item.itemId) {
+          const obj = {
+            imgUrl: item.pics[0],
+            title: item.itemName,
+            goodsId: item.itemId,
+            brand: item.brand_logo,
+            price: item.price,
+            distributor_id: item.distributor_id,
+            itemEnName: item.item_en_name,
+            promotionActivity: item.promotion_activity
+          }
+          values.push(obj)
+        }
+      })
+      this.localValue = values
     },
     onRemove() {
       this.localValue = []

@@ -1,5 +1,5 @@
 import AttrClass from './attr-class'
-import GoodsLink from './goodsLink'
+import AttrLink from './attr-link.vue'
 import { pickBy, isObject } from '@/utils'
 
 export default {
@@ -17,14 +17,14 @@ export default {
         return <AttrClass v-model={this.value[key]} />
       },
       value: [{ tabTitle: '标签', goodsList: [] }]
+    },
+    {
+      label: '查看更多',
+      key: 'moreLink',
+      component: function (h, { key }) {
+        return <AttrLink v-model={this.value[key]} />
+      }
     }
-    // {
-    //   label: '查看更多',
-    //   key: 'moreLink',
-    //   component: function (h, { key }) {
-    //     return <GoodsLink v-model={this.value[key]} />
-    //   }
-    // }
   ],
   transformIn: (v) => {
     const { name, base, config, data, list, distributor_id } = v
