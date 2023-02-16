@@ -19,25 +19,23 @@ export default {
         },
         { label: '背景颜色', key: 'bgcolor', component: 'color', value: '#ffffff' },
         { label: '字体颜色', key: 'fontcolor', component: 'color', value: '#000000' },
-        { label: '标签', key: 'label', component: 'input', value: '' },
-        { label: '', key: 'labelcolor', component: 'color', value: '#ffffff' },
         {
-            label: '文本', key: 'data',
+            label: '文本', key: 'data1',
             isShow: function () {
                 return this.value.direction == 'horizontal'
             },
             component: function (h, { key }) {
-                return <AttrHorizontal direction={this.value.direction} v-model={this.value[key]} />
+                return <AttrHorizontal dataArr={this.value.data2} direction={this.value.direction} v-model={this.value[key]} />
             },
             value: []
         },
         {
-            label: '软文', key: 'data',
+            label: '软文', key: 'data2',
             isShow: function () {
                 return this.value.direction == 'vertical'
             },
             component: function (h, { key }) {
-                return <AttrVertical direction={this.value.direction} v-model={this.value[key]} />
+                return <AttrVertical dataArr={this.value.data1} direction={this.value.direction} v-model={this.value[key]} />
             },
             value: []
         },
@@ -49,7 +47,9 @@ export default {
             name,
             ...base,
             ...config,
-            data
+            data,
+            data1: config.direction == 'horizontal' ? data : [],
+            data2: config.direction == 'vertical' ? data : []
         }
     },
     transformOut: (v) => {
@@ -66,11 +66,9 @@ export default {
                     bgcolor: "bgcolor",
                     direction:"direction",
                     fontcolor:"fontcolor",
-                    label:"label",
-                    labelcolor:"labelcolor",
                 })
             },
-            data: 'data'
+            data: ({ direction,data2,data1 }) => direction == 'vertical' ? data2 : data1
         })
     }
 
