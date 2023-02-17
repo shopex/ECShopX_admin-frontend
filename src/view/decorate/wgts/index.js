@@ -8,6 +8,7 @@ import WgtGoodsGridTab from './wgt_goodsGridTab'
 import WgtStore from './wgt_store'
 import WgtSearch from './wgt_search'
 import wgtHeadline from './wgt_headline'
+import wgtHotTopic from './wgt_hotTopic'
 
 export default {
   WgtSlider,
@@ -19,5 +20,6 @@ export default {
   WgtGoodsGridTab,
   WgtStore,
   WgtSearch,
-  wgtHeadline
+  wgtHeadline,
+  wgtHotTopic
 }
