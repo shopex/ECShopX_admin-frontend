@@ -1,5 +1,5 @@
 <template>
-  <div class="section section-white">
+  <div class="section section-white point-rule">
     <div class="section-header with-border">
       <div class="section-title">
         积分配置
@@ -280,4 +280,8 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.point-rule {
+  height: auto !important;
+}
+</style>
