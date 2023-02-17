@@ -7,7 +7,7 @@ import WgtShowCase from './wgt_showcase'
 import WgtGoodsGridTab from './wgt_goodsGridTab'
 import WgtStore from './wgt_store'
 import WgtSearch from './wgt_search'
-import wgtHeadline from './wgt_headline'
+// import wgtHeadline from './wgt_headline'
 import wgtHotTopic from './wgt_hotTopic'
 import wgtGoodsScroll from './wgt_goodsScroll'
 import WgtMarquees from './wgt_marquees'
@@ -23,7 +23,7 @@ export default {
   WgtGoodsGridTab,
   WgtStore,
   WgtSearch,
-  wgtHeadline,
+  // wgtHeadline,
   wgtHotTopic,
   wgtGoodsScroll,
   WgtMarquees

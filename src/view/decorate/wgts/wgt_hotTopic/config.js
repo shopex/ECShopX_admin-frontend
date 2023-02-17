@@ -1,6 +1,6 @@
 import TopicItem from './topic-item.vue'
 export default {
-  name: 'search',
+  name: 'hotTopic',
   setting: [
     { label: '标题', key: 'title', component: 'input', value: '标题' },
     { label: '组件间距', key: 'padded', component: 'switch', value: false },
@@ -17,5 +17,7 @@ export default {
     const { name, base, config, data } = v
     return v
   },
-  transformOut: (v) => {}
+  transformOut: (v) => {
+    return v
+  }
 }

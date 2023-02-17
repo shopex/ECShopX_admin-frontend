@@ -1,9 +1,16 @@
 <template>
   <div>
     <div v-for="(item, index) in value" :key="`topic_item_${index}`" class="topic_item_edit">
-      <el-input v-model="item.topic" size="small" class="topic_input"/>
-      <CompPickerLink :value="item" @change="(e) => onChangeLink(e, index)" />
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <span>话题&nbsp;{{ index + 1 }}</span>
+        </el-col>
+        <el-col :span="18">
+          <el-input v-model="item.topic" size="small" class="topic_input"/>
+          <CompPickerLink :value="item" @change="(e) => onChangeLink(e, index)" />
+        </el-col>
+      </el-row>
+    </div>
     <el-button class="btn btn-add" size="small" plain @click="handleClickAdd">
       添加话题
     </el-button>
@@ -33,6 +40,17 @@ export default {
     this.localValue = cloneDeep(this.value)
   },
   methods: {
+    handleClickAdd() {
+      this.localValue.push({
+        imgUrl: '',
+        title: '',
+        id: '',
+        linkPage: '',
+        linkType: 0,
+        topic: '哈哈哈'
+      })
+
+    },
     onChangeLink(e, index) {
       const v = cloneDeep(this.localValue[index])
       Vue.set(this.localValue, index, {
@@ -48,6 +66,7 @@ export default {
   margin-bottom: 20px;
   .topic_input{
     margin-block: 5px;
+    display: inline-block;
   }
 }
 </style>
