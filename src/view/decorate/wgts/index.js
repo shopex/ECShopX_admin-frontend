@@ -8,6 +8,7 @@ import WgtGoodsGridTab from './wgt_goodsGridTab'
 import WgtStore from './wgt_store'
 import wgtGoodsScroll from './wgt_goodsScroll'
 import WgtMarquees from './wgt_marquees'
+import WgtImageNavigation from './wgt_imgNavigation'
 
 
 export default {
@@ -20,5 +21,6 @@ export default {
   WgtGoodsGridTab,
   WgtStore,
   wgtGoodsScroll,
-  WgtMarquees
+  WgtMarquees,
+  WgtImageNavigation
 }

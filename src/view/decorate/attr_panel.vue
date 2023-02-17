@@ -65,6 +65,7 @@ export default {
 
     const renderComp = (item) => {
       if (isFunction(item.component)) {
+        console.log('item====',item)
         return item.component.call(this, h, item)
         // return <el-input v-model={this.value[item.key]} />
       }

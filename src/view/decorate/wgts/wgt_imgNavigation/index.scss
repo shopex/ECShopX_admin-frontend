@@ -1,0 +1,17 @@
+.component-body {
+    &.with-padding {
+      padding: 0 10px;
+    }
+    .navigation{
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      .nav-item{
+        margin-right:5px ;
+        .sp-image{
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+  }

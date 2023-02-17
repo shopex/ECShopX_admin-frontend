@@ -155,6 +155,7 @@ export default {
       }
     },
     cloneDefaultField(e) {
+      console.log('e=====',e)
       const { wgtName, wgtDesc, config } = e
       const { setting, name } = config
       const compData = {
