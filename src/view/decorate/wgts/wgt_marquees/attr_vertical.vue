@@ -20,7 +20,7 @@
 
     <articleSelector :visible.sync="articleVisible" :get-status="setArticleStatus" :rel-items-ids="relArticles"
       @change="pickArticle" />
-  </div>
+</div>
 </template>
 
 <script>
@@ -32,14 +32,25 @@ export default {
   name: 'AttrVertical',
   data() {
     return {
-      articleVisible: false,
-      setArticleStatus: false,
+      localValue: [],
       relArticles: [],
+      setArticleStatus: false,
+      articleVisible: false,
+      directions: ''
     }
   },
   watch: {
-    localValue: function (nVal, oVal) {
-      this.$emit('input', nVal)
+    localValue: {
+      handler(nVal) {
+        this.$emit('input', nVal)
+      },
+      deep: true,
+    },
+    direction: function (nVal, oVal) {
+      if (this.directions != this.direction) {
+        this.eliminate()
+        this.directions = this.direction
+      }
     }
   },
   props: {
@@ -48,9 +59,6 @@ export default {
     },
     direction: {
       type: String
-    },
-    dataArr: {
-      type: Array
     }
   },
   components: {
@@ -59,6 +67,7 @@ export default {
   },
   created() {
     this.localValue = this.value
+    this.directions = this.direction
   },
   methods: {
     pickArticle(data) {
@@ -78,6 +87,10 @@ export default {
       this.setArticleStatus = true
       this.articleVisible = true
     },
+    eliminate() {
+      this.localValue.splice(0)
+      this.relArticles = []
+    }
   }
 }
 </script>

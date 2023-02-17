@@ -12,7 +12,6 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-
 }
 </style>
 <template>
@@ -21,9 +20,8 @@
         'padded': value.padded
     }">
         <el-carousel height="30px" direction="vertical" :autoplay="true" indicator-position="none"
-            v-if="value.direction == 'vertical' ? value.data2.length == 0 ? false : true : value.data1.length == 0 ? false : true">
-            <el-carousel-item v-for="(item, index) in value.direction == 'vertical' ? value.data2 : value.data1"
-                :key="index">
+            v-if="value.data.length == 0 ? false : true">
+            <el-carousel-item v-for="(item, index) in value.data" :key="index">
                 <h3 :style="'color:' + value.fontcolor + ';background:' + value.bgcolor" class="medium">
                     {{ item.title }}
                 </h3>
@@ -36,11 +34,10 @@
                 </h3>
             </el-carousel-item>
         </el-carousel>
-    </div>
+</div>
 </template>
 
 <script>
-import Vue from 'vue'
 import config from './config'
 export default {
     name: 'Marquees',
@@ -56,10 +53,8 @@ export default {
         }
     },
     created() {
-        console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', this.value)
     },
     methods: {
-
     }
 }
 </script>
