@@ -1,5 +1,6 @@
 
-import { pickBy } from '@/utils'
+import { pickBy } from '@/utils';
+import ShopCategory from './shop-category';
 
 export default {
   name: 'NearbyShop',
@@ -9,19 +10,22 @@ export default {
     {
       label: '商家分类',
       key: 'shopClass',
-      component: 'radio',
-      options: [
-        { name: '一行2个', label: 'grid' },
-        { name: '一行3个', label: 'grids' }
-      ],
-      value: 'grid'
+      component: function (h, { key }) {
+        return <ShopCategory v-model={this.value[key]} />
+      },
+      value: {
+        tagList: [],
+        shopList: []
+      }
     },
     { label: '显示优惠券', key: 'showCoupon', component: 'switch', value: false },
-    { label: '商家排序', key: 'shopSort', 
+    { 
+      label: '商家排序', key: 'shopSort', 
       component: function (h, { key }) {
         return <div>{this.value[key]}</div>
       },
-     value: 'LBS定位' },
+      value: 'LBS定位' 
+    },
   ],
   transformIn: (v) => {
     const { name, base, config, data, list, distributor_id } = v
