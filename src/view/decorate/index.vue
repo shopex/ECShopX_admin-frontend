@@ -57,8 +57,8 @@
                   {{ wgt.wgtName }}
                 </div>
                 <div class="wgt-tools" :class="{ active: activeCompIndex == index }">
-                  <i class="iconfont icon-arrow-alt-circle-up1" />
-                  <i class="iconfont icon-arrow-alt-circle-dow1" />
+                  <i class="iconfont icon-arrow-alt-circle-up1" @click="onMoveUpComp(index)" />
+                  <i class="iconfont icon-arrow-alt-circle-dow1" @click="onMoveDownComp(index)" />
                   <i class="iconfont icon-copy1" @click="onCopyComp(index, wgt)" />
                   <i class="iconfont icon-trash-alt1" @click="onDeleteComp(index)" />
                 </div>
@@ -238,8 +238,11 @@ export default {
       })
       console.log('getTemplateDetial:', this.contentComps)
     },
+    onMoveUpComp(index) {
+      this.contentComps
+    },
+    onMoveDownComp(index) {},
     onCopyComp(index, wgt) {
-      // this.contentComps.
       this.contentComps.splice(index + 1, 0, cloneDeep(wgt))
     },
     onDeleteComp(index) {

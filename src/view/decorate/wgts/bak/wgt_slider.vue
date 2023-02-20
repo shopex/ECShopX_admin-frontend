@@ -17,11 +17,7 @@
       }"
     >
       <!-- {{JSON.stringify(value.data)}} -->
-      <SpImage
-        class="placeholder-item"
-        :src="value.data.length > 1 ? value.data[0].url : null"
-        :width="'100%'"
-      />
+      <SpImage class="placeholder-item" :src="value.data.length > 1 ? value.data[0].url : null" />
       <el-carousel
         class="slider-container"
         arrow="never"
@@ -45,7 +41,6 @@
             :class="{
               'rounded': value.rounded
             }"
-            :width="'100%'"
             :src="item.url"
           />
         </el-carousel-item>

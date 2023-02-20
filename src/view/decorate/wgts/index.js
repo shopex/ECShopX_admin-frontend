@@ -11,6 +11,7 @@ import WgtSearch from './wgt_search'
 import wgtHotTopic from './wgt_hotTopic'
 import wgtGoodsScroll from './wgt_goodsScroll'
 import WgtMarquees from './wgt_marquees'
+import WgtFloorImg from './wgt_floorImg'
 
 // export default {
 //   WgtSlider,
@@ -39,7 +40,8 @@ const SCENE_1001 = {
   // wgtHeadline,
   wgtHotTopic,
   wgtGoodsScroll,
-  WgtMarquees
+  WgtMarquees,
+  WgtFloorImg
 }
 
 // 商品详情
