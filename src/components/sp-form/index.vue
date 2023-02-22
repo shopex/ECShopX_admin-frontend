@@ -20,6 +20,8 @@
     }
     &.inline {
       display: inline-block;
+      margin-right: 20px;
+      vertical-align: top;
     }
     &.no-label {
       > .el-form-item__content {
@@ -351,6 +353,7 @@ export default {
             return (
               <div class='sp-form-group' v-show={this.getItemShow(item)}>
                 {item.label}
+                <span class='form-item-tip' domPropsInnerHTML={item.tip}></span>
               </div>
             )
           } else {
@@ -367,7 +370,7 @@ export default {
                   }
                 ]}
                 style={{
-                  width: item.width ? item.width : 'auto'
+                  width: item.width ? item.width : ''
                 }}
                 showMessage={typeof item.showMessage == 'undefined' ? true : item.showMessage}
                 v-show={this.getItemShow(item)}
