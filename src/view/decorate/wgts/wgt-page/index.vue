@@ -1,5 +1,5 @@
 <style lang="scss">
-.wgt-header {
+.wgt-page {
   &-content {
     // background-image: url('../../../../assets/imgs/weapp-header.png');
     height: 64px;
@@ -22,8 +22,8 @@
 }
 </style>
 <template>
-  <div class="wgt-header" :style="headerStyle" @click="handleClickHeader">
-    <div class="wgt-header-content" :style="contentStyle">
+  <div class="wgt-page" :style="headerStyle" @click="handleClickHeader">
+    <div class="wgt-page-content" :style="contentStyle">
       <div v-if="value" class="header-container" :style="containerStyle">
         <span v-if="value.titleStyle == '1'">{{ value.wgtName }}</span>
         <sp-image v-else class="title-image" :src="value.titleBackgroundImage" />
@@ -37,7 +37,7 @@ const weappHeaderDark = require('@/assets/imgs/weapp-header-dark.png')
 const weappHeaderLight = require('@/assets/imgs/weapp-header-light.png')
 import config from './config'
 export default {
-  name: 'Header',
+  name: 'Page',
   wgtName: '页面设置',
   wgtDesc: '',
   config: config,

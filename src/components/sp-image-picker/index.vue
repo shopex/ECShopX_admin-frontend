@@ -10,12 +10,18 @@
       height: 64px;
     }
   }
+
   .image-item {
     width: 80px;
     height: 80px;
     border: 1px solid #d9d9d9;
-    margin: 0 10px 10px 0;
+    margin-right: 10px;
     position: relative;
+  }
+  &.multiple {
+    .image-item {
+      margin-bottom: 10px;
+    }
   }
   .placeholder {
     height: 80px;
@@ -186,9 +192,16 @@ export default {
   },
   render() {
     const { value, max, size } = this
-    const multiple = isArray(value)
     return (
-      <div class={['sp-image-picker', size]}>
+      <div
+        class={[
+          'sp-image-picker',
+          size,
+          {
+            'multiple': max > 1
+          }
+        ]}
+      >
         {max > 1 && value.map((item, index) => this._renderImage(item, index))}
         {max > 1 && value.length < max && (
           <div class='image-item placeholder' on-click={this.handleSelectImage}>

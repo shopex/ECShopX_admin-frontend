@@ -52,11 +52,11 @@ export default {
 .attr-nav-item {
   .nav-item--picker {
     display: flex;
-    margin-top: 14px;
+    margin-top: 10px;
   }
-  .cell-value-tip {
-    position: relative;
-    top: -12px;
-  }
+  // .cell-value-tip {
+  //   position: relative;
+  //   top: -12px;
+  // }
 }
 </style>

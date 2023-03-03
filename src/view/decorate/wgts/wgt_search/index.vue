@@ -1,8 +1,7 @@
-
 <template>
-    <div
+  <div
     :class="{
-      'wgt-slider': true,
+      'wgt-search': true,
       'padded': value.padded
     }"
   >
@@ -15,10 +14,13 @@
       :class="{
         'spaced': value.spaced
       }"
-      >
-      <div class="wgt-search">
-        <span class="bg"> 搜索想要的商品 </span>
+    >
+      <!-- 挂件自定义部分 -->
+      <div class="search-container">
+        <i class="ecx-icon icon-sousuo" />
+        <span class="placeholder"> {{ value.placeholder }} </span>
       </div>
+      <!-- 挂件自定义部分 -->
     </div>
   </div>
 </template>
@@ -32,20 +34,26 @@ export default {
   config: config,
   props: {
     value: [Object, Array]
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
-.wgt-slider {
-  .wgt-search{
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    .bg{
-      width: 80%;
-      display: inline-block;
-      background: #ccc;
-      border-radius: 20px;
+.wgt-search {
+  &.padded {
+    padding: 10px 0;
+  }
+  .search-container {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background: #fff;
+    border-radius: 30px;
+    padding: 5px 10px;
+    margin: 0 8px;
+    box-sizing: border-box;
+    .placeholder {
+      margin-left: 4px;
+      font-size: 13px;
     }
   }
 }

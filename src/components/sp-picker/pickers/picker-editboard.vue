@@ -44,7 +44,7 @@
         <SpImage :src="item.imgUrl" width="120" height="120" />
         <i class="ecx-icon icon-quanping" />
       </div>
-      <div class="btn-add">
+      <div class="btn-add" @click="onAddItem">
         <i class="ecx-icon icon-jia" />
         <p>添加商品</p>
       </div>
@@ -54,6 +54,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { cloneDeep } from 'lodash'
 import BasePicker from './base'
 export default {
   name: 'PickerEditBoard',
@@ -75,9 +76,21 @@ export default {
       }
     }
   },
-  created() {
-    this.localValue = this.value.data
+  watch: {
+    localValue: function (nVal, oVal) {
+      this.updateVal(nVal)
+    }
   },
-  methods: {}
+  created() {
+    this.localValue = cloneDeep(this.value.data)
+  },
+  methods: {
+    async onAddItem() {
+      const { data } = await this.$picker.goods()
+      if (data) {
+        this.localValue.push(data)
+      }
+    }
+  }
 }
 </script>

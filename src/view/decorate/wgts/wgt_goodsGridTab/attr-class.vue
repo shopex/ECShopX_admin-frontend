@@ -104,7 +104,7 @@ export default {
       const { data } = await this.$picker.editBoard({
         data: this.localValue[index].goodsList
       })
-      debugger
+      this.localValue[index].goodsList = data
     }
   }
 }

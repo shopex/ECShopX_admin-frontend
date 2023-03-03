@@ -16,17 +16,18 @@
 </style>
 <template>
   <div class="coupon-wrap">
-    <CompTodoList v-model="localValue" :max="20" @onAddItem="handleAddTabs">
+    <CompTodoList
+      v-model="localValue"
+      is-edit
+      :max="20"
+      @onAddItem="handleAddTabs"
+      @edit="onChangeCouponItem"
+    >
       <template slot="body" slot-scope="scope">
         <div class="coupon-item">
           <SpImagePicker v-model="scope.data.imgUrl" size="small" />
           <div>
             <div class="coupon">{{ scope.data.title || '优惠券名称' }}</div>
-            <el-button type="text" @click="onChangeCouponItem(scope.data, scope.index)"
-              >
-更换优惠券
-</el-button
-            >
           </div>
         </div>
       </template>
@@ -77,10 +78,11 @@ export default {
         })
       )
     },
-    async onChangeCouponItem({ id }, index) {
+    async onChangeCouponItem({ item, index }) {
+      const { id } = item
       const { data } = await this.$picker.coupon({
         data: [id],
-        num: 1
+        multiple: false
       })
       if (data) {
         const [{ reduce_cost, description, card_id, title, card_type }] = data

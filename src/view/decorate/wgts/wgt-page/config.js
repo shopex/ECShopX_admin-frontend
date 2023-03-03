@@ -1,7 +1,7 @@
 import { pickBy, isObject } from '@/utils'
 
 export default {
-  name: 'header',
+  name: 'page',
   setting: [
     {
       label: '导航背景',
@@ -41,13 +41,13 @@ export default {
         { name: '文字', label: '1' },
         { name: '图片', label: '2' }
       ],
-      value: '副标题'
+      value: '1'
     },
     {
       label: '',
       key: 'titleColor',
       component: 'color',
-      value: '#333',
+      value: '#fff',
       isShow: function () {
         return this.value.titleStyle == '1'
       },
@@ -72,7 +72,7 @@ export default {
         { name: '居左', label: 'left' },
         { name: '居中', label: 'center' }
       ],
-      value: 'left'
+      value: 'center'
     },
     {
       label: '页面背景',
@@ -107,7 +107,18 @@ export default {
   ],
   transformIn: (v) => {
     const { name, base } = v
-    let { navigateBackgroundImage, titleBackgroundImage, pageBackgroundImage } = base || {}
+    let {
+      navigateStyle,
+      navigateBackgroundColor,
+      navigateBackgroundImage,
+      titleStyle,
+      titleColor,
+      titleBackgroundImage,
+      titlePosition,
+      pageBackgroundStyle,
+      pageBackgroundColor,
+      pageBackgroundImage
+    } = base || {}
     if (isObject(navigateBackgroundImage)) {
       const { url } = navigateBackgroundImage
       navigateBackgroundImage = url
@@ -123,8 +134,15 @@ export default {
     return {
       name,
       ...base,
+      navigateStyle,
+      navigateBackgroundColor,
       navigateBackgroundImage,
+      titleStyle,
+      titleColor,
       titleBackgroundImage,
+      titlePosition,
+      pageBackgroundStyle,
+      pageBackgroundColor,
       pageBackgroundImage
     }
   },
@@ -133,24 +151,18 @@ export default {
       name: 'name',
       base: (v) => {
         return pickBy(v, {
-          title: 'title',
-          subtitle: 'subtitle',
-          padded: 'padded'
+          navigateStyle: 'navigateStyle',
+          navigateBackgroundColor: 'navigateBackgroundColor',
+          navigateBackgroundImage: 'navigateBackgroundImage',
+          titleStyle: 'titleStyle',
+          titleColor: 'titleColor',
+          titleBackgroundImage: 'titleBackgroundImage',
+          titlePosition: 'titlePosition',
+          pageBackgroundStyle: 'pageBackgroundStyle',
+          pageBackgroundColor: 'pageBackgroundColor',
+          pageBackgroundImage: 'pageBackgroundImage'
         })
-      },
-      config: (v) => {
-        return pickBy(v, {
-          interval: 'interval',
-          dot: 'dot',
-          dotLocation: 'dotLocation',
-          dotColor: 'dotColor',
-          shape: 'shape',
-          dotCover: 'dotCover',
-          rounded: 'rounded',
-          content: 'content'
-        })
-      },
-      data: 'data'
+      }
     })
   }
 }

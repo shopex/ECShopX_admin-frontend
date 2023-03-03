@@ -5,6 +5,10 @@
     flex: 1;
   }
 }
+.cell-value-tip {
+  position: relative;
+  top: -12px;
+}
 </style>
 <template>
   <div>
@@ -14,6 +18,7 @@
           <SpImagePicker v-model="scope.data.imgUrl" size="small" />
           <CompPickerLink :value="scope.data" @change="(e) => onChangeLink(e, scope.index)" />
         </div>
+        <div class="cell-value-tip">建议尺寸:（宽度640px，高度自适应）</div>
       </template>
     </CompTodoList>
     <!-- <el-button class="btn btn-add" size="small" plain @click="handleClickAdd">

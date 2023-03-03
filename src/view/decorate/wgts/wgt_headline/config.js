@@ -1,5 +1,7 @@
+import { pickBy } from '@/utils'
+
 export default {
-  name: 'search',
+  name: 'headline',
   setting: [
     { label: '标题', key: 'title', component: 'input', value: '标题' },
     {
@@ -8,14 +10,27 @@ export default {
       component: 'radio',
       options: [
         { name: '居中', label: 'center' },
-        { name: '居左', label: 'left' },
+        { name: '居左', label: 'left' }
       ],
       value: 'center'
-    },
+    }
   ],
   transformIn: (v) => {
-    const { name, base, config, data } = v
-    return v
+    const { name, base } = v
+    return {
+      name,
+      ...base
+    }
   },
-  transformOut: (v) => {}
+  transformOut: (v) => {
+    return pickBy(v, {
+      name: 'name',
+      base: (v) => {
+        return pickBy(v, {
+          title: 'title',
+          float: 'float'
+        })
+      }
+    })
+  }
 }

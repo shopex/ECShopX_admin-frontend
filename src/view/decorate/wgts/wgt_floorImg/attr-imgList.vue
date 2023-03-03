@@ -4,10 +4,10 @@
     display: flex;
     margin-top: 14px;
   }
-  .cell-value-tip {
-    position: relative;
-    top: -12px;
-  }
+  // .cell-value-tip {
+  //   position: relative;
+  //   top: -12px;
+  // }
 }
 </style>
 <template>

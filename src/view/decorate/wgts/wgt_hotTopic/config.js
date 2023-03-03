@@ -1,4 +1,6 @@
+import { pickBy } from '@/utils'
 import AttrItem from './attr-item'
+
 export default {
   name: 'hotTopic',
   setting: [
@@ -11,14 +13,33 @@ export default {
       component: function (h, { key }) {
         return <AttrItem v-model={this.value[key]} />
       },
-      value: []
+      value: [
+        {
+          id: '',
+          topic: '话题'
+        }
+      ]
     }
   ],
   transformIn: (v) => {
     const { name, base, config, data } = v
-    return v
+    return {
+      name,
+      ...base,
+      data
+    }
   },
   transformOut: (v) => {
-    return v
+    return pickBy(v, {
+      name: 'name',
+      base: (v) => {
+        return pickBy(v, {
+          title: 'title',
+          subtitle: 'subtitle',
+          padded: 'padded'
+        })
+      },
+      data: 'data'
+    })
   }
 }

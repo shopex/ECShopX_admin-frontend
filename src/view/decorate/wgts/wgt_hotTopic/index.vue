@@ -1,20 +1,33 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .wgt-hotTopic {
-  .wgt-contnet {
-    .topics {
-      display: flex;
-      .topic-item {
-        display: inline-block;
-        padding: 10px 20px;
-        background: #000;
-        color: #fff;
-        border: 1px solid #000;
-        margin-right: 10px;
-        &:nth-child(2n) {
-          background: #fff;
-          color: #000;
-        }
-      }
+  &.padded {
+    padding: 10px 0;
+  }
+  .wgt-hd {
+    padding: 10px;
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    .sub-title {
+      color: #666;
+      margin-left: 4px;
+    }
+  }
+  .wgt-bd {
+    padding: 0 8px;
+    display: flex;
+    flex-wrap: wrap;
+    .topic-item {
+      font-size: 12px;
+      line-height: 26px;
+      padding: 0 12px;
+      color: #222;
+      background: #f5f5f5;
+      border-radius: 30px;
+      border: 1px solid #bbbbbb;
+      margin: 0 10px 10px 0;
     }
   }
 }

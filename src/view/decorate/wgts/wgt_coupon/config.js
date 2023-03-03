@@ -8,14 +8,14 @@ export default {
     { label: '标题', key: 'title', component: 'input', value: '到店优惠' },
     { label: '副标题', key: 'subtitle', component: 'input', value: '游客专享福利' },
     { label: '组件间距', key: 'padded', component: 'switch', value: true },
-    {
-      label: '样式',
-      key: 'style',
-      component: function (h, { key }) {
-        return <CouponStyle v-model={this.value[key]} />
-      },
-      value: '1'
-    },
+    // {
+    //   label: '样式',
+    //   key: 'style',
+    //   component: function (h, { key }) {
+    //     return <CouponStyle v-model={this.value[key]} />
+    //   },
+    //   value: '1'
+    // },
     {
       label: '优惠券',
       key: 'data',
@@ -31,7 +31,12 @@ export default {
           title: '优惠券名称',
           type: 'cash'
         }
-      ]
+      ],
+      tip: `提示: 优惠券颜色跟随商城主题色变化<br />
+      建议尺寸:<br />
+      一张图片（宽度355px，高度90px）<br />
+      二张图片（宽度172px，高度90px）<br />
+      三张图片或更多（宽度138px，高度90px）`
     }
   ],
   transformIn: (v) => {

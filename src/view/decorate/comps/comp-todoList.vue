@@ -3,7 +3,7 @@
   .todo-list {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .item-bd {
@@ -12,7 +12,7 @@
 
   .item-fd {
     margin-left: 10px;
-    width: 42px;
+    width: 62px;
   }
 
   .icon-shoudongpaixu,
@@ -32,7 +32,7 @@
           <slot name="body" :data="item" :index="index" />
         </div>
         <div class="item-fd">
-          <i v-if="isEdit" class="ecx-icon icon-paiban" @click="onEdit(index)" />
+          <i v-if="isEdit" class="ecx-icon icon-paiban" @click="onEdit(item, index)" />
           <i class="ecx-icon icon-shoudongpaixu mover" />
           <i v-if="index > min - 1" class="ecx-icon icon-guanbi" @click="onRemoveItem(index)" />
         </div>
@@ -60,7 +60,7 @@ export default {
     },
     max: {
       type: Number,
-      default: 5
+      default: 100
     },
     btnText: {
       type: String,
@@ -98,8 +98,8 @@ export default {
       }
       this.$emit('onAddItem')
     },
-    onEdit(index) {
-      this.$emit('edit', index)
+    onEdit(item, index) {
+      this.$emit('edit', { item, index })
     },
     onRemoveItem(index) {
       this.localValue.splice(index, 1)

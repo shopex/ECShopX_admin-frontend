@@ -1,56 +1,63 @@
+<style lang="scss">
+.attr-topic-item {
+  .topic-input {
+    width: 220px;
+    margin-bottom: 6px;
+  }
+  .comp-picker-link {
+    width: 220px;
+  }
+  .btn-linkpath {
+    max-width: 100%;
+  }
+}
+</style>
+
 <template>
-  <div>
-    <div v-for="(item, index) in value" :key="`topic_item_${index}`" class="topic_item_edit">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <span>话题&nbsp;{{ index + 1 }}</span>
-        </el-col>
-        <el-col :span="18">
-          <el-input v-model="item.topic" size="small" class="topic_input" />
-          <CompPickerLink :value="item" @change="(e) => onChangeLink(e, index)" />
-        </el-col>
-      </el-row>
-    </div>
-    <el-button class="btn btn-add" size="small" plain @click="handleClickAdd"> 添加话题 </el-button>
+  <div class="attr-topic-item">
+    <CompTodoList v-model="value" @onAddItem="handleClickAdd">
+      <template slot="body" slot-scope="scope">
+        <div class="topic-item">
+          <el-input
+            v-model="scope.data.topic"
+            placeholder="话题"
+            size="small"
+            class="topic-input"
+          />
+          <CompPickerLink :value="scope.data" @change="(e) => onChangeLink(e, scope.index)" />
+        </div>
+      </template>
+    </CompTodoList>
   </div>
 </template>
 <script>
 import { cloneDeep } from 'lodash'
 import Vue from 'vue'
 import CompPickerLink from '../../comps/comp-pickerLink'
+import CompTodoList from '../../comps/comp-todoList'
 export default {
   name: 'TopicItem',
   components: {
-    CompPickerLink
+    CompPickerLink,
+    CompTodoList
   },
   props: ['value'],
   data() {
-    return {
-      localValue: []
-    }
-  },
-  watch: {
-    localValue: function (nVal, oVal) {
-      this.$emit('input', nVal)
-    }
+    return {}
   },
   created() {
-    this.localValue = cloneDeep(this.value)
+    // this.localValue = cloneDeep(this.value)
   },
   methods: {
     handleClickAdd() {
-      this.localValue.push({
-        imgUrl: '',
-        title: '',
+      this.value.push({
         id: '',
-        linkPage: '',
-        linkType: 0,
-        topic: '哈哈哈'
+        topic: ''
       })
     },
     onChangeLink(e, index) {
-      const v = cloneDeep(this.localValue[index])
-      Vue.set(this.localValue, index, {
+      const v = cloneDeep(this.value[index])
+      Vue.set(this.value, index, {
         ...v,
         ...e
       })
@@ -58,12 +65,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.topic_item_edit {
-  margin-bottom: 20px;
-  .topic_input {
-    margin-block: 5px;
-    display: inline-block;
-  }
-}
-</style>

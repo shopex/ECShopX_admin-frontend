@@ -18,7 +18,7 @@
     height: 32px;
     line-height: 32px;
     border-radius: 3px;
-    max-width: 200px;
+    max-width: 160px;
     @include text-overflow();
   }
   input::-webkit-input-placeholder {

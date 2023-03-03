@@ -243,8 +243,6 @@ export function pickBy(arr = [], keyMaps = {}) {
     const ret = {}
     Object.keys(keyMaps).forEach((key) => {
       const val = keyMaps[key]
-      console.log(item, keyMaps)
-
       if (isString(val)) {
         ret[key] = _get(item, val)
       } else if (isFunction(val)) {

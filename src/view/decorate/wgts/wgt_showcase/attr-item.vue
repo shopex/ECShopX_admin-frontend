@@ -1,6 +1,9 @@
 <style lang="scss" scoped>
-.slider-item {
+.case-item {
   display: flex;
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
   .comp-picker-link {
     flex: 1;
   }
@@ -8,13 +11,10 @@
 </style>
 <template>
   <div>
-    <div v-for="(item, index) in value" :key="`slider-item__${index}`" class="slider-item">
+    <div v-for="(item, index) in value" :key="`case-item__${index}`" class="case-item">
       <SpImagePicker v-model="item.imgUrl" size="small" />
       <CompPickerLink :value="item" @change="(e) => onChangeLink(e, index)" />
     </div>
-    <!-- <el-button class="btn btn-add" size="small" plain @click="handleClickAdd">
-      {{ `添加图片(${value.length}/5)` }}
-    </el-button> -->
   </div>
 </template>
 

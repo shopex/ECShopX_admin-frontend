@@ -13,6 +13,7 @@
     :value="goodsCount"
     @click="handleClickAdd"
     @remove="onRemoveItem"
+    @view="onViewItem"
   />
 </template>
 
@@ -82,6 +83,12 @@ export default {
     },
     onRemoveItem() {
       this.localValue = []
+    },
+    async onViewItem() {
+      const { data } = await this.$picker.editBoard({
+        data: this.localValue
+      })
+      this.localValue = data
     }
   }
 }

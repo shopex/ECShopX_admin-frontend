@@ -97,7 +97,7 @@ import store from '@/store'
 import gWgts from './wgts'
 import comps from './comps'
 import attrPanel from './attr_panel'
-import Header from './wgts/wgt-header'
+import Header from './wgts/wgt-page'
 export default {
   async beforeRouteLeave(to, from, next) {
     const { theme } = SYSTEM_CONFIG[store.getters.versionMode]
@@ -267,6 +267,7 @@ export default {
         )?.config
         return transformOut(item)
       })
+      data.unshift(this.headerAttr.transformOut(this.headerData))
       console.log('onSaveTemplate:', JSON.stringify(data))
       const { id } = this.$route.query
       await this.$api.template.savePagesTemplate({
