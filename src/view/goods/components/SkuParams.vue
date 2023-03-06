@@ -70,18 +70,6 @@
             </el-popover>
           </span>
         </el-checkbox-group>
-        <!-- <el-select
-        v-model="item.value"
-        clearable
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="child in item.children"
-          :key="child.value"
-          :label="child.label"
-          :value="child.value"
-        />
-      </el-select> -->
       </el-form-item>
     </el-form>
     <el-table
