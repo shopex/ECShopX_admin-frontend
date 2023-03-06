@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.coupon-wrap {
+.coupon-package {
   width: 100%;
 }
 .coupon-item {
@@ -15,12 +15,12 @@
 }
 </style>
 <template>
-  <div class="coupon-wrap">
+  <div class="coupon-package">
     <CompTodoList
       v-model="localValue"
       is-edit
       :max="20"
-      @onAddItem="handleAddTabs"
+      @onAddItem="handleAdd"
       @edit="onChangeCouponItem"
     >
       <template slot="body" slot-scope="scope">
@@ -40,7 +40,7 @@ import Vue from 'vue'
 import { cloneDeep } from 'lodash'
 import CompTodoList from '../../comps/comp-todoList'
 export default {
-  name: 'CouponItem',
+  name: 'CouponPackage',
   components: { CompTodoList },
   props: {
     value: {
@@ -61,7 +61,7 @@ export default {
     this.localValue = cloneDeep(this.value)
   },
   methods: {
-    async handleAddTabs() {
+    async handleAdd() {
       const { data } = await this.$picker.coupon({
         // num: 3 - this.localValue.length
       })

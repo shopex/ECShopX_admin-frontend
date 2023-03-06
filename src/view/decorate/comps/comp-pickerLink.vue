@@ -3,10 +3,14 @@
   .linktype-radio {
     margin-bottom: 6px;
     .el-radio {
-      margin-right: 10px;
+      margin-right: 8px;
+      &:last-child {
+        margin-right: 0;
+      }
     }
     .el-radio__label {
       padding-left: 2px;
+      font-size: 13px;
     }
   }
   .btn-linkpath {

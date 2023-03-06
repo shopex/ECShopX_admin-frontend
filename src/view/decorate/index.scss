@@ -220,6 +220,7 @@
         box-sizing: border-box;
         z-index: 99;
         cursor: move;
+        pointer-events: none;
       }
     }
     &:hover {

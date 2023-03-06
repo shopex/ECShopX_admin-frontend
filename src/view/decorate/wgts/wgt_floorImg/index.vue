@@ -26,6 +26,9 @@
     overflow-x: auto;
     box-sizing: border-box;
     padding: 0 8px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .img-item {
       margin-right: 8px;
       text-align: center;

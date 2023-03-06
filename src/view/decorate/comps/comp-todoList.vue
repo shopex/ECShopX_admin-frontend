@@ -12,12 +12,12 @@
 
   .item-fd {
     margin-left: 10px;
-    width: 62px;
+    width: 58px;
   }
 
   .icon-shoudongpaixu,
   .icon-paiban {
-    margin-right: 8px;
+    margin-right: 6px;
   }
   .icon-guanbi {
     font-size: 13px;

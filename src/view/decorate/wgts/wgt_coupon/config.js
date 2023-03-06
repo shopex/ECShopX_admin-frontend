@@ -1,6 +1,7 @@
 import { pickBy } from '@/utils'
 import CouponStyle from './coupon-style'
 import CouponItem from './coupon-item'
+import CouponPackage from './coupon-package'
 
 export default {
   name: 'coupon',
@@ -32,6 +33,19 @@ export default {
           type: 'cash'
         }
       ],
+      tip: `提示: 优惠券颜色跟随商城主题色变化<br />
+      建议尺寸:<br />
+      一张图片（宽度355px，高度90px）<br />
+      二张图片（宽度172px，高度90px）<br />
+      三张图片或更多（宽度138px，高度90px）`
+    },
+    {
+      label: '券包',
+      key: 'voucher_package',
+      component: function (h, { key }) {
+        return <CouponPackage v-model={this.value[key]} />
+      },
+      value: [],
       tip: `提示: 优惠券颜色跟随商城主题色变化<br />
       建议尺寸:<br />
       一张图片（宽度355px，高度90px）<br />
