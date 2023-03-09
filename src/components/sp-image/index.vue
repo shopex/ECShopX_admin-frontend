@@ -36,7 +36,9 @@ export default {
 
     return (
       <el-image class={'sp-image'} style={styleNames} src={src || dImage} fit='cover'>
-        <template slot='error'>图片加载错误</template>
+        <template slot='error'>
+          <img src={dImage} width='100%' />
+        </template>
       </el-image>
     )
   }

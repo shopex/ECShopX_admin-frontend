@@ -24,10 +24,18 @@
     display: none;
   }
   .el-button-group {
-    .el-button {
+    .el-button:first-child {
       &:focus,
       &:hover {
         border: 1px solid #dcdfe6;
+      }
+    }
+    .el-dropdown__caret-button {
+      &:focus,
+      &:hover {
+        border-top: 1px solid #dcdfe6;
+        border-right: 1px solid #dcdfe6;
+        border-bottom: 1px solid #dcdfe6;
       }
     }
   }
@@ -45,13 +53,14 @@
     size="small"
     split-button
     plain
+    :disabled="disabled"
     @click="handleClick"
     @command="handleCommand"
   >
     {{ value > 0 ? getFormatValue() : placeholder }}
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="clear" :disabled="value == 0">清除</el-dropdown-item>
-      <el-dropdown-item command="view" :disabled="value == 0">查看</el-dropdown-item>
+      <el-dropdown-item v-if="viewBtn" command="view" :disabled="value == 0">查看</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -61,19 +70,23 @@ export default {
   props: {
     value: {
       type: Number,
-      value: 0
+      default: 0
     },
     format: {
       type: String,
-      value: ''
+      default: ''
     },
     placeholder: {
       type: String,
-      value: ''
+      default: ''
     },
     disabled: {
       type: Boolean,
-      value: false
+      default: false
+    },
+    viewBtn: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

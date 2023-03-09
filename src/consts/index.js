@@ -234,3 +234,10 @@ export const CARD_TYPE = {
   'cash': '满减券',
   'new_gift': '兑换券'
 }
+
+export const SECKILL_ACTIVITY_STATUS = {
+  'waiting': '待开始',
+  'in_the_notice': '预热中',
+  'in_sale': '进行中',
+  'it_has_ended': '已结束'
+}

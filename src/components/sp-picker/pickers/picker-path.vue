@@ -112,11 +112,19 @@ export default {
   methods: {
     getVal() {
       const { data } = this.$refs[this.tabValue].getVal()
-      const [{ id, title }] = this.resolveData(data)
-      return {
-        linkPage: this.tabValue,
-        title,
-        id
+      if (data.length > 0) {
+        const [{ id, title }] = this.resolveData(data)
+        return {
+          linkPage: this.tabValue,
+          title,
+          id
+        }
+      } else {
+        return {
+          linkPage: '',
+          title: '',
+          id: ''
+        }
       }
     },
     resolveData(data) {

@@ -255,7 +255,7 @@ export default {
               </div>
             </div>
           ),
-          tip: `1. 最多可上传9个图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
+          tip: `1. 最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
         },
         {
           label: '商品视频',

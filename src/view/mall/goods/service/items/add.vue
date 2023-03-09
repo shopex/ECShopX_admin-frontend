@@ -190,7 +190,7 @@
         </el-form-item>
         <!-- 老的写法[用的element] -->
         <!-- <el-form-item label="图片">
-          <el-col><p class="frm-tips">最多可上传9个图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：375px * 200px）</p></el-col>
+          <el-col><p class="frm-tips">最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：375px * 200px）</p></el-col>
             <el-col>
               <el-upload
                 action=""
@@ -213,7 +213,7 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <div class="frm-tips">
-                最多可上传9个图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：375px
+                最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：375px
                 * 200px）
               </div>
               <div class="pics-box">

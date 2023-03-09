@@ -7,9 +7,14 @@
 }
 </style>
 <template>
-  <CompButton :clearable="value.id !== ''" @click="handleClickAdd" @remove="onRemove">
-    {{ value.id !== '' ? `已选: ${value.name}` : `选择店铺` }}
-  </CompButton>
+  <CompButton
+    placeholder="选择店铺"
+    format="{0}个店铺"
+    :value="value.id ? 1 : 0"
+    :view-btn="false"
+    @click="handleClickAdd"
+    @remove="onRemove"
+  />
 </template>
 
 <script>

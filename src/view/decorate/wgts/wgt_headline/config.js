@@ -9,8 +9,8 @@ export default {
       key: 'float',
       component: 'radio',
       options: [
-        { name: '居中', label: 'center' },
-        { name: '居左', label: 'left' }
+        { name: '居左', label: 'left' },
+        { name: '居中', label: 'center' }
       ],
       value: 'center'
     }

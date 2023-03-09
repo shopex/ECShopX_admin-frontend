@@ -14,8 +14,8 @@
   }
 
   .cate-name {
-    width: 100px;
-    margin-right: 10px;
+    width: 90px;
+    margin-right: 4px;
   }
 }
 </style>
@@ -32,11 +32,7 @@
             @click="handleSelectGoods(scope.data.goodsList, scope.index)"
             @remove="onRemoveItem(scope.index)"
             @view="onViewItem(scope.index)"
-          >
-            <!-- {{
-              scope.data.goodsList.length > 0 ? `已选: ${scope.data.goodsList.length}` : `选择商品`
-            }} -->
-          </CompButton>
+          />
         </div>
       </template>
     </CompTodoList>

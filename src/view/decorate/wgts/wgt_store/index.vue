@@ -13,7 +13,12 @@
     <div class="wgt-bd">
       <div class="wgt-block" :style="blockStyle">
         <div class="store-info">
-          <SpImage :src="value.distributor.logo" :width="40" :height="40" :circle="8" />
+          <SpImage
+            :src="value.distributor.logo || defaultShopLogo"
+            :width="40"
+            :height="40"
+            :circle="6"
+          />
           <div>
             <div class="name">{{ value.distributor.name || '店铺名称' }}</div>
             <div class="tags">
@@ -24,27 +29,17 @@
           </div>
         </div>
         <div class="activity-goods">
-          <div class="activity-img">
-            <SpImage :src="value.imgUrl" :height="value.imgUrl ? '' : 160" />
+          <div v-if="value.imgUrl" class="activity-img">
+            <SpImage :circle="6" :src="value.imgUrl" />
           </div>
-          <div v-if="value.items.length > 0" class="goods-list">
+          <div class="goods-list">
             <div
               v-for="(item, index) in value.items"
               :key="`goods-item__${index}`"
               class="goods-item"
             >
-              <SpImage :src="item.imgUrl" :width="96" :height="96" />
-              <div>123</div>
-            </div>
-          </div>
-          <div v-else class="goods-list">
-            <div
-              v-for="(item, index) in [1, 2, 3, 4]"
-              :key="`goods-item__${index}`"
-              class="goods-item"
-            >
-              <SpImage :width="96" :height="96" />
-              <div>123</div>
+              <SpImage :circle="6" :src="item.imgUrl" :width="80" :height="80" />
+              <SpPrice :value="item.price / 100" />
             </div>
           </div>
         </div>
@@ -55,6 +50,7 @@
 
 <script>
 import config from './config'
+const defaultShopLogo = require('@/assets/imgs/decorate/default-shop-logo.png')
 export default {
   name: 'Store',
   wgtName: '推荐店铺',
@@ -66,7 +62,8 @@ export default {
   },
   data() {
     return {
-      currentIndex: 1
+      currentIndex: 1,
+      defaultShopLogo
     }
   },
   computed: {

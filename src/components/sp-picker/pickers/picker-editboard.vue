@@ -6,17 +6,38 @@
   .drag-container {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 10px;
   }
   .board-item {
-    margin: 0 10px 10px 0;
+    margin: 0 10px 20px 0;
     position: relative;
     &:nth-child(7n + 7) {
       margin-right: 0;
     }
-    .icon-quanping {
-      position: absolute;
-      top: 0;
-      left: 2px;
+    .ecx-icon {
+      display: none;
+    }
+    &:hover {
+      .btn-tool {
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 100%;
+      }
+      .ecx-icon {
+        display: block;
+      }
+    }
+  }
+  .btn-tool {
+    height: 26px;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    padding: 0 2px;
+    width: 0;
+    transition: width 0.3s ease-in;
+    .ecx-icon {
+      color: #fff;
+      margin-right: 6px;
     }
   }
   .btn-add {
@@ -31,8 +52,11 @@
   }
 }
 </style>
-<template>
+<!-- <template>
   <div class="picker-edit-board">
+    <div>
+      <el-button type="primary">添加</el-button>
+    </div>
     <draggable
       class="drag-container"
       :list="localValue"
@@ -40,6 +64,7 @@
       style="width: 100%"
       handle=".icon-quanping"
     >
+      <slot >{{ value.template() }}</slot>
       <div v-for="(item, index) in localValue" :key="`item__${index}`" class="board-item">
         <SpImage :src="item.imgUrl" width="120" height="120" />
         <i class="ecx-icon icon-quanping" />
@@ -50,7 +75,7 @@
       </div>
     </draggable>
   </div>
-</template>
+</template> -->
 
 <script>
 import draggable from 'vuedraggable'
@@ -91,6 +116,33 @@ export default {
         this.localValue.push(data)
       }
     }
+  },
+  render() {
+    const { localValue, dragOptions } = this
+    return (
+      <div class='picker-edit-board'>
+        <div>
+          <el-button type='primary'>添加</el-button>
+        </div>
+        <draggable
+          class='drag-container'
+          list={localValue}
+          options={dragOptions}
+          style='width: 100%'
+          handle='.icon-quanping'
+        >
+          {localValue.map((item, index) => (
+            <div key={`item__${index}`} class='board-item'>
+              {this.value.template(item)}
+              <div class='btn-tool'>
+                <i class='ecx-icon icon-quanping' />
+                <i class='ecx-icon icon-shanchu' />
+              </div>
+            </div>
+          ))}
+        </draggable>
+      </div>
+    )
   }
 }
 </script>

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { isNumber } from '@/utils'
 export default {
   name: 'SpPrice',
   props: {
@@ -57,8 +58,8 @@ export default {
   //   }
   // },
   created() {
-    const priceVal = this.value.toFixed(2)
-    const [int, decimal] = (priceVal || '').split('.')
+    const priceVal = isNumber(this.value) ? this.value.toFixed(2) : this.value
+    const [int, decimal = '00'] = (priceVal || '').split('.')
     this.intValue = int
     this.decimalValue = decimal
   },

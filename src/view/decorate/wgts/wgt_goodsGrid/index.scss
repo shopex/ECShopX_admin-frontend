@@ -68,6 +68,11 @@
         left: 50%;
         top: -30px;
         transform: translateX(-50%);
+        background: #fff;
+        width: 64px;
+        height: 64px;
+        border-radius: 32px;
+        padding: 2px;
       }
       .name {
         @include text-overflow();

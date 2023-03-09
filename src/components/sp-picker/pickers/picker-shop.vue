@@ -43,12 +43,7 @@
       }"
       url="/distributors"
       :fixed-row-action="true"
-      :setting="{
-        columns: [
-          { name: '店铺名称', key: 'name' },
-          { name: '店铺地址', key: 'store_address' }
-        ]
-      }"
+      :setting="setting"
       :hooks="{
         beforeSearch: beforeSearch,
         afterSearch: afterSearch
@@ -60,6 +55,7 @@
 </template>
 
 <script>
+import { createSetting } from '@shopex/finder'
 import district from '@/common/district.json'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
@@ -81,6 +77,30 @@ export default {
       regionArea: [],
       loading: false,
       multiple: this.value?.multiple ?? true
+    }
+  },
+  computed: {
+    setting() {
+      const columns = [
+        { name: '店铺名称', key: 'name' },
+        {
+          name: '店铺类型',
+          key: 'distribution_type',
+          width: 100,
+          formatter: (value, row, col) => {
+            if (value == '1') {
+              return '加盟'
+            } else if (value == '0') {
+              return '自营'
+            }
+          },
+          visible: this.VERSION_PLATFORM
+        },
+        { name: '店铺地址', key: 'store_address' }
+      ]
+      return createSetting({
+        columns: columns.filter(({ visible }) => visible !== false)
+      })
     }
   },
   created() {

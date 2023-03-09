@@ -51,34 +51,26 @@ export default {
     async handleClickAdd() {
       const ids = this.value.map(({ goodsId }) => goodsId)
       const { data } = await this.$picker.goods({
-        data: ids,
-        multiple: true
+        data: ids
       })
       const values = []
-      data?.length &&
-        data.forEach((item) => {
-          if (item.itemId) {
-            const obj = {
-              imgUrl: item.pics[0],
-              linkPage: '',
-              title: item.itemName,
-              goodsId: item.itemId,
-              brand: item.brand_logo,
-              price: item.price,
-              distributor_id: item.distributor_id,
-              itemEnName: item.item_en_name,
-              promotionActivity: item.promotion_activity
-              // imgUrl: '',
-              // linkPage: '',
-              // content: '',
-              // title: '商品名称',
-              // id: '',
-              // price: 0,
-              // market_price: 0
-            }
-            values.push(obj)
+      data.forEach((item) => {
+        if (item.itemId) {
+          const obj = {
+            imgUrl: item.pics[0],
+            linkPage: '',
+            title: item.itemName,
+            goodsId: item.itemId,
+            brand: item.brand_logo,
+            price: item.price,
+            market_price: item.market_price,
+            distributor_id: item.distributor_id,
+            itemEnName: item.item_en_name,
+            promotionActivity: item.promotion_activity
           }
-        })
+          values.push(obj)
+        }
+      })
       this.localValue = values
     },
     onRemoveItem() {
@@ -86,7 +78,10 @@ export default {
     },
     async onViewItem() {
       const { data } = await this.$picker.editBoard({
-        data: this.localValue
+        data: this.localValue,
+        template: ({ imgUrl }) => {
+          return <SpImage src={imgUrl} width={120} height={120} />
+        }
       })
       this.localValue = data
     }

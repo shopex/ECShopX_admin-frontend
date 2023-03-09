@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="right-container">
-        <div v-if="activeCompIndex !== null && hackReset">
+        <div v-if="activeCompIndex !== null && contentComps[activeCompIndex] && hackReset">
           <div class="wgt-name">
             {{ getComponentAttr(contentComps[activeCompIndex]).wgtName }}
           </div>
@@ -94,6 +94,7 @@ import draggable from 'vuedraggable'
 import { cloneDeep } from 'lodash'
 import { SYSTEM_CONFIG } from '@/consts'
 import store from '@/store'
+import { hex2rgb } from '@/utils'
 import gWgts from './wgts'
 import comps from './comps'
 import attrPanel from './attr_panel'
@@ -150,6 +151,9 @@ export default {
     // document.querySelector('.page-decorate-index').style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
     document.body.style.setProperty('--themeColor', '#155bd4')
     document.body.style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
+    const { primary } = this.$store.getters?.color_theme || {}
+    document.body.style.setProperty('--appThemeColor', primary)
+    document.body.style.setProperty('--appThemeColorRgb', hex2rgb(primary))
   },
   methods: {
     regsiterWgts() {
@@ -204,10 +208,16 @@ export default {
     },
     async getTemplateDetial() {
       const { id } = this.$route.query
-      const { template_content } = await this.$api.template.getPagesTemplateDetail({
-        pages_template_id: id
-      })
-      const { list } = template_content
+      let list = []
+      try {
+        const { template_content } = await this.$api.template.getPagesTemplateDetail({
+          pages_template_id: id
+        })
+        list = template_content?.list || []
+      } catch (e) {
+        console.error(e)
+      }
+
       console.log('Header:', Header)
       // 页面设置初始数据
       const { setting, name } = Header.config
@@ -258,6 +268,11 @@ export default {
       this.contentComps.splice(index + 1, 0, cloneDeep(wgt))
     },
     onDeleteComp(index) {
+      if (this.contentComps.length == index + 1) {
+        setTimeout(() => {
+          this.handleClickHeader()
+        }, 20)
+      }
       this.contentComps.splice(index, 1)
     },
     async onSaveTemplate() {

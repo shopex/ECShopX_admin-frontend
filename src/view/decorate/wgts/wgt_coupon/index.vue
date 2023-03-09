@@ -42,6 +42,10 @@
               <span class="value">{{ item.amount }}</span>
               <span class="symbol">折</span>
             </div>
+            <div v-if="item.type == 'new_gift'" class="coupon-amount">
+              <span class="value">{{ item.amount / 100 }}</span>
+              <span class="symbol">元</span>
+            </div>
             <div class="coupon-desc">
               <div class="name">{{ item.title }}</div>
               <div class="desc">{{ item.desc }}</div>

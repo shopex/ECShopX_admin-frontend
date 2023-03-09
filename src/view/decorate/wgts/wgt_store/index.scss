@@ -17,6 +17,8 @@
   .wgt-bd {
     .wgt-block {
       padding: 10px;
+      margin: 0 8px;
+      border-radius: 8px;
     }
     .store-info {
       display: flex;
@@ -39,15 +41,21 @@
       }
     }
     .activity-goods {
-      margin-top: 6px;
+      margin-top: 8px;
       .goods-list {
-        margin-top: 6px;
+        margin-top: 8px;
         display: flex;
         overflow-x: auto;
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
       .goods-item {
         display: inline-block;
-        margin-right: 6px;
+        margin-right: 8px;
+      }
+      .sp-price {
+        color: #222;
       }
     }
   }

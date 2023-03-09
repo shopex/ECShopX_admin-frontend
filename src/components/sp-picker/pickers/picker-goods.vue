@@ -91,11 +91,14 @@
 
     <SpFinder
       ref="finder"
+      reserve-selection
+      row-key="item_id"
       :other-config="{
         'max-height': 416,
         'header-cell-class-name': cellClass
       }"
       url="/goods/items"
+      show-pager-text="已选中：${n}"
       :fixed-row-action="true"
       :setting="{
         columns: [
@@ -149,7 +152,7 @@ export default {
   },
   props: ['value'],
   data() {
-    const { params } = this.value
+    const { queryParams } = this.value
     const defaultParams = {
       keywords: '',
       approve_status: 'onsale',
@@ -157,9 +160,9 @@ export default {
       category: '',
       distributor_id: ''
     }
-    const _params = Object.assign(defaultParams, params)
+    const formData = Object.assign(defaultParams, queryParams)
     return {
-      formData: _params,
+      formData,
       salesStatus: SALES_STATUS,
       list: [],
       multipleSelection: [],
@@ -171,10 +174,13 @@ export default {
         attribute_name: ''
       },
       categoryList: [],
-      multiple: this.value?.multiple ?? true
+      multiple: this.value?.multiple ?? true,
+      localSelection: []
     }
   },
-  created() {},
+  created() {
+    this.localSelection = this.value.data || []
+  },
   mounted() {
     this.getGoodsBranchList()
     this.getCategory()
@@ -195,8 +201,8 @@ export default {
     },
     afterSearch(response) {
       const { list } = response.data.data
-      if (this.value.data) {
-        const selectRows = list.filter((item) => this.value.data.includes(item.item_id))
+      if (this.localSelection.length > 0) {
+        const selectRows = list.filter((item) => this.localSelection.includes(item.item_id))
         const { finderTable } = this.$refs.finder.$refs
         setTimeout(() => {
           finderTable.$refs.finderTable.setSelection(selectRows)
@@ -207,19 +213,17 @@ export default {
       this.$refs.finder.refresh(true)
     },
     onSelect(selection, row) {
-      if (this.multiple) {
-        // this.updateVal(selection)
-      } else {
+      if (!this.multiple) {
         const { finderTable } = this.$refs.finder.$refs
         console.log('finderTable:', finderTable)
         finderTable.clearSelection()
         setTimeout(() => {
           finderTable.$refs.finderTable.setSelection(selection.length > 0 ? [row] : [])
-          // this.updateVal([row])
         })
       }
     },
     onSelectionChange(selection) {
+      this.localSelection = []
       this.updateVal(selection)
     },
     isShowFormItem(key) {
@@ -234,10 +238,6 @@ export default {
     async getCategory() {
       const res = await this.$api.goods.getCategory({ is_show: false })
       this.categoryList = res
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-      this.updateVal(val)
     }
   }
 }

@@ -1,4 +1,7 @@
 <style lang="scss" scoped>
+.attr-goods {
+  margin-top: 8px;
+}
 .slider-item {
   display: flex;
   .comp-picker-link {
@@ -7,21 +10,39 @@
 }
 </style>
 <template>
-  <div>
-    <el-radio-group v-model="value.type" size='small' @change="radioChange" style="margin-bottom: 10px">
-      <el-radio label='goods'>单商品</el-radio>
-      <el-radio label='seckill'>秒杀活动</el-radio>
-      <el-radio label='limitTimeSale'>限时特惠</el-radio>
+  <div class="attr-goods">
+    <el-radio-group v-model="value.type" size="small" style="margin-bottom: 10px">
+      <el-radio label="goods">单商品</el-radio>
+      <el-radio label="seckill">秒杀活动</el-radio>
+      <el-radio label="limitTimeSale">限时特惠</el-radio>
     </el-radio-group>
     <CompButton
-      :clearable="value.data.length > 0"
+      v-if="value.type == 'goods'"
+      placeholder="选择商品"
+      format="{0}件商品"
+      :value="value.data.length"
       @click="handleClickAdd"
       @remove="onRemove"
-      v-if="value.type == 'goods'"
-    >
-      {{ value.data.length > 0 ? `已选: ${value.data.length}` : `选择商品` }}
-    </CompButton>
-    <AttrSelect v-else :type="value.type" v-model="value.seckillId" />
+      @view="onViewItem"
+    />
+    <CompButton
+      v-if="value.type == 'seckill'"
+      placeholder="选择秒杀活动"
+      format="{0}个秒杀活动"
+      :value="value.secKillId ? 1 : 0"
+      :view-btn="false"
+      @click="onAddSeckill"
+      @remove="onRemoveSeckill"
+    />
+    <CompButton
+      v-if="value.type == 'limitTimeSale'"
+      placeholder="选择限时特惠"
+      format="{0}个限时特惠"
+      :value="value.limitTimeSaleId ? 1 : 0"
+      :view-btn="false"
+      @click="onAddLimitSeckill"
+      @remove="onRemoveLimitSeckill"
+    />
   </div>
 </template>
 
@@ -29,11 +50,10 @@
 import Vue from 'vue'
 import { cloneDeep } from 'lodash'
 import CompButton from '../../comps/comp-button'
-import AttrSelect from './attr-select'
 
 export default {
   name: 'AttrGoods',
-  components: { CompButton, AttrSelect },
+  components: { CompButton },
   props: {
     value: Object
   },
@@ -41,8 +61,12 @@ export default {
     return {
       localValue: {
         data: [],
+        secKillGoods: [],
+        limitSecKillGoods: [],
         type: '',
-        seckillId: ''
+        seckillId: '',
+        limitTimeSaleId: '',
+        lastSeconds: ''
       }
     }
   },
@@ -51,50 +75,113 @@ export default {
       handler: function (nVal) {
         this.$emit('input', nVal)
       },
-      deep: true,
+      deep: true
     }
   },
   created() {
     this.localValue = cloneDeep(this.value)
   },
   methods: {
-    radioChange (value) {
-      this.localValue.type = value
-      this.localValue.data = []
-      this.localValue.seckillId = ''
-    },
     async handleClickAdd() {
       const ids = this.value.data.map(({ goodsId }) => goodsId)
-      let reqParams = {
+      const { data } = await this.$picker.goods({
         data: ids,
-        multiple: true,
-      }
-      // if (this.value.length > 0) {
-      //   reqParams['params'] = {
-      //     distributor_id: this.value[0].distributor_id
-      //   }
-      // }
-      const { data = [] } = await this.$picker.goods(reqParams)
-      const values = []
-      data.length && data.forEach((item) => {
-        if (item.itemId) {
-          const obj = {
-            imgUrl: item.pics[0],
-            title: item.itemName,
-            goodsId: item.itemId,
-            brand: item.brand_logo,
-            price: item.price,
-            distributor_id: item.distributor_id,
-            itemEnName: item.item_en_name,
-            promotionActivity: item.promotion_activity
-          }
-          values.push(obj)
-        }
+        multiple: true
       })
-      this.localValue.data = values
+      if (data) {
+        this.localValue.data = data.map(({ pics, itemName, itemId, price, market_price }) => {
+          return {
+            imgUrl: pics[0],
+            title: itemName,
+            goodsId: itemId,
+            price,
+            market_price
+          }
+        })
+      }
     },
     onRemove() {
       this.localValue.data = []
+    },
+    async onViewItem() {
+      const { data } = await this.$picker.editBoard({
+        data: this.localValue.data
+      })
+      this.localValue.data = data
+    },
+    async onAddSeckill() {
+      const { data } = await this.$picker.seckill({
+        data: [this.value.seckillId],
+        queryParams: {
+          status: 'not_end'
+        },
+        multiple: false
+      })
+      if (data) {
+        const { list } = await this.$api.promotions.getSeckillItemList({
+          seckill_id: data[0].seckill_id,
+          page: 1,
+          pageSize: 100,
+          is_sku: 0
+        })
+        this.value.secKillId = data[0].seckill_id
+        this.value.secKillLastSeconds = data[0].last_seconds
+        this.value.secKillStatus = data[0].status
+        this.value.secKillGoods = list.map(({ item_pic, item_name, item_id, price }) => {
+          return {
+            imgUrl: item_pic,
+            title: item_name,
+            goodsId: item_id,
+            price
+          }
+        })
+      } else {
+        this.onRemoveSeckill()
+      }
+    },
+    onRemoveSeckill() {
+      this.value.secKillId = ''
+      this.value.secKillLastSeconds = 0
+      this.value.secKillStatus = ''
+      this.value.secKillGoods = []
+    },
+    async onAddLimitSeckill() {
+      const { data } = await this.$picker.seckill({
+        data: [this.value.limitTimeSaleId],
+        dialogTitle: '选择限时特惠活动',
+        queryParams: {
+          status: 'valid',
+          seckill_type: 'limited_time_sale'
+        },
+        multiple: false
+      })
+      if (data) {
+        const { list } = await this.$api.promotions.getSeckillItemList({
+          seckill_id: data[0].seckill_id,
+          page: 1,
+          pageSize: 100,
+          is_sku: 0
+        })
+        this.value.limitTimeSaleId = data[0].seckill_id
+        this.value.limitTimeSaleLastSeconds = data[0].last_seconds
+        this.value.limitTimeSaleLastStatus = data[0].status
+        this.value.limitTimeSaleGoods = list.map(({ item_pic, item_name, item_id, price }) => {
+          return {
+            imgUrl: item_pic,
+            title: item_name,
+            goodsId: item_id,
+            price
+          }
+        })
+      } else {
+        this.onRemoveLimitSeckill()
+      }
+    },
+    onRemoveLimitSeckill() {
+      this.value.limitTimeSaleId = ''
+      this.value.limitTimeSaleLastSeconds = 0
+      this.value.limitTimeSaleLastStatus = ''
+      this.value.limitTimeSaleGoods = []
     }
   }
 }

@@ -1,6 +1,6 @@
 import { pickBy } from '@/utils'
 import AttrGoods from './attr-goods'
-import AttrLink from './attr-link.vue'
+import CompPickerLink from '../../comps/comp-pickerLink'
 
 export default {
   name: 'goodsGrid',
@@ -69,7 +69,7 @@ export default {
       label: '查看更多',
       key: 'moreLink',
       component: function (h, { key }) {
-        return <AttrLink v-model={this.value[key]} />
+        return <CompPickerLink v-model={this.value[key]} style='margin-top: 7px;' />
       }
     }
   ],

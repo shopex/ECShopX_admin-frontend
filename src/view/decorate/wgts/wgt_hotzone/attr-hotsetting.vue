@@ -8,9 +8,18 @@
 </style>
 <template>
   <div>
-    <el-button plain size="small" @click="onSetHotZone">
+    <!-- <el-button plain size="small" @click="onSetHotZone">
       {{ `热区设置 (${value.data.length})` }}
-    </el-button>
+    </el-button> -->
+
+    <CompButton
+      placeholder="设置热区"
+      format="{0}个热区"
+      :value="value.data.length"
+      :view-btn="false"
+      @click="onSetHotZone"
+      @remove="onRemoveHotZone"
+    />
 
     <el-dialog
       :visible="dialog"
@@ -21,8 +30,14 @@
       width="800px"
       @close="onCancel"
     >
-      <div class="">
-        <el-button type="primary" size="small" plain @click="onSelectImage"> 选择图片 </el-button>
+      <div v-if="dialog" class="">
+        <div>
+          <el-button type="primary" size="small" plain @click="onSelectImage"> 选择图片 </el-button>
+          <span style="font-size: 12px; color: #888; margin-left: 4px"
+            >建议尺寸:（宽度640px，高度自适应）</span
+          >
+        </div>
+
         <div class="hot-content">
           <el-row :gutter="20">
             <el-col :span="12">
@@ -59,10 +74,12 @@ import Vue from 'vue'
 import hotzone from 'vue-hotzone'
 import { cloneDeep } from 'lodash'
 import CompPickerLink from '../../comps/comp-pickerLink'
+import CompButton from '../../comps/comp-button'
 export default {
   name: 'AttrHotSetting',
   components: {
     CompPickerLink,
+    CompButton,
     hotzone
   },
   props: {
@@ -93,6 +110,9 @@ export default {
   methods: {
     onSetHotZone() {
       this.dialog = true
+    },
+    onRemoveHotZone() {
+      this.localValue.data = []
     },
     async onSelectImage() {
       const {

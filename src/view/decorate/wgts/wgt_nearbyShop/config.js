@@ -1,41 +1,36 @@
 import { pickBy } from '@/utils'
-import ShopCategory from './shop-category'
+import AttrCategory from './attr-category'
 
 export default {
   name: 'NearbyShop',
   setting: [
     { label: '标题', key: 'title', component: 'input', value: '附近商家' },
+    { label: '副标题', key: 'subtitle', component: 'input', value: '副标题' },
     { label: '组件间距', key: 'padded', component: 'switch', value: false },
     {
-      label: '商家分类',
-      key: 'shopClass',
+      label: '商家',
+      key: 'seletedTags',
       component: function (h, { key }) {
-        return <ShopCategory v-model={this.value[key]} />
+        return <AttrCategory v-model={this.value[key]} />
       },
-      value: {
-        tagList: [],
-        shopList: []
-      }
+      value: []
     },
-    { label: '显示优惠券', key: 'showCoupon', component: 'switch', value: false },
-    {
-      label: '商家排序',
-      key: 'shopSort',
-      component: function (h, { key }) {
-        return <div>{this.value[key]}</div>
-      },
-      value: 'LBS定位'
-    }
+    { label: '显示优惠券', key: 'show_coupon', component: 'switch', value: false }
+    // {
+    //   label: '商家排序',
+    //   key: 'shopSort',
+    //   component: function (h, { key }) {
+    //     return <div>{this.value[key]}</div>
+    //   },
+    //   value: 'LBS定位'
+    // }
   ],
   transformIn: (v) => {
-    const { name, base, config, data, list, distributor_id } = v
+    const { name, base, seletedTags = [] } = v
     return {
       name,
       ...base,
-      ...config,
-      data,
-      list,
-      distributor_id
+      seletedTags
     }
   },
   transformOut: (v) => {
@@ -45,18 +40,11 @@ export default {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
-          padded: 'padded'
+          padded: 'padded',
+          show_coupon: 'show_coupon'
         })
       },
-      config: (v) => {
-        return pickBy(v, {
-          brand: 'brand',
-          showPrice: 'showPrice',
-          style: 'style',
-          moreLink: 'moreLink'
-        })
-      },
-      data: 'data'
+      seletedTags: 'seletedTags'
     })
   }
 }

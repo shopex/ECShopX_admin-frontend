@@ -1,5 +1,5 @@
 <style lang="scss">
-.picker-seckill {
+.picker-shop-tag {
   .sp-filter-form {
     padding: 8px 8px 0px 8px;
   }
@@ -18,10 +18,10 @@
 }
 </style>
 <template>
-  <div class="picker-seckill">
+  <div class="picker-shop-tag">
     <SpFilterForm :model="formData" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="keywords">
-        <el-input v-model="formData.keywords" placeholder="请输入活动名称" />
+        <el-input v-model="formData.keywords" placeholder="请输入标签名称" />
       </SpFilterFormItem>
     </SpFilterForm>
     <SpFinder
@@ -30,27 +30,15 @@
         'max-height': 460,
         'header-cell-class-name': cellClass
       }"
-      url="/promotions/seckillactivity/getlist"
+      row-key="tag_id"
+      reserve-selection
+      url="/distributor/tag"
       :fixed-row-action="true"
       :setting="{
         columns: [
-          { name: '活动ID', key: 'seckill_id', width: '80' },
-          { name: '活动名称', key: 'activity_name' },
-          {
-            name: '活动时间',
-            key: 'activity_start_date',
-            formatter: (value, row, col) => {
-              return `${row.activity_start_date} ~ ${row.activity_end_date}`
-            }
-          },
-          {
-            name: '活动状态',
-            key: 'status',
-            width: '160',
-            formatter: (value, row, col) => {
-              return this.statusList[value]
-            }
-          }
+          { name: 'ID', key: 'tag_id', width: 80 },
+          { name: '标签名称', key: 'tag_name' },
+          { name: '描述', key: 'description' }
         ]
       }"
       :hooks="{
@@ -64,43 +52,49 @@
 </template>
 
 <script>
-import { SECKILL_ACTIVITY_STATUS } from '@/consts'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
 export default {
-  name: 'PickerPages',
+  name: 'PickerTag',
   extends: BasePicker,
   mixins: [PageMixin],
   config: {
-    title: '选择秒杀'
+    title: '选择店铺标签'
   },
   props: ['value'],
   data() {
-    const { queryParams } = this.value
-    const defaultParams = {
-      keywords: ''
-    }
-    const formData = Object.assign(defaultParams, queryParams)
     return {
-      formData,
+      formData: {
+        keywords: ''
+      },
       multiple: this.value?.multiple ?? true,
-      statusList: SECKILL_ACTIVITY_STATUS
+      localSelection: []
     }
   },
-  created() {},
+  created() {
+    this.localSelection = this.value.data || []
+  },
   methods: {
     beforeSearch(params) {
-      params = {
-        ...params,
-        ...this.formData
-        // status: 'valid'
+      const { keywords } = this.formData
+      if (keywords) {
+        params = {
+          ...params,
+          tag_name: keywords
+        }
+      }
+      if (this.value.params) {
+        params = {
+          ...params,
+          ...this.value.params
+        }
       }
       return params
     },
     afterSearch(response) {
       const { list } = response.data.data
-      if (this.value.data) {
-        const selectRows = list.filter((item) => this.value.data.includes(item.seckill_id))
+      if (this.localSelection.length > 0) {
+        const selectRows = list.filter((item) => this.localSelection.includes(item.tag_id))
         const { finderTable } = this.$refs.finder.$refs
         setTimeout(() => {
           finderTable.$refs.finderTable.setSelection(selectRows)
@@ -111,15 +105,12 @@ export default {
       this.$refs.finder.refresh(true)
     },
     onSelect(selection, row) {
-      if (this.multiple) {
-        // this.updateVal(selection)
-      } else {
+      if (!this.multiple) {
         const { finderTable } = this.$refs.finder.$refs
         console.log('finderTable:', finderTable)
         finderTable.clearSelection()
         setTimeout(() => {
-          finderTable.$refs.finderTable.setSelection([row])
-          // this.updateVal([row])
+          finderTable.$refs.finderTable.setSelection(selection.length > 0 ? [row] : [])
         })
       }
     },

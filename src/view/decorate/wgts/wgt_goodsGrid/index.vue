@@ -21,7 +21,7 @@
             <SpImage :src="item.imgUrl" />
             <div class="item-info" :style="{ 'padding-top': value.brand ? '30px' : '4px' }">
               <div v-if="value.brand" class="brand-logo">
-                <SpImage :src="item.imgUrl" :width="60" :height="60" circle />
+                <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">{{ item.title }}</div>
               <div v-if="value.showPrice" class="price">
@@ -45,7 +45,7 @@
             <SpImage :src="item.imgUrl" />
             <div class="item-info" :style="{ 'padding-top': value.brand ? '30px' : '4px' }">
               <div v-if="value.brand" class="brand-logo">
-                <SpImage :src="item.imgUrl" :width="60" :height="60" circle />
+                <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">{{ item.title }}</div>
               <div v-if="value.showPrice" class="price">
@@ -66,7 +66,7 @@
           <SpImage :src="item.imgUrl" />
           <div class="item-info" :style="{ 'padding-top': value.brand ? '30px' : '4px' }">
             <div v-if="value.brand" class="brand-logo">
-              <SpImage :src="item.imgUrl" :width="60" :height="60" circle />
+              <SpImage :src="item.brand" :width="60" :height="60" circle />
             </div>
             <div class="name">{{ item.title }}</div>
             <div v-if="value.showPrice" class="price">
@@ -145,9 +145,7 @@ export default {
     value: [Object, Array]
   },
   data() {
-    return {
-      colorPrimary: ''
-    }
+    return {}
   },
   computed: {
     leftGoodsList() {
@@ -170,9 +168,7 @@ export default {
     }
   },
   created() {},
-  mounted() {
-    this.colorPrimary = this.$store.getters.color_theme.primary
-  },
+  mounted() {},
   methods: {}
 }
 </script>

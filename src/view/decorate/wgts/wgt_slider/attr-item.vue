@@ -5,10 +5,6 @@
     flex: 1;
   }
 }
-.cell-value-tip {
-  position: relative;
-  top: -12px;
-}
 </style>
 <template>
   <div>

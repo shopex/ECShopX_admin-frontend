@@ -8,13 +8,13 @@
 </style>
 <template>
   <CompButton
+    placeholder="选择商品"
+    format="{0}个商品"
     :disabled="disabledBtn"
-    :clearable="value.length > 0"
+    :value="value.length"
     @click="handleClickAdd"
     @remove="onRemove"
-  >
-    {{ value.length > 0 ? `已选: ${value.length}` : `选择商品` }}
-  </CompButton>
+  />
 </template>
 
 <script>
@@ -39,6 +39,11 @@ export default {
   watch: {
     localValue: function (nVal, oVal) {
       this.$emit('input', nVal)
+    },
+    distributor: function (nVal, oVal) {
+      if (JSON.stringify(nVal) != JSON.stringify(oVal)) {
+        this.localValue = []
+      }
     }
   },
   created() {
@@ -49,13 +54,20 @@ export default {
       const ids = this.value.map(({ goodsId }) => goodsId)
       const { data } = await this.$picker.goods({
         data: ids,
-        params: {
+        queryParams: {
           distributor_id: this.distributor.id
         },
         paramsFieldExclude: ['distributor_id'],
         multiple: true
       })
-      this.localValue = data
+      this.localValue = data.map(({ item_id, pics, price, item_name }) => {
+        return {
+          goodsId: item_id,
+          title: item_name,
+          imgUrl: pics?.[0],
+          price
+        }
+      })
     },
     onRemove() {
       this.localValue = []

@@ -8,13 +8,13 @@
 </style>
 <template>
   <CompButton
+    placeholder="选择标签"
+    format="{0}个标品"
     :disabled="disabledBtn"
-    :clearable="value.length > 0"
+    :value="value.length"
     @click="handleClickAdd"
     @remove="onRemove"
-  >
-    {{ value.length > 0 ? `已选: ${value.length}` : `选择标签` }}
-  </CompButton>
+  />
 </template>
 
 <script>
@@ -39,6 +39,11 @@ export default {
   watch: {
     localValue: function (nVal, oVal) {
       this.$emit('input', nVal)
+    },
+    distributor: function (nVal, oVal) {
+      if (JSON.stringify(nVal) != JSON.stringify(oVal)) {
+        this.localValue = []
+      }
     }
   },
   created() {

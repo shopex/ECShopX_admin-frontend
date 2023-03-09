@@ -1,7 +1,6 @@
 import { pickBy } from '@/utils'
-import AttrMoreLink from './attr-morelink'
-import AttrSelect from './attr-select'
 import AttrGoods from './attr-goods'
+import CompPickerLink from '../../comps/comp-pickerLink'
 
 export default {
   name: 'goodsScroll',
@@ -9,7 +8,45 @@ export default {
     { label: '标题', key: 'title', component: 'input', value: '当地必买' },
     { label: '副标题', key: 'subtitle', component: 'input', value: '看看大家都在买什么' },
     { label: '组件间距', key: 'padded', component: 'switch', value: true },
-    { label: '显示价格', key: 'showPrice', component: 'switch', value: false },
+    { label: '显示价格', key: 'showPrice', component: 'switch', value: true },
+    {
+      label: '商品类型',
+      key: 'goodsSetting',
+      component: function (h, { key }) {
+        return <AttrGoods type={this.value[key].type} v-model={this.value[key]} />
+      },
+      value: {
+        data: [
+          {
+            imgUrl: '',
+            content: '',
+            title: '商品名称',
+            id: '',
+            price: 8888,
+            market_price: 10
+          }
+        ],
+        secKillGoods: [
+          {
+            imgUrl: '',
+            title: '商品名称',
+            id: '',
+            price: 8888
+          }
+        ],
+        limitSecKillGoods: [
+          {
+            imgUrl: '',
+            title: '商品名称',
+            id: '',
+            price: 8888
+          }
+        ],
+        type: 'goods',
+        seckillId: '',
+        limitTimeSaleId: ''
+      }
+    },
     {
       label: '开启排行榜',
       key: 'leaderboard',
@@ -20,37 +57,65 @@ export default {
       }
     },
     {
-      label: '商品类型',
-      key: 'goodsSetting',
+      label: '更多链接',
+      key: 'moreLink',
       component: function (h, { key }) {
-        console.log(this.value)
-        return <AttrGoods type={this.value[key].type} v-model={this.value[key]}/>
+        return <CompPickerLink v-model={this.value[key]} style='margin-top: 7px;' />
       },
-      value: { data: [], type: 'goods', seckillId: '' }
-    },
-    {
-      label:'更多链接',
-      key:'moreLink',
-      component:  function (h, { key }) {
-        return <AttrMoreLink v-model={this.value[key]} />
-      }
+      value: {}
     },
     {
       label: '更多图片',
       key: 'backgroundImg',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' />
+        return <SpImagePicker v-model={this.value[key]} size='small' style='margin-top: 10px;' />
       },
-      value: ''
-    },
+      value: '',
+      tip: `建议尺寸:（宽度130px，高度200px）`
+    }
   ],
   transformIn: (v) => {
     const { name, base, config, data } = v
+    const { type, seckillId, lastSeconds, status } = config
+    let list = []
+    let secKillId = '',
+      secKillGoods = [],
+      secKillLastSeconds = 0,
+      secKillStatus = ''
+    let limitTimeSaleId = '',
+      limitTimeSaleGoods = [],
+      limitTimeSaleLastSeconds = 0,
+      limitTimeSaleLastStatus = ''
+    if (type == 'goods') {
+      list = data
+    } else if (type == 'limitTimeSale') {
+      limitTimeSaleId = seckillId
+      limitTimeSaleGoods = data
+      limitTimeSaleLastSeconds = lastSeconds
+      limitTimeSaleLastStatus = status
+    } else {
+      secKillId = seckillId
+      secKillGoods = data
+      secKillLastSeconds = lastSeconds
+      secKillStatus = status
+    }
+
     return {
       name,
       ...base,
       ...config,
-      goodsSetting: { type: config.type, seckillId: config.seckillId, data }
+      goodsSetting: {
+        type: type,
+        data: list,
+        secKillId,
+        secKillGoods,
+        secKillLastSeconds,
+        secKillStatus,
+        limitTimeSaleId,
+        limitTimeSaleGoods,
+        limitTimeSaleLastSeconds,
+        limitTimeSaleLastStatus
+      }
     }
   },
   transformOut: (v) => {
@@ -68,12 +133,29 @@ export default {
         return pickBy(v, {
           leaderboard: 'leaderboard',
           moreLink: 'moreLink',
-          seckillId: 'goodsSetting.seckillId',
           showPrice: 'showPrice',
+          seckillId: ({ goodsSetting: { type, secKillId, limitTimeSaleId } }) => {
+            if (type == 'seckill') {
+              return secKillId
+            } else if (type == 'limitTimeSale') {
+              return limitTimeSaleId
+            } else {
+              return ''
+            }
+          },
           type: 'goodsSetting.type'
+          // lastSeconds: 'goodsSetting.lastSeconds'
         })
       },
-      data: 'goodsSetting.data'
+      data: ({ goodsSetting: { type, data, secKillGoods, limitTimeSaleGoods } }) => {
+        if (type == 'seckill') {
+          return secKillGoods
+        } else if (type == 'limitTimeSale') {
+          return limitTimeSaleGoods
+        } else {
+          return data
+        }
+      }
     })
   }
 }

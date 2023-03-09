@@ -2,7 +2,7 @@
 <template>
   <div
     :class="{
-      'wgt-slider': true,
+      'wgt-nearby-shop': true,
       'padded': value.padded
     }"
   >
@@ -12,37 +12,58 @@
     </div>
     <div class="wgt-bd">
       <!-- 自定义部分 -->
-      <div class="nearbyBox">
-        <div class="tags">
-          <span v-for="item in value.shopClass.tagList" :key="item.tag_id">{{
-            item.tag_name
-          }}</span>
+      <div class="nearby-box">
+        <div class="tag-list">
+          <span
+            v-for="(item, index) in value.seletedTags"
+            :key="item.tag_id"
+            :class="[
+              'tag-item',
+              {
+                'active': index == activeIndex
+              }
+            ]"
+            @click="handleClickTag(item, index)"
+            >{{ item.tag_name }}</span
+          >
         </div>
-        <div class="shopList">
-          <div v-if="value.shopClass.shopList.length <= 0" class="noShop">
-            <img :src="img.noShopImg" alt="">
-            <p>更多商家接入中，敬请期待</p>
+
+        <div class="shop-list">
+          <!-- shopList: {{ shopList }} -->
+          <div v-if="shopList.length <= 0" class="default-shop">
+            <SpImage :src="defaultShopImg" :width="160" />
+            <div>更多商家接入中，敬请期待</div>
           </div>
-          <div v-else class="content">
-            <div v-for="item in value.shopClass.shopList" :key="item.distributor_id" class="shop">
+          <div v-else class="shop-content">
+            <div v-for="item in shopList" :key="item.distributor_id" class="shop-item">
               <div
-                class="bg"
+                class="shop-banner"
                 :style="{
-                  backgroundImage: 'url(' + `${item.banner || img.bgImg}` + ')',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
+                  backgroundImage: `url(${item.banner || defaultShopBanner})`
                 }"
               >
-                <img class="logo" :src="item.logo || img.logoImg" alt="">
+                <div class="logo-wrap">
+                  <SpImage
+                    class="shop-logo"
+                    :circle="23"
+                    :src="item.logo || defaultShopLogo"
+                    :width="46"
+                    :height="46"
+                  />
+                </div>
               </div>
-              <!-- <img class="bg" :src="img.bgImg" alt="" /> -->
 
-              <div class="title">
+              <div class="shop-name">
                 {{ item.name }}
               </div>
-              <div v-if="value.showCoupon && item.discountCardList.length > 0" class="coupon">
-                {{ item.discountCardList[0].title }}
+              <div v-if="value.show_coupon" class="coupon-list">
+                <div
+                  v-for="(coupon, index) in item.discountCardList"
+                  :key="`coupon-item__${index}`"
+                  class="coupon-item"
+                >
+                  {{ coupon.title }}
+                </div>
               </div>
             </div>
           </div>
@@ -54,9 +75,9 @@
 
 <script>
 import config from './config'
-const noShopImg = require('@/assets/img/platform/noShop.png')
-const logoImg = require('@/assets/img/platform/shop_default_logo.png')
-const bgImg = require('@/assets/img/platform/shop_default_bg.png')
+const defaultShopImg = require('@/assets/imgs/decorate/default-shop.png')
+const defaultShopBanner = require('@/assets/imgs/decorate/default-shop-banner.png')
+const defaultShopLogo = require('@/assets/imgs/decorate/default-shop-logo.png')
 
 export default {
   name: 'NearbyShop',
@@ -69,21 +90,37 @@ export default {
   },
   data() {
     return {
-      img: {
-        noShopImg,
-        logoImg,
-        bgImg
-      },
-      colorPrimary: ''
+      defaultShopImg,
+      defaultShopBanner,
+      defaultShopLogo,
+      shopList: [],
+      activeIndex: 0
     }
   },
-  computed: {},
-  created() {
-    console.log(this.value)
+  watch: {
+    'value.seletedTags': {
+      handler: function (nVal, oVal) {
+        if (nVal.length > 0) {
+          const [{ tag_id }] = nVal
+          this.activeIndex = 0
+          this.getShopByTag(tag_id)
+        } else {
+          this.shopList = []
+        }
+      },
+      immediate: true
+    }
   },
-  mounted() {
-    this.colorPrimary = this.$store.getters.color_theme.primary
-  },
-  methods: {}
+  created() {},
+  methods: {
+    async getShopByTag(tag_id) {
+      const { list } = await this.$api.marketing.queryTagShop({ tag_id })
+      this.shopList = list
+    },
+    handleClickTag({ tag_id }, index) {
+      this.activeIndex = index
+      this.getShopByTag(tag_id)
+    }
+  }
 }
 </script>

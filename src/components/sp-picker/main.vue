@@ -36,6 +36,7 @@ export default {
     value: Object,
     type: String,
     width: {
+      type: String,
       default: '1008px'
     },
     isShow: Boolean,
@@ -44,9 +45,9 @@ export default {
 
   data() {
     const { title } = PickerType.resolvePickerConfig(this.type)
-
+    const { dialogTitle } = this.value
     return {
-      title,
+      title: dialogTitle || title,
       isLocalShow: false
     }
   },

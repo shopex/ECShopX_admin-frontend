@@ -8,7 +8,7 @@ export default {
   setting: [
     { label: '标题', key: 'title', component: 'input', value: '标题' },
     { label: '副标题', key: 'subtitle', component: 'input', value: '副标题' },
-    { label: '组件间距', key: 'padded', component: 'switch', value: false },
+    { label: '组件间距', key: 'padded', component: 'switch', value: true },
     {
       label: '背景色',
       key: 'backgroundColor',
@@ -21,7 +21,8 @@ export default {
       component: function (h, { key }) {
         return <SpImagePicker v-model={this.value[key]} size='small' />
       },
-      value: ''
+      value: '',
+      tip: `建议尺寸:（宽度640px，高度自适应）`
     },
     {
       label: '推荐店铺',
@@ -51,7 +52,32 @@ export default {
       component: function (h, { key }) {
         return <AttrGoods v-model={this.value[key]} distributor={this.value['distributor']} />
       },
-      value: []
+      value: [
+        {
+          goodsId: '',
+          title: '商品名称',
+          imgUrl: '',
+          price: 88
+        },
+        {
+          goodsId: '',
+          title: '商品名称',
+          imgUrl: '',
+          price: 88
+        },
+        {
+          goodsId: '',
+          title: '商品名称',
+          imgUrl: '',
+          price: 88
+        },
+        {
+          goodsId: '',
+          title: '商品名称',
+          imgUrl: '',
+          price: 88
+        }
+      ]
     },
     {
       label: '商品标签',
@@ -63,7 +89,6 @@ export default {
     }
   ],
   transformIn: (v) => {
-    debugger
     const {
       name,
       base,
@@ -89,22 +114,22 @@ export default {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
-          padded: 'padded'
+          padded: 'padded',
+          backgroundColor: 'backgroundColor',
+          imgUrl: 'imgUrl'
         })
       },
-      config: (v) => {
-        return pickBy(v, {
-          interval: 'interval',
-          dot: 'dot',
-          dotLocation: 'dotLocation',
-          dotColor: 'dotColor',
-          shape: 'shape',
-          dotCover: 'dotCover',
-          rounded: 'rounded',
-          content: 'content'
-        })
-      },
-      data: 'data'
+      seletedTags: 'tags',
+      data: ({ distributor: { id, logo, name }, items }) => {
+        return [
+          {
+            id,
+            items,
+            logo,
+            name
+          }
+        ]
+      }
     })
   }
 }

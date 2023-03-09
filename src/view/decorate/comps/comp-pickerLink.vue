@@ -35,6 +35,7 @@
 </style>
 <template>
   <div class="comp-picker-link">
+    <!-- {{ localValue }} -->
     <el-radio-group v-model="localValue.linkType" class="linktype-radio" @change="onChangeLinkType">
       <el-radio :label="0"> 选择路径 </el-radio>
       <el-radio v-if="isShowH5Link" :label="1"> H5链接 </el-radio>
@@ -61,8 +62,8 @@ export default {
   name: 'CompPickerLink',
   props: {
     value: {
-      type: Object,
-      default: {}
+      type: [Object, Array],
+      default: () => {}
     },
     isShowH5Link: {
       // 不展示自定义链接label true：展示
@@ -91,6 +92,9 @@ export default {
         }
       }
     }
+    // localValue: (nVal, oVal) => {
+    //   this.$emit('input', nVal)
+    // }
   },
   // created() {
   //   this.localValue = this.value
@@ -103,12 +107,15 @@ export default {
         tab: linkPage,
         multiple: false
       })
+      this.$emit('input', res)
       this.$emit('change', res)
     },
     onChangeLinkType() {
+      this.$emit('input', this.localValue)
       this.$emit('change', this.localValue)
     },
     onChangeLinkUrl() {
+      this.$emit('input', this.localValue)
       this.$emit('change', this.localValue)
     },
     getLabelName() {
