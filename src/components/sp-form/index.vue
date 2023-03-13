@@ -214,6 +214,7 @@ export default {
       return (
         <el-select
           clearable={clearable ?? true}
+          filterable
           v-model={value[key]}
           placeholder={placeholder || '请选择'}
           onChange={onChange}
