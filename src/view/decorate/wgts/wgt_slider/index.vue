@@ -13,14 +13,17 @@
     <div
       class="wgt-bd"
       :class="{
-        'spaced': value.spaced
+        'spaced': value.spaced,
+        'padded': value.itemPadded
       }"
     >
       <!-- 挂件自定义部分 -->
       <SpImage
         class="placeholder-item"
-        :src="value.data.length > 1 ? value.data[0].imgUrl : null"
+        :src="value.data.length > 0 ? value.data[0].imgUrl : null"
+        fit="contain"
       />
+      <!-- <img class="placeholder-item" style="display: block;" :src="value.data.length > 0 ? value.data[0].imgUrl : null" width="100%" /> -->
       <el-carousel
         class="slider-container"
         arrow="never"
@@ -41,12 +44,14 @@
             'padded': value.itemPadded
           }"
         >
-          <SpImage
+          <!-- <SpImage
             :class="{
               'rounded': value.rounded
             }"
             :src="item.imgUrl"
-          />
+          /> -->
+          <!-- <img :src="item.imgUrl" style="display: block" width="100%" /> -->
+          <SpImage :src="item.imgUrl" fit="contain" />
         </el-carousel-item>
       </el-carousel>
       <div

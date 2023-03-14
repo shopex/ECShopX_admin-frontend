@@ -105,7 +105,23 @@ export default {
     },
     async onViewItem() {
       const { data } = await this.$picker.editBoard({
-        data: this.localValue.data
+        data: this.localValue.data,
+        template: ({ imgUrl }) => {
+          return <SpImage src={imgUrl} width={100} height={100} />
+        },
+        onAdd: async () => {
+          const { data } = await this.$picker.goods()
+          const res = data.map(({ pics, itemName, itemId, price, market_price }) => {
+            return {
+              imgUrl: pics[0],
+              title: itemName,
+              goodsId: itemId,
+              price,
+              market_price
+            }
+          })
+          return res
+        }
       })
       this.localValue.data = data
     },

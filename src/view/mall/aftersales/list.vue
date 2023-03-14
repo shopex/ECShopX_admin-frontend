@@ -237,12 +237,7 @@
           >
             <el-form-item label="提醒内容">
               <template>
-                <vue-html5-editor
-                  ref="editor"
-                  :content="aftersalesRemindForm.intro.toString()"
-                  :height="360"
-                  @change="updateContent"
-                />
+                <SpRichText v-model="aftersalesRemindForm.intro" />
               </template>
               <span class="frm-tips"
                 >例如：由于商品的特殊性，如涉及机油类产品需寄回，建议使用京东快递，快递公司联系电话955XX。</span

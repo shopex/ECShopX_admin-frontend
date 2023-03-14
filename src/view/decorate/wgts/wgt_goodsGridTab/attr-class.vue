@@ -81,6 +81,7 @@ export default {
               goodsId: item.itemId,
               brand: item.brand_logo,
               price: item.price,
+              market_price: item.market_price,
               distributor_id: item.distributor_id,
               itemEnName: item.item_en_name,
               promotionActivity: item.promotion_activity
@@ -98,7 +99,27 @@ export default {
     },
     async onViewItem(index) {
       const { data } = await this.$picker.editBoard({
-        data: this.localValue[index].goodsList
+        data: this.localValue[index].goodsList,
+        template: ({ imgUrl }) => {
+          return <SpImage src={imgUrl} width={100} height={100} />
+        },
+        onAdd: async () => {
+          const { data } = await this.$picker.goods()
+          const res = data.map((item) => {
+            return {
+              imgUrl: item.pics[0],
+              title: item.itemName,
+              goodsId: item.itemId,
+              brand: item.brand_logo,
+              price: item.price,
+              market_price: item.market_price,
+              distributor_id: item.distributor_id,
+              itemEnName: item.item_en_name,
+              promotionActivity: item.promotion_activity
+            }
+          })
+          return res
+        }
       })
       this.localValue[index].goodsList = data
     }

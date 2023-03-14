@@ -43,7 +43,7 @@ export default {
       shopTag: (args) => fn({ value: { ...args }, type: 'pickerShopTag' }),
       zitilist: (args) => fn({ value: { ...args }, type: 'pickerZitiList' }),
       aftersalesList: (args) => fn({ value: { ...args }, type: 'pickerAftersalesList' }),
-      editBoard: (args) => fn({ value: { ...args }, type: 'pickerEditBoard', width: '922px' }),
+      editBoard: (args) => fn({ value: { ...args }, type: 'pickerEditBoard', width: '892px' }),
       planting: (args) => fn({ value: { ...args }, type: 'pickerPlanting' })
     }
 

@@ -11,7 +11,7 @@ import { VueMasonryPlugin } from 'vue-masonry'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 
-import { install as H5EditorInstall } from '@/utils/vue-h5-editor'
+// import { install as H5EditorInstall } from '@/utils/vue-h5-editor'
 
 import App from './App'
 import router from './router'
@@ -64,7 +64,7 @@ initFinder(Vue, {
 })
 
 apiInstall(Vue)
-H5EditorInstall(Vue)
+// H5EditorInstall(Vue)
 
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(ElementUI)

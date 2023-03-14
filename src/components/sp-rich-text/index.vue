@@ -1,23 +1,23 @@
+<style lang="scss">
+.sp-rich-text {
+  width: 750px;
+  .vue-html5-editor {
+    width: 100%;
+  }
+  .ecx-icon {
+    font-size: 18px;
+    color: #666;
+  }
+}
+</style>
+<template>
+  <div class="sp-rich-text">
+    <VueHtml5Editor :content="value" @change="updateData" />
+  </div>
+</template>
+
+<script>
 import Vue from 'vue'
-import ElementUI from 'element-ui'
-Vue.use(ElementUI)
-import 'element-ui/lib/theme-chalk/index.css'
-
-import { VueMasonryPlugin } from 'vue-masonry'
-Vue.use(VueMasonryPlugin)
-
-import 'es6-promise/auto'
-
-import Directives from '../directives'
-Vue.use(Directives)
-
-// import Mock from '../mock'
-// Mock.bootstrap()
-
-import VueVideoPlayer from 'vue-video-player'
-import 'video.js/dist/video-js.css'
-Vue.use(VueVideoPlayer)
-
 import VueHtml5Editor from 'vue-html5-editor'
 const options = {
   // 全局组件名称，使用new VueHtml5Editor(options)时该选项无效
@@ -29,20 +29,17 @@ const options = {
   // 自定义各个图标的class，默认使用的是font-awesome提供的图标
   // custom icon class of built-in modules,default using font-awesome
   icons: {
-    text: 'iconfont icon-pen',
-    color: 'iconfont icon-paint-brush',
-    font: 'iconfont icon-font',
-    align: 'iconfont icon-align-justify',
-    list: 'iconfont icon-list',
-    // link: 'iconfont icon-chain',
-    // unlink: 'iconfont icon-chain-broken',
-    tabulation: 'iconfont icon-table',
-    image: 'iconfont icon-file-image-o',
-    hr: 'iconfont icon-minus',
-    eraser: 'iconfont icon-eraser',
-    undo: 'iconfont icon-undo',
-    'full-screen': 'iconfont icon-arrows-alt'
-    // info: 'iconfont icon-info'
+    'text': 'ecx-icon icon-paiban',
+    'color': 'ecx-icon icon-yanse',
+    'font': 'ecx-icon icon-ziti',
+    'align': 'ecx-icon icon-duiqifangshi',
+    'list': 'ecx-icon icon-xuliebiao',
+    'tabulation': 'ecx-icon icon-biaoge',
+    // 'image': 'ecx-icon icon-tupian',
+    'hr': 'ecx-icon icon-fengexian',
+    'eraser': 'ecx-icon icon-eraser',
+    'undo': 'ecx-icon icon-chehui1'
+    // 'full-screen': 'ecx-icon icon-yanse'
   },
   // 配置图片模块
   // config image module
@@ -138,26 +135,61 @@ const options = {
     'font',
     'align',
     'list',
-    // 'image',
-    // 'link',
-    // 'unlink',
     'tabulation',
     'hr',
-    'eraser',
+    // 'eraser',
     'undo',
-    'full-screen'
-    // 'info'
+    'uploader'
+    // 'full-screen'
   ],
   // 扩展模块，具体可以参考examples或查看源码
   // extended modules
-  modules: {
-    // omit,reference to source code of build-in modules
+  modules: [
+    {
+      icon: 'ecx-icon icon-tupian',
+      name: 'uploader',
+      dashboard: {
+        template: '<el-button @click="onUpload">图片上传</el-button>',
+        data: function () {
+          return {
+            imgUrl: ''
+          }
+        },
+        methods: {
+          async onUpload() {
+            const { data } = await Vue.prototype.$picker.image({
+              multiple: true
+            })
+            let imgHtml = ''
+            data.forEach(({ url }) => {
+              imgHtml += `<img src=${url} style='display: block;'/>`
+            })
+            this.$parent.execCommand('insertHTML', imgHtml)
+          }
+        }
+      }
+    }
+  ]
+}
+export default {
+  name: 'SpRichText',
+  components: {
+    VueHtml5Editor: new VueHtml5Editor(options)
+  },
+  props: {
+    value: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {}
+  },
+  created() {},
+  methods: {
+    updateData(e) {
+      this.$emit('input', e)
+    }
   }
 }
-
-// Vue.use(VueHtml5Editor, options)
-/* eslint-disable no-new */
-
-import VueClipboard from 'vue-clipboard2'
-VueClipboard.config.autoSetContainer = true // add this line
-Vue.use(VueClipboard)
+</script>

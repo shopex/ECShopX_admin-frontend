@@ -67,12 +67,7 @@
         />
       </el-form-item>
       <el-form-item label="内容">
-        <vue-html5-editor
-          ref="editor"
-          :content="dataForm.task_content"
-          :height="360"
-          @change="handelChangeUpdateContent"
-        />
+        <SpRichText v-model="dataForm.task_content" />
       </el-form-item>
       <el-card header="店铺" shadow="naver">
         <el-form-item label="适用店铺">

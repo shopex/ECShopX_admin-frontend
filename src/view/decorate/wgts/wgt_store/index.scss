@@ -33,8 +33,8 @@
           font-size: 12px;
           margin-right: 4px;
           border-radius: 4px;
-          color: #c3c3c3;
-          border: 1px solid #c3c3c3;
+          border: 1px solid var(--appThemeColor);
+          color: var(--appThemeColor);
           line-height: 12px;
           padding: 2px 4px;
         }

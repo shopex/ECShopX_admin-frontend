@@ -11,7 +11,7 @@
 </style>
 <template>
   <div class="invitation-code">
-    <SpImage :src="info" />
+    <SpImage :src="info" :width="120" />
     <a class="download-link" download="invitation_code.jpg" :href="info">下载邀请码</a>
   </div>
 </template>

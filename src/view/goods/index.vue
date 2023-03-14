@@ -400,13 +400,15 @@ export default {
           key: 'content',
           component: ({ key }, value) => {
             return (
-              <richTextEditor
+              <SpDecorate v-model={value[key]} scene={'1002'} />
+
+              /* <richTextEditor
                 data={value[key]}
                 control={['film', 'slider', 'heading', 'writing']}
                 on-change={(data) => {
                   value[key] = data
                 }}
-              />
+              /> */
             )
           },
           isShow: (item, { mode }) => {
@@ -793,7 +795,7 @@ export default {
           mate_description,
           mate_keywords
         }),
-        intro: mode == 'components' ? JSON.stringify(content) : intro
+        intro: mode == 'component' ? JSON.stringify(content) : intro
       }
 
       if (isSpecs) {

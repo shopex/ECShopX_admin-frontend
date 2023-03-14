@@ -802,7 +802,12 @@ export default {
       // this.templateVisible = true
       // this.currTemplateId = pages_template_id
       // window.open(`/wxapp/manage/decorate?id=${pages_template_id}`, '_blank')
-      this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}`)
+      const { distributor_id } = this.$route.query
+      if (distributor_id > 0) {
+        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}&scene=1003`)
+      } else {
+        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}`)
+      }
     },
     copyTemplate(pages_template_id) {
       let params = {

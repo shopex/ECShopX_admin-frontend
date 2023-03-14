@@ -14,7 +14,11 @@ export default {
     src: String,
     width: [Number, String],
     height: [Number, String],
-    circle: [Boolean, Number]
+    circle: [Boolean, Number],
+    fit: {
+      type: String,
+      default: 'cover'
+    }
   },
   render() {
     const { src, width, height, circle } = this
@@ -35,7 +39,7 @@ export default {
     }
 
     return (
-      <el-image class={'sp-image'} style={styleNames} src={src || dImage} fit='cover'>
+      <el-image class={'sp-image'} style={styleNames} src={src || dImage} fit={this.fit}>
         <template slot='error'>
           <img src={dImage} width='100%' />
         </template>

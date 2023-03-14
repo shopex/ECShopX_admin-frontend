@@ -2,8 +2,12 @@
 <template>
   <div class="page-decorate-index">
     <div class="decorate-hd">
-      <el-button plain @click="onExit"> 后退 </el-button>
-      <el-button plain @click="onSaveTemplate"> 保存 </el-button>
+      <div class="hd-lf">{{ localTitle }}</div>
+      <div class="hd-rg">
+        <el-button v-if="mode == 'page'" plain @click="onExit"> 后退 </el-button>
+        <el-button v-if="mode == 'dialog'" plain @click="onClose"> 关闭 </el-button>
+        <el-button plain @click="onSaveTemplate"> 保存 </el-button>
+      </div>
     </div>
     <div class="decorate-bd">
       <div class="left-container">
@@ -43,7 +47,7 @@
         <!-- {{ contentComps }} -->
         <!-- {{ headerData }} -->
         <div class="weapp-template">
-          <Header :value="headerData" @change="handleClickHeader" />
+          <Header v-if="headerVisible" :value="headerData" @change="handleClickHeader" />
           <div class="weapp-body" :style="weappBodyStyle">
             <draggable :list="contentComps" group="easyview" class="components-design-wrap">
               <div
@@ -101,12 +105,7 @@ import attrPanel from './attr_panel'
 import Header from './wgts/wgt-page'
 export default {
   async beforeRouteLeave(to, from, next) {
-    const { theme } = SYSTEM_CONFIG[store.getters.versionMode]
-    const red = parseInt(theme.replace('#', '').slice(0, 2), 16)
-    const green = parseInt(theme.replace('#', '').slice(2, 4), 16)
-    const blue = parseInt(theme.replace('#', '').slice(4, 6), 16)
-    document.body.style.setProperty('--themeColor', theme)
-    document.body.style.setProperty('--themeColorRgb', [red, green, blue].join(','))
+    this.resetDecorateTheme()
     next()
   },
   components: {
@@ -114,13 +113,33 @@ export default {
     attrPanel,
     Header
   },
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
+    mode: {
+      type: String,
+      default: 'page' // page || dialog
+    },
+    scene: {
+      type: String,
+      default: '1001'
+    },
+    title: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
+      localScene: '1001',
+      localTitle: '',
       widgets: [],
       contentComps: [],
       activeComp: null,
       activeCompIndex: null,
-      hackReset: false,
+      hackReset: true,
       headerData: null,
       headerAttr: null
     }
@@ -140,15 +159,38 @@ export default {
           'background-position': 'center'
         }
       }
+    },
+    headerVisible() {
+      if (this.mode == 'page' && this.scene == '1001') {
+        return true
+      } else {
+        return false
+      }
     }
   },
   created() {
+    const { mode } = this
+    if (mode == 'page') {
+      const { scene = '1001' } = this.$route.query
+      this.localScene = scene
+
+      const _title = {
+        1001: '商城装修',
+        1002: '商品详情',
+        1003: '店铺装修'
+      }
+      this.localTitle = _title[scene]
+    } else {
+      this.localScene = this.scene
+      this.localTitle = this.title
+      this.contentComps = this.value
+    }
     this.regsiterWgts()
-    this.getTemplateDetial()
+    if (this.mode == 'page') {
+      this.getTemplateDetial()
+    }
   },
   mounted() {
-    // document.querySelector('.page-decorate-index').style.setProperty('--themeColor', '#155bd4')
-    // document.querySelector('.page-decorate-index').style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
     document.body.style.setProperty('--themeColor', '#155bd4')
     document.body.style.setProperty('--themeColorRgb', [21, 91, 212].join(','))
     const { primary } = this.$store.getters?.color_theme || {}
@@ -158,12 +200,20 @@ export default {
   methods: {
     regsiterWgts() {
       console.log('wgts:', wgts, comps)
-      const { scene = '1001' } = this.$route.query
-      const wgts = gWgts[scene]
+      // const { scene = '1001' } = this.$route.query
+      const wgts = gWgts[this.localScene]
       Object.keys(wgts).forEach((index) => {
         this.widgets.push(wgts[index])
         Vue.component(wgts[index].name, wgts[index])
       })
+    },
+    resetDecorateTheme() {
+      const { theme } = SYSTEM_CONFIG[store.getters.versionMode]
+      const red = parseInt(theme.replace('#', '').slice(0, 2), 16)
+      const green = parseInt(theme.replace('#', '').slice(2, 4), 16)
+      const blue = parseInt(theme.replace('#', '').slice(4, 6), 16)
+      document.body.style.setProperty('--themeColor', theme)
+      document.body.style.setProperty('--themeColorRgb', [red, green, blue].join(','))
     },
     getComponentAttr(item) {
       const { wgtName, config } = this.widgets.find((wgt) => {
@@ -276,26 +326,36 @@ export default {
       this.contentComps.splice(index, 1)
     },
     async onSaveTemplate() {
-      const data = this.contentComps.map((item) => {
-        const { transformOut } = this.widgets.find(
-          (wgt) => wgt.name.toLowerCase() == item.name.toLowerCase()
-        )?.config
-        return transformOut(item)
-      })
-      data.unshift(this.headerAttr.transformOut(this.headerData))
       // console.log('onSaveTemplate:', JSON.stringify(data))
-      const { id } = this.$route.query
-      await this.$api.template.savePagesTemplate({
-        pages_template_id: id,
-        template_name: 'yykweishop',
-        template_content: JSON.stringify({
-          content: data
+      if (this.mode == 'dialog') {
+        this.resetDecorateTheme()
+        this.$emit('change', this.contentComps)
+        return
+      } else {
+        const data = this.contentComps.map((item) => {
+          const { transformOut } = this.widgets.find(
+            (wgt) => wgt.name.toLowerCase() == item.name.toLowerCase()
+          )?.config
+          return transformOut(item)
         })
-      })
-      this.$message.success('保存成功')
+        data.unshift(this.headerAttr.transformOut(this.headerData))
+        const { id } = this.$route.query
+        await this.$api.template.savePagesTemplate({
+          pages_template_id: id,
+          template_name: 'yykweishop',
+          template_content: JSON.stringify({
+            content: data
+          })
+        })
+        this.$message.success('保存成功')
+      }
     },
     onExit() {
       this.$router.go(-1)
+    },
+    onClose() {
+      this.resetDecorateTheme()
+      this.$emit('change', [])
     }
   }
 }

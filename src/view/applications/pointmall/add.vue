@@ -712,12 +712,7 @@
             </el-radio-group>
           </el-form-item>
           <template v-if="mode === 'richText'">
-            <vue-html5-editor
-              ref="editor"
-              :content="form.intro"
-              :height="360"
-              @change="updateContent"
-            />
+            <SpRichText v-model="form.intro" />
             <span class="tpl_item img" style="" @click="addImgPreview">
               <i class="iconfont icon-image" />图片
             </span>

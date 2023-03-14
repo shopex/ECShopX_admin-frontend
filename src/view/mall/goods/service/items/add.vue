@@ -251,12 +251,7 @@
         </el-form-item>
 
         <el-form-item label="详情">
-          <vue-html5-editor
-            ref="editor"
-            :content="form.intro"
-            :height="360"
-            @change="updateContent"
-          />
+          <SpRichText v-model="form.intro" />
         </el-form-item>
         <el-form-item label="开启购买协议">
           <el-switch
@@ -272,7 +267,6 @@
             :autosize="{ minRows: 6 }"
             placeholder="请输入购买协议"
           />
-          <!-- <vue-html5-editor :content="form.purchase_agreement" ref="editor" @change="updatePurchaseAgreement" :height="360"></vue-html5-editor> -->
         </el-form-item>
         <el-form-item label=" ">
           <el-button @click.native="handleCancel"> 取消 </el-button>
