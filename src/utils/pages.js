@@ -38,7 +38,7 @@ class Pages {
     const { hasNext, fetch, pageSize } = this.options
     this.options.page++
     if (hasNext) {
-      fetch({ page: this.options.page, pageSize }, arguments)
+      fetch({ page: this.options.page, pageSize }, ...arguments)
     }
     return this
   }

@@ -245,7 +245,7 @@ export default {
           message: '请上传商品图片',
           component: ({ key }, value) => (
             <div>
-              <SpImagePicker v-model={value[key]} max={9} />
+              <SpImagePicker v-model={value[key]} drag max={9} />
               <div class='image-checkbox-container'>
                 <el-checkbox-group v-model={value['picsQrcode']}>
                   {value[key].map((pic, index) => (
