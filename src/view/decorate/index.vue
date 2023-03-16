@@ -5,8 +5,8 @@
       <div class="hd-lf">{{ localTitle }}</div>
       <div class="hd-rg">
         <el-button v-if="mode == 'page'" plain @click="onExit"> 后退 </el-button>
+        <el-button v-if="mode == 'page'" plain @click="onSaveTemplate"> 保存 </el-button>
         <el-button v-if="mode == 'dialog'" plain @click="onClose"> 关闭 </el-button>
-        <el-button plain @click="onSaveTemplate"> 保存 </el-button>
       </div>
     </div>
     <div class="decorate-bd">
@@ -329,35 +329,29 @@ export default {
     },
     async onSaveTemplate() {
       // console.log('onSaveTemplate:', JSON.stringify(data))
-      if (this.mode == 'dialog') {
-        this.resetDecorateTheme()
-        this.$emit('change', this.contentComps)
-        return
-      } else {
-        const data = this.contentComps.map((item) => {
-          const { transformOut } = this.widgets.find(
-            (wgt) => wgt.name.toLowerCase() == item.name.toLowerCase()
-          )?.config
-          return transformOut(item)
+      const data = this.contentComps.map((item) => {
+        const { transformOut } = this.widgets.find(
+          (wgt) => wgt.name.toLowerCase() == item.name.toLowerCase()
+        )?.config
+        return transformOut(item)
+      })
+      data.unshift(this.headerAttr.transformOut(this.headerData))
+      const { id } = this.$route.query
+      await this.$api.template.savePagesTemplate({
+        pages_template_id: id,
+        template_name: 'yykweishop',
+        template_content: JSON.stringify({
+          content: data
         })
-        data.unshift(this.headerAttr.transformOut(this.headerData))
-        const { id } = this.$route.query
-        await this.$api.template.savePagesTemplate({
-          pages_template_id: id,
-          template_name: 'yykweishop',
-          template_content: JSON.stringify({
-            content: data
-          })
-        })
-        this.$message.success('保存成功')
-      }
+      })
+      this.$message.success('保存成功')
     },
     onExit() {
       this.$router.go(-1)
     },
     onClose() {
       this.resetDecorateTheme()
-      this.$emit('change', [])
+      this.$emit('change', this.contentComps)
     }
   }
 }
