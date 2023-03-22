@@ -372,7 +372,12 @@ export default {
       const list = await this.getCategory(parent_id)
       const { resolve } = this.mapData.get(parent_id) || {}
       if (resolve) {
-        resolve(list)
+        if (list.length > 0) {
+          resolve(list)
+        } else {
+          const { lazyTreeNodeMap } = this.$refs.tableTree.store.states
+          this.$set(lazyTreeNodeMap, parent_id, [])
+        }
       } else {
         const store = this.$refs.tableTree.store
         this.cacheRowData['hasChildren'] = true
