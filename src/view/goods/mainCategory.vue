@@ -362,7 +362,17 @@ export default {
       })
       await this.$api.goods.deleteCategory(category_id)
       this.$message.success('删除分类成功')
-      this.refreshNode(parent_id)
+      const store = this.$refs.tableTree.store
+      let parentRow, index
+      if (parent_id != '0') {
+        parentRow = store.states.lazyTreeNodeMap[parent_id]
+        index = parentRow.findIndex((child) => child.category_id == category_id)
+        parentRow.splice(index, 1)
+      } else {
+        parentRow = store.states.data
+        index = parentRow.findIndex((child) => child.category_id == category_id)
+        parentRow.splice(index, 1)
+      }
     },
     async refreshNode(parent_id) {
       if (parent_id == '0') {
