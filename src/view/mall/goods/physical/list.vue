@@ -144,10 +144,11 @@
           </el-select>
         </SpFilterFormItem>
         <SpFilterFormItem prop="is_gift" label="赠品:">
-          <el-radio-group v-model="params.is_gift">
-            <el-radio :label="true"> 是 </el-radio>
-            <el-radio :label="false"> 否 </el-radio>
-          </el-radio-group>
+          <el-select v-model="params.is_gift">
+            <el-option :value="undefined" label="全部" />
+            <el-option :value="true" label="是" />
+            <el-option :value="false" label="否" /> 
+          </el-select>
         </SpFilterFormItem>
       </SpFilterForm>
 
