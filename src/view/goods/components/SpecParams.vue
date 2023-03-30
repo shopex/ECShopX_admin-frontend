@@ -13,6 +13,10 @@ export default {
     value: {
       type: Object,
       default: () => {}
+    },
+    isShowPoint: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -105,13 +109,7 @@ export default {
           label: '条形码',
           key: 'barcode',
           type: 'input',
-          display: 'inline'
-        },
-        {
-          label: '获取积分',
-          key: 'point_num',
-          type: 'input',
-          display: 'inline'
+          display: 'inline',
         }
       ]
     }
@@ -124,6 +122,18 @@ export default {
       deep: true,
       handler(newVal) {
         this.$emit('input', newVal)
+      }
+    },
+    isShowPoint: {
+      handler(newVal) {
+        if (newVal) {
+          this.formList.push({
+            label: '获取积分',
+            key: 'point_num',
+            type: 'input',
+            display: 'inline',
+          })
+        }
       }
     }
   },
