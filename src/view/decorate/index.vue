@@ -32,7 +32,7 @@
             <!-- <i
               class="wgt-icon iconfont"
               :class="wgt.wgtIcon"
-              /> -->
+                      /> -->
             <div :class="['wgt-icon', wgt.wgtIcon]" />
             <div class="wgt-name">
               {{ wgt.wgtName }}
@@ -62,7 +62,7 @@
                 </div>
                 <div class="wgt-tools" :class="{ active: activeCompIndex == index }">
                   <!-- <i class="iconfont icon-arrow-alt-circle-up1" @click="onMoveUpComp(index)" />
-                    <i class="iconfont icon-arrow-alt-circle-dow1" @click="onMoveDownComp(index)" /> -->
+                            <i class="iconfont icon-arrow-alt-circle-dow1" @click="onMoveDownComp(index)" /> -->
                   <i class="iconfont icon-copy1" @click="onCopyComp(index, wgt)" />
                   <i class="iconfont icon-trash-alt1" @click="onDeleteComp(index)" />
                 </div>
@@ -179,7 +179,8 @@ export default {
       const _title = {
         1001: '商城装修',
         1002: '商品详情',
-        1003: '店铺装修'
+        1003: '店铺装修',
+        1004: '自定义页装修'
       }
       this.localTitle = _title[scene]
     } else {
@@ -262,10 +263,19 @@ export default {
       const { id } = this.$route.query
       let list = []
       try {
-        const { template_content } = await this.$api.template.getPagesTemplateDetail({
-          pages_template_id: id
-        })
-        list = template_content?.list || []
+        if (this.localScene == '1004') {
+          const resTemplate = await this.$api.wxa.getParamByTempName({
+            template_name: 'yykweishop',
+            page_name: `custom_${id}`,
+            version: 'v1.0.1'
+          })
+          list = resTemplate?.list || []
+        } else {
+          const { template_content } = await this.$api.template.getPagesTemplateDetail({
+            pages_template_id: id
+          })
+          list = template_content?.list || []
+        }
       } catch (e) {
         console.error(e)
       }
@@ -342,13 +352,23 @@ export default {
       })
       data.unshift(this.headerAttr.transformOut(this.headerData))
       const { id } = this.$route.query
-      await this.$api.template.savePagesTemplate({
-        pages_template_id: id,
-        template_name: 'yykweishop',
-        template_content: JSON.stringify({
-          content: data
+      if (this.localScene == '1004') {
+        await this.$api.wxa.savePageParams({
+          template_name: 'yykweishop',
+          page_name: `custom_${id}`,
+          version: 'v1.0.1',
+          config: JSON.stringify(data)
         })
-      })
+      } else {
+        await this.$api.template.savePagesTemplate({
+          pages_template_id: id,
+          template_name: 'yykweishop',
+          template_content: JSON.stringify({
+            content: data
+          })
+        })
+      }
+
       this.$message.success('保存成功')
     },
     onExit() {

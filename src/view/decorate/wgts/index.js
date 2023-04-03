@@ -67,13 +67,17 @@ const SCENE_1003 = {
   WgtImageNavigation
 }
 
+// 自定义页面装修
+const SCENE_1004 = SCENE_1001
+
 // 软文
-const SCENE_1004 = {
+const SCENE_1005 = {
   WgtSlider
 }
 
 export default {
   1001: SCENE_1001,
   1002: SCENE_1002,
-  1003: SCENE_1003
+  1003: SCENE_1003,
+  1004: SCENE_1004
 }
