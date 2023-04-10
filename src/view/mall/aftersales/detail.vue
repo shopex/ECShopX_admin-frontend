@@ -197,7 +197,7 @@
       </div>
     </template>
 
-    <template v-if="!aftersalesInfo.sendback_data">
+    <template v-if="!aftersalesInfo.sendback_data && aftersalesInfo.aftersales_status == '1'">
       <div class="section-header with-border">
         <h3>用户回寄物流信息</h3>
       </div>
@@ -205,7 +205,7 @@
         <el-row>
           <el-col :span="3" class="col-3 content-right"> 物流公司: </el-col>
           <el-col :span="20">
-            <el-select v-model="sendbackInfo.delivery_corp" placeholder="请输入物流公司名称">
+            <el-select v-model="sendbackInfo.corp_code" placeholder="请输入物流公司名称">
               <el-option
                 v-for="(data, index) in logisticsList"
                 :key="index"
@@ -218,7 +218,7 @@
         <el-row>
           <el-col :span="3" class="col-3 content-right"> 物流单号: </el-col>
           <el-col :span="8">
-            <el-input v-model="sendbackInfo.delivery_code" placeholder="请输入物流单号" />
+            <el-input v-model="sendbackInfo.logi_no" placeholder="请输入物流单号" />
           </el-col>
         </el-row>
         <el-row>
@@ -691,7 +691,7 @@ import {
   getAftersalesAddressList,
   createAftersalesAddress
 } from '../../../api/aftersales'
-import { isBind,updateDelivery } from '../../../api/trade'
+import { isBind,updateAftersalesSendBack } from '../../../api/trade'
 import hqbdlycorp_kname from '../../../common/hqbdlycorp_kname.json'
 import district from '../../../common/district.json'
 import RemarkModal from '@/components/remarkModal'
@@ -773,8 +773,8 @@ export default {
       },
       regions: district,
       sendbackInfo: {
-        delivery_corp: '',
-        delivery_code: ''
+        corp_code: '',
+        logi_no: ''
       },
       logisticsList: [],
     }
@@ -832,15 +832,23 @@ export default {
       this.aftersalesInfo.distributor_remark = remark
     },
     submitAftersalesInfo () {
-      updateDelivery(this.order_id, this.sendbackInfo).then((response) => {
-        var deliveryStatus = response.data.data.delivery_status
-        if (deliveryStatus && deliveryStatus != 'PENDING') {
-          this.$message.success('修改物流信息成功!')
-          this.getDetail()
-        } else {
-          this.$message.error('修改物流信息失败!')
-          return false
-        }
+      this.sendbackInfo['aftersales_bn'] = this.aftersales_bn
+      updateAftersalesSendBack(this.sendbackInfo).then((response) => {
+          this.$message.success('修改用户回寄信息成功!')
+          let data = response.data.data
+          this.aftersalesInfo = data
+          this.orderInfo = data.order_info
+          if (data.aftersales_address) {
+            this.aftersales_address = data.aftersales_address.aftersales_address
+            this.aftersales_contact = data.aftersales_address.aftersales_contact
+            this.aftersales_mobile = data.aftersales_address.aftersales_mobile
+          }
+          if (data.sendback_data.length == 0) {
+            this.aftersalesInfo.sendback_data = null
+          }
+          if (data.sendconfirm_data.length == 0) {
+            this.aftersalesInfo.sendconfirm_data = null
+          }
       })
     },
     reviewSubmit() {
