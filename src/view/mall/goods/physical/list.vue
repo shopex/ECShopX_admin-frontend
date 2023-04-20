@@ -60,10 +60,10 @@
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
-          <el-input v-model="params.keywords" placeholder="请输入商品标题或副标题关键词" />
+          <el-input v-model="params.keywords" placeholder="商品标题或副标题关键词" />
         </SpFilterFormItem>
         <SpFilterFormItem prop="item_bn" label="商品编码:">
-          <el-input v-model="params.item_bn" placeholder="请输入商品编号或条形码" />
+          <el-input v-model="params.item_bn" placeholder="商品编号或条形码" />
         </SpFilterFormItem>
         <!-- <SpFilterFormItem prop="barcode" label="条形码:">
           <el-input v-model="params.barcode" placeholder="请输入商品编号条形码" />
@@ -85,7 +85,7 @@
             placeholder="请选择"
             clearable
             :options="itemCategoryList"
-            :props="{ value: 'category_id', checkStrictly: true }"
+            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
           />
         </SpFilterFormItem>
         <SpFilterFormItem prop="category" label="销售分类:">
@@ -94,7 +94,7 @@
             placeholder="请选择"
             clearable
             :options="categoryList"
-            :props="{ value: 'category_id', checkStrictly: true }"
+            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
           />
         </SpFilterFormItem>
         <SpFilterFormItem prop="templates_id" label="运费模板:">
@@ -151,7 +151,7 @@
           <el-select v-model="params.is_gift">
             <el-option :value="undefined" label="全部" />
             <el-option :value="true" label="是" />
-            <el-option :value="false" label="否" /> 
+            <el-option :value="false" label="否" />
           </el-select>
         </SpFilterFormItem>
       </SpFilterForm>
@@ -251,7 +251,12 @@
                   <el-tag v-if="!scope.row.nospec" size="mini" effect="plain" type="primary">
                     多
                   </el-tag>
-                  <el-tag v-if="scope.row.is_gift === '1'" size="mini" effect="plain" type="primary">
+                  <el-tag
+                    v-if="scope.row.is_gift === '1'"
+                    size="mini"
+                    effect="plain"
+                    type="primary"
+                  >
                     赠
                   </el-tag>
                 </div>
@@ -1725,7 +1730,7 @@ export default {
         page: 1,
         pageSize: 1000
       })
-      this.templatesList = [{name: '全部', template_id: ''}, ...list]
+      this.templatesList = [{ name: '全部', template_id: '' }, ...list]
     },
     getGoodsBranchList(searchVal = '') {
       // this.loading = true
