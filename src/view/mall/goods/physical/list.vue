@@ -777,7 +777,7 @@ import Treeselect from '@riophae/vue-treeselect'
 import SideBar from '@/components/element/sideBar'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getDefaultCurrency } from '@/api/company'
-import district from '@/common/district.json'
+// import district from '@/common/district.json'
 import {
   getItemsList,
   setItemsTemplate,
@@ -862,7 +862,7 @@ export default {
           type: 'profit'
         }
       },
-      regions: district,
+      regions: [],
       current: '',
       currentId: '',
       currentPrice: '',
@@ -990,12 +990,18 @@ export default {
   mounted() {
     this.init()
     this.fetchWechatList()
+    this.getAddress()
   },
 
   destroyed() {
     console.log(111)
   },
   methods: {
+    // 获取地区列表
+    async getAddress() {
+      const res = await this.$api.common.getAddress()
+      this.regions = res
+    },
     // 同步至店铺
     async syncToShop(isAll) {
       if (this.item_id.length == 0) {
