@@ -55,9 +55,9 @@
 <script>
 import _uniqBy from 'lodash/uniqBy'
 import { isObject, isArray } from '@/utils'
-import GoodsParams from './comps/CmGoodsParams'
-import SpecParams from './comps/CmSpecParams'
-import SkuParams from './comps/CmSkuParams'
+import GoodsParams from './components/GoodsParams'
+import SpecParams from './components/SpecParams'
+import SkuParams from './components/SkuParams'
 import sku from '../../store/modules/sku'
 export default {
   async beforeRouteLeave(to, from, next) {
@@ -805,9 +805,8 @@ export default {
           mate_description,
           mate_keywords
         }),
-        intro: mode == 'components' ? JSON.stringify(content) : intro
+        intro: mode == 'component' ? JSON.stringify(content) : intro
       }
-
       if (isSpecs) {
         const { skus, skuItemImages, specItems } = this.form.skuParams
         // 多规格
