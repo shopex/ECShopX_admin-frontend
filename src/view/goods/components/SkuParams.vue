@@ -185,7 +185,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="获取积分"  v-if="isShowPoint">
+      <el-table-column v-if="isShowPoint" label="获取积分">
         <template slot-scope="scope">
           <el-input
             v-model="scope.row.point_num"
@@ -258,7 +258,7 @@
           <el-input v-model="scope.row.barcode" size="mini" />
         </template>
       </el-table-column>
-      <el-table-column prop="point_num" label="获取积分" v-if="isShowPoint">
+      <el-table-column v-if="isShowPoint" prop="point_num" label="获取积分">
         <template slot-scope="scope">
           <el-input v-model="scope.row.point_num" type="number" min="0" size="mini" />
         </template>

@@ -901,7 +901,7 @@ export default {
       let data = []
       res.data.data.list.forEach((item) => {
         data.push({
-          imgUrl: item.pics[0],
+          imgUrl: item.pics ? item.pics[0] : '',
           title: item.itemName,
           goodsId: item.itemId
         })

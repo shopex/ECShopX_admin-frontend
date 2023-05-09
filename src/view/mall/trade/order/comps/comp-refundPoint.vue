@@ -26,11 +26,13 @@ export default {
     getTotalFee() {
       const { items = [] } = this.value || {}
       let leftPoint = 0
-      items.forEach(item => {
+      items.forEach((item) => {
         if (item.checked) {
-          item.refundNum === item.left_aftersales_num ? 
-          leftPoint = item.remain_point / 100 :
-          leftPoint = parseInt(item.remain_point / 100 / item.left_aftersales_num * item.refundNum)
+          item.refundNum === item.left_aftersales_num
+            ? (leftPoint = item.remain_point / 100)
+            : (leftPoint = parseInt(
+                (item.remain_point / 100 / item.left_aftersales_num) * item.refundNum
+              ))
         }
       })
       return leftPoint

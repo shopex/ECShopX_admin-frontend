@@ -312,7 +312,9 @@ export default {
           // 单规格组件
           key: 'specParams',
           component: ({ key }, value) => {
-            return <SpecParams v-model={value[key]} ref='specParams' is-show-point={this.isShowPoint} />
+            return (
+              <SpecParams v-model={value[key]} ref='specParams' is-show-point={this.isShowPoint} />
+            )
           },
           isShow: (item, { isSpecs }) => {
             return !isSpecs
@@ -334,7 +336,9 @@ export default {
         {
           key: 'skuParams',
           component: ({ key }, value) => {
-            return <SkuParams v-model={value[key]} ref='skuParams' is-show-point={this.isShowPoint} />
+            return (
+              <SkuParams v-model={value[key]} ref='skuParams' is-show-point={this.isShowPoint} />
+            )
           },
           isShow: (item, { isSpecs }) => {
             return isSpecs
@@ -440,9 +444,11 @@ export default {
     this.getAddress()
   },
   methods: {
-    async getPointRule () {
+    async getPointRule() {
       const pointRuleInfo = await this.$api.promotions.getPointRule()
-      this.isShowPoint = pointRuleInfo.access == 'items' && (pointRuleInfo.isOpenMemberPoint == 'true' || pointRuleInfo.isOpenMemberPoint == true)
+      this.isShowPoint =
+        pointRuleInfo.access == 'items' &&
+        (pointRuleInfo.isOpenMemberPoint == 'true' || pointRuleInfo.isOpenMemberPoint == true)
     },
     // 获取管理分类
     async getMainCategory() {
@@ -808,7 +814,6 @@ export default {
         }),
         intro: mode == 'component' ? JSON.stringify(content) : intro
       }
-
       if (isSpecs) {
         const { skus, skuItemImages, specItems } = this.form.skuParams
         // 多规格

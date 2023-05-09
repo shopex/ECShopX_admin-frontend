@@ -109,7 +109,7 @@ export default {
           label: '条形码',
           key: 'barcode',
           type: 'input',
-          display: 'inline',
+          display: 'inline'
         }
       ]
     }
@@ -131,7 +131,7 @@ export default {
             label: '获取积分',
             key: 'point_num',
             type: 'input',
-            display: 'inline',
+            display: 'inline'
           })
         }
       }

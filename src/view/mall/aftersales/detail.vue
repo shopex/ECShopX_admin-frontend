@@ -691,7 +691,7 @@ import {
   getAftersalesAddressList,
   createAftersalesAddress
 } from '../../../api/aftersales'
-import { isBind,updateAftersalesSendBack } from '../../../api/trade'
+import { isBind, updateAftersalesSendBack } from '../../../api/trade'
 import hqbdlycorp_kname from '../../../common/hqbdlycorp_kname.json'
 import district from '../../../common/district.json'
 import RemarkModal from '@/components/remarkModal'
@@ -776,7 +776,7 @@ export default {
         corp_code: '',
         logi_no: ''
       },
-      logisticsList: [],
+      logisticsList: []
     }
   },
   computed: {
@@ -794,7 +794,7 @@ export default {
   methods: {
     isArray,
     isObject,
-    getLogisticsListData () {
+    getLogisticsListData() {
       getLogisticsLists({ status: 1 }).then((response) => {
         this.logisticsList = response.data.data.list
       })
@@ -831,24 +831,24 @@ export default {
     onRemarksDone(remark) {
       this.aftersalesInfo.distributor_remark = remark
     },
-    submitAftersalesInfo () {
+    submitAftersalesInfo() {
       this.sendbackInfo['aftersales_bn'] = this.aftersales_bn
       updateAftersalesSendBack(this.sendbackInfo).then((response) => {
-          this.$message.success('修改用户回寄信息成功!')
-          let data = response.data.data
-          this.aftersalesInfo = data
-          this.orderInfo = data.order_info
-          if (data.aftersales_address) {
-            this.aftersales_address = data.aftersales_address.aftersales_address
-            this.aftersales_contact = data.aftersales_address.aftersales_contact
-            this.aftersales_mobile = data.aftersales_address.aftersales_mobile
-          }
-          if (data.sendback_data.length == 0) {
-            this.aftersalesInfo.sendback_data = null
-          }
-          if (data.sendconfirm_data.length == 0) {
-            this.aftersalesInfo.sendconfirm_data = null
-          }
+        this.$message.success('修改用户回寄信息成功!')
+        let data = response.data.data
+        this.aftersalesInfo = data
+        this.orderInfo = data.order_info
+        if (data.aftersales_address) {
+          this.aftersales_address = data.aftersales_address.aftersales_address
+          this.aftersales_contact = data.aftersales_address.aftersales_contact
+          this.aftersales_mobile = data.aftersales_address.aftersales_mobile
+        }
+        if (data.sendback_data.length == 0) {
+          this.aftersalesInfo.sendback_data = null
+        }
+        if (data.sendconfirm_data.length == 0) {
+          this.aftersalesInfo.sendconfirm_data = null
+        }
       })
     },
     reviewSubmit() {
