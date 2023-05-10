@@ -3,8 +3,10 @@
   .el-form-item__content {
     min-width: 260px;
   }
+
   .el-cascader {
     width: 100%;
+
     .el-input {
       width: 100%;
       max-width: initial;
@@ -14,10 +16,12 @@
   .image-checkbox-container {
     line-height: initial;
     margin-bottom: 10px;
+
     .el-checkbox {
       width: 80px;
       margin-right: 10px;
       text-align: center;
+
       .el-checkbox__label {
         display: none;
       }
@@ -58,10 +62,12 @@ import { isObject, isArray } from '@/utils'
 import GoodsParams from './components/GoodsParams'
 import SpecParams from './components/SpecParams'
 import SkuParams from './components/SkuParams'
-import sku from '../../store/modules/sku'
 export default {
   async beforeRouteLeave(to, from, next) {
-    if (!this.isLeave) {
+    if (this.$refs['decorateRef'].dialogVisible) {
+      this.$refs['decorateRef'].resetDecorateTheme()
+      this.$refs['decorateRef'].onClose()
+    } else if (!this.isLeave) {
       await this.$confirm('确定要离开当前页面，您将丢失已编辑的数据？！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -255,7 +261,7 @@ export default {
               </div>
             </div>
           ),
-          tip: `1. 最多可上传9个图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
+          tip: `1. 最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
         },
         {
           label: '商品视频',
@@ -404,13 +410,14 @@ export default {
           key: 'content',
           component: ({ key }, value) => {
             return (
-              <richTextEditor
+              <SpDecorate ref='decorateRef' v-model={value[key]} scene={'1002'} />
+              /* <richTextEditor
                 data={value[key]}
                 control={['film', 'slider', 'heading', 'writing']}
                 on-change={(data) => {
                   value[key] = data
                 }}
-              />
+              /> */
             )
           },
           isShow: (item, { mode }) => {
