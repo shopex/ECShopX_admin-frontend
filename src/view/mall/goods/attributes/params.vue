@@ -164,8 +164,8 @@ export default {
       }
     },
     addItem() {
-      if (this.form.attribute_values.length > 20) {
-        this.$message({ type: 'warning', message: '最多添加20项' })
+      if (this.form.attribute_values.length > 50) {
+        this.$message({ type: 'warning', message: '最多添加50项' })
         return
       }
       let item = {
