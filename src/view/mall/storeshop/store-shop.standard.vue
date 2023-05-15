@@ -58,6 +58,26 @@
       <export-tip @exportHandle="handleExport">
         <el-button type="primary" plain> 导出 </el-button>
       </export-tip>
+
+      <el-dropdown @command="onPatchAction">
+        <el-button type="primary" plain>
+          批量操作<i class="el-icon-arrow-down el-icon--right" />
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="1">
+            <span>批量上架</span>
+          </el-dropdown-item>
+          <el-dropdown-item command="2">
+            <span>批量下架</span>
+          </el-dropdown-item>
+          <el-dropdown-item command="3">
+            <span>总部库存</span>
+          </el-dropdown-item>
+          <el-dropdown-item command="4">
+            <span>店铺库存</span>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
 
     <el-tabs v-model="activeTab" type="card">
@@ -311,6 +331,26 @@ export default {
     onItemSkuFormSubmit() {
       this.itemSkuDialog = false
       this.$refs.finder.refresh(true)
+    },
+    async onPatchAction(command) {
+      if (this.selectItems.length == 0) {
+        return this.$message.error('请至少选择一个商品')
+      }
+      if (command == '1' || command == '2') {
+        await this.$api.marketing.updateDistributorItem({
+          'distributor_id': this.formData.distributor_id,
+          'goods_id': JSON.stringify(this.selectItems.map((item) => item.goods_id)),
+          'is_can_sale': command == '1'
+        })
+        this.$refs.finder.refresh()
+      } else if (command == '3' || command == '4') {
+        await this.$api.marketing.updateDistributorItem({
+          distributor_id: this.formData.distributor_id,
+          goods_id: JSON.stringify(this.selectItems.map((item) => item.goods_id)),
+          is_total_store: command == '3'
+        })
+        this.$refs.finder.refresh(true)
+      }
     }
   }
 }

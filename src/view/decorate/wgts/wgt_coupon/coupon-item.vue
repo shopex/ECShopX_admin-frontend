@@ -85,10 +85,18 @@ export default {
         multiple: false
       })
       if (data) {
-        const [{ reduce_cost, description, card_id, title, card_type }] = data
+        const [{ reduce_cost, description, card_id, title, card_type, discount }] = data
+        let amount
+        if (card_type == 'cash') {
+          amount = reduce_cost
+        } else if (card_type == 'discount') {
+          amount = (100 - parseInt(discount)) / 10
+        } else {
+          amount = reduce_cost
+        }
         Vue.set(this.localValue, index, {
           ...this.localValue[index],
-          amount: reduce_cost,
+          amount,
           desc: description,
           id: card_id,
           title: title,

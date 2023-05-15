@@ -58,10 +58,11 @@
 
 <script>
 import _uniqBy from 'lodash/uniqBy'
-import { isObject, isArray } from '@/utils'
+import { isObject, isString, isArray } from '@/utils'
 import GoodsParams from './components/GoodsParams'
 import SpecParams from './components/SpecParams'
 import SkuParams from './components/SkuParams'
+import sku from '../../store/modules/sku'
 export default {
   async beforeRouteLeave(to, from, next) {
     if (this.$refs['decorateRef'].dialogVisible) {
@@ -295,7 +296,8 @@ export default {
           onChange: () => {},
           isShow: (item, { isSpecs }) => {
             const { itemId } = this.$route.params
-            return !itemId
+            const { skus } = this.form.skuParams
+            return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
           }
         },
         {
@@ -433,7 +435,11 @@ export default {
       submitLoading: false,
       loading: false,
       isLeave: false,
-      isShowPoint: false
+      isShowPoint: false,
+      // 管理分类上绑定的规格
+      mainCategorySpec: [],
+      // 当前商品是否多规格
+      multipleSkuGoods: false
     }
   },
   created() {
@@ -529,6 +535,7 @@ export default {
         item_category_info, // 销售分类
         item_category, // 销售分类值
         item_spec_list,
+        item_main_cat_id,
         is_show_specimg,
         spec_images,
         spec_items,
@@ -564,6 +571,7 @@ export default {
         }
       })
       this.form.isSpecs = !nospec
+      this.multipleSkuGoods = !nospec
 
       this.form.specParams = {
         approve_status: approve_status,
@@ -577,10 +585,16 @@ export default {
         barcode,
         point_num
       }
-      this.resolveParamsData(item_params_list, item_params)
+      const { goods_params, goods_spec = [] } = await this.$api.goods.getCategoryInfo(
+        item_main_cat_id
+      )
+      this.mainCategorySpec = goods_spec
+      this.resolveParamsData(goods_params, item_params)
       if (!nospec) {
         this.resolveSkuParams(item_spec_list, spec_items)
         this.$refs['skuParams'].onSkuChange({ spec_images, spec_items })
+      } else {
+        this.resolveSkuParams(goods_spec)
       }
 
       if (tdk_content) {
@@ -593,7 +607,7 @@ export default {
         this.form.mode = 'component'
         this.form.content = intro
       } else {
-        this.form.intro = intro
+        this.form.intro = isString(intro) ? intro : intro.toString()
       }
     },
     // 递归管理分类
@@ -674,13 +688,14 @@ export default {
       this.resolveParamsData(goods_params)
       this.resolveSkuParams(goods_spec)
     },
-    resolveParamsData(goodsParams, value) {
+    resolveParamsData(goodsParams, value = []) {
       this.form.paramsData = goodsParams.map(
         ({ attribute_id, attribute_name, attribute_values: { list } }, index) => {
+          const fd = value.find((item) => item.attribute_id == attribute_id) || {}
           return {
             id: attribute_id,
             label: attribute_name,
-            attr_id: value ? (value.length > 0 ? value[index].attribute_value_id : '') : '',
+            attr_id: fd?.attribute_value_id || '',
             children: list.map(({ attribute_value_id, attribute_value }) => {
               return {
                 value: attribute_value_id,
