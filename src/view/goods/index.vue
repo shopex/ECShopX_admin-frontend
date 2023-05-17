@@ -591,7 +591,8 @@ export default {
       this.mainCategorySpec = goods_spec
       this.resolveParamsData(goods_params, item_params)
       if (!nospec) {
-        this.resolveSkuParams(item_spec_list, spec_items)
+        // 多规格
+        this.resolveSkuParams(goods_spec, spec_items)
         this.$refs['skuParams'].onSkuChange({ spec_images, spec_items })
       } else {
         this.resolveSkuParams(goods_spec)
@@ -792,7 +793,6 @@ export default {
       pics.forEach((pic, index) => {
         _picsQrcode.push(picsQrcode.includes(index))
       })
-      debugger
       let params = {
         item_type: itemType,
         special_type: specialType,
