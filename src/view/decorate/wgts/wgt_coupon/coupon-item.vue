@@ -67,8 +67,16 @@ export default {
       })
       this.localValue = this.localValue.concat(
         data.map((item, index) => {
+          let amount
+          if (card_type == 'cash') {
+            amount = item.reduce_cost
+          } else if (card_type == 'discount') {
+            amount = (100 - parseInt(item.discount)) / 10
+          } else {
+            amount = item.reduce_cost
+          }
           return {
-            amount: item.reduce_cost,
+            amount,
             desc: item.description,
             id: item.card_id,
             imgUrl: this.localValue[index] ? this.localValue[index].imgUrl : '',
