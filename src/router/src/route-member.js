@@ -1,6 +1,7 @@
 // 会员路由
 const name = '会员'
 import Layout from '@/view/layout' // 主框架
+import { VERSION_IN_PURCHASE } from '@/utils'
 
 export default {
   path: '/member',
@@ -36,16 +37,22 @@ export default {
       name: `会员标签分组`,
       component: () => import('@/view/member/members/tagcategory.vue')
     },
-    // {
-    //   path: 'whitelistlist',
-    //   name: `白名单列表`,
-    //   component: () => import('@/view/member/whitelist/list')
-    // },
-    // {
-    //   path: 'whitelistuploade',
-    //   name: `白名单导入`,
-    //   component: () => import('@/view/member/whitelist/uploadeindex')
-    // },
+    {
+      path: 'whitelistlist',
+      name: `白名单列表`,
+      component: () => {
+        if (VERSION_IN_PURCHASE) {
+          return import('@/view/member/whitelist/list.purchase')
+        } else {
+          return import('@/view/member/whitelist/list')
+        }
+      }
+    },
+    {
+      path: 'whitelistuploade',
+      name: `白名单导入`,
+      component: () => import('@/view/member/whitelist/uploadeindex')
+    },
     {
       path: 'pointrule',
       name: `积分规则`,

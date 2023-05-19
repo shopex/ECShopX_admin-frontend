@@ -3,8 +3,10 @@
   .el-form-item__content {
     min-width: 260px;
   }
+
   .el-cascader {
     width: 100%;
+
     .el-input {
       width: 100%;
       max-width: initial;
@@ -14,10 +16,12 @@
   .image-checkbox-container {
     line-height: initial;
     margin-bottom: 10px;
+
     .el-checkbox {
       width: 80px;
       margin-right: 10px;
       text-align: center;
+
       .el-checkbox__label {
         display: none;
       }
@@ -54,15 +58,17 @@
 
 <script>
 import _uniqBy from 'lodash/uniqBy'
-import richTextEditor from '@/components/function/richTextEditor'
-import { isObject, isArray } from '@/utils'
-import CmGoodsParams from './comps/CmGoodsParams'
-import CmSpecParams from './comps/CmSpecParams'
-import CmSkuParams from './comps/CmSkuParams'
+import { isObject, isString, isArray, getRegionNameById } from '@/utils'
+import GoodsParams from './components/GoodsParams'
+import SpecParams from './components/SpecParams'
+import SkuParams from './components/SkuParams'
 import sku from '../../store/modules/sku'
 export default {
   async beforeRouteLeave(to, from, next) {
-    if (!this.isLeave) {
+    if (this.$refs['decorateRef'].dialogVisible) {
+      this.$refs['decorateRef'].resetDecorateTheme()
+      this.$refs['decorateRef'].onClose()
+    } else if (!this.isLeave) {
       await this.$confirm('确定要离开当前页面，您将丢失已编辑的数据？！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -202,7 +208,7 @@ export default {
           label: '产地',
           key: 'regionsId',
           component: ({ key }, value) => (
-            <el-cascader v-model={value[key]} options={this.regionsList} />
+            <el-cascader v-model={value[key]} clearable options={this.regionsList} />
           ),
           display: 'inline'
         },
@@ -227,7 +233,13 @@ export default {
           component: ({ key }, value) => (
             <el-cascader
               v-model={value[key]}
+              class={[
+                {
+                  'is-error': value[key]
+                }
+              ]}
               clearable
+              filterable
               {...{ props: cascaderProps }}
               options={this.saleCategoryList}
             />
@@ -240,7 +252,7 @@ export default {
           message: '请上传商品图片',
           component: ({ key }, value) => (
             <div>
-              <SpImagePicker v-model={value[key]} max={9} />
+              <SpImagePicker v-model={value[key]} drag max={9} />
               <div class='image-checkbox-container'>
                 <el-checkbox-group v-model={value['picsQrcode']}>
                   {value[key].map((pic, index) => (
@@ -250,7 +262,7 @@ export default {
               </div>
             </div>
           ),
-          tip: `1. 最多可上传9个图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
+          tip: `1. 最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
         },
         {
           label: '商品视频',
@@ -267,7 +279,7 @@ export default {
         {
           key: 'paramsData',
           component: ({ key }, value) => {
-            return <CmGoodsParams v-model={value[key]} />
+            return <GoodsParams v-model={value[key]} />
           },
           isShow: (item, { paramsData }) => {
             return paramsData.length > 0
@@ -284,7 +296,8 @@ export default {
           onChange: () => {},
           isShow: (item, { isSpecs }) => {
             const { itemId } = this.$route.params
-            return !itemId
+            const { skus } = this.form.skuParams
+            return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
           }
         },
         {
@@ -301,7 +314,9 @@ export default {
           // 单规格组件
           key: 'specParams',
           component: ({ key }, value) => {
-            return <CmSpecParams v-model={value[key]} ref='specParams' />
+            return (
+              <SpecParams v-model={value[key]} ref='specParams' is-show-point={this.isShowPoint} />
+            )
           },
           isShow: (item, { isSpecs }) => {
             return !isSpecs
@@ -323,7 +338,9 @@ export default {
         {
           key: 'skuParams',
           component: ({ key }, value) => {
-            return <CmSkuParams v-model={value[key]} ref='cmSkuParams' />
+            return (
+              <SkuParams v-model={value[key]} ref='skuParams' is-show-point={this.isShowPoint} />
+            )
           },
           isShow: (item, { isSpecs }) => {
             return isSpecs
@@ -395,13 +412,14 @@ export default {
           key: 'content',
           component: ({ key }, value) => {
             return (
-              <richTextEditor
+              <SpDecorate ref='decorateRef' v-model={value[key]} scene={'1002'} />
+              /* <richTextEditor
                 data={value[key]}
                 control={['film', 'slider', 'heading', 'writing']}
                 on-change={(data) => {
                   value[key] = data
                 }}
-              />
+              /> */
             )
           },
           isShow: (item, { mode }) => {
@@ -416,16 +434,28 @@ export default {
       goodsSpec: [],
       submitLoading: false,
       loading: false,
-      isLeave: false
+      isLeave: false,
+      isShowPoint: false,
+      // 管理分类上绑定的规格
+      mainCategorySpec: [],
+      // 当前商品是否多规格
+      multipleSkuGoods: false
     }
   },
   created() {
+    this.getPointRule()
     this.getMainCategory()
     this.getShippingTemplates()
     this.getBrandList()
     this.getAddress()
   },
   methods: {
+    async getPointRule() {
+      const pointRuleInfo = await this.$api.promotions.getPointRule()
+      this.isShowPoint =
+        pointRuleInfo.access == 'items' &&
+        (pointRuleInfo.isOpenMemberPoint == 'true' || pointRuleInfo.isOpenMemberPoint == true)
+    },
     // 获取管理分类
     async getMainCategory() {
       const { itemId } = this.$route.params
@@ -505,6 +535,7 @@ export default {
         item_category_info, // 销售分类
         item_category, // 销售分类值
         item_spec_list,
+        item_main_cat_id,
         is_show_specimg,
         spec_images,
         spec_items,
@@ -540,6 +571,7 @@ export default {
         }
       })
       this.form.isSpecs = !nospec
+      this.multipleSkuGoods = !nospec
 
       this.form.specParams = {
         approve_status: approve_status,
@@ -553,10 +585,17 @@ export default {
         barcode,
         point_num
       }
-      this.resolveParamsData(item_params_list, item_params)
+      const { goods_params, goods_spec = [] } = await this.$api.goods.getCategoryInfo(
+        item_main_cat_id
+      )
+      this.mainCategorySpec = goods_spec
+      this.resolveParamsData(goods_params, item_params)
       if (!nospec) {
-        this.resolveSkuParams(item_spec_list, spec_items)
-        this.$refs['cmSkuParams'].onSkuChange({ spec_images, spec_items })
+        // 多规格
+        this.resolveSkuParams(goods_spec, spec_items)
+        this.$refs['skuParams'].onSkuChange({ spec_images, spec_items })
+      } else {
+        this.resolveSkuParams(goods_spec)
       }
 
       if (tdk_content) {
@@ -569,7 +608,7 @@ export default {
         this.form.mode = 'component'
         this.form.content = intro
       } else {
-        this.form.intro = intro
+        this.form.intro = isString(intro) ? intro : intro.toString()
       }
     },
     // 递归管理分类
@@ -650,13 +689,14 @@ export default {
       this.resolveParamsData(goods_params)
       this.resolveSkuParams(goods_spec)
     },
-    resolveParamsData(goodsParams, value) {
+    resolveParamsData(goodsParams, value = []) {
       this.form.paramsData = goodsParams.map(
         ({ attribute_id, attribute_name, attribute_values: { list } }, index) => {
+          const fd = value.find((item) => item.attribute_id == attribute_id) || {}
           return {
             id: attribute_id,
             label: attribute_name,
-            attr_id: value ? (value.length > 0 ? value[index].attribute_value_id : '') : '',
+            attr_id: fd?.attribute_value_id || '',
             children: list.map(({ attribute_value_id, attribute_value }) => {
               return {
                 value: attribute_value_id,
@@ -717,6 +757,7 @@ export default {
     },
     async onFormSave() {
       const { itemId } = this.$route.params
+      const { is_new } = this.$route.query
       const {
         itemType,
         specialType,
@@ -764,7 +805,8 @@ export default {
         brand_id: brandId,
         item_unit: itemUnit,
         sort,
-        regions_id: regionsId,
+        regions_id: regionsId?.length > 0 ? regionsId : '',
+        regions: regionsId?.length > 0 ? getRegionNameById(regionsId, this.regionsList) : '',
         tax_rate: taxRate,
         is_gift: isGift,
         item_category: _salesCategory,
@@ -787,9 +829,8 @@ export default {
           mate_description,
           mate_keywords
         }),
-        intro: mode == 'components' ? JSON.stringify(content) : intro
+        intro: mode == 'component' ? JSON.stringify(content) : intro
       }
-
       if (isSpecs) {
         const { skus, skuItemImages, specItems } = this.form.skuParams
         // 多规格
@@ -812,6 +853,7 @@ export default {
               const skuIds = sku_id.split('_')
               return {
                 ...item,
+                item_bn: is_new == 'true' ? '' : item.item_bn,
                 is_default: itemId ? index == 0 : is_default,
                 item_spec: skuIds.map((id) => {
                   let resItemSpec = {}
@@ -838,11 +880,17 @@ export default {
           ...params,
           ...specParams
         }
+        if (is_new) {
+          params = {
+            ...params,
+            item_bn: ''
+          }
+        }
       }
 
       this.submitLoading = true
       try {
-        if (itemId) {
+        if (itemId && !is_new) {
           await this.$api.goods.updateItems(itemId, {
             ...params,
             item_id: itemId

@@ -808,6 +808,26 @@ export default {
           },
           data: []
         },
+        {
+          name: 'store',
+          base: {
+            title: '推荐商铺',
+            subtitle: '热门商铺，官方推荐',
+            padded: true,
+            backgroundColor: '#FFF',
+            borderColor: '#FF6700',
+            imgUrl: ''
+          },
+          data: [
+            {
+              id: '',
+              name: '',
+              logo: '',
+              items: []
+            }
+          ],
+          seletedTags: []
+        },
         // {
         //   name: "floorImg-two", //楼层图片默认数据2
         //   base: {
@@ -1372,11 +1392,11 @@ export default {
         })
       }
 
-      const faverite = await getRecommendLikeItemList()
+      const faverite = await this.$api.promotions.getRecommendLikeItemList()
       let data = []
-      faverite.data.data.list.forEach((item) => {
+      faverite.list.forEach((item) => {
         data.push({
-          imgUrl: item.pics[0],
+          imgUrl: item.pics ? item.pics[0] : '',
           title: item.itemName,
           goodsId: item.itemId
         })

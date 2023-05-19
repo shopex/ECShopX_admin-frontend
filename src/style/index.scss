@@ -177,6 +177,16 @@ a {
       text-align: center;
     }
   }
+  .sp-finder-footer-text {
+    margin-left: 10px;
+  }
+  .sp-finder-actions {
+    &-item {
+    }
+    &__wrap {
+      justify-content: flex-start !important;
+    }
+  }
   .el-table--border .el-table__cell:last-of-type {
     border-right: 1px solid #ebeef5;
   }

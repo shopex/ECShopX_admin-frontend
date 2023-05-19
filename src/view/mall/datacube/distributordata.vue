@@ -221,13 +221,9 @@ export default {
         aftersalesData: [],
         refundedData: [],
         amountPayedData: [],
-        amountPointPayedData: [],
         orderData: [],
-        orderPointData: [],
         orderPayedData: [],
-        orderPointPayedData: [],
-        gmvData: [],
-        gmvPointData: []
+        gmvData: []
       },
       tab: {
         'name': this.$store.getters.login_type !== 'merchant' ? 'member' : 'order',
@@ -352,13 +348,9 @@ export default {
             this.list.aftersalesData.push(companyDataList[key].aftersales_count)
             this.list.refundedData.push(companyDataList[key].refunded_count / 100)
             this.list.amountPayedData.push(companyDataList[key].amount_payed_count / 100)
-            this.list.amountPointPayedData.push(companyDataList[key].amount_point_payed_count)
             this.list.orderData.push(companyDataList[key].order_count)
-            this.list.orderPointData.push(companyDataList[key].order_point_count)
             this.list.orderPayedData.push(companyDataList[key].order_payed_count)
-            this.list.orderPointPayedData.push(companyDataList[key].order_point_payed_count)
             this.list.gmvData.push(companyDataList[key].gmv_count / 100)
-            this.list.gmvPointData.push(companyDataList[key].gmv_point_count / 100)
           }
           this.loading = false
           const name = this.tab.name

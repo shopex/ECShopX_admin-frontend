@@ -24,12 +24,12 @@ export default {
       children: [
         {
           path: 'editor/:itemId?',
-          component: () => import('@/view/mall/marketing/distributor_editor')
+          component: () => import('@/view/merchant/store')
         },
         {
           path: 'template',
-          // component: () => import('@/view/mall/marketing/distributor_template')
-          component: () => import('@/view/wxapp/home')
+          component: () => import('@/view/mall/marketing/distributor_template')
+          // component: () => import('@/view/wxapp/home')
         },
         {
           path: 'details/:id?',

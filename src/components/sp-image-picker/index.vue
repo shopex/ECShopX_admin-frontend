@@ -10,12 +10,28 @@
       height: 64px;
     }
   }
+  .image-list-wrap {
+    @include clearfix();
+  }
   .image-item {
     width: 80px;
     height: 80px;
     border: 1px solid #d9d9d9;
-    margin: 0 10px 10px 0;
+    margin-right: 10px;
     position: relative;
+    float: left;
+    &.drag {
+      &:hover {
+        .icon-tuozhuai {
+          display: block;
+        }
+      }
+    }
+  }
+  &.multiple {
+    .image-item {
+      margin-bottom: 10px;
+    }
   }
   .placeholder {
     height: 80px;
@@ -36,12 +52,6 @@
     line-height: initial;
   }
   .img-content {
-    // position: relative;
-    // left: 50%;
-    // top: 50%;
-    // transform: translate(-50%, -50%);
-    // max-width: 100%;
-    // max-height: 100%;
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -58,14 +68,28 @@
     text-align: center;
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
-    // display: none;
     position: absolute;
     bottom: 0;
     left: 0;
     font-size: 12px;
     cursor: default;
   }
-  .icon-times-circle1 {
+  .icon-tuozhuai {
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+  }
+  .icon-qingchuFilled {
     position: absolute;
     right: -7px;
     z-index: 99;
@@ -78,8 +102,10 @@
 <script>
 import Vue from 'vue'
 import { isArray, isEmpty, isString, isObject } from '@/utils'
+import draggable from 'vuedraggable'
 export default {
   name: 'SpImagePicker',
+  components: { draggable },
   props: {
     value: {
       type: [Object, Array, String]
@@ -95,76 +121,99 @@ export default {
     size: {
       type: String,
       default: 'normal'
+    },
+    drag: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      dragOptions: {
+        animation: 300,
+        forceFallback: false,
+        scroll: true
+      }
+    }
+  },
+  watch: {
+    value: {
+      handler(nVal) {
+        this.localValue = nVal
+      },
+      deep: true,
+      immediate: true
     }
   },
   created() {},
   methods: {
     // 图片添加
     async handleSelectImage() {
-      console.log('handleSelectImage:', this.max, this.value)
       const { data } = await this.$picker.image({
         multiple: this.max > 1,
-        num: this.max > 1 ? this.max - this.value.length : 1
+        num: this.max > 1 ? this.max - this.localValue.length : 1
       })
-      if (isString(this.value)) {
+      if (isString(this.localValue)) {
         this.updateValue(data.url)
-      } else if (isObject(this.value)) {
+      } else if (isObject(this.localValue)) {
         this.updateValue(data)
-      } else if (isArray(this.value)) {
+      } else if (isArray(this.localValue)) {
         if (this.type == 'string') {
           const res = data.map(({ url }) => url)
-          this.updateValue(this.value.concat(res))
+          this.updateValue(this.localValue.concat(res))
         } else {
-          this.updateValue(this.value.concat(data))
+          this.updateValue(this.localValue.concat(data))
         }
       }
     },
 
     async onUpdateImage(index) {
       let val
-      if (isArray(this.value)) {
-        val = this.value[index]
-      } else if (isObject(this.value)) {
-        val = this.value.url
+      if (isArray(this.localValue)) {
+        val = this.localValue[index]
+      } else if (isObject(this.localValue)) {
+        val = this.localValue.url
       } else {
-        val = this.value
+        val = this.localValue
       }
       const { data } = await this.$picker.image({
         data: val
       })
-      if (isArray(this.value)) {
+      if (isArray(this.localValue)) {
         if (this.type == 'string') {
-          Vue.set(this.value, index, data.url)
+          Vue.set(this.localValue, index, data.url)
         } else {
-          Vue.set(this.value, index, data)
+          Vue.set(this.localValue, index, data)
         }
-      } else if (isObject(this.value)) {
-        this.value = data
+      } else if (isObject(this.localValue)) {
+        this.localValue = data
       } else {
-        this.value = data.url
+        this.localValue = data.url
       }
-      this.updateValue(this.value)
+      this.updateValue(this.localValue)
     },
 
     updateValue(val) {
+      console.log('updateValue========', val)
       this.$emit('input', val)
       this.$emit('onChange', val)
     },
 
     handleDeleteItem(index) {
-      if (isArray(this.value)) {
-        this.value.splice(index, 1)
+      if (isArray(this.localValue)) {
+        this.localValue.splice(index, 1)
       } else {
-        this.value = isString(this.value) ? '' : {}
+        this.localValue = isString(this.localValue) ? '' : {}
       }
-      this.updateValue(this.value)
+      this.updateValue(this.localValue)
     },
 
     _renderImage(item, index = 0) {
       return (
-        <div class='image-item' key={`image-item__${index}`}>
+        <div class={['image-item', { 'drag': this.drag }]} key={`image-item__${index}`}>
+          <i class='ecx-icon icon-tuozhuai' />
           <i
-            class='iconfont icon-times-circle1'
+            class='ecx-icon icon-qingchuFilled'
             on-click={this.handleDeleteItem.bind(this, index)}
           />
           <el-image class='img-content' src={item?.url || item} fit='cover' />
@@ -177,10 +226,27 @@ export default {
   },
   render() {
     const { value, max, size } = this
-    const multiple = isArray(value)
     return (
-      <div class={['sp-image-picker', size]}>
-        {max > 1 && value.map((item, index) => this._renderImage(item, index))}
+      <div
+        class={[
+          'sp-image-picker',
+          size,
+          {
+            'multiple': max > 1
+          }
+        ]}
+      >
+        {max > 1 && (
+          <draggable
+            class='list-container'
+            list={value}
+            disabled={!this.drag}
+            options={this.dragOptions}
+            handle='.icon-tuozhuai'
+          >
+            {value.map((item, index) => this._renderImage(item, index))}
+          </draggable>
+        )}
         {max > 1 && value.length < max && (
           <div class='image-item placeholder' on-click={this.handleSelectImage}>
             <i class='iconfont icon-camera' />

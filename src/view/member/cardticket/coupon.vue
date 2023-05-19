@@ -42,7 +42,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="title" label="卡券标题" />
-            <el-table-column width="280" label="卡券有效期">
+            <el-table-column width="350" label="卡券有效期">
               <template slot-scope="scope">
                 <i class="el-icon-time" />
                 <template v-if="scope.row.takeEffect">
@@ -145,7 +145,10 @@
                       查看
                     </router-link>
                   </el-button>
-                  <el-button v-if="scope.row.edit_btn == 'Y'" type="text">
+                  <el-button
+                    v-if="scope.row.edit_btn == 'Y' && parseInt(scope.row.source_id) <= 0"
+                    type="text"
+                  >
                     <router-link
                       :to="{
                         path: matchHidePage('editor'),
@@ -164,15 +167,12 @@
                           plain
                           size="mini"
                           @click="handleDownload(scope.row.title)"
-                          >
-下载码
-</el-button
                         >
-                        <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini"
-                          >
-复制链接
-</el-button
-                        >
+                          下载码
+                        </el-button>
+                        <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini">
+                          复制链接
+                        </el-button>
                       </div>
                     </div>
                     <el-button
