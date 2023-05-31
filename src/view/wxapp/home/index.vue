@@ -776,8 +776,14 @@ export default {
       this.getList()
     },
     editTemplate(pages_template_id) {
-      this.templateVisible = true
-      this.currTemplateId = pages_template_id
+      // this.templateVisible = true
+      // this.currTemplateId = pages_template_id
+      const { distributor_id } = this.$route.query
+      if (distributor_id > 0) {
+        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}&scene=1003`)
+      } else {
+        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}`)
+      }
     },
     async copyTemplate(pages_template_id) {
       await this.$confirm('确认拷贝当前模板？', '拷贝模板', {
