@@ -189,7 +189,7 @@ export default {
                 on: {
                   change: async (e) => {
                     await this.$api.member.updateCompanyStatus({
-                      id: row.id,
+                      enterprise_id: row.id,
                       disabled: e
                     })
                     row.disabled = e
