@@ -112,7 +112,7 @@ export default {
             action: {
               handler: async ([row]) => {
                 await this.$api.member.sendEmployeeEmail({
-                  id: row.company_id,
+                  enterprise_id: row.company_id,
                   email: row.email_user
                 })
                 this.$message.success('邮件已发送')
