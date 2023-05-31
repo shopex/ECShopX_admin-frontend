@@ -122,7 +122,7 @@
             <template slot-scope="scope">
               <div class="table-column-content">
                 <div v-for="(item, index) in scope.row.items" :key="index" class="goods_pn">
-                  <p class="goods_pn_price">{{ (item.cny_fee / 100).toFixed(2) }}</p>
+                  <p class="goods_pn_price">{{ (item.price / 100).toFixed(2) }}</p>
                   <p class="goods_pn_num">x{{ item.num }}</p>
                 </div>
               </div>
