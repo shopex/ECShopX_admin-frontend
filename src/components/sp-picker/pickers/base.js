@@ -58,7 +58,7 @@ export default {
       }
     },
     getVal() {
-      console.log(`sp-picker getVal:`, this, JSON.stringify(this.localVal))
+      console.log(`sp-picker getVal:`, JSON.stringify(this.localVal))
       if (this.multiple) {
         console.log('this.value', this, this.value)
         const { num } = this.value
