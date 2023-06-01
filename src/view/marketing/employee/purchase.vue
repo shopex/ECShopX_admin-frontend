@@ -394,6 +394,7 @@ export default {
                         v-model={this.activityRule.relatives.type}
                         disabled={type}
                         label='1'
+                        onChange={this.onRadioChange}
                       >
                         <SpInput
                           v-model={this.activityRule.relatives.shareLimit}
@@ -410,6 +411,7 @@ export default {
                         v-model={this.activityRule.relatives.type}
                         disabled={type}
                         label='2'
+                        onChange={this.onRadioChange}
                       >
                         共享员工额度
                       </el-radio>
@@ -545,6 +547,7 @@ export default {
         orderMiniAmount: res.minimum_amount / 100,
         modifyReceiveAddress: res.close_modify_hours_after_activity
       }
+      this.onRadioChange(res.if_share_limitfee ? '2' : '1')
     },
     async onPickerTemp() {
       const { data } = await this.$picker.template({
@@ -616,6 +619,18 @@ export default {
       } else {
         const { id: _id } = await this.$api.marketing.createPurchaseActivity(params)
         this.$router.replace({ path: `/marketing/employee/purchase/result/${_id}` })
+      }
+    },
+    onRadioChange (e) {
+      if (e == '1') {
+        this.activityRuleList[3]['disabled'] = {
+          shareLimit: false
+        }
+      } else {
+        this.activityRule.relatives.shareLimit = 0
+        this.activityRuleList[3]['disabled'] = {
+          shareLimit: true
+        }
       }
     }
   }
