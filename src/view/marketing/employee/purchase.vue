@@ -533,7 +533,7 @@ export default {
           quota: res.employee_limitfee / 100
         },
         relatives: {
-          join: res.if_relative_join,
+          join: res.if_relative_join == 1 ? true : false,
           num: res.invite_limit,
           datetime: [
             res.relative_begin_time ? res.relative_begin_time * 1000 : '',
@@ -590,7 +590,7 @@ export default {
         employee_begin_time: moment(employeeDateTime[0]).unix(),
         employee_end_time: moment(employeeDateTime[1]).unix(),
         employee_limitfee: quota * 100,
-        if_relative_join: join,
+        if_relative_join: join ? 1 : 0,
         invite_limit: num,
         if_share_limitfee: type == '2',
         relative_limitfee: shareLimit * 100,
