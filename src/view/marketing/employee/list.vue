@@ -259,12 +259,18 @@ export default {
           {
             name: '员工额度（元）',
             key: 'employee_limitfee',
-            width: '120'
+            width: '120',
+            formatter: (value, row, col) => {
+              return value > 0 ? value  / 100 : 0
+            }
           },
           {
             name: '亲友额度（元）',
             key: 'relative_limitfee',
-            width: '120'
+            width: '120',
+            formatter: (value, row, col) => {
+              return value > 0 ? value  / 100 : 0
+            }
           },
           {
             name: '预热时间',
