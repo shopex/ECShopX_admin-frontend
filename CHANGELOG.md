@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.13.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.0...v3.13.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* 云店装修路径选择器取消关联店铺 ([e9b1a43](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e9b1a431e084f9c163eb47eb11e346c718e67bef))
+
 ## [3.13.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.12.1...v3.13.0) (2023-06-01)
 
 
