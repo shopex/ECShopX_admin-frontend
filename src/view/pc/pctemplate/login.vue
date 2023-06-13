@@ -1,0 +1,98 @@
+<template>
+  <div>
+    <el-form ref="form" :model="form" label-position="left" label-width="100px">
+      <div class="section-body">
+        <el-form-item label="商城Logo">
+          <imgBox :img-url="form.logo" inline @click="handleImgChange" />
+          <imgPicker
+            :dialog-visible="imgDialog"
+            :sc-status="isGetImage"
+            @chooseImg="pickImg"
+            @closeImgDialog="closeImgDialog"
+          />
+        </el-form-item>
+        <el-form-item label="背景图">
+          <imgBox width="200" height="150" :img-url="form.background" inline @click="handleImgChange" />
+          <imgPicker
+            :dialog-visible="imgDialog"
+            :sc-status="isGetImage"
+            @chooseImg="pickImg"
+            @closeImgDialog="closeImgDialog"
+          />
+        </el-form-item>
+      </div>
+      <div class="section-footer content-center">
+        <el-button v-loading="loading" type="primary" @click="onSubmit"> 保存 </el-button>
+      </div>
+    </el-form>
+  </div>
+</template>
+
+<script>
+import { saveLoginPageSetting, getLoginPageSetting } from '@/api/webtemplate'
+import imgPicker from '@/components/imageselect'
+import imgBox from '@/components/element/imgBox'
+export default {
+  components: {
+    imgPicker,
+    imgBox
+  },
+  data() {
+    return {
+      loading: false,
+      form: {
+        logo: '',
+        background: ''
+      },
+      imgDialog: false,
+      isGetImage: false
+    }
+  },
+  mounted() {
+    getLoginPageSetting().then((res) => {
+      this.form.logo = res.data.data.logo
+      this.form.background = res.data.data.background
+    })
+  },
+  methods: {
+    onSubmit() {
+      let params = {}
+      this.loading = true
+
+      params = {
+        logo: this.form.logo,
+        background: this.form.background,
+      }
+      console.log(params)
+      saveLoginPageSetting(params).then((response) => {
+        if (response.data.data) {
+          this.$message({
+            message: '保存配置信息成功！',
+            type: 'success'
+          })
+          this.loading = false
+          this.$store.dispatch('setSysLogo', this.form.logo)
+        } else {
+          this.$message.error('配置信息失败，请确认是否正确填写内容！')
+          this.loading = false
+          return false
+        }
+      })
+    },
+    //门店LOGO
+    handleImgChange() {
+      this.imgDialog = true
+      this.isGetImage = true
+    },
+    pickImg(data) {
+      this.form.logo = data.url
+      this.imgDialog = false
+    },
+    closeImgDialog() {
+      this.imgDialog = false
+    }
+  }
+}
+</script>
+
+<style lang="scss"></style>

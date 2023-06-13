@@ -24,6 +24,11 @@ export default {
       }
     },
     {
+      path: 'loginPageSetting',
+      name: `登陆页设置`,
+      component: () => import('@/view/pc/pctemplate/login')
+    },
+    {
       path: 'tdkglobalset',
       name: `全局TDK配置`,
       component: () => import('@/view/pc/tdk/globalset')

@@ -56,3 +56,19 @@ export const saveHeaderOrFooter = (params) => {
     params
   })
 }
+
+export const getLoginPageSetting = (params) => {
+  return fetch({
+    url: '/pctemplate/getLoginPageSetting',
+    method: 'get',
+    params
+  })
+}
+
+export const saveLoginPageSetting = (params) => {
+  return fetch({
+    url: '/pctemplate/saveLoginPageSetting',
+    method: 'post',
+    params
+  })
+}
