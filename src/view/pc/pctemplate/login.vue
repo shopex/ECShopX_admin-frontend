@@ -16,7 +16,7 @@
           <imgPicker
             :dialog-visible="imgDialog"
             :sc-status="isGetImage"
-            @chooseImg="pickImg"
+            @chooseImg="pickBgImg"
             @closeImgDialog="closeImgDialog"
           />
         </el-form-item>
@@ -86,6 +86,10 @@ export default {
     },
     pickImg(data) {
       this.form.logo = data.url
+      this.imgDialog = false
+    },
+    pickBgImg(data) {
+      this.form.background = data.url
       this.imgDialog = false
     },
     closeImgDialog() {
