@@ -18,22 +18,14 @@
 
 <script>
 import { saveLoginPageSetting, getLoginPageSetting } from '@/api/webtemplate'
-import imgPicker from '@/components/imageselect'
-import imgBox from '@/components/element/imgBox'
 export default {
-  components: {
-    imgPicker,
-    imgBox
-  },
   data() {
     return {
       loading: false,
       form: {
         logo: '',
         background: ''
-      },
-      imgDialog: false,
-      isGetImage: false
+      }
     }
   },
   mounted() {
