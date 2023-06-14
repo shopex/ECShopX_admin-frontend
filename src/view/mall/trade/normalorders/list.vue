@@ -32,6 +32,21 @@
           <el-option v-for="item in orderType" :key="item.value" size="mini" :label="item.title" :value="item.value" />
         </el-select>
       </SpFilterFormItem>
+      <SpFilterFormItem prop="source_from" label="渠道:">
+        <el-select
+              v-model="params.source_from"
+              placeholder="请选择渠道"
+              clearable
+            >
+              <el-option
+                v-for="(item, index) in sourceFromList"
+                :key="index"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+      </SpFilterFormItem>
+
       <SpFilterFormItem prop="create_time" label="下单时间:" size="max">
         <el-date-picker v-model="params.create_time" clearable type="datetimerange" align="right"
           format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
@@ -174,6 +189,12 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column label="渠道">
+            <template slot-scope="scope">
+              <span>{{ getSourceFrom(scope.row) }}</span>
+            </template>
+          </el-table-column>
+
           <el-table-column label="操作" min-width="120px" align="center">
             <template slot-scope="scope">
               <el-button type="text" style="margin-right: 8px">
@@ -271,7 +292,8 @@ import {
   VERSION_B2C,
   VERSION_IN_PURCHASE,
   IS_ADMIN,
-  IS_DISTRIBUTOR
+  IS_DISTRIBUTOR,
+  getSourceFromNameByValue
 } from '@/utils'
 import { exportInvoice, orderExport } from '@/api/trade'
 import CompTableView from './components/comp-tableview'
@@ -318,8 +340,17 @@ export default {
         time_start_end: '',
         distributor_type: '', // 订单分类
         distributor_id: '', // 店铺
-        subDistrict: []
+        subDistrict: [],
+        source_from:''
       },
+      sourceFromList:[
+        {name:'pc',value:'pc'},
+        {name:'h5',value:'h5'},
+        {name:'微信小程序',value:'wxapp'},
+        {name:'支付宝小程序',value:'aliapp'},
+        {name:'未知',value:'unknow'},
+        {name:'店务端',value:'dianwu'},
+      ],
       datapass_block: 1, // 是否为数据脱敏
       subDistrictList: [],
       distributionType: DISTRIBUTION_TYPE,
@@ -1237,6 +1268,9 @@ export default {
         required: true,
         message: '不能为空'
       })
+    },
+    getSourceFrom({source_from}){
+      return getSourceFromNameByValue(this.sourceFromList,source_from)
     },
     onChangeTableView({ items, item_fee_new, freight_fee, total_fee, item_total_fee }) {
       // this.changePriceForm.itemFee = item_fee_new / 100
