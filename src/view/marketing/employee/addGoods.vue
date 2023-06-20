@@ -512,7 +512,8 @@ export default {
           main_cat_id
         }
       } else if (type == 'salesCategory') {
-        const cat_id = value.map((item) => item[item.length - 1])
+        // const cat_id = value.map((item) => item[item.length - 1])
+        const cat_id = value[value.length-1]
         params = {
           ...params,
           cat_id
