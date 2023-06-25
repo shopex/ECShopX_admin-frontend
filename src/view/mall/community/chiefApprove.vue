@@ -74,8 +74,9 @@ export default {
             action: {
               handler: ([row]) => {
                 const { path } = this.$route
+                console.log()
                 this.$router.push({
-                  path: `${path}/approve`
+                  path: `${path.split('/approve')[0]}/detail/${row.apply_id}`
                 })
               }
             }
