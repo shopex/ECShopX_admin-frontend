@@ -313,6 +313,17 @@ export function hex2rgb(hex) {
   return rgb
 }
 
+export function getSourceFromNameByValue(list, value) {
+  let sourceFromName = '-'
+  list.forEach((item) => {
+    if (item.value === value) {
+      sourceFromName = item.name
+    }
+  })
+  return sourceFromName
+}
+
+
 export { log, export_open, isEmpty }
 
 export default {}
