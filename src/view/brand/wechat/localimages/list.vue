@@ -183,6 +183,7 @@
           class="btn-upload"
           action=""
           accept="image/jpeg,image/png,image/gif"
+          :multiple="true"
           :show-file-list="false"
           :data="localpostData"
           :http-request="handleUpload"
