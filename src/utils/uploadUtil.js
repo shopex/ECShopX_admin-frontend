@@ -160,7 +160,6 @@ class UploadUtil {
     try {
       const tokenRes = await getOssToken({
         filetype: this.fileType,
-        group: 'put',
         filename: `${file.uid}.${file.name}` 
       })
       const data = { ...tokenRes.data.data.token }
