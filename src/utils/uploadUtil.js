@@ -115,10 +115,12 @@ class UploadUtil {
             },
             (err, data) => {
               if (data) {
-                console.log(data)
+                const {Location} =data;
+                const key= Location.split('/').slice(1).join("/")
+                console.log(key)
                 resolve({
-                  ...data,
-                  key: data.Location
+                ...data,
+                  key: key
                 })
               } else {
                 console.log(err)
@@ -160,8 +162,7 @@ class UploadUtil {
     try {
       const tokenRes = await getOssToken({
         filetype: this.fileType,
-        group: 'put',
-        filename: `${file.uid}.${file.name}` 
+        filename: `${file.uid}.${file.name}`
       })
       const data = { ...tokenRes.data.data.token }
       // 初始化
