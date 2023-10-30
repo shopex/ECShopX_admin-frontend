@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [3.13.10](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.9...v3.13.10) (2023-10-30)
 
+
+### Bug Fixes
+
+* ECX-5037 ([a913c34](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a913c347fda220a47f01d608750a82481798d9c9))
+
+### [3.13.10](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.9...v3.13.10) (2023-10-30)
+
 ### [3.13.9](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.8...v3.13.9) (2023-10-26)
 
 ### [3.13.8](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.7...v3.13.8) (2023-10-10)
