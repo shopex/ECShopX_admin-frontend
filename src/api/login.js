@@ -78,9 +78,9 @@ export function getAuthorizelogout(params) {
   })
 }
 
-export function getAuthorizeLeve() {
+export function invalidateToken() {
   return fetch({
-    url: '/operator/getLevel',
-    method: 'post'
+    url: '/api/token/invalidate',
+    method: 'get',
   })
 }

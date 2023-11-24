@@ -189,6 +189,33 @@
         :label="item.title"
         :name="item.value"
       />
+      <el-table v-loading="loading" border :data="tableList">
+        <el-table-column width="220" prop="order_id" label="订单信息">
+          <template slot-scope="scope">
+            <div class="order-num">
+              {{ scope.row.order_id }}
+              <el-tooltip effect="dark" content="复制" placement="top-start">
+                <i
+                  v-clipboard:copy="scope.row.order_id"
+                  v-clipboard:success="onCopySuccess"
+                  class="el-icon-document-copy"
+                />
+              </el-tooltip>
+            </div>
+            <div class="order-store">
+              <el-tooltip effect="dark" content="店铺名" placement="top-start">
+                <i class="el-icon-office-building" />
+              </el-tooltip>
+              {{ scope.row.distributor_name }}
+            </div>
+            <div class="order-time">
+              <el-tooltip effect="dark" content="下单时间" placement="top-start">
+                <i class="el-icon-time" />
+              </el-tooltip>
+              {{ scope.row.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}
+            </div>
+          </template>
+        </el-table-column>
 
       <div class="action-table">
         <el-table
