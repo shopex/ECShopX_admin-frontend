@@ -79,7 +79,7 @@ export function getAuthorizelogout(params) {
 
 export function invalidateToken() {
   return fetch({
-    url: '/api/token/invalidate',
+    url: '/token/invalidate',
     method: 'get',
     params
   })
