@@ -80,7 +80,6 @@ export function getAuthorizelogout(params) {
 export function invalidateToken() {
   return fetch({
     url: '/token/invalidate',
-    method: 'get',
-    params
+    method: 'get'
   })
 }
