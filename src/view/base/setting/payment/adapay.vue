@@ -1,37 +1,20 @@
 <template>
   <div>
     <SpForm v-model="form" label-width="220px" :form-list="formList" @onSubmit="onSaveConfig" />
-    <!-- <el-form ref="form" :model="form" label-width="150px" :rules="rules">
-      <el-form-item label="App_ID" prop="app_id">
-        <el-input v-model="form.app_id" style="width: 500px" />
-      </el-form-item>
-      <el-form-item label="mock模式API_KEY" prop="test_api_key">
-        <el-input v-model="form.test_api_key" style="width: 500px" />
-      </el-form-item>
-      <el-form-item label="prod模式API_KEY" prop="live_api_key">
-        <el-input v-model="form.live_api_key" style="width: 500px" />
-      </el-form-item>
-      <el-form-item label="商户RSA私钥" prop="rsa_private_key">
-        <el-input v-model="form.rsa_private_key" style="width: 880px" type="textarea" :rows="5" />
-      </el-form-item>
-      <el-form-item label="是否启用" prop="is_open">
-        <el-switch
-          v-model="form.is_open"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          :active-value="true"
-          :inactive-value="false"
-        />
-      </el-form-item>
-      <div class="section-footer with-border content-center">
-        <el-button v-loading="loading" type="primary" @click="onSubmit('form')"> 保存 </el-button>
-      </div>
-    </el-form> -->
+
+    <!-- 公钥查看 -->
+    <SpDialog
+      ref="publicKeyDialogRef"
+      v-model="publicKeyDialog"
+      title="RSA公钥"
+      :modal="false"
+      :form="publicKeyDialogForm"
+      :form-list="publicKeyDialogFormList"
+      @onSubmit="onClose"
+    />
   </div>
 </template>
 <script>
-import { refundResubmit } from '../../../../api/trade'
-
 export default {
   data() {
     return {
@@ -90,7 +73,21 @@ export default {
         {
           label: '商户RSA私钥',
           key: 'rsa_private_key',
-          type: 'textarea',
+          component: ({ key }, value) => {
+            return (
+              <div>
+                <el-input
+                  type='textarea'
+                  v-model={value[key]}
+                  placeholder='请输入RSA私钥'
+                  rows={4}
+                />
+                <el-button type='text' onClick={this.createKey}>
+                  生成RSA密钥
+                </el-button>
+              </div>
+            )
+          },
           required: true,
           inline: true,
           width: '960px'
@@ -229,6 +226,18 @@ export default {
           key: 'is_open',
           type: 'switch'
         }
+      ],
+      publicKeyDialog: false,
+      publicKeyDialogForm: {
+        publicKey: ''
+      },
+      publicKeyDialogFormList: [
+        {
+          label: 'RSA公钥',
+          key: 'publicKey',
+          type: 'textarea',
+          width: '480px'
+        }
       ]
     }
   },
@@ -273,28 +282,15 @@ export default {
           this.form[key] = res[key]
         }
       })
-
-      console.log(this.form)
-      // this.from.app_id = typeof res.app_id
-      // this.from.test_api_key = res.test_api_key
-      // this.from.live_api_key = res.live_api_key
-      // this.from.rsa_private_key = res.rsa_private_key
-      // this.from.wxpay_fee_type = res.wxpay_fee_type
-      // this.from.wx_pub_online = res.wx_pub_online
-      // this.from.wx_pub_offline = res.wx_pub_offline
-      // this.from.wx_lite_online = res.wx_lite_online
-      // this.from.wx_lite_offline = res.wx_lite_offline
-      // this.from.wx_scan = res.wx_scan
-      // this.from.alipay_fee_type = res.alipay_fee_type
-      // this.from.alipay_qr_online = res.alipay_qr_online
-      // this.from.alipay_qr_offline = res.alipay_qr_offline
-      // this.from.alipay_scan = res.alipay_scan
-      // this.from.alipay_lite_online = res.alipay_lite_online
-      // this.from.alipay_lite_offline = res.alipay_lite_offline
-      // this.from.alipay_call = res.alipay_call
-      // this.from.ali_pub_off_b2b = res.ali_pub_off_b2b
-      // this.from.ali_pub_online_b2b = res.ali_pub_online_b2b
-      // this.from.is_open = res.is_open
+    },
+    async createKey() {
+      // await this.$api.adapay.createAdapayKey()
+      this.form.rsa_private_key = '私钥内容'
+      this.publicKeyDialogForm.publicKey = '公钥内容'
+      this.publicKeyDialog = true
+    },
+    onClose() {
+      this.publicKeyDialog = false
     }
   }
 }
