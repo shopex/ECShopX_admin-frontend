@@ -85,10 +85,9 @@ export function getAuthorizeLeve() {
   })
 }
 
-export function invalidateToken(params) {
+export function invalidateToken() {
   return fetch({
     url: '/token/invalidate',
-    method: 'get',
-    params
+    method: 'get'
   })
 }
