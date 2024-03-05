@@ -81,7 +81,8 @@ export default {
         { id: 'vipgrades', title: '会员开通' },
         { id: 'applyChief', title: '社区团长申请' },
         { id: 'recharge', title: '储值卡' },
-        { id: 'purchase', title: '内购' }
+        { id: 'purchase', title: '内购' },
+        { id: 'pointShop', title: '积分商城' }
       ],
       multiple: this.value?.multiple ?? true
     }
