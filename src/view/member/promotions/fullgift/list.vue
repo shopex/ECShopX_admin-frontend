@@ -403,6 +403,7 @@ export default {
       this.activityItemDialog = true
       if(ele==1){
         this.activityItemListsData = row.gifts
+        this.activityItemTotalCount = row.gifts.length
       }else{
         let activityItem = row.gifts.map(item=>{
         if(item.filter_full == full){
@@ -410,11 +411,12 @@ export default {
         }else{
           return {}
         }
-      })
-      let filteredArr = activityItem.filter(function(obj) {
-        return Object.keys(obj).length > 0;
-    })
-      this.activityItemListsData = filteredArr
+        })
+          let filteredArr = activityItem.filter(function(obj) {
+            return Object.keys(obj).length > 0;
+        })
+          this.activityItemListsData = filteredArr
+          this.activityItemTotalCount = filteredArr.length
       }
       
     },
