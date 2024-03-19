@@ -1,5 +1,6 @@
 import { pickBy } from '@/utils'
 import AttrCategory from './attr-category'
+import ProductLabel from './product-label'
 
 export default {
   name: 'nearbyShop',
@@ -12,6 +13,14 @@ export default {
       key: 'seletedTags',
       component: function (h, { key }) {
         return <AttrCategory v-model={this.value[key]} />
+      },
+      value: []
+    },
+    {
+      label: '商品标签',
+      key: 'tagIds',
+      component: function (h, { key }) {
+        return <ProductLabel v-model={this.value[key]} />
       },
       value: []
     },

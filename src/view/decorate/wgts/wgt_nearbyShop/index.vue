@@ -36,7 +36,7 @@
           </div>
           <div v-else class="shop-content">
             <div v-for="item in shopList" :key="item.distributor_id" class="shop-item">
-              <div
+              <!-- <div
                 class="shop-banner"
                 :style="{
                   backgroundImage: `url(${item.banner || defaultShopBanner})`
@@ -55,8 +55,47 @@
 
               <div class="shop-name">
                 {{ item.name }}
+              </div> -->
+
+              <div class="store-map">
+                <div>
+                  <SpImage
+                    :circle="8"
+                    :src="item.logo || defaultShopLogo"
+                    :width="50"
+                    :height="50"
+                  />
+                </div>
               </div>
-              <div v-if="value.show_coupon" class="coupon-list">
+              <div class="store-details">
+                <div class="name">11111111111111</div>
+                <div class="free-shipping">起送20 满20减运费</div>
+                <div class="product-details">
+                  <div v-for="item in 9" class="product-details-list">
+                    <SpImage
+                    :circle="8"
+                    :src="item.logo || defaultShopLogo"
+                    :width="50"
+                    :height="50"
+                  />
+                  <div class="name">1111111111111111</div>
+                  <SpPrice class="item-price" :value="20000 / 100" :size="15" />
+                  <div class="underlined-price">103.99</div>
+                  </div>
+                </div>
+                <div v-if="value.show_coupon" class="coupon-list">
+                  <div
+                    v-for="(coupon, index) in 5"
+                    :key="`coupon-item__${index}`"
+                    class="coupon-item"
+                  >
+                    1111
+                  </div>
+                </div>
+              </div>
+
+              <!-- 优惠券 -->
+              <!-- <div v-if="value.show_coupon" class="coupon-list">
                 <div
                   v-for="(coupon, index) in item.discountCardList"
                   :key="`coupon-item__${index}`"
@@ -64,7 +103,16 @@
                 >
                   {{ coupon.title }}
                 </div>
-              </div>
+              </div> -->
+              <!-- <div v-if="value.show_coupon" class="coupon-list">
+                <div
+                  v-for="(coupon, index) in 5"
+                  :key="`coupon-item__${index}`"
+                  class="coupon-item"
+                >
+                  1111
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -109,6 +157,11 @@ export default {
         }
       },
       immediate: true
+    },
+    shopList: {
+      handler(nVal) {
+        console.log(nVal, '我是里面的数据哟')
+      }
     }
   },
   created() {},
