@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.14.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.0...v3.14.1) (2024-03-20)
+
+
+### Features
+
+* adapay配置 ([b4b6694](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b4b669472fa8d7cd288563d23f43d203296cc322))
+
 ## [3.14.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.13.19...v3.14.0) (2024-03-11)
 
 
