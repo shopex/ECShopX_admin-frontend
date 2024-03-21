@@ -18,11 +18,22 @@ export default {
     },
     {
       label: '商品标签',
-      key: 'tagIds',
+      key: 'productLabel',
       component: function (h, { key }) {
         return <ProductLabel v-model={this.value[key]} />
       },
       value: []
+    },
+    {
+      label: '导航展示',
+      key: 'navigation_display',
+      component: 'radio',
+      options: [
+        { name: '全部', label: 'all' },
+        { name: '商家', label: 'business' },
+        { name: '商品标签', label: 'productLabels' }
+      ],
+      value: 'all'
     },
     { label: '显示优惠券', key: 'show_coupon', component: 'switch', value: false }
     // {
@@ -35,11 +46,12 @@ export default {
     // }
   ],
   transformIn: (v) => {
-    const { name, base, seletedTags = [] } = v
+    const { name, base, seletedTags = [] ,productLabel=[]} = v
     return {
       name,
       ...base,
-      seletedTags
+      seletedTags,
+      productLabel
     }
   },
   transformOut: (v) => {
@@ -50,10 +62,13 @@ export default {
           title: 'title',
           subtitle: 'subtitle',
           padded: 'padded',
-          show_coupon: 'show_coupon'
+          show_coupon: 'show_coupon',
+          navigation_display:'navigation_display'
         })
       },
-      seletedTags: 'seletedTags'
+      seletedTags: 'seletedTags',
+      productLabel:'productLabel',
+
     })
   }
 }

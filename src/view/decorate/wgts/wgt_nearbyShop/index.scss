@@ -25,6 +25,7 @@
     background-color: #fff;
     margin: 0 8px;
     border-radius: 8px;
+    padding-bottom: 2px;
   }
 
   .tag-list {
@@ -116,6 +117,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-top: 4px;
           }
           .underlined-price {
             font-size: 12px;
@@ -161,6 +163,23 @@
           margin-right: 4px;
         }
       }
+    }
+  }
+  .goods-more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    .more-btn {
+      text-align: center;
+      font-size: 12px;
+      line-height: 30px;
+      font-weight: 500;
+      color: #00081c;
+      letter-spacing: 2px;
+      width: 90px;
+      height: 30px;
+      border-radius: 2px;
+      border: 1px solid #00081c;
     }
   }
 }

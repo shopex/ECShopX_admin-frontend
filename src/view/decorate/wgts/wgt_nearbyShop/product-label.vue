@@ -37,11 +37,6 @@ export default {
       handler: function (nVal, oVal) {
         // this.getShop(nVal)
       }
-    },
-    value:{
-      handler:function(nVal,oVal){
-        console.log(this.value,'qqqqqqqqqqqqqq')
-      }
     }
   },
   created() {
@@ -79,7 +74,7 @@ export default {
     },
     async onAddLabel() {
       const ids = this.value.map(({ tag_id }) => tag_id)
-      const { data } = await this.$picker.pickerTag({
+      const { data } = await this.$picker.tag({
         data: ids
       })
       this.$emit('input', data)

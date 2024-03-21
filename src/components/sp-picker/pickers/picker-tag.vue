@@ -74,16 +74,22 @@ export default {
   methods: {
     beforeSearch(params) {
       const { keywords } = this.formData
+      params = {
+          ...params,
+          tag_source:'all'
+        }
       if (keywords) {
         params = {
           ...params,
-          tag_name: keywords
+          tag_name: keywords,
+          tag_source:'all'
         }
       }
       if (this.value.params) {
         params = {
           ...params,
-          ...this.value.params
+          ...this.value.params,
+          tag_source:'all'
         }
       }
       return params
