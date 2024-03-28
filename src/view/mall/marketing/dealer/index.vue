@@ -20,10 +20,8 @@
 }
 </style>
 <template>
-  <div class="cus-dealer-page">
-    <div
-      v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('detail/storelist') === -1"
-    >
+  <SpRouterView>
+    <div class="cus-dealer-page">
       <el-card>
         <SpFinder
           ref="finder"
@@ -92,8 +90,7 @@
       </el-dialog>
       <AddModal :visible="addVisible" @handleClose="handleClose" />
     </div>
-    <router-view />
-  </div>
+  </SpRouterView>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -146,7 +143,7 @@ export default {
               type: 'link',
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail',
+                  path: this.matchHidePage('detail'),
                   query: { operator_id: row[0].operator_id }
                 })
               }
@@ -163,7 +160,7 @@ export default {
             action: {
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail/storelist',
+                  path: this.matchHidePage('storelist'),
                   query: { dealer_id: row[0].operator_id, username: row[0].username }
                 })
               }

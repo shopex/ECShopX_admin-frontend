@@ -212,7 +212,6 @@ Vue.prototype.matchHidePage = function (name) {
   // debugger
   // componentName = componentName[componentName.length-1]
   // return `${this.$route.path}/${componentName}_${name}`
-
   return `${this.$route.path}/${name}`
 }
 
