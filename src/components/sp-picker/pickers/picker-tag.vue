@@ -23,6 +23,17 @@
       <SpFilterFormItem prop="keywords">
         <el-input v-model="formData.keywords" placeholder="请输入标签名称" />
       </SpFilterFormItem>
+      <SpFilterFormItem prop="distributor_id" v-if="!IS_DISTRIBUTOR" label="店铺名称:">
+        <el-select v-model="formData.distributor_id" clearable placeholder="请选择">
+          <el-option
+            v-for="item in salesStatus"
+            :key="item.distributor_id"
+            :label="item.name"
+            size="mini"
+            :value="item.distributor_id"
+          />
+        </el-select>
+      </SpFilterFormItem>
     </SpFilterForm>
     <SpFinder
       ref="finder"
@@ -68,15 +79,29 @@ export default {
   data() {
     return {
       formData: {
-        keywords: ''
+        keywords: '',
+        distributor_id:""
       },
+      salesStatus:[],
       multiple: this.value?.multiple ?? true
     }
   },
-  created() {},
+  created() {
+    this.getDistributorList()
+  },
   methods: {
+    async getDistributorList(){
+      let params = {
+        page:1,
+        pageSize:500,
+      }
+      const { list} =
+      await this.$api.marketing.getDistributorList(params)
+      this.salesStatus = list
+
+    },
     beforeSearch(params) {
-      const { keywords } = this.formData
+      const { keywords,distributor_id } = this.formData
       if(!IS_DISTRIBUTOR){
         params = {
           ...params,
@@ -89,10 +114,11 @@ export default {
         }
       }
      
-      if (keywords) {
+      if (keywords ||  distributor_id) {
         params = {
           ...params,
           tag_name: keywords,
+          distributor_id:distributor_id,
           tag_source:'all'
         }
       }
