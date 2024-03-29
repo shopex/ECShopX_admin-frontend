@@ -827,10 +827,26 @@ $txt-placeholder: #f5f5f7;
                   >
                     {{ item.category_name ? item.category_name : '绑定分类' }}
                   </div>
-                  <div class="bind-btn iconfont icon-link" @click="openPageDialog(fidx)">
+                  <!-- <div class="bind-btn iconfont icon-link" @click="openPageDialog(fidx)">
                     {{ item.page_name ? item.page_name : '绑定自定义页面' }}
-                  </div>
-                  <el-checkbox v-model="item.hot"> 热推1 </el-checkbox>
+                  </div> -->
+                  <div
+                  class="bind-btn"
+                  :class="{
+                    ' iconfont icon-link': !item.main_category_id && !item.category_id
+                  }"
+                  @click="showCategory(fidx, sidx, '', item)"
+                >
+                  <template v-if="item">
+                    {{ item.main_category_id ? '管理分类：' : '' }}
+                    {{ item.category_id ? '商品分类：' : '' }}
+                    {{ item.category_name ? item.category_name : '绑定分类' }}
+                  </template>
+                </div>
+
+
+
+                  <el-checkbox v-model="item.hot"> 热推 </el-checkbox>
                   <div class="control-bar move iconfont icon-stream" />
                   <div class="control-bar remove iconfont icon-trash" @click="remove(fidx)" />
                 </div>
