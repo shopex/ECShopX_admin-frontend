@@ -38,6 +38,7 @@
         columns: [
           { name: 'ID', key: 'tag_id', width: 80 },
           { name: '标签名称', key: 'tag_name' },
+          { name: '店铺名称', key: 'distributor_name' },
           { name: '描述', key: 'description' }
         ]
       }"
@@ -54,6 +55,8 @@
 <script>
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
+import { IS_DISTRIBUTOR } from '@/utils'
+
 export default {
   name: 'PickerTag',
   extends: BasePicker,
@@ -74,10 +77,18 @@ export default {
   methods: {
     beforeSearch(params) {
       const { keywords } = this.formData
-      params = {
+      if(!IS_DISTRIBUTOR){
+        params = {
           ...params,
           tag_source:'all'
         }
+      }else{
+        params = {
+          ...params,
+          isPlatform:true
+        }
+      }
+     
       if (keywords) {
         params = {
           ...params,
