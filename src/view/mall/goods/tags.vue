@@ -43,6 +43,7 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column prop="distributor_name" label="店铺名称" />
       <el-table-column prop="description" label="标签描述" />
     </el-table>
     <div class="content-padded content-center">
