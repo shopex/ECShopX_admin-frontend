@@ -75,7 +75,8 @@ export default {
     async onAddLabel() {
       const ids = this.value.map(({ tag_id }) => tag_id)
       const { data } = await this.$picker.tag({
-        data: ids
+        data: ids,
+        scene:this.$route.query.scene
       })
       this.$emit('input', data)
     },

@@ -102,15 +102,15 @@ export default {
     },
     beforeSearch(params) {
       const { keywords,distributor_id } = this.formData
-      if(!IS_DISTRIBUTOR){
+      if(IS_DISTRIBUTOR || this.value?.scene){
         params = {
           ...params,
-          tag_source:'all'
+          isPlatform:true
         }
       }else{
         params = {
           ...params,
-          isPlatform:true
+          tag_source:'all'
         }
       }
      
