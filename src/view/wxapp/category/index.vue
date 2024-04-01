@@ -507,11 +507,11 @@ $txt-placeholder: #f5f5f7;
   <transition name="el-fade-in-linear" mode="out-in">
     <div>
       <SpPlatformTip h5 app alipay />
-      <el-switch
+      <!-- <el-switch
         v-model="customClassification"
         @change="switchChange"
         inactive-text="是否开启自定义分类">
-      </el-switch>
+      </el-switch> -->
       <section
         class="section section-white category-view-warp"
         :style="'height: ' + (wheight - 160) + 'px;'"
