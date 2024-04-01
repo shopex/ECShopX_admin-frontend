@@ -804,7 +804,7 @@ import {
   flowItems
 } from '@/api/goods'
 import { getPageCode } from '@/api/marketing'
-import { VERSION_IN_PURCHASE, isArray } from '@/utils'
+import { VERSION_IN_PURCHASE, isArray,IS_DISTRIBUTOR } from '@/utils'
 import mixins from '@/mixins'
 
 import GoodsSelect from './comps/goodsSelect'
@@ -1391,6 +1391,9 @@ export default {
       let params = {
         page: 1,
         pageSize: 500
+      }
+      if(IS_DISTRIBUTOR){
+        params.isPlatform=true
       }
       getTagList(params).then((response) => {
         this.tag.list = response.data.data.list
