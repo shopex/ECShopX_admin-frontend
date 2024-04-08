@@ -33,7 +33,6 @@
           </div>
         </el-alert>
       </div>
-
       <div v-if="IS_MERCHANT" style="margin-bottom: 10px">
         <el-alert type="info" title="" show-icon>
           <div>可在设置-店铺管理员添加店铺端账号，登录地址 【 {{ origin }}/shopadmin/login 】</div>
@@ -97,18 +96,28 @@
       </SpFilterForm>
 
       <div class="action-container">
-        <el-button
+        <!-- <el-button
           v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT"
           plain
           type="primary"
           @click="addDistributorTag"
         >
           打标签
+        </el-button> -->
+        <el-button
+          v-if="IS_ADMIN || IS_MERCHANT"
+          plain
+          type="primary"
+          @click="addDistributorTag"
+        >
+          打标签
         </el-button>
-        <el-button v-if="IS_ADMIN" type="primary" plain @click="showSettingDistance()">
-          店铺范围配置
+        <el-button v-if="IS_ADMIN || IS_MERCHANT" type="primary" plain @click="showSettingDistance('')">
+          全部店铺范围配置
         </el-button>
       </div>
+
+     
 
       <el-table
         v-loading="loading"
@@ -284,10 +293,15 @@
               </router-link>
             </el-button>
             <el-button type="text" @click="linkTemplates(scope.row)"> 店铺装修 </el-button>
-            <el-button type="text" @click="showSettingMeiQia(scope.row.distributor_id)">
-              客服
-            </el-button>
-            <el-button
+
+            <el-popover
+            placement="top-start"
+            trigger="hover">
+            <div>
+              <el-button type="text" @click="showSettingMeiQia(scope.row.distributor_id)">
+                客服
+              </el-button>
+              <el-button
               v-if="VERSION_PLATFORM"
               type="text"
               @click="downDistributor(scope.row, 'store')"
@@ -318,7 +332,18 @@
             <el-button type="text" @click="linkAlipaysettting(scope.row)"> 支付宝配置 </el-button>
             <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
               银联商务支付配置
+            </el-button> 
+            <!-- <el-button v-if="scope.row.distribution_type == '0' || IS_DISTRIBUTOR" type="text" @click="showSettingDistance(scope.row.distributor_id)">
+              店铺范围配置
+            </el-button> -->
+             <el-button type="text" @click="showSettingDistance(scope.row.distributor_id)">
+              店铺范围配置
             </el-button>
+            </div>
+            <el-button slot="reference" type="text">更多>></el-button>
+          </el-popover>
+
+          
             <!-- <router-link
               v-if="scope.row.is_valid !== 'delete' && datapass_block == '0'"
               :to="{
@@ -446,7 +471,7 @@
         </template>
       </el-dialog>
       <!-- 编辑距离-开始 -->
-      <el-dialog
+      <!-- <el-dialog
         title="店铺范围配置"
         width="50%"
         :visible.sync="setDistanceVisible"
@@ -475,6 +500,20 @@
           <el-button @click.native="handleDistanceCancel"> 取消 </el-button>
           <el-button type="primary" @click="handleSubmitDistance"> 保存 </el-button>
         </div>
+      </el-dialog> -->
+      <el-dialog
+        title="店铺范围配置"
+        width="35%"
+        :visible.sync="setDistanceVisible"
+        :before-close="handleDistanceCancel"
+      >
+        <SpForm
+          v-model="distanceForm"
+          :form-list="formList"
+          :submit="true"
+          @resetForm="handleDistanceCancel"
+          @onSubmit="handleSubmitDistance"
+        />
       </el-dialog>
       <!-- 编辑距离-结束 -->
 
@@ -529,6 +568,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import SpForm from '@/components/sp-form'
 import {
   saveDistributor,
   getWxaDristributorCodeStream,
@@ -584,6 +624,31 @@ export default {
       }
     }
     return {
+      formList: [
+        {
+          label: '距离',
+          key: 'distance',
+          component: () => (
+           <div>
+            <el-input
+              placeholder="输入大于等于0的数字，为0则显示所有店铺"
+              width='60%'
+              v-model={this.distanceForm.distance}
+            />&nbsp;km
+           </div>
+          ),
+          validator: (rule, value, callback) => {
+            const { distance } = this.distanceForm
+            const regex = /^\d+$/;
+            if (regex.test(distance)) {
+              callback()
+            } else {
+              callback(new Error('请输入数字'))
+            }
+          }
+        }
+      ],
+      distributorIds:"",
       initialParams,
       params: {
         ...initialParams
@@ -1150,17 +1215,17 @@ export default {
       this.keFuDialog = false
       this.$message.success('保存成功')
     },
-    showSettingDistance() {
+    showSettingDistance(distributor_id) {
       // 设置距离参数
       this.setDistanceVisible = true
       let that = this
-
-      // distributor_id
-      getDistance().then((response) => {
+      that.distributorIds = distributor_id
+      that.distanceForm.distance = 0
+     if(distributor_id){
+      getDistance({distributor_id}).then((response) => {
         that.distanceForm.distance = response.data.data.distance
       })
-      // console.log('this.distributor_id', that.distributor_id)
-      // console.log('showSettingDistance', that.distanceForm)
+     }
     },
     handleDistanceCancel() {
       // 距离设置窗口关闭
@@ -1170,7 +1235,8 @@ export default {
     handleSubmitDistance() {
       // 提交距离配置
       let params = {
-        distance: this.distanceForm.distance
+        distance: this.distanceForm.distance,
+        distributor_id : this.distributorIds
       }
       setDistance(params).then((response) => {
         this.$message({
