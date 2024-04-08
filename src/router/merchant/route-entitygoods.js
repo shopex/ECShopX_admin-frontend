@@ -11,7 +11,7 @@ export default {
     {
       path: 'goods/goodsphysical',
       name: `商品管理`,
-      component: () => import('@/view/mall/goods/physical/list'),
+      component: () => import('@/view/mall/storeshop/store-shop.standard'),
       children: [
         {
           path: 'editor/:itemId?',
