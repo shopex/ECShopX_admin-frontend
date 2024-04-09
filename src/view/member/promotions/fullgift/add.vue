@@ -61,7 +61,7 @@
                 <el-table-column label="规格" prop="item_spec_desc" />
                 <el-table-column label="赠品数量" width="90">
                   <template slot-scope="scope">
-                    <el-input v-model="scope.row.gift_num" width="90" size="mini" />
+                    <el-input v-model="scope.row.gift_num" width="90" size="mini" :disabled="form.status == 'waiting' ? false : true" />
                   </template>
                 </el-table-column>
                 <!-- <el-table-column label="其他配置" width="200">
