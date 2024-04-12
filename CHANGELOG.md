@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.13.4](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.3...v3.13.4) (2024-04-12)
+
+
+### Features
+
+* 增加登录页 背景图配置 ([a0e3d77](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a0e3d771cb431d462c22a952325850ec702385ed))
+
 ### [3.14.3](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.2...v3.14.3) (2024-04-08)
 
 ### [3.14.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.0...v3.14.1) (2024-03-20)
