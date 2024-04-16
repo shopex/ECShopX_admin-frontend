@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="一级分类模版" width="200" prop="customize_page_id" />
+      <el-table-column label="一级分类模版" width="200" prop="customize_page_name" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text">
@@ -233,7 +233,7 @@ export default {
         sort,
         parent_id,
         image_url,
-        customize_page_id
+        customize_page_id:customize_page_id==0?'':customize_page_id
       }
       this.categoryDialog = true
     },
