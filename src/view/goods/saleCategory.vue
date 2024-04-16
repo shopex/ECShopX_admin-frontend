@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="一级分类模版" width="200" prop="customize_page_name" />
+      <!-- <el-table-column label="一级分类模版" width="200" prop="customize_page_name" /> -->
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text">
@@ -168,14 +168,14 @@ export default {
           key: 'image_url',
           component: ({ key }, value) => <SpImagePicker v-model={value[key]} />
         },
-        {
-          label: '一级分类模版',
-          key: 'customize_page_id',
-          type: 'select',
-          options: [],
-          placeholder: '请选择一级分类模版',
-          display: 'inline'
-        }
+        // {
+        //   label: '一级分类模版',
+        //   key: 'customize_page_id',
+        //   type: 'select',
+        //   options: [],
+        //   placeholder: '请选择一级分类模版',
+        //   display: 'inline'
+        // }
       ]
     }
   },
