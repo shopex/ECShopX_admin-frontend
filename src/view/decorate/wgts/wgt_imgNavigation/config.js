@@ -17,22 +17,27 @@ export default {
       value: [
         {
           content: '基础护肤',
+          seletedTags:[],
           imgUrl: ''
         },
         {
           content: '彩妆香水',
+          seletedTags:[],
           imgUrl: ''
         },
         {
           content: '营养保健',
+          seletedTags:[],
           imgUrl: ''
         },
         {
           content: '满减优惠',
+          seletedTags:[],
           imgUrl: ''
         },
         {
           content: '分享拼单',
+          seletedTags:[],
           imgUrl: ''
         }
       ]
