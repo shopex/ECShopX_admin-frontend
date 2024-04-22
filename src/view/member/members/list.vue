@@ -63,12 +63,12 @@
 <template>
   <div>
     <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('chiefupload') === -1">
-      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="mobile" label="手机号:">
           <el-input v-model="params.mobile" placeholder="请输入手机号" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="username" label="姓名:">
-          <el-input v-model="params.username" placeholder="请输入姓名" />
+        <SpFilterFormItem prop="username" label="昵称:">
+          <el-input v-model="params.username" placeholder="请输入昵称" />
         </SpFilterFormItem>
         <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="vip_grade" label="会员身份:">
           <el-select v-model="params.vip_grade" clearable placeholder="请选择">
@@ -119,9 +119,9 @@
             @change="dateChange"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="wechat_nickname" label="微信昵称:">
+        <!-- <SpFilterFormItem prop="wechat_nickname" label="微信昵称:">
           <el-input v-model="params.wechat_nickname" placeholder="请输入微信昵称" />
-        </SpFilterFormItem>
+        </SpFilterFormItem> -->
         <SpFilterFormItem prop="remarks" label="备注:">
           <el-input v-model="params.remarks" placeholder="备注" />
         </SpFilterFormItem>
@@ -1142,6 +1142,12 @@ export default {
       } else {
         this.params.distributor_id = ''
       }
+    },
+        onReset() {
+      this.created = ''
+      this.params.time_start_begin = ''
+      this.params.time_start_end = ''
+      this.onSearch()
     },
     onSearch() {
       this.page.pageIndex = 1
