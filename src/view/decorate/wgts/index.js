@@ -80,7 +80,12 @@ const SCENE_1005 = {
 // ibs导航
 const SCENE_1006 = {
   WgtSlider,
-  WgtSearch
+  WgtHotZone,
+  WgtFilm,
+  WgtCoupon,
+  WgtShowCase,
+  WgtSearch,
+  WgtHeadline
 }
 
 export default {
