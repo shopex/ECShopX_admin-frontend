@@ -219,7 +219,7 @@ export default {
     temDialog(id, type) {
       // this.pageForm.id = id
       // this.template_dialog = true
-      this.$router.push(`/wxapp/manage/decorate?id=${id}&scene=1004`)
+      this.$router.push(`/wxapp/manage/decorate?id=${id}&scene=1006`)
     },
     closeDialog() {
       this.template_dialog = false

@@ -15,7 +15,7 @@
               "
             />
           </div>
-          <div class="cell-value-tip" v-if="isBusinessShow">
+          <div v-if="isBusinessShow" class="cell-value-tip">
             商家：   
             <CompButton
             placeholder="选择店铺签"
