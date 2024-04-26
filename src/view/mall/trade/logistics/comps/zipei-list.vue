@@ -6,37 +6,65 @@
     </div>
     <span class="delivery-open">平台自营店铺配送费用配置</span>
     <div>
-        <div class="delivery-money">
-            <span>配送：</span>
-            <el-input-number v-model="min_amount" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <span>元，基础运费</span>
-            <el-input-number v-model="freight_fee" :precision="2" :step="0.1" :max="10"></el-input-number>
-            <span>元</span>
-        </div>
+      <div class="delivery-money">
+        <span>配送：</span>
+        <el-input-number v-model="min_amount" :precision="2" :step="0.1" :max="10" />
+        <span>元，基础运费</span>
+        <el-input-number v-model="freight_fee" :precision="2" :step="0.1" :max="10" />
+        <span>元</span>
+      </div>
+      <div class="delivery-money">
+        <el-radio v-model="selected" label="0">满：</el-radio>
+        <el-input-number v-model="rule[0].full" :precision="2" :step="0.1" :max="10" />
+        <span>元，实际运费</span>
+        <el-input-number v-model="rule[0].freight_fee" :precision="2" :step="0.1" :max="10" />
+        <span>元，输入0元时为免运费</span>
+      </div>
+      <div class="delivery-money">
+        <el-radio v-model="selected" label="1">满：</el-radio>
+        <el-input-number v-model="rule[1].full" :precision="2" :step="0.1" :max="10" />
+        <span>元，实际运费</span>
+        <el-input-number v-model="rule[1].freight_fee" :precision="2" :step="0.1" :max="10" />
+        <span>元</span>
+      </div>
     </div>
+    <GlobalFooter>
+      <el-button type="primary" @click="save"> 保存配置 </el-button>
+    </GlobalFooter>
   </div>
 </template>
 
 <script>
+import GlobalFooter from '@/components/global_footer'
+
+/**
+ * is_open  是否开启
+ * min_amount  最小起配金额
+ * freight_fee  基础运费
+ * rule:  规则
+ *  [{
+ *   selected  是否选中
+ *   full  满多少
+ *   freight_fee  运费多少
+ *  }]
+ */
 export default {
   name: 'ZiPeiList',
-  /**
-   * is_open  是否开启
-   * min_amount  最小起配金额
-   * freight_fee  基础运费
-   * rule:  规则
-   *  [{
-   *   selected  是否选中
-   *   full  满多少
-   *   freight_fee  运费多少
-   *  }]
-   */
+  components: {
+    GlobalFooter
+  },
   data() {
     return {
       is_open: false,
       min_amount: 0,
       freight_fee: 0,
+      selected: '0',
       rule: [
+        {
+          selected: true,
+          full: 0,
+          freight_fee: 0
+        },
         {
           selected: false,
           full: 0,
@@ -45,22 +73,52 @@ export default {
       ]
     }
   },
-  mounted() {},
-  methods: {}
+  mounted() {
+    this.obtain()
+  },
+  methods: {
+    async obtain() {
+      let res = await this.$api.pickuplocation.getPickuplocationList()
+      this.data = {
+        is_open: res.is_open,
+        min_amount: res.min_amount,
+        freight_fee: res.freight_fee,
+        rule: res.rule
+      }
+      console.log(res, 'src/view/mall/trade/logistics/comps/zipei-list.vue-第82行')
+    },
+    async save() {
+      if (this.selected == 0) {
+        this.rule[0].selected = true
+        this.rule[1].selected = false
+      } else {
+        this.rule[0].selected = false
+        this.rule[1].selected = true
+      }
+      let params = {
+        is_open: this.is_open,
+        min_amount: this.min_amount,
+        freight_fee: this.freight_fee,
+        rule: this.rule
+      }
+      let res = await this.$api.pickuplocation.postPickuplocationList(params)
+      console.log(res, 'res777777')
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 ::v-deep .el-input-number {
-    margin: 0 14px;
-    line-height: 34px;
+  margin: 0 14px;
+  line-height: 34px;
 }
 .delivery-open {
   margin: 20px;
 }
-.delivery-money{
-    display: flex;
-    align-items: center;
-    margin: 20px 60px;
+.delivery-money {
+  display: flex;
+  align-items: center;
+  margin: 20px 60px;
 }
 </style>
