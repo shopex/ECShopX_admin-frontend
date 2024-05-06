@@ -1,6 +1,6 @@
 // 商品路由
 const name = '店铺'
-import Layout from '@/view/layout' // 主框架 1
+import Layout from '@/view/layout' // 主框架 2024001
 
 export default {
   path: '/shopadmin/store',
