@@ -166,6 +166,14 @@ export function orderExport(query) {
   })
 }
 
+export function datacubeDeliverystaffdataExport(query) {
+  return fetch({
+    url: '/datacube/Deliverystaffdata/export ',
+    method: 'get',
+    params: query
+  })
+}
+
 export function orderNormalExport(query) {
   return fetch({
     url: '/orders/exportnormaldata',
