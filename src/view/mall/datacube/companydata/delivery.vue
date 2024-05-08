@@ -143,17 +143,17 @@ export default {
                   type: 'delivery_staffdata',
                   ...this.params
                 }
-                this.$api.trade.datacubeDeliverystaffdataExport(params).then((response) => {
-                  if (response.data.data.status) {
+                let response = await this.$api.trade.datacubeDeliverystaffdataExport(params)
+                  if (response.status) {
                     this.$message({
                       type: 'success',
                       message: '已加入执行队列，请在设置-导出列表中下载'
                     })
                     this.$export_open(params.type)
                     return
-                  } else if (response.data.data.url) {
-                    this.downloadUrl = response.data.data.url
-                    this.downloadName = response.data.data.filename
+                  } else if (response.url) {
+                    this.downloadUrl = response.url
+                    this.downloadName = response.filename
                     this.downloadView = true
                   } else {
                     this.$message({
@@ -162,7 +162,6 @@ export default {
                     })
                     return
                   }
-                })
               }
             }
           }
