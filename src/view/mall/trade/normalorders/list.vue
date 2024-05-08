@@ -191,15 +191,16 @@
       >
         <el-button type="primary" plain> 批量取消 </el-button>
       </el-upload>
-      <el-upload
+      <el-button type="primary" plain @click="assignPersonnel(true)"> 分配配送员 </el-button>
+      <!-- <el-upload
         action=""
         class="btn-upload"
         :on-change="uploadHandlePatchCancel"
         :auto-upload="false"
         :show-file-list="false"
-      >
-        <el-button type="primary" plain> 取消配送 </el-button>
-      </el-upload>
+      > -->
+        <el-button type="primary" plain @click="assignPersonnel(false)"> 取消配送（针对商家自配送订单，已分配业务员订单在未到达前，商家可取消配送员配送） </el-button>
+      <!-- </el-upload> -->
     </div>
 
     <el-tabs v-model="params.order_status" type="card" @tab-click="onSearch">
@@ -452,6 +453,16 @@
       :form-list="changePriceFormList"
       @onSubmit="changePriceSubmit"
     />
+
+       <!-- 发货 -->
+       <SpDialog
+       ref="personnel"
+       v-model="personnelDialog"
+       :title="statusPersonnel?'分配配送员':'取消配送'"
+       :form="personnelForm"
+       :form-list="personnelFormList"
+       @onSubmit="onPersonnelSubmit"
+     />
   </SpRouterView>
 </template>
 <script>
@@ -492,6 +503,8 @@ export default {
   mixins: [mixin, pageMixin],
   data() {
     return {
+      personnelDialog :false,
+      statusPersonnel :false,
       loading: false,
       defaultTime: ['00:00:00', '23:59:59'],
       params: {
@@ -860,7 +873,31 @@ export default {
         pointFreightFee: 0
       },
       origin: '',
-      isBindOMS: false
+      isBindOMS: false,
+      personnelForm:{
+        order_id:"",
+        self_delivery_operator_id:''
+      },
+      personnelFormList:[ {
+          label: '配送员',
+          key: 'self_delivery_operator_id',
+          type: 'select',
+          options: [],
+          required: true,
+          message: '配送员不能为空',
+          isShow:()=>{
+            return this.statusPersonnel
+          }
+        },
+        {
+          label: '订单号',
+          key: 'order_id',
+          placeholder: '请输入订单号',
+          type: 'input',
+          required: true,
+          message: '订单号不能为空'
+        },
+      ]
     }
   },
   computed: {
@@ -885,8 +922,49 @@ export default {
     this.$EventBus.$on('event.tradelist.refresh', () => {
       this.fetchList()
     })
+    this.accountManagement()
   },
   methods: {
+    async accountManagement(){
+      let params = {
+        pageSize: 999,
+        page: 1,
+        finderId: 100,
+        operator_type : 'self_delivery_staff'
+      }
+      let res = await this.$api.trade.accountManagement(params)
+      res.list.forEach(ele => {
+        ele.value = ele.operator_id,
+        ele.title = ele.username
+      });
+      this.personnelFormList[0].options = res.list
+    },
+    // 分配配送员
+    assignPersonnel(val){
+      this.personnelDialog = true
+      this.statusPersonnel = val
+      this.personnelForm = {
+        order_id:"",
+        self_delivery_operator_id: this.personnelFormList[0].options[0].operator_id
+      }
+    },
+    async onPersonnelSubmit(){
+      if(this.statusPersonnel){
+        await this.$api.trade.orderDeliverystaffConfirm(this.personnelForm)
+        this.$message({
+          message: '分配成功',
+          type: 'success'
+        });
+        this.personnelDialog = false
+      }else{
+        await this.$api.trade.orderCancelDeliverystaff({order_id:this.personnelForm.order_id})
+        this.$message({
+          message: '取消成功',
+          type: 'success'
+        });
+        this.personnelDialog = false
+      }
+    },
     async delivery(){
       let params= {
         pageSize: 1000,

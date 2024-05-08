@@ -114,19 +114,17 @@ export default {
           {
             name: '所属店铺',
             key: 'distributor_ids',
-            width:300,
+            width: 300,
             render: (h, { row }) => {
               return (
                 <div>
-                  {
-                    row.distributor_ids.map((item) => {
-                      return (
-                        <el-tag key={item.distributor_ids} size='mini'>
-                          {item.name}
-                        </el-tag>
-                      )
-                    })
-                  }
+                  {row.distributor_ids.map((item) => {
+                    return (
+                      <el-tag key={item.distributor_ids} size='mini'>
+                        {item.name}
+                      </el-tag>
+                    )
+                  })}
                 </div>
               )
             }
@@ -156,22 +154,23 @@ export default {
             action: {
               handler: ([row]) => {
                 this.operator_id = row.operator_id
-                this.relDistributors=[]
+                this.relDistributors = []
                 this.editTitle = '编辑配送员'
                 this.deliveryman = true
                 this.addForm = {
-                    username:row.username,
+                  username: row.username,
                   operator_type: row.operator_type,
                   distributor_name: row.distributor_name,
                   staff_type: row.staff_type,
                   staff_no: row.staff_no,
                   staff_attribute: row.staff_attribute,
                   payment_method: row.payment_method,
-                  payment_fee: Number(row.payment_fee),
+                  payment_fee: row.payment_method == 'order'?Number(row.payment_fee):0.01,
+                  payment_fee1: row.payment_method == 'order'?1:Number(row.payment_fee),
                   mobile: row.mobile,
                   distributor_ids: []
                 }
-                this.relDistributors=row.distributor_ids
+                this.relDistributors = row.distributor_ids
               }
             }
           },
@@ -202,6 +201,7 @@ export default {
         staff_attribute: 'part_time',
         payment_method: 'order',
         payment_fee: 0.01,
+        payment_fee1:1,
         mobile: '',
         password: '',
         distributor_ids: []
@@ -269,12 +269,37 @@ export default {
           precision: 2,
           setp: 0.1,
           tip: '元，每单',
+          isShow:()=>{
+            return this.addForm.payment_method == 'order'
+          },
           validator: (rule, value, callback) => {
             const { payment_fee } = this.addForm
             if (!payment_fee) {
               callback(new Error('不能为空'))
             } else {
               let res = /^(0|[1-9]\d*)(.\d{1,2})?$/.test(payment_fee)
+              if (!res) {
+                callback(new Error('结算费用格式错误'))
+              } else {
+                callback()
+              }
+            }
+          }
+        },
+        {
+          label: '结算费用',
+          key: 'payment_fee1',
+          type: 'number',
+          tip:'%,每单',
+          isShow:()=>{
+            return this.addForm.payment_method == 'amount'
+          },
+          validator: (rule, value, callback) => {
+            const { payment_fee1 } = this.addForm
+            if (!payment_fee1) {
+              callback(new Error('不能为空'))
+            } else {
+              let res = /^(0|[1-9]\d*)?$/.test(payment_fee1)
               if (!res) {
                 callback(new Error('结算费用格式错误'))
               } else {
@@ -306,7 +331,9 @@ export default {
           label: '配送员姓名',
           key: 'username',
           placeholder: '请输入配送员姓名',
-          type: 'input'
+          type: 'input',
+          required: true,
+          message: '配送员姓名不能为空'
         },
         {
           label: '登录密码',
@@ -386,30 +413,38 @@ export default {
         staff_attribute: 'part_time',
         payment_method: 'order',
         payment_fee: 0.01,
+        payment_fee1: 1,
         mobile: '',
         password: '',
         distributor_ids: []
       }
-    this.relDistributors = []
+      this.relDistributors = []
     },
     onAddCancel() {
       this.deliveryman = false
     },
 
     async onAddSubmit() {
-      if (this.relDistributors.length > 0) {
-        this.relDistributors.forEach((distributor) => {
-          this.addForm.distributor_ids.push({
-            name: distributor.name,
-            distributor_id: distributor.distributor_id
+      if (this.addForm.staff_type == 'distributor') {
+        if (this.relDistributors.length > 0) {
+          this.relDistributors.forEach((distributor) => {
+            this.addForm.distributor_ids.push({
+              name: distributor.name,
+              distributor_id: distributor.distributor_id
+            })
           })
-        })
-      } else {
-        this.$message({ type: 'error', message: '必须关联店铺' })
-        return false
+        } else {
+          this.$message({ type: 'error', message: '必须关联店铺' })
+          return false
+        }
       }
+      let params = {
+        ...this.addForm,
+        payment_fee: this.addForm.payment_method == 'order'? this.addForm.payment_fee: this.addForm.payment_fee1
+      }
+
       if (this.operator_id) {
-        await this.$api.company.updateAccountInfo(this.operator_id, this.addForm)
+        await this.$api.company.updateAccountInfo(this.operator_id, params)
         this.$message.success('保存成功')
         this.deliveryman = false
         this.onSearch()

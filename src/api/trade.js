@@ -168,8 +168,34 @@ export function orderExport(query) {
 
 export function datacubeDeliverystaffdataExport(query) {
   return fetch({
-    url: '/datacube/Deliverystaffdata/export ',
+    url: '/datacube/Deliverystaffdata/export',
     method: 'get',
+    params: query
+  })
+}
+
+export function accountManagement(query) {
+  return fetch({
+    url: '/account/management',
+    method: 'get',
+    params: query
+  })
+}
+
+//取消配送员配送送
+export function orderCancelDeliverystaff(query) {
+  return fetch({
+    url: '/order/cancel/deliverystaff',
+    method: 'post',
+    params: query
+  })
+}
+
+//确认配送员配送送
+export function orderDeliverystaffConfirm(query) {
+  return fetch({
+    url: '/order/deliverystaff/confirm',
+    method: 'post',
     params: query
   })
 }
