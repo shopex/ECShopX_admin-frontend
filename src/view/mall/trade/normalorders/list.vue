@@ -217,14 +217,42 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="单价/数量" min-width="120px" align="right">
+          <el-table-column label="配送方式">
             <template slot-scope="scope">
-              <div class="table-column-content">
-                <div v-for="(item, index) in scope.row.items" :key="index" class="goods_pn">
-                  <p class="goods_pn_price">{{ (item.price / 100).toFixed(2) }}</p>
-                  <p class="goods_pn_num">x{{ item.num }}</p>
+              {{ getDistributionType(scope.row) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="source_name" label="来源" />
+          <el-table-column label="操作" fixed="left">
+            <template slot-scope="scope">
+              <el-button type="text" style="margin-right: 8px">
+                <router-link
+                  :to="`${$route.path}/detail?orderId=${scope.row.order_id}&resource=${$route.path}`"
+                >
+                  详情
+                </router-link>
+              </el-button>
+              <el-popover placement="right" trigger="hover">
+                <div class="operating-icons">
+                  <el-button type="text">
+                    <router-link
+                      :to="`${$route.path}/process?orderId=${scope.row.order_id}&resource=${$route.path}`"
+                    >
+                      日志
+                    </router-link>
+                  </el-button>
+                  <template v-for="(btn, index) in scope.row.actionBtns">
+                    <el-button
+                      :key="`btn-item__${index}`"
+                      type="text"
+                      @click="handleAction(scope.row, btn)"
+                    >
+                      {{ btn.name }}
+                    </el-button>
+                  </template>
                 </div>
-              </div>
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column label="订单实收金额" min-width="180px" align="right">
@@ -393,6 +421,7 @@
       ref="deliverGoodsDialogRef"
       v-model="deliverGoodsDialog"
       width="1000px"
+      :confirm-status="confirmStatus"
       :title="`发货【订单:${deliverGoodsForm.order_id}】`"
       :form="deliverGoodsForm"
       :form-list="deliverGoodsFormList"
@@ -477,6 +506,7 @@ export default {
   mixins: [mixin, pageMixin],
   data() {
     return {
+      confirmStatus: false,
       loading: false,
       defaultTime: ['00:00:00', '23:59:59'],
       params: {
@@ -1085,6 +1115,9 @@ export default {
           }
         })
         this.deliverGoodsForm.type = delivery_type
+        this.deliverGoodsForm.delivery_type = 'batch'
+        this.deliverGoodsForm.delivery_corp = ''
+        this.deliverGoodsForm.delivery_code = ''
         // 部分发货
         if (delivery_status == 'PARTAIL') {
           this.deliverGoodsForm.delivery_type = 'sep'
@@ -1272,7 +1305,9 @@ export default {
       if (delivery_type == 'sep') {
         params['sepInfo'] = JSON.stringify(items.filter((item) => item.delivery_num))
       }
+      this.confirmStatus = true
       const { delivery_status } = await this.$api.trade.delivery(params)
+      this.confirmStatus = false
       this.deliverGoodsDialog = false
       this.fetchList()
       if (delivery_status && delivery_status != 'PENDING') {

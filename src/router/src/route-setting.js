@@ -43,19 +43,15 @@ export default {
       children: [
         {
           path: 'detail/:id?',
-          component: () => import('@/view/mall/marketing/dealer/detail'),
-          children: [
-            {
-              path: 'storelist/:id?',
-              component: () => import('@/view/mall/marketing/dealer/storelist'),
-              children: [
-                {
-                  path: 'relation/:id?',
-                  component: () => import('@/view/mall/marketing/dealer/relationstorelist')
-                }
-              ]
-            }
-          ]
+          component: () => import('@/view/mall/marketing/dealer/detail')
+        },
+        {
+          path: 'storelist/:id?',
+          component: () => import('@/view/mall/marketing/dealer/storelist')
+        },
+        {
+          path: 'relation/:id?',
+          component: () => import('@/view/mall/marketing/dealer/relationstorelist')
         }
       ]
     },

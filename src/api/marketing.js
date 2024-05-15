@@ -444,10 +444,11 @@ export function deleteRole(id, query) {
 }
 
 // 获取距离信息
-export function getDistance() {
+export function getDistance(params) {
   return fetch({
     url: 'distribution/getdistance',
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 

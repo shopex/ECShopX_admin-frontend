@@ -20,54 +20,54 @@
 }
 </style>
 <template>
-  <div class="cus-dealer-page">
-    <div
-      v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('detail/storelist') === -1"
-    >
-      <SpFinder
-        ref="finder"
-        :no-selection="true"
-        :setting="setting"
-        :search-row-count="3"
-        :splict-count="3"
-        :hooks="{
-          beforeSearch: beforeSearch
-        }"
-        url="/adapay/dealer/list"
-        @reset="onFinderReset"
-      >
-        <template v-slot:tableTop>
-          <el-row class="cus-btn">
-            <el-button type="primary" plain size="mini" @click="handleClose(true)">
-              新增经销商
-            </el-button>
-          </el-row>
-        </template>
-        <template v-slot:create_time>
-          <el-date-picker
-            v-model="create_time"
-            class="input-m"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="(val) => dateChange('create', val)"
-          />
-        </template>
-        <template v-slot:open_time>
-          <el-date-picker
-            v-model="open_time"
-            class="input-m"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="(val) => dateChange('open', val)"
-          />
-        </template>
-      </SpFinder>
+  <SpRouterView>
+    <div class="cus-dealer-page">
+      <el-card>
+        <SpFinder
+          ref="finder"
+          :no-selection="true"
+          :setting="setting"
+          :search-row-count="3"
+          :splict-count="3"
+          :hooks="{
+            beforeSearch: beforeSearch
+          }"
+          url="/adapay/dealer/list"
+          @reset="onFinderReset"
+        >
+          <template v-slot:tableTop>
+            <el-row class="cus-btn">
+              <el-button type="primary" plain size="mini" @click="handleClose(true)">
+                新增经销商
+              </el-button>
+            </el-row>
+          </template>
+          <template v-slot:create_time>
+            <el-date-picker
+              v-model="create_time"
+              class="input-m"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="(val) => dateChange('create', val)"
+            />
+          </template>
+          <template v-slot:open_time>
+            <el-date-picker
+              v-model="open_time"
+              class="input-m"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="(val) => dateChange('open', val)"
+            />
+          </template>
+        </SpFinder>
+      </el-card>
       <el-dialog
         title="提示"
         :visible.sync="visibleModal"
@@ -90,8 +90,7 @@
       </el-dialog>
       <AddModal :visible="addVisible" @handleClose="handleClose" />
     </div>
-    <router-view />
-  </div>
+  </SpRouterView>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -144,7 +143,7 @@ export default {
               type: 'link',
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail',
+                  path: this.matchHidePage('detail'),
                   query: { operator_id: row[0].operator_id }
                 })
               }
@@ -161,7 +160,7 @@ export default {
             action: {
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail/storelist',
+                  path: this.matchHidePage('storelist'),
                   query: { dealer_id: row[0].operator_id, username: row[0].username }
                 })
               }
