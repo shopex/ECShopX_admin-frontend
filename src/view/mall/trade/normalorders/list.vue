@@ -1231,8 +1231,11 @@ export default {
       }
       this.confirmStatus = true
       const { delivery_status } = await this.$api.trade.delivery(params)
-      this.confirmStatus = false
       this.deliverGoodsDialog = false
+      this.$nextTick(()=>{
+        this.confirmStatus = false
+
+      })
       this.fetchList()
       if (delivery_status && delivery_status != 'PENDING') {
         this.$message.success('发货成功!')
