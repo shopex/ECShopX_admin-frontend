@@ -44,6 +44,39 @@ export default {
       component: () => import('@/view/guide/salesman')
     },
     {
+      path: 'popularize/popularizegoods',
+      name: `分销商品`,
+      component: () => import('@/view/popularize/goods')
+    },
+    {
+      path: 'marketing/popularize/popularizelist',
+      name: `推广员列表`,
+      component: () => import('@/view/popularize/list'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        },
+        {
+          path: 'child',
+          component: () => import('@/view/popularize/children')
+        }
+      ]
+    },
+    {
+      path: 'marketing/popularize/popularizedata',
+      name: `推广员业绩`,
+      component: () => import('@/view/popularize/data'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        }
+      ]
+    },
+
+
+    {
       path: 'tmpl/shopDecoration',
       name: `移动商城`,
       component: () => import('@/view/mall/marketing/shopDecoration'),
