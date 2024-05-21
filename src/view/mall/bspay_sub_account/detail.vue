@@ -13,9 +13,9 @@
         <span v-if="list.bspay_div_status == 'NOTDIV'">未分账</span>
         <span v-else-if="list.bspay_div_status == 'DIVED'">已分账</span>
       </el-descriptions-item>
-      <el-descriptions-item label="商户名称">
+      <!-- <el-descriptions-item label="商户名称">
         {{ list.mer_name }}
-      </el-descriptions-item>
+      </el-descriptions-item> -->
       <el-descriptions-item label="店铺名称">
         {{ list.distributor_name }}
       </el-descriptions-item>
