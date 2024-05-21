@@ -19,6 +19,7 @@
         <el-tab-pane label="商品统计导出" name="goods_data" />
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
       </template>
       <template v-else>
         <el-tab-pane label="会员导出" name="member" />
@@ -84,6 +85,7 @@
         <el-tab-pane label="商品码导出" name="itemcode" />
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
       </template>
 
       <el-table v-loading="loading" :data="exportLogLists" :height="wheight - 220">
