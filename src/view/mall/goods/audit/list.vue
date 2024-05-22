@@ -213,7 +213,10 @@
                   <el-radio label="2"> 固定金额 </el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="SPU结算佣金" :rules="[{ required: true, message: '请输入SPU结算佣金', trigger: 'blur' }]">
+              <el-form-item 
+                label="SPU结算佣金"
+                :rules="[{ required: true}]"
+                >
                 <el-input v-model="commissionSpecItems.commission" size="mini" type="number" style="width: 200px">
                   <template v-if="1 == commissionSpecItems.commission_type" slot="append"> % </template>
                 </el-input>
@@ -469,10 +472,10 @@ export default {
     saveCommissionConf() {
       if (this.commissionSpecItems.commission == "") {
         this.$message({
-            type: 'error',
-            message: 'SPU结算佣金不能为空'
-          })
-        return
+          type: 'error',
+          message: 'SPU结算佣金不能为空'
+        })
+        return false
       }
       var rebateConf = []
       let params = {
