@@ -55,8 +55,8 @@
           <el-col v-if="$store.getters.login_type == 'admin'" :span="8">
             <el-form-item label="手续费扣费方式" prop="bspay_fee_mode">
               <el-select v-model="form.bspay_fee_mode" style="width: 100%">
-                <el-option label="内扣" value="1" />
-                <el-option label="外扣" value="2" />
+                <el-option label="外扣" value="1" />
+                <el-option label="内扣" value="2" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -204,8 +204,8 @@
             <template v-if="$store.getters.login_type == 'admin'">
               <el-table-column label="手续费扣费方式" prop="bspayFeeMode">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.bspayFeeMode == '1'">内扣</span>
-                  <span v-else-if="scope.row.bspayFeeMode == '2'">外扣</span>
+                  <span v-if="scope.row.bspayFeeMode == '2'">内扣</span>
+                  <span v-else-if="scope.row.bspayFeeMode == '1'">外扣</span>
                   <span v-else>-</span>
                 </template>
               </el-table-column>
@@ -343,7 +343,6 @@ export default {
       this.loading = false
     },
     handleCurrentChange(page) {
-      console.log(page)
       this.params.page = page
       this.getSub_account()
     },
