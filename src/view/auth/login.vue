@@ -247,6 +247,12 @@ export default {
         this.$router.push({ path: '/dealer/index' })
       } else if (this.loginType == 'merchant') {
         this.$router.push({ path: '/merchant' })
+      }else if (this.loginType == 'supplier') {
+        if (userInfo.supplier_check_status == 1) {
+          this.$router.push({ path: '/supplier/order/tradenormalorders' })
+        } else {
+          this.$router.push({ path: '/supplier/setting/supplier_register' })
+        }
       } else {
         window.location.href = '/'
       }

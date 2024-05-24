@@ -310,6 +310,10 @@ export default {
         this.$router.push({
           path: '/shopadmin/admininfo'
         })
+      } else if(this.$store.getters.login_type === 'supplier'){
+        this.$router.push({
+          path: '/supplier/admininfo'
+        })
       } else {
         this.$router.push({
           path: '/admininfo'
@@ -330,7 +334,9 @@ export default {
         window.location.href = `/dealer/login`
       } else if (loginType == 'merchant') {
         window.location.href = `/merchant/login`
-      } else {
+      } else if (loginType == 'supplier') {
+        window.location.href = `/supplier/login`
+      }  else {
         window.location.href = `/login`
       }
     }
