@@ -130,7 +130,6 @@
               :props="{value:'tag_id', label: 'tag_name'}"
               v-model="searchParams.tag_id"
               clearable
-              @change="searchAction"
           ></el-cascader>
         </SpFilterFormItem>
 <!--        <SpFilterFormItem prop="goods_bn" label="SPU编码:">-->
