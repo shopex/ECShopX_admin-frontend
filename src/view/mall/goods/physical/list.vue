@@ -498,6 +498,7 @@ export default {
         keywords: '',
         item_bn: '',
         supplier_goods_bn: '',
+        approve_status: '',
         category: 0,
         item_category: 0,
         is_warning: false,
