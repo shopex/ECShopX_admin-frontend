@@ -157,6 +157,12 @@ export default {
     getLoginTitle(t) {
       let title
       switch (this.loginType) {
+        case 'supplier':
+          title = '供应商管理中心'
+          break
+        case 'agent':
+          title = '代理商管理中心'
+          break
         case 'distributor':
           title = '店铺管理中心'
           break

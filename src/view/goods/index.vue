@@ -828,7 +828,7 @@ export default {
       })
       this.form.isSpecs = !nospec
       this.multipleSkuGoods = !nospec
-      const _limit_area = buy_limit_area.split(',')
+      const _limit_area = []
       this.form.specParams = {
         approve_status: approve_status,
         store,
@@ -1208,6 +1208,7 @@ export default {
         }, 200)
       } catch (e) {
         this.submitLoading = false
+        console.log(e);
       }
     },
     onApplyConfirm() {

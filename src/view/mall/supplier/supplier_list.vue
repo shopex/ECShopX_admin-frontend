@@ -40,6 +40,14 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
+              v-if="scope.row.check_state == '审核通过'"
+              type="text"
+              @click="editRow(scope.row)"
+          >
+            修改
+          </el-button>
+          <el-button
+              v-else
               type="text"
               @click="editRow(scope.row)"
           >
@@ -121,17 +129,17 @@
           </template>
           {{ editForm.bank_account }}
         </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            公众号openid
-          </template>
-          <el-input
-              type="textarea"
-              :rows="2"
-              placeholder="每行输入一个openid"
-              v-model="editForm.wx_openid">
-          </el-input>
-        </el-descriptions-item>
+<!--        <el-descriptions-item>-->
+<!--          <template slot="label">-->
+<!--            公众号openid-->
+<!--          </template>-->
+<!--          <el-input-->
+<!--              type="textarea"-->
+<!--              :rows="2"-->
+<!--              placeholder="每行输入一个openid"-->
+<!--              v-model="editForm.wx_openid">-->
+<!--          </el-input>-->
+<!--        </el-descriptions-item>-->
       </el-descriptions>
 
       <el-form ref="editForm" label-width="160px" style="padding-top: 10px;">

@@ -59,10 +59,10 @@
             <export-tip @exportHandle="exportInvoice"> 未开票订单 </export-tip>
           </el-dropdown-item>
           <el-dropdown-item>
-            <export-tip @exportHandle="exportDataMaster"> 主订单 </export-tip>
+            <export-tip @exportHandle="exportSupplierOrders"> 主订单 </export-tip>
           </el-dropdown-item>
           <el-dropdown-item>
-            <export-tip @exportHandle="exportDataNormal"> 子订单 </export-tip>
+            <export-tip @exportHandle="exportOrderItems"> 子订单 </export-tip>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -1152,7 +1152,7 @@ export default {
       exportInvoice({
         ...this.params,
         type,
-        order_type: 'normal'
+        order_type: 'supplier_order'
       }).then((response) => {
         const { status, url, filename } = response.data.data
         if (status) {
@@ -1167,11 +1167,11 @@ export default {
         }
       })
     },
-    exportDataNormal() {
+    exportOrderItems() {
       this.exportData('normal_order')
     },
-    exportDataMaster() {
-      this.exportData('supplier_master_order')
+    exportSupplierOrders() {
+      this.exportData('supplier_order')
     },
     exportData(type) {
       console.log('====exportData', type)
