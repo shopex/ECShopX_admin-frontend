@@ -679,7 +679,7 @@ export default {
           },
           { name: '库存', key: 'store', align: "right", headerAlign: 'center' },
           {
-            name: '建议零售价（¥）',
+            name: '市场价（¥）',
             key: 'market_price',
             width: 100,
             formatter: (value, row, col) => {
@@ -689,7 +689,7 @@ export default {
             headerAlign: 'center'
           },
           {
-            name: '门店采购价（¥）',
+            name: '销售价（¥）',
             key: 'price',
             width: 100,
             formatter: (value, row, col) => {
