@@ -1,8 +1,32 @@
 <template>
   <section class="section section-white content-padded" onload="init()">
-    <el-col v-if="certify_status" :span="24" class="group-label certify-status">
-      <span class="label-title">审核状态：{{certify_status}} {{form.audit_remark}} </span>
-    </el-col>
+    <template>
+      <el-alert
+          v-if="is_check == '1'"
+          :title="certify_status"
+          type="success"
+          :closable="false"
+          center
+          show-icon>
+      </el-alert>
+      <el-alert
+          v-if="is_check == '0'"
+          :title="'审核状态: ' + certify_status"
+          type="warning"
+          :closable="false"
+          center
+          show-icon>
+      </el-alert>
+      <el-alert
+          v-if="is_check == '2'"
+          :title="certify_status + ' : ' + form.audit_remark"
+          type="error"
+          :closable="false"
+          center
+          show-icon>
+      </el-alert>
+    </template>
+    
     <el-form ref="form" :model="form" label-width="110px">
       <el-col :span="24" class="group-label">
         <span class="label-title">供应商基础信息</span>
@@ -65,7 +89,7 @@
         </el-col>
       </el-row>
 
-      <el-form-item>
+      <el-form-item v-if="is_check == '2' || is_check == '-1'">
         <el-button type="primary" size="large" @click="createSupplier"> 提交审核 </el-button>
       </el-form-item>
     </el-form>
@@ -103,6 +127,7 @@
         picsDialog: false,
         picsCurrent: -1,
         picsOldLen: 0,
+        is_check: '-1',
         certify_status: ''
       }
     },
@@ -127,6 +152,7 @@
               bank_account,
               audit_remark,
             }
+            this.is_check = is_check
             if(is_check) {
               this.certify_status = check_map[is_check] || ''
             }

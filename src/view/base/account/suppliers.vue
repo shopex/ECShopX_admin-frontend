@@ -34,7 +34,7 @@ export default {
       finderSetting: {
         search: [
           {
-            name: '供应商编号',
+            name: '账号',
             key: 'login_name'
           },
           {
@@ -47,7 +47,7 @@ export default {
           }
         ],
         columns: [
-          { name: '供应商编号', key: 'login_name' },
+          { name: '账号', key: 'login_name' },
           { name: '手机号', key: 'mobile' },
           { name: '姓名', key: 'username' },
           {
@@ -105,7 +105,7 @@ export default {
       },
       supplierFormList: [
         {
-          label: '供应商编号',
+          label: '账号',
           key: 'login_name',
           type: 'input',
           required: true,
