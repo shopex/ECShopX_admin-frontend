@@ -203,7 +203,8 @@ export default {
     },
     detail (row) {
       let routeData = this.$router.resolve({
-        path: '/marketing/popularize/popularizelist/detail',
+        // path: '/marketing/popularize/popularizelist/detail',
+        path: this.matchHidePage('detail'),
         query: { user_id: row.user_id }
       })
       window.open(routeData.href, '_blank')
