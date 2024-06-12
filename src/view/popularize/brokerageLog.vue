@@ -141,7 +141,8 @@
               </el-tag>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="plan_close_date" label="预计结算时间"></el-table-column> -->
+          <el-table-column v-if="loginType == 'distributor'" prop="user_id" label="业务员ID"></el-table-column>
+          <el-table-column v-if="loginType == 'distributor'" prop="title"   label="订单内容"></el-table-column>
         </el-table>
         <div
           v-if="total_count > params.pageSize"
@@ -193,6 +194,8 @@ export default {
     }
   },
   mounted () {
+    this.loginType = this.$store.getters.login_type
+
     if (this.$route.query.user_id) {
       this.params.user_id = this.$route.query.user_id
     }
