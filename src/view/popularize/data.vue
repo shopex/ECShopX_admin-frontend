@@ -35,9 +35,18 @@
               type="primary"
               plain
             >
-              导出推广员业绩
+              导出业绩统计
             </el-button>
           </export-tip>
+          <export-tip @exportHandle="exportPopularizeOrder">
+            <el-button
+              type="primary"
+              plain
+            >
+              导出业绩订单详细
+            </el-button>
+          </export-tip>
+
         </el-button-group>
       </div>
 
@@ -152,7 +161,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import { getPopularizeList, exportPopularizeData } from '../../api/promotions'
+import { getPopularizeList, exportPopularizeData,exportPopularizeOrder } from '../../api/promotions'
 import { pageMixin } from '@/mixins'
 export default {
   mixins: [pageMixin],
@@ -195,6 +204,28 @@ export default {
         }
       })
     },
+
+    exportPopularizeOrder () {
+      const { pageIndex: page, pageSize } = this.page
+      let params = {
+        page,
+        pageSize,
+        ...this.params
+      }
+      exportPopularizeOrder(params).then((res) => {
+        if (res.data.data.status == true) {
+          this.$message({
+            type: 'success',
+            message: '已加入执行队列，请在设置-导出列表中下载'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '导出失败'
+          })
+        }
+      })
+    },    
     onCopy () {
       this.$notify.success({
         message: '复制成功',

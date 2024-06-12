@@ -328,6 +328,16 @@ export function exportPopularizeData (data) {
   })
 }
 
+
+export function exportPopularizeOrder (data) {
+  return fetch({
+    url: '/popularize/promoter/exportPopularizeOrder',
+    method: 'get',
+    params: data
+  })
+}
+
+
 export function getPopularizeChildren (data) {
   return fetch({
     url: '/popularize/promoter/children',
