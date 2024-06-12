@@ -139,7 +139,7 @@ export default {
         address: '',
         is_dada: false,
         is_self_delivery: true,
-        freight_time:0.1,
+        freight_time:1,
         business: '',
         is_ziti: false,
         offline_aftersales: false,
@@ -458,7 +458,7 @@ export default {
             return (
               <div style="margin-left: 27px;display:flex">
                 立即配送，预计
-                <el-input-number v-model={value[key]} placeholder='请输入内容' step={0.1} precision={1} min={0.1} />
+                <el-input-number v-model={value[key]} placeholder='请输入内容' step={1} min={1} />
                 小时后送达（下单时间往后延多少小时）
               </div>
             )
