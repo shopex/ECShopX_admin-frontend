@@ -814,7 +814,7 @@ export default {
       this.form.isShowSpecimg = is_show_specimg
       this.form.aftersales_end_date = aftersales_end_date
       this.form.goods_notice = goods_notice
-      this.form.goods_bn = goods_bn
+      this.form.goods_bn = is_new ? '' : goods_bn
       this.form.delivery_data = {
         delivery_data_type,
         delivery_desc
@@ -833,7 +833,7 @@ export default {
         approve_status: approve_status,
         store,
         item_id,
-        item_bn,
+        item_bn: is_new ? '' : item_bn,
         weight,
         volume,
         price: isNaN(price / 100) ? '' : price / 100,
