@@ -327,7 +327,7 @@
 
         <el-table-column label="配送费">
           <template slot-scope="scope">
-            {{ scope.row.payment_fee }}
+            {{ (scope.row.self_delivery_fee || 0) / 100 }}
           </template>
         </el-table-column>
 
@@ -1281,6 +1281,7 @@ export default {
         } = item
         const isDada = receipt_type == 'dada'
         const isLogistics = receipt_type == 'logistics'
+        const isSelfDelivery = receipt_type == 'merchant'
         if (VERSION_STANDARD || distributor_id == 0 || this.login_type == 'distributor') {
           if (
             !isDada &&
@@ -1313,7 +1314,7 @@ export default {
           }
 
           if (
-            (isLogistics || is_logistics) &&
+            (isLogistics || is_logistics || isSelfDelivery) &&
             !isDada &&
             order_status == 'PAYED' &&
             delivery_status != 'DONE' &&
