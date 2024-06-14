@@ -1656,7 +1656,7 @@ export default {
           { title: '已取消', value: 'CONFIRMING' }]
         }
       } else if (key == 'confirmpackag'){
-        this.$confirm('打包后待配送员配送', '已打包', {
+        this.$confirm('是否确认打包', '商品打包', {
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         }).then(async () => {
