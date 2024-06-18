@@ -4,7 +4,11 @@
       <el-tab-pane label="普通快递" name="normal">
         <Normal />
       </el-tab-pane>
-      <el-tab-pane v-if="!IS_SUPPLIER() && !IS_DISTRIBUTOR() && !VERSION_B2C" label="同城配" name="city">
+      <el-tab-pane
+        v-if="!IS_SUPPLIER() && !IS_DISTRIBUTOR() && !VERSION_B2C"
+        label="同城配"
+        name="city"
+      >
         <City />
       </el-tab-pane>
       <el-tab-pane v-if="!IS_SUPPLIER()" label="到店自提" name="ziti">
@@ -16,6 +20,7 @@
 
 <script>
 import City from './city'
+import Shansong from './shansong'
 import Normal from './normal'
 import ZitiList from './comps/ziti-list'
 import { mapGetters } from 'vuex'
@@ -24,6 +29,7 @@ export default {
   components: {
     Normal,
     City,
+    Shansong,
     ZitiList
   },
   data() {

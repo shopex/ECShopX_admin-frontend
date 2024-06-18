@@ -18,10 +18,11 @@
 }
 </style>
 <style lang="scss">
-.physical-cell-reason{
+.physical-cell-reason {
   @include text-overflow();
   width: 180px;
-}</style>
+}
+</style>
 <template>
   <div class="page-body">
     <SpRouterView>
@@ -34,7 +35,12 @@
             导入<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="physicalupload"> 商品导入 </el-dropdown-item>
+            <el-dropdown-item
+              v-if="$store.getters.login_type != 'merchant'"
+              command="physicalupload"
+            >
+              商品导入
+            </el-dropdown-item>
             <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -44,9 +50,9 @@
         <SpFilterFormItem prop="keywords" label="商品标题:">
           <el-input v-model="searchParams.keywords" placeholder="商品标题或副标题关键词" />
         </SpFilterFormItem>
-<!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
-<!--          <el-input v-model="searchParams.supplier_goods_bn" placeholder="请输入供应商货号" />-->
-<!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
+        <!--          <el-input v-model="searchParams.supplier_goods_bn" placeholder="请输入供应商货号" />-->
+        <!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="approve_status" label="商品状态:">
           <el-select v-model="searchParams.approve_status" clearable placeholder="请选择">
             <el-option
@@ -84,9 +90,9 @@
             />
           </el-select>
         </SpFilterFormItem>
-<!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
-<!--          <el-input v-model="searchParams.tax_rate_code" placeholder="商品编号或条形码" />-->
-<!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
+        <!--          <el-input v-model="searchParams.tax_rate_code" placeholder="商品编号或条形码" />-->
+        <!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="brand_id" label="品牌:">
           <el-select
             v-model="searchParams.brand_id"
@@ -104,53 +110,53 @@
             />
           </el-select>
         </SpFilterFormItem>
-<!--        <SpFilterFormItem prop="regions_id" label="商品产地:">-->
-<!--          <el-cascader-->
-<!--            v-model="searchParams.regions_id"-->
-<!--            placeholder="请选择"-->
-<!--            clearable-->
-<!--            :options="regions"-->
-<!--          />-->
-<!--        </SpFilterFormItem>-->
-<!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
-<!--          <el-select v-model="searchParams.delivery_data_type">-->
-<!--            <el-option value="fixed_date" label="指定发货日期" />-->
-<!--            <el-option value="relative_date" label="相对发货日期" />-->
-<!--            <el-option value="default_date" label="默认发货日期" />-->
-<!--          </el-select>-->
-<!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="regions_id" label="商品产地:">-->
+        <!--          <el-cascader-->
+        <!--            v-model="searchParams.regions_id"-->
+        <!--            placeholder="请选择"-->
+        <!--            clearable-->
+        <!--            :options="regions"-->
+        <!--          />-->
+        <!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
+        <!--          <el-select v-model="searchParams.delivery_data_type">-->
+        <!--            <el-option value="fixed_date" label="指定发货日期" />-->
+        <!--            <el-option value="relative_date" label="相对发货日期" />-->
+        <!--            <el-option value="default_date" label="默认发货日期" />-->
+        <!--          </el-select>-->
+        <!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="item_bn" label="SKU编码:">
           <el-input v-model="searchParams.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
         <SpFilterFormItem prop="item_bn" label="商品标签:">
           <el-cascader
-              size="small"
-              placeholder="选择标签"
-              :options="tagList"
-              :props="{value:'tag_id', label: 'tag_name'}"
-              v-model="searchParams.tag_id"
-              clearable
-          ></el-cascader>
+            v-model="searchParams.tag_id"
+            size="small"
+            placeholder="选择标签"
+            :options="tagList"
+            :props="{ value: 'tag_id', label: 'tag_name' }"
+            clearable
+          />
         </SpFilterFormItem>
-<!--        <SpFilterFormItem prop="goods_bn" label="SPU编码:">-->
-<!--          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />-->
-<!--        </SpFilterFormItem>-->
-<!--        <SpFilterFormItem prop="operator_name" label="来源供应商:">-->
-<!--          <el-input v-model="searchParams.operator_name" placeholder="请输入来源供应商" />-->
-<!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="goods_bn" label="SPU编码:">-->
+        <!--          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />-->
+        <!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="operator_name" label="来源供应商:">-->
+        <!--          <el-input v-model="searchParams.operator_name" placeholder="请输入来源供应商" />-->
+        <!--        </SpFilterFormItem>-->
       </SpFilterForm>
 
       <div class="action-container">
         <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeCategory">
           更改销售分类
         </el-button>
-        <el-button type="primary" plain @click="changeGoodsLabel">
-          标签
-        </el-button>
+        <el-button type="primary" plain @click="changeGoodsLabel"> 标签 </el-button>
         <el-button v-if="IS_SUPPLIER()" type="primary" plain @click="changeFreightTemplate">
           更改运费模板
         </el-button>
-        <el-button v-if="!IS_ADMIN()" type="primary" plain @click="onBatchSubmitItems"> 批量提交 </el-button>
+        <el-button v-if="!IS_ADMIN()" type="primary" plain @click="onBatchSubmitItems">
+          批量提交
+        </el-button>
         <el-button type="primary" plain @click="changeItemsStore"> 统一库存 </el-button>
         <el-button type="primary" plain @click="() => changeHaltTheSales('stop')"> 停售 </el-button>
         <el-button type="primary" plain @click="() => changeHaltTheSales('start')">
@@ -225,10 +231,10 @@
         v-model="showMemberPriceDrawer"
         title="改价"
         :width="800"
-        confirmText="保存"
+        confirm-text="保存"
         @confirm="onSaveMemberPrice"
       >
-        <el-table border v-loading="skuLoading" :data="specItems" height="100%">
+        <el-table v-loading="skuLoading" border :data="specItems" height="100%">
           <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
           <el-table-column label="原价" prop="market_price" width="100">
             <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
@@ -285,7 +291,7 @@
         :width="800"
         @confirm="onSaveItemStore"
       >
-        <el-table border v-loading="skuLoading" :data="storeItemsList" height="100%">
+        <el-table v-loading="skuLoading" border :data="storeItemsList" height="100%">
           <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
           <el-table-column label="库存">
             <template slot-scope="scope">
@@ -352,23 +358,20 @@
         @onSubmit="onLabelFormSubmit"
       />
 
-      <el-dialog
-          title="设置商品佣金"
-          width="600px"
-          :visible.sync="commissionDialog"
-      >
-
+      <el-dialog title="设置商品佣金" width="600px" :visible.sync="commissionDialog">
         <el-form ref="form" :model="commissionForm" label-width="150px">
           <el-form-item label="平台佣金比例:">
-            <el-input v-model="commissionForm.commission_ratio" maxlength="5" style="width: 160px;">
+            <el-input v-model="commissionForm.commission_ratio" maxlength="5" style="width: 160px">
               <template slot="append">%</template>
             </el-input>
-            <div class="frm-tips">
-            * 0-100之间，最多两位小数
-            </div>
+            <div class="frm-tips">* 0-100之间，最多两位小数</div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :loading="formLoading" @click="commissionSubmit">保存设置</el-button>
+            <el-button type="primary" :loading="formLoading" @click="commissionSubmit"
+              >
+保存设置
+</el-button
+            >
             <el-button @click="commissionDialog = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -385,7 +388,7 @@
           }
         "
       >
-        <el-table border v-loading="skuLoading" :data="itemSkuList" height="100%">
+        <el-table v-loading="skuLoading" border :data="itemSkuList" height="100%">
           <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
           <el-table-column label="供应商货号" prop="supplier_goods_bn" min-width="120" />
           <el-table-column label="sku编码" prop="item_bn" min-width="120" />
@@ -450,7 +453,7 @@ export default {
     return {
       formLoading: false,
       commissionDialog: false,
-      commissionForm: {goods_id: 0, commission_ratio: ''},
+      commissionForm: { goods_id: 0, commission_ratio: '' },
       show_profit_sideBar: false,
       select_tags_value: [],
 
@@ -537,7 +540,7 @@ export default {
       batchChangeStateDialog: false,
       batchChangeStateFormList: [
         {
-          label: '商品状态:',
+          label: '商品状态',
           key: 'status',
           type: 'select',
           message: '不能为空',
@@ -842,7 +845,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
-              const visible = row.approve_status == 'onsale' && !IS_SUPPLIER()&&!IS_ADMIN()
+              const visible = row.approve_status == 'onsale' && !IS_SUPPLIER() && !IS_ADMIN()
               return visible
             },
             action: {
@@ -864,7 +867,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
-              const visible = row.approve_status == 'instock' && !IS_SUPPLIER()&&!IS_ADMIN()
+              const visible = row.approve_status == 'instock' && !IS_SUPPLIER() && !IS_ADMIN()
               return visible
             },
             action: {
@@ -960,14 +963,14 @@ export default {
           {
             name: '库存',
             key: 'store',
-            align: "right",
+            align: 'right',
             headerAlign: 'center'
           },
           {
             name: 'sku编码',
             key: 'item_bn',
             width: 150,
-            align: "right",
+            align: 'right',
             headerAlign: 'center'
           },
           // {
@@ -999,7 +1002,7 @@ export default {
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
-            align: "right",
+            align: 'right',
             headerAlign: 'center'
           },
           {
@@ -1009,7 +1012,7 @@ export default {
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
-            align: "right",
+            align: 'right',
             headerAlign: 'center'
           },
           {
@@ -1019,7 +1022,7 @@ export default {
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
-            align: "right",
+            align: 'right',
             headerAlign: 'center'
           },
           // {
@@ -1046,7 +1049,7 @@ export default {
             width: 120,
             key: 'approve_status',
             formatter: (value, row, col) => {
-              return this.statusOption.find(item=>item.value===value)?.title
+              return this.statusOption.find((item) => item.value === value)?.title
             }
           },
           {
@@ -1054,11 +1057,13 @@ export default {
             key: 'audit_status',
             width: 200,
             render: (h, scope) => (
-              <div >
+              <div>
                 <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
-                {scope.row.audit_status=='rejected'&&loginType=='supplier'&&<div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>}
+                {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
+                  <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
+                )}
               </div>
-            ),
+            )
           },
           { name: '销售分类', key: 'itemCatName', minWidth: 120 },
           {
@@ -1335,12 +1340,12 @@ export default {
     },
     async commissionSubmit() {
       this.formLoading = true
-      try{
+      try {
         await this.$api.goods.setCommissionRatio(this.commissionForm)
         this.commissionDialog = false
         this.$refs['finder'].refresh()
         this.$message.success('操作成功')
-      }catch(e) {}
+      } catch (e) {}
       this.formLoading = false
     },
     async onLabelFormSubmit() {
@@ -1359,13 +1364,13 @@ export default {
       const res = await this.$api.common.getAddress()
       this.regions = res
     },
-      // 同步至店铺
-      async syncToShop(isAll) {
-        let distributorIds = '_all'
-        if (!isAll) {
-          const { data } = await this.$picker.shop()
-          distributorIds = data.map((item) => item.distributor_id)
-        }
+    // 同步至店铺
+    async syncToShop(isAll) {
+      let distributorIds = '_all'
+      if (!isAll) {
+        const { data } = await this.$picker.shop()
+        distributorIds = data.map((item) => item.distributor_id)
+      }
       if (this.selectionItems.length == 0) {
         await this.$confirm('是否将所有商品的都同步至店铺?', '提示')
         await this.$api.marketing.saveDistributorItems({
@@ -1374,7 +1379,7 @@ export default {
           // 是否同步并上架
           is_can_sale: false
         })
-      }else{
+      } else {
         await this.$api.marketing.saveDistributorItems({
           distributor_ids: distributorIds,
           item_ids: this.selectionItems.map((item) => item.item_id),

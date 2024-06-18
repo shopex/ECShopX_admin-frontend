@@ -16,10 +16,11 @@ export function getSmsCode(params) {
   })
 }
 
-export function getImageCode() {
+export function getImageCode(query) {
   return fetch({
     url: '/operator/images/code',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
@@ -74,6 +75,13 @@ export function getAuthorizelogout(params) {
     url: '/operator/oauth/logout',
     method: 'get',
     params
+  })
+}
+
+export function getAuthorizeLeve() {
+  return fetch({
+    url: '/operator/getLevel',
+    method: 'post'
   })
 }
 

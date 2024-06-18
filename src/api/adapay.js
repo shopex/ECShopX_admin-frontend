@@ -85,10 +85,10 @@ export const accountUpdatePerson = (params) => {
 }
 
 // 店铺、经销商开户更新
-export const accountPersonUpdate = (params)=>{
+export const accountPersonUpdate = (params) => {
   return fetch({
-    url:'adapay/member/modify',
-    method:'post',
+    url: 'adapay/member/modify',
+    method: 'post',
     params
   })
 }
@@ -247,11 +247,18 @@ export const seleteBusiness = (params) => {
 }
 
 // 保存提现设置
-export const saveDrawSetting =(params)=>{
+export const saveDrawSetting = (params) => {
   return fetch({
-    url:'/adapay/sub_approve/draw_cash_config',
-    method:'post',
+    url: '/adapay/sub_approve/draw_cash_config',
+    method: 'post',
     params
   })
 }
 
+// 生成Adapay秘钥
+export const createAdapayKey = () => {
+  return fetch({
+    url: '/trade/payment/rsakey',
+    method: 'get'
+  })
+}

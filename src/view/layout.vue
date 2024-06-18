@@ -312,7 +312,7 @@ export default {
         this.$router.push({
           path: '/shopadmin/admininfo'
         })
-      } else if(this.$store.getters.login_type === 'supplier'){
+      } else if (this.$store.getters.login_type === 'supplier') {
         this.$router.push({
           path: '/supplier/admininfo'
         })
@@ -338,7 +338,7 @@ export default {
         window.location.href = `/merchant/login`
       } else if (loginType == 'supplier') {
         window.location.href = `/supplier/login`
-      }  else {
+      } else {
         window.location.href = `/login`
       }
     }
@@ -517,7 +517,8 @@ export default {
     background-color: #fff;
     padding: 16px;
     border-radius: 0;
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    min-height: 600px;
     &.footer-fixed {
       margin-bottom: 57px;
     }

@@ -10,7 +10,8 @@ export default {
     {
       path: 'manage/templateedit',
       name: `模板编辑`,
-      component: () => import('@/view/wxapp/management')
+      // component: () => import('@/view/wxapp/management')
+      component: () => import('@/view/wxapp/home')
     },
     {
       path: 'manage/editcategory',
@@ -60,6 +61,11 @@ export default {
       meta: {
         hidemenu: true
       }
+    },
+    {
+      path: 'pcmall/loginPageSetting',
+      name: `登陆页设置`,
+      component: () => import('@/view/pc/pctemplate/login')
     },
     {
       path: 'pcmall/seo',

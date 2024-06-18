@@ -75,11 +75,11 @@
               </el-tag>
             </template>
           </el-table-column>
-<!--          <el-table-column prop="item_spec_desc" label="SPU编码">-->
-<!--            <template slot-scope="scope">-->
-<!--              {{ scope.row.goods_bn }}-->
-<!--            </template>-->
-<!--          </el-table-column>-->
+          <!--          <el-table-column prop="item_spec_desc" label="SPU编码">-->
+          <!--            <template slot-scope="scope">-->
+          <!--              {{ scope.row.goods_bn }}-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column prop="item_spec_desc" label="SKU编码">
             <template slot-scope="scope">
               {{ scope.row.item_bn }}
@@ -238,8 +238,8 @@
           </el-row>
         </div>
       </el-card>
-      <div slot="header" v-if="!IS_SUPPLIER()">优惠明细</div>
-      <div class="card-panel" v-if="!IS_SUPPLIER()">
+      <div v-if="!IS_SUPPLIER()" slot="header">优惠明细</div>
+      <div v-if="!IS_SUPPLIER()" class="card-panel">
         <el-table
           v-if="orderInfo"
           border
@@ -455,7 +455,7 @@ export default {
       deliverGoodsDialog: false,
       deliverGoodsFormList: [
         {
-          label: '发货类型:',
+          label: '发货类型',
           key: 'delivery_type',
           type: 'radio',
           disabled: false,
@@ -504,7 +504,7 @@ export default {
           ]
         },
         {
-          label: '快递公司:',
+          label: '快递公司',
           key: 'delivery_corp',
           placeholder: '请选择快递公司',
           type: 'select',
@@ -513,7 +513,7 @@ export default {
           message: '不能为空'
         },
         {
-          label: '物流单号:',
+          label: '物流单号',
           key: 'delivery_code',
           type: 'input',
           placeholder: '物流公司单号',
@@ -782,7 +782,7 @@ export default {
           !isDada &&
           order_status == 'PAYED' &&
           delivery_status != 'DONE' &&
-          receipt_type != 'ziti'&&
+          receipt_type != 'ziti' &&
           this.login_type == 'supplier'
         ) {
           btnActions.push({ name: '发货', key: 'deliverGoods' })

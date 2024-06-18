@@ -17,8 +17,12 @@
         <el-tab-pane label="交易单导出" name="tradedata" />
         <el-tab-pane label="退款单导出" name="refund_record_count" />
         <el-tab-pane label="商品统计导出" name="goods_data" />
+        <el-tab-pane label="商品导出" name="items" />
+        <el-tab-pane label="商品标签导出" name="normal_items_tag" />
+        <el-tab-pane label="商品码导出" name="itemcode" />
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
       </template>
       <template v-else-if="$store.getters.login_type == 'supplier'">
         <el-tab-pane label="实体主订单导出" name="normal_master_order" />
@@ -36,10 +40,7 @@
         /> -->
         <el-tab-pane label="实体主订单导出" name="normal_master_order" />
         <el-tab-pane label="实体子订单导出" name="normal_order" />
-        <el-tab-pane
-          label="社区团购销售数据导出"
-          name="normal_community_order"
-        />
+        <el-tab-pane label="社区团购销售数据导出" name="normal_community_order" />
         <el-tab-pane v-if="!VERSION_IN_PURCHASE" label="发票信息导出" name="invoice" />
         <!-- <el-tab-pane
           v-if="!VERSION_IN_PURCHASE"
@@ -91,6 +92,7 @@
         <el-tab-pane label="商品码导出" name="itemcode" />
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
       </template>
 
       <el-table v-loading="loading" :data="exportLogLists" :height="wheight - 220">

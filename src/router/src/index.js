@@ -36,6 +36,8 @@ import RouteMerchantOrder from '../merchant/route-order'
 import RouteMerchantSellers from '../merchant/route-sellers'
 import RouteMerchantCompanydata from '../merchant/route-companydata'
 import RouteMerchantSetting from '../merchant/route-setting'
+import RouteMerchantEntitygoods from '../merchant/route-entitygoods'
+import RouteMerchantApplications from '../merchant/route-applications'
 
 // dealer
 import RouteDealerInfomation from './route-dealer-infomation'
@@ -46,7 +48,7 @@ import RouteDealerSetting from './route-dealer-setting'
 
 //supplier
 import RouteSupplierApplications from './route-supplier-applications'
-import RouteSupplierEntitygoods from './route-supplier-entitygoods' 
+import RouteSupplierEntitygoods from './route-supplier-entitygoods'
 import RouteSupplierTradenormalorders from './route-supplier-tradenormalorders'
 import RouteSupplierBase from './route-supplier-base'
 import RouteSupplierSetting from './route-supplier-setting'
@@ -95,5 +97,7 @@ export default {
   RouteSupplierEntitygoods,
   RouteSupplierTradenormalorders,
   RouteSupplierBase,
-  RouteSupplierSetting
+  RouteSupplierSetting,
+  RouteMerchantEntitygoods,
+  RouteMerchantApplications
 }

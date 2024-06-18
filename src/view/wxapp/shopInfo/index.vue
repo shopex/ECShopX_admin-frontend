@@ -9,23 +9,37 @@
         <el-form-item label="商城简介">
           <el-row>
             <el-col :span="18">
-              <el-input v-model="form.intro" type="textarea" :maxlength="120" :rows="6" placeholder="请输入商城简介"
-                @input="countInput" />
+              <el-input
+                v-model="form.intro"
+                type="textarea"
+                :maxlength="120"
+                :rows="6"
+                placeholder="请输入商城简介"
+                @input="countInput"
+              />
               <div class="content-right muted">{{ remnant }}/120</div>
             </el-col>
           </el-row>
         </el-form-item>
         <el-form-item label="商城Logo">
           <imgBox :img-url="form.logo" inline @click="handleImgChange('imgDialog')" />
-          <imgPicker :dialog-visible="imgDialog" :sc-status="isGetImage" @chooseImg="pickImg"
-            @closeImgDialog="closeImgDialog('imgDialog')" />
-            （ 推荐尺寸:147*46px ）
+          <imgPicker
+            :dialog-visible="imgDialog"
+            :sc-status="isGetImage"
+            @chooseImg="pickImg"
+            @closeImgDialog="closeImgDialog('imgDialog')"
+          />
+          （ 推荐尺寸:147*46px ）
         </el-form-item>
         <el-form-item label="登录页背景图">
           <imgBox :img-url="form.background" inline @click="handleImgChange('imgDialogLoginBg')" />
-          <imgPicker :dialog-visible="imgDialogLoginBg" :sc-status="isGetImage" @chooseImg="pickImgLoginBg"
-            @closeImgDialog="closeImgDialog('imgDialogLoginBg')" />
-             （ 推荐尺寸:1920*690px ）
+          <imgPicker
+            :dialog-visible="imgDialogLoginBg"
+            :sc-status="isGetImage"
+            @chooseImg="pickImgLoginBg"
+            @closeImgDialog="closeImgDialog('imgDialogLoginBg')"
+          />
+          （ 推荐尺寸:1920*690px ）
         </el-form-item>
       </div>
       <div class="section-footer content-center">
