@@ -14,7 +14,7 @@
 </style>
 <template>
   <div>
-    <div class="time-box basic">
+    <div class="time-box basic"   v-if="loginType !== 'distributor'" >
       <el-row>
         <el-col
           :span="3"
@@ -53,6 +53,46 @@
         </el-col>
       </el-row>
     </div>
+
+    <div class="time-box basic"   v-if="loginType == 'distributor'" >
+      <el-row>
+        <!-- <el-col
+          :span="3"
+        >
+          可提现:&nbsp;<span>{{ count.cashWithdrawalRebate / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          已提现:&nbsp;<span>{{ count.payedRebate / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          申请提现:&nbsp;<span>{{ count.freezeCashWithdrawalRebate / 100 }}</span>元
+        </el-col> -->
+        <el-col
+          :span="3"
+        >
+          未结算:&nbsp;<span>{{ count.countDataShop.rebate_sum_noclose / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          佣金总额:&nbsp;<span>{{ count.countDataShop.rebate_sum / 100 }}</span>元
+        </el-col>
+        <!-- <el-col
+          :span="3"
+        >
+          积分总额:&nbsp;<span>{{ count.pointTotal }}</span>积分
+        </el-col> -->
+        <el-col
+          :span="3"
+        >
+          商品总额:&nbsp;<span>{{ count.countDataShop.price_sum / 100 }}</span>元
+        </el-col>
+      </el-row>
+    </div>    
     <el-tabs
       v-model="activeName"
       @tab-click="handleClick"
