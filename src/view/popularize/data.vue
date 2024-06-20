@@ -254,7 +254,10 @@ export default {
     }
   },
   mounted () {
+
     this.loginType = this.$store.getters.login_type
+    console.log(this.$route.path);
+    console.log(this.loginType);
     this.fetchList()
   },
   methods: {
