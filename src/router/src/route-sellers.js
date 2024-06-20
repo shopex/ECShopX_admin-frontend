@@ -51,6 +51,19 @@ export default {
       name: `店铺导购员`,
       component: () => import('@/view/guide/salesman')
     },
+
+    { 
+      path: 'marketing/popularize/popularizedata',
+      name: `业务员业绩`,
+      component: () => import('@/view/popularize/data'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        }
+      ]
+    },
+
     {
       path: 'storemanager/distributortags',
       name: `商家标签`,

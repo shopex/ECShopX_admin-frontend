@@ -65,7 +65,7 @@ export default {
     },
     {
       path: 'marketing/popularize/popularizedata',
-      name: `推广员业绩`,
+      name: `业务员业绩`,
       component: () => import('@/view/popularize/data'),
       children: [
         {
