@@ -223,10 +223,6 @@ export default {
               name: '平台配送员'
             },
             {
-              label: 'shop',
-              name: '商家配送员'
-            },
-            {
               label: 'distributor',
               name: '店铺配送员'
             }
@@ -412,12 +408,8 @@ export default {
   watch: {},
   mounted() {
     if(IS_DISTRIBUTOR){
-      this.addForm.staff_type = 'shop'
+      this.addForm.staff_type = 'distributor'
       this.addFormList[0].options = [
-            {
-              label: 'shop',
-              name: '商家配送员'
-            },
             {
               label: 'distributor',
               name: '店铺配送员'
@@ -442,7 +434,7 @@ export default {
       this.addForm = {
         operator_type: 'self_delivery_staff',
         distributor_name: '',
-        staff_type: IS_DISTRIBUTOR ? 'shop' :'platform',
+        staff_type: IS_DISTRIBUTOR ? 'distributor' :'platform',
         staff_no: '',
         staff_attribute: 'part_time',
         payment_method: 'order',
