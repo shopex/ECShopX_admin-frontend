@@ -367,11 +367,9 @@
             <div class="frm-tips">* 0-100之间，最多两位小数</div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :loading="formLoading" @click="commissionSubmit"
-              >
-保存设置
-</el-button
-            >
+            <el-button type="primary" :loading="formLoading" @click="commissionSubmit">
+              保存设置
+            </el-button>
             <el-button @click="commissionDialog = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -937,7 +935,7 @@ export default {
             key: 'tagList',
             render: (h, scope) => (
               <div style='white-space: normal;'>
-                {scope.row.tagList.map((item) => (
+                {scope.row.tagList?.map((item) => (
                   <span
                     style={{
                       'color': item.font_color,
