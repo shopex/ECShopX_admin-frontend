@@ -181,8 +181,8 @@ export default {
                   staff_no: row.staff_no,
                   staff_attribute: row.staff_attribute,
                   payment_method: row.payment_method,
-                  payment_fee: row.payment_method == 'order' ? Number(row.payment_fee) : 0.01,
-                  payment_fee1: row.payment_method == 'order' ? 1 : Number(row.payment_fee),
+                  payment_fee: row.payment_method == 'order' ? Number(row.payment_fee)/100 : 0.01,
+                  payment_fee1: row.payment_method == 'order' ? 1 : Number(row.payment_fee)/100,
                   mobile: row.mobile,
                   distributor_ids: [],
                   password: ''
