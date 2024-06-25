@@ -9,7 +9,7 @@
     <!-- <span class="delivery-open">平台自营店铺配送费用配置</span> -->
     <div>
       <div class="delivery-money">
-        <span>配送：</span>
+        <span>起送：</span>
         <el-input-number v-model="min_amount" :precision="2" :step="0.1" :min="0" />
         <span>元，基础运费</span>
         <el-input-number v-model="freight_fee" :precision="2" :step="0.1" :min="0" />
