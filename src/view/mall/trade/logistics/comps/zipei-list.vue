@@ -6,7 +6,7 @@
       商家自配送是否开启：
       <el-switch v-model="is_open" active-color="#13ce66" inactive-color="#ff4949" />
     </div>
-    <span class="delivery-open">平台自营店铺配送费用配置</span>
+    <!-- <span class="delivery-open">平台自营店铺配送费用配置</span> -->
     <div>
       <div class="delivery-money">
         <span>配送：</span>
