@@ -10,23 +10,23 @@
     <div>
       <div class="delivery-money">
         <span>配送：</span>
-        <el-input-number v-model="min_amount" :precision="2" :step="0.1" />
+        <el-input-number v-model="min_amount" :precision="2" :step="0.1" :min="0" />
         <span>元，基础运费</span>
-        <el-input-number v-model="freight_fee" :precision="2" :step="0.1" />
+        <el-input-number v-model="freight_fee" :precision="2" :step="0.1" :min="0" />
         <span>元</span>
       </div>
       <div class="delivery-money">
         <el-radio v-model="selected" label="0">满：</el-radio>
-        <el-input-number v-model="rule[0].full" :precision="2" :step="0.1" />
+        <el-input-number v-model="rule[0].full" :precision="2" :step="0.1" :min="0" />
         <span>元，实际运费</span>
-        <el-input-number v-model="rule[0].freight_fee" :precision="2" :step="0.1" />
+        <el-input-number v-model="rule[0].freight_fee" :precision="2" :step="0.1" :min="0" />
         <span>元，输入0元时为免运费</span>
       </div>
       <div class="delivery-money">
         <el-radio v-model="selected" label="1">满：</el-radio>
-        <el-input-number v-model="rule[1].full" :precision="2" :step="0.1" />
+        <el-input-number v-model="rule[1].full" :precision="2" :step="0.1" :min="0" />
         <span>元，实际运费</span>
-        <el-input-number v-model="rule[1].freight_fee" :precision="2" :step="0.1" />
+        <el-input-number v-model="rule[1].freight_fee" :precision="2" :step="0.1" :min="0" />
         <span>元</span>
       </div>
     </div>
