@@ -57,6 +57,7 @@
 </template>
 <script>
 import DistributorSelect from '@/components/function/distributorSelect'
+import { IS_DISTRIBUTOR } from '@/utils'
 
 export default {
   name: '',
@@ -114,7 +115,9 @@ export default {
               return <span>{row.payment_method === 'order' ? '按单笔订单' : '按订单金额比例'}</span>
             }
           },
-          { name: '结算费用（¥/单）', key: 'payment_fee', width: 150 },
+          { name: '结算费用（¥/单）', key: 'payment_fee', width: 150,  render: (h, { row }) => {
+              return <span>{row.payment_fee/100}</span>
+            } },
           {
             name: '所属店铺',
             key: 'distributor_ids',
@@ -218,10 +221,6 @@ export default {
             {
               label: 'platform',
               name: '平台配送员'
-            },
-            {
-              label: 'shop',
-              name: '商家配送员'
             },
             {
               label: 'distributor',
@@ -407,7 +406,17 @@ export default {
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() {
+    if(IS_DISTRIBUTOR){
+      this.addForm.staff_type = 'distributor'
+      this.addFormList[0].options = [
+            {
+              label: 'distributor',
+              name: '店铺配送员'
+            }
+      ]
+    }
+  },
   methods: {
     onSearch() {
       this.$refs['finder'].refresh()
@@ -425,7 +434,7 @@ export default {
       this.addForm = {
         operator_type: 'self_delivery_staff',
         distributor_name: '',
-        staff_type: 'platform',
+        staff_type: IS_DISTRIBUTOR ? 'distributor' :'platform',
         staff_no: '',
         staff_attribute: 'part_time',
         payment_method: 'order',

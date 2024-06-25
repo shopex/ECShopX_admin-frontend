@@ -191,7 +191,8 @@
       >
         <el-button type="primary" plain> 批量取消 </el-button>
       </el-upload>
-      <el-button v-if="IS_DISTRIBUTOR || IS_MERCHANT" type="primary" plain @click="assignPersonnel(true)"> 分配配送员 </el-button>
+      <!-- v-if="IS_DISTRIBUTOR || IS_MERCHANT" -->
+      <el-button  type="primary" plain @click="assignPersonnel(true)"> 分配配送员 </el-button>
       <!-- <el-upload
         action=""
         class="btn-upload"
@@ -199,7 +200,8 @@
         :auto-upload="false"
         :show-file-list="false"
       > -->
-        <el-button v-if="IS_DISTRIBUTOR || IS_ADMIN"  type="primary" plain @click="assignPersonnel(false)"> 取消配送（针对商家自配送订单，已分配业务员订单在未到达前，商家可取消配送员配送） </el-button>
+      <!-- v-if="IS_DISTRIBUTOR || IS_ADMIN" -->
+        <el-button  type="primary" plain @click="assignPersonnel(false)"> 取消配送（针对商家自配送订单，已分配业务员订单在未到达前，商家可取消配送员配送） </el-button>
       <!-- </el-upload> -->
     </div>
 
