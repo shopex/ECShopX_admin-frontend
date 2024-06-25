@@ -475,11 +475,11 @@ export default {
     },
 
     async onAddSubmit() {
+      let res = /^(?=.*[a-zA-Z0-9!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{6,20}$/.test(
+        this.addForm.password
+      )
       if (this.operator_id) {
         if (this.addForm.password) {
-          let res = /^(?=.*[a-zA-Z0-9!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{6,20}$/.test(
-            this.addForm.password
-          )
           if (!res) {
             this.$message({ type: 'error', message: '密码不能是文字并且至少6位' })
             return
@@ -487,9 +487,6 @@ export default {
         }
       } else {
         if (this.addForm.password) {
-          let res = /^(?=.*[a-zA-Z0-9!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{6,20}$/.test(
-            this.addForm.password
-          )
           if (!res) {
             this.$message({ type: 'error', message: '密码不能是文字并且至少6位' })
             return
