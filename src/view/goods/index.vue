@@ -56,7 +56,7 @@
     <div class="footer-container">
       <el-button @click.native="handleCancel"> 取消 </el-button>
       <el-button
-        v-if="IS_SUPPLIER() && !routerParams.detail"
+        v-if="(IS_SUPPLIER() || !form.supplier_id ) && !routerParams.detail"
         type="primary"
         @click="onFormSubmit('submitting')"
       >
@@ -123,6 +123,7 @@ export default {
     }
     return {
       form: {
+        supplier_id: 0,
         item_id: '',
         audit_status: '',
         itemType: 'normal',

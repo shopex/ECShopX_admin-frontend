@@ -39,6 +39,11 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
+      <div v-else class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">
+          添加商品
+        </el-button>
+      </div>
 
       <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
@@ -682,7 +687,7 @@ export default {
             key: 'edit',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => IS_SUPPLIER(),
+            visible: (row) => {return IS_SUPPLIER() || row.supplier_id == '0'},
             action: {
               type: 'link',
               handler: ([row]) => {
@@ -993,7 +998,7 @@ export default {
             }
           },
           {
-            name: '建议零售价（¥）',
+            name: '市场价（¥）',
             key: 'market_price',
             width: 100,
             formatter: (value, row, col) => {
@@ -1003,7 +1008,7 @@ export default {
             headerAlign: 'center'
           },
           {
-            name: '门店采购价（¥）',
+            name: '销售价（¥）',
             key: 'price',
             width: 100,
             formatter: (value, row, col) => {
@@ -1029,11 +1034,11 @@ export default {
           //   align: "right",
           //   headerAlign: 'center'
           // },
-          // {
-          //   name: '来源供应商',
-          //   key: 'operator_name',
-          //   width: 100
-          // },
+          {
+            name: '来源供应商',
+            key: 'operator_name',
+            width: 100
+          },
           {
             name: '可售状态',
             key: 'is_market',
