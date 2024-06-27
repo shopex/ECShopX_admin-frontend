@@ -1155,15 +1155,17 @@ export default {
     this.$EventBus.$on('event.tradelist.refresh', () => {
       this.fetchList()
     })
-    this.accountManagement()
   },
   methods: {
-    async accountManagement(){
+    async accountManagement(distributor_id){
       let params = {
         pageSize: 999,
         page: 1,
         finderId: 100,
         operator_type : 'self_delivery_staff'
+      }
+      if(distributor_id != '0'){
+        params.distributor_id = distributor_id
       }
       let res = await this.$api.trade.accountManagement(params)
       res.list.forEach(ele => {
@@ -1182,7 +1184,7 @@ export default {
 
       }
 
-      const { order_id, self_delivery_status} = this.selectList[0]
+      const { order_id, self_delivery_status,distributor_id} = this.selectList[0]
 
       if(!val){
         // 已接单，配送中才能取消配送
@@ -1195,6 +1197,12 @@ export default {
           return this.$message.error('该订单无法分配配送员！')
         }
       }
+
+      if(val){
+        this.accountManagement(distributor_id)
+      }
+
+
       this.personnelDialog = true
       this.statusPersonnel = val
 
@@ -1438,6 +1446,7 @@ export default {
         order_status,
         distributor_remark,
         items,
+        distributor_id,
         delivery_type,
         delivery_status,
         receipt_type,
@@ -1469,6 +1478,9 @@ export default {
         if (this.isBindOMS && this.IS_ADMIN) {
           return this.$message.warning('请至OMS处理订单发货')
         }
+
+        this.accountManagement(distributor_id)
+
         this.deliverGoodsForm.delivery_way = receipt_type == 'merchant' ? '2' : '1'
         //已经分配配送员数据回显示
         this.deliverGoodsForm.self_delivery_operator_id = self_delivery_status == "RECEIVEORDER" ? self_delivery_operator_id : '';
