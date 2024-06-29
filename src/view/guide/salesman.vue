@@ -226,7 +226,9 @@
             v-model="form.mobile"
             placeholder="请输入手机号"
             style="width: 193px"
+            v-bind:readonly="salesman_id > 0"
           />
+          <div v-if="salesman_id">* 手机号不可修改</div>
         </el-form-item>
         <el-form-item label="角色" v-show="false">
           <el-radio-group v-model="form.role">
