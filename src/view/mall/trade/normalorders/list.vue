@@ -1484,14 +1484,15 @@ export default {
           return this.$message.warning('请至OMS处理订单发货')
         }
 
-        this.accountManagement(distributor_id)
+        await this.accountManagement(distributor_id)
 
         this.deliverGoodsForm.delivery_way = receipt_type == 'merchant' ? '2' : '1'
         //已经分配配送员数据回显示
-        this.deliverGoodsForm.self_delivery_operator_id = self_delivery_status == "RECEIVEORDER" ? self_delivery_operator_id : '';
-        this.deliverGoodsForm.self_delivery_operator_mobile = self_delivery_status == "RECEIVEORDER" ?  self_delivery_operator_mobile : '';
-        let self_delivery_operator_staffno =  this.deliverGoodsFormList[5].options.find(item=>item.operator_id == self_delivery_operator_id)?.staff_no
-        this.deliverGoodsForm.self_delivery_operator_staffno = self_delivery_status == "RECEIVEORDER" ? self_delivery_operator_staffno : '';
+        this.deliverGoodsForm.self_delivery_operator_id = ['PACKAGED','RECEIVEORDER'].includes(self_delivery_status) ? self_delivery_operator_id : '';
+        this.deliverGoodsForm.self_delivery_operator_mobile = ['PACKAGED','RECEIVEORDER'].includes(self_delivery_status) ?  self_delivery_operator_mobile : '';
+
+        let self_delivery_operator_staffno =  this.deliverGoodsFormList[5].options.find(item=>item.operator_id == self_delivery_operator_id)?.staff_no ?? '';
+        this.deliverGoodsForm.self_delivery_operator_staffno = ['PACKAGED','RECEIVEORDER'].includes(self_delivery_status) ? self_delivery_operator_staffno : '';
         this.deliverGoodsForm.delivery_remark = ''
         this.deliverGoodsForm.delivery_pics = []
 
