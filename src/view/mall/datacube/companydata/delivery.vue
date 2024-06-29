@@ -20,7 +20,7 @@
       <SpFilterFormItem prop="distributor_id" label="所属店铺:">
         <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="merchant_id" label="所属商家:">
+      <!-- <SpFilterFormItem prop="merchant_id" label="所属商家:">
         <el-select v-model="params.merchant_id" filterable placeholder="请选择">
           <el-option
             v-for="item in belongingMerchant"
@@ -29,7 +29,7 @@
             :value="item.id"
           />
         </el-select>
-      </SpFilterFormItem>
+      </SpFilterFormItem> -->
     </SpFilterForm>
 
     <SpFinder
