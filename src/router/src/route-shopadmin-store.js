@@ -40,7 +40,7 @@ export default {
     },
     {
       path: 'marketingsalesman',
-      name: `店铺导购员`,
+      name: `业务员`,
       component: () => import('@/view/guide/salesman'),
       children: [
         {
@@ -50,6 +50,10 @@ export default {
         {
           path: 'child',
           component: () => import('@/view/popularize/children')
+        },
+        {
+          path: 'children', 
+          component: () => import('@/view/guide/children')
         }
       ]
 
