@@ -210,6 +210,7 @@ export default {
         start: this.params.time[0]/1000,
         end: this.params.time[1]/1000
       }
+      delete _params.time
       return _params
     }
   }
