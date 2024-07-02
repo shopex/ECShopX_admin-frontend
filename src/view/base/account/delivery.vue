@@ -294,7 +294,7 @@ export default {
                   precision='2'
                   step='0.01'
                 />{' '}
-                <span>元，每单</span>
+                <span>元，每单(费用包含运费)</span>
               </div>
             )
           },
