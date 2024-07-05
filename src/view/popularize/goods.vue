@@ -56,9 +56,10 @@
               <el-button type="text" class="btn-gap" @click="handleRebateConf(scope.row, 1)">
                 设置参数
               </el-button>
-              <!-- <el-button type="text" class="btn-gap" @click="handleRebateConf(scope.row, 2)">
+              <el-button v-if=" $store.getters.login_type != 'distributor'"
+               type="text" class="btn-gap" @click="handleRebateConf(scope.row, 2)">
                 任务参数
-              </el-button> -->
+              </el-button>
             </template>
           </el-table-column>
           <el-table-column
@@ -477,6 +478,10 @@ export default {
     }
   },
   mounted() {
+
+    this.loginType = this.$store.getters.login_type
+    this.params.pathSource = this.$route.path
+
     getPopularizeSetting().then((res) => {
       this.popularizeSetting = res.data.data
       if (res.data.data.goods == 'all') {
