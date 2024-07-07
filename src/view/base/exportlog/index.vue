@@ -19,6 +19,9 @@
         <el-tab-pane label="商品统计导出" name="goods_data" />
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane label="推广员业绩导出" name="popularize" />
+        <el-tab-pane label="业绩订单" name="popularizeOrder" />
+
       </template>
       <template v-else>
         <el-tab-pane label="会员导出" name="member" />

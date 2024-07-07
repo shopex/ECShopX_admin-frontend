@@ -56,7 +56,7 @@
               <el-button type="text" class="btn-gap" @click="handleRebateConf(scope.row, 1)">
                 设置参数
               </el-button>
-              <el-button v-if=" $store.getters.login_type != 'distributor'"
+              <el-button v-if=" $store.getters.login_type != 'distributor' && $store.getters.login_type != 'merchant'"
                type="text" class="btn-gap" @click="handleRebateConf(scope.row, 2)">
                 任务参数
               </el-button>
