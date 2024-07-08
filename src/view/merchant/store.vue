@@ -325,16 +325,14 @@ export default {
           key: 'is_require_subdistrict',
           type: 'switch',
           display: 'inline',
-          tip: '下单是否需要选择街道居委',
-          isShow: ({ key }, value) => this.distributor_self == 0
+          tip: '下单是否需要选择街道居委'
         },
         {
           label: '楼号房号',
           key: 'is_require_building',
           type: 'switch',
           display: 'inline',
-          tip: '下单是否需要填写楼号房号',
-          isShow: ({ key }, value) => this.distributor_self == 0
+          tip: '下单是否需要填写楼号房号'
         },
         {
           label: '店铺图片',
@@ -392,6 +390,7 @@ export default {
                   ]}
                   placeholder='请输入详细地址（去除省市县）'
                 />
+                <el-input v-model={value['house_number']} placeholder='门牌号' />
                 <el-button type='primary' on-click={this.searchKeyword}>
                   搜索定位
                 </el-button>
@@ -425,11 +424,11 @@ export default {
           isShow: this.dadaEnable
         },
         {
-          label: '达达同城配',
+          label: '同城配',
           key: 'is_dada',
           type: 'switch',
           width: 'auto',
-          tip: '开启后有店铺订单时需要改店铺人员手动接单，接单后系统会自动在达达平台下单',
+          tip: '开启后有店铺订单时需要改店铺人员手动接单，接单后系统会自动在达达/闪送平台下单',
           isShow: this.dadaEnable
         },
         {
@@ -442,7 +441,7 @@ export default {
             console.log('value:', value)
             if (this.form.is_dada) {
               if (!value) {
-                callback(new Error('达达业务类型必填'))
+                callback(new Error('业务类型必填'))
               } else {
                 callback()
               }
@@ -535,7 +534,12 @@ export default {
       fetch: this.getMerchantList
     })
     this.distributor_self = distributor_type === 'distributor_self' ? 1 : 0
-    this.getDadaInfo()
+    console.log(process.env.VUE_APP_LOCAL_DELIVERY_DIRVER)
+    if (process.env.VUE_APP_LOCAL_DELIVERY_DIRVER == 'shansong') {
+      this.getShansongInfo()
+    } else {
+      this.getDadaInfo()
+    }
     this.getStoreInfo()
   },
   mounted() {
@@ -627,6 +631,21 @@ export default {
       })
       this.dadaEnable = is_open === '1'
     },
+    async getShansongInfo() {
+      const { business_list, is_open } = await this.$api.dada.getShansongInfo()
+      const typeList = Object.keys(business_list).reduce((total, current, index) => {
+        return total.concat({
+          value: Number(current),
+          title: business_list[current]
+        })
+      }, [])
+      this.formList.forEach((item) => {
+        if (item.key == 'business') {
+          item.options = typeList
+        }
+      })
+      this.dadaEnable = is_open === '1'
+    },
     async getStoreInfo() {
       const { distributor_id } = this.$route.query
       if (distributor_id || this.IS_DISTRIBUTOR) {
@@ -674,6 +693,7 @@ export default {
           lat: res.lat,
           regions_id: res.regions_id,
           address: res.address,
+          house_number: res.house_number,
           is_dada: res.is_dada,
           business: res.business,
           is_ziti: res.is_ziti,

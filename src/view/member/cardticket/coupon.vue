@@ -146,7 +146,12 @@
                     </router-link>
                   </el-button>
                   <el-button
-                    v-if="scope.row.edit_btn == 'Y' && (!isShopadmin?parseInt(scope.row.source_id) <= 0:parseInt(scope.row.source_id) > 0)" 
+                    v-if="
+                      scope.row.edit_btn == 'Y' &&
+                      (!isShopadmin
+                        ? parseInt(scope.row.source_id) <= 0
+                        : parseInt(scope.row.source_id) > 0)
+                    "
                     type="text"
                   >
                     <router-link
@@ -312,7 +317,7 @@ export default {
           ]
         },
         {
-          label: '数量:',
+          label: '数量',
           key: 'quantity',
           type: 'input',
           placeholder: '请输入数量',

@@ -1,6 +1,6 @@
 // 商品路由
 const name = '店铺'
-import Layout from '@/view/layout' // 主框架
+import Layout from '@/view/layout' // 主框架 2024003
 
 export default {
   path: '/shopadmin/store',
@@ -37,6 +37,11 @@ export default {
       path: 'distributorCode',
       name: `店铺码`,
       component: () => import('@/view/mall/marketing/distributorCode')
+    },
+    {
+      path: 'marketingsalesman',
+      name: `店铺导购员`,
+      component: () => import('@/view/guide/salesman')
     },
     {
       path: 'tmpl/shopDecoration',

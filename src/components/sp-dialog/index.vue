@@ -52,10 +52,10 @@ export default {
       type: String,
       default: '120px'
     },
-    confirmStatus:{
+    confirmStatus: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data() {
     return {
@@ -77,7 +77,7 @@ export default {
     }
   },
   render() {
-    const { title, value, form, formList, width, labelWidth ,confirmStatus} = this
+    const { title, value, form, formList, width, labelWidth, confirmStatus } = this
 
     if (!value) {
       return null
