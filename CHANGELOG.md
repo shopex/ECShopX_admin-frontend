@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.15.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.7...v3.15.0) (2024-07-08)
+
+
+### Features
+
+*  删除团购详情页查看平台全部商品的入口按钮 ([2c25216](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2c2521630bf654a90169ac4aaa3270a80cbf1218))
+* 不要全部取消disable ([e09f216](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e09f216f4bb31f63de5f0893ab20bbee5842cd53))
+* 全部订单样式修改 ([a9247c7](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a9247c7bac53b5c3237894612677905bf9c39fdd))
+* 全部订单样式修改 ([08a94ef](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/08a94ef20fafe6645c20730c7c1b7794b9b8b074))
+* 单价取错 ([7683717](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/76837174c75d70a695e9632980fb955bb9f55636))
+* 只能关联一个图片类型规格，不允许多个 ([a149afa](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a149afadfb83da43f07e50f7bab61afa1924c8da))
+* 合并 ([933023e](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/933023e9ac3a52fbb22a291c807d361d9629df44))
+* 团长 ([59d40fd](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/59d40fd8083f426e1dfbee960a0e3aa91a064587))
+* 团长设置 ([e7f72b2](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e7f72b248e3c87bece40e358b030d4244cc47db6))
+* 操作浮动 ([167272d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/167272d02bfcbf15ff7c85565ffb53eedc7419f8))
+* 腾讯云上传 ([44f127c](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/44f127c3cbee3946a8613ee127f5d94d7ff84645))
+
+
+### Bug Fixes
+
+* bug ([1f830b5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/1f830b53e14de616071ebf7935f74e04faff4286))
+* **bugs:** 修复昵称筛选内容，修复表单重置问题 ([49a111f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/49a111f62a5f45df30ae41fd0bdc4c3f2e971254))
+* fixed ([d4aee3c](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d4aee3c05e683a1b89d6553567ede353caabbdd9))
+* 上传url ([fd03992](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/fd03992acb996c841a64bc9a93cde9a74e6d680e))
+* 兼容处理商品列表接口tagList ([b248532](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b248532afb8dcad106ff45c1b54941bf6a40c2bb))
+* 内购 ([5c76491](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5c76491b38931521bbe8c8086a9e3f53b16cf718))
+* 内购 ([254182f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/254182fa822c7d8da7ce8f7c2c7f1411525b7ff8))
+* 内购 ([7e30a03](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/7e30a03fd22ea93f65cbfea9e81e645b69ee8a4d))
+* 内购bug修复 ([d1c3f3f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d1c3f3fb2742a5076e805b1b550d6353a20c908e))
+* 内购优化 ([6623581](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/66235816bbdba884a6cd1f86be00c36d17657224))
+* 内购活动button ([047e19f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/047e19feea0e1c92eeeba1e0451b7a6103a67162))
+* 内购营销 ([defc3fb](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/defc3fb59e9d6eb31262637cecb163aac5c1d01a))
+* 内购订单 ([2cc3124](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2cc3124c0a7fd1966cb66d750dac6dc7b8b90d8f))
+* 处理shopadmin端概况路由 ([c19a06e](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/c19a06e43680bc85f85f7bccfe3c0772030cc412))
+* 总部店铺编辑添加楼号、街道开关 ([73fcc79](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/73fcc79551ec42b0416d813fc90ec915074709d5))
+* 模板设置 ([81b7dca](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/81b7dcab4202b93adce50c3e090522dd2449b60d))
+* 添加RSA秘钥生成 ([fea57f2](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/fea57f2af21b125b9548060ed14aa023f9c83dc3))
+* 统计优化 ([d5815e5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d5815e5fe5c68ac636f8d5c6b67031d997487886))
+* 账号退出 ([b1ee086](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b1ee086072aca8e987c6113092c172efba5a41ff))
+
 ### [3.14.7](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.6...v3.14.7) (2024-05-14)
 
 
