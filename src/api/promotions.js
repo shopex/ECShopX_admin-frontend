@@ -329,6 +329,14 @@ export function exportPopularizeData (data) {
 }
 
 
+export function exportPopularizeStatic (data) {
+  return fetch({
+    url: '/popularize/promoter/exportPopularizeStatic',
+    method: 'get',
+    params: data
+  })
+}
+
 export function exportPopularizeOrder (data) {
   return fetch({
     url: '/popularize/promoter/exportPopularizeOrder',
@@ -336,6 +344,7 @@ export function exportPopularizeOrder (data) {
     params: data
   })
 }
+
 
 
 export function getPopularizeChildren (data) {

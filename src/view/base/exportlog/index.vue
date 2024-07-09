@@ -20,6 +20,7 @@
         <el-tab-pane label="结算单" name="statements" />
         <el-tab-pane label="结算单明细" name="statement_details" />
         <el-tab-pane label="推广员业绩导出" name="popularize" />
+        <el-tab-pane label="业绩统计" name="popularizeStatic" />
         <el-tab-pane label="业绩订单" name="popularizeOrder" />
 
       </template>
@@ -71,10 +72,11 @@
           label="报名导出"
           name="selform_registration_record"
         />
-        <el-tab-pane label="售后列表导出" name="aftersale_record_count" />
-        <el-tab-pane label="退款单列表导出" name="refund_record_count" />
-        <el-tab-pane label="银联分账单导出" name="chinaums_division" />
-        <el-tab-pane label="推广员业绩导出" name="popularize" />
+        <el-tab-pane label="售后列表" name="aftersale_record_count" />
+        <el-tab-pane label="退款单列表" name="refund_record_count" />
+        <el-tab-pane label="银联分账单" name="chinaums_division" />
+        <el-tab-pane label="推广员业绩" name="popularize" />
+        <el-tab-pane label="业绩统计" name="popularizeStatic" />
         <el-tab-pane label="业绩订单" name="popularizeOrder" />
         <el-tab-pane label="财务售后单导出" name="aftersale_financial" />
         <el-tab-pane label="财务销售报表导出" name="salesreport_financial" />
