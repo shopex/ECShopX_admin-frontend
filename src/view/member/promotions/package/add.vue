@@ -361,10 +361,10 @@ export default {
   },
   computed: {
     usePlatformVisiable () {
-      if (this.IS_ADMIN && this.form.source_id != '0') {
+      if (this.IS_ADMIN() && this.form.source_id != '0') {
         return false
       }
-      if (this.IS_DISTRIBUTOR) {
+      if (this.IS_DISTRIBUTOR()) {
         return false
       }
       return true
