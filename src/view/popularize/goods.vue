@@ -30,7 +30,7 @@
               批量设置任务制
             </el-button> -->
             <el-button size="mini" @click="handleBatchChangeStatus()">
-              批量设置状态
+              批量设置开启
             </el-button>
           </el-button-group>
         </el-col>
