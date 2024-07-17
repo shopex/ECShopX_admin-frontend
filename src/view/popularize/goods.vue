@@ -333,20 +333,38 @@
               min-width="110"
             >
               <template slot-scope="scope">
-                <el-input
+                <div v-if="scope.row.rebate_conf.type == 'money'" :style="{ display: 'flex', alignItems: 'flex-end' }">
+                  <el-input-number
+                  v-model="scope.row.rebate_conf.value[key]"
+                  precision="3"
+                  step="0.001"
+                  size="mini"
+                />元
+                </div>
+                <div v-else :style="{ display: 'flex', alignItems: 'flex-end' }">
+                  <el-input-number
+                  v-model="scope.row.rebate_conf.value[key]"
+                  precision="3"
+                  step="0.001"
+                  size="mini"
+                />%
+                </div>
+                
+
+                <!-- <el-input
                   v-if="scope.row.rebate_conf.type == 'money'"
                   v-model="scope.row.rebate_conf.value[key]"
                   type="number"
                   size="mini"
                   suffix-icon="iconfont icon-yen-sign"
-                />
-                <el-input
+                /> -->
+                <!-- <el-input
                   v-else
                   v-model="scope.row.rebate_conf.value[key]"
                   size="mini"
                   type="number"
                   suffix-icon="iconfont icon-percent"
-                />
+                /> -->
               </template>
             </el-table-column>
           </el-table>
