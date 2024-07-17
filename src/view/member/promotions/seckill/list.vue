@@ -207,10 +207,10 @@ export default {
   methods: {
     overActionVisible({ status, source_id }) {
       if (status != 'it_has_ended') {
-        if (this.IS_ADMIN && source_id == '0') {
+        if (this.IS_ADMIN() && source_id == '0') {
           return true
         }
-        if (this.IS_DISTRIBUTOR) {
+        if (this.IS_DISTRIBUTOR()) {
           return true
         }
       }

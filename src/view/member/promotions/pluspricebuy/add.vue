@@ -523,13 +523,13 @@ export default {
     useShopVisible() {
       const { marketing_id } = this.$route.params
       if (!marketing_id) {
-        if (this.IS_ADMIN) {
+        if (this.IS_ADMIN()) {
           return true
         } else {
           return false
         }
       } else {
-        if (this.IS_ADMIN && this.form.source_id == '0') {
+        if (this.IS_ADMIN() && this.form.source_id == '0') {
           return true
         } else {
           return false
@@ -542,9 +542,9 @@ export default {
       if (!marketing_id) {
         return true
       } else {
-        if (this.IS_ADMIN && this.form.source_id == '0') {
+        if (this.IS_ADMIN() && this.form.source_id == '0') {
           return true
-        } else if (this.IS_DISTRIBUTOR && this.form.source_id != '0') {
+        } else if (this.IS_DISTRIBUTOR() && this.form.source_id != '0') {
           return true
         } else {
           return false

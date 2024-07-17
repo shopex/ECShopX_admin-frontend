@@ -80,9 +80,9 @@
     />
 
     <div class="footer-container">
-      <el-button @click.native="handleCancel"> 取消 </el-button>
+      <el-button @click.native="handleCancel"> 取消</el-button>
       <el-button
-        v-if="!VERSION_STANDARD || (!IS_DISTRIBUTOR && VERSION_STANDARD)"
+        v-if="!VERSION_STANDARD || (!IS_DISTRIBUTOR() && VERSION_STANDARD)"
         type="primary"
         :loading="submitLoading"
         @click="onFormSubmit"
@@ -158,7 +158,7 @@ export default {
         {
           label: '店铺类型',
           type: 'group',
-          isShow: ({ key }, value) => this.IS_ADMIN && this.distributor_self == 0
+          isShow: ({ key }, value) => this.IS_ADMIN() && this.distributor_self == 0
         },
         {
           label: '店铺类型',
@@ -166,7 +166,7 @@ export default {
           type: 'select',
           clearable: false,
           options: distributionTypeOptions,
-          isShow: ({ key }, value) => this.IS_ADMIN && this.distributor_self == 0
+          isShow: ({ key }, value) => this.IS_ADMIN() && this.distributor_self == 0
         },
         {
           label: '所属商户',
@@ -202,7 +202,7 @@ export default {
             )
           },
           isShow: ({ key }, value) => {
-            return value.distribution_type == 1 && this.IS_ADMIN && this.distributor_self == 0
+            return value.distribution_type == 1 && this.IS_ADMIN() && this.distributor_self == 0
           },
           validator: (rule, value, callback) => {
             if (this.form.distribution_type == 1 && !value) {
@@ -324,7 +324,7 @@ export default {
           display: 'inline',
           tip: '自动同步商品至店铺',
           isShow: ({ key }, value) =>
-            this.VERSION_STANDARD && !this.IS_DISTRIBUTOR && this.distributor_self == 0
+            this.VERSION_STANDARD && !this.IS_DISTRIBUTOR() && this.distributor_self == 0
         },
         {
           label: '街道居委',
@@ -678,7 +678,7 @@ export default {
     },
     async getStoreInfo() {
       const { distributor_id } = this.$route.query
-      if (distributor_id || this.IS_DISTRIBUTOR) {
+      if (distributor_id || this.IS_DISTRIBUTOR()) {
         const res = await this.$api.marketing.getDistributorInfo({ distributor_id })
         const [startTime, endTime] = res.hour.split('-')
 
@@ -878,7 +878,7 @@ export default {
           this.submitLoading = false
           this.$message.success('保存店铺成功')
         }
-        if (!this.IS_DISTRIBUTOR) {
+        if (!this.IS_DISTRIBUTOR()) {
           this.$router.go(-1)
         }
       } catch (e) {

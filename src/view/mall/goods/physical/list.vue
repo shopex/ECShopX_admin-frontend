@@ -26,7 +26,7 @@
 <template>
   <div class="page-body">
     <SpRouterView>
-      <div v-if="IS_SUPPLIER()" class="action-container">
+      <div class="action-container">
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">
           添加商品
         </el-button>
@@ -45,11 +45,11 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div v-else class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">
-          添加商品
-        </el-button>
-      </div>
+      <!--      <div v-else class="action-container">-->
+      <!--        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">-->
+      <!--          添加商品-->
+      <!--        </el-button>-->
+      <!--      </div>-->
 
       <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
@@ -76,6 +76,14 @@
             clearable
             :options="itemCategoryList"
             :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+          />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="cat_id" label="销售分类:">
+          <el-cascader
+            v-model="searchParams.cat_id"
+            :options="categoryList"
+            :props="{ checkStrictly: true, label: 'category_name', value: 'category_id' }"
+            clearable
           />
         </SpFilterFormItem>
         <!-- <SpFilterFormItem prop="audit_status" label="审核状态:">
@@ -115,14 +123,14 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <!--        <SpFilterFormItem prop="regions_id" label="商品产地:">-->
-        <!--          <el-cascader-->
-        <!--            v-model="searchParams.regions_id"-->
-        <!--            placeholder="请选择"-->
-        <!--            clearable-->
-        <!--            :options="regions"-->
-        <!--          />-->
-        <!--        </SpFilterFormItem>-->
+        <SpFilterFormItem prop="regions_id" label="商品产地:">
+          <el-cascader
+            v-model="searchParams.regions_id"
+            placeholder="请选择"
+            clearable
+            :options="regions"
+          />
+        </SpFilterFormItem>
         <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
         <!--          <el-select v-model="searchParams.delivery_data_type">-->
         <!--            <el-option value="fixed_date" label="指定发货日期" />-->
@@ -143,6 +151,14 @@
             clearable
           />
         </SpFilterFormItem>
+        <SpFilterFormItem prop="is_gift" label="赠品:">
+          <el-select v-model="searchParams.is_gift">
+            <el-option :value="undefined" label="全部" />
+            <el-option :value="true" label="是" />
+            <el-option :value="false" label="否" />
+          </el-select>
+        </SpFilterFormItem>
+
         <!--        <SpFilterFormItem prop="goods_bn" label="SPU编码:">-->
         <!--          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />-->
         <!--        </SpFilterFormItem>-->
@@ -156,13 +172,17 @@
           更改销售分类
         </el-button>
         <el-button type="primary" plain @click="changeGoodsLabel"> 标签 </el-button>
-        <el-button v-if="IS_SUPPLIER()" type="primary" plain @click="changeFreightTemplate">
+        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeFreightTemplate">
           更改运费模板
         </el-button>
         <el-button v-if="!IS_ADMIN()" type="primary" plain @click="onBatchSubmitItems">
           批量提交
         </el-button>
         <el-button type="primary" plain @click="changeItemsStore"> 统一库存 </el-button>
+        <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
+        <el-button type="primary" plain @click="batchGifts('true')"> 设为赠品 </el-button>
+        <el-button type="primary" plain @click="batchGifts('false')"> 设为非赠品 </el-button>
+
         <el-button type="primary" plain @click="() => changeHaltTheSales('stop')"> 停售 </el-button>
         <el-button type="primary" plain @click="() => changeHaltTheSales('start')">
           开售
@@ -179,6 +199,9 @@
             </el-dropdown-item>
             <el-dropdown-item v-if="$store.getters.login_type != 'supplier'">
               <export-tip @exportHandle="exportItemsTagData"> 商品标签 </export-tip>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
             </el-dropdown-item>
             <el-dropdown-item>
               <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
@@ -380,6 +403,16 @@
         </el-form>
       </el-dialog>
 
+      <SpDialog
+        ref="sendNumDialogRef"
+        v-model="batchChangeStateDialog"
+        title="更改商品状态"
+        :width="'500px'"
+        :form="batchChangeStateForm"
+        :form-list="batchChangeStateFormList"
+        @onSubmit="onBatchChangeStateSubmit"
+      />
+
       <!-- 查看多规格信息 -->
       <SpDrawer
         v-model="showItemSkuDrawer"
@@ -409,8 +442,9 @@
 </template>
 <script>
 import moment from 'moment'
-import { exportItemsData, exportItemsTagData } from '@/api/goods'
+import { exportItemsData, exportItemsTagData, saveIsGifts } from '@/api/goods'
 import { IS_ADMIN, IS_SUPPLIER } from '@/utils'
+import { getPageCode } from '@/api/marketing'
 import { GOODS_APPLY_STATUS } from '@/consts'
 
 export default {
@@ -519,7 +553,8 @@ export default {
         regions_id: [],
         brand_id: '',
         goods_bn: '',
-        operator_name: ''
+        operator_name: '',
+        cat_id: ''
       },
       start_date: '',
       end_date: '',
@@ -688,7 +723,9 @@ export default {
             key: 'edit',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => {return IS_SUPPLIER() || row.supplier_id == '0'},
+            visible: (row) => {
+              return IS_SUPPLIER() || row.supplier_id == '0'
+            },
             action: {
               type: 'link',
               handler: ([row]) => {
@@ -715,6 +752,37 @@ export default {
                   query: {
                     some_param: 'true',
                     detail: true
+                  }
+                })
+              }
+            }
+          },
+          {
+            name: '投放',
+            key: 'put',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.handleShow(row.goods_id)
+              }
+            }
+          },
+
+          {
+            name: '添加相似',
+            key: 'similarity',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              type: 'link',
+              handler: ([row]) => {
+                this.$router.push({
+                  path: `${this.$route.path}/editor/${row.item_id}`,
+                  query: {
+                    some_param: 'true',
+                    is_new: true
                   }
                 })
               }
@@ -762,24 +830,24 @@ export default {
               }
             }
           },
+          // {
+          //   name: '佣金',
+          //   key: 'set_commission',
+          //   type: 'button',
+          //   buttonType: 'text',
+          //   visible: (row) => !IS_SUPPLIER(),
+          //   action: {
+          //     type: 'link',
+          //     handler: async ([row]) => {
+          //       this.formLoading = false
+          //       this.commissionForm.goods_id = row.goods_id
+          //       this.commissionForm.commission_ratio = row.commission_ratio / 100
+          //       this.commissionDialog = true
+          //     }
+          //   }
+          // },
           {
-            name: '佣金',
-            key: 'set_commission',
-            type: 'button',
-            buttonType: 'text',
-            visible: (row) => !IS_SUPPLIER(),
-            action: {
-              type: 'link',
-              handler: async ([row]) => {
-                this.formLoading = false
-                this.commissionForm.goods_id = row.goods_id
-                this.commissionForm.commission_ratio = row.commission_ratio / 100
-                this.commissionDialog = true
-              }
-            }
-          },
-          {
-            name: '改价',
+            name: '设置价格',
             key: 'setup_price',
             type: 'button',
             buttonType: 'text',
@@ -818,7 +886,7 @@ export default {
             key: 'change_store',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => IS_SUPPLIER(),
+
             action: {
               type: 'link',
               handler: async ([row]) => {
@@ -848,7 +916,8 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
-              const visible = row.approve_status == 'onsale' && !IS_SUPPLIER() && !IS_ADMIN()
+              // const visible = row.approve_status == 'onsale' && !IS_SUPPLIER() && !IS_ADMIN()
+              const visible = row.approve_status == 'onsale' && !IS_SUPPLIER()
               return visible
             },
             action: {
@@ -1112,7 +1181,8 @@ export default {
         ...params,
         item_type: 'normal',
         operate_source: IS_SUPPLIER() ? 'supplier' : 'platform',
-        ...this.searchParams
+        ...this.searchParams,
+        item_source: 'platform'
       }
       return params
     },
@@ -1157,6 +1227,19 @@ export default {
       this.specItems = specItems
       this.skuLoading = false
     },
+    handleShow(id) {
+      const page = 'pages/item/espier-detail'
+      this.curPageUrl = `${page}?id=${id}`
+      let params = {
+        wxaAppId: this.appID,
+        page,
+        id
+      }
+      getPageCode(params).then((response) => {
+        this.appCodeUrl = response.data.data.base64Image
+      })
+    },
+
     async getSkuStoreByGoods(item_id) {
       this.skuLoading = true
       const { list } = await this.$api.goods.getItemsList({
@@ -1286,6 +1369,59 @@ export default {
         this.$message.error('请选择至少一个商品')
       }
     },
+    batchGifts(status) {
+      if (this.selectionItems.length) {
+        this.isGiftsData.item_id = Object.assign(
+          {},
+          this.selectionItems.map((item) => item.item_id)
+        )
+        this.isGiftsData.status = status
+        saveIsGifts(this.isGiftsData).then((res) => {
+          if (res.data.data.status == true) {
+            this.$message({
+              type: 'success',
+              message: '操作成功',
+              duration: 2000
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '操作失败',
+              duration: 2000
+            })
+          }
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择至少一个商品!',
+          duration: 2000
+        })
+      }
+    },
+
+    batchChangeStore() {
+      if (this.selectionItems.length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请选择至少一个商品'
+        })
+        return false
+      }
+      this.batchChangeStateDialog = true
+    },
+    async onBatchChangeStateSubmit() {
+      await this.$api.marketing.updateDistributorItem({
+        // distributor_id: this.shopId,
+        goods_id: this.selectionItems.map((item) => item.item_id),
+        is_can_sale: this.batchChangeStateForm.status
+      })
+
+      this.$message.success('修改成功')
+      this.$refs['finder'].refresh()
+      this.batchChangeStateDialog = false
+    },
+
     async onStoreItemSubmit() {
       const { item_id, storeNum } = this.storeItemForm
       const data = []
