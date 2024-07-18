@@ -106,11 +106,24 @@ export const INVOICE_STATUS = [
   { title: '已开票', value: 1 }
 ]
 
+export const GOOD_CATEGORY_MAP = {
+  'self':'自营商品',
+  'distributor':'商家商品',
+  'supplier':'供应商商品'
+}
+
 export const ORDER_CATEGORY = [
   { title: '全部', value: '' },
   { title: '自营订单', value: 'self' },
-  { title: '商家订单', value: 'shop' },
-  { title: '供应商订单', value: 'supplier' }
+  { title: '商家订单', value: 'distributor' },
+  { title: '供应商订单', value: 'supplier' },
+  { title: '自营+供应商订单', value: 'self_supplier' },
+]
+
+export const SELF_ORDER_CATEGORY = [
+  // { title: '全部', value: '' },
+  { title: '自营订单', value: 'self' },
+  { title: '自营+供应商订单', value: 'self_supplier' },
 ]
 
 export const REFUND_STATUS = {

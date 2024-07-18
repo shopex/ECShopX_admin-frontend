@@ -37,8 +37,8 @@
           />
         </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem prop="supplier_name" label="供应商名称:">
-        <el-input v-model="params.supplier_name" placeholder="请输入供应商名称" />
+      <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+        <el-input v-model="params.supplier_name" placeholder="来源供应商" />
       </SpFilterFormItem>
       <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="order_class" label="订单类型:">
         <el-select v-model="params.order_class" clearable placeholder="请选择">
@@ -109,10 +109,10 @@
       </SpFilterFormItem>
       <SpFilterFormItem
         v-if="!VERSION_STANDARD && !VERSION_IN_PURCHASE"
-        prop="distributor_type"
+        prop="order_holder"
         label="订单分类:"
       >
-        <el-select v-model="params.distributor_type" clearable placeholder="请选择">
+        <el-select v-model="params.order_holder" clearable placeholder="请选择">
           <el-option
             v-for="item in orderCategory"
             :key="item.value"
@@ -259,9 +259,10 @@
           width="120"
           label="订单分类"
           header-align="center"
+          prop="order_holder"
         >
-          <template slot-scope="scope">
-            {{ scope.row.distributor_info.distribution_type }}
+        <template slot-scope="scope">
+            {{  getOrderCategoryName(scope.row.order_holder) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -358,6 +359,8 @@
             </template>
           </template>
         </el-table-column>
+        <el-table-column prop="distributor_name" label="来源门店" >
+      </el-table-column>
         <el-table-column prop="receiver_name" label="收货人" />
         <template v-if="login_type != 'merchant'">
           <el-table-column v-if="!isMicorMall" label="订单类型">
@@ -572,8 +575,10 @@ import {
   PICKER_DATE_OPTIONS,
   REFUND_STATUS,
   REFUND_PROCESS,
-  PAY_TYPE
+  PAY_TYPE,
+  GOOD_CATEGORY_MAP
 } from '@/consts'
+import { IS_SUPPLIER } from '../../../../utils'
 
 export default {
   // components: { CompTableView },
@@ -602,7 +607,7 @@ export default {
         is_invoiced: '', // 开票状态
         time_start_begin: '', //
         time_start_end: '',
-        distributor_type: '', // 订单分类
+        order_holder: '', // 订单分类
         distributor_id: '', // 店铺
         subDistrict: []
       },
@@ -754,9 +759,9 @@ export default {
           ],
           onChange: (e) => {
             if (e == 'sep') {
-              this.deliverGoodsFormList[2].options[4].isShow = true
+              this.deliverGoodsFormList[2].options[7].isShow = true
             } else {
-              this.deliverGoodsFormList[2].options[4].isShow = false
+              this.deliverGoodsFormList[2].options[7].isShow = false
             }
           }
         },
@@ -766,9 +771,16 @@ export default {
           type: 'table',
           options: [
             { title: '商品名', key: 'item_name' },
+            { title: '商品类型', key: 'item_holder',render: (row, column, cell) => {
+                return this.goodCategoryMap[row.item_holder]
+            } },
+            { title: '来源供应商', key: 'supplier_name', width: 100 },
             { title: '数量', key: 'num', width: 60 },
             { title: '已发货数量', key: 'delivery_item_num', width: 100 },
             { title: '总支付价（¥）', key: 'price', width: 120 },
+            { title: '成本价（¥）', key: 'cost_price', width: 100,render: (row, column, cell) => {
+              return row.cost_price / 100
+            } },
             {
               title: '发货数量',
               key: 'item_num',
@@ -782,6 +794,7 @@ export default {
                       size='mini'
                       v-model={row.delivery_num}
                       min={1}
+                      disabled={IS_ADMIN() && row.supplier_id > 0}
                       max={row.num - row.delivery_item_num}
                     ></el-input-number>
                   )
@@ -918,6 +931,7 @@ export default {
         pickupcode: '',
         items: []
       },
+      goodCategoryMap:GOOD_CATEGORY_MAP,
       refundDialog: false,
       refundFormList: [
         {
@@ -1355,12 +1369,14 @@ export default {
           delivery_status,
           pay_status,
           can_apply_aftersales,
-          self_delivery_status
+          self_delivery_status,
+          order_holder
         } = item
         const isDada = receipt_type == 'dada'
         const isLogistics = receipt_type == 'logistics'
         const isSelfDelivery = receipt_type == 'merchant'
-        if (VERSION_STANDARD || distributor_id == 0 || this.login_type == 'distributor') {
+
+        if (VERSION_STANDARD || (distributor_id == 0 && order_holder != 'supplier') || this.login_type == 'distributor') {
           if (
             !isDada &&
             cancel_status == 'NO_APPLY_CANCEL' &&
@@ -1462,6 +1478,9 @@ export default {
       console.log(`getSubDistrictList:`, res)
       this.subDistrictList = res
     },
+    getOrderCategoryName(order_holder){
+      return this.orderCategory.find(item=>item.value == order_holder)?.title ?? ''
+    },
     getOrderType({ order_class, type }) {
       if (order_class == 'normal') {
         return type == '1' ? '跨境订单' : '普通订单'
@@ -1526,7 +1545,8 @@ export default {
         delivery_corp,
         self_delivery_operator_mobile,
         delivery_code,
-        self_delivery_status
+        self_delivery_status,
+        order_holder
       },
       { key }
     ) {
@@ -1592,14 +1612,17 @@ export default {
         this.deliverGoodsForm.delivery_corp = ''
         this.deliverGoodsForm.delivery_code = ''
         // 部分发货
-        if (delivery_status == 'PARTAIL') {
+        //如果自营+供应商订单，只能部分发货，并且只能发自营的商品
+        if (delivery_status == 'PARTAIL' || order_holder == 'self_supplier') {
           this.deliverGoodsForm.delivery_type = 'sep'
           this.deliverGoodsFormList[1].disabled = true
-          this.deliverGoodsFormList[2].options[4].isShow = true
+          this.deliverGoodsFormList[2].options[7].isShow = true
         } else {
           this.deliverGoodsFormList[1].disabled = false
-          this.deliverGoodsFormList[2].options[4].isShow = false
+          this.deliverGoodsFormList[2].options[7].isShow = false
         }
+
+
         this.deliverGoodsDialog = true
       } else if (key == 'writeOff') {
         this.$refs['writeOffDialogRef'].resetForm()
