@@ -149,11 +149,12 @@
       </el-table-column>
       <el-table-column
         prop="price"
-        label="价格"
+        label="销售价"
         width="80"
         :formatter="priceformatter"
         show-overflow-tooltip
       />
+      <el-table-column prop="cost_price" label="成本价" />
       <el-table-column prop="store" label="库存" width="80" show-overflow-tooltip />
     </el-table>
     <el-table
@@ -184,11 +185,14 @@
       </el-table-column>
       <el-table-column
         prop="price"
-        label="价格"
+        label="销售价"
         width="80"
         :formatter="priceformatter"
         show-overflow-tooltip
       />
+      <el-table-column prop="cost_price" label="成本价" width="80"
+        :formatter="priceformatter"
+        show-overflow-tooltip />
       <el-table-column prop="store" label="库存" width="80" show-overflow-tooltip />
     </el-table>
     <div v-if="total_count > params.pageSize" class="pager">
@@ -335,6 +339,10 @@ export default {
         {
           title: '自营商品',
           value: 'platform'
+        },
+        {
+          title: '商户商品',
+          value: 'distributor'
         },
         {
           title: '供应商商品',
