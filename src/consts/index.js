@@ -106,6 +106,13 @@ export const INVOICE_STATUS = [
   { title: '已开票', value: 1 }
 ]
 
+export const GOOD_CATEGORY = [
+  { title: '自营商品', value: 'self' },
+  { title: '商家商品', value: 'distributor' },
+  { title: '供应商商品', value: 'supplier' }
+]
+
+
 export const GOOD_CATEGORY_MAP = {
   'self':'自营商品',
   'distributor':'商家商品',

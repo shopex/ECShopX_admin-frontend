@@ -90,6 +90,19 @@
           @change="onSearch"
         />
       </SpFilterFormItem>
+      <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+        <el-input v-model="formData.supplier_name" placeholder="来源供应商" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="item_holder" label="商品类型:">
+        <el-select v-model="formData.item_holder" placeholder="请选择商品类型" clearable>
+          <el-option
+            v-for="item in goodCategory"
+            :key="item.value"
+            :label="item.title"
+            :value="item.value"
+          />
+        </el-select>
+      </SpFilterFormItem>
     </SpFilterForm>
 
     <SpFinder
@@ -123,13 +136,34 @@
                 h('div', { class: 'item-name' }, row.itemName)
               ])
           },
+          { name: 'SKU编码', key: 'item_bn', width: 120 },
           {
-            name: '价格（¥）',
+            name: '商品类型',
+            key: 'item_holder',
+            width: 80,
+            render: (h, { row }) => h('span', {}, this.goodCategoryMap[row.item_holder])
+          },
+          { name: '来源供应商', key: 'supplier_name', width: 100 },
+
+          {
+            name: '市场价（¥）',
+            key: 'market_price',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.market_price / 100)
+          },
+          {
+            name: '销售价（¥）',
             key: 'price',
-            width: 150,
+            width: 100,
             render: (h, { row }) => h('span', {}, row.price / 100)
           },
-          { name: '库存', key: 'store', width: 150 }
+          {
+            name: '成本价（¥）',
+            key: 'cost_price',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.cost_price / 100)
+          },
+          { name: '库存', key: 'store', width: 100 }
         ]
       }"
       :hooks="{
@@ -143,7 +177,7 @@
 </template>
 
 <script>
-import { SALES_STATUS } from '@/consts'
+import { SALES_STATUS, GOOD_CATEGORY, GOOD_CATEGORY_MAP } from '@/consts'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
 export default {
@@ -161,13 +195,17 @@ export default {
       approve_status: 'onsale',
       brand_id: '',
       category: '',
-      distributor_id: ''
+      distributor_id: '',
+      supplier_name: '',
+      item_holder: ''
     }
     const formData = Object.assign(defaultParams, queryParams)
     return {
       formData,
       salesStatus: SALES_STATUS,
       list: [],
+      goodCategoryMap: GOOD_CATEGORY_MAP,
+      goodCategory: GOOD_CATEGORY,
       multipleSelection: [],
       goodsBranchList: [],
       goodsBranchParams: {
