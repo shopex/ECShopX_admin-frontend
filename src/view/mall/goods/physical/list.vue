@@ -257,7 +257,7 @@
       <!-- 设置会员价 -->
       <SpDrawer
         v-model="showMemberPriceDrawer"
-        title="改价"
+        title="设置价格"
         :width="800"
         confirm-text="保存"
         @confirm="onSaveMemberPrice"
@@ -1102,7 +1102,7 @@ export default {
             headerAlign: 'center'
           },
           {
-            name: '结算价（¥）',
+            name: '成本价（¥）',
             key: 'cost_price',
             width: 100,
             formatter: (value, row, col) => {

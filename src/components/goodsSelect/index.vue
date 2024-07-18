@@ -102,7 +102,7 @@
         </el-col>
         <el-col :span="5" class="last-col">
           <el-select
-            v-model="params.item_source"
+            v-model="params.item_holder"
             placeholder="商品类型"
             clearable
             :disabled="setSearch"
@@ -144,7 +144,7 @@
       <el-table-column prop="supplier_name" label="所属供应商" />
       <el-table-column label="商品类型" >
         <template slot-scope="scope">
-         {{ itemSourceMap[scope.row.item_source] }}
+         {{ itemSourceMap[scope.row.item_holder] }}
         </template>
       </el-table-column>
       <el-table-column
@@ -180,7 +180,7 @@
       <el-table-column prop="supplier_name" label="所属供应商" />
       <el-table-column label="商品类型" >
         <template slot-scope="scope">
-         {{ itemSourceMap[scope.row.item_source] }}
+         {{ itemSourceMap[scope.row.item_holder] }}
         </template>
       </el-table-column>
       <el-table-column
@@ -221,6 +221,7 @@ import { getItemsList, getCategory, getSkuList, getGoodsAttr } from '@/api/goods
 import { getShippingTemplatesList } from '@/api/shipping'
 import { getDefaultCurrency } from '@/api/company'
 import { getDistributorItems } from '@/api/marketing'
+import { GOOD_CATEGORY_MAP } from '../../consts'
 
 export default {
   components: {
@@ -319,7 +320,8 @@ export default {
         is_sku: false,
         audit_status: 'approved',
         is_gift: false,
-        supplier_name:''
+        supplier_name:'',
+        item_holder:''
       },
       categoryList: [],
       select_category_value: [],
@@ -367,11 +369,7 @@ export default {
           value: 'instock'
         }
       ],
-      itemSourceMap:{
-        'platform':'自营商品',
-        'supplier':'供应商商品',
-        'distributor':'商户商品'
-      },
+      itemSourceMap:GOOD_CATEGORY_MAP,
       currency: {},
       cursymbol: '￥',
       templateRadio: ''

@@ -443,20 +443,20 @@
             <el-form-item label="商品信息">
               <el-table :data="deliveryData.orderInfo.items">
                 <el-table-column prop="item_name" label="商品名" width="180" />
-                <el-table-column  label="商品类型" width="180">
+                <el-table-column  label="商品类型" width="120">
                   <template slot-scope="scope">
-                    <span>{{ this.goodCategoryMap[scope.row.item_holder] }}</span>
+                    <span>{{ goodCategoryMap[scope.row.item_holder] }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="supplier_name" label="来源供应商" width="180" />
-                <el-table-column prop="num" label="数量" width="180" />
-                <el-table-column prop="delivery_item_num" label="已发货数量" width="180" />
-                <el-table-column label="总支付价(元)">
+                <el-table-column prop="supplier_name" label="来源供应商" width="130" />
+                <el-table-column prop="num" label="数量" width="100" />
+                <el-table-column prop="delivery_item_num" label="已发货数量" width="100" />
+                <el-table-column label="总支付价(元)" width="130">
                   <template slot-scope="scope">
                     <span>{{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="成本价(元)">
+                <el-table-column label="成本价(元)" width="130">
                   <template slot-scope="scope">
                     <span>{{ scope.row.fee_symbol }}{{ scope.row.cost_price / 100 }}</span>
                   </template>
