@@ -119,8 +119,8 @@
         <SpFilterFormItem prop="goods_bn" label="SPU编码:">
           <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="supplier_name" label="所属供应商:">
-          <el-input v-model="searchParams.supplier_name" placeholder="请输入所属供应商" />
+        <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+          <el-input v-model="searchParams.supplier_name" placeholder="请输入来源供应商" />
         </SpFilterFormItem>
       </SpFilterForm>
 
@@ -691,7 +691,6 @@ export default {
               )
             }
           },
-          { name: '供应商', key: 'operator_name', width: 120 },
           {
             name: '标签',
             key: 'tagList',
@@ -767,8 +766,16 @@ export default {
             align: 'right',
             headerAlign: 'center'
           },
+          { name: '来源供应商', key: 'operator_name', width: 120 },
           {
-            name: '可售状态',
+            name: '毛利率（%)',
+            key: 'gross_profit_rate',
+            width: 100,
+            align: "right",
+            headerAlign: 'center'
+          },
+          {
+            name: '供应状态',
             key: 'is_market',
             formatter: (value, row, col) => {
               return value == '1' ? '可售' : '不可售'

@@ -1083,7 +1083,7 @@ export default {
             width: 100
           },
           {
-            name: '可售状态',
+            name: '供应状态',
             key: 'is_market',
             formatter: (value, row, col) => {
               return value == '1' ? '可售' : '不可售'
