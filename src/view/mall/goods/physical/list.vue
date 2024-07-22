@@ -209,7 +209,7 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-dropdown v-if="IS_ADMIN()">
+        <el-dropdown v-if="VERSION_STANDARD && IS_ADMIN()">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             同步商品<i class="el-icon-arrow-down el-icon--right" />
           </el-button>

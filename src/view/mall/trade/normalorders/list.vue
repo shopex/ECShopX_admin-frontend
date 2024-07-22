@@ -37,7 +37,7 @@
           />
         </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+      <SpFilterFormItem prop="supplier_name"  v-if="VERSION_STANDARD || IS_ADMIN()" label="来源供应商:">
         <el-input v-model="params.supplier_name" placeholder="来源供应商" />
       </SpFilterFormItem>
       <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="order_class" label="订单类型:">
@@ -110,8 +110,8 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
+      <!-- v-if="!VERSION_STANDARD && !VERSION_IN_PURCHASE" -->
       <SpFilterFormItem
-        v-if="!VERSION_STANDARD && !VERSION_IN_PURCHASE"
         prop="order_holder"
         label="订单分类:"
       >
@@ -373,6 +373,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="distributor_name" label="来源门店" >
+      </el-table-column>
+      <el-table-column prop="supplier_name" v-if="VERSION_STANDARD || IS_ADMIN()" label="来源供应商" >
       </el-table-column>
         <el-table-column prop="receiver_name" label="收货人" />
         <template v-if="login_type != 'merchant'">
@@ -637,7 +639,7 @@ export default {
         : ORDER_STATUS,
       orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
       invoiceStatus: INVOICE_STATUS,
-      orderCategory: ORDER_CATEGORY,
+      orderCategory: this.VERSION_STANDARD ? ORDER_CATEGORY.filter(item=>item.value != 'distributor') :  ORDER_CATEGORY,
       pickerOptions: PICKER_DATE_OPTIONS,
       orderSourceList: [],
       remarkDialog: false,
@@ -788,7 +790,9 @@ export default {
             { title: '商品类型', key: 'item_holder',render: (row, column, cell) => {
                 return this.goodCategoryMap[row.item_holder]
             } },
-            { title: '来源供应商', key: 'supplier_name', width: 100 },
+            { title: '来源供应商', key: 'supplier_name', width: 100,isShow: ({ key }, value) => {
+            return this.VERSION_STANDARD || this.IS_ADMIN()
+          }, },
             { title: '数量', key: 'num', width: 60 },
             { title: '已发货数量', key: 'delivery_item_num', width: 100 },
             { title: '总支付价（¥）', key: 'price', width: 120 },

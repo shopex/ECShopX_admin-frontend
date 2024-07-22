@@ -55,15 +55,17 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem v-if="IS_SUPPLIER()" prop="item_bn" label="SKU编号:">
+        <SpFilterFormItem prop="item_bn" label="SKU编号:">
           <el-input v-model="params.item_bn" placeholder="SKU编号" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+
+        <SpFilterFormItem v-if="VERSION_STANDARD || IS_ADMIN()" prop="supplier_name" label="来源供应商:">
           <el-input v-model="params.supplier_name" placeholder="请输入来源供应商" />
         </SpFilterFormItem>
         <SpFilterFormItem
           prop="order_holder"
           label="订单分类:"
+          v-if="VERSION_STANDARD || IS_ADMIN()"
         >
           <el-select v-model="params.order_holder" clearable placeholder="请选择">
             <el-option
@@ -162,12 +164,13 @@
           label="订单分类"
           header-align="center"
           prop="order_holder"
+          v-if="VERSION_STANDARD || IS_ADMIN()"
         >
         <template slot-scope="scope">
             {{  getOrderCategoryName(scope.row.order_holder) }}
           </template>
         </el-table-column>
-        <el-table-column min-width="100" prop="supplier_name" label="来源供应商" />
+        <el-table-column min-width="100" v-if="VERSION_STANDARD || IS_ADMIN()" prop="supplier_name" label="来源供应商" />
         <el-table-column
           width="120"
           label="退款金额（¥）"
