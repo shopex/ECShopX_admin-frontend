@@ -39,10 +39,10 @@
         label="列表"
         name="admin"
       />
-      <el-tab-pane
+      <!-- <el-tab-pane
         label="禁用"
         name="invalid"
-      />
+      /> -->
       <el-table
         v-loading="loading"
         :data="list"
