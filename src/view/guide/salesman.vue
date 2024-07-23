@@ -22,6 +22,9 @@
               {{ scope.row.storeInfo.name }}
             </template>
           </el-table-column>
+        </el-table>
+        </el-tabs>
+        </div>
   <div>
     <el-row :gutter="20">
       <el-col>
@@ -110,7 +113,7 @@
             </template>
           </el-table-column>
 
-          <!-- 
+           <!--
 
         <el-table-column label="导购角色">
           <template slot-scope="scope">
