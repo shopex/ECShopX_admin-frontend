@@ -93,6 +93,8 @@
 import { isObject, isArray, isEmpty, getRegionNameById } from '@/utils'
 import Pages from '@/utils/pages'
 import district from '@/common/district.json'
+import fetchJsonp from '@/utils/axiosJsonp'
+import { axios } from '@/utils/fetch'
 import DaoDianZiti from './components/DaoDianZiti'
 import RefundGoodsAddress from './components/RefundGoodsAddress'
 import RefundGoodsStore from './components/RefundGoodsStore'
@@ -394,14 +396,6 @@ export default {
                 <el-button type='primary' on-click={this.searchKeyword}>
                   搜索定位
                 </el-button>
-
-                <div v-show={this.qqmap_infowin_show} class='qqmap-infowin' id='qqmap_infowin'>
-                  <div class='address-name'>{this.poi_info?.name}</div>
-                  <div class='address-detail'>{this.poi_info?.address}</div>
-                  <el-button type='primary' size='mini' on-click={this.importPosition}>
-                    导入位置信息
-                  </el-button>
-                </div>
               </div>
             )
           },
@@ -519,9 +513,8 @@ export default {
       regions: district,
       submitLoading: false,
       searchService: null,
-      markers: [],
-      qqmap_infowin_show: false,
-      poi_info: null,
+      map: null,
+      mapMarker: null,
       datapass_block: 0,
       distributor_self: 0, // 总店=1
       dadaEnable: false
@@ -542,11 +535,7 @@ export default {
     }
     this.getStoreInfo()
   },
-  mounted() {
-    // this.$nextTick(() => {
-    //   this.qqmapinit()
-    // })
-  },
+  mounted() {},
   methods: {
     async getMerchantList({ page, pageSize }, keywords) {
       let params = {
@@ -575,7 +564,7 @@ export default {
         this.pageQuery.reset(e)
       }
     },
-    searchKeyword() {
+    async searchKeyword() {
       //设置搜索的范围和关键字等属性
       const { regions_id, address } = this.form
       if (regions_id.length == 0) {
@@ -587,34 +576,16 @@ export default {
         return
       }
       const [province, city, country] = getRegionNameById(regions_id, district)
-      this.clearOverlays(this.markers)
-      this.searchService.setLocation(
-        ['110000', '120000', '310000', '500000'].includes(regions_id[0])
-          ? province
-          : `${province}${city}`
-      ) //设置省市区
-      //设置搜索页码
-      this.searchService.setPageIndex(0)
-      //设置每页的结果数
-      this.searchService.setPageCapacity(5)
-      this.searchService.search(address)
-    },
-    //清除地图上的marker
-    clearOverlays(overlays) {
-      let overlay
-      while ((overlay = overlays.pop())) {
-        overlay.setMap(null)
-      }
-    },
-    // 导入位置信息
-    importPosition() {
-      const {
-        latLng: { lng, lat },
-        name
-      } = this.poi_info
-      this.form.lng = lng
-      this.form.lat = lat
-      this.form.address = name
+
+      const { location } = await fetchJsonp({
+        method: 'get',
+        url: `https://apis.map.qq.com/ws/geocoder/v1?address=${province}${city}${country}${address}&key=SIUBZ-AUDCR-XGWW2-WQ5BW-ZWYYJ-GJFR4&output=jsonp`
+      })
+      this.form.lng = location.lng
+      this.form.lat = location.lat
+      const latlng = new qq.maps.LatLng(location.lat, location.lng)
+      this.map.setCenter(latlng)
+      this.mapMarker.setPosition(latlng)
     },
     async getDadaInfo() {
       const { business_list, is_open } = await this.$api.dada.getDadaInfo()
@@ -718,64 +689,16 @@ export default {
         this.qqmapinit()
       })
     },
-    qqmapinit() {
+    async qqmapinit() {
       const { lat, lng } = this.form
-      // eslint-disable-next-line no-undef
       const center = new qq.maps.LatLng(lat, lng)
-      // eslint-disable-next-line no-undef
-      const map = new qq.maps.Map(document.getElementById('qqmap_container'), {
+      this.map = new qq.maps.Map(document.getElementById('qqmap_container'), {
         center: center,
         zoom: 13
       })
-      // eslint-disable-next-line no-undef
-      new qq.maps.Marker({
+      this.mapMarker = new qq.maps.Marker({
         position: center,
-        map: map
-      })
-      var that = this
-      // eslint-disable-next-line no-undef
-      this.searchService = new qq.maps.SearchService({
-        panel: document.getElementById('qqmap_rslist'),
-        //检索成功的回调函数
-        complete: ({ detail }) => {
-          //设置回调函数参数
-          const { pois } = detail
-          // eslint-disable-next-line no-undef
-          const infoWin = new qq.maps.InfoWindow({
-            map: map
-          })
-          if (!pois) {
-            return that.$message.error('您输入的位置有误')
-          }
-          // eslint-disable-next-line no-undef
-          const latlngBounds = new qq.maps.LatLngBounds()
-          for (let i = 0; i < pois.length; i++) {
-            let poi = pois[i]
-            //扩展边界范围，用来包含搜索到的Poi点
-            latlngBounds.extend(poi.latLng)
-            // eslint-disable-next-line no-undef
-            const marker = new qq.maps.Marker({
-              map: map
-            })
-            marker.setPosition(poi.latLng)
-            marker.setTitle(i + 1)
-            this.markers.push(marker)
-            // eslint-disable-next-line no-undef
-            qq.maps.event.addListener(marker, 'click', () => {
-              const { latLng, name } = poi
-              this.qqmap_infowin_show = true
-              this.poi_info = poi //将选点位置信息存入poi_info
-              infoWin.setContent(document.getElementById('qqmap_infowin'))
-              infoWin.setPosition(latLng)
-              infoWin.open()
-              console.log(poi)
-            })
-          }
-          map.fitBounds(latlngBounds)
-        },
-        error: function () {
-          this.$message.error('未查询到数据')
-        }
+        map: this.map
       })
     },
     handleCancel() {
