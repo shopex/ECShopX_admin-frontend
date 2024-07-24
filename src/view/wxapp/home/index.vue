@@ -454,7 +454,7 @@ export default {
           key: 'name',
           component: () => (
             <div class='tablist'>
-              {this.navForm.tabList.map((item, index) => (
+              {this.navForm?.tabList?.map((item, index) => (
                 <div
                   class='tab-item'
                   style={{
@@ -510,7 +510,7 @@ export default {
           component: () => (
             <div class='nav-list'>
               <div class='nav-list-body'>
-                {this.navForm.tabList.map((item, index) => (
+                {this.navForm?.tabList?.map((item, index) => (
                   <div class='nav-item'>
                     <div class='nav-item-hd'>
                       <SpImagePicker v-model={item.iconPath} />
@@ -554,7 +554,7 @@ export default {
           component: () => (
             <el-button
               type='primary'
-              disabled={this.navForm.tabList.length >= 5}
+              disabled={this.navForm?.tabList?.length >= 5}
               plain
               class='iconfont icon-plus-circle'
               on-click={this.addTabItem}
@@ -825,7 +825,8 @@ export default {
       this.show_sideBar = true
     },
     handleShowTabConfig() {
-      const { config, name, data } = this.globalTabbar || {}
+      const { config, name, data = [] } = this.globalTabbar || {}
+
       const { backgroundColor, color, selectedColor } = config || {}
       this.navForm = {
         pages_template_id: '',
