@@ -284,6 +284,7 @@
                 :min="0"
                 :precision="2"
                 style="width: 120px"
+                disabled
                 @change="updateGoodsSkuPrice(scope.row,'cost_price')"
               />
             </template>
