@@ -187,6 +187,7 @@
         <el-button type="primary" plain @click="() => changeHaltTheSales('start')">
           开售
         </el-button>
+        <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
         <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
 
         <el-dropdown>
@@ -261,8 +262,17 @@
       >
         <el-table v-loading="skuLoading" border :data="specItems" height="100%">
           <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-          <el-table-column label="市场价" prop="market_price" width="100">
-            <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
+          <el-table-column label="市场价" prop="market_price" width="160">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.market_price"
+                controls-position="right"
+                :min="0"
+                :precision="2"
+                style="width: 120px"
+                @change="updateGoodsSkuPrice(scope.row,'market_price')"
+              />
+            </template>
           </el-table-column>
           <el-table-column label="销售价" width="160">
             <template slot-scope="scope">
@@ -362,6 +372,16 @@
         :form="freightTemplateForm"
         :form-list="freightTemplateFormList"
         @onSubmit="onFreightTemplateSubmit"
+      />
+
+      <SpDialog
+        ref="sendNumDialogRef"
+        v-model="batchChangeStateDialog"
+        title="更改商品状态"
+        :width="'500px'"
+        :form="batchChangeStateForm"
+        :form-list="batchChangeStateFormList"
+        @onSubmit="onBatchChangeStateSubmit"
       />
 
       <!-- 批量修改库存 -->
@@ -1171,6 +1191,17 @@ export default {
       const itemCategoryList = await this.$api.goods.getCategory({ is_main_category: true })
       this.itemCategoryList = itemCategoryList
     },
+    async onBatchChangeStateSubmit() {
+      await this.$api.marketing.updateDistributorItem({
+        distributor_id: this.shopId,
+        goods_id: this.selectionItems.map((item) => item.item_id),
+        is_can_sale: this.batchChangeStateForm.status
+      })
+
+      this.$message.success('修改成功')
+      this.$refs['finder'].refresh()
+      this.batchChangeStateDialog = false
+    },
     async getMemberPriceByGoods(item_id) {
       this.currentId = item_id
       this.skuLoading = true
@@ -1296,6 +1327,16 @@ export default {
       this.$message.success('操作成功')
       this.saleCategoryDialog = false
       this.$refs['finder'].refresh()
+    },
+    batchChangeStore() {
+      if (this.selectionItems.length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请选择至少一个商品'
+        })
+        return false
+      }
+      this.batchChangeStateDialog = true
     },
     changeFreightTemplate() {
       if (this.selectionItems.length > 0) {
@@ -1525,10 +1566,16 @@ export default {
         this.$message.error('导出失败')
       }
     },
-    async updateGoodsSkuPrice({ item_id, price,cost_price },priceType) {
+    async updateGoodsSkuPrice({ item_id, price,cost_price,market_price },priceType) {
+      const priceMap = {
+        'price':price,
+        'cost_price':cost_price,
+        'market_price':market_price
+      }
+
       await this.$api.goods.updateGoodsInfo({
         item_id,
-        [priceType]:priceType == 'price' ? price :cost_price,
+        [priceType]:priceMap[priceType],
         operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
       })
       this.$message.success('操作成功')

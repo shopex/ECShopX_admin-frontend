@@ -305,23 +305,43 @@
             {{ (scope.row.freight_fee || 0) / 100 }}
           </template>
         </el-table-column>
+
         <el-table-column prop="mobile" label="业务员">
           <template slot-scope="scope">
+            <div class="order-num">
+
             {{ scope.row.salesman_mobile }}
             <el-tooltip
-              v-if="datapass_block == 0"
-              effect="dark"
-              content="复制"
-              placement="top-start"
-            >
-              <i
-                v-clipboard:copy="scope.row.salesman_mobile"
-                v-clipboard:success="onCopySuccess"
-                class="el-icon-document-copy"
-              />
+                v-if="datapass_block == 0"
+                effect="dark"
+                content="复制"
+                placement="top-start"
+              >
+                <i
+                  v-clipboard:copy="scope.row.salesman_mobile"
+                  v-clipboard:success="onCopySuccess"
+                  class="el-icon-document-copy"
+                />
+            </el-tooltip>               
+          </div>
+            <div class="order-num">
+            {{ scope.row.salesman_name }}
+            <el-tooltip
+                v-if="datapass_block == 0"
+                effect="dark"
+                content="复制"
+                placement="top-start"
+              >
+                <i
+                  v-clipboard:copy="scope.row.salesman_name"
+                  v-clipboard:success="onCopySuccess"
+                  class="el-icon-document-copy"
+                />
             </el-tooltip>
+          </div>                           
           </template>
-        </el-table-column>
+
+        </el-table-column>        
         <el-table-column prop="mobile" label="客户手机号">
           <template slot-scope="scope">
             <template v-if="!scope.row.user_delete && login_type !== 'merchant'">
@@ -805,7 +825,7 @@ export default {
               width: 160,
               render: (row, column, cell) => {
                 if (row.num - row.delivery_item_num == 0) {
-                  return '已完成'
+                  return ''
                 } else {
                   return (
                     <el-input-number
@@ -1394,7 +1414,7 @@ export default {
         const isLogistics = receipt_type == 'logistics'
         const isSelfDelivery = receipt_type == 'merchant'
 
-        if ((VERSION_STANDARD && order_holder != 'supplier') || (distributor_id == 0 && order_holder != 'supplier') || this.login_type == 'distributor') {
+        if ( (receipt_type == 'ziti' || (VERSION_STANDARD || distributor_id == 0) && order_holder != 'supplier') || this.login_type == 'distributor') {
           if (
             !isDada &&
             cancel_status == 'NO_APPLY_CANCEL' &&
@@ -1402,13 +1422,25 @@ export default {
             ziti_status != 'DONE'
           ) {
             // 非同城配的取消订单按钮
-            if (!isDada || (isDada && ['0', '1'].includes(dada.data_status))) {
-              actionBtns.push({ name: '取消订单', key: 'cancel' })
+            if (!isDada || (isDada && ['0', '1'].includes(dada.data_status)) ) {
+
+              if(receipt_type == 'ziti'){
+                //如果是自提，商家订单店铺端才可以取消
+                if((order_holder == 'distributor' && IS_DISTRIBUTOR()) || (IS_ADMIN() && order_holder != 'distributor')){
+                  actionBtns.push({ name: '取消订单', key: 'cancel' })
+                }
+              }else{
+
+                actionBtns.push({ name: '取消订单', key: 'cancel' })
+              }
             }
           }
-
-          if (order_status == 'PAYED' && receipt_type == 'ziti' && ziti_status == 'PENDING') {
-            actionBtns.push({ name: '核销', key: 'writeOff' })
+          //待自提
+          if (order_status == 'PAYED' && receipt_type == 'ziti' && ziti_status == 'PENDING' ) {
+              //商家自提订单只有在店铺端
+              if((order_holder == 'distributor' && IS_DISTRIBUTOR()) || (IS_ADMIN() && order_holder != 'distributor')){
+                actionBtns.push({ name: '核销', key: 'writeOff' })
+              }
           }
 
           if (
@@ -1431,6 +1463,7 @@ export default {
             order_status == 'PAYED' &&
             delivery_status != 'DONE' &&
             receipt_type != 'ziti'
+            && cancel_status != 'WAIT_PROCESS' //待退款不展示发货按钮
             // && this.login_type == 'supplier'
           ) {
             actionBtns.push({ name: '发货', key: 'deliverGoods' })
