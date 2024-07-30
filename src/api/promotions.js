@@ -296,7 +296,17 @@ export function getPopularizeSetting() {
   })
 }
 
-export function setPopularizeSetting(data) {
+export function getPopularizeSettingStore (data) {
+  return fetch({
+    url: '/popularize/config',
+    method: 'get',
+    params: data
+
+  })
+}
+
+
+export function setPopularizeSetting (data) {
   return fetch({
     url: '/popularize/config',
     method: 'post',
