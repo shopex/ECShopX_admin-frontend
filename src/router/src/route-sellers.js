@@ -1,6 +1,6 @@
 // 会员路由
 const name = '商家'
-import Layout from '@/view/layout' // 主框架
+import Layout from '@/view/layout'; // 主框架
 
 export default {
   path: '/sellers',
@@ -45,6 +45,40 @@ export default {
         }
       ]
     },
+    {
+      path: 'marketingsalesman',
+      name: `业务员`,
+      component: () => import('@/view/guide/salesman'),
+      children: [
+        {
+          path: 'children', 
+          component: () => import('@/view/guide/children')
+        }
+      ]
+    },
+    { 
+      path: 'marketing/popularize/popularizedata',
+      name: `业务员业绩`,
+      component: () => import('@/view/popularize/data'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        }
+      ]
+    },
+    { 
+      path: 'marketing/popularize/salesman/withdraw',
+      name: `业务员提现`,
+      component: () => import('@/view/mall/marketing/salesmanwithdraw')
+    },
+
+    {
+      path: 'popularize/popularizegoods',
+      name: `业务员商品`,
+      component: () => import('@/view/popularize/goodsStore')
+    },   
+
     {
       path: 'storemanager/distributortags',
       name: `商家标签`,

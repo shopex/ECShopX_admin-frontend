@@ -14,7 +14,7 @@
 </style>
 <template>
   <div>
-    <div class="time-box basic">
+    <div class="time-box basic"   v-if="loginType !== 'distributor'  && $route.path.indexOf('detail') === -1" >
       <el-row>
         <el-col
           :span="3"
@@ -53,6 +53,46 @@
         </el-col>
       </el-row>
     </div>
+
+    <div class="time-box basic"   v-if="loginType == 'distributor' || $route.path.indexOf('detail') !== -1 || $route.path.indexOf('sellers') !== -1" >
+      <el-row>
+        <!-- <el-col
+          :span="3"
+        >
+          可提现:&nbsp;<span>{{ count.cashWithdrawalRebate / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          已提现:&nbsp;<span>{{ count.payedRebate / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          申请提现:&nbsp;<span>{{ count.freezeCashWithdrawalRebate / 100 }}</span>元
+        </el-col> -->
+        <el-col
+          :span="3"
+        >
+          未结算:&nbsp;<span>{{ count.countDataShop.rebate_sum_noclose / 100 }}</span>元
+        </el-col>
+        <el-col
+          :span="3"
+        >
+          佣金总额:&nbsp;<span>{{ count.countDataShop.rebate_sum / 100 }}</span>元
+        </el-col>
+        <!-- <el-col
+          :span="3"
+        >
+          积分总额:&nbsp;<span>{{ count.pointTotal }}</span>积分
+        </el-col> -->
+        <el-col
+          :span="3"
+        >
+          商品总额:&nbsp;<span>{{ count.countDataShop.price_sum / 100 }}</span>元
+        </el-col>
+      </el-row>
+    </div>    
     <el-tabs
       v-model="activeName"
       @tab-click="handleClick"
@@ -113,7 +153,7 @@
               <span> {{ scope.row.rebate / 100 }} </span> 元
             </template>
           </el-table-column>
-          <el-table-column
+          <el-table-column v-if="1==2"
             label="返佣积分"
             min-width="60"
           >
@@ -141,7 +181,9 @@
               </el-tag>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="plan_close_date" label="预计结算时间"></el-table-column> -->
+          <el-table-column v-if="loginType == 'distributor'" prop="store_name" label="店铺"></el-table-column>
+          <el-table-column v-if="loginType == 'distributor'" prop="user_id" label="业务员ID"></el-table-column>
+          <el-table-column v-if="loginType == 'distributor'" prop="title"   label="订单内容"></el-table-column>
         </el-table>
         <div
           v-if="total_count > params.pageSize"
@@ -187,15 +229,31 @@ export default {
       params: {
         page: 1,
         pageSize: 20,
-        user_id: 0
+        user_id: 0,
+        distributor_id: 0,
+        pathSource: ''
+
       },
       list: [{}]
     }
   },
   mounted () {
+    this.loginType = this.$store.getters.login_type
+    this.params.pathSource = this.$route.path
+    console.log(this.$route.path);
+    console.log(this.$route.path);
+    console.log(this.$route.path);
+    console.log(this.$route.path);
+    console.log(this.loginType);
+    console.log(this.loginType);
+    console.log(this.loginType);
     if (this.$route.query.user_id) {
       this.params.user_id = this.$route.query.user_id
     }
+    if (this.$route.query.distributor_id) {
+      this.params.distributor_id = this.$route.query.distributor_id
+    }
+    console.log(this.params)
     this.getCount()
     this.getList()
   },
@@ -216,7 +274,7 @@ export default {
       this.getList()
     },
     getCount () {
-      withdrawalStatistics({ user_id: this.params.user_id }).then((response) => {
+      withdrawalStatistics({ user_id: this.params.user_id,distributor_id: this.params.distributor_id }).then((response) => {
         this.count = response.data.data
       })
     },

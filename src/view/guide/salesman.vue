@@ -1,4 +1,6 @@
 <template>
+  <SpRouterView>
+
   <div>
     <el-row :gutter="20">
       <el-col>
@@ -24,7 +26,7 @@
           icon="plus"
           @click="handleAddSalesmanAction"
         >
-          添加导购员
+          添加
         </el-button>
       </el-col>
     </el-row>
@@ -34,13 +36,13 @@
       @tab-click="handleClick"
     >
       <el-tab-pane
-        label="导购员列表"
+        label="列表"
         name="admin"
       />
-      <el-tab-pane
-        label="禁用导购员"
+      <!-- <el-tab-pane
+        label="禁用"
         name="invalid"
-      />
+      /> -->
       <el-table
         v-loading="loading"
         :data="list"
@@ -53,9 +55,41 @@
           prop="mobile"
           label="手机号"
         />
+
+        <el-table-column  
+          prop="distributor_name"
+          label="所属店铺"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.storeInfo.name }}
+
+          </template>
+        </el-table-column> 
+
+        <el-table-column
+          prop="children_count"
+          width="100"
+          label="会员数量"
+          
+        >
+        <!-- sortable -->
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              icon="edit"
+              type="text"
+              @click="count(scope.$index, scope.row)"
+            >
+              {{ scope.row.children_count }}
+            </el-button>
+          </template>
+        </el-table-column>
+
+
+
         <el-table-column
           prop="child_count"
-          label="会员数量"
+          label="会员数量" v-if="1==2"
         >
           <template slot-scope="scope">
             <span v-if="scope.row.child_count > 0">{{ scope.row.child_count }}</span>
@@ -74,19 +108,10 @@
             />
           </template>
         </el-table-column>
-        <el-table-column
-          prop="distributor_name"
-          label="所属店铺"
-        >
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              @click="getSalepersonShopList(scope.row.salespersonId, 'distributor')"
-            >
-              查看店铺
-            </el-button>
-          </template>
-        </el-table-column>
+        
+       
+        <!-- 
+
         <el-table-column label="导购角色">
           <template slot-scope="scope">
             {{ scope.row.role_name }}
@@ -96,9 +121,9 @@
             />
           </template>
         </el-table-column>
+
         <el-table-column label="绑定关系">
           <template slot-scope="scope">
-            <!-- <router-link :to="{ path: '/store/storemanager/salesmanRelationship', query: {salesperson_id: scope.row.salespersonId, is_bind: 1}}">绑定关系</router-link> -->
             <el-button
               type="text"
               @click.stop="handleShowSideBar(scope.row.salespersonId)"
@@ -107,6 +132,9 @@
             </el-button>
           </template>
         </el-table-column>
+      -->
+            <!-- <router-link :to="{ path: '/store/storemanager/salesmanRelationship', query: {salesperson_id: scope.row.salespersonId, is_bind: 1}}">绑定关系</router-link> -->
+
         <el-table-column label="操作">
           <template slot-scope="scope">
             <div class="operating-icons">
@@ -114,11 +142,11 @@
                 class="iconfont icon-edit1"
                 @click="handleUpdateSalesman(scope.row)"
               />
-              <i
+              <!-- <i
                 v-if="activeName == 'admin'"
                 class="mark iconfont icon-trash-alt1"
                 @click="handleDeleteSalesman(scope.$index, scope.row)"
-              />
+              /> -->
             </div>
           </template>
         </el-table-column>
@@ -136,16 +164,16 @@
       />
     </el-tabs>
 
-    <el-dialog
+    <el-dialog v-show="false" 
       title="编辑导购员角色"
       :visible.sync="dialog_role"
       :close-on-click-modal="false"
     >
       <el-form
-        v-model="form"
+        v-model="form" 
         label-width="160px"
       >
-        <el-form-item label="角色">
+        <el-form-item label="角色" >
           <el-radio-group v-model="roleForm.role">
             <el-radio
               v-for="(item, index) in roleList"
@@ -170,7 +198,7 @@
       </div>
     </el-dialog>
     <el-dialog
-      title="添加/编辑导购员"
+      title="添加/编辑"
       :visible.sync="dialog"
       :close-on-click-modal="false"
     >
@@ -178,7 +206,7 @@
         v-model="form"
         label-width="160px"
       >
-        <el-form-item label="管理店铺">
+        <el-form-item label="管理店铺" >
           <shop-select
             distributors
             :shop-id-default="form.distributor_id"
@@ -198,9 +226,11 @@
             v-model="form.mobile"
             placeholder="请输入手机号"
             style="width: 193px"
+            v-bind:readonly="salesman_id > 0"
           />
+          <div v-if="salesman_id">* 手机号不可修改</div>
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色" v-show="false">
           <el-radio-group v-model="form.role">
             <el-radio
               v-for="(item, index) in roleList"
@@ -211,10 +241,10 @@
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="导购员姓名">
+        <el-form-item label="姓名">
           <el-input
             v-model="form.salesman_name"
-            placeholder="请输入导购员姓名"
+            placeholder="请输入姓名"
             style="width: 193px"
           />
         </el-form-item>
@@ -359,7 +389,10 @@
         </el-card>
       </div>
     </SideBar>
+
   </div>
+</SpRouterView>
+
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -462,6 +495,25 @@ export default {
     addSelectStoreChange (data) {
       this.form.distributor_id = data.shop_id
     },
+    count (index, row) {
+      if (row.children_count > 0) {
+        console.log(this.matchHidePage('child'))
+        console.log(row.promoter_id)
+        console.log(row.promoter_id)
+        console.log(row.promoter_id)
+        let routeData = this.$router.resolve({
+          // path: "/sellers/marketingsalesman/children",
+          // pathxxx: "/sellers/marketingsalesman/popularizelist/child",
+          // path: "/marketing/popularize/popularizelist/child",
+          path: this.matchHidePage('children'),
+          query: { promoter_id: row.promoter_id }
+        })
+        console.log(routeData.href)
+        console.log(routeData.href)
+
+        window.open(routeData.href, '_blank')
+      }
+    },    
     storeChange (params) {
       params && params.shop_id
       this.params.distributor_id = params.shop_id
@@ -500,7 +552,7 @@ export default {
       })
     },
     handleDeleteSalesman (index, row) {
-      this.$confirm('此操作将禁用该导购员, 是否继续?', '提示', {
+      this.$confirm('此操作将禁用, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
