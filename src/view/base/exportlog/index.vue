@@ -25,6 +25,7 @@
         <el-tab-pane label="推广员业绩导出" name="popularize" />
         <el-tab-pane label="业绩统计" name="popularizeStatic" />
         <el-tab-pane label="业绩订单" name="popularizeOrder" />
+        <el-tab-pane label="配送员业绩导出" name="delivery_staffdata" />
       </template>
       <template v-else>
         <el-tab-pane label="会员导出" name="member" />
