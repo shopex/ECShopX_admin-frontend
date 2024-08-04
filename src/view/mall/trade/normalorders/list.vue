@@ -1318,7 +1318,7 @@ export default {
         // if (!['CONFIRMING', 'PACKAGED'].includes(self_delivery_status)) {
         //   return this.$message.error('该订单无法分配配送员！')
         // }
-        if(self_delivery_operator_id !== 0){
+        if(self_delivery_operator_id != 0){
           return this.$message.error('该订单无法分配配送员！')
         }
       }
