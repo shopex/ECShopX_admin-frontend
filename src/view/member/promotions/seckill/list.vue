@@ -22,10 +22,10 @@
           <el-select v-model="params.status" placeholder="活动状态" clearable style="width: 100%">
             <el-option label="全部" value="0" />
             <el-option label="待开始" value="waiting" />
-            <!-- <el-option
+            <el-option
               label="预热中"
               value="in_the_notice"
-            /> -->
+            />
             <el-option label="进行中" value="in_sale" />
             <el-option label="已结束" value="it_has_ended" />
             <!-- <el-option
