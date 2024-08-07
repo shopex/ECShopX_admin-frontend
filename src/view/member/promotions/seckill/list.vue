@@ -69,7 +69,7 @@
         <el-table-column prop="status" label="状态" width="70">
           <template slot-scope="scope">
             <span v-if="scope.row.status == 'waiting'">待开始</span>
-            <!-- <span v-else-if="scope.row.status == 'in_the_notice'">预热中</span> -->
+            <span v-else-if="scope.row.status == 'in_the_notice'">预热中</span>
             <span v-else-if="scope.row.status == 'in_sale'">进行中</span>
             <span v-else-if="scope.row.status == 'it_has_ended'">已结束</span>
             <!-- <span v-else-if="scope.row.status == 'close'">已终止</span> -->
