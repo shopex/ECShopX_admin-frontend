@@ -124,6 +124,7 @@ export default {
     return {
       form: {
         supplier_id: 0,
+        is_market: 0,
         item_id: '',
         audit_status: '',
         itemType: 'normal',
@@ -428,6 +429,17 @@ export default {
           display: 'inline'
         },
         {
+          label: '供应状态',
+          key: 'is_market',
+          type: 'select',
+          isShow: this.IS_SUPPLIER(),
+          options: [
+            {title: '可售', value: 1},
+            {title: '不可售', value: 0}
+          ],
+          display: 'inline'
+        },
+        {
           label: '赠品',
           key: 'isGift',
           type: 'switch',
@@ -537,7 +549,8 @@ export default {
           isShow: (item, { isSpecs }) => {
             const { itemId } = this.$route.params
             const { skus } = this.form.skuParams
-            return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
+            // return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
+            return !itemId
           }
         },
         {
@@ -791,6 +804,7 @@ export default {
         item_spec_list,
         item_main_cat_id,
         is_show_specimg,
+        is_market,
         spec_images,
         spec_items,
         mode,
@@ -832,6 +846,7 @@ export default {
       this.form.taxRate = tax_rate
       this.form.videos = videos
       this.form.isShowSpecimg = is_show_specimg
+      this.form.is_market = is_market
       this.form.aftersales_end_date = aftersales_end_date
       this.form.goods_notice = goods_notice
       this.form.goods_bn = is_new ? '' : goods_bn
@@ -861,7 +876,6 @@ export default {
         market_price: isNaN(market_price / 100) ? '' : market_price / 100,
         barcode,
         point_num,
-        supplier_goods_bn,
         tax_rate,
         tax_rate_code,
         package_num,
@@ -1077,6 +1091,7 @@ export default {
         picsQrcode,
         videos,
         isSpecs,
+        is_market,
         title,
         mate_description,
         mate_keywords,
@@ -1108,6 +1123,7 @@ export default {
         buy_limit_area,
         goods_bn,
         supplier_id,
+        is_market,
         item_type: itemType,
         operate_source: supplier ? 'supplier' : IS_SUPPLIER() ? 'supplier' : 'platform',
         audit_status: action, // submitting 待提交；processing 审核中
