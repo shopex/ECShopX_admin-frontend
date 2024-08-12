@@ -766,7 +766,7 @@
           <el-table-column type="index" width="50" />
           <el-table-column prop="username" label="姓名" />
           <el-table-column prop="mobile" label="手机号" />
-          <el-table-column prop="promoter_grade_name" label="推广员等级" />
+          <!-- <el-table-column prop="promoter_grade_name" label="推广员等级" /> -->
           <el-table-column prop="disabled" label="状态">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.disabled == '0'" type="success" size="mini"> 有效 </el-tag>
