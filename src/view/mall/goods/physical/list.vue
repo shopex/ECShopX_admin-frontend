@@ -992,7 +992,7 @@ export default {
         columns: [
           { name: '商品ID', key: 'goods_id', width: 80 },
           {
-            name: '商品',
+            name: '商品标题',
             key: 'itemName',
             width: 280,
             render: (h, scope) => {
@@ -1057,6 +1057,7 @@ export default {
           {
             name: '标签',
             width: 120,
+            visible:!IS_SUPPLIER(),
             key: 'tagList',
             render: (h, scope) => (
               <div style='white-space: normal;'>
