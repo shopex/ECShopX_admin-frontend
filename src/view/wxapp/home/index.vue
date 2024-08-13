@@ -126,7 +126,7 @@
             <span class="btn" @click="abandonTemplate(item.pages_template_id)">废弃</span>
           </div>
           <div
-            v-if="!isDistributorTemplate && VERSION_STANDARD"
+            v-if="!isDistributorTemplate"
             class="synchronize-btn"
             @click="synchronizeTemplateToShop(index)"
           >
