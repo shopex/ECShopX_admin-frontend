@@ -59,12 +59,14 @@
         v-if="(IS_SUPPLIER() || !form.supplier_id ) && !routerParams.detail && !routerParams.supplier"
         type="primary"
         @click="onFormSubmit('submitting')"
+        :loading="submitLoading"
       >
         保存
       </el-button>
       <el-button
         v-if="IS_SUPPLIER() && !routerParams.detail"
         type="primary"
+        :loading="submitLoading"
         @click.native="onFormSubmit('processing')"
       >
         提交审核
@@ -73,6 +75,7 @@
       <el-button
         v-if="IS_ADMIN() && form.audit_status == 'processing'"
         type="primary"
+        :loading="submitLoading"
         @click.native="onApplyConfirm"
       >
         保存并审核
