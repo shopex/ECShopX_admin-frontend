@@ -53,7 +53,7 @@
             </template>
           </el-table-column> -->
 
-          <!-- <el-table-column prop="children_count" width="130" label="累计会员数量">
+          <el-table-column prop="children_count" width="130" label="累计会员数量">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -64,14 +64,8 @@
                 {{ scope.row.children_count }}
               </el-button>
             </template>
-          </el-table-column> -->
-
-          <el-table-column prop="child_count" label="累计会员数量">
-            <template slot-scope="scope">
-              <span v-if="scope.row.child_count > 0">{{ scope.row.child_count }}</span>
-              <span v-else>0</span>
-            </template>
           </el-table-column>
+          
           <el-table-column label="是否启用">
             <template slot-scope="scope">
               <el-switch
