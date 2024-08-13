@@ -482,6 +482,13 @@ export default {
   data() {
     const loginType = this.$store.getters.login_type
     let statusOption
+    let updateStatusOption = [
+      { title: '全部', value: '' },
+      { title: '前台可销售', value: 'onsale' },
+      { title: '前台不展示', value: 'offline_sale' },
+      { title: '前台仅展示', value: 'only_show' },
+      { title: '不可销售', value: 'instock' }
+    ]
     if (loginType == 'distributor') {
       statusOption = [
         { title: '全部', value: '' },
@@ -493,13 +500,7 @@ export default {
         { title: '不可销售', value: 'instock' }
       ]
     } else {
-      statusOption = [
-        { title: '全部', value: '' },
-        { title: '前台可销售', value: 'onsale' },
-        { title: '前台不展示', value: 'offline_sale' },
-        { title: '前台仅展示', value: 'only_show' },
-        { title: '不可销售', value: 'instock' }
-      ]
+      statusOption = updateStatusOption
     }
 
     let tabList = []
@@ -614,7 +615,7 @@ export default {
           key: 'status',
           type: 'select',
           message: '不能为空',
-          options: statusOption
+          options: updateStatusOption
         }
       ],
       batchChangeStateForm: {
