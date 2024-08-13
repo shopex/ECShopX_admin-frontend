@@ -21,8 +21,7 @@
           <el-table-column prop="mobile" label="手机号" />
           <el-table-column prop="storeInfo.name" label="店铺" />
 
-          <el-table-column prop="children_count" width="100" label="会员数量">
-            <!-- sortable -->
+          <!-- <el-table-column prop="children_count" width="100" label="会员数量">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -33,7 +32,7 @@
                 {{ scope.row.children_count }}
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <!-- <el-table-column prop="child_count" label="会员数量">
             <template slot-scope="scope">
@@ -41,7 +40,7 @@
               <span v-else>0</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="是否启用">
+          <!-- <el-table-column label="是否启用">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.is_valid"
@@ -52,10 +51,9 @@
                 @change="defaultSwitchChange(scope.row)"
               />
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
-          <el-table-column prop="children_count" width="130" label="累计会员数量">
-            <!-- sortable -->
+          <!-- <el-table-column prop="children_count" width="130" label="累计会员数量">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -66,7 +64,7 @@
                 {{ scope.row.children_count }}
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <!-- <el-table-column prop="child_count" label="累计会员数量">
             <template slot-scope="scope">
@@ -74,7 +72,7 @@
               <span v-else>0</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="是否启用">
+          <!-- <el-table-column label="是否启用">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.is_valid"
@@ -85,7 +83,7 @@
                 @change="defaultSwitchChange(scope.row)"
               />
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <!-- 
 
@@ -112,7 +110,7 @@
       -->
           <!-- <router-link :to="{ path: '/store/storemanager/salesmanRelationship', query: {salesperson_id: scope.row.salespersonId, is_bind: 1}}">绑定关系</router-link> -->
 
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
               <div class="operating-icons">
                 <i class="iconfont icon-edit1" @click="handleUpdateSalesman(scope.row)" />
