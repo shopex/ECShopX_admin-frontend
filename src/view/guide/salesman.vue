@@ -66,13 +66,13 @@
             </template>
           </el-table-column> -->
 
-          <!-- <el-table-column prop="child_count" label="累计会员数量">
+          <el-table-column prop="child_count" label="累计会员数量">
             <template slot-scope="scope">
               <span v-if="scope.row.child_count > 0">{{ scope.row.child_count }}</span>
               <span v-else>0</span>
             </template>
-          </el-table-column> -->
-          <!-- <el-table-column label="是否启用">
+          </el-table-column>
+          <el-table-column label="是否启用">
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.is_valid"
@@ -83,7 +83,7 @@
                 @change="defaultSwitchChange(scope.row)"
               />
             </template>
-          </el-table-column> -->
+          </el-table-column>
 
           <!-- 
 
