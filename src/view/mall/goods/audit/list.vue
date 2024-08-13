@@ -4,9 +4,12 @@
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品名称:">
           <el-input v-model="params.keywords" placeholder="请输入商品名称" />
+        </SpFilterFormItem>        
+        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+          <el-input v-model="params.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="item_bn" label="商品编号:">
-          <el-input v-model="params.item_bn" placeholder="请输入商品编号" />
+        <SpFilterFormItem prop="item_bn" label="SKU编码:">
+          <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
         <SpFilterFormItem prop="regions_id" label="商品产地:">
           <el-cascader
@@ -75,10 +78,14 @@
           >
             <el-table-column type="selection" align="center" label="全选" />
             <el-table-column prop="goods_id" label="商品ID" />
-            <el-table-column prop="itemName" label="商品名称">
+            <el-table-column prop="itemName" label="商品名称" width="200">
               <template slot-scope="scope">
                 {{ scope.row.item_name }}
                 <el-tag v-if="scope.row.special_type == 'drug'" type="danger"> 处方药 </el-tag>
+
+                <div style='color: #888;font-size: 12px;'>
+                  SPU编码：{{ scope.row.goods_bn }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="排序编号">
@@ -327,6 +334,7 @@ export default {
       params: {
         keywords: '',
         item_bn: '',
+        goods_bn: '',
         regions_id: [],
         approve_status: '',
         distributor_id: 'all_distributor',

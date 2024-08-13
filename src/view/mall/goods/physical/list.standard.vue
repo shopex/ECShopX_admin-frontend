@@ -68,9 +68,9 @@
         <SpFilterFormItem prop="keywords" label="商品标题:">
           <el-input v-model="params.keywords" placeholder="商品标题或副标题关键词" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">
-          <el-input v-model="params.supplier_goods_bn" placeholder="请输入供应商货号" />
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
+<!--          <el-input v-model="params.supplier_goods_bn" placeholder="请输入供应商货号" />-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem v-if="!IS_DISTRIBUTOR()" prop="approve_status" label="商品状态:">
           <el-select v-model="params.approve_status" clearable placeholder="请选择">
             <el-option
@@ -138,9 +138,9 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">
-          <el-input v-model="params.tax_rate_code" placeholder="商品编号或条形码" />
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
+<!--          <el-input v-model="params.tax_rate_code" placeholder="商品编号或条形码" />-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="brand_id" label="品牌:">
           <el-select
             v-model="params.brand_id"
@@ -166,13 +166,13 @@
             :options="regions"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">
-          <el-select v-model="params.delivery_data_type">
-            <el-option value="fixed_date" label="指定发货日期" />
-            <el-option value="relative_date" label="相对发货日期" />
-            <el-option value="default_date" label="默认发货日期" />
-          </el-select>
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
+<!--          <el-select v-model="params.delivery_data_type">-->
+<!--            <el-option value="fixed_date" label="指定发货日期" />-->
+<!--            <el-option value="relative_date" label="相对发货日期" />-->
+<!--            <el-option value="default_date" label="默认发货日期" />-->
+<!--          </el-select>-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="item_bn" label="SKU编码:">
           <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
@@ -182,9 +182,9 @@
         <!-- <SpFilterFormItem prop="operator_name" label="来源供应商:">
           <el-input v-model="params.operator_name" placeholder="请输入来源供应商" />
         </SpFilterFormItem> -->
-        <SpFilterFormItem prop="supplier_name" label="所属供应商:">
-          <el-input v-model="params.supplier_name" placeholder="请输入所属供应商" />
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="supplier_name" label="所属供应商:">-->
+<!--          <el-input v-model="params.supplier_name" placeholder="请输入所属供应商" />-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="is_gift" label="赠品:">
           <el-select v-model="params.is_gift">
             <el-option :value="undefined" label="全部" />
