@@ -1102,7 +1102,7 @@ export default {
           },
           {
             name: '来源供应商',
-            key: 'operator_name',
+            key: 'supplier_name',
             width: 100
           },
           {
