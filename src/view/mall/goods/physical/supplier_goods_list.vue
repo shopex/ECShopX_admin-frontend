@@ -1536,7 +1536,8 @@ export default {
     },
     async exportItemsData() {
       const exportParams = {
-        ...this.searchParams
+        ...this.searchParams,
+        item_source: 'supplier'
       }
       if (this.selectionItems.length > 0) {
         exportParams['item_id'] = this.selectionItems.map((item) => item.item_id)
