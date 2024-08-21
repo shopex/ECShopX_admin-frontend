@@ -1122,19 +1122,19 @@ export default {
               return this.statusOption.find((item) => item.value === value)?.title
             }
           },
-          {
-            name: '审核状态',
-            key: 'audit_status',
-            width: 200,
-            render: (h, scope) => (
-              <div>
-                <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
-                {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
-                  <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
-                )}
-              </div>
-            )
-          },
+          // {
+          //   name: '审核状态',
+          //   key: 'audit_status',
+          //   width: 200,
+          //   render: (h, scope) => (
+          //     <div>
+          //       <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
+          //       {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
+          //         <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
+          //       )}
+          //     </div>
+          //   )
+          // },
           { name: '销售分类', key: 'itemCatName', minWidth: 120 },
           {
             name: '创建时间',
