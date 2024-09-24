@@ -226,7 +226,7 @@ export default {
                   'value': row.goods_can_sale,
                   'active-value': true,
                   'inactive-value': false,
-                  'disabled': this.IS_ADMIN() && row.is_market == '0'
+                  // 'disabled': this.IS_ADMIN() && row.is_market == '0'
                 },
                 on: {
                   change: async (e) => {
@@ -343,8 +343,7 @@ export default {
                 props: {
                   'value': !row.is_total_store,
                   'active-value': true,
-                  'inactive-value': false,
-                  'disabled': this.IS_ADMIN() && row.supplier_id != '0'
+                  'inactive-value': false
                 },
                 on: {
                   change: async (e) => {
