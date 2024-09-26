@@ -54,10 +54,13 @@
     />
 
     <div class="footer-container">
-      <el-button @click.native="handleCancel"> 取消 </el-button>
+      <el-button @click.native="handleCancel"> 取消</el-button>
       <el-button
-        v-if="(IS_SUPPLIER() || !form.supplier_id ) && !routerParams.detail"
+        v-if="
+          (IS_SUPPLIER() || !form.supplier_id) && !routerParams.detail && !routerParams.supplier
+        "
         type="primary"
+        :loading="submitLoading"
         @click="onFormSubmit('submitting')"
       >
         保存
@@ -65,6 +68,7 @@
       <el-button
         v-if="IS_SUPPLIER() && !routerParams.detail"
         type="primary"
+        :loading="submitLoading"
         @click.native="onFormSubmit('processing')"
       >
         提交审核
@@ -73,9 +77,10 @@
       <el-button
         v-if="IS_ADMIN() && form.audit_status == 'processing'"
         type="primary"
+        :loading="submitLoading"
         @click.native="onApplyConfirm"
       >
-        审核
+        保存并审核
       </el-button>
     </div>
 
@@ -121,9 +126,12 @@ export default {
         children: 'children'
       }
     }
+    const { prohibit } = this.$route.query
+    const disabled = prohibit == 1
     return {
       form: {
         supplier_id: 0,
+        is_market: 0,
         item_id: '',
         audit_status: '',
         itemType: 'normal',
@@ -184,68 +192,7 @@ export default {
         mate_keywords: '', // pc页面标题
         goods_notice: '' // 商品公告
       },
-      categoryList: [],
-      mainCategoryDisabled: false,
-      saleCategoryList: [],
-      regionsList: [],
-      provinceList: [],
-      goodsSpec: [],
-      submitLoading: false,
-      loading: false,
-      isLeave: false,
-      isShowPoint: false,
-      // 管理分类上绑定的规格
-      mainCategorySpec: [],
-      // 当前商品是否多规格
-      multipleSkuGoods: false,
-      applyDialog: false,
-      applyForm: {
-        applyResult: 'rejected',
-        audit_reason: ''
-      },
-      applyFormList: [
-        {
-          label: '处理结果',
-          key: 'applyResult',
-          type: 'radio',
-          options: [
-            { label: 'rejected', name: '不同意' },
-            { label: 'approved', name: '同意' }
-          ]
-        },
-        {
-          label: '拒绝原因',
-          key: 'audit_reason',
-          type: 'textarea',
-          placeholder: '请输入拒绝原因',
-          isShow: (item, value) => {
-            return value.applyResult == 'rejected'
-          },
-          validator: (rule, value, callback) => {
-            if (this.applyForm.applyResult == 'rejected' && !value) {
-              callback(new Error('请输入拒绝原因'))
-            } else {
-              callback()
-            }
-          }
-        }
-      ],
-      routerParams: {}
-    }
-  },
-  computed: {
-    formList() {
-      const { prohibit } = this.$route.query
-      const disabled = prohibit == 1
-      const cascaderProps = {
-        props: {
-          multiple: true,
-          value: 'value',
-          children: 'children'
-        }
-      }
-
-      return [
+      formList: [
         {
           label: '管理分类',
           type: 'group'
@@ -277,7 +224,7 @@ export default {
           key: 'itemName',
           type: 'input',
           display: 'inline',
-          disabled,
+          // disabled,
           required: true,
           message: '请输入商品标题'
         },
@@ -285,7 +232,7 @@ export default {
           label: '副标题',
           key: 'brief',
           type: 'input',
-          disabled,
+          // disabled,
           display: 'inline'
         },
         {
@@ -339,6 +286,7 @@ export default {
         {
           label: 'SPU编码',
           key: 'goods_bn',
+          disabled,
           // disabled: () => {
           //   return !!this.form.item_id
           // },
@@ -420,11 +368,36 @@ export default {
         //     }
         //   }
         // },
+        // {
+        //   label: '商品税率',
+        //   key: 'taxRate',
+        //   type: 'input',
+        //   display: 'inline'
+        // },
+        {
+          label: '供应状态',
+          key: 'is_market',
+          type: 'select',
+          isShow: this.IS_SUPPLIER(),
+          options: [
+            { title: '可售', value: 1 },
+            { title: '不可售', value: 0 }
+          ],
+          display: 'inline'
+        },
+        {
+          label: '赠品',
+          key: 'isGift',
+          type: 'switch',
+          tip: '开启后前台不可购买'
+        },
+
         {
           label: '销售分类',
           key: 'salesCategory',
           width: '720px',
-          required: true,
+          // required: !this.IS_SUPPLIER() && !this.form.supplier_id,
+          required: !this.IS_SUPPLIER(),
           message: '请选择销售分类',
           component: ({ key }, value) => (
             <el-cascader
@@ -448,7 +421,8 @@ export default {
           message: '请上传商品图片',
           component: ({ key }, value) => (
             <div>
-              {disabled ? (
+              {/* diabled */}
+              {false ? (
                 <div class='goods-img-list'>
                   {value[key].map((item) => (
                     <el-image
@@ -480,14 +454,15 @@ export default {
           key: 'videos',
           component: ({ key }, value) => (
             <div>
-              {disabled && value[key] && (
+              {/* {disabled && value[key] && (
                 <video-player
                   class='picker-video-player'
                   options={this.getOptions(value[key]?.url || value[key])}
                   style='width:180px;height:80px'
                 />
-              )}
-              {!disabled && <SpVideoPicker v-model={value[key]} disabled={disabled} />}
+              )} */}
+              {/* !disabled */}
+              <SpVideoPicker v-model={value[key]} disabled={disabled} />
             </div>
           )
         },
@@ -521,7 +496,8 @@ export default {
           isShow: (item, { isSpecs }) => {
             const { itemId } = this.$route.params
             const { skus } = this.form.skuParams
-            return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
+            // return !itemId || (itemId && !this.multipleSkuGoods && skus.length > 0)
+            return !itemId
           }
         },
         {
@@ -576,6 +552,7 @@ export default {
               <SkuParams
                 v-model={value[key]}
                 ref='skuParams'
+                isSupplierGoods={this.routerParams.isSupplierGoods}
                 is-show-point={this.isShowPoint}
                 disabled={disabled}
                 provinceList={this.provinceList}
@@ -589,10 +566,12 @@ export default {
           validator: async (rule, value, callback) => {
             if (this.form.isSpecs) {
               const { specItems } = value
+
               const approveStatus = specItems.find(({ approve_status }) => !!approve_status)
               const store = specItems.find(({ store }) => !!store)
               const price = specItems.find(({ price }) => !!price)
-              if (!approveStatus) {
+
+              if (!IS_SUPPLIER() && !this.routerParams.isSupplierGoods &&  !approveStatus) {
                 callback('请选择商品状态')
               } else if (!store) {
                 callback('请输入商品库存')
@@ -671,9 +650,59 @@ export default {
             return mode == 'component'
           }
         }
-      ]
+      ],
+      categoryList: [],
+      mainCategoryDisabled: false,
+      saleCategoryList: [],
+      regionsList: [],
+      provinceList: [],
+      goodsSpec: [],
+      submitLoading: false,
+      loading: false,
+      isLeave: false,
+      isShowPoint: false,
+      // 管理分类上绑定的规格
+      mainCategorySpec: [],
+      // 当前商品是否多规格
+      multipleSkuGoods: false,
+      applyDialog: false,
+      applyForm: {
+        applyResult: 'rejected',
+        audit_reason: ''
+      },
+      applyFormList: [
+        {
+          label: '处理结果',
+          key: 'applyResult',
+          type: 'radio',
+          options: [
+            { label: 'rejected', name: '不同意' },
+            { label: 'approved', name: '同意' }
+          ]
+        },
+        {
+          label: '拒绝原因',
+          key: 'audit_reason',
+          type: 'textarea',
+          placeholder: '请输入拒绝原因',
+          isShow: (item, value) => {
+            return value.applyResult == 'rejected'
+          },
+          validator: (rule, value, callback) => {
+            if (this.applyForm.applyResult == 'rejected' && !value) {
+              callback(new Error('请输入拒绝原因'))
+            } else {
+              callback()
+            }
+          }
+        }
+      ],
+      routerParams: {
+        isSupplierGoods:false
+      }
     }
   },
+  computed: {},
   created() {
     this.getPointRule()
     this.getMainCategory()
@@ -743,6 +772,7 @@ export default {
       this.routerParams = this.$route.query || {}
       const {
         item_id,
+        supplier_id,
         audit_status,
         item_name,
         brief,
@@ -774,6 +804,7 @@ export default {
         item_spec_list,
         item_main_cat_id,
         is_show_specimg,
+        is_market,
         spec_images,
         spec_items,
         mode,
@@ -804,6 +835,7 @@ export default {
       this.form.audit_reason = audit_reason
       this.form.itemName = is_new ? `${item_name}_复制` : item_name
       this.form.item_id = item_id
+      this.form.supplier_id = supplier_id
       this.form.brief = brief
       this.form.templatesId = templates_id.toString()
       this.form.brandId = brand_id
@@ -811,8 +843,10 @@ export default {
       this.form.sort = sort
       this.form.regionsId = regions_id
       this.form.isGift = is_gift
+      this.form.taxRate = tax_rate
       this.form.videos = videos
       this.form.isShowSpecimg = is_show_specimg
+      this.form.is_market = is_market
       this.form.aftersales_end_date = aftersales_end_date
       this.form.goods_notice = goods_notice
       this.form.goods_bn = is_new ? '' : goods_bn
@@ -842,7 +876,6 @@ export default {
         market_price: isNaN(market_price / 100) ? '' : market_price / 100,
         barcode,
         point_num,
-        supplier_goods_bn,
         tax_rate,
         tax_rate_code,
         package_num,
@@ -862,7 +895,7 @@ export default {
           package_type
         }
         this.resolveSkuParams(goods_spec, spec_items)
-        this.$refs['skuParams'].onSkuChange({ spec_images, spec_items, restParams})
+        this.$refs['skuParams'].onSkuChange({ spec_images, spec_items, restParams })
       } else {
         this.resolveSkuParams(goods_spec)
       }
@@ -927,6 +960,8 @@ export default {
             title: item.name
           }
         })
+
+        console.log('this.formList[5]:', this.formList[5])
       } else {
         this.$message.error('请先添加运费模板')
       }
@@ -950,13 +985,13 @@ export default {
     async getAddress() {
       const res = await this.$api.common.getAddress()
       this.regionsList = res
-      const _all_obj = { 
+      const _all_obj = {
         value: 'all',
         label: '全部'
       }
-      const data_n = res.map(v => {
-          const children = []
-          return {...v, children}
+      const data_n = res.map((v) => {
+        const children = []
+        return { ...v, children }
       })
       this.provinceList = [].concat(_all_obj, data_n)
     },
@@ -1039,6 +1074,7 @@ export default {
       const { is_new, supplier } = this.$route.query
       const {
         goods_bn,
+        supplier_id,
         itemType,
         specialType,
         itemSource,
@@ -1051,11 +1087,13 @@ export default {
         sort,
         regionsId,
         isGift,
+        taxRate,
         salesCategory,
         pics,
         picsQrcode,
         videos,
         isSpecs,
+        is_market,
         title,
         mate_description,
         mate_keywords,
@@ -1071,9 +1109,9 @@ export default {
       } = this.form
       // 单规格销售区域
       let buy_limit_area = ''
-      if(specParams.buy_limit_area) {
+      if (specParams.buy_limit_area) {
         const _limit_area = specParams.buy_limit_area
-        if(_limit_area && _limit_area.length) {
+        if (_limit_area && _limit_area.length) {
           buy_limit_area = _limit_area.join(',')
         }
       }
@@ -1086,6 +1124,8 @@ export default {
       let params = {
         buy_limit_area,
         goods_bn,
+        supplier_id,
+        is_market,
         item_type: itemType,
         operate_source: supplier ? 'supplier' : IS_SUPPLIER() ? 'supplier' : 'platform',
         audit_status: action, // submitting 待提交；processing 审核中
@@ -1106,6 +1146,7 @@ export default {
         delivery_data_type: delivery_data_type,
         goods_notice: goods_notice,
         is_gift: isGift,
+        tax_rate: taxRate,
         item_category: _salesCategory,
         pics,
         pics_create_qrcode: _picsQrcode,
@@ -1130,7 +1171,8 @@ export default {
         intro: mode == 'component' ? JSON.stringify(content) : intro
       }
       if (isSpecs) {
-        const { skus, skuItemImages, specItems, package_type, package_num, buy_limit_area } = this.form.skuParams
+        const { skus, skuItemImages, specItems, package_type, package_num, buy_limit_area } =
+          this.form.skuParams
         // 多规格
         params = {
           ...params,
@@ -1209,7 +1251,7 @@ export default {
         }, 200)
       } catch (e) {
         this.submitLoading = false
-        console.log(e);
+        console.log(e)
       }
     },
     onApplyConfirm() {

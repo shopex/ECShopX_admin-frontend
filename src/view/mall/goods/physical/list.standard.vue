@@ -68,9 +68,9 @@
         <SpFilterFormItem prop="keywords" label="商品标题:">
           <el-input v-model="params.keywords" placeholder="商品标题或副标题关键词" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">
-          <el-input v-model="params.supplier_goods_bn" placeholder="请输入供应商货号" />
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
+<!--          <el-input v-model="params.supplier_goods_bn" placeholder="请输入供应商货号" />-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem v-if="!IS_DISTRIBUTOR()" prop="approve_status" label="商品状态:">
           <el-select v-model="params.approve_status" clearable placeholder="请选择">
             <el-option
@@ -93,6 +93,16 @@
             />
           </el-select>
         </SpFilterFormItem>
+        <!-- <SpFilterFormItem prop="item_holder" label="商品类型:">
+        <el-select v-model="params.item_holder" placeholder="请选择商品类型" clearable>
+          <el-option
+            v-for="item in goodCategory"
+            :key="item.value"
+            :label="item.title"
+            :value="item.value"
+          />
+        </el-select>
+      </SpFilterFormItem> -->
         <SpFilterFormItem prop="main_cat_id" label="管理分类:">
           <el-cascader
             v-model="params.main_cat_id"
@@ -102,6 +112,15 @@
             :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
           />
         </SpFilterFormItem>
+        <SpFilterFormItem prop="cat_id" label="销售分类:">
+          <el-cascader
+            v-model="params.cat_id"
+            :options="categoryList"
+            :props="{ checkStrictly: true, label: 'category_name', value: 'category_id' }"
+            clearable
+          />
+        </SpFilterFormItem>
+
         <!-- <SpFilterFormItem prop="audit_status" label="审核状态:">
           <el-select v-model="params.audit_status">
             <el-option value="processing" label="待审核" />
@@ -119,9 +138,9 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">
-          <el-input v-model="params.tax_rate_code" placeholder="商品编号或条形码" />
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
+<!--          <el-input v-model="params.tax_rate_code" placeholder="商品编号或条形码" />-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="brand_id" label="品牌:">
           <el-select
             v-model="params.brand_id"
@@ -147,21 +166,41 @@
             :options="regions"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">
-          <el-select v-model="params.delivery_data_type">
-            <el-option value="fixed_date" label="指定发货日期" />
-            <el-option value="relative_date" label="相对发货日期" />
-            <el-option value="default_date" label="默认发货日期" />
-          </el-select>
-        </SpFilterFormItem>
+<!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
+<!--          <el-select v-model="params.delivery_data_type">-->
+<!--            <el-option value="fixed_date" label="指定发货日期" />-->
+<!--            <el-option value="relative_date" label="相对发货日期" />-->
+<!--            <el-option value="default_date" label="默认发货日期" />-->
+<!--          </el-select>-->
+<!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="item_bn" label="SKU编码:">
           <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
         <SpFilterFormItem prop="goods_bn" label="SPU编码:">
           <el-input v-model="params.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="operator_name" label="来源供应商:">
+        <!-- <SpFilterFormItem prop="operator_name" label="来源供应商:">
           <el-input v-model="params.operator_name" placeholder="请输入来源供应商" />
+        </SpFilterFormItem> -->
+<!--        <SpFilterFormItem prop="supplier_name" label="所属供应商:">-->
+<!--          <el-input v-model="params.supplier_name" placeholder="请输入所属供应商" />-->
+<!--        </SpFilterFormItem>-->
+        <SpFilterFormItem prop="is_gift" label="赠品:">
+          <el-select v-model="params.is_gift">
+            <el-option :value="undefined" label="全部" />
+            <el-option :value="true" label="是" />
+            <el-option :value="false" label="否" />
+          </el-select>
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="item_holder" label="商品类型:">
+          <el-select v-model="params.item_holder" placeholder="请选择商品类型" clearable>
+            <el-option
+              v-for="item in goodCategory"
+              :key="item.value"
+              :label="item.title"
+              :value="item.value"
+            />
+          </el-select>
         </SpFilterFormItem>
       </SpFilterForm>
 
@@ -236,7 +275,20 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="所属供应商" prop="operator_name" width="120" />
+            <el-table-column label="是否赠品" >
+              <template slot-scope="scope">
+              {{ scope.row.is_gift == '1' ? '是' : '否' }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="item_holder" label="商品类型" width="100">
+            <template slot-scope="scope">
+              <div class="ell3">
+                {{ goodCategoryMap[scope.row.item_holder] }}
+              </div>
+            </template>
+          </el-table-column>
+            <el-table-column label="所属供应商" prop="supplier_name" width="120" />
+
             <el-table-column
               label="供应商货号"
               prop="supplier_goods_bn"
@@ -244,6 +296,11 @@
               align="right"
               header-align="center"
             />
+            <el-table-column  label="供应状态" width="120">
+              <template slot-scope="scope">
+                {{ scope.row.is_market == '1' ? '可售' : '不可售' }}
+              </template>
+            </el-table-column>
             <!-- <el-table-column label="标签">
               <template slot-scope="scope">
                 <template>
@@ -500,9 +557,9 @@
               <el-table-column label="销售价" min-width="80">
                 <template slot-scope="scope"> ¥{{ scope.row.price / 100 }} </template>
               </el-table-column>
-              <el-table-column label="成本价" min-width="80">
+              <!-- <el-table-column label="成本价" min-width="80">
                 <template slot-scope="scope"> ¥{{ scope.row.cost_price / 100 }} </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column label="类型" width="160">
                 <template slot-scope="scope">
                   <el-switch
@@ -804,6 +861,7 @@ import {
 import { getPageCode } from '@/api/marketing'
 import { VERSION_IN_PURCHASE } from '@/utils'
 import mixins from '@/mixins'
+import { GOOD_CATEGORY, GOOD_CATEGORY_MAP } from '@/consts'
 
 import GoodsSelect from './comps/goodsSelect'
 import skuFinder from './comps/skuFinder'
@@ -926,8 +984,14 @@ export default {
         brand_id: '',
         goods_bn: '',
         operator_name: '',
-        is_can_sale: ''
+        is_can_sale: '',
+        supplier_name:'',
+        cat_id:'',
+        item_holder:'',
+        is_gift:''
       },
+      goodCategoryMap: GOOD_CATEGORY_MAP,
+      goodCategory: GOOD_CATEGORY,
       start_date: '',
       end_date: '',
       addTemplatesdialogVisible: false,
@@ -991,7 +1055,9 @@ export default {
       ],
       showItemSkuDrawer: false,
       itemSkuDrawerTitle: '',
-      itemSkuList: []
+      itemSkuList: [],
+      goodCategoryMap: GOOD_CATEGORY_MAP,
+      goodCategory: GOOD_CATEGORY.filter(item=>item.value != 'distributor'),
     }
   },
   computed: {

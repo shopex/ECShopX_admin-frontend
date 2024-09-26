@@ -97,7 +97,7 @@
 
       <div class="action-container">
         <!-- <el-button
-          v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT"
+          v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT()"
           plain
           type="primary"
           @click="addDistributorTag"
@@ -113,7 +113,7 @@
           打标签
         </el-button>
         <el-button
-          v-if="IS_ADMIN() || IS_MERCHANT"
+          v-if="IS_ADMIN() || IS_MERCHANT()"
           type="primary"
           plain
           @click="showSettingDistance('')"
@@ -226,7 +226,11 @@
             />
           </template>
         </el-table-column>
-
+        <el-table-column width="100" label="商家自配送">
+          <template slot-scope="scope">
+            {{ scope.row.is_self_delivery ? '是' : '否' }}
+          </template>
+        </el-table-column>
         <el-table-column width="70" label="状态">
           <template slot-scope="scope">
             <el-button
@@ -350,7 +354,7 @@
                 <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
                   银联商务支付配置
                 </el-button>
-                <!-- <el-button v-if="scope.row.distribution_type == '0' || IS_DISTRIBUTOR" type="text" @click="showSettingDistance(scope.row.distributor_id)">
+                <!-- <el-button v-if="scope.row.distribution_type == '0' || IS_DISTRIBUTOR()" type="text" @click="showSettingDistance(scope.row.distributor_id)">
               店铺范围配置
             </el-button> -->
                 <el-button type="text" @click="showSettingDistance(scope.row.distributor_id)">

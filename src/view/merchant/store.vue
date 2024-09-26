@@ -80,7 +80,7 @@
     />
 
     <div class="footer-container">
-      <el-button @click.native="handleCancel"> 取消 </el-button>
+      <el-button @click.native="handleCancel"> 取消</el-button>
       <el-button
         v-if="!VERSION_STANDARD || (!IS_DISTRIBUTOR() && VERSION_STANDARD)"
         type="primary"
@@ -97,6 +97,8 @@
 import { isObject, isArray, isEmpty, getRegionNameById } from '@/utils'
 import Pages from '@/utils/pages'
 import district from '@/common/district.json'
+import fetchJsonp from '@/utils/axiosJsonp'
+import { axios } from '@/utils/fetch'
 import DaoDianZiti from './components/DaoDianZiti'
 import RefundGoodsAddress from './components/RefundGoodsAddress'
 import RefundGoodsStore from './components/RefundGoodsStore'
@@ -152,13 +154,15 @@ export default {
           endTime: ''
         },
         offline_aftersales_other: false,
+        is_refund_freight:false,
         introduce: ''
       },
+      offline_freight_status:false,
       formList: [
         {
           label: '店铺类型',
           type: 'group',
-          isShow: ({ key }, value) => this.IS_ADMIN && this.distributor_self == 0
+          isShow: ({ key }, value) => this.IS_ADMIN() && this.distributor_self == 0
         },
         {
           label: '店铺类型',
@@ -166,7 +170,7 @@ export default {
           type: 'select',
           clearable: false,
           options: distributionTypeOptions,
-          isShow: ({ key }, value) => this.IS_ADMIN && this.distributor_self == 0
+          isShow: ({ key }, value) => this.IS_ADMIN() && this.distributor_self == 0
         },
         {
           label: '所属商户',
@@ -202,7 +206,7 @@ export default {
             )
           },
           isShow: ({ key }, value) => {
-            return value.distribution_type == 1 && this.IS_ADMIN && this.distributor_self == 0
+            return value.distribution_type == 1 && this.IS_ADMIN() && this.distributor_self == 0
           },
           validator: (rule, value, callback) => {
             if (this.form.distribution_type == 1 && !value) {
@@ -324,7 +328,7 @@ export default {
           display: 'inline',
           tip: '自动同步商品至店铺',
           isShow: ({ key }, value) =>
-            this.VERSION_STANDARD && !this.IS_DISTRIBUTOR && this.distributor_self == 0
+            this.VERSION_STANDARD && !this.IS_DISTRIBUTOR() && this.distributor_self == 0
         },
         {
           label: '街道居委',
@@ -400,14 +404,6 @@ export default {
                 <el-button type='primary' on-click={this.searchKeyword}>
                   搜索定位
                 </el-button>
-
-                <div v-show={this.qqmap_infowin_show} class='qqmap-infowin' id='qqmap_infowin'>
-                  <div class='address-name'>{this.poi_info?.name}</div>
-                  <div class='address-detail'>{this.poi_info?.address}</div>
-                  <el-button type='primary' size='mini' on-click={this.importPosition}>
-                    导入位置信息
-                  </el-button>
-                </div>
               </div>
             )
           },
@@ -440,17 +436,25 @@ export default {
         {
           label: '送货方式',
           key: 'is_self_delivery',
-          type: 'radio',
-          options: [
-            { name: '商家自配送', label: true },
-            { name: '达达同城配', label: false }
+          // type: 'radio',
+          // options: [
+            // { name: '商家自配送', label: true },
+            // { name: '达达同城配', label: false }
             // { name: '闪送', label: 6 }
-          ],
-          isShow: ({ key }, value) => value.is_dada && this.dadaEnable
+          // ],
+          isShow: ({ key }, value) => value.is_dada,
+          component: ({ key }, value) => {
+            return (
+            <div style='margin-top: 14px;display:flex'>
+              <el-radio v-model={value[key]} label={true}>商家自配送</el-radio>
+              <el-radio v-model={value[key]} label={false} disabled={!this.dadaEnable}>达达同城配</el-radio>
+            </div>
+            )
+          }
         },
         {
           key: 'freight_time',
-          isShow: ({ key }, value) => value.is_self_delivery && value.is_dada && this.dadaEnable,
+          isShow: ({ key }, value) => value.is_self_delivery && value.is_dada,
           component: ({ key }, value) => {
             return (
               <div style='margin-left: 27px;display:flex'>
@@ -466,10 +470,10 @@ export default {
           key: 'business',
           type: 'select',
           options: [],
-          isShow: ({ key }, value) => !value.is_self_delivery && this.dadaEnable && value.is_dada,
+          isShow: ({ key }, value) => !value.is_self_delivery && value.is_dada,
           validator: (rule, value, callback) => {
             console.log('value:', value)
-            if (!this.form.is_self_delivery) {
+            if (!this.form.is_self_delivery && value.is_dada) {
               if (!value) {
                 callback(new Error('业务类型必填'))
               } else {
@@ -532,6 +536,15 @@ export default {
           width: 'auto',
           tip: '启用后其他店铺在设置可退货店铺时可选择本店（即本店可接收其他店铺订单到店退货）；商家发起的售后订单不受此规则限制。'
         },
+        //平台开了才能操作，否则置灰
+        {
+          label: '消费者退货退款时可退运费',
+          key: 'is_refund_freight',
+          type: 'switch',
+          disabled: () => this.offline_freight_status,
+          width: 'auto',
+          tip: '启用后本店订单买家发起退货退款时可退运费。'
+        },
         {
           label: '店铺介绍',
           type: 'group'
@@ -549,9 +562,8 @@ export default {
       regions: district,
       submitLoading: false,
       searchService: null,
-      markers: [],
-      qqmap_infowin_show: false,
-      poi_info: null,
+      map: null,
+      mapMarker: null,
       datapass_block: 0,
       distributor_self: 0, // 总店=1
       dadaEnable: false
@@ -571,13 +583,14 @@ export default {
       this.getDadaInfo()
     }
     this.getStoreInfo()
+    this.getOrderSetting()
   },
-  mounted() {
-    // this.$nextTick(() => {
-    //   this.qqmapinit()
-    // })
-  },
+  mounted() {},
   methods: {
+    async getOrderSetting() {
+      const res = await this.$api.trade.getOrderSetting()
+      this.offline_freight_status = res.is_refund_freight != 1
+    },
     async getMerchantList({ page, pageSize }, keywords) {
       let params = {
         pageSize,
@@ -605,7 +618,7 @@ export default {
         this.pageQuery.reset(e)
       }
     },
-    searchKeyword() {
+    async searchKeyword() {
       //设置搜索的范围和关键字等属性
       const { regions_id, address } = this.form
       if (regions_id.length == 0) {
@@ -617,34 +630,16 @@ export default {
         return
       }
       const [province, city, country] = getRegionNameById(regions_id, district)
-      this.clearOverlays(this.markers)
-      this.searchService.setLocation(
-        ['110000', '120000', '310000', '500000'].includes(regions_id[0])
-          ? province
-          : `${province}${city}`
-      ) //设置省市区
-      //设置搜索页码
-      this.searchService.setPageIndex(0)
-      //设置每页的结果数
-      this.searchService.setPageCapacity(5)
-      this.searchService.search(address)
-    },
-    //清除地图上的marker
-    clearOverlays(overlays) {
-      let overlay
-      while ((overlay = overlays.pop())) {
-        overlay.setMap(null)
-      }
-    },
-    // 导入位置信息
-    importPosition() {
-      const {
-        latLng: { lng, lat },
-        name
-      } = this.poi_info
-      this.form.lng = lng
-      this.form.lat = lat
-      this.form.address = name
+
+      const { location } = await fetchJsonp({
+        method: 'get',
+        url: `https://apis.map.qq.com/ws/geocoder/v1?address=${province}${city}${country}${address}&key=${process.env.VUE_APP_MAP_KEY}&output=jsonp`
+      })
+      this.form.lng = location.lng
+      this.form.lat = location.lat
+      const latlng = new qq.maps.LatLng(location.lat, location.lng)
+      this.map.setCenter(latlng)
+      this.mapMarker.setPosition(latlng)
     },
     async getDadaInfo() {
       const { business_list, is_open } = await this.$api.dada.getDadaInfo()
@@ -659,7 +654,7 @@ export default {
           item.options = typeList
         }
       })
-      this.dadaEnable = is_open === '1'
+      this.dadaEnable = is_open === '1'    
     },
     async getShansongInfo() {
       const { business_list, is_open } = await this.$api.dada.getShansongInfo()
@@ -674,11 +669,11 @@ export default {
           item.options = typeList
         }
       })
-      this.dadaEnable = is_open === '1'
+      this.dadaEnable = is_open === '1'     
     },
     async getStoreInfo() {
       const { distributor_id } = this.$route.query
-      if (distributor_id || this.IS_DISTRIBUTOR) {
+      if (distributor_id || this.IS_DISTRIBUTOR()) {
         const res = await this.$api.marketing.getDistributorInfo({ distributor_id })
         const [startTime, endTime] = res.hour.split('-')
 
@@ -731,6 +726,7 @@ export default {
           is_ziti: res.is_ziti,
           offline_aftersales: res.offline_aftersales === 1,
           offline_aftersales_other: res.offline_aftersales_other === 1,
+          is_refund_freight: res.is_refund_freight == 1,
           offline_aftersales_address: {
             name: res.offline_aftersales_address.name,
             regions_id: res.offline_aftersales_address.regions_id,
@@ -750,64 +746,16 @@ export default {
         this.qqmapinit()
       })
     },
-    qqmapinit() {
+    async qqmapinit() {
       const { lat, lng } = this.form
-      // eslint-disable-next-line no-undef
       const center = new qq.maps.LatLng(lat, lng)
-      // eslint-disable-next-line no-undef
-      const map = new qq.maps.Map(document.getElementById('qqmap_container'), {
+      this.map = new qq.maps.Map(document.getElementById('qqmap_container'), {
         center: center,
         zoom: 13
       })
-      // eslint-disable-next-line no-undef
-      new qq.maps.Marker({
+      this.mapMarker = new qq.maps.Marker({
         position: center,
-        map: map
-      })
-      var that = this
-      // eslint-disable-next-line no-undef
-      this.searchService = new qq.maps.SearchService({
-        panel: document.getElementById('qqmap_rslist'),
-        //检索成功的回调函数
-        complete: ({ detail }) => {
-          //设置回调函数参数
-          const { pois } = detail
-          // eslint-disable-next-line no-undef
-          const infoWin = new qq.maps.InfoWindow({
-            map: map
-          })
-          if (!pois) {
-            return that.$message.error('您输入的位置有误')
-          }
-          // eslint-disable-next-line no-undef
-          const latlngBounds = new qq.maps.LatLngBounds()
-          for (let i = 0; i < pois.length; i++) {
-            let poi = pois[i]
-            //扩展边界范围，用来包含搜索到的Poi点
-            latlngBounds.extend(poi.latLng)
-            // eslint-disable-next-line no-undef
-            const marker = new qq.maps.Marker({
-              map: map
-            })
-            marker.setPosition(poi.latLng)
-            marker.setTitle(i + 1)
-            this.markers.push(marker)
-            // eslint-disable-next-line no-undef
-            qq.maps.event.addListener(marker, 'click', () => {
-              const { latLng, name } = poi
-              this.qqmap_infowin_show = true
-              this.poi_info = poi //将选点位置信息存入poi_info
-              infoWin.setContent(document.getElementById('qqmap_infowin'))
-              infoWin.setPosition(latLng)
-              infoWin.open()
-              console.log(poi)
-            })
-          }
-          map.fitBounds(latlngBounds)
-        },
-        error: function () {
-          this.$message.error('未查询到数据')
-        }
+        map: this.map
       })
     },
     handleCancel() {
@@ -830,6 +778,7 @@ export default {
 
       const params = {
         ...this.form,
+        is_refund_freight:this.form.is_refund_freight ? 1:0,
         distributor_self: this.distributor_self,
         regions: getRegionNameById(this.form.regions_id, district),
         hour: `${this.form.startTime}-${this.form.endTime}`,
@@ -878,7 +827,7 @@ export default {
           this.submitLoading = false
           this.$message.success('保存店铺成功')
         }
-        if (!this.IS_DISTRIBUTOR) {
+        if (!this.IS_DISTRIBUTOR()) {
           this.$router.go(-1)
         }
       } catch (e) {

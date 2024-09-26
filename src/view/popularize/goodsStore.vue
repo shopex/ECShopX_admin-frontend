@@ -1,6 +1,9 @@
 <template>
   <div>
+    <shop-select distributors @update="storeChange" @init="initChange" />
+
     <div class="content-bottom-padded">
+
       <el-row class="content-bottom-padded" :gutter="20">
         <el-col :span="6">
           <el-input
@@ -26,10 +29,10 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-button-group>
-            <el-button type="primary" size="mini" @click="showChangeRebateType()">
-              批量设置返佣任务制
-            </el-button>
-            <el-button size="mini" @click="handleBatchChangeStatus()"> 批量设置返佣状态 </el-button>
+            <!-- <el-button type="primary" size="mini" @click="showChangeRebateType()">
+              批量设置任务制
+            </el-button> -->
+            <el-button size="mini" @click="handleBatchChangeStatus()"> 批量设置开启 </el-button>
           </el-button-group>
         </el-col>
       </el-row>
@@ -54,19 +57,22 @@
           <el-table-column label="操作" width="160">
             <template slot-scope="scope">
               <el-button type="text" class="btn-gap" @click="handleRebateConf(scope.row, 1)">
-                分销参数
+                设置参数
               </el-button>
-              <el-button type="text" class="btn-gap" @click="handleRebateConf(scope.row, 2)">
+              <el-button
+                v-if="
+                  $store.getters.login_type != 'distributor' &&
+                  $store.getters.login_type != 'merchant' && false
+                "
+                type="text"
+                class="btn-gap"
+                @click="handleRebateConf(scope.row, 2)"
+              >
                 任务参数
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column
-            label="返佣状态"
-            width="160"
-            column-key="rebate"
-            :filter-multiple="false"
-          >
+          <el-table-column label="状态" width="160" column-key="rebate" :filter-multiple="false">
             <template slot-scope="scope">
               <div v-if="allSelect && $store.getters.login_type != 'distributor'">
                 <el-switch v-model="allSelect" active-color="#13ce66" disabled />
@@ -101,6 +107,7 @@
             </template>
           </el-table-column>
           <el-table-column label="标题" prop="item_name" min-width="250" />
+          <el-table-column label="店铺" prop="distributor_name.name" min-width="250" />
           <el-table-column label="销售价">
             <template slot-scope="scope"> {{ scope.row.price / 100 }}元 </template>
           </el-table-column>
@@ -149,7 +156,7 @@
             <span class="title">{{ current.item_name }}</span>
             <span>
               <!-- <el-alert title="比例计算"
-                description="积分  计算方式：返佣金额*积分与现金的抵扣比例，其中返佣金额为满足条件自定义，如果不填则不进行返佣"
+                description="积分  计算方式：金额*积分与现金的抵扣比例，其中金额为满足条件自定义，如果不填则不进行"
                 type="info" close-text=" " class="alert-text" show-icon>
               </el-alert> -->
               <el-alert
@@ -163,9 +170,9 @@
             </span>
           </div>
           <el-radio-group v-model="current.rebate_type">
-            <el-radio label="default"> 不支持任务制 </el-radio>
+            <!-- <el-radio label="default"> 不支持任务制 </el-radio>
             <el-radio label="total_money"> 任务制-按总金额 </el-radio>
-            <el-radio label="total_num"> 任务制-按总数量 </el-radio>
+            <el-radio label="total_num"> 任务制-按总数量 </el-radio> -->
           </el-radio-group>
         </el-card>
         <el-card v-if="current.rebate_type != 'default'" class="box-card">
@@ -203,7 +210,7 @@
                   @input="changeLimit(arguments[0], key, scope.row)"
                 />
 
-                返佣
+                金额
                 <el-input
                   v-if="scope.row.rebate_conf.rebate_task_type == 'money'"
                   v-model="scope.row.rebate_conf.rebate_task[key].money"
@@ -229,14 +236,13 @@
         </div>
       </slot>
     </SideBar>
-    <SideBar :visible.sync="show_sideBar" title="分销参数配置" width="67">
+    <SideBar :visible.sync="show_sideBar" title="参数配置" width="67">
       <slot>
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span class="title">{{ current.item_name }}</span>
             <div class="frm-tips">
-              如果设置的返佣为固定金额，返佣金额就是设置的固定金额。否则按照
-              【返佣计算类型】计算返佣
+              如果设置为固定金额，金额就是设置的固定金额。否则按照 【计算类型】计算
             </div>
             <span
               v-if="
@@ -245,8 +251,8 @@
               "
             >
               <el-alert
-                title="返佣计算类型: 【按利润分佣】"
-                description="计算方式：商品利润 ×  百分比，其中商品利润为【支付金额-运费-商品成本价】，如果不填则不进行返佣"
+                title="计算类型: 【按利润】"
+                description="计算方式：商品利润 ×  百分比，其中商品利润为【支付金额-运费-商品成本价】，如果不填则不进行计算"
                 type="info"
                 close-text=" "
                 class="alert-text"
@@ -260,8 +266,8 @@
               "
             >
               <el-alert
-                title="返佣计算类型: 【按利润分佣】"
-                description="计算方式： 商品利润 × 百分比 × 积分与现金的抵扣比例，其中商品利润为【支付金额-运费-商品成本价】，如果不填则不进行返佣"
+                title="计算类型: 【按利润】"
+                description="计算方式： 商品利润 × 百分比 × 积分与现金的抵扣比例，其中商品利润为【支付金额-运费-商品成本价】，如果不填则不进行"
                 type="info"
                 close-text=" "
                 class="alert-text"
@@ -275,8 +281,8 @@
               "
             >
               <el-alert
-                title="返佣计算类型: 【按订单金额分佣】"
-                description="计算方式： 订单金额 × 百分比，其中订单金额为【支付金额-运费】，如果不填则使用通用配置返佣"
+                title="计算类型: 【按订单金额】"
+                description="计算方式： 订单金额 × 百分比，其中订单金额为【支付金额-运费】，如果不填则使用通用配置"
                 type="info"
                 close-text=" "
                 class="alert-text"
@@ -290,8 +296,8 @@
               "
             >
               <el-alert
-                title="返佣计算类型: 【按订单金额分佣】"
-                description="计算方式： 订单金额 × 百分比 × 积分与现金的抵扣比例，其中订单金额为【支付金额-运费】，如果不填则使用通用配置返佣"
+                title="计算类型: 【按订单金额】"
+                description="计算方式： 订单金额 × 百分比 × 积分与现金的抵扣比例，其中订单金额为【支付金额-运费】，如果不填则使用通用配置"
                 type="info"
                 close-text=" "
                 class="alert-text"
@@ -329,21 +335,39 @@
               :label="item.name"
               min-width="110"
             >
-              <template slot-scope="scope">
-                <el-input
+              <template slot-scope="scope" >
+                <div v-if="scope.row.rebate_conf.type == 'money'" :style="{ display: 'flex', alignItems: 'flex-end' }">
+                  <el-input-number
+                  v-model="scope.row.rebate_conf.value[key]"
+                  precision="3"
+                  step="0.001"
+                  size="mini"
+                />元
+                </div>
+                <div v-else :style="{ display: 'flex', alignItems: 'flex-end' }">
+                  <el-input-number
+                  v-model="scope.row.rebate_conf.value[key]"
+                  precision="3"
+                  step="0.001"
+                  size="mini"
+                />%
+                </div>
+                
+
+                <!-- <el-input
                   v-if="scope.row.rebate_conf.type == 'money'"
                   v-model="scope.row.rebate_conf.value[key]"
                   type="number"
                   size="mini"
                   suffix-icon="iconfont icon-yen-sign"
-                />
-                <el-input
+                /> -->
+                <!-- <el-input
                   v-else
                   v-model="scope.row.rebate_conf.value[key]"
                   size="mini"
                   type="number"
                   suffix-icon="iconfont icon-percent"
-                />
+                /> -->
               </template>
             </el-table-column>
           </el-table>
@@ -355,11 +379,11 @@
         </div>
       </slot>
     </SideBar>
-    <el-dialog title="更改商品返佣任务制支持" :visible.sync="changeRebateTypeVisible" width="30%">
+    <el-dialog title="更改商任务制支持" :visible.sync="changeRebateTypeVisible" width="30%">
       <el-radio-group v-model="changeRebateType">
-        <el-radio label="default"> 不支持任务制 </el-radio>
+        <!-- <el-radio label="default"> 不支持任务制 </el-radio>
         <el-radio label="total_money"> 任务制-按总金额 </el-radio>
-        <el-radio label="total_num"> 任务制-按总数量 </el-radio>
+        <el-radio label="total_num"> 任务制-按总数量 </el-radio> -->
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
         <el-button @click="changeRebateTypeVisible = false">取 消</el-button>
@@ -373,8 +397,16 @@ import axios from 'axios'
 import store from '@/store'
 import { mapGetters } from 'vuex'
 import SideBar from '@/components/element/sideBar'
-import { getPopularizeSetting } from '../../api/promotions'
+import { getPopularizeSetting,getPopularizeSettingStore } from '../../api/promotions'
 import { getItemsList, updateItemRebateConf, updateGoodsInfo } from '@/api/goods'
+import shopSelect from "@/components/shopSelect";
+import {
+  getSalesmanList,
+  updateSalesman,
+  addSalesman,
+  getRoleList,
+  updateSalesmanRole
+} from '@/api/marketing'
 
 let changeRebateTypeMap = {
   default: {
@@ -383,18 +415,17 @@ let changeRebateTypeMap = {
   },
   total_money: {
     title: '任务制：商品月度销售金额设置',
-    description:
-      '任务制说明：阶梯设置商品月度销售金额目标及对应返佣佣金，每月月底达标后可获得佣金。'
+    description: '任务制说明：阶梯设置商品月度销售金额目标及对应业绩，每月月底达标后可获得业绩。'
   },
   total_num: {
     title: '任务制：商品月度销售数量设置',
-    description:
-      '任务制说明：阶梯设置商品月度销售数量目标及对应返佣佣金，每月月底达标后可获得佣金。'
+    description: '任务制说明：阶梯设置商品月度销售数量目标及对应业绩，每月月底达标后可获得业绩。'
   }
 }
 
 export default {
   components: {
+    shopSelect,
     SideBar
   },
   data() {
@@ -425,10 +456,11 @@ export default {
         }
       },
       tabList: [
-        { name: '全部返佣商品', value: null, activeName: 'first' },
-        { name: '不支持任务制', value: 'true', activeName: 'default' },
-        { name: '任务制-按总金额', value: 'true', activeName: 'total_money' },
-        { name: '任务制-按总数量', value: 'true', activeName: 'total_num' }
+        { name: '全部商品', value: null, activeName: 'first' }
+        // ,
+        // { name: '不支持任务制', value: 'true', activeName: 'default' },
+        // { name: '任务制-按总金额', value: 'true', activeName: 'total_money' },
+        // { name: '任务制-按总数量', value: 'true', activeName: 'total_num' }
       ],
       floorHead: [
         {
@@ -476,7 +508,10 @@ export default {
     }
   },
   mounted() {
-    getPopularizeSetting().then((res) => {
+    this.loginType = this.$store.getters.login_type
+    this.params.pathSource = this.$route.path
+
+    getPopularizeSettingStore(this.params).then((res) => {
       this.popularizeSetting = res.data.data
       if (res.data.data.goods == 'all') {
         this.allSelect = true
@@ -509,6 +544,30 @@ export default {
       this.params.pageSize = pageSize
       this.getGoodsList()
     },
+    getList () {
+      this.loading = true
+      this.getGoodsList()
+      this.loading = false
+
+      // getSalesmanList(this.params).then((response) => {
+      //   if (response.data.data.list) {
+      //     this.list = response.data.data.list
+      //     this.total_count = Number(response.data.data.total_count)
+      //   }
+      //   this.loading = false
+      // })
+    },
+
+    storeChange(params) {
+      params && params.shop_id;
+      this.params.distributor_id = params.shop_id;
+      this.params.page = 1;
+      this.getList();
+    },
+    initChange() {
+      this.shopId = "";
+    },
+
     handleCurrentChange(page_num) {
       this.params.page = page_num
       this.getGoodsList()
@@ -571,16 +630,17 @@ export default {
         })
         this.changeRebateTypeVisible = false
       } else {
-        updateGoodsInfo({ goods_id: this.selectGoodsIds, rebate_type: this.changeRebateType }).then(
-          (res) => {
-            this.$message({
-              type: 'success',
-              message: '操作成功'
-            })
-            this.changeRebateTypeVisible = false
-            this.getGoodsList()
-          }
-        )
+        updateGoodsInfo({
+          goods_id: this.selectGoodsIds,
+          rebate_type: this.changeRebateType
+        }).then((res) => {
+          this.$message({
+            type: 'success',
+            message: '操作成功'
+          })
+          this.changeRebateTypeVisible = false
+          this.getGoodsList()
+        })
       }
     },
     saveRebateConf() {
@@ -607,13 +667,13 @@ export default {
       rebateTask.forEach((item, index) => {
         if (succCount > 0) {
           if ((item.money != '' && item.filter == '') || (item.money == '' && item.filter != '')) {
-            errorMsg = '满足条件或返佣金额不能为空'
+            errorMsg = '满足条件或金额不能为空'
           }
         }
         // else{
         //   if(item.money == '' || item.filter == ''){
         //     debugger
-        //     errorMsg = '满足条件或返佣金额不能为空'
+        //     errorMsg = '满足条件或金额不能为空'
         //   }
         // }
       })
@@ -621,7 +681,7 @@ export default {
         if (errorMsg != '') {
           this.$message({
             type: 'error',
-            message: '满足条件或返佣金额不能为空'
+            message: '满足条件或金额不能为空'
           })
           return
         }

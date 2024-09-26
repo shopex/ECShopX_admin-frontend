@@ -75,6 +75,14 @@
               </el-tag>
             </template>
           </el-table-column>
+          <el-table-column prop="item_holder" label="商品类型" width="100">
+            <template slot-scope="scope">
+              <div class="ell3">
+                {{ goodCategoryMap[scope.row.item_holder] }}
+              </div>
+            </template>
+          </el-table-column>
+
           <!--          <el-table-column prop="item_spec_desc" label="SPU编码">-->
           <!--            <template slot-scope="scope">-->
           <!--              {{ scope.row.goods_bn }}-->
@@ -90,9 +98,15 @@
               {{ scope.row.item_spec_desc ? scope.row.item_spec_desc : '单规格' }}
             </template>
           </el-table-column>
+          <el-table-column prop="supplier_name" label="来源供应商" width="120" />
           <el-table-column prop="price" label="单价（¥）" width="100">
             <template slot-scope="scope">
               {{ (scope.row.price / 100).toFixed(2) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="cost_price" label="成本价（¥）" width="100">
+            <template slot-scope="scope">
+              {{ (scope.row.cost_price / 100).toFixed(2) }}
             </template>
           </el-table-column>
           <el-table-column prop="num" label="数量" width="80" />
@@ -110,6 +124,11 @@
           <el-table-column label="小计（¥）" width="120">
             <template slot-scope="scope">
               {{ (scope.row.item_fee / 100).toFixed(2) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="成本小计（¥）" width="120">
+            <template slot-scope="scope">
+              {{ (scope.row.cost_fee / 100).toFixed(2) }}
             </template>
           </el-table-column>
           <el-table-column v-if="!VERSION_IN_PURCHASE" label="会员优惠（¥）" width="120">
@@ -312,7 +331,7 @@
 
     <el-card class="el-card--normal">
       <div slot="header">订单追踪</div>
-      <div v-if="orderInfo.self_delivery_operator_name" class="card-panel">
+      <div v-if="orderInfo?.self_delivery_operator_name" class="card-panel">
         <div class="card-panel-item">
           <span>配送员姓名：{{ orderInfo.self_delivery_operator_name || '-' }}</span>
           <span class="ml-16"
@@ -332,7 +351,7 @@
             <el-card>
               <p>操作详情：{{ key.msg }}</p>
               <p v-if="key.delivery_remark">配送备注：{{ key.delivery_remark }}</p>
-              <div v-if="key.pics.length">
+              <div v-if="key.pics?.length">
                 配送照片：
                 <div class="img-box">
                   <el-image
@@ -408,7 +427,8 @@ import {
   DISTRIBUTION_TYPE,
   PROFIT_TYPE,
   PAY_TYPE,
-  PAY_STATUS
+  PAY_STATUS,
+  GOOD_CATEGORY_MAP
 } from '@/consts'
 import { VERSION_STANDARD, VERSION_IN_PURCHASE, IS_SUPPLIER } from '@/utils'
 import moment from 'moment'
@@ -487,6 +507,7 @@ export default {
           message: '不能为空'
         }
       ],
+      goodCategoryMap: GOOD_CATEGORY_MAP,
       expressForm: {
         orders_delivery_id: '',
         delivery_corp: '',

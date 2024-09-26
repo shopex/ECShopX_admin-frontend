@@ -927,7 +927,7 @@ export default {
         }
         if (order_status == 'NOTPAY') {
           if (VERSION_PLATFORM) {
-            if ((this.IS_ADMIN && distributor_id == 0) || this.IS_DISTRIBUTOR) {
+            if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '改价', key: 'changePrice' })
             }
           } else if (!VERSION_IN_PURCHASE) {
@@ -936,7 +936,7 @@ export default {
         }
         if (can_apply_aftersales == 1) {
           if (VERSION_PLATFORM) {
-            if ((this.IS_ADMIN && distributor_id == 0) || this.IS_DISTRIBUTOR) {
+            if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '申请售后', key: 'salesAfter' })
             }
           } else if (!VERSION_IN_PURCHASE) {
@@ -1024,7 +1024,7 @@ export default {
         this.cancelOrderForm.loading = true
         this.cancelOrderDialog = true
       } else if (key == 'deliverGoods') {
-        if (this.isBindOMS && this.IS_ADMIN) {
+        if (this.isBindOMS && this.IS_ADMIN()) {
           return this.$message.warning('请至OMS处理订单发货')
         }
 
@@ -1181,7 +1181,7 @@ export default {
         })
         console.log('this.changePriceForm:', this.changePriceForm)
       } else if (key == 'salesAfter') {
-        if (IS_DISTRIBUTOR) {
+        if (IS_DISTRIBUTOR()) {
           this.$router.push({ path: `/shopadmin/order/tradenormalorders/after-sale/${order_id}` })
         } else {
           this.$router.push({ path: `/order/entitytrade/tradenormalorders/after-sale/${order_id}` })

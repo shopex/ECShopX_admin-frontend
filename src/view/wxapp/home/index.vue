@@ -126,7 +126,7 @@
             <span class="btn" @click="abandonTemplate(item.pages_template_id)">废弃</span>
           </div>
           <div
-            v-if="!isDistributorTemplate && VERSION_STANDARD"
+            v-if="!isDistributorTemplate"
             class="synchronize-btn"
             @click="synchronizeTemplateToShop(index)"
           >
@@ -211,6 +211,7 @@
       v-model="navDrawerShow"
       class="nav-drawer"
       :title="'导航设置'"
+      :width="650"
       @confirm="
         () => {
           this.$refs['navForm'].handleSubmit()
@@ -454,7 +455,7 @@ export default {
           key: 'name',
           component: () => (
             <div class='tablist'>
-              {this.navForm.tabList.map((item, index) => (
+              {this.navForm?.tabList?.map((item, index) => (
                 <div
                   class='tab-item'
                   style={{
@@ -510,7 +511,7 @@ export default {
           component: () => (
             <div class='nav-list'>
               <div class='nav-list-body'>
-                {this.navForm.tabList.map((item, index) => (
+                {this.navForm?.tabList?.map((item, index) => (
                   <div class='nav-item'>
                     <div class='nav-item-hd'>
                       <SpImagePicker v-model={item.iconPath} />
@@ -525,6 +526,13 @@ export default {
                           <el-option label={item.label} value={item.value} />
                         ))}
                       </el-select>
+                      {item.pagePath == 'customPage' && (
+                        <div  class="uploader-setting">
+                          <div class="btn-linkpath" onClick={this.handleCustomPageSelect.bind(this,item)}>
+                            {item?.customPage?.page_name ?? '请选择自定义页面' }
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div class='nav-item-bd'>
                       {index > 1 && (
@@ -554,7 +562,7 @@ export default {
           component: () => (
             <el-button
               type='primary'
-              disabled={this.navForm.tabList.length >= 5}
+              disabled={this.navForm?.tabList?.length >= 5}
               plain
               class='iconfont icon-plus-circle'
               on-click={this.addTabItem}
@@ -650,6 +658,13 @@ export default {
     },
     allDistributorChooseAction() {
       this.syncTemplate(1)
+    },
+    async handleCustomPageSelect(item){
+      const {data} = await this.$picker.pages({
+        multiple:false,
+        data:[item?.customPage?.id]
+      })
+      this.$set(item,'customPage',data[0])
     },
     syncTemplate(is_all_distributor, shop_ids) {
       let params = {
@@ -825,7 +840,8 @@ export default {
       this.show_sideBar = true
     },
     handleShowTabConfig() {
-      const { config, name, data } = this.globalTabbar || {}
+      const { config, name, data = [] } = this.globalTabbar || {}
+
       const { backgroundColor, color, selectedColor } = config || {}
       this.navForm = {
         pages_template_id: '',
@@ -855,9 +871,22 @@ export default {
       const { label, name } = NAVS.find((item) => item.value == value)
       this.navForm.tabList[index].text = label
       this.navForm.tabList[index].name = name
+      if(value != 'customPage' && this.navForm.tabList[index]?.customPage){
+        this.$delete(this.navForm.tabList[index],'customPage')
+      }
     },
     async onSubmitTabList() {
       const { pages_template_id, theme, tabList } = this.navForm
+
+      const emptyIndex = tabList.findIndex(item=>item.name == "customPage" && !item.customPage )
+      if(emptyIndex > -1){
+        return this.$message({
+          message: '请选择自定义页面',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
+
       let params = {
         tab_bar: JSON.stringify({
           name: 'tabs',
@@ -1189,6 +1218,16 @@ export default {
     z-index: 999;
   }
 }
+.btn-linkpath {
+    padding: 0 8px;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 3px;
+    max-width: 160px;
+    @include text-overflow();
+  }
 </style>
 <style lang="scss" scoped>
 .el-checkbox__input.is-checked + .el-checkbox__label {

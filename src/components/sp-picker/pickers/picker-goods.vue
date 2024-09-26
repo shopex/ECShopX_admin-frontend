@@ -41,7 +41,7 @@
 </style>
 <template>
   <div class="picker-goods">
-    <SpFilterForm :model="formData" size="small" @onSearch="onSearch" @onReset="onReset">
+    <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onReset">
       <SpFilterFormItem prop="keywords">
         <el-input v-model="formData.keywords" clearable placeholder="请输入商品名称" />
       </SpFilterFormItem>
@@ -90,6 +90,27 @@
           @change="onSearch"
         />
       </SpFilterFormItem>
+      <SpFilterFormItem prop="supplier_name" >
+        <el-input v-model="formData.supplier_name" placeholder="所属供应商" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="item_holder" >
+        <el-select v-model="formData.item_holder" placeholder="请选择商品类型" clearable>
+          <el-option
+            v-for="item in goodCategory"
+            :key="item.value"
+            :label="item.title"
+            :value="item.value"
+          />
+        </el-select>
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="is_gift" >
+        <el-select v-model="formData.is_gift"
+            placeholder="是否为赠品"
+            clearable>
+            <el-option :value="true" label="是" />
+            <el-option :value="false" label="否" />
+          </el-select>
+      </SpFilterFormItem>
     </SpFilterForm>
 
     <SpFinder
@@ -123,13 +144,40 @@
                 h('div', { class: 'item-name' }, row.itemName)
               ])
           },
+          { name: 'SKU编码', key: 'item_bn', width: 120 },
           {
-            name: '价格（¥）',
+            name: '商品类型',
+            key: 'item_holder',
+            width: 80,
+            render: (h, { row }) => h('span', {}, this.goodCategoryMap[row.item_holder])
+          },
+          {
+            name: '是否赠品',
+            key: 'is_gift',
+            width: 80,
+            render: (h, { row }) => h('span', {}, row.is_gift == '1' ? '是' : '否' )
+          },
+          { name: '所属供应商', key: 'supplier_name', width: 100 },
+
+          {
+            name: '市场价（¥）',
+            key: 'market_price',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.market_price / 100)
+          },
+          {
+            name: '销售价（¥）',
             key: 'price',
-            width: 150,
+            width: 100,
             render: (h, { row }) => h('span', {}, row.price / 100)
           },
-          { name: '库存', key: 'store', width: 150 }
+          {
+            name: '成本价（¥）',
+            key: 'cost_price',
+            width: 100,
+            render: (h, { row }) => h('span', {}, row.cost_price / 100)
+          },
+          { name: '库存', key: 'store', width: 100 }
         ]
       }"
       :hooks="{
@@ -143,7 +191,7 @@
 </template>
 
 <script>
-import { SALES_STATUS } from '@/consts'
+import { SALES_STATUS, GOOD_CATEGORY, GOOD_CATEGORY_MAP } from '@/consts'
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
 export default {
@@ -161,13 +209,18 @@ export default {
       approve_status: 'onsale',
       brand_id: '',
       category: '',
-      distributor_id: ''
+      distributor_id: '',
+      supplier_name: '',
+      item_holder: '',
+      is_gift:''
     }
     const formData = Object.assign(defaultParams, queryParams)
     return {
       formData,
       salesStatus: SALES_STATUS,
       list: [],
+      goodCategoryMap: GOOD_CATEGORY_MAP,
+      goodCategory: GOOD_CATEGORY,
       multipleSelection: [],
       goodsBranchList: [],
       goodsBranchParams: {

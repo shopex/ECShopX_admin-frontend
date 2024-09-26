@@ -56,6 +56,33 @@
         </el-col>
       </el-row>
 
+      <!-- <el-table
+        v-loading="modalLoading"
+        :data="modalList"
+        style="width: 100%"
+        :height="400"
+        element-loading-text="数据加载中..."
+        highlight-current-row
+        @current-change="handleCurrentChangeUpLV"
+      > -->
+      <!-- <el-row :gutter="10">
+          <el-col
+            :md="8"
+            :lg="10"
+          >
+            <el-input
+              v-model="identifierModal"
+              placeholder="请输入手机号"
+            >
+              <el-button
+                slot="append"
+                icon="el-icon-search"
+                @click="numberSearchModal"
+              />
+            </el-input>
+          </el-col>
+        </el-row> -->
+
       <el-table
         v-loading="modalLoading"
         :data="modalList"
@@ -68,7 +95,7 @@
         <el-table-column type="index" width="50" />
         <el-table-column prop="username" label="姓名" />
         <el-table-column prop="mobile" label="手机号" />
-        <el-table-column prop="promoter_grade_name" label="推广员等级" />
+        <!-- <el-table-column prop="promoter_grade_name" label="推广员等级-" /> -->
         <el-table-column prop="disabled" label="状态">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.disabled == '0'" type="success" size="mini"> 有效 </el-tag>

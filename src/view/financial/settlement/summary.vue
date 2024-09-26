@@ -140,15 +140,15 @@ export default {
             }
           },
           {
-            name: this.IS_ADMIN ? '结算' : '确认',
+            name: this.IS_ADMIN() ? '结算' : '确认',
             key: 'settlement',
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
-              if (this.IS_ADMIN && row.statement_status == 'confirmed') {
+              if (this.IS_ADMIN() && row.statement_status == 'confirmed') {
                 return true
               }
-              if (this.IS_DISTRIBUTOR && row.statement_status == 'ready') {
+              if (this.IS_DISTRIBUTOR() && row.statement_status == 'ready') {
                 return true
               }
               return false

@@ -21,6 +21,18 @@
               :value="item.value"
             />
           </el-select>
+          <el-select v-model="order_holder" clearable placeholder="请选择订单分类" @change="TypeHandle">
+          <el-option
+            v-for="item in orderCategory"
+            :key="item.value"
+            size="mini"
+            :label="item.title"
+            :value="item.value"
+          />
+        </el-select>
+        <!-- <el-input v-model="supplier_name" clearable placeholder="来源供应商" >
+          <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
+        </el-input> -->
           <el-autocomplete
             v-model="source_name"
             class="inline-input"
@@ -109,6 +121,11 @@
               {{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}
             </template>
           </el-table-column>
+          <el-table-column prop="point_fee" width="120" label="积分抵扣">
+            <template slot-scope="scope">
+              {{ scope.row.point_fee / 100 }}
+            </template>
+          </el-table-column>
           <el-table-column prop="mobile" width="110" label="手机号" />
           <el-table-column width="90" label="订单类型">
             <template slot-scope="scope">
@@ -190,7 +207,14 @@
               </template>
             </template>
           </el-table-column>
-          <el-table-column prop="source_name" label="来源" />
+          <el-table-column prop="source_name" label="订单来源" />
+          <el-table-column prop="supplier_name" label="来源供应商" />
+
+          <el-table-column label="订单分类">
+            <template slot-scope="scope">
+              {{ getOrderCategoryName(scope.row.order_holder) }}
+            </template>
+          </el-table-column>
           <el-table-column label="配送方式">
             <template slot-scope="scope">
               {{ getDistributionType(scope.row) }}
@@ -424,15 +448,26 @@
             <el-form-item label="商品信息">
               <el-table :data="deliveryData.orderInfo.items">
                 <el-table-column prop="item_name" label="商品名" width="180" />
-                <el-table-column prop="num" label="数量" width="180" />
-                <el-table-column prop="delivery_item_num" label="已发货数量" width="180" />
-                <el-table-column label="总支付价(元)">
+                <el-table-column  label="商品类型" width="120">
+                  <template slot-scope="scope">
+                    <span>{{ goodCategoryMap[scope.row.item_holder] }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="supplier_name" label="来源供应商" width="130" />
+                <el-table-column prop="num" label="数量" width="100" />
+                <el-table-column prop="delivery_item_num" label="已发货数量" width="100" />
+                <el-table-column label="总支付价(元)" width="130">
                   <template slot-scope="scope">
                     <span>{{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}</span>
                   </template>
                 </el-table-column>
+                <el-table-column label="成本价(元)" width="130">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.fee_symbol }}{{ scope.row.cost_price / 100 }}</span>
+                  </template>
+                </el-table-column>
                 <template v-if="deliveryForm.delivery_type == 'sep'">
-                  <el-table-column label="发货数量" width="200">
+                  <el-table-column label="发货数量" width="200" fixed="right">
                     <template slot-scope="scope">
                       <el-input-number
                         v-if="scope.row.num - scope.row.delivery_item_num != 0"
@@ -441,6 +476,7 @@
                         controls-position="right"
                         :min="0"
                         :max="scope.row.num - scope.row.delivery_item_num"
+                        :disabled="IS_ADMIN() && scope.row.supplier_id > 0"
                       />
                       <!-- <el-input v-model="scope.row.delivery_num" :maxlength=20 placeholder="发货数量"></el-input> -->
                       <span v-if="scope.row.num - scope.row.delivery_item_num == 0">已发完</span>
@@ -731,7 +767,8 @@ import { getSourceFromNameByValue } from '@/utils'
 import shopSelect from '@/components/shopSelect'
 import RemarkModal from '@/components/remarkModal'
 import remarkMixin from '@/mixins/remarkMixin'
-import { DISTRIBUTION_TYPE, DISTRIBUTION_STATUS } from '@/consts'
+import { DISTRIBUTION_TYPE, DISTRIBUTION_STATUS, SELF_ORDER_CATEGORY,GOOD_CATEGORY_MAP } from '@/consts'
+import { IS_ADMIN } from '../../../../utils'
 
 export default {
   components: {
@@ -751,8 +788,10 @@ export default {
         order_class_exclude: 'drug,pointsmall',
         distributor_id: 0,
         distributorIds: [],
-        source_from: ''
+        source_from: '',
+        order_holder:'self,self_supplier'
       },
+      goodCategoryMap:GOOD_CATEGORY_MAP,
       deliveryPersonnel: [], //配送员
       order_class_array: [
         { name: '全部订单', value: '' },
@@ -796,6 +835,8 @@ export default {
       ],
       source_id: '',
       order_class: '',
+      order_holder:'self,self_supplier',
+      supplier_name:'',
       cancel_order: '',
       deliveryVisible: false,
       deliveryTitle: '',
@@ -848,7 +889,8 @@ export default {
       },
       // 选择发货订单的类型，老订单还是新订单
       selectItemType: '',
-      deliveryVisibleNew: false
+      deliveryVisibleNew: false,
+      orderCategory:SELF_ORDER_CATEGORY
     }
   },
   computed: {
@@ -953,6 +995,9 @@ export default {
       this.params.time_start_end = this.time_start_end
       this.params.order_type = this.order_type
       this.params.order_class = this.order_class
+      this.params.order_holder = this.order_holder
+      this.params.supplier_name = this.supplier_name
+
       this.params.salesman_mobile = this.salesman_mobile
       this.params.source_from = this.source_from
       if (this.identifier.length == 11) {
@@ -998,6 +1043,9 @@ export default {
         return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
       }
     },
+    getOrderCategoryName(order_holder){
+      return this.orderCategory.find(item=>item.value == order_holder)?.title ?? ''
+    },
     deliveryAction(data) {
       // 编辑物料弹框
       let order_id = data.order_id
@@ -1020,9 +1068,13 @@ export default {
         } else {
           this.deliveryVisibleNew = true
         }
-        if (this.deliveryData && this.deliveryData.orderInfo.delivery_status == 'PARTAIL') {
+        //已经拆分发货的和供应商自营订单 都需要拆分发货
+        if (this.deliveryData && this.deliveryData.orderInfo.delivery_status == 'PARTAIL' || this.deliveryData.orderInfo.order_holder == 'self_supplier') {
           this.IsDisabled = true
           this.deliveryForm.delivery_type = 'sep'
+        }else{
+          this.IsDisabled = false
+          this.deliveryForm.delivery_type = 'batch'
         }
       })
       this.deliveryForm.order_id = order_id

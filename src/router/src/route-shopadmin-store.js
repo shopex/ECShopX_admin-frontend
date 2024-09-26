@@ -60,7 +60,7 @@ export default {
     {
       path: 'popularize/popularizegoods',
       name: `分销商品`,
-      component: () => import('@/view/popularize/goods')
+      component: () => import('@/view/popularize/goodsStore')
     },
     {
       path: 'marketing/popularize/popularizelist',
@@ -89,8 +89,8 @@ export default {
       ]
     },
 
-    {
-      path: 'marketing/popularize/salesman/withdraw',
+    { 
+      path: 'popularizewithdraw',
       name: `业务员提现`,
       component: () => import('@/view/mall/marketing/salesmanwithdraw')
     },

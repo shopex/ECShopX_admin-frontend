@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.15.4](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.15.3...v3.15.4) (2024-09-03)
+
+
+### Bug Fixes
+
+* 订单详情配送字段兼容 ([24068cb](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/24068cbc84ad9b7251a1d94a4b8cef79a860efba))
+
+### [3.15.3](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.15.2...v3.15.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* 更新商品详情，formlist放入computed动态计算导致select错误 ([195140e](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/195140e0c741c82e9d559ed5e79fa17dd016674f))
+
+### [3.15.2](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.15.1...v3.15.2) (2024-08-16)
+
+
+### Features
+
+* 装修模板商品挂件添加直接加购配置 ([7192b97](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/7192b97897f4c2ee80db2b0a4b188e7313767eb5))
+
+
+### Bug Fixes
+
+* shopadmin 概况路由兼容 ([e577241](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e57724174600641e6e16fc82839f32c4a35ebae4))
+* 腾讯地图API升级改造 ([2750f03](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2750f03f74759c565a19b689a041bbaffd57d26a))
+* 腾讯地图key ([a09c9fe](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a09c9fe17120e49fbca6f91ba77f58f7595a8139))
+
 ### [3.15.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.15.0...v3.15.1) (2024-07-10)
 
 ## [3.15.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.14.7...v3.15.0) (2024-07-08)

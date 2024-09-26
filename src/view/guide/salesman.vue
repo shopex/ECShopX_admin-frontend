@@ -12,19 +12,48 @@
       </el-row>
       <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
         <el-tab-pane label="列表" name="admin" />
-        <el-tab-pane label="禁用" name="invalid" />
+        <!-- <el-tab-pane
+        label="禁用"
+        name="invalid"
+      /> -->
         <el-table v-loading="loading" :data="list">
           <el-table-column prop="salesman_name" label="姓名" />
           <el-table-column prop="mobile" label="手机号" />
+          <el-table-column prop="storeInfo.name" label="店铺" />
 
-          <el-table-column prop="distributor_name" label="所属店铺">
+          <!-- <el-table-column prop="children_count" width="100" label="会员数量">
             <template slot-scope="scope">
-              {{ scope.row.storeInfo.name }}
+              <el-button
+                size="mini"
+                icon="edit"
+                type="text"
+                @click="count(scope.$index, scope.row)"
+              >
+                {{ scope.row.children_count }}
+              </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
-          <el-table-column prop="children_count" width="100" label="会员数量">
-            <!-- sortable -->
+          <!-- <el-table-column prop="child_count" label="会员数量">
+            <template slot-scope="scope">
+              <span v-if="scope.row.child_count > 0">{{ scope.row.child_count }}</span>
+              <span v-else>0</span>
+            </template>
+          </el-table-column> -->
+          <!-- <el-table-column label="是否启用">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.is_valid"
+                active-value="true"
+                inactive-value="false"
+                active-color="#13ce66"
+                inactive-color="#ccc"
+                @change="defaultSwitchChange(scope.row)"
+              />
+            </template>
+          </el-table-column> -->
+
+          <el-table-column prop="children_count" width="130" label="累计会员数量">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -36,13 +65,7 @@
               </el-button>
             </template>
           </el-table-column>
-
-          <el-table-column v-if="1 == 2" prop="child_count" label="会员数量">
-            <template slot-scope="scope">
-              <span v-if="scope.row.child_count > 0">{{ scope.row.child_count }}</span>
-              <span v-else>0</span>
-            </template>
-          </el-table-column>
+          
           <el-table-column label="是否启用">
             <template slot-scope="scope">
               <el-switch
@@ -81,7 +104,7 @@
       -->
           <!-- <router-link :to="{ path: '/store/storemanager/salesmanRelationship', query: {salesperson_id: scope.row.salespersonId, is_bind: 1}}">绑定关系</router-link> -->
 
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
               <div class="operating-icons">
                 <i class="iconfont icon-edit1" @click="handleUpdateSalesman(scope.row)" />
