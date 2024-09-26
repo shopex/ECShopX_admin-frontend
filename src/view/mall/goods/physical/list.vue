@@ -95,7 +95,7 @@
           <el-cascader
             v-model="searchParams.category"
             :options="categoryList"
-            :props="{ checkStrictly: true, label: 'category_name', value: 'category_id' }"
+            :props="{ checkStrictly: true, label: 'category_name', value: 'category_id', emitPath: false }"
             clearable
           />
         </SpFilterFormItem>
