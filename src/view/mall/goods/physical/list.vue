@@ -1208,6 +1208,7 @@ export default {
             width: 100,
             align: 'right',
             headerAlign: 'center'
+
           },
           // {
           //   name: '来源供应商',
