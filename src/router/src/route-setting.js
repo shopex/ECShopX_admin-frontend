@@ -17,6 +17,11 @@ export default {
       component: () => import('@/view/base/account/storestaff')
     },
     {
+      path: 'staff/supplier',
+      name: `账号管理-供应商账号`,
+      component: () => import('@/view/base/account/suppliers')
+    },
+    {
       path: 'staff/storemanager',
       name: `账号管理-商户账号管理`,
       component: () => import('@/view/mall/marketing/merchantAccount')
@@ -27,6 +32,11 @@ export default {
       component: () => import('@/view/base/account/storeroles')
     },
     {
+      path: 'staff/selfdeliverystaff',
+      name: `账号管理-店铺配送员`,
+      component: () => import('@/view/base/account/delivery')
+    },
+    {
       path: 'staff/Platformstaff',
       name: `账号管理-平台管理员`,
       component: () => import('@/view/base/account/normalstaff')
@@ -35,6 +45,25 @@ export default {
       path: 'staff/Platformstaffroles',
       name: `账号管理-平台角色`,
       component: () => import('@/view/base/account/normalroles')
+    },
+    {
+      path: 'staff/dealer_list',
+      name: `账号管理-经销商管理`,
+      component: () => import('@/view/mall/marketing/dealer'),
+      children: [
+        {
+          path: 'detail/:id?',
+          component: () => import('@/view/mall/marketing/dealer/detail')
+        },
+        {
+          path: 'storelist/:id?',
+          component: () => import('@/view/mall/marketing/dealer/storelist')
+        },
+        {
+          path: 'relation/:id?',
+          component: () => import('@/view/mall/marketing/dealer/relationstorelist')
+        }
+      ]
     },
     {
       path: 'assetpayment',
@@ -201,6 +230,11 @@ export default {
       path: 'menumanage/merchantmenu',
       name: `商户菜单管理`,
       component: () => import('@/view/menus/merchantmenu')
+    },
+    {
+      path: 'menumanage/suppliermenus',
+      name: `供应商菜单管理`,
+      component: () => import('@/view/menus/supplier')
     },
     {
       path: 'menumanage/distributormenu',

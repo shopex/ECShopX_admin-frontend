@@ -22,13 +22,24 @@
           </el-row>
         </el-form-item>
         <el-form-item label="商城Logo">
-          <imgBox :img-url="form.logo" inline @click="handleImgChange" />
+          <imgBox :img-url="form.logo" inline @click="handleImgChange('imgDialog')" />
           <imgPicker
             :dialog-visible="imgDialog"
             :sc-status="isGetImage"
             @chooseImg="pickImg"
-            @closeImgDialog="closeImgDialog"
+            @closeImgDialog="closeImgDialog('imgDialog')"
           />
+          （ 推荐尺寸:147*46px ）
+        </el-form-item>
+        <el-form-item label="登录页背景图">
+          <imgBox :img-url="form.background" inline @click="handleImgChange('imgDialogLoginBg')" />
+          <imgPicker
+            :dialog-visible="imgDialogLoginBg"
+            :sc-status="isGetImage"
+            @chooseImg="pickImgLoginBg"
+            @closeImgDialog="closeImgDialog('imgDialogLoginBg')"
+          />
+          （ 推荐尺寸:1920*690px ）
         </el-form-item>
       </div>
       <div class="section-footer content-center">
@@ -55,13 +66,15 @@ export default {
       form: {
         logo: '',
         intro: '',
-        brand_name: ''
+        brand_name: '',
+        background: ''
       },
       textarea: '',
       pic: '',
       remnant: 0,
       fileList: [],
       imgDialog: false,
+      imgDialogLoginBg: false,
       isGetImage: false
     }
   },
@@ -71,6 +84,7 @@ export default {
       this.pic = this.wximageurl + res.data.data.logo
       this.form.intro = res.data.data.intro
       this.form.brand_name = res.data.data.brand_name
+      this.form.background = res.data.data.background
       this.remnant = (res.data.data.intro || '').length
     })
   },
@@ -88,7 +102,8 @@ export default {
       params = {
         intro: this.form.intro,
         logo: this.form.logo,
-        brand_name: this.form.brand_name
+        brand_name: this.form.brand_name,
+        background: this.form.background
       }
       console.log(params)
       putSettingWxShops(params).then((response) => {
@@ -126,16 +141,20 @@ export default {
       this.remnant = this.form.intro.length
     },
     //门店LOGO
-    handleImgChange() {
-      this.imgDialog = true
+    handleImgChange(name) {
+      this[name] = true
       this.isGetImage = true
     },
     pickImg(data) {
       this.form.logo = data.url
       this.imgDialog = false
     },
-    closeImgDialog() {
-      this.imgDialog = false
+    pickImgLoginBg(data) {
+      this.form.background = data.url
+      this.imgDialogLoginBg = false
+    },
+    closeImgDialog(name) {
+      this[name] = false
     }
   }
 }

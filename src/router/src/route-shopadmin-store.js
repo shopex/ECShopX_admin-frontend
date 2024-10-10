@@ -1,6 +1,6 @@
 // 商品路由
 const name = '店铺'
-import Layout from '@/view/layout' // 主框架
+import Layout from '@/view/layout' // 主框架 2024003
 
 export default {
   path: '/shopadmin/store',
@@ -38,6 +38,63 @@ export default {
       name: `店铺码`,
       component: () => import('@/view/mall/marketing/distributorCode')
     },
+    {
+      path: 'marketingsalesman',
+      name: `业务员`,
+      component: () => import('@/view/guide/salesman'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        },
+        {
+          path: 'child',
+          component: () => import('@/view/popularize/children')
+        },
+        {
+          path: 'children',
+          component: () => import('@/view/guide/children')
+        }
+      ]
+    },
+    {
+      path: 'popularize/popularizegoods',
+      name: `分销商品`,
+      component: () => import('@/view/popularize/goodsStore')
+    },
+    {
+      path: 'marketing/popularize/popularizelist',
+      name: `推广员列表`,
+      component: () => import('@/view/popularize/list'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        },
+        {
+          path: 'child',
+          component: () => import('@/view/popularize/children')
+        }
+      ]
+    },
+    {
+      path: 'marketing/popularize/popularizedata',
+      name: `业务员业绩`,
+      component: () => import('@/view/popularize/data'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        }
+      ]
+    },
+
+    { 
+      path: 'popularizewithdraw',
+      name: `业务员提现`,
+      component: () => import('@/view/mall/marketing/salesmanwithdraw')
+    },
+
     {
       path: 'tmpl/shopDecoration',
       name: `移动商城`,

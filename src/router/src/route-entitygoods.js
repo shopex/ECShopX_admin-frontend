@@ -7,7 +7,7 @@ export default {
   path: '/entity',
   component: Layout,
   children: [
-    // 商品管理
+    // 自营商品
     {
       path: 'goods/goodsphysical',
       name: `商品管理`,
@@ -35,6 +35,52 @@ export default {
           path: 'physicalupload',
           name: `商品导入`,
           component: () => import('@/view/mall/goods/physical/normalGoodsUpload')
+        }
+      ]
+    },
+    // 供应商商品列表
+    {
+      path: 'goods/supplier_goods_list',
+      name: `供应商商品列表`,
+      component: () => import('@/view/mall/goods/physical/supplier_goods_list'),
+      children: [
+        {
+          path: 'editor/:itemId?',
+          // component: () => import('@/view/mall/goods/physical/add'),
+          component: () => import('@/view/goods/index'),
+          meta: {
+            footerFixed: true
+          }
+        },
+        {
+          path: 'physicalstoreupload',
+          name: `库存导入`,
+          component: () => import('@/view/mall/goods/physical/normalGoodsStoreUpload')
+        },
+        {
+          path: 'physicalprofitupload',
+          name: `分润导入`,
+          component: () => import('@/view/mall/goods/physical/normalGoodsProfitUpload')
+        },
+        {
+          path: 'physicalupload',
+          name: `商品导入`,
+          component: () => import('@/view/mall/goods/physical/normalGoodsUpload')
+        }
+      ]
+    },
+    // 供应商商品审核
+    {
+      path: 'goods/suppliergoods',
+      name: `供应商商品审核`,
+      component: () => import('@/view/mall/goods/physical/supplier_goods_check'),
+      children: [
+        {
+          path: 'editor/:itemId?',
+          component: () => import('@/view/goods/index'),
+          meta: {
+            footerFixed: true
+          }
         }
       ]
     },

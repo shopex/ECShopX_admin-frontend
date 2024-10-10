@@ -254,7 +254,7 @@ export default {
   },
   methods: {
     handleBack() {
-      this.router.go(-1)
+      this.$router.go(-1)
     },
 
     async getDetail() {
@@ -283,7 +283,7 @@ export default {
         is_top: info.is_top,
         p_order: info.p_order,
         title: info.title,
-        content: info.content.replace(/<br\/>/g,'\n'),
+        content: info.content.replace(/<br\/>/g, '\n'),
         video: info.video,
         video_ratio: info.video_ratio,
         images: JSON.parse(info.images).map((item) => item.url)
@@ -366,7 +366,7 @@ export default {
           params.is_top = this.is_top ? 1 : 0
           params.cover = params.images[0]
           params.image_path = params.images
-          params.content = params.content.replace(/\n/g,`<br/>`);
+          params.content = params.content.replace(/\n/g, `<br/>`)
           params.topics = this.relTopics.map((item) => item.topic_id)
           params.images = JSON.stringify(
             params.images.map((item) => {

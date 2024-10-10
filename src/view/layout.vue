@@ -16,7 +16,9 @@
               class="brand-link"
               :to="`${
                 login_type == 'distributor' || login_type == 'dealer'
-                  ? $store.getters.menus[0].children[0].url
+                  ? typeof $store.getters.menus[0].children == 'undefined'
+                    ? $store.getters.menus[0].url
+                    : $store.getters.menus[0].children[0].url
                   : '/'
               }`"
             >
@@ -34,7 +36,6 @@
                 :index="item.url"
               >
                 <router-link :to="getMenuUrl(item)">
-                  <!-- <i class="iconfont" :class="`icon-${item.icon}`" /> -->
                   <i :class="['ecx-icon', `icon-${getIconName(item.icon)}`]" />
                   <span>{{ item.name }}</span>
                 </router-link>
@@ -213,8 +214,8 @@ export default {
         const { menus } = state.menu
         if (store.getters.login_type == 'distributor') {
           menus.forEach((menu) => {
-            const paths = menu.url.match(/\/\w+/g)
-            menu.url = `${paths[0]}${paths[1]}`
+            const [path1, path2] = menu.url.match(/\/\w+/g)
+            menu.url = `${path1}${path2 || ''}`
           })
         }
         return menus
@@ -310,6 +311,10 @@ export default {
         this.$router.push({
           path: '/shopadmin/admininfo'
         })
+      } else if (this.$store.getters.login_type === 'supplier') {
+        this.$router.push({
+          path: '/supplier/admininfo'
+        })
       } else {
         this.$router.push({
           path: '/admininfo'
@@ -330,6 +335,8 @@ export default {
         window.location.href = `/dealer/login`
       } else if (loginType == 'merchant') {
         window.location.href = `/merchant/login`
+      } else if (loginType == 'supplier') {
+        window.location.href = `/supplier/login`
       } else {
         window.location.href = `/login`
       }
@@ -509,7 +516,8 @@ export default {
     background-color: #fff;
     padding: 16px;
     border-radius: 0;
-    min-height: calc(100vh - 70px);
+    // min-height: calc(100vh - 70px);
+    min-height: 600px;
     &.footer-fixed {
       margin-bottom: 57px;
     }

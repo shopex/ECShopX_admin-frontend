@@ -6,6 +6,7 @@ import {
   VERSION_IN_PURCHASE,
   IS_ADMIN,
   IS_DISTRIBUTOR,
+  IS_SUPPLIER,
   IS_MERCHANT,
   getUrlPathByLoginType
 } from '@/utils'
@@ -212,7 +213,6 @@ Vue.prototype.matchHidePage = function (name) {
   // debugger
   // componentName = componentName[componentName.length-1]
   // return `${this.$route.path}/${componentName}_${name}`
-
   return `${this.$route.path}/${name}`
 }
 
@@ -245,6 +245,7 @@ Vue.prototype.VUE_APP_CHUZHI = process.env.VUE_APP_CHUZHI == 'true'
 
 Vue.prototype.IS_ADMIN = IS_ADMIN
 Vue.prototype.IS_DISTRIBUTOR = IS_DISTRIBUTOR
+Vue.prototype.IS_SUPPLIER = IS_SUPPLIER
 Vue.prototype.IS_MERCHANT = IS_MERCHANT
 
 Vue.prototype.path_prefixes = process.env.VUE_APP_PREFIXES
@@ -275,6 +276,7 @@ Vue.prototype.theme = {
   $submenu_act_text: '#333',
   $submenu_text: '#666'
 }
+Vue.prototype.VUE_APP_LOCAL_DELIVERY_DIRVER = process.env.VUE_APP_LOCAL_DELIVERY_DIRVER
 
 Vue.prototype.companyBrand = '商派ECShopX'
 Vue.prototype.companyBrandImg = process.env.PRODUCT_MODEL === 'standard' ? 'onex' : 'ecshopx'

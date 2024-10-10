@@ -10,12 +10,18 @@ export default {
     {
       path: 'manage/templateedit',
       name: `模板编辑`,
-      component: () => import('@/view/wxapp/management')
+      // component: () => import('@/view/wxapp/management')
+      component: () => import('@/view/wxapp/home')
     },
     {
       path: 'manage/editcategory',
       name: `自定义分类`,
       component: () => import('@/view/wxapp/category')
+    },
+    {
+      path: 'manage/classificationTemplate',
+      name: `分类模版`,
+      component: () => import('@/view/wxapp/classificationTemplate')
     },
     {
       path: 'manage/custompage',
@@ -60,6 +66,11 @@ export default {
       meta: {
         hidemenu: true
       }
+    },
+    {
+      path: 'pcmall/loginPageSetting',
+      name: `登陆页设置`,
+      component: () => import('@/view/pc/pctemplate/login')
     },
     {
       path: 'pcmall/seo',

@@ -56,7 +56,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="total_count > params.pageSize" class="content-padded content-center">
+      <div class="content-padded content-center">
         <el-pagination
           background
           layout="prev, pager, next"
@@ -162,7 +162,7 @@ export default {
       curPageUrl: '',
       params: {
         page: 1,
-        pageSize: 20
+        pageSize: 10
       },
       pageForm: {
         id: '',

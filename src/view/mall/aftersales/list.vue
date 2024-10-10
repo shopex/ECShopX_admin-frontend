@@ -55,6 +55,28 @@
             />
           </el-select>
         </SpFilterFormItem>
+        <SpFilterFormItem prop="item_bn" label="SKU编号:">
+          <el-input v-model="params.item_bn" placeholder="SKU编号" />
+        </SpFilterFormItem>
+
+        <SpFilterFormItem v-if="VERSION_STANDARD || IS_ADMIN()" prop="supplier_name" label="来源供应商:">
+          <el-input v-model="params.supplier_name" placeholder="请输入来源供应商" />
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="order_holder"
+          label="订单分类:"
+          v-if="VERSION_STANDARD || IS_ADMIN()"
+        >
+          <el-select v-model="params.order_holder" clearable placeholder="请选择">
+            <el-option
+              v-for="item in orderCategory"
+              :key="item.value"
+              size="mini"
+              :label="item.title"
+              :value="item.value"
+            />
+          </el-select>
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -76,6 +98,8 @@
                   path:
                     (`${$store.getters.login_type}` == 'distributor' &&
                       '/shopadmin/order/aftersaleslist/detail') ||
+                      (`${$store.getters.login_type}` == 'supplier' &&
+                      '/supplier/order/aftersaleslist/detail') ||
                     (`${$store.getters.login_type}` == 'merchant' &&
                       '/merchant/order/aftersaleslist/detail') ||
                     '/order/entitytrade/aftersaleslist/detail',
@@ -106,7 +130,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column min-width="150" label="订单">
+        <el-table-column min-width="150" label="订单号">
           <template slot-scope="scope">
             <div class="order-num">
               <router-link
@@ -115,6 +139,8 @@
                   path:
                     (`${$store.getters.login_type}` == 'distributor' &&
                       '/shopadmin/order/tradenormalorders/detail') ||
+                      (`${$store.getters.login_type}` == 'supplier' &&
+                      '/supplier/order/tradenormalorders/detail') ||
                     (`${$store.getters.login_type}` == 'merchant' &&
                       '/merchant/order/tradenormalorders/detail') ||
                     '/order/entitytrade/tradenormalorders/detail',
@@ -133,6 +159,52 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column
+          width="120"
+          label="订单分类"
+          header-align="center"
+          prop="order_holder"
+          v-if="VERSION_STANDARD || IS_ADMIN()"
+        >
+        <template slot-scope="scope">
+            {{  getOrderCategoryName(scope.row.order_holder) }}
+          </template>
+        </el-table-column>
+        <el-table-column min-width="100" v-if="VERSION_STANDARD || IS_ADMIN()" prop="supplier_name" label="来源供应商" />
+        <el-table-column
+          width="120"
+          label="退款金额（¥）"
+          header-align="center"
+          prop="refund_fee"
+        ></el-table-column>
+        <el-table-column
+          width="120"
+          label="退款抵扣积分（¥）"
+          header-align="center"
+          prop="refund_point"
+        ></el-table-column>
+        <el-table-column label="配送员">
+          <template slot-scope="scope">
+            {{ scope.row.self_delivery_operator_name }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="mobile" label="业务员">
+          <template slot-scope="scope">
+            {{ scope.row.salesman_mobile }}
+            <el-tooltip
+              v-if="datapass_block == 0"
+              effect="dark"
+              content="复制"
+              placement="top-start"
+            >
+              <i
+                v-clipboard:copy="scope.row.salesman_mobile"
+                v-clipboard:success="onCopySuccess"
+                class="el-icon-document-copy"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column min-width="150" label="手机号">
           <template slot-scope="scope">
             <div
@@ -140,6 +212,7 @@
               class="order-num"
             >
               <router-link
+                v-if="$store.getters.login_type != 'supplier'&& $store.getters.login_type!= 'distributor'"
                 target="_blank"
                 :to="{
                   path:
@@ -156,6 +229,29 @@
             </template>
           </template>
         </el-table-column>
+        <el-table-column v-if="IS_SUPPLIER()" min-width="100" prop="contact" label="姓名" />
+        <el-table-column v-if="IS_SUPPLIER()" min-width="150" label="SKU编号">
+          <template slot-scope="scope">
+            <span>{{ scope.row.detail[0].item_bn }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="IS_SUPPLIER()" min-width="100" label="商品名称">
+          <template slot-scope="scope">
+            <span>{{ scope.row.detail[0].item_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="IS_SUPPLIER()" min-width="120" label="售后商品数量">
+          <template slot-scope="scope">
+            <span>{{ scope.row.detail[0].num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="IS_SUPPLIER()" min-width="100" label="金额">
+          <template slot-scope="scope">
+            <span>{{ scope.row.detail[0].refund_fee / 100 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="IS_SUPPLIER()" min-width="100" label="售后原因" prop="reason" />
+        <el-table-column v-if="IS_SUPPLIER()" min-width="100" label="修改时间" prop="update_time" />
         <el-table-column width="100" label="售后类型">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.aftersales_type == 'ONLY_REFUND'" type="info" size="mini">
@@ -270,7 +366,8 @@
 import { mapGetters } from 'vuex'
 import RemarkModal from '@/components/remarkModal'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
-import { VERSION_B2C } from '@/utils'
+import { VERSION_B2C, IS_SUPPLIER } from '@/utils'
+import { ORDER_CATEGORY} from '@/consts'
 export default {
   components: {
     RemarkModal
@@ -283,11 +380,16 @@ export default {
         name: undefined
       },
       create_time: '',
+      receiver_mobile: '',
       order_id: undefined,
       aftersales_bn: undefined,
       mobile: undefined,
       aftersales_status: undefined,
-      aftersales_type: undefined
+      aftersales_type: undefined,
+      original_order_id: undefined,
+      item_bn: undefined,
+      supplier_name:undefined,
+      order_holder:undefined
     }
     return {
       loading: false,
@@ -295,6 +397,7 @@ export default {
       params: {
         ...initialParams
       },
+      orderCategory: ORDER_CATEGORY,
       shopList: [],
       aftersalesStatusList: [
         { name: '待处理', value: '0' },
@@ -376,8 +479,12 @@ export default {
         order_id: this.params.order_id || undefined,
         aftersales_bn: this.params.aftersales_bn || undefined,
         mobile: this.params.mobile || undefined,
+        receiver_mobile: this.params.receiver_mobile || undefined,
         aftersales_status: this.params.aftersales_status || undefined,
-        aftersales_type: this.params.aftersales_type || undefined
+        aftersales_type: this.params.aftersales_type || undefined,
+        supplier_name:this.params.supplier_name || undefined,
+        order_holder:this.params.order_holder || undefined
+
       }
       return params
     },
@@ -436,6 +543,9 @@ export default {
       var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
       // 调用 callback 返回建议列表的数据
       cb(results)
+    },
+    getOrderCategoryName(order_holder){
+      return this.orderCategory.find(item=>item.value == order_holder)?.title ?? ''
     },
     async exportData() {
       const { status, url, filename } = await this.$api.aftersales.exportList(this.getParams())

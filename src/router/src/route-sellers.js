@@ -46,6 +46,40 @@ export default {
       ]
     },
     {
+      path: 'marketingsalesman',
+      name: `业务员`,
+      component: () => import('@/view/guide/salesman'),
+      children: [
+        {
+          path: 'children',
+          component: () => import('@/view/guide/children')
+        }
+      ]
+    },
+    {
+      path: 'marketing/popularize/popularizedata',
+      name: `业务员业绩`,
+      component: () => import('@/view/popularize/data'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/popularize/brokerageLog')
+        }
+      ]
+    },
+    {
+      path: 'marketing/popularize/salesman/withdraw',
+      name: `业务员提现`,
+      component: () => import('@/view/mall/marketing/salesmanwithdraw')
+    },
+
+    {
+      path: 'popularize/popularizegoods',
+      name: `业务员商品`,
+      component: () => import('@/view/popularize/goodsStore')
+    },   
+
+    {
       path: 'storemanager/distributortags',
       name: `商家标签`,
       component: () => import('@/view/mall/marketing/distributortags')
@@ -68,8 +102,13 @@ export default {
     },
     {
       path: 'storemanager/setting',
-      name: '商家设置',
+      name: '商户设置',
       component: () => import('@/view/mall/marketing/setting')
+    },
+    {
+      path: 'storemanager/supplier_list',
+      name: '供应商管理',
+      component: () => import('@/view/mall/supplier/supplier_list')
     }
   ]
 }

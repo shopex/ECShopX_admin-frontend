@@ -116,6 +116,7 @@
           <div class="option-btns">
             <span class="btn" @click="editTemplate(item.pages_template_id)">编辑</span>
             <span class="btn" @click="copyTemplate(item.pages_template_id)">复制</span>
+            <span class="btn" @click="copyTemplate(item.pages_template_id)">导航</span>
             <span class="btn" @click="abandonTemplate(item.pages_template_id)">废弃</span>
           </div>
           <div
@@ -804,7 +805,9 @@ export default {
       // window.open(`/wxapp/manage/decorate?id=${pages_template_id}`, '_blank')
       const { distributor_id } = this.$route.query
       if (distributor_id > 0) {
-        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}&scene=1003`)
+        this.$router.push(
+          `/wxapp/manage/decorate?id=${pages_template_id}&scene=1003&distributor_id=${distributor_id}`
+        )
       } else {
         this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}`)
       }

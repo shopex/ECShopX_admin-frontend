@@ -4,9 +4,12 @@
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品名称:">
           <el-input v-model="params.keywords" placeholder="请输入商品名称" />
+        </SpFilterFormItem>        
+        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+          <el-input v-model="params.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="item_bn" label="商品编号:">
-          <el-input v-model="params.item_bn" placeholder="请输入商品编号" />
+        <SpFilterFormItem prop="item_bn" label="SKU编码:">
+          <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
         <SpFilterFormItem prop="regions_id" label="商品产地:">
           <el-cascader
@@ -75,10 +78,14 @@
           >
             <el-table-column type="selection" align="center" label="全选" />
             <el-table-column prop="goods_id" label="商品ID" />
-            <el-table-column prop="itemName" label="商品名称">
+            <el-table-column prop="itemName" label="商品名称" width="200">
               <template slot-scope="scope">
                 {{ scope.row.item_name }}
                 <el-tag v-if="scope.row.special_type == 'drug'" type="danger"> 处方药 </el-tag>
+
+                <div style='color: #888;font-size: 12px;'>
+                  SPU编码：{{ scope.row.goods_bn }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="排序编号">
@@ -89,6 +96,11 @@
                   style="width: 60px"
                   @change="editItemsSort(scope.$index, scope.row)"
                 />
+              </template>
+            </el-table-column>
+            <el-table-column prop="distributor_name" label="来源店铺">
+              <template slot-scope="scope">
+                {{ scope.row.distributor_name.name }}
               </template>
             </el-table-column>
             <el-table-column label="规格">
@@ -124,7 +136,7 @@
                 <span v-else>不可销售</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <el-button
                   type="text"
@@ -141,6 +153,14 @@
                 >
                   审核
                 </el-button>
+                <!-- <el-button
+                  v-if="VERSION_PLATFORM"
+                  type="text"
+                  @click="handleCommissionConf(scope.row)"
+                  >
+佣金配置
+</el-button
+                > -->
               </template>
             </el-table-column>
           </el-table>
@@ -176,6 +196,92 @@
           </el-form-item>
         </el-form>
       </el-dialog>
+
+      <SideBar :visible.sync="show_commission_sideBar" title="总部结算佣金配置" width="60">
+        <slot>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>
+                <el-alert
+                  title="佣金结算类型: 【百分比】"
+                  description="计算方式：商品最终金额 ×  百分比，其中计算方式：商品最终金额为【支付金额-运费】"
+                  type="info"
+                  close-text=" "
+                  class="alert-text"
+                  show-icon
+                />
+              </span>
+              <span>
+                <el-alert
+                  title="佣金结算类型: 【固定金额】"
+                  description="计算方式： 固定金额结算佣金"
+                  type="info"
+                  close-text=" "
+                  class="alert-text"
+                  show-icon
+                />
+              </span>
+            </div>
+            <el-form ref="form" label-width="120px">
+              <el-form-item label="商品名称">
+                {{ current.item_name }}
+              </el-form-item>
+              <el-form-item label="佣金结算类型">
+                <el-radio-group v-model="commissionSpecItems.commission_type">
+                  <el-radio label="1"> 百分比 </el-radio>
+                  <el-radio label="2"> 固定金额 </el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="SPU结算佣金" :rules="[{ required: true }]">
+                <el-input
+                  v-model="commissionSpecItems.commission"
+                  size="mini"
+                  type="number"
+                  style="width: 200px"
+                >
+                  <template v-if="1 == commissionSpecItems.commission_type" slot="append">
+                    %
+                  </template>
+                </el-input>
+                <div class="form-item-tip">SKU未设置佣金时，按SPU设置的佣金结算</div>
+              </el-form-item>
+            </el-form>
+            <el-table v-loading="skuLoading" :data="commissionSpecItems.sku_commission">
+              <el-table-column label="规格" prop="item_spec_desc" min-width="120">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span
+                  ><span v-else>单规格</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="销售价" min-width="80">
+                <template slot-scope="scope"> ¥{{ scope.row.price / 100 }} </template>
+              </el-table-column>
+              <el-table-column label="成本价" min-width="80">
+                <template slot-scope="scope"> ¥{{ scope.row.cost_price / 100 }} </template>
+              </el-table-column>
+              <el-table-column label="SKU结算佣金">
+                <template slot-scope="scope">
+                  <div v-if="0 == commissionSpecItems.commission_type">
+                    <el-input :disabled="true" size="mini" type="number" value="0" />
+                  </div>
+                  <div v-else>
+                    <el-input v-model="scope.row.commission" size="mini" type="number">
+                      <template v-if="1 == commissionSpecItems.commission_type" slot="append">
+                        %
+                      </template>
+                    </el-input>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </slot>
+        <div slot="footer">
+          <el-button type="primary" :loading="submitLoading" @click="saveCommissionConf">
+            保存
+          </el-button>
+        </div>
+      </SideBar>
     </div>
     <router-view />
   </div>
@@ -184,12 +290,23 @@
 import { mapGetters } from 'vuex'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import district from '@/common/district.json'
-import { getItemsList, auditItems, updateItemsStatus } from '@/api/goods'
+import SideBar from '@/components/element/sideBar'
+import {
+  getItemsList,
+  auditItems,
+  updateItemsStatus,
+  getGoodsCommission,
+  saveGoodsCommission
+} from '@/api/goods'
 import { pageMixin } from '@/mixins'
 import { SALES_STATUS } from '@/consts'
 import { isArray } from '@/utils'
+import { setPaymentSetting, getPaymentSetting } from '@/api/trade'
 
 export default {
+  components: {
+    SideBar
+  },
   mixins: [pageMixin],
   props: ['getStatus'],
   provide() {
@@ -217,13 +334,19 @@ export default {
       params: {
         keywords: '',
         item_bn: '',
+        goods_bn: '',
         regions_id: [],
         approve_status: '',
         distributor_id: 'all_distributor',
         audit_status: '',
         main_cat_id: ''
       },
-      salesStatus: SALES_STATUS
+      salesStatus: SALES_STATUS,
+      submitLoading: false,
+      show_commission_sideBar: false,
+      skuLoading: false,
+      commissionSpecItems: [],
+      current: ''
     }
   },
   computed: {
@@ -367,6 +490,53 @@ export default {
         this.submitLoading = false
         this.skuLoading = false
       })
+    },
+    handleCommissionConf(data) {
+      this.show_commission_sideBar = true
+      this.skuLoading = true
+      this.current = data
+      getGoodsCommission(data.item_id).then((res) => {
+        var commissionSpecItems = res.data.data
+        this.commissionSpecItems = commissionSpecItems
+        this.skuLoading = false
+      })
+    },
+    saveCommissionConf() {
+      if (this.commissionSpecItems.commission == '') {
+        this.$message({
+          type: 'error',
+          message: 'SPU结算佣金不能为空'
+        })
+        return false
+      }
+      var rebateConf = []
+      let params = {
+        'item_id': this.current.item_id,
+        'goods_id': this.current.goods_id,
+        'commission_type': this.commissionSpecItems.commission_type
+      }
+      if (params.commission_type == '1') {
+        params.commission = this.commissionSpecItems.commission
+      } else {
+        params.commission = this.commissionSpecItems.commission * 100
+      }
+      this.commissionSpecItems.sku_commission.forEach((item) => {
+        var sku_commission = { 'item_id': item.item_id }
+        if (this.commissionSpecItems.commission_type == '2') {
+          sku_commission.commission = item.commission * 100
+        } else {
+          sku_commission.commission = item.commission
+        }
+        rebateConf.push(sku_commission)
+      })
+      params.sku_commission = JSON.stringify(rebateConf)
+      saveGoodsCommission(params).then((res) => {
+        this.$message({
+          message: '保存成功',
+          type: 'success',
+          duration: 2 * 1000
+        })
+      })
     }
   }
   // watch: {
@@ -465,6 +635,11 @@ export default {
     bottom: 0;
     visibility: hidden;
   }
+}
+.form-item-tip {
+  font-size: 13px;
+  color: #999;
+  line-height: initial;
 }
 </style>
 <style lang="scss">

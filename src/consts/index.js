@@ -24,7 +24,18 @@ export const DISTRIBUTION_TYPE = [
   { title: '全部', value: '' },
   { title: '普通快递', value: 'logistics' },
   { title: '同城配', value: 'dada' },
-  { title: '客户自提', value: 'ziti' }
+  { title: '客户自提', value: 'ziti' },
+  { title: '商家自配送', value: 'merchant' }
+]
+
+export const DISTRIBUTION_STATUS = [
+  { title: '全部', value: '' },
+  { title: '待确认', value: 'CONFIRMING' },
+  { title: '已接单', value: 'RECEIVEORDER' },
+  { title: '已打包', value: 'PACKAGED' },
+  { title: '配送中', value: 'DELIVERING' },
+  { title: '已送达', value: 'DONE' }
+  // { title: '已取消', value: 'NOTMERCHANT' }
 ]
 
 export const ORDER_STATUS = [
@@ -95,10 +106,31 @@ export const INVOICE_STATUS = [
   { title: '已开票', value: 1 }
 ]
 
+export const GOOD_CATEGORY = [
+  { title: '平台自营', value: 'self' },
+  { title: '商户商品', value: 'distributor' },
+  { title: '供应商商品', value: 'supplier' }
+]
+
+
+export const GOOD_CATEGORY_MAP = {
+  'self':'平台自营',
+  'distributor':'商户商品',
+  'supplier':'供应商商品'
+}
+
 export const ORDER_CATEGORY = [
   { title: '全部', value: '' },
   { title: '自营订单', value: 'self' },
-  { title: '商家订单', value: 'shop' }
+  { title: '商家订单', value: 'distributor' },
+  { title: '供应商订单', value: 'supplier' },
+  { title: '自营+供应商订单', value: 'self_supplier' },
+]
+
+export const SELF_ORDER_CATEGORY = [
+  { title: '全部', value: 'self,self_supplier' },
+  { title: '自营订单', value: 'self' },
+  { title: '自营+供应商订单', value: 'self_supplier' },
 ]
 
 export const REFUND_STATUS = {
@@ -128,6 +160,7 @@ export const PROFIT_TYPE = {
 }
 
 export const PAY_TYPE = {
+  offline: '线下转账',
   wxpay: '微信支付',
   amorepay: '微信支付',
   wechat: '微信支付',
@@ -226,7 +259,8 @@ export const LINK_PATH = {
   'seckill': '秒杀',
   'custom_page': '自定义页面',
   'liverooms': '直播',
-  'other_wxapp': '外部小程序'
+  'other_wxapp': '外部小程序',
+  'shop_tag':'商家'
 }
 
 export const CARD_TYPE = {
@@ -241,3 +275,20 @@ export const SECKILL_ACTIVITY_STATUS = {
   'in_sale': '进行中',
   'it_has_ended': '已结束'
 }
+
+// 商品审核状态
+export const GOODS_APPLY_STATUS = {
+  submitting: '待提交',
+  approved: '已审核',
+  processing: '审核中',
+  rejected: '已拒绝'
+}
+
+// 商品税率
+export const GOODS_TAX_RATE = [
+  { title: '1%', value: 1 },
+  { title: '6%', value: 6 },
+  { title: '9%', value: 9 },
+  { title: '13%', value: 13 },
+  { title: '免税', value: 0 }
+]

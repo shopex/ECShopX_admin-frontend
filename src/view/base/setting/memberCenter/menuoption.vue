@@ -47,6 +47,9 @@
         <el-form-item label="是否展示个人信息：">
           <el-switch v-model="form.data.memberinfo_enable" />
         </el-form-item>
+        <el-form-item label="社区团购：">
+          <el-switch v-model="form.data.community_group_enable" />
+        </el-form-item>
       </div>
       <div class="section-footer content-center">
         <el-button v-loading="loading" type="primary" @click="saveConfig"> 保存 </el-button>
@@ -78,7 +81,8 @@ export default {
           community_order: true,
           offline_order: true,
           share_enable: true,
-          memberinfo_enable: true
+          memberinfo_enable: true,
+          community_group_enable: true
         }
       },
       pic: '',
@@ -116,7 +120,8 @@ export default {
             community_order,
             offline_order,
             share_enable,
-            memberinfo_enable
+            memberinfo_enable,
+            community_group_enable
           } = res.data.data.list[0].params.data
           this.form.data = {
             ziti_order,
@@ -132,7 +137,8 @@ export default {
             community_order,
             offline_order,
             share_enable,
-            memberinfo_enable
+            memberinfo_enable,
+            community_group_enable
           }
         } catch (e) {}
       }

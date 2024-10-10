@@ -148,6 +148,7 @@
             min="0"
             size="mini"
             placeholder=""
+            :disabled="disabled"
           />
         </template>
       </el-table-column>
@@ -195,7 +196,7 @@
 
     <el-table :data="value.specItems" border style="line-height: initial; width: 100%">
       <el-table-column prop="spec_name" label="规格" />
-      <el-table-column prop="item_id" label="状态" :render-header="renderRequire">
+      <el-table-column label="状态" :render-header="renderRequire" v-if="!IS_SUPPLIER()">
         <template slot-scope="scope">
           <el-select v-model="scope.row.approve_status" size="mini" placeholder="请选择">
             <el-option
@@ -235,7 +236,7 @@
       </el-table-column>
       <el-table-column prop="cost_price" label="成本价">
         <template slot-scope="scope">
-          <el-input v-model="scope.row.cost_price" type="number" min="0" size="mini" />
+          <el-input v-model="scope.row.cost_price" type="number" min="0" size="mini" :disabled="disabled" />
         </template>
       </el-table-column>
       <el-table-column prop="market_price" label="市场价">
@@ -263,6 +264,8 @@
 </template>
 
 <script>
+import { GOODS_TAX_RATE } from '@/consts'
+import { IS_SUPPLIER } from '@/utils'
 export default {
   name: 'SkuParams',
   props: {
@@ -273,6 +276,14 @@ export default {
     isShowPoint: {
       type: Boolean,
       default: false
+    },
+    disabled:{
+      type: Boolean,
+      default: false
+    },
+    provinceList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -297,6 +308,7 @@ export default {
       })
     }
     return {
+      tax_rate_list: GOODS_TAX_RATE,
       bulkFilling: [
         {
           approve_status: '',
@@ -308,7 +320,9 @@ export default {
           barcode: '',
           point_num: '',
           weight: '',
-          volume: ''
+          volume: '',
+          supplier_goods_bn: '',
+          tax_rate: '',
         }
       ],
       statusOption,
@@ -411,7 +425,9 @@ export default {
             market_price,
             barcode,
             point_num,
-            item_spec
+            item_spec,
+            supplier_goods_bn,
+            tax_rate,
           }) => {
             const vKey = item_spec.map(({ spec_value_id }) => spec_value_id).join('_')
             const specName = item_spec.map(
@@ -432,7 +448,9 @@ export default {
               cost_price: isNaN(cost_price / 100) ? '' : cost_price / 100,
               market_price: isNaN(market_price / 100) ? '' : market_price / 100,
               barcode,
-              point_num
+              point_num,
+              supplier_goods_bn,
+              tax_rate,
             }
           }
         )
@@ -451,7 +469,9 @@ export default {
             cost_price,
             market_price,
             barcode,
-            point_num
+            point_num,
+            supplier_goods_bn,
+            tax_rate,
           } = item
           _specItems.push({
             sku_id: key,
@@ -466,7 +486,9 @@ export default {
             cost_price: isNaN(cost_price / 100) ? '' : cost_price / 100,
             market_price: isNaN(market_price / 100) ? '' : market_price / 100,
             barcode,
-            point_num
+            point_num,
+            supplier_goods_bn,
+            tax_rate,
           })
         }
       })
@@ -507,8 +529,11 @@ export default {
         cost_price,
         market_price,
         barcode,
-        point_num
+        point_num,
+        supplier_goods_bn,
+        tax_rate,
       } = this.bulkFilling[0]
+
       this.value.specItems.forEach((item) => {
         item.approve_status = approve_status
         item.store = store
@@ -520,6 +545,8 @@ export default {
         item.market_price = market_price
         item.barcode = barcode
         item.point_num = point_num
+        item.supplier_goods_bn = supplier_goods_bn
+        item.tax_rate = tax_rate
       })
     },
     // 清除
@@ -539,7 +566,9 @@ export default {
         cost_price: '',
         market_price: '',
         barcode: '',
-        point_num: ''
+        point_num: '',
+        supplier_goods_bn: '',
+        tax_rate: '',
       })
     }
   }

@@ -146,7 +146,7 @@ export default {
               type: 'link',
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail',
+                  path: this.matchHidePage('detail'),
                   query: { operator_id: row[0].operator_id }
                 })
               }
@@ -163,7 +163,7 @@ export default {
             action: {
               handler: (row) => {
                 this.$router.push({
-                  path: '/shop_dealer/dealer_list/detail/storelist',
+                  path: this.matchHidePage('storelist'),
                   query: { dealer_id: row[0].operator_id, username: row[0].username }
                 })
               }

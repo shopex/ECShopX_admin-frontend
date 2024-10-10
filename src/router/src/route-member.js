@@ -84,6 +84,11 @@ export default {
       component: () => import('@/view/member/register')
     },
     {
+      path: 'salemanprotocol',
+      name: `业务员协议`,
+      component: () => import('@/view/member/salemanprotocol')
+    },
+    {
       path: 'mallrecharge',
       name: `会员储值`,
       component: () => import('@/view/mall/storeddeposit/index')
@@ -103,10 +108,28 @@ export default {
       name: '会员注销',
       component: () => import('@/view/member/logout')
     },
+    // {
+    //   path: 'enterpriselist',
+    //   name: '内购企业列表',
+    //   component: () => import('@/view/member/members/enterprise')
+    // },
     {
-      path: 'enterpriselist',
-      name: '内购企业列表',
-      component: () => import('@/view/member/members/enterprise')
+      path: 'purchase/employee',
+      name: '员工管理',
+      component: () => import('@/view/member/purchase/employee'),
+      children: [
+        {
+          path: 'import',
+          name: `白名单导入`,
+          component: () => import('@/view/member/purchase/employeeImport')
+        }
+      ]
+    },
+
+    {
+      path: 'purchase/company',
+      name: '企业管理',
+      component: () => import('@/view/member/purchase/company')
     }
   ]
 }

@@ -67,8 +67,8 @@
         <SpFilterFormItem prop="mobile" label="手机号:">
           <el-input v-model="params.mobile" placeholder="请输入手机号" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="username" label="姓名:">
-          <el-input v-model="params.username" placeholder="请输入姓名" />
+        <SpFilterFormItem prop="username" label="昵称:">
+          <el-input v-model="params.username" placeholder="请输入昵称" />
         </SpFilterFormItem>
         <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="vip_grade" label="会员身份:">
           <el-select v-model="params.vip_grade" clearable placeholder="请选择">
@@ -119,9 +119,9 @@
             @change="dateChange"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="wechat_nickname" label="微信昵称:">
+        <!-- <SpFilterFormItem prop="wechat_nickname" label="微信昵称:">
           <el-input v-model="params.wechat_nickname" placeholder="请输入微信昵称" />
-        </SpFilterFormItem>
+        </SpFilterFormItem> -->
         <SpFilterFormItem prop="remarks" label="备注:">
           <el-input v-model="params.remarks" placeholder="备注" />
         </SpFilterFormItem>
@@ -179,9 +179,9 @@
           <el-button type="primary" plain icon="el-plus-circle"> 导出 </el-button>
         </export-tip>
 
-        <el-button v-if="!VERSION_IN_PURCHASE" type="primary" plain @click="chiefupload">
+        <!-- <el-button v-if="!VERSION_IN_PURCHASE" type="primary" plain @click="chiefupload">
           团长导入
-        </el-button>
+        </el-button> -->
       </div>
 
       <!-- <el-row>
@@ -337,6 +337,9 @@
               @click="gradeUpdate(scope.row)"
             >
               会员等级
+            </el-button>
+            <el-button icon="edit" type="text" @click="editSuperior(scope.row)">
+              调整上级
             </el-button>
           </template>
         </el-table-column>
@@ -737,6 +740,55 @@
         </template>
       </el-dialog>
 
+      <!-- 调整上下级弹框 -->
+      <el-dialog
+        title="调整上级"
+        :visible.sync="editSuperiorVisible"
+        :before-close="handleCancelSuperior"
+      >
+        <el-row :gutter="10">
+          <el-col :md="8" :lg="10">
+            <el-input v-model="identifierModal" placeholder="请输入手机号">
+              <el-button slot="append" icon="el-icon-search" @click="numberSearchModal" />
+            </el-input>
+          </el-col>
+        </el-row>
+
+        <el-table
+          v-loading="modalLoading"
+          :data="modalList"
+          style="width: 100%"
+          :height="400"
+          element-loading-text="数据加载中..."
+          highlight-current-row
+          @current-change="handleCurrentChangeUpLV"
+        >
+          <el-table-column type="index" width="50" />
+          <el-table-column prop="username" label="姓名" />
+          <el-table-column prop="mobile" label="手机号" />
+          <!-- <el-table-column prop="promoter_grade_name" label="推广员等级" /> -->
+          <el-table-column prop="disabled" label="状态">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.disabled == '0'" type="success" size="mini"> 有效 </el-tag>
+              <el-tag v-else type="info" size="mini"> 无效 </el-tag>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div v-if="modal_total_count > paramsModal.pageSize" class="content-padded content-center">
+          <el-pagination
+            layout="prev, pager, next"
+            :current-page.sync="paramsModal.page"
+            :total="modal_total_count"
+            :page-size="paramsModal.pageSize"
+            @current-change="handleModalPage"
+          />
+        </div>
+        <div slot="footer" class="dialog-footer content-center">
+          <el-button @click.native="handleCancelSuperior"> 取消 </el-button>
+          <el-button type="primary" @click="submitSuperiorAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
+
       <template v-if="aliyunsmsDialogVisible">
         <aliyunsmsDialog
           :exterior="true"
@@ -775,6 +827,16 @@ import {
 } from '../../../api/member'
 import { getaliSmsStatus } from '@/api/sms'
 
+import {
+  addPromoter,
+  getPopularizeList,
+  editPopularizeRemove,
+  editPopularizeGrade,
+  editPopularizeDisabled,
+  getPromoterGradeConfig,
+  updatePromoterShop
+} from '../../../api/promotions'
+
 import { getSalesmanList, setMemberSalesman, getDistributorEasyList } from '../../../api/marketing'
 import { getEffectiveCardList } from '../../../api/cardticket'
 import { giveCoupons } from '../../../api/promotions'
@@ -790,6 +852,17 @@ export default {
   },
   data() {
     return {
+      editSuperiorVisible: false,
+      modalLoading: false,
+      paramsModal: {
+        page: 1,
+        pageSize: 14,
+        mobile: ''
+      },
+      identifierModal: '',
+      modalList: [],
+      modal_total_count: 0,
+
       aliyunsms_status: false, //ali 短信状态
       aliyunsmsDialogVisible: false,
       aliyunsmsDialogInfo: {
@@ -1142,6 +1215,12 @@ export default {
       } else {
         this.params.distributor_id = ''
       }
+    },
+    onReset() {
+      this.created = ''
+      this.params.time_start_begin = ''
+      this.params.time_start_end = ''
+      this.onSearch()
     },
     onSearch() {
       this.page.pageIndex = 1
@@ -1541,8 +1620,8 @@ export default {
           type: 'warning'
         }).then(() => {
           let params = {
-            'user_id': row.user_id,
-            'disabled': row.disabled
+            user_id: row.user_id,
+            disabled: row.disabled
           }
           updateMemberInfo(params).then((res) => {
             this.getMembers()
@@ -1550,8 +1629,8 @@ export default {
         })
       } else {
         let params = {
-          'user_id': row.user_id,
-          'disabled': row.disabled
+          user_id: row.user_id,
+          disabled: row.disabled
         }
         updateMemberInfo(params).then((res) => {
           this.getMembers()
@@ -1568,8 +1647,8 @@ export default {
           type: 'warning'
         }).then(() => {
           let params = {
-            'user_id': row.user_id,
-            'distributor_ids': [this.$store.getters.shopId]
+            user_id: row.user_id,
+            distributor_ids: [this.$store.getters.shopId]
           }
           setCheif(params).then((res) => {
             this.getMembers()
@@ -1621,6 +1700,58 @@ export default {
         this.staffCoupons.temp.push(item)
       }
     },
+    editSuperior(row) {
+      this.editSuperiorVisible = true
+      this.row = row
+      this.identifierModal = ''
+      this.numberSearchModal()
+    },
+    submitSuperiorAction() {
+      this.editPopularizeRemoveFun()
+      this.editSuperiorVisible = false
+    },
+    handleCancelSuperior() {
+      this.editSuperiorVisible = false
+    },
+
+    numberSearchModal(e) {
+      this.paramsModal.page = 1
+      this.paramsModal.mobile = this.identifierModal
+      this.getPopularizeListModalFun(this.paramsModal)
+    },
+    getPopularizeListModalFun(filter) {
+      this.modalLoading = true
+      getPopularizeList(filter).then((res) => {
+        this.modalList = res.data.data.list
+        this.modal_total_count = Number(res.data.data.total_count)
+        this.modalLoading = false
+      })
+    },
+    handleCurrentChangeUpLV(val) {
+      console.log('handleCurrentChangeUpChange')
+      if (val && val.user_id) {
+        this.currentRow = val.user_id
+      }
+    },
+    editPopularizeRemoveFun() {
+      editPopularizeRemove({ 'user_id': this.row.user_id, 'new_user_id': this.currentRow }).then(
+        (res) => {
+          this.message = '上下级'
+          this.loading = false
+          this.$message({
+            message: '调整' + this.message + '成功',
+            type: 'success',
+            duration: 5 * 1000
+          })
+          this.fetchList()
+        }
+      )
+    },
+    handleModalPage(page_num) {
+      this.paramsModal.page = page_num
+      this.getPopularizeListModalFun(this.paramsModal)
+    },
+
     batchActionDialog(actiontype) {
       this.params.action_type = actiontype
 

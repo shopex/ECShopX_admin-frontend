@@ -13,41 +13,44 @@ import { FORM_COMP } from '@/consts'
 import { isArray } from '@/utils'
 
 export default {
-  data () {
+  data() {
     return {
       name: '',
       mobile: '',
       extraData: {},
       approve_status: 0,
-      btnActions: [{ name: '审批', key: 'resolve' }],
+      btnActions: [
+        { name: '通过', key: 'resolve' },
+        { name: '驳回', key: 'reject' }
+      ],
       resloveDialog: false,
       resloveForm: {
         approve_status: 1,
         refuse_reason: ''
       },
       resloveFormList: [
+        // {
+        //   label: '审批:',
+        //   key: 'approve_status',
+        //   type: 'radio',
+        //   options: [
+        //     { label: 1, name: '同意' },
+        //     { label: 2, name: '不同意' }
+        //   ],
+        //   onChange: (e) => {
+        //     if (e == 2) {
+        //       this.resloveFormList[1].isShow = true
+        //     } else {
+        //       this.resloveFormList[1].isShow = false
+        //     }
+        //   }
+        // },
         {
-          label: '审批:',
-          key: 'approve_status',
-          type: 'radio',
-          options: [
-            { label: 1, name: '同意' },
-            { label: 2, name: '不同意' }
-          ],
-          onChange: (e) => {
-            if (e == 2) {
-              this.resloveFormList[1].isShow = true
-            } else {
-              this.resloveFormList[1].isShow = false
-            }
-          }
-        },
-        {
-          label: '拒绝原因:',
+          label: '拒绝原因',
           key: 'refuse_reason',
           type: 'input',
           placeholder: '请输入拒绝原因',
-          isShow: false,
+          // isShow: false,
           validator: (rule, value, callback) => {
             if (this.resloveForm.approve_status == 2 && !value) {
               callback(new Error('不能为空'))
@@ -59,11 +62,11 @@ export default {
       ]
     }
   },
-  created () {
+  created() {
     this.fetchDetail()
   },
   methods: {
-    async fetchDetail () {
+    async fetchDetail() {
       const { apply_id } = this.$route.params
       const { chief_name, chief_mobile, approve_status, extra_data } =
         await this.$api.community.getChiefDetail(apply_id)
@@ -72,7 +75,7 @@ export default {
       this.extraData = extra_data
       this.approve_status = approve_status
     },
-    renderComp ({ type, value }) {
+    renderComp({ type, value }) {
       if (type == FORM_COMP.IMAGE) {
         if (isArray(value)) {
           return (
@@ -89,10 +92,16 @@ export default {
         return value
       }
     },
-    handleAction () {
-      this.resloveDialog = true
+    handleAction(e) {
+      if (e.key === 'reject') {
+        this.$set(this.resloveForm, 'approve_status', 2)
+        this.resloveDialog = true
+      } else {
+        this.$set(this.resloveForm, 'approve_status', 1)
+        this.onResloveSubmit()
+      }
     },
-    async onResloveSubmit () {
+    async onResloveSubmit() {
       const { apply_id } = this.$route.params
       const { approve_status, refuse_reason } = this.resloveForm
       await this.$api.community.approveChief(apply_id, {
@@ -103,7 +112,7 @@ export default {
       this.fetchDetail()
     }
   },
-  render () {
+  render() {
     const { name, mobile, extraData, btnActions, approve_status } = this
     console.log('approve_status', approve_status)
     return (
@@ -134,20 +143,20 @@ export default {
           ))}
         </el-card>
 
-        {this.approve_status == 0 && (
-          <div class='footer-container'>
-            {btnActions.map((btn, index) => (
-              <el-button
-                key={`btn-item__${index}`}
-                type='primary'
-                plain
-                on-click={this.handleAction.bind(this, btn)}
-              >
-                {btn.name}
-              </el-button>
-            ))}
-          </div>
-        )}
+        {/*  {this.approve_status == 0 && (*/}
+        <div class='footer-container'>
+          {btnActions.map((btn, index) => (
+            <el-button
+              key={`btn-item__${index}`}
+              type='primary'
+              plain
+              on-click={this.handleAction.bind(this, btn)}
+            >
+              {btn.name}
+            </el-button>
+          ))}
+        </div>
+        {/* )}*/}
 
         <SpDialog
           ref='resloveDialogRef'

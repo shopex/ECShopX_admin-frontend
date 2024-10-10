@@ -26,56 +26,48 @@
 </style>
 <template>
   <div class="cus-dealer-store-page">
-    <div v-if="$route.path.indexOf('relation') === -1">
-      <el-card>
-        <SpFinder
-          ref="finder"
-          :no-selection="true"
-          :setting="setting"
-          :search-row-count="3"
-          :splict-count="3"
-          :hooks="{
-            beforeSearch: beforeSearch
-          }"
-          url="/adapay/dealer/distributors"
-          @reset="onFinderReset"
-        >
-          <template v-slot:tableTop>
-            <el-row class="cus-btn">
-              <el-col :span="12" :offset="12" style="text-align: right">
-                <router-link
-                  :to="{
-                    path: matchHidePage('relation'),
-                    query: { dealer_id: dealer_id, username: username }
-                  }"
-                >
-                  <el-button type="primary" size="small" plain> 新增关联店铺 </el-button>
-                </router-link>
-              </el-col>
-            </el-row>
-          </template>
-          <template v-slot:create_time>
-            <el-date-picker
-              v-model="create_time"
-              class="input-m"
-              type="daterange"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              @change="(val) => dateChange(val)"
-            />
-          </template>
-        </SpFinder>
-      </el-card>
-      <RemoveShipModal
-        :visible="visibleModal"
-        :info="detailData"
-        :content="modalContent"
-        @handleClick="handleClick"
-      />
-    </div>
-    <router-view />
+    <el-card>
+      <SpFinder
+        ref="finder"
+        :no-selection="true"
+        :setting="setting"
+        :search-row-count="3"
+        :splict-count="3"
+        :hooks="{
+          beforeSearch: beforeSearch
+        }"
+        url="/adapay/dealer/distributors"
+        @reset="onFinderReset"
+      >
+        <template v-slot:tableTop>
+          <el-row class="cus-btn">
+            <el-col :span="12" :offset="12" style="text-align: right">
+              <el-button type="primary" size="small" plain @click="onAddShop">
+                新增关联店铺
+              </el-button>
+            </el-col>
+          </el-row>
+        </template>
+        <template v-slot:create_time>
+          <el-date-picker
+            v-model="create_time"
+            class="input-m"
+            type="daterange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="(val) => dateChange(val)"
+          />
+        </template>
+      </SpFinder>
+    </el-card>
+    <RemoveShipModal
+      :visible="visibleModal"
+      :info="detailData"
+      :content="modalContent"
+      @handleClick="handleClick"
+    />
   </div>
 </template>
 <script>
@@ -212,6 +204,12 @@ export default {
     onFinderReset() {
       this.create_time = ''
       this.form = {}
+    },
+    onAddShop() {
+      this.$router.push({
+        path: `/setting/staff/dealer_list/relation`,
+        query: { dealer_id: this.dealer_id, username: this.username }
+      })
     },
     handleModalClick(type, row) {
       if (row) {

@@ -1,19 +1,6 @@
 <style scoped lang="scss">
-.goods-title {
-  // padding-bottom: 5px;
-}
-.goods-code {
-  color: #888;
-  font-size: 13px;
-  i {
-    cursor: pointer;
-  }
-}
 .sp-filter-form {
   margin-bottom: 16px;
-}
-.btn-gap {
-  margin-right: 8px;
 }
 .tab-tools {
   text-align: right;
@@ -27,9 +14,20 @@
       width: 120px;
       margin: 0 8px;
     }
-    label {
-    }
   }
+}
+.page-code {
+  text-align: center;
+}
+.page-code-img {
+  width: 200px;
+  height: 200px;
+}
+</style>
+<style lang="scss">
+.physical-cell-reason {
+  @include text-overflow();
+  width: 180px;
 }
 </style>
 <template>
@@ -39,37 +37,36 @@
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">
           添加商品
         </el-button>
-        <!-- <el-button
-          v-if="VERSION_PLATFORM && !VUE_APP_FREE && login_type == 'distributor'"
-          type="primary"
-          icon="iconfont icon-xinzengcaozuo-01"
-          @click="selectItems"
-        >
-          选品
-        </el-button> -->
         <el-dropdown @command="handleImport">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导入<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="physicalupload"> 商品导入 </el-dropdown-item>
+            <el-dropdown-item
+              v-if="$store.getters.login_type != 'merchant'"
+              command="physicalupload"
+            >
+              商品导入
+            </el-dropdown-item>
             <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
+      <!--      <div v-else class="action-container">-->
+      <!--        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">-->
+      <!--          添加商品-->
+      <!--        </el-button>-->
+      <!--      </div>-->
 
-      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
-          <el-input v-model="params.keywords" placeholder="商品标题或副标题关键词" />
+          <el-input v-model="searchParams.keywords" placeholder="商品标题或副标题关键词" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="item_bn" label="商品编码:">
-          <el-input v-model="params.item_bn" placeholder="商品编号或条形码" />
-        </SpFilterFormItem>
-        <!-- <SpFilterFormItem prop="barcode" label="条形码:">
-          <el-input v-model="params.barcode" placeholder="请输入商品编号条形码" />
-        </SpFilterFormItem> -->
-        <SpFilterFormItem prop="approve_status" label="商品状态:">
-          <el-select v-model="params.approve_status" clearable placeholder="请选择">
+        <!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
+        <!--          <el-input v-model="searchParams.supplier_goods_bn" placeholder="请输入供应商货号" />-->
+        <!--        </SpFilterFormItem>-->
+        <SpFilterFormItem prop="approve_status" label="商品状态:" v-if="!IS_SUPPLIER()">
+          <el-select v-model="searchParams.approve_status" clearable placeholder="请选择">
             <el-option
               v-for="item in statusOption"
               :key="item.value"
@@ -79,26 +76,38 @@
             />
           </el-select>
         </SpFilterFormItem>
+        <SpFilterFormItem prop="is_market" label="供应状态:" v-if="IS_SUPPLIER()">
+          <el-select v-model="searchParams.is_market" clearable placeholder="请选择">
+            <el-option :key="1" label="可售" :value="1" />
+            <el-option :key="0" label="不可售" :value="0" />
+          </el-select>
+        </SpFilterFormItem>
         <SpFilterFormItem prop="main_cat_id" label="管理分类:">
           <el-cascader
-            v-model="params.main_cat_id"
+            v-model="searchParams.main_cat_id"
             placeholder="请选择"
             clearable
             :options="itemCategoryList"
             :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
           />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="category" label="销售分类:">
+        <SpFilterFormItem prop="cat_id" label="销售分类:">
           <el-cascader
-            v-model="params.category"
-            placeholder="请选择"
-            clearable
+            v-model="searchParams.cat_id"
             :options="categoryList"
-            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+            :props="{ checkStrictly: true, label: 'category_name', value: 'category_id' }"
+            clearable
           />
         </SpFilterFormItem>
+        <!-- <SpFilterFormItem prop="audit_status" label="审核状态:">
+          <el-select v-model="searchParams.audit_status">
+            <el-option value="processing" label="待审核" />
+            <el-option value="approved" label="审核通过" />
+            <el-option value="rejected" label="审核拒绝" />
+          </el-select>
+        </SpFilterFormItem> -->
         <SpFilterFormItem prop="templates_id" label="运费模板:">
-          <el-select v-model="params.templates_id" placeholder="请选择" clearable>
+          <el-select v-model="searchParams.templates_id" placeholder="请选择" clearable>
             <el-option
               v-for="item in templatesList"
               :key="item.template_id"
@@ -107,22 +116,12 @@
             />
           </el-select>
         </SpFilterFormItem>
-
-        <SpFilterFormItem prop="tag_id" label="标签:">
-          <el-select v-model="params.tag_id" clearable placeholder="商品标签关键词">
-            <el-option
-              v-for="item in tag.list"
-              :key="item.tag_id"
-              size="mini"
-              :label="item.tag_name"
-              :value="item.tag_id"
-            />
-          </el-select>
-        </SpFilterFormItem>
-
+        <!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
+        <!--          <el-input v-model="searchParams.tax_rate_code" placeholder="商品编号或条形码" />-->
+        <!--        </SpFilterFormItem>-->
         <SpFilterFormItem prop="brand_id" label="品牌:">
           <el-select
-            v-model="params.brand_id"
+            v-model="searchParams.brand_id"
             placeholder="商品/商标关键词"
             remote
             filterable
@@ -137,47 +136,93 @@
             />
           </el-select>
         </SpFilterFormItem>
-
         <SpFilterFormItem prop="regions_id" label="商品产地:">
           <el-cascader
-            v-model="params.regions_id"
+            v-model="searchParams.regions_id"
             placeholder="请选择"
             clearable
             :options="regions"
           />
         </SpFilterFormItem>
-
+        <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
+        <!--          <el-select v-model="searchParams.delivery_data_type">-->
+        <!--            <el-option value="fixed_date" label="指定发货日期" />-->
+        <!--            <el-option value="relative_date" label="相对发货日期" />-->
+        <!--            <el-option value="default_date" label="默认发货日期" />-->
+        <!--          </el-select>-->
+        <!--        </SpFilterFormItem>-->
+        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="item_bn" label="SKU编码:">
+          <el-input v-model="searchParams.item_bn" placeholder="请输入SKU编码" />
+        </SpFilterFormItem>
+        <SpFilterFormItem v-if="!IS_SUPPLIER()" prop="tag_id" label="商品标签:">
+          <el-cascader
+            v-model="searchParams.tag_id"
+            size="small"
+            placeholder="选择标签"
+            :options="tagList"
+            :props="{ value: 'tag_id', label: 'tag_name' }"
+            clearable
+          />
+        </SpFilterFormItem>
         <SpFilterFormItem prop="is_gift" label="赠品:">
-          <el-select v-model="params.is_gift">
+          <el-select v-model="searchParams.is_gift">
             <el-option :value="undefined" label="全部" />
             <el-option :value="true" label="是" />
             <el-option :value="false" label="否" />
           </el-select>
         </SpFilterFormItem>
+
+        <!--        <SpFilterFormItem prop="goods_bn" label="SPU编码:">-->
+        <!--          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />-->
+        <!--        </SpFilterFormItem>-->
+        <!--        <SpFilterFormItem prop="operator_name" label="来源供应商:">-->
+        <!--          <el-input v-model="searchParams.operator_name" placeholder="请输入来源供应商" />-->
+        <!--        </SpFilterFormItem>-->
       </SpFilterForm>
 
       <div class="action-container">
-        <el-button type="primary" plain @click="addCategory"> 更改销售分类 </el-button>
-        <el-button type="primary" plain @click="addTemplates"> 更改运费模板 </el-button>
-        <el-button type="primary" plain @click="addItemTag"> 打标签 </el-button>
-        <el-button type="primary" plain @click="batchItemsStore"> 统一库存 </el-button>
-        <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
-        <!-- <el-button
-          type="primary"
-          plain
-          @click="batchItemsStatus('onsale')"
-        >
-          上架
+        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeCategory">
+          更改销售分类
         </el-button>
+        <el-button type="primary" v-if="!IS_SUPPLIER()" plain @click="changeGoodsLabel">
+          打标签
+        </el-button>
+        <el-button type="primary" plain @click="changeFreightTemplate"> 更改运费模板 </el-button>
         <el-button
+          v-if="!IS_ADMIN() && !IS_DISTRIBUTOR()"
           type="primary"
           plain
-          @click="batchItemsStatus('instock')"
+          @click="onBatchSubmitItems"
         >
-          下架
-        </el-button> -->
+          批量提交审核
+        </el-button>
+        <el-button type="primary" plain @click="changeItemsStore"> 统一库存 </el-button>
+        <el-button type="primary" plain v-if="!IS_SUPPLIER()" @click="batchChangeStore">
+          更改状态
+        </el-button>
         <el-button type="primary" plain @click="batchGifts('true')"> 设为赠品 </el-button>
         <el-button type="primary" plain @click="batchGifts('false')"> 设为非赠品 </el-button>
+
+        <el-button
+          v-if="IS_SUPPLIER()"
+          type="primary"
+          plain
+          @click="() => changeHaltTheSales('stop')"
+        >
+          停售
+        </el-button>
+        <el-button
+          v-if="IS_SUPPLIER()"
+          type="primary"
+          plain
+          @click="() => changeHaltTheSales('start')"
+        >
+          开售
+        </el-button>
+        <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
 
         <el-dropdown>
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
@@ -187,19 +232,19 @@
             <el-dropdown-item>
               <export-tip @exportHandle="exportItemsData"> 商品信息 </export-tip>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item v-if="!IS_SUPPLIER()">
               <export-tip @exportHandle="exportItemsTagData"> 商品标签 </export-tip>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item v-if="!IS_SUPPLIER()">
               <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item v-if="!IS_SUPPLIER()">
               <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-dropdown v-if="VERSION_STANDARD">
+        <el-dropdown v-if="VERSION_STANDARD && IS_ADMIN()">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             同步商品<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
@@ -212,17 +257,9 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
-        <!-- <el-button
-          type="primary"
-          plain
-          @click="syncItems"
-        >
-          同步商品数据
-        </el-button> -->
       </div>
 
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane
           v-for="(item, index) in tabList"
           :key="index"
@@ -236,529 +273,192 @@
               <el-button type="text" @click="setWarningStore"> 保存 </el-button>
             </div>
           </div>
-          <el-table
-            v-loading="loading"
-            border
-            :data="ItemsList"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column type="selection" align="center" label="全选" />
-            <el-table-column prop="goods_id" label="商品ID" />
-            <el-table-column prop="itemName" label="商品" width="300">
-              <template slot-scope="scope">
-                <div class="goods-title">
-                  {{ scope.row.item_name }}
-                  <el-tag v-if="!scope.row.nospec" size="mini" effect="plain" type="primary">
-                    多
-                  </el-tag>
-                  <el-tag
-                    v-if="scope.row.is_gift === '1'"
-                    size="mini"
-                    effect="plain"
-                    type="primary"
-                  >
-                    赠
-                  </el-tag>
-                </div>
-                <div class="goods-code">
-                  货号：{{ scope.row.itemBn }}
-                  <el-tooltip effect="dark" content="复制" placement="top-start">
-                    <i
-                      v-clipboard:copy="scope.row.itemBn"
-                      v-clipboard:success="onCopySuccess"
-                      class="el-icon-document-copy"
-                    />
-                  </el-tooltip>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="标签">
-              <template slot-scope="scope">
-                <template>
-                  <el-tag
-                    v-for="taglist in scope.row.tagList"
-                    :key="taglist.index"
-                    :color="taglist.tag_color"
-                    size="mini"
-                    :style="'color:' + taglist.font_color"
-                    style="display: inline-block; margin-right: 3px"
-                  >
-                    {{ taglist.tag_name }}
-                  </el-tag>
-                </template>
-              </template>
-            </el-table-column>
-            <el-table-column label="排序编号" width="100">
-              <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.sort"
-                  size="mini"
-                  style="width: 60px"
-                  @change="editItemsSort(scope.$index, scope.row)"
-                />
-              </template>
-            </el-table-column>
-            <el-table-column prop="store" label="库存" width="80" />
-            <el-table-column prop="market_price" label="市场价（¥）" width="100" />
-            <el-table-column prop="price" label="销售价（¥）" width="100" />
-            <el-table-column label="状态">
-              <template slot-scope="scope">
-                <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
-                <el-popover
-                  v-else-if="scope.row.audit_status == 'rejected'"
-                  placement="top-start"
-                  width="200"
-                  trigger="hover"
-                  :content="scope.row.audit_reason"
-                >
-                  <el-button slot="reference" type="text"> 审核驳回 </el-button>
-                </el-popover>
-                <span v-else-if="scope.row.approve_status == 'onsale'">前台可销</span>
-                <span v-else-if="scope.row.approve_status == 'offline_sale'">前台不展示 </span>
-                <span v-else-if="scope.row.approve_status == 'only_show'">前台仅展示</span>
-                <span v-else>不可销售</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="itemCatName" label="商品分类" width="150" />
-
-            <el-table-column fixed="left" label="操作" width="200">
-              <template slot-scope="scope">
-                <el-button type="text" @click="editItemsAction(scope.$index, scope.row, false)">
-                  编辑
-                </el-button>
-                <el-popover v-if="appID" placement="top" width="200" trigger="click">
-                  <div>
-                    <img class="page-code" :src="appCodeUrl">
-                    <div class="page-btns">
-                      <el-button
-                        type="primary"
-                        plain
-                        size="mini"
-                        @click="handleDownload(scope.row.item_name)"
-                      >
-                        下载码
-                      </el-button>
-                      <el-button v-clipboard:copy="curPageUrl" type="primary" plain size="mini">
-                        复制链接
-                      </el-button>
-                    </div>
-                  </div>
-                  <el-button
-                    slot="reference"
-                    style="width: 45px"
-                    type="text"
-                    @click="handleShow(scope.row.goods_id)"
-                  >
-                    投放
-                  </el-button>
-                </el-popover>
-                <el-button
-                  type="text"
-                  class="btn-gap"
-                  @click="deleteItemsAction(scope.$index, scope.row)"
-                >
-                  删除
-                </el-button>
-                <el-popover placement="right" width="450" trigger="hover">
-                  <div class="operating-icons">
-                    <el-button type="text" @click="editItemsAction(scope.$index, scope.row, true)">
-                      添加相似
-                    </el-button>
-                    <el-button type="text" @click="handlePrice(scope.row)"> 设置价格 </el-button>
-                    <!--el-button v-if="popularizeSetting.isOpenPopularize == 'true'" type="text" @click="handleRebateConf(scope.row)" >分销配置</el-button-->
-                    <!-- <el-button
-                      v-if="!VERSION_IN_PURCHASE && !VERSION_PLATFORM"
-                      type="text"
-                      @click="handleProfitPrice(scope.row)"
-                    >
-                      分润配置
-                    </el-button> -->
-                    <el-button type="text" @click="tagUpdate(scope.row)"> 标签 </el-button>
-                    <el-button type="text" @click="updateItemsStore(scope.row)">
-                      更改库存
-                    </el-button>
-                    <el-button
-                      v-clipboard:copy="scope.row.link"
-                      v-clipboard:success="onCopySuccess"
-                      class="copy-btn"
-                      type="text"
-                    >
-                      <input v-model="scope.row.link" class="copy-link" type="text">复制链接
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.approve_status == 'onsale'"
-                      type="text"
-                      @click="updateItemStatus(scope.row)"
-                    >
-                      下架
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.approve_status == 'instock'"
-                      type="text"
-                      @click="updateItemStatus(scope.row)"
-                    >
-                      上架
-                    </el-button>
-                  </div>
-                  <el-button slot="reference" type="text">
-                    更多<i class="iconfont icon-angle-double-right" />
-                  </el-button>
-                </el-popover>
-              </template>
-            </el-table-column>
-          </el-table>
-
-          <div class="content-center content-top-padded">
-            <el-pagination
-              background
-              layout="total, sizes, prev, pager, next, jumper"
-              :current-page.sync="page.pageIndex"
-              :page-sizes="[10, 20, 50]"
-              :total="page.total"
-              :page-size="page.pageSize"
-              @current-change="handleCurrentChange"
-              @size-change="handleSizeChange"
-            />
-          </div>
         </el-tab-pane>
       </el-tabs>
-      <!-- 选择运费模板-开始 -->
-      <el-dialog title="更改运费模板" :visible.sync="addTemplatesdialogVisible" width="30%">
-        <el-select v-model="templates_new_id" placeholder="运费模板" style="width: 100%">
-          <el-option
-            v-for="item in templatesList"
-            :key="item.template_id"
-            :label="item.name"
-            :value="item.template_id"
-          />
-        </el-select>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="addTemplatesdialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="changeTemplates">确 定</el-button>
-        </span>
-      </el-dialog>
-      <!-- 选择运费模板-结束 -->
-      <!-- 选择商品分类-开始 -->
-      <el-dialog title="更改销售分类" :visible.sync="addCategorydialogVisible" width="30%">
-        <treeselect
-          v-model="category_id"
-          :normalizer="tenantIdnormalizer"
-          :options="categoryList"
-          :multiple="true"
-          :show-count="true"
-          :disable-branch-nodes="true"
-        />
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="addCategorydialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="changeCategory">确 定</el-button>
-        </span>
-      </el-dialog>
-      <el-dialog
-        title="为商品打标签"
-        class="right-dialog"
-        :visible.sync="tag.dialog"
-        :before-close="handleCancelLabelsDialog"
-      >
-        <div class="tag-users view-flex view-flex-middle">
-          <i class="iconfont icon-user-circle1" />
-          <div class="view-flex-item">
-            <span v-for="(item, index) in tag.editItem" :key="index"> {{ item }}，</span>
-          </div>
-        </div>
-        <div class="selected-tags view-flex">
-          <div class="label">已选中标签：</div>
-          <div class="view-flex-item">
-            <el-tag
-              v-for="(tag, index) in tag.currentTags"
-              :key="index"
-              closable
-              size="small"
-              :disable-transitions="false"
-              @close="tagRemove(index)"
-            >
-              {{ tag.tag_name }}
-            </el-tag>
-          </div>
-        </div>
-        <div>
-          <el-tag
-            v-for="(tag, index) in tag.tags"
-            :key="index"
-            class="tag-item"
-            size="medium"
-            color="#ffffff"
-            :disable-transitions="false"
-            @click.native="tagAdd(tag, index)"
-          >
-            {{ tag.tag_name }}
-          </el-tag>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="tag.dialog = false">取 消</el-button>
-          <el-button type="primary" @click="submitItemTag">确 定</el-button>
-        </span>
-      </el-dialog>
-      <SideBar :visible.sync="show_rebate_sideBar" title="商品分销配置" width="60">
-        <slot>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span v-if="popularizeSetting.popularize_ratio.type == 'profit'">
-                <el-alert
-                  title="返佣计算类型: 【按利润分佣】"
-                  description="计算方式：商品利润 ×  百分比，其中商品利润为【支付金额-运费-商品成本价】，如果设置的返佣为固定金额，则不会按利润返佣，返佣金额就是设置的固定金额。如果不填则使用通用配置返佣"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-              <span v-else>
-                <el-alert
-                  title="返佣计算类型: 【按订单金额分佣】"
-                  description="计算方式： 订单金额 × 百分比，其中订单金额为【支付金额-运费】，如果设置的返佣为固定金额，则不会按订单金额分佣，返佣金额就是设置的固定金额。如果不填则使用通用配置返佣"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-            </div>
-            商品名称：{{ current.item_name }}
-            <el-table v-loading="skuLoading" :data="rebateSpecItems">
-              <el-table-column label="规格" prop="item_spec_desc" min-width="120">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span
-                  ><span v-else>单规格</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="销售价" min-width="80">
-                <template slot-scope="scope"> ¥{{ scope.row.price / 100 }} </template>
-              </el-table-column>
-              <el-table-column label="成本价" min-width="80">
-                <template slot-scope="scope"> ¥{{ scope.row.cost_price / 100 }} </template>
-              </el-table-column>
-              <el-table-column label="类型" width="160">
-                <template slot-scope="scope">
-                  <el-switch
-                    v-model="scope.row.rebate_conf.type"
-                    active-value="money"
-                    inactive-value="ratio"
-                    active-text="金额"
-                    inactive-text="比例"
-                  />
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="(item, key) in popularizeSetting.popularize_ratio.profit"
-                :key="key"
-                :label="item.name"
-                min-width="110"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-if="scope.row.rebate_conf.type == 'money'"
-                    v-model="scope.row.rebate_conf.value[key]"
-                    type="number"
-                    size="mini"
-                    suffix-icon="iconfont icon-yen-sign"
-                  />
-                  <el-input
-                    v-else
-                    v-model="scope.row.rebate_conf.value[key]"
-                    size="mini"
-                    type="number"
-                    suffix-icon="iconfont icon-percent"
-                  />
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </slot>
-        <div slot="footer">
-          <el-button type="primary" :loading="submitLoading" @click="saveRebateConf">
-            保存
-          </el-button>
-        </div>
-      </SideBar>
-      <SideBar
-        :visible.sync="show_profit_sideBar"
-        name="show_profit_sideBar"
-        title="商品分销配置"
-        width="60"
-      >
-        <slot>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>
-                <el-alert
-                  title="导购分润计算类型: 【默认】"
-                  description="计算方式：默认按照 管理分类分润配置优先,导购分润配置计算其次"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-              <span>
-                <el-alert
-                  title="导购分润计算类型: 【百分比】"
-                  description="计算方式：商品最终金额 ×  百分比，其中计算方式：商品最终金额为【支付金额-运费-商品优惠金额】"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-              <span>
-                <el-alert
-                  title="导购分润计算类型: 【商品金额】"
-                  description="计算方式： 固定金额分佣"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-            </div>
-            商品名称：{{ current.item_name }}
-            <el-table v-loading="skuLoading" :data="profitSpecItems">
-              <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-              <el-table-column label="原价" prop="market_price" width="100">
-                <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
-              </el-table-column>
-              <el-table-column label="销售价" width="100">
-                <template slot-scope="scope"> ¥{{ scope.row.price }} </template>
-              </el-table-column>
-              <el-table-column label="分润类型">
-                <template slot-scope="scope">
-                  <el-select v-model="scope.row.profit_type" placeholder="请选择">
-                    <el-option label="默认" :value="0" />
-                    <el-option label="百分比" :value="1" />
-                    <el-option label="商品金额" :value="2" />
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column label="拉新导购分润">
-                <template slot-scope="scope">
-                  <div v-if="0 == scope.row.profit_type">
-                    <el-input :disabled="true" size="mini" type="number" value="0" />
-                  </div>
-                  <div v-else>
-                    <el-input v-model="scope.row.profit_conf_profit" size="mini" type="number">
-                      <template v-if="1 == scope.row.profit_type" slot="append"> % </template>
-                    </el-input>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column label="推广导购分润">
-                <template slot-scope="scope">
-                  <div v-if="0 == scope.row.profit_type">
-                    <el-input :disabled="true" size="mini" type="number" value="0" />
-                  </div>
-                  <div v-else>
-                    <el-input
-                      v-model="scope.row.profit_conf_popularize_profit"
-                      size="mini"
-                      type="number"
-                    >
-                      <template v-if="1 == scope.row.profit_type" slot="append"> % </template>
-                    </el-input>
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </slot>
-        <div slot="footer">
-          <el-button type="primary" :loading="submitLoading" @click="saveProfitConf">
-            保存
-          </el-button>
-        </div>
-      </SideBar>
-      <SideBar :visible.sync="show_sideBar" title="设置会员价" width="60">
-        <slot>
-          <el-table v-loading="skuLoading" :data="specItems" height="100%">
-            <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-            <el-table-column label="原价" prop="market_price" width="100">
-              <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
-            </el-table-column>
-            <el-table-column label="销售价" width="100">
-              <template slot-scope="scope">
-                <div v-if="scope.row.item_id !== currentId">
-                  ¥{{ scope.row.price }}
-                  <i
-                    class="el-input__icon el-icon-edit"
-                    @click="editPrice(scope.row.item_id, scope.row.price)"
-                  />
-                </div>
-                <el-input
-                  v-else
-                  :ref="'input_' + scope.row.item_id"
-                  v-model="currentPrice"
-                  size="mini"
-                  @blur="handleBlur(scope.$index)"
-                />
-              </template>
-            </el-table-column>
-            <el-table-column label="会员">
-              <el-table-column v-for="(item, index) in grade" :key="index" :label="item.grade_name">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.grade[index].mprice" size="mini" type="number" />
-                </template>
-              </el-table-column>
-            </el-table-column>
-            <el-table-column label="付费会员">
-              <el-table-column
-                v-for="(item, index) in vipGrade"
-                :key="index"
-                :label="item.grade_name"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.vipGrade[index].mprice" size="mini" type="number" />
-                </template>
-              </el-table-column>
-            </el-table-column>
-          </el-table>
-        </slot>
-        <div slot="footer">
-          <el-button type="primary" :loading="submitLoading" @click="savePrice"> 保存 </el-button>
-        </div>
-      </SideBar>
-      <!-- 选择商品分类-结束 -->
-      <SideBar :visible.sync="show_itemStore" title="设置商品库存" width="60">
-        <slot>
-          <el-table v-loading="skuLoading" :data="storeItemsList" height="100%">
-            <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-            <el-table-column label="库存">
-              <template slot-scope="scope">
-                <el-input v-model="scope.row.store" size="mini" type="number" />
-              </template>
-            </el-table-column>
-          </el-table>
-        </slot>
-        <div slot="footer">
-          <el-button type="primary" :loading="submitLoading" @click="saveItemsStore">
-            保存
-          </el-button>
-        </div>
-      </SideBar>
-      <el-dialog
-        title="批量修改库存"
-        :visible.sync="storeUpdate"
-        width="30%"
-        :close-on-click-modal="false"
-      >
-        统一库存：<el-input v-model="itemstore" size="mini" type="number" />
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="storeUpdate = false">取 消</el-button>
-          <el-button type="primary" @click="saveItemsStore">确 定</el-button>
-        </span>
-      </el-dialog>
-      <GoodsSelect
-        :items-visible="xpGoodsVisible"
-        @chooseGoods="chooseGoodsAction"
-        @closeGoodsDialog="closeGoodsDialogAction"
+
+      <SpFinder
+        ref="finder"
+        :url="IS_DISTRIBUTOR() ? '/distributor/items' : '/goods/items'"
+        fixed-row-action
+        :row-actions-align="'left'"
+        row-actions-width="200px"
+        :other-config="{}"
+        :setting="tableList"
+        :hooks="{
+          beforeSearch: beforeSearch
+        }"
+        @selection-change="onSelectionChange"
       />
+
+      <!-- 设置会员价 -->
+      <SpDrawer
+        v-model="showMemberPriceDrawer"
+        title="设置价格"
+        :width="800"
+        confirm-text="保存"
+        @confirm="onSaveMemberPrice"
+      >
+        <el-table v-loading="skuLoading" border :data="specItems" height="100%">
+          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+          <el-table-column label="市场价" prop="market_price" width="160">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.market_price"
+                controls-position="right"
+                :min="0"
+                :precision="2"
+                style="width: 120px"
+                @change="updateGoodsSkuPrice(scope.row, 'market_price')"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="销售价" width="160">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.price"
+                controls-position="right"
+                :min="0"
+                :precision="2"
+                style="width: 120px"
+                @change="updateGoodsSkuPrice(scope.row, 'price')"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="成本价" width="160">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.cost_price"
+                controls-position="right"
+                :min="0"
+                :precision="2"
+                style="width: 120px"
+                @change="updateGoodsSkuPrice(scope.row, 'cost_price')"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="会员">
+            <el-table-column v-for="(item, index) in grade" :key="index" :label="item.grade_name">
+              <template slot-scope="scope">
+                <el-input-number
+                  v-model="scope.row.grade[index].mprice"
+                  controls-position="right"
+                  :min="0"
+                  :precision="2"
+                  style="width: 120px"
+                />
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label="付费会员">
+            <el-table-column
+              v-for="(item, index) in vipGrade"
+              :key="index"
+              :label="item.grade_name"
+            >
+              <template slot-scope="scope">
+                <el-input-number
+                  v-model="scope.row.vipGrade[index].mprice"
+                  controls-position="right"
+                  :min="0"
+                  :precision="2"
+                  style="width: 120px"
+                />
+              </template>
+            </el-table-column>
+          </el-table-column>
+        </el-table>
+      </SpDrawer>
+
+      <!-- 设置商品库存 -->
+      <SpDrawer
+        v-model="showItemStoreDrawer"
+        title="设置商品库存"
+        :width="800"
+        @confirm="onSaveItemStore"
+      >
+        <el-table v-loading="skuLoading" border :data="storeItemsList" height="100%">
+          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+          <el-table-column label="库存">
+            <template slot-scope="scope">
+              <el-input-number
+                v-model="scope.row.store"
+                controls-position="right"
+                size="small"
+                :min="0"
+                style="width: 120px"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      </SpDrawer>
+
+      <!-- 更改销售分类 -->
+      <SpDialog
+        ref="saleCategoryDialogRef"
+        v-model="saleCategoryDialog"
+        title="更改销售分类"
+        :form="saleCategoryForm"
+        :form-list="saleCategoryFormList"
+        @onSubmit="onSaleCategorySubmit"
+      />
+
+      <!-- 运费模板 -->
+      <SpDialog
+        ref="freightTemplateDialogRef"
+        v-model="freightTemplateDialog"
+        title="更改运费模板"
+        :form="freightTemplateForm"
+        :form-list="freightTemplateFormList"
+        @onSubmit="onFreightTemplateSubmit"
+      />
+
+      <!-- 批量修改库存 -->
+      <SpDialog
+        ref="storeItemDialogRef"
+        v-model="storeItemDialog"
+        title="批量修改库存"
+        :form="storeItemForm"
+        :form-list="storeItemFormList"
+        @onSubmit="onStoreItemSubmit"
+      />
+
+      <!-- 批量改价 -->
+      <!-- <SpDialog
+        ref="changePriceDialogRef"
+        v-model="changePriceDialog"
+        title="批量改价"
+        :form="changePriceForm"
+        :form-list="changePriceFormList"
+        @onSubmit="onChangePriceSubmit"
+      /> -->
+
+      <!-- 打标签 -->
+      <SpDialog
+        ref="labelDialogRef"
+        v-model="labelDialog"
+        title="标签"
+        :modal="false"
+        :form="labelForm"
+        :form-list="labelFormList"
+        @onSubmit="onLabelFormSubmit"
+      />
+
+      <el-dialog title="设置商品佣金" width="600px" :visible.sync="commissionDialog">
+        <el-form ref="form" :model="commissionForm" label-width="150px">
+          <el-form-item label="平台佣金比例:">
+            <el-input v-model="commissionForm.commission_ratio" maxlength="5" style="width: 160px">
+              <template slot="append">%</template>
+            </el-input>
+            <div class="frm-tips">* 0-100之间，最多两位小数</div>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" :loading="formLoading" @click="commissionSubmit">
+              保存设置
+            </el-button>
+            <el-button @click="commissionDialog = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
 
       <SpDialog
         ref="sendNumDialogRef"
@@ -769,63 +469,68 @@
         :form-list="batchChangeStateFormList"
         @onSubmit="onBatchChangeStateSubmit"
       />
+
+      <el-dialog :title="sunCodeTitle" :visible.sync="sunCode" width='360px'>
+        <div class="page-code">
+          <img class="page-code-img" :src="appCodeUrl" />
+          <div class="page-btns">
+            <el-button type="primary" plain @click="handleDownload(sunCodeTitle)">
+              下载码
+            </el-button>
+            <el-button v-clipboard:copy="curPageUrl" type="primary" plain> 复制链接 </el-button>
+          </div>
+        </div>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="sunCode = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <!-- 查看多规格信息 -->
+      <SpDrawer
+        v-model="showItemSkuDrawer"
+        :title="itemSkuDrawerTitle"
+        :width="800"
+        @confirm="
+          () => {
+            this.showItemSkuDrawer = false
+          }
+        "
+      >
+        <el-table v-loading="skuLoading" border :data="itemSkuList" height="100%">
+          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+          <el-table-column label="供应商货号" prop="supplier_goods_bn" min-width="120" />
+          <el-table-column label="sku编码" prop="item_bn" min-width="120" />
+          <el-table-column label="税率编码" prop="tax_rate_code" min-width="120" />
+          <el-table-column label="税率" prop="tax_rate" min-width="120">
+            <template slot-scope="scope">
+              <span>{{ `${scope.row.tax_rate}%` }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="库存" prop="store" min-width="120" />
+        </el-table>
+      </SpDrawer>
     </SpRouterView>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import Treeselect from '@riophae/vue-treeselect'
-import SideBar from '@/components/element/sideBar'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { getDefaultCurrency } from '@/api/company'
-// import district from '@/common/district.json'
-import {
-  getItemsList,
-  setItemsTemplate,
-  setItemsCategory,
-  deleteItems,
-  getCategory,
-  setItemsSort,
-  updateGoodsInfo,
-  getGoodsPrice,
-  updateGoodsPrice,
-  updateItemRebateConf,
-  getTagList,
-  itemsRelTags,
-  updateItemsStore,
-  updateItemsStatus,
-  getGoodsAttr,
-  exportItemsData,
-  exportItemsTagData,
-  getGoodsProfitPrice,
-  saveGoodsProfitPrice,
-  syncItems,
-  saveIsGifts,
-  flowItems
-} from '@/api/goods'
+import moment from 'moment'
+import { exportItemsData, exportItemsTagData, saveIsGifts } from '@/api/goods'
+import { IS_ADMIN, IS_SUPPLIER, IS_DISTRIBUTOR } from '@/utils'
 import { getPageCode } from '@/api/marketing'
-import { VERSION_IN_PURCHASE, isArray } from '@/utils'
-import mixins from '@/mixins'
-
-import GoodsSelect from './comps/goodsSelect'
+import { GOODS_APPLY_STATUS } from '@/consts'
 
 export default {
-  components: {
-    Treeselect,
-    SideBar,
-    GoodsSelect
-  },
-  mixins: [mixins],
-  props: ['getStatus'],
-  provide() {
-    return {
-      refresh: this.getGoodsList
-    }
-  },
   data() {
     const loginType = this.$store.getters.login_type
-
     let statusOption
+    let updateStatusOption = [
+      { title: '全部', value: '' },
+      { title: '前台可销售', value: 'onsale' },
+      { title: '前台不展示', value: 'offline_sale' },
+      { title: '前台仅展示', value: 'only_show' },
+      { title: '不可销售', value: 'instock' }
+    ]
     if (loginType == 'distributor') {
       statusOption = [
         { title: '全部', value: '' },
@@ -836,55 +541,49 @@ export default {
         { title: '前台仅展示', value: 'only_show' },
         { title: '不可销售', value: 'instock' }
       ]
-    } else if (VERSION_IN_PURCHASE) {
-      statusOption = [
-        { title: '全部', value: '' },
-        { title: '前台可销售', value: 'onsale' },
-        { title: '前台仅展示', value: 'only_show' },
-        { title: '不可销售', value: 'instock' }
-      ]
     } else {
-      statusOption = [
-        { title: '全部', value: '' },
-        { title: '前台可销售', value: 'onsale' },
-        { title: '前台不展示', value: 'offline_sale' },
-        { title: '前台仅展示', value: 'only_show' },
-        { title: '不可销售', value: 'instock' }
-      ]
+      statusOption = updateStatusOption
     }
 
+    let tabList = []
+    if (IS_SUPPLIER()) {
+      tabList = [
+        { name: '全部商品', value: 'all', activeName: 'first' },
+        { name: '待提交', value: 'submitting', activeName: 'submitting' },
+        { name: '待审核', value: 'processing', activeName: 'processing' },
+        { name: '已通过', value: 'approved', activeName: 'approved' },
+        { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
+        { name: '库存预警商品', value: 'true', activeName: 'second' }
+      ]
+    } else {
+      tabList = [
+        { name: '全部商品', value: 'all', activeName: 'first' },
+        { name: '库存预警商品', value: 'true', activeName: 'second' }
+      ]
+    }
     return {
-      show_rebate_sideBar: false,
+      formLoading: false,
+      commissionDialog: false,
+      commissionForm: { goods_id: 0, commission_ratio: '' },
       show_profit_sideBar: false,
-      // select_category_value: [],
       select_tags_value: [],
-      popularizeSetting: {
-        popularize_ratio: {
-          type: 'profit'
-        }
-      },
-      regions: [],
+
       current: '',
       currentId: '',
       currentPrice: '',
-      tabList: [
-        { name: '全部商品', value: null, activeName: 'first' },
-        { name: '库存预警商品', value: 'true', activeName: 'second' }
-      ],
+      tabList,
+      activeName: 'first',
       goodsName: '',
       isEdit: false,
-      activeName: 'first',
       ItemsList: [],
       item_id: [],
       goods_id: [],
       templates_new_id: '',
-      templatesList: [],
+
       category_id: [],
-      categoryList: [],
-      itemCategoryList: [],
       show_sideBar: false,
       loading: false,
-      skuLoading: false,
+
       submitLoading: false,
       total_count: 0,
       warning_store: 5,
@@ -894,6 +593,8 @@ export default {
       },
       goodsBranchList: [],
       appID: '',
+      sunCode: false,
+      sunCodeTitle: '',
       appCodeUrl: '',
       curPageUrl: '',
       goodsBranchParams: {
@@ -902,57 +603,48 @@ export default {
         attribute_type: 'brand',
         attribute_name: ''
       },
-      tag: {
-        dialog: false,
-        editItem: [],
-        list: [],
-        form: {
-          tag_ids: [],
-          item_ids: []
-        },
-        currentTags: [],
-        tags: []
-      },
       page: {
         pageIndex: 1,
         pageSize: 20,
         total: 0
       },
-      params: {
+      searchParams: {
+        is_market: '',
         item_type: 'normal',
         templates_id: '',
         keywords: '',
         item_bn: '',
+        supplier_goods_bn: '',
+        approve_status: '',
         category: 0,
         item_category: 0,
         is_warning: false,
+        audit_status: '',
+        delivery_data_type: '',
         tag_id: '',
+        tax_rate_code: '',
         is_gift: undefined,
         type: 0,
         barcode: '',
         distributor_id: 0,
         regions_id: [],
-        brand_id: ''
+        brand_id: '',
+        goods_bn: '',
+        operator_name: '',
+        cat_id: ''
       },
       start_date: '',
       end_date: '',
-      addTemplatesdialogVisible: false,
       addCategorydialogVisible: false,
-      currency: {},
-      cursymbol: '￥',
       form: {},
       isGiftsData: {},
       exportData: {},
       exportTagData: {},
-      specItems: [],
-      rebateSpecItems: [],
-      profitSpecItems: [],
+
+      tagList: [],
       grade: [],
       vipGrade: [],
       statusOption: statusOption,
-      storeUpdate: false,
-      storeItemsList: [],
-      show_itemStore: false,
       itemstore: 0,
       distributorVisible: false,
       setDistributorStatus: false,
@@ -963,76 +655,626 @@ export default {
       batchChangeStateDialog: false,
       batchChangeStateFormList: [
         {
-          label: '商品状态:',
+          label: '商品状态',
           key: 'status',
           type: 'select',
           message: '不能为空',
-          options: statusOption
+          options: updateStatusOption
         }
       ],
       batchChangeStateForm: {
         status: ''
-      }
-    }
-  },
-  computed: {
-    ...mapGetters(['wheight', 'login_type'])
-  },
-  watch: {
-    '$route'(to, from) {
-      this.init()
-    },
-    getStatus(val) {
-      if (val) {
-        this.getGoodsList()
+      },
+
+      categoryList: [],
+      templatesList: [],
+      itemCategoryList: [],
+      regions: [],
+      showMemberPriceDrawer: false,
+      showItemStoreDrawer: false,
+      specItems: [],
+      storeItemsList: [],
+      skuLoading: false,
+      showItemSkuDrawer: false,
+      itemSkuDrawerTitle: '',
+      itemSkuList: [],
+      labelDialog: false,
+      labelForm: {
+        item_id: []
+      },
+      labelFormList: [
+        {
+          label: '已选标签',
+          key: '',
+          component: ({ key }, value) => (
+            <div>
+              {this.tagList
+                .filter((item) => !!item.selected)
+                .map((item) => (
+                  <el-tag
+                    closable
+                    on-close={() => (item.selected = false)}
+                    style='margin: 0 10px 10px 0;'
+                  >
+                    {item.tag_name}
+                  </el-tag>
+                ))}
+            </div>
+          )
+        },
+        {
+          label: '所有标签',
+          key: '',
+          component: ({ key }, value) => (
+            <div>
+              {this.tagList
+                .filter((item) => !item.selected)
+                .map((item) => (
+                  <el-button
+                    plain
+                    size='mini'
+                    class='tag-item'
+                    onClick={() => {
+                      item.selected = true
+                    }}
+                  >
+                    {item.tag_name}
+                  </el-button>
+                ))}
+            </div>
+          )
+        }
+      ],
+      selectionItems: [],
+      saleCategoryDialog: false,
+      saleCategoryForm: {
+        item_id: [],
+        category_id: ''
+      },
+      saleCategoryFormList: [
+        {
+          label: '销售分类',
+          key: 'category_id',
+          component: ({ key }, value) => (
+            <el-cascader
+              v-model={value[key]}
+              props={{
+                props: {
+                  value: 'category_id',
+                  label: 'category_name',
+                  multiple: true,
+                  checkStrictly: true,
+                  children: 'children'
+                }
+              }}
+              options={this.categoryList}
+            />
+          )
+        }
+      ],
+      freightTemplateDialog: false,
+      freightTemplateForm: {
+        item_id: [],
+        templates_id: ''
+      },
+      freightTemplateFormList: [
+        {
+          label: '运费模板',
+          key: 'templates_id',
+          component: ({ key }, value) => (
+            <el-select v-model={value[key]}>
+              {this.templatesList.map((item) => (
+                <el-option label={item.name} value={item.template_id} />
+              ))}
+            </el-select>
+          )
+        }
+      ],
+      storeItemDialog: false,
+      storeItemForm: {
+        item_id: [],
+        storeNum: undefined
+      },
+      storeItemFormList: [
+        {
+          label: '库存',
+          key: 'storeNum',
+          component: ({ key }, value) => (
+            <el-input-number
+              v-model={value[key]}
+              controls-position='right'
+              min={0}
+              style='width: 120px'
+            />
+          )
+        }
+      ],
+      changePriceDialog: false,
+      changePriceForm: {},
+      changePriceFormList: [],
+
+      tableList: {
+        actions: [
+          {
+            name: '编辑',
+            key: 'edit',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => {
+              return (
+                IS_SUPPLIER() ||
+                row.supplier_id == 0 ||
+                IS_DISTRIBUTOR() ||
+                (IS_ADMIN() && this.VERSION_STANDARD)
+              )
+            },
+            action: {
+              type: 'link',
+              handler: ([row]) => {
+                this.$router.push({
+                  path: `${this.$route.path}/editor/${row.item_id}`,
+                  query: {
+                    some_param: 'true'
+                  }
+                })
+              }
+            }
+          },
+          {
+            name: '查看',
+            key: 'edit',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => IS_SUPPLIER() || IS_ADMIN(),
+            action: {
+              type: 'link',
+              handler: ([row]) => {
+                this.$router.push({
+                  path: `${this.$route.path}/editor/${row.item_id}`,
+                  query: {
+                    some_param: 'true',
+                    detail: true
+                  }
+                })
+              }
+            }
+          },
+          {
+            name: '投放',
+            key: 'put',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.handleShow(row)
+              }
+            }
+          },
+          {
+            name: '添加相似',
+            key: 'similarity',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              type: 'link',
+              handler: ([row]) => {
+                this.$router.push({
+                  path: `${this.$route.path}/editor/${row.item_id}`,
+                  query: {
+                    some_param: 'true',
+                    is_new: true
+                  }
+                })
+              }
+            }
+          },
+          {
+            name: '删除',
+            key: 'delete',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => {
+              const isShow =
+                IS_ADMIN() ||
+                IS_DISTRIBUTOR() ||
+                (IS_SUPPLIER() &&
+                  (row.audit_status == 'submitting' || row.audit_status == 'rejected'))
+              return isShow
+            },
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                await this.$confirm('此操作将删除该商品, 是否继续?', '提示')
+                await this.$api.goods.deleteItems(row.item_id)
+                this.$message.success('删除商品成功')
+                setTimeout(() => {
+                  this.$refs['finder'].refresh(true)
+                }, 200)
+              }
+            }
+          },
+          {
+            name: '复制商品',
+            key: 'copy',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => IS_SUPPLIER(),
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.$router.push({
+                  path: `${this.$route.path}/editor/${row.item_id}`,
+                  query: {
+                    some_param: 'true',
+                    is_new: true
+                  }
+                })
+              }
+            }
+          },
+          // {
+          //   name: '佣金',
+          //   key: 'set_commission',
+          //   type: 'button',
+          //   buttonType: 'text',
+          //   visible: (row) => !IS_SUPPLIER(),
+          //   action: {
+          //     type: 'link',
+          //     handler: async ([row]) => {
+          //       this.formLoading = false
+          //       this.commissionForm.goods_id = row.goods_id
+          //       this.commissionForm.commission_ratio = row.commission_ratio / 100
+          //       this.commissionDialog = true
+          //     }
+          //   }
+          // },
+          {
+            name: '设置价格',
+            key: 'setup_price',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => !IS_SUPPLIER(),
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.getMemberPriceByGoods(row.item_id)
+              }
+            }
+          },
+          {
+            name: '标签',
+            key: 'label',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => IS_ADMIN() || IS_DISTRIBUTOR(),
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                // 同步taglist选中状态
+                this.tagList.forEach((item) => {
+                  if (row.tagList.map((item) => item.tag_id).includes(item.tag_id)) {
+                    item.selected = true
+                  } else {
+                    item.selected = false
+                  }
+                })
+                this.labelForm.item_id = row.item_id
+                this.labelDialog = true
+              }
+            }
+          },
+          {
+            name: '更改库存',
+            key: 'change_store',
+            type: 'button',
+            buttonType: 'text',
+
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.getSkuStoreByGoods(row.item_id)
+              }
+            }
+          },
+          {
+            name: '复制链接',
+            key: 'link',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                this.$copyText(
+                  `${process.env.VUE_APP_H5_HOST}/pages/item/espier-detail?id=${row.item_id}`
+                ).then(() => {
+                  this.$message.success('复制成功')
+                })
+              }
+            }
+          },
+          {
+            name: '下架',
+            key: 'offline',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => {
+              // const visible = row.approve_status == 'onsale' && !IS_SUPPLIER() && !IS_ADMIN()
+              const visible = row.approve_status == 'onsale' && !IS_SUPPLIER()
+              return visible
+            },
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                await this.$api.goods.updateItemsStatus({
+                  items: [{ goods_id: row.item_id }],
+                  status: 'instock',
+                  operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+                })
+                this.$message.success('操作成功')
+                this.$refs['finder'].refresh()
+              }
+            }
+          },
+          {
+            name: '上架',
+            key: 'online',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => {
+              // const visible = row.approve_status == 'instock' && !IS_SUPPLIER() && !IS_ADMIN()
+              const visible = row.approve_status == 'instock' && !IS_SUPPLIER()
+              return visible
+            },
+            action: {
+              type: 'link',
+              handler: async ([row]) => {
+                await this.$api.goods.updateItemsStatus({
+                  items: [{ goods_id: row.item_id }],
+                  status: 'onsale',
+                  operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+                })
+                this.$message.success('操作成功')
+                this.$refs['finder'].refresh()
+              }
+            }
+          }
+        ],
+        columns: [
+          { name: '商品ID', key: 'goods_id', width: 80 },
+          {
+            name: '商品标题',
+            key: 'itemName',
+            width: 280,
+            render: (h, scope) => {
+              return (
+                <div>
+                  <div style='white-space: normal;'>
+                    {scope.row.itemName}
+                    {!scope.row.nospec && (
+                      <el-tag
+                        size='mini'
+                        effect='plain'
+                        type='primary'
+                        style='margin-left: 4px; cursor: default;'
+                        on-click={() => {
+                          this.handleViewSkuInfo(scope.row)
+                        }}
+                      >
+                        多
+                        <i
+                          class='ecx-icon icon-sousuo'
+                          style='font-size: 12px; margin-left: 2px;'
+                        ></i>
+                      </el-tag>
+                    )}
+                    {scope.row.is_gift == 1 && (
+                      <el-tag
+                        size='mini'
+                        effect='plain'
+                        type='primary'
+                        style='margin-left: 4px; cursor: default;'
+                      >
+                        赠
+                      </el-tag>
+                    )}
+                  </div>
+                  <div style='color: #666;'>
+                    {`SPU编码：${scope.row.goods_bn}`}
+                    <el-tooltip effect='dark' content='复制' placement='top-start'>
+                      <i
+                        on-click={() => {
+                          this.$copyText(scope.row.goods_bn).then(() => {
+                            this.$message.success('复制成功')
+                          })
+                        }}
+                        class='el-icon-document-copy'
+                        style='margin-left: 4px;'
+                      />
+                    </el-tooltip>
+                  </div>
+                </div>
+              )
+            }
+          },
+
+          {
+            name: 'sku编码',
+            key: 'item_bn',
+            width: 150,
+            align: 'right',
+            headerAlign: 'center'
+          },
+          {
+            name: '标签',
+            width: 120,
+            visible: !IS_SUPPLIER(),
+            key: 'tagList',
+            render: (h, scope) => (
+              <div style='white-space: normal;'>
+                {scope.row.tagList?.map((item) => (
+                  <span
+                    style={{
+                      'color': item.font_color,
+                      'background-color': item.tag_color,
+                      'font-size': '12px',
+                      'padding': '2px 5px',
+                      'border-radius': '2px',
+                      'margin': '0 8px 8px 0'
+                    }}
+                  >
+                    {item.tag_name}
+                  </span>
+                ))}
+              </div>
+            )
+          },
+          // {
+          //   name: '供应商货号',
+          //   key: 'supplier_goods_bn',
+          //   align: "right",
+          //   headerAlign: 'center'
+          // },
+          {
+            name: '库存',
+            key: 'store',
+            align: 'right',
+            headerAlign: 'center'
+          },
+
+          // {
+          //   name: '商品税率',
+          //   key: 'tax_rate',
+          //   formatter: (value) => {
+          //     return value + '%'
+          //   },
+          //   align: "right",
+          //   headerAlign: 'center'
+          // },
+          {
+            name: '排序编号',
+            key: 'sort',
+            width: 120,
+            showType: 'editable',
+            componentProps: {
+              icon: 'el-icon-plus',
+              change: async (v, row) => {
+                await this.$api.goods.setItemsSort({ 'sort': v, 'item_id': row.itemId })
+                this.$refs['finder'].refresh()
+              }
+            }
+          },
+          {
+            name: '市场价（¥）',
+            key: 'market_price',
+            width: 100,
+            formatter: (value, row, col) => {
+              return (value / 100).toFixed(2)
+            },
+            align: 'right',
+            headerAlign: 'center'
+          },
+          {
+            name: '销售价（¥）',
+            key: 'price',
+            width: 100,
+            formatter: (value, row, col) => {
+              return (value / 100).toFixed(2)
+            },
+            align: 'right',
+            headerAlign: 'center'
+          },
+          {
+            name: '成本价（¥）',
+            key: 'cost_price',
+            width: 100,
+            formatter: (value, row, col) => {
+              return (value / 100).toFixed(2)
+            },
+            align: 'right',
+            headerAlign: 'center'
+          },
+          {
+            name: '毛利率（%)',
+            key: 'gross_profit_rate',
+            width: 100,
+            align: 'right',
+            headerAlign: 'center'
+          },
+          // {
+          //   name: '来源供应商',
+          //   key: 'operator_name',
+          //   width: 100,
+          //   visible: !(this.IS_DISTRIBUTOR() && this.VERSION_PLATFORM)
+          // },
+          {
+            name: '供应状态',
+            key: 'is_market',
+            formatter: (value, row, col) => {
+              return value == '1' ? '可售' : '不可售'
+            },
+            visible: IS_SUPPLIER()
+          },
+          {
+            name: '商品状态',
+            width: 120,
+            visible: !IS_SUPPLIER(),
+            key: 'approve_status',
+            formatter: (value, row, col) => {
+              return this.statusOption.find((item) => item.value === value)?.title
+            }
+          },
+          {
+            name: '审核状态',
+            key: 'audit_status',
+            width: 200,
+            visible: !IS_ADMIN(),
+            render: (h, scope) => (
+              <div>
+                <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
+                {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
+                  <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
+                )}
+              </div>
+            )
+          },
+          { name: '销售分类', key: 'itemCatName', minWidth: 120 },
+          {
+            name: '创建时间',
+            key: 'created',
+            width: 160,
+            formatter: (value, row, col) => {
+              return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')
+            }
+          },
+          // {
+          //   name: '审核时间',
+          //   key: 'audit_date',
+          //   width: 160,
+          //   formatter: (value, row, col) => {
+          //     return value ? moment(value * 1000).format('YYYY-MM-DD HH:mm:ss') : ''
+          //   }
+          // },
+          {
+            name: '更新时间',
+            key: 'updated',
+            width: 160,
+            formatter: (value, row, col) => {
+              return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')
+            }
+          }
+        ]
       }
     }
   },
   mounted() {
     this.init()
-    this.fetchWechatList()
     this.getAddress()
-  },
-
-  destroyed() {
-    console.log(111)
+    this.getShippingTemplatesList()
+    this.searchParams.operator_name = this.$route.query.operator_name
+    this.fetchWechatList()
   },
   methods: {
-    // 字段默认 id label 用于规范化数据源
-    tenantIdnormalizer(node, instanceId) {
-      if (node.children && !node.children.length) {
-        delete node.children
-      }
-      return {
-        id: node.category_id,
-        label: node.category_name,
-        children: node.children
-      }
-    },
-    // 获取地区列表
-    async getAddress() {
-      const res = await this.$api.common.getAddress()
-      this.regions = res
-    },
-    // 同步至店铺
-    async syncToShop(isAll) {
-      if (this.item_id.length == 0) {
-        this.$message.error('请选择至少一个商品')
-        return
-      }
-      let distributorIds = '_all'
-      if (!isAll) {
-        const { data } = await this.$picker.shop()
-        distributorIds = data.map((item) => item.distributor_id)
-      }
-      await this.$api.marketing.saveDistributorItems({
-        distributor_ids: distributorIds,
-        item_ids: this.item_id,
-        // 是否同步并上架
-        is_can_sale: false
-      })
-      this.$message.success('操作成功')
-    },
     async fetchWechatList() {
       const { list } = await this.$api.minimanage.gettemplateweapplist()
       list.forEach((item, i) => {
@@ -1041,100 +1283,212 @@ export default {
         }
       })
     },
-    handleShow(id) {
+    onHooksRouteBack() {
+      this.$refs['finder'].refresh()
+    },
+    beforeSearch(params) {
+      params = {
+        ...params,
+        item_type: 'normal',
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform',
+        ...this.searchParams,
+        item_source: 'platform'
+      }
+      return params
+    },
+    onSearch() {
+      this.$refs['finder'].refresh(true)
+    },
+    async getShippingTemplatesList() {
+      const { list } = await this.$api.shipping.getShippingTemplatesList({
+        page: 1,
+        pageSize: 1000
+      })
+      this.templatesList = list
+    },
+    async getCategory() {
+      //销售分类
+      const categoryList = await this.$api.goods.getCategory({ is_show: false })
+      this.categoryList = categoryList
+
+      //管理分类
+      const itemCategoryList = await this.$api.goods.getCategory({ is_main_category: true })
+      this.itemCategoryList = itemCategoryList
+    },
+    async getMemberPriceByGoods(item_id) {
+      this.currentId = item_id
+      this.skuLoading = true
+      this.showMemberPriceDrawer = true
+      const specItems = []
+      const { list } = await this.$api.goods.getGoodsPrice(item_id)
+      list.forEach((item) => {
+        specItems.push({
+          item_id: item.item_id,
+          item_spec_desc: item.item_spec_desc || item.itemName,
+          is_edit: false,
+          price: item.price / 100,
+          cost_price: item.cost_price / 100,
+          market_price: item.market_price / 100,
+          grade: this.generatePrice(item.memberGrade.grade),
+          vipGrade: this.generatePrice(item.memberGrade.vipGrade)
+        })
+      })
+      this.grade = this.generatePrice(list[0].memberGrade.grade)
+      this.vipGrade = this.generatePrice(list[0].memberGrade.vipGrade)
+      this.specItems = specItems
+      this.skuLoading = false
+    },
+    handleShow({ goods_id, itemName }) {
       const page = 'pages/item/espier-detail'
-      this.curPageUrl = `${page}?id=${id}`
+      this.curPageUrl = `${page}?id=${goods_id}`
       let params = {
         wxaAppId: this.appID,
         page,
-        id
+        id: goods_id
       }
       getPageCode(params).then((response) => {
         this.appCodeUrl = response.data.data.base64Image
+          // this.$message.success('投放成功')
+          this.sunCodeTitle = itemName + '---商品太阳码'
+          this.sunCode = true
       })
     },
-    handleDownload(name) {
-      var a = document.createElement('a')
-      var temp = name
-      if (this.appCodeUrl) {
-        a.href = this.appCodeUrl
-        a.download = temp + '.png'
-        a.click()
-      }
-    },
-    handleImport(command) {
-      if (command == 'physicalupload') {
-        if (this.login_type == 'distributor') {
-          this.$router.push({ path: `/shopadmin/entity/goodsphysical/physicalupload` })
-        } else {
-          this.$router.push({ path: `/entity/goods/goodsphysical/physicalupload` })
-        }
-      } else if (command == 'physicalstoreupload') {
-        if (this.login_type == 'distributor') {
-          this.$router.push({ path: `/shopadmin/entity/goodsphysical/physicalstoreupload` })
-        } else {
-          this.$router.push({ path: `/entity/goods/goodsphysical/physicalstoreupload` })
-        }
-      }
-    },
-    selectItems() {
-      this.xpGoodsVisible = true
-    },
-    async chooseGoodsAction(data) {
-      this.xpGoodsVisible = false
-      let list = JSON.parse(JSON.stringify(data))
-      if (list === null || list.length === 0) return
-      const items = list.map((item) => {
+
+    async getSkuStoreByGoods(item_id) {
+      this.skuLoading = true
+      const { list } = await this.$api.goods.getItemsList({
+        item_type: 'normal',
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform',
+        item_id,
+        is_sku: true,
+        page: 1,
+        pageSize: 1000
+      })
+      this.showItemStoreDrawer = true
+      this.storeItemsList = list.map((item) => {
         return {
-          goods_id: item.goods_id
+          item_id: item.item_id,
+          store: item.store,
+          item_spec_desc: item.item_spec_desc ? item.item_spec_desc : item.item_name
         }
       })
-      const params = {
-        items: JSON.stringify(items)
-      }
-      await flowItems(params)
-      this.$message({
-        type: 'success',
-        message: '选品成功'
+      this.skuLoading = false
+    },
+    async getAllTagLists() {
+      const { list } = await this.$api.goods.getTagList({
+        page: 1,
+        pageSize: 500
       })
-      this.getGoodsList()
-      // console.log('this.items=======', items)
+      this.tagList = list.map((item) => {
+        return {
+          ...item,
+          selected: false
+        }
+      })
     },
-    closeGoodsDialogAction() {
-      this.xpGoodsVisible = false
+    async onSaveMemberPrice() {
+      const param = {
+        item_id: this.currentId,
+        mprice: ''
+      }
+      console.log('specItems', this.specItems)
+      let skus = {}
+      this.specItems.forEach((item) => {
+        let grade = {}
+        item.grade.forEach((child) => {
+          Object.assign(grade, { [child.vip_grade_id]: child.mprice > 0 ? child.mprice : '' })
+        })
+        let vipGrade = {}
+        item.vipGrade.forEach((child) => {
+          Object.assign(vipGrade, { [child.vip_grade_id]: child.mprice > 0 ? child.mprice : '' })
+        })
+        skus[item.item_id] = {
+          grade,
+          vipGrade
+        }
+      })
+      param.mprice = JSON.stringify(skus)
+      this.showMemberPriceDrawer = false
+      await this.$api.goods.updateGoodsPrice(param)
+      this.$message.success('更新成功')
+      this.$refs['finder'].refresh()
     },
-    async init() {
-      if (this.$route.path.split('/')[2] === 'godsphysicalkj') {
-        this.params.type = 1
+    async onSaveItemStore() {
+      const params = {
+        items: JSON.stringify(this.storeItemsList),
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+      }
+      await this.$api.goods.updateItemsStore(params)
+      this.$message.success('修改成功')
+      this.$refs['finder'].refresh()
+      this.showItemStoreDrawer = false
+    },
+    handleTabClick() {
+      if (this.activeName == 'first') {
+        this.searchParams.is_warning = false
+        this.searchParams.audit_status = ''
+      } else if (this.activeName == 'second') {
+        this.searchParams.is_warning = true
+        this.searchParams.audit_status = ''
       } else {
-        this.params.type = 0
+        this.searchParams.is_warning = false
+        this.searchParams.audit_status = this.activeName
       }
-      const { category, item_category, main_cat_id, tab } = this.$route.query
-      if (category) {
-        this.params.category = category.split(',')
+      this.$refs['finder'].refresh()
+    },
+    onSelectionChange(selection) {
+      this.selectionItems = selection
+    },
+    changeCategory() {
+      if (this.selectionItems.length > 0) {
+        this.saleCategoryForm.item_id = this.selectionItems.map((item) => item.item_id)
+        this.saleCategoryDialog = true
+      } else {
+        this.$message.error('请选择至少一个商品')
       }
-      if (item_category) {
-        this.params.item_category = item_category.split(',')
+    },
+    async onSaleCategorySubmit() {
+      const { item_id, category_id } = this.saleCategoryForm
+      const _category_id = category_id.map((item) => {
+        return item[item.length - 1]
+      })
+      await this.$api.goods.setItemsCategory({ item_id, category_id: _category_id })
+      this.$message.success('操作成功')
+      this.saleCategoryDialog = false
+      this.$refs['finder'].refresh()
+    },
+    changeFreightTemplate() {
+      if (this.selectionItems.length > 0) {
+        this.freightTemplateForm.item_id = this.selectionItems.map((item) => item.item_id)
+        this.freightTemplateDialog = true
+      } else {
+        this.$message.error('请选择至少一个商品')
       }
-      this.params.main_cat_id = this.$route.query.main_cat_id
-      if (tab) {
-        this.activeName = this.$route.query.tab
-        this.params.is_warning = true
+    },
+    async onFreightTemplateSubmit() {
+      const { item_id, templates_id } = this.freightTemplateForm
+      await this.$api.goods.setItemsTemplate({
+        templates_id,
+        item_id
+      })
+      this.$message.success('操作成功')
+      this.freightTemplateDialog = false
+      this.$refs['finder'].refresh()
+    },
+    changeItemsStore() {
+      if (this.selectionItems.length > 0) {
+        this.storeItemForm.item_id = this.selectionItems.map((item) => item.item_id)
+        this.storeItemDialog = true
+      } else {
+        this.$message.error('请选择至少一个商品')
       }
-
-      const res = await this.$api.promotions.getPopularizeSetting()
-      this.popularizeSetting = res
-
-      this.getGoodsList()
-      this.getShippingTemplatesList()
-      this.getCategory()
-      this.getCurrencyInfo()
-      this.getAllTagLists()
-      this.getGoodsBranchList()
     },
     batchGifts(status) {
-      if (this.item_id.length) {
-        this.isGiftsData.item_id = Object.assign({}, this.item_id)
+      if (this.selectionItems.length) {
+        this.isGiftsData.item_id = Object.assign(
+          {},
+          this.selectionItems.map((item) => item.item_id)
+        )
         this.isGiftsData.status = status
         saveIsGifts(this.isGiftsData).then((res) => {
           if (res.data.data.status == true) {
@@ -1159,89 +1513,226 @@ export default {
         })
       }
     },
-    exportItemsData() {
-      if (this.item_id.length) {
-        this.exportData.item_id = Object.assign({}, this.item_id)
-        exportItemsData(this.exportData).then((res) => {
-          if (res.data.data.status == true) {
-            this.$message({
-              type: 'success',
-              message: '已加入执行队列，请在设置-导出列表中下载'
-            })
-            this.$export_open('items')
-          } else {
-            this.$message({
-              type: 'error',
-              message: '导出失败'
-            })
-          }
+
+    batchChangeStore() {
+      if (this.selectionItems.length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请选择至少一个商品'
         })
+        return false
+      }
+      this.batchChangeStateDialog = true
+    },
+    async onBatchChangeStateSubmit() {
+      let data = []
+      this.selectionItems.map((item) => {
+        data.push({ goods_id: item.goods_id })
+      })
+      await this.$api.goods.updateItemsStatus({
+        distributor_id: this.shopId,
+        items: JSON.stringify(data),
+        status: this.batchChangeStateForm.status
+      })
+
+      this.$message.success('修改成功')
+      this.$refs['finder'].refresh()
+      this.batchChangeStateDialog = false
+    },
+
+    async onStoreItemSubmit() {
+      const { item_id, storeNum } = this.storeItemForm
+      const data = []
+      item_id.forEach((id) => {
+        data.push({ item_id: id, store: storeNum, is_default: true })
+      })
+      await this.$api.goods.updateItemsStore({
+        items: JSON.stringify(data),
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+      })
+      this.$message.success('操作成功')
+      this.storeItemDialog = false
+      this.$refs['finder'].refresh()
+    },
+    async changeHaltTheSales(status) {
+      if (this.selectionItems.length > 0) {
+        await this.$confirm(`${status == 'stop' ? '停售' : '开售'}选中商品, 是否继续?`, '提示')
+        const params = {
+          goods_id: this.selectionItems.map((item) => item.goods_id),
+          is_market: status == 'stop' ? '0' : '1',
+          operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+        }
+        await this.$api.goods.updateGoodsInfo(params)
+        this.$message.success('操作成功')
+        this.$refs['finder'].refresh()
       } else {
-        this.exportData = Object.assign({}, this.params)
-        exportItemsData(this.exportData).then((res) => {
-          if (res.data.data.status == true) {
-            this.$message({
-              type: 'success',
-              message: '已加入执行队列，请在设置-导出列表中下载'
-            })
-            this.$export_open('items')
-          } else {
-            this.$message({
-              type: 'error',
-              message: '导出失败'
-            })
-          }
-        })
+        await this.$confirm(`${status == 'stop' ? '停售' : '开售'}所有商品, 是否继续?`, '提示')
+        const params = {
+          is_market: status == 'stop' ? '0' : '1',
+          operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
+        }
+        await this.$api.goods.updateGoodsInfo(params)
+        this.$message.success('操作成功')
+        this.$refs['finder'].refresh()
       }
     },
-    exportItemsTagData() {
-      if (this.item_id.length) {
-        this.exportTagData.item_id = Object.assign({}, this.item_id)
-        exportItemsTagData(this.exportTagData).then((res) => {
-          if (res.data.data.status == true) {
-            this.$message({
-              type: 'success',
-              message: '已加入执行队列，请在设置-导出列表中下载'
-            })
-            this.$export_open('normal_items_tag')
-          } else {
-            this.$message({
-              type: 'error',
-              message: '导出失败'
-            })
-          }
+    changeGoodsPrice() {
+      if (this.selectionItems.length > 0) {
+        this.changePriceDialog = true
+      } else {
+        this.$message.error('请选择至少一个商品')
+      }
+    },
+    async onChangePriceSubmit() {},
+    changeGoodsLabel() {
+      if (this.selectionItems.length > 0) {
+        this.labelForm.item_id = this.selectionItems.map((item) => item.item_id)
+        this.tagList.forEach((item) => {
+          item.selected = false
+        })
+        this.labelDialog = true
+      } else {
+        this.$message.error('请选择至少一个商品')
+      }
+    },
+    async commissionSubmit() {
+      this.formLoading = true
+      try {
+        await this.$api.goods.setCommissionRatio(this.commissionForm)
+        this.commissionDialog = false
+        this.$refs['finder'].refresh()
+        this.$message.success('操作成功')
+      } catch (e) {}
+      this.formLoading = false
+    },
+    async onLabelFormSubmit() {
+      const { item_id } = this.labelForm
+      const tagIds = this.tagList.filter((item) => !!item.selected).map((item) => item.tag_id)
+      await this.$api.goods.itemsRelTags({
+        item_ids: item_id,
+        tag_ids: tagIds
+      })
+      this.labelDialog = false
+      this.$message.success('操作成功')
+      this.$refs['finder'].refresh()
+    },
+    // 获取地区列表
+    async getAddress() {
+      const res = await this.$api.common.getAddress()
+      this.regions = res
+    },
+    // 同步至店铺
+    async syncToShop(isAll) {
+      let distributorIds = '_all'
+      if (!isAll) {
+        const { data } = await this.$picker.shop()
+        distributorIds = data.map((item) => item.distributor_id)
+      }
+      if (this.selectionItems.length == 0) {
+        await this.$confirm('是否将所有商品的都同步至店铺?', '提示')
+        await this.$api.marketing.saveDistributorItems({
+          distributor_ids: distributorIds,
+          item_ids: '_all',
+          // 是否同步并上架
+          is_can_sale: false
         })
       } else {
-        this.exportTagData = Object.assign({}, this.params)
-        exportItemsTagData(this.exportTagData).then((res) => {
-          if (res.data.data.status == true) {
-            this.$message({
-              type: 'success',
-              message: '已加入执行队列，请在设置-导出列表中下载'
-            })
-            this.$export_open('normal_items_tag')
-          } else {
-            this.$message({
-              type: 'error',
-              message: '导出失败'
-            })
-          }
+        await this.$api.marketing.saveDistributorItems({
+          distributor_ids: distributorIds,
+          item_ids: this.selectionItems.map((item) => item.item_id),
+          // 是否同步并上架
+          is_can_sale: false
         })
+      }
+      this.$message.success('操作成功')
+    },
+    // 批量提交
+    async onBatchSubmitItems() {
+      if (this.selectionItems.length == 0) {
+        this.$message.error('请选择至少一个商品')
+        return
+      }
+      await this.$confirm('确认是否批量提交？', '批量提交', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      await this.$api.goods.updateGoodsInfo({
+        goods_id: this.selectionItems.map((item) => item.item_id),
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform',
+        audit_status: 'processing'
+      })
+      this.$message.success('操作成功')
+    },
+    handleDownload(name) {
+      var a = document.createElement('a')
+      var temp = name
+      if (this.appCodeUrl) {
+        a.href = this.appCodeUrl
+        a.download = temp + '.png'
+        a.click()
+      }
+    },
+    handleImport(command) {
+      this.$router.push({ path: `${this.$route.path}/${command}` })
+    },
+    async init() {
+      const { category, item_category, main_cat_id, tab } = this.$route.query
+      if (category) {
+        this.searchParams.category = category.split(',')
+      }
+      if (item_category) {
+        this.searchParams.item_category = item_category.split(',')
+      }
+      this.searchParams.main_cat_id = this.$route.query.main_cat_id
+      if (tab) {
+        this.activeName = this.$route.query.tab
+        this.searchParams.is_warning = true
+      }
+
+      this.getCategory()
+      this.getAllTagLists()
+      this.getGoodsBranchList()
+    },
+    async exportItemsData() {
+      const exportParams = {
+        ...this.searchParams,
+        item_source: 'platform'
+      }
+      if (this.selectionItems.length > 0) {
+        exportParams['item_id'] = this.selectionItems.map((item) => item.item_id)
+      }
+      const { status } = await this.$api.goods.exportItemsData(exportParams)
+      if (status) {
+        this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+        this.$export_open('items')
+      } else {
+        this.$message.error('导出失败')
+      }
+    },
+    async exportItemsTagData() {
+      const exportParams = {
+        ...this.searchParams
+      }
+      if (this.selectionItems.length > 0) {
+        exportParams['item_id'] = this.selectionItems.map((item) => item.item_id)
+      }
+      const { status } = await this.$api.goods.exportItemsTagData(exportParams)
+      if (status) {
+        this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+        this.$export_open('normal_items_tag')
+      } else {
+        this.$message.error('导出失败')
       }
     },
     async exportItemsWxappCode(exportType) {
-      let params
-      if (this.item_id.length) {
-        params = {
-          item_id: this.item_id
-        }
-      } else {
-        params = {
-          ...this.params
-        }
+      const exportParams = {
+        ...this.searchParams
+      }
+      if (this.selectionItems.length > 0) {
+        exportParams['item_id'] = this.selectionItems.map((item) => item.item_id)
       }
       const { status } = await this.$api.goods.exportGoodsCode({
-        ...params,
+        ...exportParams,
         source: 'item',
         export_type: exportType
       })
@@ -1252,372 +1743,28 @@ export default {
         this.$message.error('导出失败')
       }
     },
-    syncItems() {
-      syncItems().then((res) => {
-        if (res.data.data.status == true) {
-          this.$message({
-            type: 'success',
-            message: '已加入执行队列'
-          })
-        } else {
-          this.$message({
-            type: 'error',
-            message: '同步失败'
-          })
-        }
-      })
-    },
-    editPrice(id, price) {
-      this.currentId = id
-      this.currentPrice = price
-      let self = this
-      this.$nextTick(() => {
-        self.$refs['input_' + id].focus()
-      })
-    },
-    handleBlur(index) {
-      if (this.currentPrice === this.specItems[index].price) {
-        this.currentId = -1
-        this.currentPrice = ''
-        return
+    async updateGoodsSkuPrice({ item_id, price, cost_price, market_price }, priceType) {
+      const priceMap = {
+        'price': price,
+        'cost_price': cost_price,
+        'market_price': market_price
       }
-      updateGoodsInfo({ item_id: this.currentId, price: this.currentPrice }).then((res) => {
-        this.$message({
-          type: 'success',
-          message: '操作成功'
-        })
-        this.specItems[index].price = this.currentPrice
-        this.currentId = -1
-        this.currentPrice = ''
+      await this.$api.goods.updateGoodsInfo({
+        item_id,
+        [priceType]: priceMap[priceType],
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform'
       })
+      this.$message.success('操作成功')
     },
-    handleClick(tab, event) {
-      this.page.pageIndex = 1
-      if (this.activeName == 'second') {
-        this.params.is_warning = true
-      } else {
-        this.params.is_warning = false
-      }
-      this.getGoodsList()
-    },
+
     async setWarningStore() {
       await this.$api.goods.getItemWarningStore({ store: this.warning_store })
-      this.page.pageIndex = 1
-      this.getGoodsList()
+      this.$refs['finder'].refresh()
     },
-    handleSelectionChange(val) {
-      this.selections = val
-      let item_id = []
-      for (let i in val) {
-        item_id.push(val[i].itemId)
-      }
-      this.item_id = item_id
-      let goods_id = []
-      for (let i in val) {
-        goods_id.push(val[i].goods_id)
-      }
-      this.goods_id = goods_id
-    },
-    handleCancelLabelsDialog() {
-      this.tag.dialog = false
-    },
-    tagUpdate(row) {
-      this.tag.editItem = [row.itemName]
-      this.tag.currentTags = row.tagList || []
-      this.tag.form.item_ids = row.item_id
-      this.showTags()
-    },
-    addItemTag() {
-      this.tag.currentTags = []
-      if (this.item_id.length) {
-        this.showTags()
-        this.tag.form.item_ids = this.item_id
-        this.tag.editItem = this.selections.map((v) => v.itemName)
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品!'
-        })
-      }
-    },
-    showTags() {
-      let tags = []
-      this.tag.list.forEach((item, index) => {
-        let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
-        if (isInArr === -1) {
-          tags.push(item)
-        }
-      })
-      this.tag.tags = tags
-      this.tag.dialog = true
-    },
-    tagRemove(index) {
-      this.tag.tags.unshift(this.tag.currentTags[index])
-      this.tag.currentTags.splice(index, 1)
-    },
-    tagAdd(item, index) {
-      let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
-      if (isInArr == -1) {
-        this.tag.currentTags.push(item)
-        this.tag.tags.splice(index, 1)
-      }
-    },
-    submitItemTag() {
-      this.tag.form.tag_ids = []
-      this.tag.currentTags.forEach((item) => {
-        this.tag.form.tag_ids.push(item.tag_id)
-      })
-      this.tag.dialog = false
-      itemsRelTags(this.tag.form)
-        .then((res) => {
-          if (res.data.data.status) {
-            this.$message({
-              type: 'success',
-              message: '打标签完成'
-            })
-            this.getGoodsList()
-          }
-        })
-        .catch((e) => {
-          this.getGoodsList()
-        })
-    },
-    tagSearchUserChange() {
-      this.getParams()
-      this.getItemsList(this.params)
-      this.loading = false
-    },
-    getAllTagLists() {
-      let params = {
-        page: 1,
-        pageSize: 500
-      }
-      getTagList(params).then((response) => {
-        this.tag.list = response.data.data.list
-      })
-    },
-    changeTemplates() {
-      if (this.item_id.length) {
-        if (!this.templates_new_id) {
-          this.$message({
-            type: 'error',
-            message: '请选择运费模板'
-          })
-          return false
-        }
-        this.addTemplatesdialogVisible = false
-        setItemsTemplate({ 'templates_id': this.templates_new_id, 'item_id': this.item_id }).then(
-          (response) => {
-            this.getGoodsList()
-          }
-        )
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-      }
-    },
-    editItemsSort(index, row) {
-      setItemsSort({ 'sort': row.sort, 'item_id': row.itemId }).then((response) => {
-        this.getGoodsList()
-      })
-    },
-    changeCategory() {
-      if (this.item_id.length) {
-        if (!this.category_id) {
-          this.$message({
-            type: 'error',
-            message: '请选择商品分类'
-          })
-          return false
-        }
-        this.addCategorydialogVisible = false
-        setItemsCategory({ 'category_id': this.category_id, 'item_id': this.item_id }).then(
-          (response) => {
-            this.getGoodsList()
-            this.category_id = []
-          }
-        )
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-      }
-    },
+
     addItems() {
       // 添加商品
-      this.$router.push({ path: this.matchHidePage('editor') })
-    },
-    addTemplates() {
-      if (this.item_id.length) {
-        this.addTemplatesdialogVisible = true
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-      }
-    },
-    addCategory() {
-      if (this.item_id.length) {
-        this.addCategorydialogVisible = true
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-      }
-    },
-    editItemsAction(index, row, isNew) {
-      // 编辑商品弹框
-      this.show_rebate_sideBar = false
-      this.show_sideBar = false
-      this.show_itemStore = false
-      if (isNew) {
-        var routeData = this.$router.push({
-          path: this.matchHidePage('editor/') + row.itemId,
-          query: { is_new: true }
-        })
-      } else {
-        var routeData = this.$router.push({ path: this.matchHidePage('editor/') + row.itemId })
-      }
-    },
-    saveRebateConf() {
-      var rebateConf = []
-      this.rebateSpecItems.forEach((item) => {
-        var rebate_conf = item.rebate_conf
-        rebate_conf.ratio_type = this.popularizeSetting.popularize_ratio.type
-        rebateConf.push(rebate_conf)
-      })
-      updateItemRebateConf({ rebateConf: JSON.stringify(rebateConf) }).then((res) => {
-        this.$message({ message: '保存成功', type: 'success', duration: 2 * 1000 })
-      })
-    },
-    saveProfitConf() {
-      var profitConf = []
-      this.profitSpecItems.forEach((item) => {
-        var profit_conf = {}
-        profit_conf.item_id = item.item_id
-        profit_conf.profit_type = item.profit_type
-        profit_conf.price = item.price * 100
-        if (1 == profit_conf.profit_type) {
-          profit_conf.profit_conf_profit = item.profit_conf_profit
-          profit_conf.profit_conf_popularize_profit = item.profit_conf_popularize_profit
-        } else {
-          profit_conf.profit_conf_profit = item.profit_conf_profit * 100
-          profit_conf.profit_conf_popularize_profit = item.profit_conf_popularize_profit * 100
-        }
-
-        profitConf.push(profit_conf)
-      })
-      saveGoodsProfitPrice({ profit_conf: JSON.stringify(profitConf) }).then((res) => {
-        this.$message({
-          message: '保存成功',
-          type: 'success',
-          duration: 2 * 1000
-        })
-      })
-    },
-    handleRebateConf(data) {
-      this.show_rebate_sideBar = true
-      this.show_profit_sideBar = false
-      this.show_sideBar = false
-      this.skuLoading = true
-      this.current = data
-      getItemsList({
-        page: 1,
-        pageSize: 1000,
-        is_sku: true,
-        item_id: data.item_id,
-        item_type: 'normal'
-      }).then((res) => {
-        var rebateSpecItems = []
-        res.data.data.list.forEach((item) => {
-          if (item.rebate_conf.length === 0) {
-            item.rebate_conf = {}
-            item.rebate_conf.type = 'money'
-            item.rebate_conf.value = {}
-            for (var key in this.popularizeSetting.popularize_ratio.profit) {
-              item.rebate_conf.value[key] = ''
-            }
-          } else {
-            if (
-              this.popularizeSetting.popularize_ratio.type != item.rebate_conf.ratio_type &&
-              item.rebate_conf.type != 'money'
-            ) {
-              for (var key in this.popularizeSetting.popularize_ratio.profit) {
-                item.rebate_conf.value[key] = ''
-              }
-            }
-          }
-          item.rebate_conf.item_id = item.item_id
-          rebateSpecItems.push(item)
-        })
-        this.rebateSpecItems = rebateSpecItems
-        this.skuLoading = false
-      })
-    },
-    handlePrice(data) {
-      this.show_rebate_sideBar = false
-      this.show_sideBar = true
-      this.show_profit_sideBar = false
-      this.current = data.item_id
-      this.getGoodsPrice(data.item_id)
-    },
-    handleProfitPrice(data) {
-      this.show_rebate_sideBar = false
-      this.show_sideBar = false
-      this.show_profit_sideBar = true
-      this.current = data.item_id
-      this.getGoodsProfitPrice(data.item_id)
-    },
-    getGoodsPrice(item_id) {
-      this.skuLoading = true
-      getGoodsPrice(item_id).then((res) => {
-        let specItems = []
-        let colConfigs = []
-        res.data.data.list.forEach((item) => {
-          specItems.push({
-            item_id: item.item_id,
-            item_spec_desc: item.item_spec_desc || item.itemName,
-            price: item.price / 100,
-            market_price: item.market_price / 100,
-            grade: this.generatePrice(item.memberGrade.grade),
-            vipGrade: this.generatePrice(item.memberGrade.vipGrade)
-          })
-        })
-        this.grade = this.generatePrice(res.data.data.list[0].memberGrade.grade)
-        this.vipGrade = this.generatePrice(res.data.data.list[0].memberGrade.vipGrade)
-        this.specItems = specItems
-        this.skuLoading = false
-      })
-    },
-    getGoodsProfitPrice(item_id) {
-      this.skuLoading = true
-      getGoodsProfitPrice(item_id).then((res) => {
-        let profitSpecItems = []
-        let colConfigs = []
-        res.data.data.list.forEach((item) => {
-          let arr = {
-            item_id: item.item_id,
-            item_spec_desc: item.item_spec_desc || item.itemName,
-            price: item.price / 100,
-            market_price: item.market_price / 100,
-            profit_type: item.profit_type,
-            profit_conf_profit: item.profit_conf_profit,
-            profit_conf_popularize_profit: item.profit_conf_popularize_profit
-          }
-          if (2 == item.profit_type) {
-            arr.profit_conf_profit = item.profit_conf_profit / 100
-            arr.profit_conf_popularize_profit = item.profit_conf_popularize_profit / 100
-          }
-          profitSpecItems.push(arr)
-        })
-        this.profitSpecItems = profitSpecItems
-        this.skuLoading = false
-      })
+      this.$router.push({ path: `${this.$route.path}/editor` })
     },
     generatePrice(data) {
       let list = []
@@ -1625,416 +1772,32 @@ export default {
         list.push({
           vip_grade_id: data[key].vip_grade_id,
           grade_name: data[key].grade_name,
-          mprice: data[key].mprice / 100 || ''
+          mprice: data[key].mprice / 100 || undefined
         })
       }
       return list
     },
-    savePrice() {
-      let param = {
-        item_id: this.current,
-        mprice: ''
-      }
-      let skus = {}
-      this.specItems.forEach((item) => {
-        let grade = {}
-        item.grade.forEach((child) => {
-          Object.assign(grade, { [child.vip_grade_id]: child.mprice })
-        })
-        let vipGrade = {}
-        item.vipGrade.forEach((child) => {
-          Object.assign(vipGrade, { [child.vip_grade_id]: child.mprice })
-        })
-        Object.assign(skus, {
-          [item.item_id]: {
-            grade: grade,
-            vipGrade: vipGrade
-          }
-        })
-      })
-      param.mprice = JSON.stringify(skus)
-
-      this.submitLoading = true
-      const _self = this
-      updateGoodsPrice(param)
-        .then((res) => {
-          this.$message({
-            type: 'success',
-            message: '更新成功',
-            duration: 2000,
-            onClose() {
-              _self.submitLoading = false
-              _self.getGoodsPrice(param.item_id)
-
-              _self.getGoodsList()
-            }
-          })
-        })
-        .catch((res) => {
-          _self.submitLoading = false
-        })
+    async getGoodsBranchList(searchVal = '') {
+      this.goodsBranchParams.attribute_name = searchVal
+      const { list } = await this.$api.goods.getGoodsAttr(this.goodsBranchParams)
+      this.goodsBranchList = list
     },
-    handleCurrentChange(pageIndex) {
-      this.page.pageIndex = pageIndex
-      this.getGoodsList()
-    },
-    handleSizeChange(pageSize) {
-      this.page.pageIndex = 1
-      this.page.pageSize = pageSize
-      this.getGoodsList()
-    },
-    onSearch() {
-      this.page.pageIndex = 1
-      this.$nextTick(() => {
-        this.getGoodsList()
-      })
-    },
-    async getGoodsList() {
-      this.loading = true
-      const { pageIndex: page, pageSize } = this.page
-      let params = {
-        page,
-        pageSize,
-        ...this.params
-      }
-      if (params.category.length > 0) {
-        params.category = params.category[params.category.length - 1]
-      }
-      // if (params.item_category.length > 0) {
-      //   // params.item_category = params.item_category[params.item_category.length - 1]
-      //   params.main_cat_id = params.item_category[params.item_category.length - 1]
-      //   delete params.item_category
-      // }
-      if (this.params.main_cat_id) {
-        if (isArray(this.params.main_cat_id)) {
-          params.main_cat_id = this.params.main_cat_id[this.params.main_cat_id.length - 1]
-        } else {
-          params.main_cat_id = this.params.main_cat_id
-        }
-      }
-
-      if (typeof params.is_gift === 'undefined') {
-        delete params.is_gift
-      }
-      const { list, total_count, warning_store } = await this.$api.goods.getItemsList(params)
-      list.forEach((item) => {
-        item.price = item.price / 100
-        item.market_price = item.market_price / 100
-        item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
-      })
-      this.ItemsList = list
-      this.page.total = total_count
-      this.warning_store = warning_store
-      this.loading = false
-    },
-    deleteItemsAction(index, row) {
-      this.$confirm('此操作将删除该商品, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          deleteItems(row.itemId).then((response) => {
-            this.ItemsList.splice(index, 1)
-            this.$message({
-              message: '删除商品成功',
-              type: 'success',
-              duration: 2 * 1000
-            })
-          })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
-        })
-    },
-    async getShippingTemplatesList() {
-      const { list } = await this.$api.shipping.getShippingTemplatesList({
+    async handleViewSkuInfo(item) {
+      this.skuLoading = true
+      const { list } = await this.$api.goods.getItemsList({
+        item_type: 'normal',
+        operate_source: IS_SUPPLIER() ? 'supplier' : 'platform',
+        item_id: item.item_id,
+        is_sku: true,
         page: 1,
         pageSize: 1000
       })
-      this.templatesList = [{ name: '全部', template_id: '' }, ...list]
-    },
-    getGoodsBranchList(searchVal = '') {
-      // this.loading = true
-      // console.log(searchVal)
-      this.goodsBranchParams.attribute_name = searchVal
-      getGoodsAttr(this.goodsBranchParams).then((response) => {
-        this.goodsBranchList = response.data.data.list
-        // console.log(this.goodsBranchList)
-      })
-    },
-    getCategory() {
-      //销售分类
-      getCategory({ is_show: false }).then((response) => {
-        this.categoryList = response.data.data
-      })
-
-      //管理分类
-      getCategory({ is_main_category: true }).then((response) => {
-        this.itemCategoryList = response.data.data
-      })
-    },
-    getCurrencyInfo() {
-      getDefaultCurrency().then((res) => {
-        this.currency = res.data.data
-        this.cursymbol = this.currency.symbol
-      })
-    },
-    batchItemsStore() {
-      this.storeItemsList = []
-      if (this.item_id.length) {
-        this.storeUpdate = true
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-      }
-    },
-    batchChangeStore() {
-      if (this.goods_id.length === 0) {
-        this.$message({
-          type: 'error',
-          message: '请选择至少一个商品'
-        })
-        return false
-      }
-      this.batchChangeStateDialog = true
-    },
-    onBatchChangeStateSubmit() {
-      this.skuLoading = true
-      let params = {}
-      if (this.goods_id.length > 0) {
-        let data = []
-        this.goods_id.forEach((goods_id) => {
-          data.push({ goods_id: goods_id })
-        })
-        params = {
-          'items': JSON.stringify(data),
-          'status': this.batchChangeStateForm.status
-        }
-      }
-      this.submitLoading = true
-      updateItemsStatus(params).then((res) => {
-        if (res.data.data.status) {
-          this.$message({
-            message: '修改成功',
-            type: 'success',
-            duration: 2 * 1000
-          })
-          this.getGoodsList()
-        }
-        this.submitLoading = false
-        this.skuLoading = false
-        this.batchChangeStateDialog = false
-        this.batchChangeStateForm.status = ''
-      })
-    },
-    updateItemStatus(items) {
-      this.loading = true
-      let params = {}
-      params = {
-        'items': [{ 'goods_id': items.goods_id }],
-        'status': items.approve_status === 'instock' ? 'onsale' : 'instock'
-      }
-      updateItemsStatus(params).then((res) => {
-        if (res.data.data.status) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 2 * 1000
-          })
-          this.getGoodsList()
-        }
-      })
-      this.loading = false
-    },
-    updateItemsStore(items) {
-      this.skuLoading = true
-      this.item_id = []
-      let param = JSON.parse(JSON.stringify(this.params))
-      param.item_id = items.item_id
-      param.is_sku = true
-      this.storeItemsList = []
-      getItemsList({
-        ...param,
-        page: this.page.pageIndex,
-        pageSize: this.page.pageSize
-      }).then((response) => {
-        let list = response.data.data.list
-        let data = {}
-        list.forEach((item) => {
-          let data = {
-            item_id: item.item_id,
-            store: item.store,
-            item_spec_desc: item.item_spec_desc ? item.item_spec_desc : item.item_name
-          }
-          this.storeItemsList.push(data)
-        })
-        this.skuLoading = false
-      })
-      this.show_itemStore = true
-    },
-    saveItemsStore() {
-      this.skuLoading = true
-      if (
-        Number(this.itemstore) < 0 ||
-        (this.storeItemsList.length && Number(this.storeItemsList[0].store) < 0)
-      ) {
-        this.$message({ type: 'error', message: '库存需为正整数', duration: 2000 })
-        this.skuLoading = false
-        return
-      }
-      let params = {}
-      if (this.storeItemsList.length > 0) {
-        params = {
-          'items': JSON.stringify(this.storeItemsList)
-        }
-      } else if (this.item_id.length > 0) {
-        let data = []
-        this.item_id.forEach((itemid) => {
-          data.push({ item_id: itemid, store: this.itemstore, is_default: true })
-        })
-        params = {
-          'items': JSON.stringify(data)
-        }
-      }
-      this.submitLoading = true
-      const _self = this
-      updateItemsStore(params)
-        .then((res) => {
-          if (res.data.data.status) {
-            this.$message({
-              message: '修改成功',
-              type: 'success',
-              duration: 2 * 1000
-            })
-          }
-          this.submitLoading = false
-          this.skuLoading = false
-          this.storeUpdate = false
-
-          this.getGoodsList()
-        })
-        .catch((err) => {
-          this.submitLoading = false
-          this.skuLoading = false
-        })
+      this.itemSkuDrawerTitle = `商品【${item.item_name}】`
+      this.itemSkuList = list || []
+      this.showItemSkuDrawer = true
+      this.itemSkuList = list
+      this.skuLoading = false
     }
   }
 }
 </script>
-<style scoped lang="scss">
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  img {
-    width: 90%;
-  }
-}
-.el-col {
-  border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 10px;
-  img {
-    width: 90%;
-  }
-}
-.row-bg {
-  padding: 10px 20px;
-  background-color: #f9fafc;
-}
-.service-label .el-checkbox:first-child {
-  margin-left: 15px;
-}
-.service-label .el-input:first-child {
-  margin-left: 15px;
-}
-.grid-detail {
-  max-height: 300px;
-  overflow-y: scroll;
-  margin-bottom: 20px;
-}
-.el-carousel {
-  width: 375px;
-}
-.tag-users {
-  padding-bottom: 10px;
-  line-height: 1.2;
-  .icon-user-circle1 {
-    margin-right: 10px;
-    font-size: 24px;
-    color: #ccc;
-  }
-}
-.selected-tags {
-  padding-top: 15px;
-  margin-bottom: 15px;
-  border-top: 1px solid #efefef;
-  border-bottom: 1px solid #efefef;
-  .label {
-    margin-bottom: 15px;
-  }
-  .el-tag {
-    margin-right: 10px;
-    margin-bottom: 15px;
-  }
-}
-.tag-item {
-  cursor: pointer;
-  color: #666;
-  border-color: #dadadd;
-  margin-right: 10px;
-  margin-top: 10px;
-}
-.copy-btn {
-  position: relative;
-  [class^='copy-link'] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    visibility: hidden;
-  }
-}
-.page-code {
-  width: 100%;
-}
-.page-btns {
-  text-align: center;
-}
-</style>
-<style lang="scss">
-.grid-detail {
-  table,
-  .detail-content-wrap,
-  .detail-content-item {
-    width: 100% !important;
-  }
-  img {
-    width: 100%;
-  }
-}
-.grid-attribute {
-  table {
-    width: 100% !important;
-  }
-}
-</style>

@@ -33,14 +33,13 @@
           </div>
         </el-alert>
       </div>
-
-      <div v-if="IS_MERCHANT" style="margin-bottom: 10px">
+      <div v-if="IS_MERCHANT()" style="margin-bottom: 10px">
         <el-alert type="info" title="" show-icon>
           <div>可在设置-店铺管理员添加店铺端账号，登录地址 【 {{ origin }}/shopadmin/login 】</div>
         </el-alert>
       </div>
 
-      <div v-if="!IS_DISTRIBUTOR" class="action-container">
+      <div v-if="!IS_DISTRIBUTOR()" class="action-container">
         <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="dialogOpen()">
           添加店铺
         </el-button>
@@ -49,7 +48,7 @@
           新增总部自提点
         </el-button>
         <template v-else>
-          <el-button v-if="!IS_MERCHANT" type="primary" @click="editDistributorSelf()">
+          <el-button v-if="!IS_MERCHANT()" type="primary" @click="editDistributorSelf()">
             编辑总部自提点
           </el-button>
         </template>
@@ -97,16 +96,29 @@
       </SpFilterForm>
 
       <div class="action-container">
+        <!-- <el-button
+          v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT()"
+          plain
+          type="primary"
+          @click="addDistributorTag"
+        >
+          打标签
+        </el-button> -->
         <el-button
-          v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT"
+          v-if="VERSION_PLATFORM && !is_distributor && !IS_MERCHANT()"
           plain
           type="primary"
           @click="addDistributorTag"
         >
           打标签
         </el-button>
-        <el-button v-if="IS_ADMIN" type="primary" plain @click="showSettingDistance()">
-          店铺范围配置
+        <el-button
+          v-if="IS_ADMIN() || IS_MERCHANT()"
+          type="primary"
+          plain
+          @click="showSettingDistance('')"
+        >
+          全部店铺范围配置
         </el-button>
       </div>
 
@@ -203,6 +215,18 @@
             />
           </template>
         </el-table-column>
+
+        <el-table-column width="100" label="开启业务员">
+          <template v-if="scope.row.is_valid !== 'delete'" slot-scope="scope">
+            <el-switch
+              v-model="scope.row.is_open_salesman"
+              active-color="#13ce66"
+              inactive-color="#cccccc"
+              @change="switchChange(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+
         <el-table-column width="70" label="状态">
           <template slot-scope="scope">
             <el-button
@@ -284,41 +308,58 @@
               </router-link>
             </el-button>
             <el-button type="text" @click="linkTemplates(scope.row)"> 店铺装修 </el-button>
-            <el-button type="text" @click="showSettingMeiQia(scope.row.distributor_id)">
-              客服
-            </el-button>
-            <el-button
-              v-if="VERSION_PLATFORM"
-              type="text"
-              @click="downDistributor(scope.row, 'store')"
-            >
-              下载店铺码
-            </el-button>
-            <el-button v-else type="text" @click="downDistributor(scope.row, 'index')">
-              下载店铺码
-            </el-button>
-            <router-link
-              v-if="scope.row.is_openAccount"
-              :to="{
-                path: matchHidePage('details'),
-                query: { distributor_id: scope.row.distributor_id }
-              }"
-            >
-              <span style="padding: 0px 5px">详情</span>
-            </router-link>
-            <el-button
-              v-clipboard:copy="scope.row.link"
-              v-clipboard:success="onCopy"
-              class="copy-btn"
-              type="text"
-            >
-              <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
-            </el-button>
-            <el-button type="text" @click="linkWxpaysettting(scope.row)"> 微信支付配置 </el-button>
-            <el-button type="text" @click="linkAlipaysettting(scope.row)"> 支付宝配置 </el-button>
-            <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
-              银联商务支付配置
-            </el-button>
+
+            <el-popover placement="top-start" trigger="hover">
+              <div>
+                <el-button type="text" @click="showSettingMeiQia(scope.row.distributor_id)">
+                  客服
+                </el-button>
+                <el-button
+                  v-if="VERSION_PLATFORM"
+                  type="text"
+                  @click="downDistributor(scope.row, 'store')"
+                >
+                  下载店铺码
+                </el-button>
+                <el-button v-else type="text" @click="downDistributor(scope.row, 'index')">
+                  下载店铺码
+                </el-button>
+                <router-link
+                  v-if="scope.row.is_openAccount"
+                  :to="{
+                    path: matchHidePage('details'),
+                    query: { distributor_id: scope.row.distributor_id }
+                  }"
+                >
+                  <span style="padding: 0px 5px">详情</span>
+                </router-link>
+                <el-button
+                  v-clipboard:copy="scope.row.link"
+                  v-clipboard:success="onCopy"
+                  class="copy-btn"
+                  type="text"
+                >
+                  <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
+                </el-button>
+                <el-button type="text" @click="linkWxpaysettting(scope.row)">
+                  微信支付配置
+                </el-button>
+                <el-button type="text" @click="linkAlipaysettting(scope.row)">
+                  支付宝配置
+                </el-button>
+                <el-button type="text" @click="showSettingChinaumspay(scope.row.distributor_id)">
+                  银联商务支付配置
+                </el-button>
+                <!-- <el-button v-if="scope.row.distribution_type == '0' || IS_DISTRIBUTOR()" type="text" @click="showSettingDistance(scope.row.distributor_id)">
+              店铺范围配置
+            </el-button> -->
+                <el-button type="text" @click="showSettingDistance(scope.row.distributor_id)">
+                  店铺范围配置
+                </el-button>
+              </div>
+              <el-button slot="reference" type="text">更多>></el-button>
+            </el-popover>
+
             <!-- <router-link
               v-if="scope.row.is_valid !== 'delete' && datapass_block == '0'"
               :to="{
@@ -326,7 +367,7 @@
                 query: { distributor_id: scope.row.distributor_id }
               }"
             >
-              <span style="margin-right: 5px">微信支付配置2</span>
+              <span style="margin-right: 5px">微信支付配置</span>
             </router-link> -->
             <!--<el-button type="text" @click="downDistributor(scope.row, 'scancode')">扫码购页面码(微商城)</el-button>-->
             <!-- <router-link :to="{  path: matchInternalRoute('Storeshopitemanagement'), query: {distributor_id: scope.row.distributor_id}}">商品码</router-link> -->
@@ -446,7 +487,7 @@
         </template>
       </el-dialog>
       <!-- 编辑距离-开始 -->
-      <el-dialog
+      <!-- <el-dialog
         title="店铺范围配置"
         width="50%"
         :visible.sync="setDistanceVisible"
@@ -475,6 +516,20 @@
           <el-button @click.native="handleDistanceCancel"> 取消 </el-button>
           <el-button type="primary" @click="handleSubmitDistance"> 保存 </el-button>
         </div>
+      </el-dialog> -->
+      <el-dialog
+        title="店铺范围配置"
+        width="35%"
+        :visible.sync="setDistanceVisible"
+        :before-close="handleDistanceCancel"
+      >
+        <SpForm
+          v-model="distanceForm"
+          :form-list="formList"
+          :submit="true"
+          @resetForm="handleDistanceCancel"
+          @onSubmit="handleSubmitDistance"
+        />
       </el-dialog>
       <!-- 编辑距离-结束 -->
 
@@ -529,6 +584,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import SpForm from '@/components/sp-form'
 import {
   saveDistributor,
   getWxaDristributorCodeStream,
@@ -584,6 +640,32 @@ export default {
       }
     }
     return {
+      formList: [
+        {
+          label: '距离',
+          key: 'distance',
+          component: () => (
+            <div>
+              <el-input
+                placeholder='输入大于等于0的数字，为0则显示所有店铺'
+                width='60%'
+                v-model={this.distanceForm.distance}
+              />
+              &nbsp;km
+            </div>
+          ),
+          validator: (rule, value, callback) => {
+            const { distance } = this.distanceForm
+            const regex = /^\d+$/
+            if (regex.test(distance)) {
+              callback()
+            } else {
+              callback(new Error('请输入数字'))
+            }
+          }
+        }
+      ],
+      distributorIds: '',
       initialParams,
       params: {
         ...initialParams
@@ -674,7 +756,7 @@ export default {
       },
       keFuFormList: [
         {
-          label: '店铺客服:',
+          label: '店铺客服',
           key: 'channel',
           type: 'radio',
           options: [
@@ -801,7 +883,10 @@ export default {
       }
       const { list, total_count, distributor_self, datapass_block } =
         await this.$api.marketing.getDistributorList(params)
-      this.tableList = list
+      this.tableList = list.map((item) => {
+        item.link = `${process.env.VUE_APP_H5_HOST}/${item.link}`
+        return item
+      })
       this.page.total = total_count
       this.distributor_self = distributor_self
       this.datapass_block = datapass_block
@@ -976,7 +1061,8 @@ export default {
       var params = {
         distributor_id: row.distributor_id,
         is_ziti: row.is_ziti,
-        is_delivery: row.is_delivery
+        is_delivery: row.is_delivery,
+        is_open_salesman: row.is_open_salesman
       }
       saveDistributor(params).then((response) => {
         this.detailDialog = false
@@ -1150,17 +1236,17 @@ export default {
       this.keFuDialog = false
       this.$message.success('保存成功')
     },
-    showSettingDistance() {
+    showSettingDistance(distributor_id) {
       // 设置距离参数
       this.setDistanceVisible = true
       let that = this
-
-      // distributor_id
-      getDistance().then((response) => {
-        that.distanceForm.distance = response.data.data.distance
-      })
-      // console.log('this.distributor_id', that.distributor_id)
-      // console.log('showSettingDistance', that.distanceForm)
+      that.distributorIds = distributor_id
+      that.distanceForm.distance = 0
+      if (distributor_id) {
+        getDistance({ distributor_id }).then((response) => {
+          that.distanceForm.distance = response.data.data.distance
+        })
+      }
     },
     handleDistanceCancel() {
       // 距离设置窗口关闭
@@ -1170,7 +1256,8 @@ export default {
     handleSubmitDistance() {
       // 提交距离配置
       let params = {
-        distance: this.distanceForm.distance
+        distance: this.distanceForm.distance,
+        distributor_id: this.distributorIds
       }
       setDistance(params).then((response) => {
         this.$message({

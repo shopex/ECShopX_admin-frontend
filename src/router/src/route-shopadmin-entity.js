@@ -38,7 +38,7 @@ export default {
           path: 'editor/:itemId?',
           component: () => import('@/view/mall/goods/physical/add')
           // component: () => {
-          //   if(IS_DISTRIBUTOR) {
+          //   if(IS_DISTRIBUTOR()) {
           //     return import('@/view/mall/goods/physical/add.standard')
           //   } else {
           //     return import('@/view/mall/goods/physical/add')
