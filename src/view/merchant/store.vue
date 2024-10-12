@@ -155,8 +155,10 @@ export default {
           endTime: ''
         },
         offline_aftersales_other: false,
+        is_refund_freight:false,
         introduce: ''
       },
+      offline_freight_status:false,
       formList: [
         {
           label: '店铺类型',
@@ -539,6 +541,15 @@ export default {
           width: 'auto',
           tip: '启用后其他店铺在设置可退货店铺时可选择本店（即本店可接收其他店铺订单到店退货）；商家发起的售后订单不受此规则限制。'
         },
+        //平台开了才能操作，否则置灰
+        {
+          label: '消费者退货退款时可退运费',
+          key: 'is_refund_freight',
+          type: 'switch',
+          disabled: () => this.offline_freight_status,
+          width: 'auto',
+          tip: '启用后本店订单买家发起退货退款时可退运费。'
+        },
         {
           label: '店铺介绍',
           type: 'group'
@@ -577,9 +588,14 @@ export default {
       this.getDadaInfo()
     }
     this.getStoreInfo()
+    this.getOrderSetting()
   },
   mounted() {},
   methods: {
+    async getOrderSetting() {
+      const res = await this.$api.trade.getOrderSetting()
+      this.offline_freight_status = res.is_refund_freight != 1
+    },
     async getMerchantList({ page, pageSize }, keywords) {
       let params = {
         pageSize,
@@ -715,6 +731,7 @@ export default {
           is_ziti: res.is_ziti,
           offline_aftersales: res.offline_aftersales === 1,
           offline_aftersales_other: res.offline_aftersales_other === 1,
+          is_refund_freight: res.is_refund_freight == 1,
           offline_aftersales_address: {
             name: res.offline_aftersales_address.name,
             regions_id: res.offline_aftersales_address.regions_id,
@@ -765,6 +782,7 @@ export default {
 
       const params = {
         ...this.form,
+        is_refund_freight:this.form.is_refund_freight ? 1:0,
         distributor_self: this.distributor_self,
         regions: getRegionNameById(this.form.regions_id, district),
         hour: `${this.form.startTime}-${this.form.endTime}`,
