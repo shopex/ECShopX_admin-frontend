@@ -149,9 +149,11 @@ export default {
       const params = {
         start: moment(start).format('YYYY-MM-DD'),
         end: moment(end).format('YYYY-MM-DD'),
-        order_class: 'employee_purchase',
         act_id: activity_id.toString()
       }
+     if(params.act_id){
+      params.order_class= 'employee_purchase'
+     }
       this.loading = true
       const { list } = await this.$api.datacube.getCompanyData(params)
       this.loading = false
