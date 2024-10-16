@@ -37,3 +37,19 @@ export function setMapSetting (query) {
     params: query
   })
 }
+
+export function getWdtErpSetting () {
+  return fetch({
+    url: '/third/wdterp/setting',
+    method: 'get'
+  })
+}
+
+export function setWdtErpSetting (query) {
+  return fetch({
+    url: '/third/wdterp/setting',
+    method: 'post',
+    params: query
+  })
+}
+

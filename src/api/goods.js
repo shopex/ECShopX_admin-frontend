@@ -585,3 +585,11 @@ export function batchReviewItems(query) {
     params: query
   })
 }
+
+export function uploadWdtErpItems(data) {
+  return fetch({
+    url: '/goods/upload/wdterp/items',
+    method: 'post',
+    data
+  })
+}

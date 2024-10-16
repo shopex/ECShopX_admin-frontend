@@ -121,6 +121,11 @@ export default {
       component: () => import('@/view/base/setting/certificate/index')
     },
     {
+      path: 'saaserp/wdtSetting',
+      name: `旺店通ERP`,
+      component: () => import('@/view/base/setting/saaserp/wdtSetting')
+    },
+    {
       path: 'baseexport',
       name: `导出列表`,
       component: () => import('@/view/base/exportlog/index')
