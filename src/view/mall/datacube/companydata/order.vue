@@ -101,15 +101,24 @@ export default {
           },
           {
             name: '交易额',
-            key: 'amount_payed_count'
+            key: 'amount_payed_count',
+            formatter: (value, row, col) => {
+              return value /100
+            }
           },
           {
             name: 'GMV',
-            key: 'gmv_count'
+            key: 'gmv_count',
+            formatter: (value, row, col) => {
+              return value /100
+            }
           },
           {
             name: '退款额',
-            key: 'refunded_count'
+            key: 'refunded_count',
+            formatter: (value, row, col) => {
+              return value /100
+            }
           }
         ]
       }),
