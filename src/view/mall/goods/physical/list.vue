@@ -243,6 +243,8 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-button size="small" v-if="isBindJushuitan" type="primary" @click="uploadItems()">上传商品到聚水潭</el-button>
+        <!-- <el-button size="small" v-if="isBindJushuitan" type="primary" @click="queryInventory()">同步聚水潭商品库存</el-button> -->
         <el-button size="small" v-if="isBindWdtErp" type="primary" @click="uploadWdtErpItems()">上传商品到旺店通</el-button>
         <el-dropdown v-if="VERSION_STANDARD && IS_ADMIN()">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
@@ -666,7 +668,7 @@ export default {
         status: ''
       },
       isBindWdtErp: false,
-
+      isBindJushuitan: false,
       categoryList: [],
       templatesList: [],
       itemCategoryList: [],
@@ -1275,6 +1277,7 @@ export default {
     this.searchParams.operator_name = this.$route.query.operator_name
     this.fetchWechatList()
     this.checkWdtErpBind()
+    this.checkJushuitanBind()
   },
   methods: {
     async fetchWechatList() {
@@ -1819,6 +1822,53 @@ export default {
         item_id: this.selectionItems.map((item) => item.item_id)
       }
       this.$api.goods.uploadWdtErpItems(params).then(res => {
+        if (res.status == true) {
+          this.$message({
+            type: 'success',
+            message: '已加入执行队列'
+          });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '执行失败'
+          });
+        }
+      });
+    },
+    checkJushuitanBind () {
+      this.$api.third.getJushuitanSetting().then(response => {
+        this.isBindJushuitan = response.is_open
+      })
+    },
+    uploadItems() {
+      let params = {};
+      if (this.item_id.length) {
+        params = {
+          item_id: this.item_id
+        }
+      }
+      this.$api.goods.uploadItems(params).then(res => {
+        if (res.status == true) {
+          this.$message({
+            type: 'success',
+            message: '已加入执行队列'
+          });
+        } else {
+          this.$message({
+            type: 'error',
+            message: '执行失败'
+          });
+        }
+      });
+    },
+    queryInventory() {
+      let params = {};
+      if (this.item_id.length) {
+        params = {
+          item_id: this.item_id
+        }
+      }
+      this.$api.goods.queryInventory(params).then(res => {
         if (res.status == true) {
           this.$message({
             type: 'success',

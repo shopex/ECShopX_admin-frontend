@@ -297,7 +297,7 @@
     </template>
 
     <!-- 申请通过 -->
-    <template v-if="aftersalesInfo.progress == '2'">
+    <template v-if="aftersalesInfo.progress == '2' || (isJuishuitan && aftersalesInfo.progress == '8')">
       <!-- 换货商家发货信息填写 -->
       <template v-if="aftersalesInfo.aftersales_type == 'EXCHANGING_GOODS'">
         <div class="section-header with-border">
@@ -802,7 +802,8 @@ export default {
         corp_code: '',
         logi_no: ''
       },
-      logisticsList: []
+      logisticsList: [],
+      isJuishuitan: false,
     }
   },
   computed: {
@@ -853,6 +854,7 @@ export default {
         }
         this.distributor_id = data.distributor_id
         this.loading = false
+        this.isJuishuitan = this.aftersalesInfo.is_jushuitan
       })
     },
     onRemarksDone(remark) {

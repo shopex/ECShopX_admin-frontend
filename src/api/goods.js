@@ -593,3 +593,21 @@ export function uploadWdtErpItems(data) {
     data
   })
 }
+
+// 上传商品到聚水潭
+export function uploadItems(data) {
+  return fetch({
+    url: '/goods/upload/items',
+    method: 'post',
+    data
+  })
+}
+
+// 同步聚水潭商品库存
+export function queryInventory(data) {
+  return fetch({
+    url: '/goods/query/inventory',
+    method: 'post',
+    data
+  })
+}

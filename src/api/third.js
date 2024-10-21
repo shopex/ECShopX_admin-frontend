@@ -53,3 +53,18 @@ export function setWdtErpSetting (query) {
   })
 }
 
+export function setJushuitanSetting(query) {
+  return fetch({
+    url: '/third/jushuitan/setting',
+    method: 'post',
+    data: query
+  })
+}
+
+export function getJushuitanSetting() {
+  return fetch({
+    url: '/third/jushuitan/setting',
+    method: 'get'
+  })
+}
+

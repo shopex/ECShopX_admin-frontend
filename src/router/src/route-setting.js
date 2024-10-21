@@ -126,6 +126,11 @@ export default {
       component: () => import('@/view/base/setting/saaserp/wdtSetting')
     },
     {
+      path: 'saaserp/jstSetting',
+      name: '聚水潭ERP',
+      component: () => import('@/view/base/setting/saaserp/jstSetting')
+    },
+    {
       path: 'baseexport',
       name: `导出列表`,
       component: () => import('@/view/base/exportlog/index')
