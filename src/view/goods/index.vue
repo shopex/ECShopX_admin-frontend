@@ -745,6 +745,13 @@ export default {
       } else {
         this.loading = false
       }
+
+      //供应商商品销售分类非必填
+      const salesCategoryIndex = this.formList.findIndex(item=>item.key == 'salesCategory')
+        if(salesCategoryIndex != -1){
+          this.formList[salesCategoryIndex].required = !(this.IS_SUPPLIER() || this.routerParams?.isSupplierGoods)
+        }
+
     },
     // 获取销售分类
     async getSaleCategory() {
@@ -771,11 +778,6 @@ export default {
       const { is_new, supplier } = this.$route.query
       this.routerParams = this.$route.query || {}
 
-      //供应商商品销售分类非必填
-      const salesCategoryIndex = this.formList.findIndex(item=>item.key == 'salesCategory')
-      if(salesCategoryIndex != -1){
-        this.formList[salesCategoryIndex].required = !(this.IS_SUPPLIER() || this.routerParams?.isSupplierGoods)
-      }
 
       const {
         item_id,
