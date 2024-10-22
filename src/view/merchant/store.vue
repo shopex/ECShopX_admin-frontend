@@ -156,7 +156,7 @@ export default {
         offline_aftersales_other: false,
         is_refund_freight:false,
         wdt_shop_no: '',
-        jst_shop_no: '',
+        jst_shop_id: '',
         introduce: ''
       },
       offline_freight_status:false,
@@ -564,7 +564,7 @@ export default {
         },
         {
           label: '店铺编号',
-          key: 'jst_shop_no',
+          key: 'jst_shop_id',
           type: 'input',
           display: 'inline',
           placeholder: '',
@@ -761,7 +761,7 @@ export default {
             endTime: offline_endTime
           },
           wdt_shop_no: res.wdt_shop_no,
-          jst_shop_no: res.jst_shop_no,
+          jst_shop_id: res.jst_shop_id,
           introduce: res.introduce
         }
         if (res.merchant_name) {
