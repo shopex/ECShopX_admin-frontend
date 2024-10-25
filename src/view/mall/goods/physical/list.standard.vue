@@ -2031,7 +2031,7 @@ export default {
       });
     },
     checkJstErpBind() {
-      this.$api.third.getJushuitanSetting().then(response => {
+      this.$api.third.getJstErpSetting().then(response => {
         this.isBindJstErp = response.is_open
       })
     },
@@ -2047,7 +2047,7 @@ export default {
       params = {
         item_id: this.item_id
       }
-      this.$api.goods.uploadItems(params).then(res => {
+      this.$api.goods.uploadJstErpItems(params).then(res => {
         if (res.status == true) {
           this.$message({
             type: 'success',

@@ -53,7 +53,7 @@ export function setWdtErpSetting (query) {
   })
 }
 
-export function setJushuitanSetting(query) {
+export function setJstErpSetting(query) {
   return fetch({
     url: '/third/jushuitan/setting',
     method: 'post',
@@ -61,7 +61,7 @@ export function setJushuitanSetting(query) {
   })
 }
 
-export function getJushuitanSetting() {
+export function getJstErpSetting() {
   return fetch({
     url: '/third/jushuitan/setting',
     method: 'get'

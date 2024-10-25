@@ -60,7 +60,6 @@
   </el-form>
 </template>
 <script>
-import { setJushuitanSetting, getJushuitanSetting } from '../../../../api/third'
 export default {
   data () {
     return {
@@ -83,13 +82,13 @@ export default {
     },
     getConfig () {
       let query = { pay_type: 'ebuy' }
-      getJushuitanSetting(query).then((response) => {
+      this.$api.third.getJstErpSetting(query).then((response) => {
         this.form = response.data.data
       })
     },
     onSubmit () {
       this.loading = true
-      setJushuitanSetting(this.form)
+      this.$api.third.setJstErpSetting(this.form)
         .then((response) => {
           this.$message({
             type: 'success',

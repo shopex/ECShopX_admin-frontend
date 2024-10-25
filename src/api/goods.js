@@ -595,7 +595,7 @@ export function uploadWdtErpItems(data) {
 }
 
 // 上传商品到聚水潭
-export function uploadItems(data) {
+export function uploadJstErpItems(data) {
   return fetch({
     url: '/goods/upload/items',
     method: 'post',
