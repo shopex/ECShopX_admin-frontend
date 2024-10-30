@@ -396,7 +396,7 @@
       </el-table-column>
       <!-- <el-table-column prop="supplier_name" v-if="VERSION_STANDARD || IS_ADMIN()" label="来源供应商" >
       </el-table-column> -->
-        <el-table-column prop="receiver_name" label="收货人" />
+        <!-- <el-table-column prop="receiver_name" label="收货人" /> -->
         <template v-if="login_type != 'merchant'">
           <el-table-column v-if="!isMicorMall" label="订单类型">
             <template slot-scope="scope">
