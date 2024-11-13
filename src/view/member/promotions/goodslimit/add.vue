@@ -296,8 +296,12 @@ export default {
       }
       this.form.day = this.rule.day
       this.form.limit = this.rule.limit
+      let res = JSON.parse(JSON.stringify(this.form))
+      if(res.use_bound != 'goods'){
+      res.items = []
+      }
       if (this.$route.params.limit_id) {
-        updateLimitPromotions(this.$route.params.limit_id, this.form)
+        updateLimitPromotions(this.$route.params.limit_id, res)
           .then((response) => {
             this.loading = false
             this.$message({
@@ -312,7 +316,7 @@ export default {
           })
           .catch()
       } else {
-        createLimitPromotions(this.form)
+        createLimitPromotions(res)
           .then((response) => {
             this.loading = false
             this.$message({
