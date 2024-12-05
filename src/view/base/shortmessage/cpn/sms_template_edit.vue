@@ -43,7 +43,7 @@
           :disabled="disabled"
         >
           <el-option
-            v-for="item in search_options"
+            v-for="item in signNameList"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -161,11 +161,7 @@ export default {
       pickerImgType: '',
       // result
       resultVisible: false,
-      search_options: [
-        { label: '审核中', value: '0' },
-        { label: '审核通过', value: '1' },
-        { label: '审核失败', value: '2' }
-      ],
+      signNameList: [],
       //
       form: {
         template_type: '',
@@ -224,6 +220,13 @@ export default {
       const { type, id } = this.$route.query
       console.log(type, id)
 
+      const { list, total_count } = await this.$api.sms.getSmsSignatureList({
+        status: '1',
+        page:1,
+        pageSize:500
+      })
+      this.signNameList = list.map(item=>({label:item.sign_name,value:item.sign_name}))
+
       if (type) {
         const result = await SmsTemplateDetail({ id })
         this.resultHandler(result)
@@ -242,7 +245,7 @@ export default {
         template_name,
         template_content,
         remark,
-        related_sign_name:related_sign_name+''
+        related_sign_name
       }
 
       console.log(this.form)
