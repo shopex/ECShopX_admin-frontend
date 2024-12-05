@@ -199,7 +199,7 @@ export default {
         remark: '',
         sign_file: '', // 证明文件
         delegate_file: '', //委托授权书
-        third_party: 'true',
+        third_party: 'false',
         qualification_id: ''
       },
       rules: {
