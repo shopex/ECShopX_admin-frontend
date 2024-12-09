@@ -226,7 +226,11 @@
             />
           </template>
         </el-table-column>
-
+        <el-table-column width="100" label="商家自配送">
+          <template slot-scope="scope">
+            {{ scope.row.is_self_delivery ? '是' : '否' }}
+          </template>
+        </el-table-column>
         <el-table-column width="70" label="状态">
           <template slot-scope="scope">
             <el-button
@@ -339,7 +343,7 @@
                   class="copy-btn"
                   type="text"
                 >
-                  <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
+                  <input v-model="scope.row.link" class="copy-link" type="text" />复制店铺链接
                 </el-button>
                 <el-button type="text" @click="linkWxpaysettting(scope.row)">
                   微信支付配置
@@ -451,7 +455,7 @@
             </el-tag>
           </div>
         </div>
-        <hr>
+        <hr />
         <div>
           <div class="label">全部标签：</div>
           <el-tag
@@ -1103,6 +1107,16 @@ export default {
     addDistributorTag() {
       this.tag.currentTags = []
       if (this.distributor_id.length) {
+        let res = []
+        this.tableList.forEach((item) => {
+          this.distributor_id.forEach((n) => {
+            if (item.distributor_id == n) {
+              res = [...res, ...item.tagList]
+            }
+          })
+        })
+        res = Array.from(new Map(res.map((item) => [item.tag_id, item])).values())
+        this.tag.currentTags = res
         this.showTags()
         this.tag.form.distributor_id = this.distributor_id
       } else {

@@ -126,7 +126,10 @@ export default {
     if (isObject(titleBackgroundImage)) {
       const { url } = titleBackgroundImage
       titleBackgroundImage = url
+    }else if(!titleBackgroundImage){
+      titleBackgroundImage = ''
     }
+
     if (isObject(pageBackgroundImage)) {
       const { url } = pageBackgroundImage
       pageBackgroundImage = url

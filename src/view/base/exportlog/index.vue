@@ -78,7 +78,7 @@
         <el-tab-pane label="推广员业绩" name="popularize" />
         <el-tab-pane label="业绩统计" name="popularizeStatic" />
         <el-tab-pane label="业绩订单" name="popularizeOrder" />
-        <el-tab-pane label="财务售后单导出" name="aftersale_financial" />
+        <!-- <el-tab-pane label="财务售后单导出" name="aftersale_financial" /> -->
         <el-tab-pane label="财务销售报表导出" name="salesreport_financial" />
         <el-tab-pane label="交易统计导出" name="hfpay_trade_record" />
         <!-- <el-tab-pane
@@ -92,6 +92,7 @@
         <el-tab-pane label="结算单明细" name="statement_details" />
         <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
         <el-tab-pane label="配送员业绩导出" name="delivery_staffdata" />
+        <el-tab-pane v-if="IS_SUPPLIER()" label="主订单导出" name="supplier_order" />
       </template>
 
       <el-table v-loading="loading" :data="exportLogLists" :height="wheight - 220">
