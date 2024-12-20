@@ -27,11 +27,11 @@
       </el-table-column>
       <el-table-column
         prop="up"
-        label="货款下限(元)"
+        label="金额下限(元)"
       />
       <el-table-column
         prop="down"
-        label="货款上限(元)"
+        label="金额上限(元)"
       />
       <el-table-column
         prop="basefee"
