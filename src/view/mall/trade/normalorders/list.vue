@@ -1048,7 +1048,9 @@ export default {
           key: 'shop_reject_reason',
           type: 'input',
           placeholder: '请输入拒绝原因',
-          isShow: false,
+          isShow: ()=>{
+            return this.refundForm.check_cancel == '0'
+          },
           validator: (rule, value, callback) => {
             if (this.refundFormList.check_cancel == '0' && !value) {
               callback(new Error('不能为空'))
