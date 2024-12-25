@@ -1,18 +1,14 @@
 <template>
   <div>
     <SpRouterView>
-      <SpFilterForm :model="params" size="small" @onSearch="onSearch" @onReset="onSearch">
-        <SpFilterFormItem prop="create_time" label="日期范围:">
-          <el-date-picker
-            v-model="params.create_time"
-            type="daterange"
-            value-format="yyyy/MM/dd"
-            placeholder="选择日期范围"
-          />
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+        <SpFilterFormItem prop="bank_account_name" label="收款账户名:">
+          <el-input v-model="params.bank_account_name" placeholder="请输入收款账户名" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="mobile" label="单号:">
-          <el-input v-model="params.mobile" placeholder="手机号/交易单号" />
+        <SpFilterFormItem prop="user_mobile" label="手机号:">
+          <el-input v-model="params.user_mobile" placeholder="请输入手机号" />
         </SpFilterFormItem>
+
         <SpFilterFormItem prop="order_id" label="订单号:">
           <el-input v-model="params.order_id" placeholder="请输入订单号" />
         </SpFilterFormItem>
@@ -26,9 +22,25 @@
             />
           </el-select>
         </SpFilterFormItem>
+        <SpFilterFormItem prop="pay_account_bank" label="付款账户名:">
+          <el-input v-model="params.pay_account_bank" placeholder="请输入付款账户名" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="pay_account_no" label="付款卡号:">
+          <el-input v-model="params.pay_account_no" placeholder="请输入付款卡号" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="create_time" label="日期范围:">
+          <el-date-picker
+            v-model="params.create_time"
+            type="daterange"
+            value-format="yyyy/MM/dd"
+            placeholder="选择日期范围"
+          />
+        </SpFilterFormItem>
       </SpFilterForm>
 
-      <el-button type="primary" plain>导出</el-button>
+      <export-tip class="export-box" @exportHandle="exportData">
+        <el-button type="primary" plain> 导出 </el-button>
+      </export-tip>
 
       <SpFinder
         ref="finder"
@@ -52,53 +64,40 @@
         @onSubmit="onAddSubmit"
       />
 
-      <!-- <DistributorSelect
-        :store-visible="DistributorVisible"
-        :is-valid="isValid"
-        :get-status="DistributorStatus"
-        :rel-data-ids="relDistributors"
-        :old-data="oldData"
-        :is-single="isSingle"
-        :distribution_type="distributionType"
-        @chooseStore="DistributorChooseAction"
-        @closeStoreDialog="closeDialogAction"
-      /> -->
+      <el-dialog title="交易单下载" :visible.sync="downloadView" :close-on-click-modal="false">
+        <template v-if="downloadUrl">
+          <a :href="downloadUrl" download>{{ downloadName }}</a>
+        </template>
+      </el-dialog>
     </SpRouterView>
   </div>
 </template>
 <script>
-import DistributorSelect from '@/components/function/distributorSelect'
-import { IS_DISTRIBUTOR, IS_MERCHANT } from '@/utils'
 import moment from 'moment'
 
 export default {
   name: '',
-  components: {
-    DistributorSelect
-  },
   mixins: [],
   props: {},
   data() {
     return {
       deliveryman: false,
-      DistributorVisible: false,
-      DistributorStatus: false,
-      distributionType: '0',
-      isSingle: false,
-      isValid: true,
-      oldData: [],
-      relDistributors: [],
-      operator_id: '',
       editTitle: '',
-      isLook:false,
-      confirmStatus:false,
+      isLook: false,
+      confirmStatus: false,
       params: {
         create_time: [],
-        mobile: '',
+        user_mobile: '',
         order_id: '',
-        check_status:''
+        check_status: '',
+        pay_account_no: '',
+        pay_account_bank: '',
+        bank_account_name:''
       },
-      itemInfo:{},
+      downloadView: false,
+      downloadUrl: '',
+      downloadName: '',
+      itemInfo: {},
       checkStatusOptions: [
         {
           value: '0',
@@ -115,7 +114,7 @@ export default {
         {
           value: '9',
           label: '已取消'
-        },
+        }
       ],
       setting: {
         columns: [
@@ -123,11 +122,11 @@ export default {
           { name: '收款银行名称', key: 'bank_name', width: 110 },
           { name: '收款银行账号', key: 'bank_account_no', width: 110 },
           {
-            name: '订单支付金额',
+            name: '转账金额',
             width: 110,
-            key: 'total_fee',
+            key: 'pay_fee',
             render: (h, { row }) => {
-              return <span>¥{(row.total_fee / 100).toFixed(2)}</span>
+              return <span>¥{(row.pay_fee / 100).toFixed(2)}</span>
             }
           },
           { name: '订单编号', key: 'order_id', width: 150 },
@@ -203,7 +202,9 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                this.$router.push('/financial/examine/transfer/logs')
+                this.$router.push(
+                  `/financial/examine/transfer/logs?orderId=${row.order_id}&resource=${this.$route.path}`
+                )
               }
             }
           }
@@ -211,56 +212,91 @@ export default {
       },
 
       addForm: {
-        id:'',
-        order_id:'',
-        pay_fee:0,
+        id: '',
+        order_id: '',
+        pay_fee: 0,
         check_status: '1',
-        remark: '',
+        remark: ''
       },
       addFormList: [
         {
           component: () => (
             <div>
-              <el-descriptions title='用户信息'>
-                <el-descriptions-item label='订单号'>{this.itemInfo?.order_info?.order_id}</el-descriptions-item>
-                <el-descriptions-item label='订单金额'>{(this.itemInfo?.order_info?.total_fee / 100).toFixed(2)}</el-descriptions-item>
-                <el-descriptions-item label='订单状态'>{this.itemInfo?.order_info?.order_status_msg}</el-descriptions-item>
-                <el-descriptions-item label='运费'>{(this.itemInfo?.order_info?.freight_fee /100).toFixed(2)}</el-descriptions-item>
-                <el-descriptions-item label='订单备注'>{this.itemInfo?.order_info?.remark}</el-descriptions-item>
-                <el-descriptions-item label='收货人'>{this.itemInfo?.order_info?.receiver_name}</el-descriptions-item>
-                <el-descriptions-item label='收货地址'>{this.itemInfo?.order_info?.receiver_state}{this.itemInfo?.order_info?.receiver_city}{this.itemInfo?.order_info?.receiver_district}{this.itemInfo?.order_info?.receiver_address}</el-descriptions-item>
-
+              <el-descriptions title='用户信息' column={2}>
+                <el-descriptions-item label='订单号'>
+                  {this.itemInfo?.order_info?.order_id}
+                </el-descriptions-item>
+                <el-descriptions-item label='凭证创建时间'>
+                  {this.itemInfo?.create_time &&
+                    moment(this.itemInfo?.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                </el-descriptions-item>
+                <el-descriptions-item label='订单金额'>
+                  {(this.itemInfo?.order_info?.total_fee / 100).toFixed(2)}
+                </el-descriptions-item>
+                {/* <el-descriptions-item label='订单状态'>
+                  {this.itemInfo?.order_info?.order_status_msg}
+                </el-descriptions-item>
+                <el-descriptions-item label='运费'>
+                  {(this.itemInfo?.order_info?.freight_fee / 100).toFixed(2)}
+                </el-descriptions-item>
+                <el-descriptions-item label='订单备注'>
+                  {this.itemInfo?.order_info?.remark}
+                </el-descriptions-item>
+                <el-descriptions-item label='收货人'>
+                  {this.itemInfo?.order_info?.receiver_name}
+                </el-descriptions-item>
+                <el-descriptions-item label='收货地址'>
+                  {this.itemInfo?.order_info?.receiver_state}
+                  {this.itemInfo?.order_info?.receiver_city}
+                  {this.itemInfo?.order_info?.receiver_district}
+                  {this.itemInfo?.order_info?.receiver_address}
+                </el-descriptions-item> */}
               </el-descriptions>
-              <el-descriptions title='收款账户信息' column={2}>
-                <el-descriptions-item label='收款账户名'>{this.itemInfo?.bank_account_name}</el-descriptions-item>
-                <el-descriptions-item label='收款银行名称'>{this.itemInfo?.bank_name}</el-descriptions-item>
-                <el-descriptions-item label='收款银行账号'>{this.itemInfo?.bank_account_no}</el-descriptions-item>
-                <el-descriptions-item label='收款银联号'>{this.itemInfo?.china_ums_no}</el-descriptions-item>
+              <el-descriptions title='收款账户名' column={2}>
+                <el-descriptions-item label='收款账户名'>
+                  {this.itemInfo?.bank_account_name}
+                </el-descriptions-item>
+                <el-descriptions-item label='收款银行名称'>
+                  {this.itemInfo?.bank_name}
+                </el-descriptions-item>
+                <el-descriptions-item label='收款银行账号'>
+                  {this.itemInfo?.bank_account_no}
+                </el-descriptions-item>
+                <el-descriptions-item label='收款银联号'>
+                  {this.itemInfo?.china_ums_no}
+                </el-descriptions-item>
               </el-descriptions>
               <el-descriptions title='付款账户信息' column={2}>
-                <el-descriptions-item label='付款银行'>{this.itemInfo?.pay_account_bank}</el-descriptions-item>
-                <el-descriptions-item label='付款卡号'>{this.itemInfo?.pay_account_no}</el-descriptions-item>
-                <el-descriptions-item label='付款账户名'>{this.itemInfo?.bank_name}</el-descriptions-item>
-                <el-descriptions-item label='订单支付金额'>{(this.itemInfo?.pay_fee / 100).toFixed(2)}</el-descriptions-item>
-                <el-descriptions-item label='凭证图片集合' span={3}>
-                  {/* {
-                    Array.isArray(this.itemInfo?.voucher_pic) && this.itemInfo?.voucher_pic.length > 0 && (
-                      this.itemInfo?.voucher_pic.map(urlitem=>(
-                        <SpImage
-                          src={urlitem}
-                          width="48"
-                          height="48"
-                        />
-                      ))
-                    )
-                  } */}
-                  <SpImage
-                    src={this.itemInfo?.voucher_pic}
-                    width="60"
-                    height="60"
-                  />
+                <el-descriptions-item label='付款银行'>
+                  {this.itemInfo?.pay_account_bank}
                 </el-descriptions-item>
-                <el-descriptions-item label='支付备注'>{this.itemInfo?.transfer_remark}</el-descriptions-item>
+                <el-descriptions-item label='付款卡号'>
+                  {this.itemInfo?.pay_account_no}
+                </el-descriptions-item>
+                <el-descriptions-item label='付款账户名'>
+                  {this.itemInfo?.bank_name}
+                </el-descriptions-item>
+                <el-descriptions-item label='转账金额'>
+                  {(this.itemInfo?.pay_fee / 100).toFixed(2)}
+                </el-descriptions-item>
+                <el-descriptions-item label='交易流水号'>
+                  {this.itemInfo?.pay_sn}
+                </el-descriptions-item>
+                <el-descriptions-item label='支付备注'>
+                  {this.itemInfo?.transfer_remark}
+                </el-descriptions-item>
+                <el-descriptions-item label='凭证图片集合' span={3}>
+                  {Array.isArray(this.itemInfo?.voucher_pic) &&
+                    this.itemInfo?.voucher_pic.length > 0 &&
+                    this.itemInfo?.voucher_pic.map((urlitem) => (
+                      <SpImage
+                        src={urlitem}
+                        width='48'
+                        height='48'
+                        style={{ marginRight: '16px' }}
+                      />
+                    ))}
+                </el-descriptions-item>
               </el-descriptions>
               <div class='modal-header el-descriptions__title'>订单信息</div>
             </div>
@@ -287,15 +323,14 @@ export default {
           key: 'remark',
           type: 'textarea',
           maxlength: 500,
-          required: false,
-
+          required: false
         }
       ]
     }
   },
   computed: {},
   watch: {
-    'addForm.check_status'(val){
+    'addForm.check_status'(val) {
       if (val == '1') {
         this.addFormList[2].required = false
       } else {
@@ -311,61 +346,63 @@ export default {
     beforeSearch(params) {
       const _params = {
         ...params,
-        ...this.params,
-        // ...this.dateTransfer(this.params.create_time),
-        begin_date:this.params.create_time[0],
-        end_date:this.params.create_time[1]
+        ...this.getParams()
       }
       return _params
     },
-    onAddCancel() {
-      this.deliveryman = false
+    getParams() {
+      const _params = {
+        ...this.params,
+        ...this.dateTransfer(this.params.create_time)
+      }
+      delete _params.create_time
+      return _params
     },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
     },
     dateTransfer(val) {
-      let time_start_begin = undefined
-      let time_start_end = undefined
+      let begin_date = undefined
+      let end_date = undefined
       if (val.length > 0) {
-        time_start_begin = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
-        time_start_end = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
+        // begin_date = this.dateStrToTimeStamp(val[0] + ' 00:00:00')
+        // end_date = this.dateStrToTimeStamp(val[1] + ' 23:59:59')
+        begin_date = val[0] + ' 00:00:00'
+        end_date = val[1] + ' 23:59:59'
       }
       return {
-        time_start_begin,
-        time_start_end
+        begin_date,
+        end_date
       }
     },
-    async getItemDetail({id}){
-      const res = await this.$api.trade.getOffLineInfo({id})
+    async getItemDetail({ id }) {
+      const res = await this.$api.trade.getOffLineInfo({ id })
       this.itemInfo = res
       this.addForm = {
         ...this.addForm,
         id,
-        order_id:res?.order_info?.order_id,
-        pay_fee:res?.pay_fee
+        order_id: res?.order_info?.order_id,
+        pay_fee: res?.pay_fee
       }
-      if(this.isLook){
-        this.addForm.check_status = res.check_status+''
+      if (this.isLook) {
+        this.addForm.check_status = res.check_status + ''
         this.addForm.remark = res.remark
-      }else{
+      } else {
         this.addForm.check_status = '1'
         this.addForm.remark = ''
       }
     },
-    getCheckStatusLabel(status){
-      return this.checkStatusOptions.find(item=>item.value == status)?.label
+    getCheckStatusLabel(status) {
+      return this.checkStatusOptions.find((item) => item.value == status)?.label
     },
     async onAddSubmit() {
-
-
       this.confirmStatus = true
 
       let params = {
         ...this.addForm
       }
 
-      console.log('params',params)
+      console.log('params', params)
 
       // return
       try {
@@ -378,57 +415,49 @@ export default {
         this.confirmStatus = false
       }
     },
-    async addDistributoreAction() {
-      const { data } = await this.$picker.shop()
-      let arrObj = [...this.relDistributors, ...data]
-
-      for (let i = 0; i < arrObj.length; i++) {
-        for (let j = i + 1; j < arrObj.length; j++) {
-          if (arrObj[i].distributor_id == arrObj[j].distributor_id) {
-            arrObj.splice(j, 1)
-            j--
-          }
-        }
+    async exportData() {
+      const { status, url, filename } = await this.$api.trade.exportOffline({
+        ...this.getParams()
+      })
+      if (status) {
+        this.$message({
+          type: 'success',
+          message: '已加入执行队列，请在设置-导出列表中下载'
+        })
+        this.$export_open('offline_payment')
+        return
+      } else if (url) {
+        this.downloadUrl = url
+        this.downloadName = filename
+        this.downloadView = true
+      } else {
+        this.$message({
+          type: 'error',
+          message: '无内容可导出 或 执行失败，请检查重试'
+        })
+        return
       }
-      console.log(arrObj, 'tttt')
-
-      this.relDistributors = arrObj
-      this.DistributorStatus = true
-      this.DistributorVisible = true
-    },
-    // DistributorChooseAction(data) {
-    //   console.log(data)
-    //   this.DistributorVisible = false
-    //   if (data === null || data.length <= 0) return
-    //   this.relDistributors = data
-    //   this.oldData = data
-    // },
-    // closeDialogAction() {
-    //   this.DistributorVisible = false
-    //   this.relDistributors = this.oldData
-    //   this.DistributorStatus = false
-    // },
-    DistributoreHandleClose(index) {
-      this.DistributorVisible = false
-      this.relDistributors.splice(index, 1)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.flex-box {
-  display: flex;
-  align-items: center;
-  span {
-    margin-left: 10px;
-  }
-}
+// .flex-box {
+//   display: flex;
+//   align-items: center;
+//   span {
+//     margin-left: 10px;
+//   }
+// }
 .modal-header {
   width: 100%;
   background: #f3f3f3;
   padding-left: 16px;
   box-sizing: border-box;
   color: #000;
+}
+.export-box {
+  margin-top: 16px;
 }
 </style>
 <style>

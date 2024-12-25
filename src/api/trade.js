@@ -636,5 +636,13 @@ export function offlineCheck(params) {
   })
 }
 
+export function exportOffline(params) {
+  return fetch({
+    url: '/order/offline_payment/export_data',
+    method: 'post',
+    params
+  })
+}
+
 
 
