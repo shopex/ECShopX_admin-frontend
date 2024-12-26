@@ -129,6 +129,14 @@ export default {
           { name: '银行账号', key: 'bank_account_no' },
           { name: '开户银行', key: 'bank_name' },
           { name: '银联号', key: 'china_ums_no' },
+          {
+            name: '银行LOGO',
+            width: 100,
+            key: 'pic',
+            render: (h, { row }) => {
+              return <SpImage src={row.pic} width={60} height={60} />
+            }
+          },
           { name: '备注', key: 'remark' },
           {
             name: '是否默认',
@@ -179,7 +187,7 @@ export default {
         bank_account_name: '',
         bank_account_no: '',
         bank_name: '',
-        bank_logo:'',
+        pic:'',
         remark:'',
         china_ums_no: '',
         is_default: null
@@ -219,7 +227,7 @@ export default {
         },
         {
           label: '银行LOGO',
-          key: 'bank_logo',
+          key: 'pic',
           tip: '支持png、jpg、gif、jpeg等格式文件',
           required: true,
           message: '请上传银行LOGO',
@@ -291,7 +299,7 @@ export default {
         bank_account_no: '',
         bank_name: '',
         china_ums_no: '',
-        bank_logo:'',
+        pic:'',
         remark:'',
         is_default: null
       }

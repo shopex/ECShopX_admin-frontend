@@ -83,6 +83,7 @@
 </template>
 <script>
 import moment from 'moment'
+import { PAY_STATUS } from '@/consts'
 
 export default {
   name: '',
@@ -109,6 +110,16 @@ export default {
       downloadUrl: '',
       downloadName: '',
       itemInfo: {},
+      payStatusMap: {
+        SUCCESS: '支付成功',
+        NOTPAY: '未支付',
+        CLOSED: '已关闭',
+        REVOKED: '已撤销',
+        PAYERROR: '支付失败',
+        REFUND_PROCESS: '退款处理中',
+        REFUND_SUCCESS: '退款成功',
+        REFUND_FAIL: '退款失败'
+      },
       checkStatusOptions: [
         {
           value: '0',
@@ -127,6 +138,53 @@ export default {
           label: '已取消'
         }
       ],
+      goodSetting: {
+        columns: [
+          { name: 'SKU编码', key: 'item_bn', width: 110 },
+          { name: '商品名称', key: 'item_name', width: 110 },
+          {
+            name: '单价',
+            key: 'price',
+            width: 110,
+            render: (h, { row }) => {
+              return <span>¥{(row.price / 100).toFixed(2)}</span>
+            }
+          },
+          { name: '数量', key: 'num', width: 100 },
+          {
+            name: '小计（¥）',
+            width: 110,
+            key: 'item_fee',
+            render: (h, { row }) => {
+              return <span>¥{(row.item_fee / 100).toFixed(2)}</span>
+            }
+          },
+          {
+            name: '积分抵扣（¥）',
+            width: 110,
+            key: 'point_fee',
+            render: (h, { row }) => {
+              return <span>¥{(row.point_fee / 100).toFixed(2)}</span>
+            }
+          },
+          {
+            name: '总支付金额（¥）',
+            width: 110,
+            key: 'total_fee',
+            render: (h, { row }) => {
+              return <span>¥{(row.total_fee / 100).toFixed(2)}</span>
+            }
+          },
+          {
+            name: '总优惠（¥）',
+            width: 110,
+            key: 'discount_fee',
+            render: (h, { row }) => {
+              return <span>¥{(row.discount_fee / 100).toFixed(2)}</span>
+            }
+          }
+        ]
+      },
       setting: {
         columns: [
           { name: '收款账户名', key: 'bank_account_name', width: 110 },
@@ -228,6 +286,7 @@ export default {
         pay_fee: 0,
         check_status: '1',
         remark: '',
+        bank_account_name: '',
         bank_account_no: '',
         bank_name: '',
         china_ums_no: ''
@@ -236,36 +295,88 @@ export default {
         {
           component: () => (
             <div>
-              <el-descriptions title='用户信息' column={2}>
+              <el-descriptions title='用户信息' column={3}>
                 <el-descriptions-item label='订单号'>
                   {this.itemInfo?.order_info?.order_id}
                 </el-descriptions-item>
-                <el-descriptions-item label='凭证创建时间'>
+                <el-descriptions-item label='下单时间'>
                   {this.itemInfo?.create_time &&
-                    moment(this.itemInfo?.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                    moment(this.itemInfo?.order_info?.create_time * 1000).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    )}
                 </el-descriptions-item>
-                <el-descriptions-item label='订单金额'>
-                  {(this.itemInfo?.order_info?.total_fee / 100).toFixed(2)}
-                </el-descriptions-item>
-                {/* <el-descriptions-item label='订单状态'>
-                  {this.itemInfo?.order_info?.order_status_msg}
+                <el-descriptions-item label='会员手机号'>
+                  {this.itemInfo?.order_info?.mobile}
                 </el-descriptions-item>
                 <el-descriptions-item label='运费'>
-                  {(this.itemInfo?.order_info?.freight_fee / 100).toFixed(2)}
+                  ¥
+                  {this.itemInfo?.order_info?.freight_fee
+                    ? (this.itemInfo?.order_info?.freight_fee / 100).toFixed(2)
+                    : '0.00'}
                 </el-descriptions-item>
-                <el-descriptions-item label='订单备注'>
-                  {this.itemInfo?.order_info?.remark}
+                <el-descriptions-item label='订单金额'>
+                  {this.itemInfo?.order_info?.order_type != 'bargain'
+                    ? this.itemInfo?.order_info?.item_fee
+                      ? `¥${(this.itemInfo?.order_info?.item_fee / 100).toFixed(2)}`
+                      : '￥0.00'
+                    : this.itemInfo?.order_info?.item_price
+                    ? `¥${(this.itemInfo?.order_info?.item_price / 100).toFixed(2)}`
+                    : '￥0.00'}
                 </el-descriptions-item>
-                <el-descriptions-item label='收货人'>
-                  {this.itemInfo?.order_info?.receiver_name}
+                <el-descriptions-item label='会员优惠'>
+                  ￥
+                  {this.itemInfo?.order_info?.member_discount
+                    ? (this.itemInfo?.order_info?.member_discount / 100).toFixed(2)
+                    : '0.00'}
                 </el-descriptions-item>
-                <el-descriptions-item label='收货地址'>
-                  {this.itemInfo?.order_info?.receiver_state}
-                  {this.itemInfo?.order_info?.receiver_city}
-                  {this.itemInfo?.order_info?.receiver_district}
-                  {this.itemInfo?.order_info?.receiver_address}
-                </el-descriptions-item> */}
+                <el-descriptions-item label='优惠卷减免'>
+                  ￥
+                  {this.itemInfo?.order_info?.coupon_discount
+                    ? (this.itemInfo?.order_info?.coupon_discount / 100).toFixed(2)
+                    : '0.00'}
+                </el-descriptions-item>
+                <el-descriptions-item label='优惠总金额'>
+                  ￥
+                  {this.itemInfo?.order_info?.discount_fee
+                    ? (this.itemInfo?.order_info?.discount_fee / 100).toFixed(2)
+                    : '0.00'}
+                </el-descriptions-item>
+                <el-descriptions-item label='积分抵扣金额'>
+                  ￥
+                  {this.itemInfo?.order_info?.point_fee
+                    ? (this.itemInfo?.order_info?.point_fee / 100).toFixed(2)
+                    : '0.00'}
+                </el-descriptions-item>
+                <el-descriptions-item label='应付总金额'>
+                  {this.itemInfo?.order_info?.total_fee
+                    ? (this.itemInfo?.order_info?.total_fee / 100).toFixed(2)
+                    : '0.00'}
+                </el-descriptions-item>
+                <el-descriptions-item label='实付总金额'>
+                  ￥
+                  {this.itemInfo?.tradeInfo?.payType === 'point'
+                    ? '0.00'
+                    : this.itemInfo?.tradeInfo?.tradeState == 'NOTPAY'
+                    ? '0.00'
+                    : this.itemInfo?.order_info?.total_fee
+                    ? (this.itemInfo?.order_info?.total_fee / 100).toFixed(2)
+                    : '0.00'}
+                </el-descriptions-item>
+                <el-descriptions-item label='支付状态'>
+                  {PAY_STATUS[this.itemInfo?.tradeInfo?.tradeState]}
+                </el-descriptions-item>
               </el-descriptions>
+
+              <div class='good-info-title'>商品信息</div>
+
+              <SpFinder
+                ref='goodfinder'
+                setting={this.goodSetting}
+                data={this.itemInfo?.order_info?.items}
+                show-pager={false}
+                no-selection
+              />
+
               <el-descriptions title='收款账户名' column={2}>
                 <el-descriptions-item label='收款账户名'>
                   {this.itemInfo?.bank_account_name}
@@ -290,11 +401,11 @@ export default {
                 <el-descriptions-item label='付款账户名'>
                   {this.itemInfo?.bank_name}
                 </el-descriptions-item> */}
-                <el-descriptions-item label='转账金额'>
-                  {(this.itemInfo?.pay_fee / 100).toFixed(2)}
-                </el-descriptions-item>
                 <el-descriptions-item label='交易流水号'>
                   {this.itemInfo?.pay_sn}
+                </el-descriptions-item>
+                <el-descriptions-item label='转账金额'>
+                  {(this.itemInfo?.pay_fee / 100).toFixed(2)}
                 </el-descriptions-item>
                 <el-descriptions-item label='支付备注' span={2}>
                   {this.itemInfo?.transfer_remark}
@@ -321,47 +432,34 @@ export default {
           key: 'bank_account_name',
           type: 'select',
           required: true,
+          message: '收款账户名不能为空',
           options: [
             // { title: '可售', value: 1 },
             // { title: '不可售', value: 0 }
           ],
           onChange: (e) => {
-            const targetItem =  this.bankList.find(item=>item.title == e)
+            const targetItem = this.bankList.find((item) => item.title == e)
             this.addForm.bank_account_no = targetItem?.bank_account_no
             this.addForm.bank_name = targetItem?.bank_name
             this.addForm.china_ums_no = targetItem?.china_ums_no
-          },
-          validator: (rule, value, callback) => {
-            console.log(value,typeof value,!!value)
-            if (!value) {
-              callback(new Error('收款账户名不能为空'))
-            } else {
-              callback()
-            }
           }
         },
         {
           label: '收款银行名称',
 
-          component: () => (
-            <span>{this.addForm.bank_account_no}</span>
-          ),
+          component: () => <span>{this.addForm.bank_account_no || '-'}</span>,
           display: 'inline'
         },
         {
           label: '收款银行账号',
           key: 'bank_name',
-          component: () => (
-            <span>{this.addForm.bank_name}</span>
-          ),
+          component: () => <span>{this.addForm.bank_name || '-'}</span>,
           display: 'inline'
         },
         {
           label: '收款银联号',
           key: 'china_ums_no',
-          component: () => (
-            <span>{this.addForm.china_ums_no}</span>
-          ),
+          component: () => <span>{this.addForm.china_ums_no || '-'}</span>,
           display: 'inline'
         },
 
@@ -387,7 +485,7 @@ export default {
           type: 'textarea',
           maxlength: 500,
           required: false,
-          message:'审核备注不能为空'
+          message: '审核备注不能为空'
         }
       ]
     }
@@ -475,8 +573,8 @@ export default {
       }
       this.addForm.bank_account_name = res.bank_account_name
       this.addForm.bank_account_no = res.bank_account_no
-      this.addForm.bank_name= res.bank_name
-      this.addForm.china_ums_no= res.china_ums_no
+      this.addForm.bank_name = res.bank_name
+      this.addForm.china_ums_no = res.china_ums_no
     },
     getCheckStatusLabel(status) {
       return this.checkStatusOptions.find((item) => item.value == status)?.label
@@ -544,6 +642,9 @@ export default {
 }
 .export-box {
   margin-top: 16px;
+}
+.good-info-title {
+  font-weight: 600;
 }
 </style>
 <style>
