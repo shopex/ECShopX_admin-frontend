@@ -65,6 +65,7 @@
       <SpDialog
         ref="addDialogRef"
         v-model="deliveryman"
+        width="900px"
         :isShowFooter="!isLook"
         :confirmStatus="confirmStatus"
         :title="editTitle"
@@ -371,13 +372,14 @@ export default {
 
               <SpFinder
                 ref='goodfinder'
+                class='goodfinder'
                 setting={this.goodSetting}
                 data={this.itemInfo?.order_info?.items}
                 show-pager={false}
                 no-selection
               />
 
-              <el-descriptions title='收款账户名' column={2}>
+              {/* <el-descriptions title='收款账户名' column={2}>
                 <el-descriptions-item label='收款账户名'>
                   {this.itemInfo?.bank_account_name}
                 </el-descriptions-item>
@@ -390,7 +392,7 @@ export default {
                 <el-descriptions-item label='收款银联号'>
                   {this.itemInfo?.china_ums_no}
                 </el-descriptions-item>
-              </el-descriptions>
+              </el-descriptions> */}
               <el-descriptions title='付款账户信息' column={2}>
                 {/* <el-descriptions-item label='付款银行'>
                   {this.itemInfo?.pay_account_bank}
@@ -414,11 +416,10 @@ export default {
                   {Array.isArray(this.itemInfo?.voucher_pic) &&
                     this.itemInfo?.voucher_pic.length > 0 &&
                     this.itemInfo?.voucher_pic.map((urlitem) => (
-                      <SpImage
+                      <ElImage
                         src={urlitem}
-                        width='48'
-                        height='48'
-                        style={{ marginRight: '16px' }}
+                        class='voucher-pic'
+                        previewSrcList={this.itemInfo.voucher_pic}
                       />
                     ))}
                 </el-descriptions-item>
@@ -645,6 +646,14 @@ export default {
 }
 .good-info-title {
   font-weight: 600;
+}
+.goodfinder {
+  margin-bottom: 16px;
+}
+.voucher-pic{
+  width: 90px;
+  height: 90px;
+  margin-right: 16px;
 }
 </style>
 <style>
