@@ -343,7 +343,7 @@
                   class="copy-btn"
                   type="text"
                 >
-                  <input v-model="scope.row.link" class="copy-link" type="text" />复制店铺链接
+                  <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
                 </el-button>
                 <el-button type="text" @click="linkWxpaysettting(scope.row)">
                   微信支付配置
@@ -455,7 +455,7 @@
             </el-tag>
           </div>
         </div>
-        <hr />
+        <hr>
         <div>
           <div class="label">全部标签：</div>
           <el-tag
@@ -888,7 +888,11 @@ export default {
       const { list, total_count, distributor_self, datapass_block } =
         await this.$api.marketing.getDistributorList(params)
       this.tableList = list.map((item) => {
-        item.link = `${process.env.VUE_APP_H5_HOST}/${item.link}`
+        if (this.VERSION_PLATFORM) {
+          item.link = `${process.env.VUE_APP_H5_HOST}/subpages/store/index?id=${item.distributor_id}`
+        } else {
+          item.link = `${process.env.VUE_APP_H5_HOST}/${item.link}`
+        }
         return item
       })
       this.page.total = total_count
