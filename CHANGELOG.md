@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.17.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.16.1...v3.17.0) (2025-02-14)
 
+
+### Features
+
+* 商品统计导出参数order_class区分版本 ([6d99735](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/6d997353cbeb853985faab84a716877586362663))
+
+## [3.17.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.16.1...v3.17.0) (2025-02-14)
+
 ### [3.16.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.16.0...v3.16.1) (2025-01-03)
 
 
