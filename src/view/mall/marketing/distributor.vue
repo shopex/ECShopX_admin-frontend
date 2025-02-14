@@ -888,7 +888,11 @@ export default {
       const { list, total_count, distributor_self, datapass_block } =
         await this.$api.marketing.getDistributorList(params)
       this.tableList = list.map((item) => {
-        item.link = `${process.env.VUE_APP_H5_HOST}/${item.link}`
+        if (this.VERSION_PLATFORM) {
+          item.link = `${process.env.VUE_APP_H5_HOST}/subpages/store/index?id=${item.distributor_id}`
+        } else {
+          item.link = `${process.env.VUE_APP_H5_HOST}/${item.link}`
+        }
         return item
       })
       this.page.total = total_count
@@ -1107,6 +1111,16 @@ export default {
     addDistributorTag() {
       this.tag.currentTags = []
       if (this.distributor_id.length) {
+        let res = []
+        this.tableList.forEach((item) => {
+          this.distributor_id.forEach((n) => {
+            if (item.distributor_id == n) {
+              res = [...res, ...item.tagList]
+            }
+          })
+        })
+        res = Array.from(new Map(res.map((item) => [item.tag_id, item])).values())
+        this.tag.currentTags = res
         this.showTags()
         this.tag.form.distributor_id = this.distributor_id
       } else {

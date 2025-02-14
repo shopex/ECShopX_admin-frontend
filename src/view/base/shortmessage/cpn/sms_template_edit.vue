@@ -34,6 +34,22 @@
           placeholder="长度限1-30个字符"
         />
       </el-form-item>
+
+      <el-form-item label="关联签名" prop="related_sign_name">
+        <el-select
+          v-model="form.related_sign_name"
+          placeholder="请选择"
+          style="width: 400px"
+          :disabled="disabled"
+        >
+          <el-option
+            v-for="item in signNameList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="模板内容" prop="template_content">
         <nav>
           <span
@@ -145,18 +161,20 @@ export default {
       pickerImgType: '',
       // result
       resultVisible: false,
-
+      signNameList: [],
       //
       form: {
         template_type: '',
         scene_id: '',
         template_name: '',
+        related_sign_name:'',
         template_content: '',
         remark: ''
       },
       rules: {
         template_type: [requiredRules('短信类型', 'change')],
         scene_id: [requiredRules('短信场景'), 'change'],
+        related_sign_name: [requiredRules('关联签名'), 'change'],
         template_name: [requiredRules('模板名称')],
         template_content: [requiredRules('模板内容'), MaxRules(500), MinRules(1)],
         remark: [requiredRules('申请说明'), MaxRules(200)]
@@ -202,6 +220,13 @@ export default {
       const { type, id } = this.$route.query
       console.log(type, id)
 
+      const { list, total_count } = await this.$api.sms.getSmsSignatureList({
+        status: '1',
+        page:1,
+        pageSize:500
+      })
+      this.signNameList = list.map(item=>({label:item.sign_name,value:item.sign_name}))
+
       if (type) {
         const result = await SmsTemplateDetail({ id })
         this.resultHandler(result)
@@ -212,14 +237,15 @@ export default {
     },
     resultHandler(result) {
       console.log(result)
-      const { template_type, scene_id, template_name, template_content, remark } = result.data.data
+      const { template_type, scene_id, template_name, template_content, remark,related_sign_name } = result.data.data
       console.log(template_content)
       this.form = {
         template_type,
         scene_id: scene_id + '',
         template_name,
         template_content,
-        remark
+        remark,
+        related_sign_name
       }
 
       console.log(this.form)

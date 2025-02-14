@@ -506,7 +506,7 @@ $txt-placeholder: #f5f5f7;
 <template>
   <transition name="el-fade-in-linear" mode="out-in">
     <div>
-      <SpPlatformTip h5 app alipay />
+      <!-- <SpPlatformTip h5 app alipay /> -->
       <!-- <el-switch
         v-model="customClassification"
         @change="switchChange"
@@ -951,9 +951,9 @@ $txt-placeholder: #f5f5f7;
           </div>
         </div>
       </section>
-      <section class="content-padded-s section-white content-center">
+      <!-- <section class="content-padded-s section-white content-center">
         <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
-      </section>
+      </section> -->
       <!-- 分类选择器弹窗 -->
       <el-dialog title="绑定分类" :visible.sync="categoryDialog" :before-close="hideCategory">
         <el-form>
@@ -1558,6 +1558,8 @@ export default {
         this.series[this.curTabIndex].content = this.editableData
         this.form.data = this.series
       }
+      this.form.addCar= true
+      this.form.classify= false
       console.log(this.form, 'kkkkkkkkkkkkkkkkkkkkkkkkkk')
       let param = {
         template_name: this.template_name,

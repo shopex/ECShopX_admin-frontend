@@ -50,6 +50,18 @@
           {{ aftersalesInfo.refund_point }}
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="3" class="col-3 content-right"> 是否退运费: </el-col>
+        <el-col :span="20">
+          {{ aftersalesInfo.freight>0 ? '是' : '否' }}
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="3" class="col-3 content-right"> 退款运费: </el-col>
+        <el-col :span="20">
+          ￥{{ aftersalesInfo.freight >0 ? aftersalesInfo.freight / 100 : '0' }}
+        </el-col>
+      </el-row>
       <el-row v-if="IS_SUPPLIER()">
         <el-col :span="3" class="col-3 content-right"> 申请门店: </el-col>
         <el-col :span="20">
@@ -380,6 +392,12 @@
                   <el-input v-model="refund_point" type="number" min="0" :max="orderInfo.point" />
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :span="3" class="col-3 content-right"> 退款运费: </el-col>
+                <el-col :span="8">
+                  <el-input v-model="freight" type="number" min="0" :max="orderInfo.freight_fee / 100" />
+                </el-col>
+              </el-row>
             </template>
             <el-row v-if="this.check_refund == '0'">
               <el-col :span="2" class="col-3 agreen-right"> 拒绝原因: </el-col>
@@ -450,6 +468,17 @@
                   type="number"
                   min="0"
                   :max="aftersalesInfo.refund_point"
+                />
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="3" class="col-3 content-right"> 退款运费: </el-col>
+              <el-col :span="8">
+                <el-input
+                  v-model="freight"
+                  type="number"
+                  min="0"
+                  :max="aftersalesInfo.freight"
                 />
               </el-col>
             </el-row>
@@ -773,6 +802,7 @@ export default {
       refuse_reason: '',
       refund_fee: 0,
       refund_point: 0,
+      freight:0,
       corp_code: '', // 物流公司
       logi_no: '', // 快递单号
       reviewData: {},
@@ -841,6 +871,7 @@ export default {
         // this.tradeInfo = data.tradeInfo
         this.refund_fee = data.refund_fee / 100
         this.refund_point = data.refund_point
+        this.freight = data.freight / 100
         // this.refund_point = this.orderInfo.items[0].point
         // if(data.refundInfo) {
         //   this.refundInfo = data.refundInfo
@@ -898,6 +929,7 @@ export default {
         this.reviewData.refund_fee = accMul(this.refund_fee, 100)
         //parseInt(this.refund_fee * 100)
         this.reviewData.refund_point = this.refund_point
+        this.reviewData.freight = accMul(this.freight, 100)
         //售后地址
         console.log(this.aftersalesInfo.aftersales_type)
         if (
@@ -921,7 +953,6 @@ export default {
       setTimeout(() => {
         this.submitDisabled = false
       }, 1000)
-
       reviewAftersales(this.reviewData).then((response) => {
         if (response.data.data) {
           this.$message({
@@ -958,6 +989,7 @@ export default {
       this.refundData.refunds_memo = this.refuse_reason
       this.refundData.refund_fee = accMul(this.refund_fee, 100)
       this.refundData.refund_point = this.refund_point
+      this.refundData.freight = accMul(this.freight, 100)
       if (this.refundData.check_refund == '0' && !this.refundData.refunds_memo) {
         this.$message.error('拒绝原因必填！')
         return false
