@@ -206,6 +206,53 @@ export default {
           }
         },
         {
+          label: '是否为医药行业',
+          key: 'dianwu_show_status',
+          type: 'switch',
+          tip: '用于开启医药行业商品与处方药业务',
+          // isShow: !VERSION_IN_PURCHASE,
+          onChange: async (e) => {
+            const { dianwu_show_status } = this.form
+            await this.$api.company.setDianwuShowStatus({
+              dianwu_show_status
+            })
+          }
+        },
+        {
+          label: '是否继承第三方处方系统',
+          key: 'dianwu_show_status',
+          type: 'switch',
+          // isShow: !VERSION_IN_PURCHASE,
+          onChange: async (e) => {
+            const { dianwu_show_status } = this.form
+            await this.$api.company.setDianwuShowStatus({
+              dianwu_show_status
+            })
+          }
+        },
+        {
+          label: '',
+          key: 'dianwu_show_status',
+          type: 'radio',
+          options: [
+            {
+              label: 'part_time',
+              name: '580处方业务集成'
+            },
+            {
+              label: 'full_time',
+              name: '全职'
+            }
+          ],
+          // isShow: !VERSION_IN_PURCHASE,
+          onChange: async (e) => {
+            const { dianwu_show_status } = this.form
+            await this.$api.company.setDianwuShowStatus({
+              dianwu_show_status
+            })
+          }
+        },
+        {
           label: '商品价格展示',
           type: 'group'
         },

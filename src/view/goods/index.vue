@@ -293,6 +293,113 @@ export default {
           type: 'input',
           display: 'inline'
         },
+        // 处方药
+        {
+          label: '处方药',
+          key: 'brandId',
+          type: 'radio',
+          options: [
+            {
+              label: 'order',
+              name: '实物商品'
+            },
+            {
+              label: 'amount',
+              name: '医药商品'
+            }
+          ],
+          required: true,
+          message: '请选择处方药'
+        },
+        {
+          label: '药品分类',
+          key: 'templatesId',
+          type: 'select',
+          options: [],
+          required: true,
+          message: '请选择药品分类',
+          display: 'inline'
+        },
+        {
+          label: '第三方药品编码',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          message: '请输入第三方药品编码',
+          display: 'inline'
+        },
+        {
+          label: '生产厂家',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          message: '请输入第三方药品编码',
+          display: 'inline'
+        },
+        {
+          label: '通用别名',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          message: '请输入通用别名',
+          display: 'inline'
+        },
+        {
+          label: '特殊通用名',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          display: 'inline'
+        },
+        {
+          label: '批准文号',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          message: '请输入批准文号',
+          display: 'inline'
+        },
+        {
+          label: '最小售卖单位',
+          key: 'templatesId',
+          type: 'input',
+          required: true,
+          message: '请输入第三方药品编码',
+          display: 'inline'
+        },
+        {
+          label: '包装规格',
+          key: 'templatesId',
+          type: 'input',
+          display: 'inline'
+        },
+        {
+          label: '剂型',
+          key: 'templatesId',
+          type: 'input',
+          display: 'inline'
+        },
+        {
+          label: '是否处方药',
+          key: 'isGift',
+          type: 'switch',
+          tip: '开启后前端走处方药下单流程'
+        },
+        {
+          label: '处方药用药提示',
+          key: 'isGift',
+          type: 'input',
+          required: true,
+          message: '请输入处方药用药提示',
+        },
+        {
+          label: '处方药品症状',
+          key: 'isGift',
+          type: 'input',
+          required: true,
+          message: '请输入处方药品症状',
+        },
+
         // {
         //   label: '申请售后',
         //   key: 'aftersales_end_date',
