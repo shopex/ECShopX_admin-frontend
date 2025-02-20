@@ -53,6 +53,12 @@
           />
         </el-select>
       </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="distributor_id"
+        label="来源店铺:"
+      >
+        <SpSelectShop v-model="queryForm.distributor_id" clearable placeholder="请选择" />
+      </SpFilterFormItem>
     </SpFilterForm>
 
     <el-tabs
@@ -96,7 +102,8 @@ export default {
         display_time_begin: '',
         datetime: [],
         enterprise_id: [],
-        activityState: 'all'
+        activityState: 'all',
+        distributor_id:''
       },
       defaultTime: ['00:00:00', '23:59:59'],
       pickerOptions: PICKER_DATE_OPTIONS,
@@ -118,6 +125,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
+              // 平台端 来源店铺非平台则隐藏
               return row.status != 'cancel' && row.status != 'over'
             },
             action: {
@@ -227,6 +235,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
+              // 平台端 来源店铺非平台则隐藏
               return row.status == 'ongoing'
             },
             action: {
@@ -243,6 +252,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             visible: (row) => {
+              // 平台端 来源店铺非平台则隐藏
               return row.status == 'warm_up' || row.status == 'pending' || row.status == 'ongoing'
             },
             action: {
@@ -281,6 +291,10 @@ export default {
             }
           },
           {
+            name: '来源店铺',
+            key: 'distributor_name'
+          },
+          {
             name: '购买时间',
             key: 'employee_end_time',
             width: '320',
@@ -310,11 +324,13 @@ export default {
         display_time_begin,
         datetime: [buy_time_begin, buy_time_end],
         enterprise_id,
+        distributor_id,
         activityState
       } = this.queryForm
       params = {
         ...params,
         enterprise_id,
+        distributor_id,
         name
       }
       if (display_time_begin) {

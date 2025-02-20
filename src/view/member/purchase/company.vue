@@ -42,6 +42,12 @@
           />
         </el-select>
       </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="distributor_id"
+        label="来源店铺:"
+      >
+        <SpSelectShop v-model="queryForm.distributor_id" clearable placeholder="请选择" />
+      </SpFilterFormItem>
     </SpFilterForm>
 
     <SpFinder
@@ -92,6 +98,7 @@
     />
 
     <canvas id="qurcodeCanvas" class="qurcode-canvas" />
+
   </div>
 </template>
 
@@ -121,7 +128,8 @@ export default {
       queryForm: {
         name: '',
         enterprise_sn: '',
-        auth_type: ''
+        auth_type: '',
+        distributor_id:''
       },
       sendEmailDialog:false,
       sendEmaiLoading:false,
@@ -190,6 +198,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             // visible: (row) => {
+            //  auth_type == 'qrcode' && 平台端 来源店铺非平台则隐藏
             //   return row.auth_type == 'qrcode'
             // },
             action: {
@@ -200,6 +209,20 @@ export default {
                 this.qrcodeUrl = base64Image
                 this.qrcodeName = row.name
                 this.qrDialog = true
+              }
+            }
+          },
+          {
+            name: '查看员工列表',
+            key: 'modify',
+            type: 'button',
+            buttonType: 'text',
+            // visible: (row) => {
+            //   return row.auth_type == 'qrcode'
+            // },
+            action: {
+              handler: async ([row]) => {
+
               }
             }
           },
@@ -280,7 +303,11 @@ export default {
                   }
                 }
               })
-          }
+          },
+          {
+            name: '来源店铺',
+            key: 'distributor_name'
+          },
         ]
       }),
       validateTypeList: VALIDATE_TYPES,

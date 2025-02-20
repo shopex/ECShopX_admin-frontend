@@ -88,6 +88,7 @@
       </SpFilterForm>
 
       <div class="action-container">
+        <!-- 平台端 来源店铺非平台则隐藏 -->
         <el-button type="primary" plain @click="handleImport"> 导入商品 </el-button>
         <el-button type="primary" plain @click="onSelectGoods"> 选择商品 </el-button>
         <el-button type="primary" plain @click="handlePatchAction"> 批量设置 </el-button>
@@ -311,6 +312,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="120px">
           <template slot-scope="scope">
+            <!-- 平台端 来源店铺非平台则隐藏 -->
             <el-button type="text" @click="removeActivityItem(scope.row)">移除</el-button>
           </template>
         </el-table-column>

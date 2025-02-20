@@ -8,6 +8,9 @@
       <el-button type="primary" icon="iconfont icon-daorucaozuo-01" @click="handleImportEmployee">
         导入员工
       </el-button>
+      <el-button type="primary" plain @click="handleExport">
+        导出
+      </el-button>
     </div>
 
     <SpFilterForm :model="queryForm" @onSearch="onSearch" @onReset="onSearch">
@@ -37,6 +40,12 @@
             :value="item.id"
           />
         </el-select>
+      </SpFilterFormItem>
+      <SpFilterFormItem
+        prop="distributor_id"
+        label="来源店铺:"
+      >
+        <SpSelectShop v-model="queryForm.distributor_id" clearable placeholder="请选择" />
       </SpFilterFormItem>
     </SpFilterForm>
 
@@ -75,6 +84,7 @@ export default {
         account: '',
         email: '',
         member_mobile: '',
+        distributor_id:'',
         enterprise_id: []
       },
       enterpriseList: [],
@@ -85,6 +95,10 @@ export default {
             key: 'edit',
             type: 'button',
             buttonType: 'text',
+            visible: (row) => {
+              //平台：来源店铺是非平台则隐藏
+              return 1
+            },
             action: {
               handler: async ([row]) => {
                 Object.keys(this.employeeForm).forEach((key) => (this.employeeForm[key] = row[key]))
@@ -97,6 +111,10 @@ export default {
             key: 'delete',
             type: 'button',
             buttonType: 'text',
+             //平台：来源店铺是非平台则隐藏
+            visible: (row) => {
+              return 1
+            },
             action: {
               handler: async ([row]) => {
                 await this.$confirm(`确认是否删除？`, '提示', {
@@ -116,6 +134,11 @@ export default {
             key: 'name'
           },
           {
+            name: '登录类型',
+            key: 'name',
+            visible:true
+          },
+          {
             name: '账号',
             key: 'account'
           },
@@ -126,6 +149,10 @@ export default {
           {
             name: '邮箱',
             key: 'email'
+          },
+          {
+            name: '来源店铺',
+            key: 'distributor_name'
           },
           {
             name: '企业ID',
@@ -290,6 +317,33 @@ export default {
     },
     onSearch() {
       this.$refs['finder'].refresh()
+    },
+    async handleExport(){
+      let params = {
+        page: 1,
+        pageSize: 20,
+        type: 'delivery_staffdata',
+        ...this.queryForm
+      }
+      let response = await this.$api.trade.datacubeDeliverystaffdataExport(params)
+      if (response.status) {
+        this.$message({
+          type: 'success',
+          message: '已加入执行队列，请在设置-导出列表中下载'
+        })
+        this.$export_open(params.type)
+        return
+      } else if (response.url) {
+        this.downloadUrl = response.url
+        this.downloadName = response.filename
+        this.downloadView = true
+      } else {
+        this.$message({
+          type: 'error',
+          message: '无内容可导出 或 执行失败，请检查重试'
+        })
+        return
+      }
     },
     handleImportEmployee() {
       this.$router.push({ path: '/member/purchase/employee/import' })

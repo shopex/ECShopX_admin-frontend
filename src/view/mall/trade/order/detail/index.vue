@@ -472,6 +472,7 @@ export default {
         { label: '角色:', field: 'role', is_show: true },
         { label: '员工姓名:', field: 'name', is_show: true },
         { label: '员工所属企业:', field: 'memberGrade', is_show: true },
+        { label: '来源店铺:', field: 'memberGrade', is_show: true },
       ],
       payList: [
         { label: '交易单号:', field: 'tradeId', is_show: true },
