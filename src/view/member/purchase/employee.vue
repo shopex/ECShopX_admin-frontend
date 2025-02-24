@@ -135,7 +135,7 @@ export default {
           },
           {
             name: '登录类型',
-            key: 'name',
+            key: 'auth_type',
             visible:true
           },
           {
@@ -322,16 +322,15 @@ export default {
       let params = {
         page: 1,
         pageSize: 20,
-        type: 'delivery_staffdata',
         ...this.queryForm
       }
-      let response = await this.$api.trade.datacubeDeliverystaffdataExport(params)
+      let response = await this.$api.member.exportEmployees(params)
       if (response.status) {
         this.$message({
           type: 'success',
           message: '已加入执行队列，请在设置-导出列表中下载'
         })
-        this.$export_open(params.type)
+        this.$export_open('employee_purchase_employees')
         return
       } else if (response.url) {
         this.downloadUrl = response.url
@@ -364,10 +363,15 @@ export default {
       this.$refs['finder'].refresh()
     },
     async getCompanyList({ page, pageSize }) {
-      const { list, total_count } = await this.$api.member.getPurchaseCompanyList({
+      const params = {
         page,
-        pageSize
-      })
+        pageSize,
+        is_employee_check_enabled:'true'
+      }
+      if(this.IS_ADMIN()){
+        params.distributor_id = 0
+      }
+      const { list, total_count } = await this.$api.member.getPurchaseCompanyList(params)
       this.pages.setTotal(total_count)
       this.companyList = this.companyList.concat(list)
     },

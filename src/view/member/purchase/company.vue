@@ -197,10 +197,10 @@ export default {
             key: 'modify',
             type: 'button',
             buttonType: 'text',
-            // visible: (row) => {
-            //  auth_type == 'qrcode' && 平台端 来源店铺非平台则隐藏
-            //   return row.auth_type == 'qrcode'
-            // },
+            visible: (row) => {
+            //  auth_type == 'qr_code' && 平台端 来源店铺非平台则隐藏
+              return row.auth_type == 'qr_code'
+            },
             action: {
               handler: async ([row]) => {
                 const { base64Image } = await this.$api.member.getEnterpriseQrcode({
@@ -218,7 +218,7 @@ export default {
             type: 'button',
             buttonType: 'text',
             // visible: (row) => {
-            //   return row.auth_type == 'qrcode'
+            //   return row.auth_type == 'qr_code'
             // },
             action: {
               handler: async ([row]) => {
@@ -279,7 +279,7 @@ export default {
             name: '登录类型',
             key: 'auth_type',
             formatter: (value, { auth_type }, col) => {
-              const authType = VALIDATE_TYPES.find((item) => item.value == auth_type).name
+              const authType = VALIDATE_TYPES.find((item) => item.value == auth_type)?.name
               return authType
             }
           },
@@ -323,7 +323,10 @@ export default {
         relay_host: '',
         smtp_port: '',
         email_user: '',
-        email_password: ''
+        email_password: '',
+        email_suffix:'',
+        is_employee_check_enabled:false,
+        qr_code_bg_image:''
       },
       companyFormList: [
         {
@@ -362,7 +365,7 @@ export default {
             { label: 'mobile', name: '手机号' },
             { label: 'account', name: '账号' },
             { label: 'email', name: '邮箱' },
-            { label: 'qrcode', name: '二维码' }
+            { label: 'qr_code', name: '二维码' }
           ],
           validator: (rule, value, callback) => {
             if (value) {
@@ -406,19 +409,25 @@ export default {
         },
         {
           label: '员工收件邮箱后缀',
-          key: 'smtp_port',
+          key: 'email_suffix',
           type: 'input',
           placeholder: '请输入员工收件邮箱后缀',
           isShow,
           validator
         },
         {
+          label: '是否验证白名单',
+          key: 'is_employee_check_enabled',
+          type: 'switch',
+          isShow:()=>this.companyForm.auth_type == 'qr_code'
+        },
+        {
           label: '企业二维码海报',
-          key: 'logo',
-          component: () => <SpImagePicker v-model={this.companyForm.logo} />,
-          isShow:()=>this.companyForm.auth_type == 'qrcode',
+          key: 'qr_code_bg_image',
+          component: () => <SpImagePicker v-model={this.companyForm.qr_code_bg_image} />,
+          isShow:()=>this.companyForm.auth_type == 'qr_code',
           validator: (rule, value, callback) => {
-            if (value || this.companyForm.auth_type == 'qrcode') {
+            if (value || this.companyForm.auth_type != 'qr_code') {
               callback()
             } else {
               callback('请选择企业')
@@ -572,6 +581,9 @@ export default {
         relay_host,
         smtp_port,
         email_password,
+        email_suffix,
+        is_employee_check_enabled,
+        qr_code_bg_image,
         sort
       } = this.companyForm
       const params = {
@@ -583,6 +595,9 @@ export default {
         smtp_port,
         email_user,
         email_password,
+        email_suffix,
+        is_employee_check_enabled,
+        qr_code_bg_image,
         sort
       }
       if (id) {

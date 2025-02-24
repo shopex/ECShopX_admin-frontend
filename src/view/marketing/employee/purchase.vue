@@ -155,7 +155,7 @@ export default {
   data() {
 
     const activePriceList = [
-        { name: '销售价', label: 'price',disabled:true },
+        { name: '销售价', label: 'sale_price',disabled:true },
         { name: '市场价', label: 'market_price' },
         { name: '活动价/到手价', label: 'activity_price' }
       ]
@@ -262,7 +262,11 @@ export default {
           shareLimit: ''
         },
         orderMiniAmount: '',
-        modifyReceiveAddress: ''
+        modifyReceiveAddress: '',
+        items_page:['sale_price','activity_price'],
+        cart_page:['sale_price','activity_price'],
+        order_detail_page:['sale_price','activity_price'],
+        checkout_page:['sale_price','activity_price']
       },
 
       activityRuleList: [
@@ -488,25 +492,25 @@ export default {
         },
         {
           label: '商品列表/商详页面',
-          key: 'modifyReceiveAddress',
+          key: 'items_page',
           type: 'checkbox',
           options: activePriceList
         },
         {
           label: '购物车',
-          key: 'modifyReceiveAddress',
+          key: 'cart_page',
           type: 'checkbox',
           options: activePriceList
         },
         {
           label: '订单详情',
-          key: 'modifyReceiveAddress',
+          key: 'order_detail_page',
           type: 'checkbox',
           options: activePriceList
         },
         {
           label: '结算页',
-          key: 'modifyReceiveAddress',
+          key: 'checkout_page',
           type: 'checkbox',
           options: activePriceList
         },
@@ -577,6 +581,12 @@ export default {
         enterprise_id: res.enterprise_id
       })
 
+      // res.price_display_config = {"cart_page": {"sale_price": "true", "market_price": "false", "activity_price": "false"}, "items_page": {"sale_price": "true", "market_price": "true", "activity_price": "false"}, "checkout_page": {"sale_price": "true", "market_price": "false", "activity_price": "false"}, "order_detail_page": {"sale_price": "true", "market_price": "false", "activity_price": "true"}}
+      //价格展示处理
+      const priceData = this.priceShowData(res.price_display_config,'detail')
+
+      console.log('priceData',priceData)
+
       this.activityRule = {
         companyList: list,
         preheatTime: res.display_time * 1000,
@@ -595,7 +605,9 @@ export default {
           shareLimit: res.relative_limitfee / 100
         },
         orderMiniAmount: res.minimum_amount / 100,
-        modifyReceiveAddress: res.close_modify_hours_after_activity
+        modifyReceiveAddress: res.close_modify_hours_after_activity,
+        ...priceData
+
       }
       this.onRadioChange(res.if_share_limitfee ? '2' : '1')
     },
@@ -615,6 +627,37 @@ export default {
     },
     closeCompany(index) {
       this.activityRule.companyList.splice(index, 1)
+    },
+    priceShowData(form,isDetail){
+      //接口需要
+      // cart_page: {sale_price: "true", market_price: "false", activity_price: "false"},
+      // items_page: {sale_price: "true", market_price: "false", activity_price: "false"},
+      // checkout_page: {sale_price: "true", market_price: "false", activity_price: "false"},
+      // order_detail_page: {sale_price: "true", market_price: "false", activity_price: "false"}
+
+      let keys= ['items_page','cart_page','order_detail_page','checkout_page']
+      let prices = ['sale_price','market_price','activity_price']
+      if(isDetail){
+        //编辑获取详情数据处理
+        return keys.reduce((prev,cur)=>{
+          let _arr = []
+          prices.forEach(item=>{
+            _arr = Object.keys(form[cur]).filter(item2=>form[cur][item2] == 'true')
+            console.log(Object.keys(form[cur]));
+
+          })
+          prev[cur] = _arr
+          return prev
+        },{})
+      }
+      return keys.reduce((prev,cur)=>{
+        let _obj = {}
+        prices.forEach(item=>{
+          _obj[item] = form[cur].includes(item) + ''
+        })
+        prev[cur] = _obj
+        return prev
+      },{})
     },
     async onSubmitForm() {
       await this.$refs['formBase'].handleSubmit()
@@ -650,7 +693,8 @@ export default {
         if_share_limitfee: type == '2',
         relative_limitfee: shareLimit * 100,
         minimum_amount: orderMiniAmount * 100,
-        close_modify_hours_after_activity: modifyReceiveAddress
+        close_modify_hours_after_activity: modifyReceiveAddress,
+        price_display_config:this.priceShowData(this.activityRule)
       }
       if (relativesDateTime[0]) {
         params = {
