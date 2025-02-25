@@ -113,6 +113,7 @@
       :data="finderData"
       :url="finderUrl"
       @selection-change="onSelectionChange"
+       row-actions-fixed-align='left'
     />
 
     <!-- 商品sku配置 -->
