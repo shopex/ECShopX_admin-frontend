@@ -66,10 +66,23 @@ export default {
   },
   methods: {
     async handleSelectGoods(items, index) {
-      const ids = items.map((item) => item.goodsId)
-      const { data } = await this.$picker.goods({
-        data: ids,
-        multiple: true
+      let list = items
+      .filter(item => item.goodsId)
+      .map(item => ({
+        item_id: item.goodsId,
+        pics: [item.imgUrl],
+        itemName: item.title,
+        itemId: item.goodsId,
+        brand_logo: item.brand,
+        price: item.price,
+        market_price: item.market_price,
+        distributor_id: item.distributor_id,
+        item_en_name: item.itemEnName,
+        promotion_activity: item.promotionActivity
+      }))
+      const { data } = await this.$picker.goodsitem({
+        data: list,
+        multiple: true,
       })
       let values = []
       data &&
