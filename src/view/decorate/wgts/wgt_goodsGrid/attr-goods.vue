@@ -49,10 +49,25 @@ export default {
   },
   methods: {
     async handleClickAdd() {
-      const ids = this.value.map(({ goodsId }) => goodsId)
-      const { data } = await this.$picker.goods({
-        data: ids
+      const list =this.value.map(item=>{
+        return {
+          item_id:item.goodsId,
+          pics:[item.imgUrl],
+          itemName:item.title,
+          itemId:item.goodsId,
+          brand_logo:item.brand,
+          price:item.price,
+          market_price:item.market_price,
+          distributor_id:item.distributor_id,
+          item_en_name:item.itemEnName,
+          promotion_activity:item.promotionActivity
+        }
       })
+      console.log(list,'ids')
+      const { data } = await this.$picker.pagesitem({
+        data:list
+      })
+      console.log(data)
       const values = []
       data.forEach((item) => {
         if (item.itemId) {
