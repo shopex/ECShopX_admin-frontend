@@ -127,13 +127,8 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem prop="regions_id" label="商品产地:">
-          <el-cascader
-            v-model="searchParams.regions_id"
-            placeholder="请选择"
-            clearable
-            :options="regions"
-          />
+        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
         <!--        <SpFilterFormItem prop="regions_id" label="商品产地:">-->
         <!--          <el-cascader-->
@@ -164,8 +159,13 @@
           />
         </SpFilterFormItem>
 
-        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
-          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
+        <SpFilterFormItem prop="regions_id" label="商品产地:">
+          <el-cascader
+            v-model="searchParams.regions_id"
+            placeholder="请选择"
+            clearable
+            :options="regions"
+          />
         </SpFilterFormItem>
         <SpFilterFormItem prop="supplier_name" label="所属供应商:">
           <el-input v-model="searchParams.supplier_name" placeholder="请输入所属供应商" />
