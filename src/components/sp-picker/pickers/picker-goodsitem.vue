@@ -94,7 +94,7 @@
             'max-height': 416,
             'header-cell-class-name': cellClass
         }" 
-            :url="IS_DISTRIBUTOR()||VERSION_STANDARD ? 'distributor/items' : '/goods/items'"
+            :url="url"
             :show-pager-text="`已选中：${localSelection.length}`"
             :fixed-row-action="true" 
             :setting="{
@@ -202,6 +202,11 @@ export default {
             categoryList: [],
             multiple: this.value?.multiple ?? true,
             localSelection: []
+        }
+    },
+    computed:{
+        url(){
+            return this.IS_DISTRIBUTOR()||(this.VERSION_STANDARD&&this.formData.distributor_id)? 'distributor/items' : '/goods/items'
         }
     },
     created() {
