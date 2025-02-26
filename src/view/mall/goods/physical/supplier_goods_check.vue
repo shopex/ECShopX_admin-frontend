@@ -153,6 +153,7 @@
         :hooks="{
           beforeSearch: beforeSearch
         }"
+        row-actions-fixed-align="left"
         @selection-change="onSelectionChange"
       />
 
