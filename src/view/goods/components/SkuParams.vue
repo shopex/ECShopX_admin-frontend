@@ -95,6 +95,7 @@
               :key="item.value"
               :label="item.title"
               size="mini"
+              :disabled="statusDisabled(item)"
               :value="item.value"
             />
           </el-select>
@@ -216,6 +217,7 @@
               :key="item.value"
               :label="item.title"
               :value="item.value"
+              :disabled="statusDisabled(item)"
               size="mini"
             />
           </el-select>
@@ -390,6 +392,12 @@ export default {
         result = []
       }
       return result
+    },
+    statusDisabled({value}){
+      if(this.medicinePrescription && value == 'instock' || !this.medicinePrescription){
+        return false
+      }
+      return true
     },
     onSkuChange({ spec_images, spec_items }) {
       this.getSkuItemImages(spec_images)

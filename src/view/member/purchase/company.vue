@@ -69,6 +69,7 @@
       :modal="false"
       :form="companyForm"
       :form-list="companyFormList"
+      :confirmStatus="addDialogLoading"
       @onSubmit="onCompanyFormSubmit"
     />
 
@@ -197,9 +198,9 @@ export default {
             key: 'modify',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => {
-              return row.auth_type == 'qr_code'
-            },
+            // visible: (row) => {
+            //   return row.auth_type == 'qr_code'
+            // },
             action: {
               handler: async ([row]) => {
                 const { base64Image } = await this.$api.member.getEnterpriseQrcode({
@@ -316,6 +317,7 @@ export default {
       validateTypeList: VALIDATE_TYPES,
       addDialog: false,
       qrDialog: false,
+      addDialogLoading:false,
       companyForm: {
         id: '',
         logo: '',
@@ -622,14 +624,20 @@ export default {
         qr_code_bg_image,
         sort
       }
-      if (id) {
-        await this.$api.member.updatePurchaseCompany(id, params)
-      } else {
-        await this.$api.member.postPurchaseCompany(params)
-      }
+      this.addDialogLoading = true
 
-      this.addDialog = false
-      this.onSearch()
+      try {
+        if (id) {
+          await this.$api.member.updatePurchaseCompany(id, params)
+        } else {
+          await this.$api.member.postPurchaseCompany(params)
+        }
+        this.addDialog = false
+        this.addDialogLoading = false
+        this.onSearch()
+      } catch (error) {
+        this.addDialogLoading = false
+      }
     }
   }
 }

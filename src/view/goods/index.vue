@@ -308,10 +308,10 @@ export default {
         },
         // 处方药
         {
-          label: '处方药',
+          label: '商品类型',
           key: 'is_medicine',
           type: 'radio',
-          disabled:()=> !this.is_pharma_industry,
+          disabled:()=> !this.is_pharma_industry || this.$route.params.itemId,
           options: [
             {
               label: '0',
@@ -432,7 +432,8 @@ export default {
         {
           label: '是否处方药',
           key: 'is_prescription',
-          isShow:()=> this.form.is_medicine == '1',
+          isShow:()=> this.form.is_medicine == '1' ,
+          disabled:()=> this.$route.params.itemId,
           type: 'radio',
           options: [
             { label: '1', name: '是' },
@@ -1072,8 +1073,8 @@ export default {
 
       //处方药
       this.form.is_medicine = is_medicine + ''
-      if(Object.keys(medicine_data).length){
-        this.form.medicine_type = medicine_type
+      if(Object.keys(medicine_data || {}).length){
+        this.form.medicine_type = medicine_type + ''
         this.form.manufacturer = manufacturer
         this.form.common_name = common_name
         this.form.special_common_name = special_common_name

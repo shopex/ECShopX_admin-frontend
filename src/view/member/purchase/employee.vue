@@ -67,6 +67,7 @@
       :modal="false"
       :form="employeeForm"
       :form-list="employeeFormList"
+      :confirmStatus="addDialogLoading"
       @onSubmit="onEmployeeFormSubmit"
     />
   </SpRouterView>
@@ -179,6 +180,7 @@ export default {
       }),
       addDialog: false,
       companyList: [],
+      addDialogLoading:false,
       employeeForm: {
         id: '',
         enterprise_id: '',
@@ -363,14 +365,21 @@ export default {
     },
     async onEmployeeFormSubmit() {
       let params = JSON.parse(JSON.stringify(this.employeeForm))
-      if (params.id) {
-        await this.$api.member.updateEmployee(params.id, params)
-      } else {
-        // delete params.id
-        await this.$api.member.addEmployee(params)
+      this.addDialogLoading = true
+      try {
+        if (params.id) {
+          await this.$api.member.updateEmployee(params.id, params)
+        } else {
+          // delete params.id
+          await this.$api.member.addEmployee(params)
+        }
+        this.addDialog = false
+        this.addDialogLoading = false
+        this.$refs['finder'].refresh()
+      } catch (error) {
+        this.addDialogLoading = false
       }
-      this.addDialog = false
-      this.$refs['finder'].refresh()
+
     },
     async getCompanyList({ page, pageSize }) {
       const params = {

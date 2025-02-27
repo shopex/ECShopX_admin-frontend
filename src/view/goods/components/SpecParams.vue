@@ -92,20 +92,6 @@ export default {
           display: 'inline'
         },
         {
-          label: '药品规格',
-          key: 'medicine_spec',
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.isMedicine) {
-              callback('请输入药品规格')
-            } else {
-              callback()
-            }
-          },
-          isShow:()=>this.isMedicine,
-          display: 'inline'
-        },
-        {
           label: '重量',
           key: 'weight',
           type: 'input',
@@ -143,6 +129,20 @@ export default {
           label: '条形码',
           key: 'barcode',
           type: 'input',
+          display: 'inline'
+        },
+        {
+          label: '药品规格',
+          key: 'medicine_spec',
+          type: 'input',
+          validator: async (rule, value, callback) => {
+            if (!value && this.isMedicine) {
+              callback('请输入药品规格')
+            } else {
+              callback()
+            }
+          },
+          isShow:()=>this.isMedicine,
           display: 'inline'
         }
       ]
