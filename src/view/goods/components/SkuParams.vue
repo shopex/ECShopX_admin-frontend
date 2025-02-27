@@ -95,7 +95,6 @@
               :key="item.value"
               :label="item.title"
               size="mini"
-              :disabled="statusDisabled(item)"
               :value="item.value"
             />
           </el-select>
@@ -110,18 +109,6 @@
             min="0"
             size="mini"
             placeholder="库存"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="medicinePrescription" label="最大开方数量">
-        <template slot-scope="scope">
-          <el-input
-            v-model="scope.row.max_num"
-            type="number"
-            required
-            min="0"
-            size="mini"
-            placeholder="最大开方数量"
           />
         </template>
       </el-table-column>
@@ -217,7 +204,6 @@
               :key="item.value"
               :label="item.title"
               :value="item.value"
-              :disabled="statusDisabled(item)"
               size="mini"
             />
           </el-select>
@@ -226,12 +212,6 @@
       <el-table-column prop="store" label="库存" :render-header="renderRequire">
         <template slot-scope="scope">
           <el-input v-model="scope.row.store" type="number" min="0" size="mini" />
-        </template>
-      </el-table-column>
-
-      <el-table-column v-if="medicinePrescription" prop="max_num" label="最大开方数量">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.max_num" size="mini" />
         </template>
       </el-table-column>
       <el-table-column prop="item_bn" label="货号">
@@ -309,10 +289,6 @@ export default {
       type: Boolean,
       default: false
     },
-    medicinePrescription:{
-      type: Boolean,
-      default: false
-    }
   },
   data() {
     let statusOption = [
@@ -341,7 +317,6 @@ export default {
         {
           approve_status: '',
           store: '',
-          max_num:'',
           item_bn: '',
           price: '',
           cost_price: '',
@@ -392,12 +367,6 @@ export default {
         result = []
       }
       return result
-    },
-    statusDisabled({value}){
-      if(this.medicinePrescription && value == 'instock' || !this.medicinePrescription){
-        return false
-      }
-      return true
     },
     onSkuChange({ spec_images, spec_items }) {
       this.getSkuItemImages(spec_images)
@@ -452,7 +421,6 @@ export default {
             item_id,
             approve_status,
             store,
-            max_num,
             item_bn,
             weight,
             volume,
@@ -477,7 +445,6 @@ export default {
               is_default: false,
               approve_status,
               store,
-              max_num,
               item_bn,
               weight,
               volume,
@@ -499,7 +466,6 @@ export default {
           const {
             approve_status,
             store,
-            max_num,
             item_bn,
             weight,
             volume,
@@ -517,7 +483,6 @@ export default {
             is_default: false,
             approve_status,
             store,
-            max_num,
             item_bn,
             weight,
             volume,
@@ -561,7 +526,6 @@ export default {
       const {
         approve_status,
         store,
-        max_num,
         item_bn,
         weight,
         volume,
@@ -577,7 +541,6 @@ export default {
       this.value.specItems.forEach((item) => {
         item.approve_status = approve_status
         item.store = store
-        item.max_num = max_num
         item.item_bn = item_bn
         item.weight = weight
         item.volume = volume
@@ -600,7 +563,6 @@ export default {
       Object.assign(this.value.specItems[index], {
         approve_status: '',
         store: '',
-        max_num:'',
         item_bn: '',
         weight: '',
         volume: '',

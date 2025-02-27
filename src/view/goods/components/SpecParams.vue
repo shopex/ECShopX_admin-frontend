@@ -27,10 +27,6 @@ export default {
     provinceList: {
       type: Array,
       default: () => []
-    },
-    isMedicine:{
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -61,7 +57,6 @@ export default {
         approve_status: 'onsale',
         store: 1,
         item_bn: '',
-        medicine_spec:'',
         weight: '',
         volume: '',
         price: '',
@@ -129,20 +124,6 @@ export default {
           label: '条形码',
           key: 'barcode',
           type: 'input',
-          display: 'inline'
-        },
-        {
-          label: '药品规格',
-          key: 'medicine_spec',
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.isMedicine) {
-              callback('请输入药品规格')
-            } else {
-              callback()
-            }
-          },
-          isShow:()=>this.isMedicine,
           display: 'inline'
         }
       ]

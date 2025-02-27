@@ -163,7 +163,6 @@ export default {
         specParams: {
           approve_status: 'onsale',
           store: 1,
-          medicine_spec:'',
           item_bn: '',
           weight: '',
           volume: '',
@@ -191,19 +190,7 @@ export default {
         title: '', // pc页面标题
         mate_description: '', // pc页面标题
         mate_keywords: '', // pc页面标题
-        goods_notice: '', // 商品公告
-        is_medicine:'0',
-        medicine_type:'',
-        manufacturer:'',
-        common_name:'',
-        special_common_name:'',
-        approval_number:'',
-        unit:'',
-        packing_spec:'',
-        dosage:'',
-        is_prescription:'1',
-        use_tip:'',
-        symptom:''
+        goods_notice: '' // 商品公告
       },
       formList: [
         {
@@ -306,168 +293,6 @@ export default {
           type: 'input',
           display: 'inline'
         },
-        // 处方药
-        {
-          label: '商品类型',
-          key: 'is_medicine',
-          type: 'radio',
-          disabled:()=> !this.is_pharma_industry || this.$route.params.itemId,
-          options: [
-            {
-              label: '0',
-              name: '实物商品'
-            },
-            {
-              label: '1',
-              name: '医药商品'
-            }
-          ],
-          required: true,
-          message: '请选择是否是处方药'
-        },
-        {
-          label: '药品分类',
-          key: 'medicine_type',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'select',
-          options: [
-            { title: '西药', value: '0' },
-            { title: '中成药', value: '1' },
-            { title: '其他', value: '3' },
-          ],
-          // required: true,
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请选择药品分类')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '生产厂家',
-          key: 'manufacturer',
-          type: 'input',
-          isShow:()=> this.form.is_medicine == '1',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入生产厂家')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '通用别名',
-          key: 'common_name',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入通用别名')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '特殊通用名',
-          key: 'special_common_name',
-          type: 'input',
-          isShow:()=> this.form.is_medicine == '1',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入特殊通用名')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '批准文号',
-          key: 'approval_number',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入批准文号')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '最小售卖单位',
-          key: 'unit',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入第三方药品编码')
-            } else {
-              callback()
-            }
-          },
-          display: 'inline'
-        },
-        {
-          label: '包装规格',
-          key: 'packing_spec',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'input',
-          display: 'inline'
-        },
-        {
-          label: '剂型',
-          key: 'dosage',
-          isShow:()=> this.form.is_medicine == '1',
-          type: 'input',
-          display: 'inline'
-        },
-        {
-          label: '是否处方药',
-          key: 'is_prescription',
-          isShow:()=> this.form.is_medicine == '1' ,
-          disabled:()=> this.$route.params.itemId,
-          type: 'radio',
-          options: [
-            { label: '1', name: '是' },
-            { label: '2', name: '否' }
-          ],
-          tip: '开启后前端走处方药下单流程'
-        },
-        {
-          label: '处方药用药提示',
-          key: 'use_tip',
-          type: 'input',
-          isShow:()=> this.medicinePrescription,
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1' && this.form.is_prescription == '1') {
-              callback('请输入处方药用药提示')
-            } else {
-              callback()
-            }
-          }
-        },
-        {
-          label: '处方药品症状',
-          key: 'symptom',
-          isShow:()=> this.medicinePrescription,
-          type: 'input',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1' && this.form.is_prescription == '1') {
-              callback('请输入处方药品症状')
-            } else {
-              callback()
-            }
-          }
-        },
-
         // {
         //   label: '申请售后',
         //   key: 'aftersales_end_date',
@@ -696,7 +521,6 @@ export default {
                   v-model={value[key]}
                   ref='specParams'
                   is-show-point={this.isShowPoint}
-                  isMedicine={this.form.is_medicine == '1'}
                   disabled={disabled}
                   provinceList={this.provinceList}
                 />
@@ -728,7 +552,6 @@ export default {
                 v-model={value[key]}
                 ref='skuParams'
                 isSupplierGoods={this.routerParams.isSupplierGoods}
-                medicinePrescription={this.medicinePrescription}
                 is-show-point={this.isShowPoint}
                 disabled={disabled}
                 provinceList={this.provinceList}
@@ -746,7 +569,6 @@ export default {
               const approveStatus = specItems.find(({ approve_status }) => !!approve_status)
               const store = specItems.find(({ store }) => !!store)
               const price = specItems.find(({ price }) => !!price)
-              const max_num = specItems.find(({ max_num }) => !!max_num)
 
               if (!IS_SUPPLIER() && !this.routerParams.isSupplierGoods &&  !approveStatus) {
                 callback('请选择商品状态')
@@ -754,8 +576,6 @@ export default {
                 callback('请输入商品库存')
               } else if (!price) {
                 callback('请输入商品销售价格')
-              } else if(!max_num && this.medicinePrescription){
-                callback('请输入最大开方数量')
               } else {
                 callback()
               }
@@ -836,7 +656,6 @@ export default {
       regionsList: [],
       provinceList: [],
       goodsSpec: [],
-      is_pharma_industry:true,
       submitLoading: false,
       loading: false,
       isLeave: false,
@@ -882,25 +701,15 @@ export default {
       }
     }
   },
-  computed: {
-    medicinePrescription(){
-      return this.form.is_medicine == '1' && this.form.is_prescription == '1'
-    }
-  },
+  computed: {},
   created() {
     this.getPointRule()
     this.getMainCategory()
     this.getShippingTemplates()
     this.getBrandList()
     this.getAddress()
-    this.getBaseSetting()
   },
   methods: {
-    async getBaseSetting(){
-      const res = await this.$api.company.getGlobalSetting()
-      this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
-      console.log(777,this.is_pharma_industry)
-    },
     async getPointRule() {
       const pointRuleInfo = await this.$api.promotions.getPointRule()
       this.isShowPoint =
@@ -990,7 +799,6 @@ export default {
         approve_status,
         store,
         item_bn,
-        medicine_spec,
         weight,
         volume,
         price,
@@ -1022,24 +830,10 @@ export default {
         audit_reason,
         package_num,
         buy_limit_area = [],
-        package_type = '',
-        is_medicine,
-        medicine_data
+        package_type = ''
       } = await this.$api.goods.getItemsDetail(itemId, {
        operate_source: supplier ? 'supplier' : IS_SUPPLIER() ? 'supplier' : this.routerParams?.isSupplierGoods ? 'supplier' : 'platform'
       })
-
-      const { medicine_type,
-        manufacturer,
-        common_name,
-        special_common_name,
-        approval_number,
-        unit,
-        packing_spec,
-        dosage,
-        is_prescription,
-        use_tip,
-        symptom} = medicine_data || {};
       console.log(666, buy_limit_area)
       this.loading = false
       let mainCategory = []
@@ -1070,23 +864,6 @@ export default {
       }
       this.form.salesCategory = this.deepSalesCategory(item_category)
       this.form.pics = pics
-
-      //处方药
-      this.form.is_medicine = is_medicine + ''
-      if(Object.keys(medicine_data || {}).length){
-        this.form.medicine_type = medicine_type + ''
-        this.form.manufacturer = manufacturer
-        this.form.common_name = common_name
-        this.form.special_common_name = special_common_name
-        this.form.approval_number = approval_number
-        this.form.unit = unit
-        this.form.packing_spec = packing_spec
-        this.form.dosage = dosage
-        this.form.is_prescription = is_prescription + ''
-        this.form.use_tip = use_tip
-        this.form.symptom = symptom
-      }
-
       pics_create_qrcode.forEach((v, index) => {
         if (v) {
           this.form.picsQrcode.push(index)
@@ -1100,7 +877,6 @@ export default {
         store,
         item_id,
         item_bn: is_new ? '' : item_bn,
-        medicine_spec,
         weight,
         volume,
         price: isNaN(price / 100) ? '' : price / 100,
@@ -1338,19 +1114,7 @@ export default {
         paramsData,
         aftersales_end_date,
         delivery_data: { delivery_data_type, delivery_desc },
-        goods_notice,
-        is_medicine,
-        medicine_type,
-        manufacturer,
-        common_name,
-        special_common_name,
-        approval_number,
-        unit,
-        packing_spec,
-        dosage,
-        is_prescription,
-        use_tip,
-        symptom
+        goods_notice
       } = this.form
       // 单规格销售区域
       let buy_limit_area = ''
@@ -1474,34 +1238,6 @@ export default {
             item_bn: ''
           }
         }
-      }
-
-      //处方药
-      if(is_medicine == '1'){
-        params = {
-          ...params,
-          is_medicine,
-          medicine_type,
-          manufacturer,
-          common_name,
-          special_common_name,
-          approval_number,
-          unit,
-          packing_spec,
-          dosage
-        }
-        if(is_prescription == '1'){
-          params = {
-            ...params,
-            is_prescription,
-            use_tip,
-            symptom
-          }
-        }else{
-          params.is_prescription = is_prescription
-        }
-      }else{
-        params.is_medicine = is_medicine
       }
 
       this.submitLoading = true
