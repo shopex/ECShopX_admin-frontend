@@ -186,15 +186,12 @@
         <!--        <SpFilterFormItem prop="operator_name" label="来源供应商:">-->
         <!--          <el-input v-model="searchParams.operator_name" placeholder="请输入来源供应商" />-->
         <!--        </SpFilterFormItem>-->
-        <SpFilterFormItem prop="is_gift" label="商品类型:">
+        <SpFilterFormItem prop="is_gift" label="处方药:">
           <el-select v-model="searchParams.is_gift">
             <el-option :value="undefined" label="全部" />
             <el-option :value="true" label="处方药" />
             <el-option :value="false" label="非处方药" />
           </el-select>
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="goods_bn" label="药品症状:">
-          <el-input v-model="searchParams.goods_bn" placeholder="请输入药品症状" />
         </SpFilterFormItem>
       </SpFilterForm>
 
@@ -1165,11 +1162,11 @@ export default {
               </div>
             )
           },
-            {
-            name: '药品症状',
-            key: 'supplier_goods_bn',
-            align: "right",
-            headerAlign: 'center'
+          {
+            name: '审核结果',
+            key: 'item_bn',
+            width: 150,
+            render: (h, scope) =>  '是'
           },
           // {
           //   name: '供应商货号',
