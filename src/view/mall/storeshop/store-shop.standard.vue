@@ -259,6 +259,35 @@ export default {
             key: 'store',
             width: 160
           },
+
+          {
+            name: '店铺库存',
+            // key: 'order_num',
+            render: (h, { row }) =>
+              h('el-switch', {
+                props: {
+                  'value': !row.is_total_store,
+                  'active-value': true,
+                  'inactive-value': false
+                },
+                on: {
+                  change: async (e) => {
+                    await this.$api.marketing.updateDistributorItem({
+                      distributor_id: this.formData.distributor_id,
+                      goods_id: row.goods_id,
+                      is_total_store: !e
+                    })
+                    this.$refs.finder.refresh(true)
+                  }
+                }
+              })
+          },
+          {
+            name: '店铺销售状态',
+            key: 'is_can_sale',
+            width: 120,
+            render: (h, { row }) => h('span', {}, row.is_can_sale? '可销售' : '不可销售')
+          },
           {
             name: '市场价（¥）',
             key: 'market_price',
@@ -337,34 +366,6 @@ export default {
             key: 'distributor_name',
             width: 160,
           },
-          {
-            name: '店铺库存',
-            // key: 'order_num',
-            render: (h, { row }) =>
-              h('el-switch', {
-                props: {
-                  'value': !row.is_total_store,
-                  'active-value': true,
-                  'inactive-value': false
-                },
-                on: {
-                  change: async (e) => {
-                    await this.$api.marketing.updateDistributorItem({
-                      distributor_id: this.formData.distributor_id,
-                      goods_id: row.goods_id,
-                      is_total_store: !e
-                    })
-                    this.$refs.finder.refresh(true)
-                  }
-                }
-              })
-          },
-          {
-            name: '店铺销售状态',
-            key: 'is_can_sale',
-            width: 120,
-            render: (h, { row }) => h('span', {}, row.is_can_sale? '可销售' : '不可销售')
-          }
         ]
       })
     }
