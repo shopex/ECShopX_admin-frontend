@@ -193,6 +193,9 @@
             <el-option :value="false" label="非处方药" />
           </el-select>
         </SpFilterFormItem>
+        <SpFilterFormItem prop="goods_bn" label="药品症状:">
+          <el-input v-model="searchParams.goods_bn" placeholder="请输入药品症状" />
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -576,6 +579,7 @@ export default {
     } else {
       tabList = [
         { name: '全部商品', value: 'all', activeName: 'first' },
+        {name: '处方商品', value: 'chufang', activeName: 'third'},
         { name: '库存预警商品', value: 'true', activeName: 'second' }
       ]
     }
@@ -1124,7 +1128,12 @@ export default {
               )
             }
           },
-
+          {
+            name: '是否处方',
+            key: 'item_bn',
+            width: 150,
+            render: (h, scope) =>  '是'
+          },
           {
             name: 'sku编码',
             key: 'item_bn',
@@ -1155,6 +1164,12 @@ export default {
                 ))}
               </div>
             )
+          },
+            {
+            name: '药品症状',
+            key: 'supplier_goods_bn',
+            align: "right",
+            headerAlign: 'center'
           },
           // {
           //   name: '供应商货号',
