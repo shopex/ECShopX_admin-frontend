@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.17.14](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.13...v3.17.14) (2025-02-28)
+
+
+### Bug Fixes
+
+* ECX-6146 ([f0edf38](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f0edf38cfae219e5ce6b11bdbdc27fb474ef9854))
+* ECX-6146 ([b737cd7](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b737cd7a9f6108d4f8a283ca068b75e10cb820b3))
+
 ### [3.17.13](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.12...v3.17.13) (2025-02-28)
 
 
