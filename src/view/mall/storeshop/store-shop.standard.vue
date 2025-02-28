@@ -257,7 +257,7 @@ export default {
           {
             name: '商品库存',
             key: 'store',
-            width: 160
+            width: 90
           },
 
           {
