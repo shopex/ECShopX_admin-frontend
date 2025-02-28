@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.17.13](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.12...v3.17.13) (2025-02-28)
+
+
+### Bug Fixes
+
+* ecx logo 替换 ([f5bec4e](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f5bec4ed91c9677281676d5290f67e8c199adf4f))
+
 ### [3.17.12](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.0...v3.17.12) (2025-02-28)
 
 
