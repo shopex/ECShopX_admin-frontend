@@ -355,10 +355,10 @@
                   query: { user_id: scope.row.user_id }
                 }"
               >
-                {{ scope.row.receiver_mobile }}
+                {{ scope.row.mobile }}
               </router-link>
               <span v-else>
-                {{ scope.row.receiver_mobile }}
+                {{ scope.row.mobile }}
               </span>
               <el-tooltip
                 v-if="datapass_block == 0"
@@ -367,14 +367,14 @@
                 placement="top-start"
               >
                 <i
-                  v-clipboard:copy="scope.row.receiver_mobile"
+                  v-clipboard:copy="scope.row.mobile"
                   v-clipboard:success="onCopySuccess"
                   class="el-icon-document-copy"
                 />
               </el-tooltip>
             </template>
             <template v-else slot-scope="scope">
-              <span>{{ scope.row.receiver_mobile }}</span>
+              <span>{{ scope.row.mobile }}</span>
               <el-tooltip
                 v-if="datapass_block == 0"
                 effect="dark"
@@ -382,7 +382,7 @@
                 placement="top-start"
               >
                 <i
-                  v-clipboard:copy="scope.row.receiver_mobile"
+                  v-clipboard:copy="scope.row.mobile"
                   v-clipboard:success="onCopySuccess"
                   class="el-icon-document-copy"
                 />
