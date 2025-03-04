@@ -144,18 +144,18 @@
       </el-tab-pane>
       <el-tab-pane label="互联网诊疗风险告知及知情同意书配置" class="paneSecond" name="third">
         <div class="mainSecond">
-          <el-form ref="privacy" :model="medicineForm" :rles="rules" label-width="100px">
+          <el-form ref="medicine" :model="medicineForm" :rules="rules2" label-width="100px">
             <div class="section-white content-padded">
               <el-card class="box-card">
                 <div class="text item">
-                  <el-form-item label="互联网诊疗风险告及知情同意书">
+                  <el-form-item label="互联网诊疗风险告及知情同意书" prop="title">
                     <el-input
                       v-model="medicineForm.title"
                       placeholder="互联网诊疗风险告及知情同意书"
                       style="width: 500px"
                     />
                   </el-form-item>
-                  <el-form-item label="互联网诊疗风险告及知情同意书">
+                  <el-form-item label="互联网诊疗风险告及知情同意书" prop="content">
                     <SpRichText v-model="medicineForm.content" />
                   </el-form-item>
                 </div>
@@ -362,6 +362,10 @@ export default {
         'privacy.content': [{ required: true, message: '请输入充值协议', trigger: 'blur' }],
         'member_register.content': [{ required: true, message: '请输入注册协议', trigger: 'blur' }]
       },
+      rules2: {
+        'title': [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        'content': [{ required: true, message: '请输入意向书', trigger: 'blur' }],
+      },
       modalTitle: '',
       medicineForm:{
         title:'',
@@ -385,9 +389,7 @@ export default {
       this.pageParam.page = val
       this.getFormItems()
     },
-    async saveMedicineContent(){
-      console.log(this.medicineForm)
-    },
+
     // 获取配置表单
     async getFormItems(isInit = false) {
       this.isLoading = true
@@ -409,6 +411,7 @@ export default {
     async getShopRules() {
       const data = await getRulesInfo()
       const rules = Array.isArray(data.data.data) ? {} : data.data.data
+
       this.privacyForm.member_register = rules.member_register || {
         title: '',
         content: ''
@@ -417,6 +420,11 @@ export default {
         title: '',
         content: ''
       }
+      this.medicineForm = rules.ehospital_risk_informed || {
+        title: '',
+        content: ''
+      }
+
     },
     // 保存编辑
     saveForm() {
@@ -554,6 +562,28 @@ export default {
     },
     updatePrivacyAgreement: function (data) {
       this.privacyForm.privacy.content = data
+    },
+    async saveMedicineContent(){
+      console.log(this.medicineForm)
+      this.$refs['medicine'].validate((valid) => {
+        if (valid) {
+          putRulesInfo({
+            data: [
+              {
+                type: 'ehospital_risk_informed',
+                ...this.medicineForm
+              }
+            ]
+          }).then((response) => {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            this.getShopRules('medicine')
+          })
+        }
+      })
+
     },
     saveContent(type) {
       this.$refs['privacy'].validate((valid) => {
