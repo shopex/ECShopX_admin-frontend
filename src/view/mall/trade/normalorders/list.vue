@@ -560,7 +560,7 @@
       class="dialog-changeprice"
       :loading="changePriceForm.loading"
       :destroy-on-close="true"
-      :title="`申请售后【订单:${changePriceForm.order_id}】`"
+      :title="`订单改价【订单:${changePriceForm.order_id}】`"
       :form="changePriceForm"
       :form-list="changePriceFormList"
       @onSubmit="changePriceSubmit"
@@ -823,7 +823,11 @@ export default {
             },
             { title: '数量', key: 'num', width: 60 },
             { title: '已发货数量', key: 'delivery_item_num', width: 100 },
-            { title: '总支付价（¥）', key: 'price', width: 120 },
+            { title: '总支付价（¥）', key: 'total_fee',
+            render: (row, column, cell) => {
+              return (row.total_fee / 100).toFixed(2)
+            },
+            width: 120 },
             {
               title: '成本价（¥）',
               key: 'cost_price',
