@@ -880,6 +880,23 @@ export default {
             }
           },
           {
+            name: '重推',
+            key: 'repush',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => row.medicine_data?.audit_status == 3,
+            action: {
+              type: 'link',
+              handler: async([row]) => {
+                await this.$api.goods.medicineItemsSync({goods_id: row.goods_id})
+                this.$message.success('操作成功')
+                setTimeout(() => {
+                  this.$refs['finder'].refresh(true)
+                }, 200)
+              }
+            }
+          },
+          {
             name: '投放',
             key: 'put',
             type: 'button',
@@ -1192,9 +1209,13 @@ export default {
             name: '错误信息',
             key: 'audit_reason',
             width: 150,
-            render: (h, {row}) => <div onClick={()=>this.handleErrDetail(row.medicine_data)}>
-              {this.handleAuditReason(row.medicine_data)}
-              {row.medicine_data?.audit_reason && <i class="el-icon-info"></i>}
+            render: (h, {row}) => <div>
+              {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+                <div onClick={()=>this.handleErrDetail(row.medicine_data)}>
+                  {this.handleAuditReason(row.medicine_data)}
+                  <i class="el-icon-info"></i>
+                </div>
+              )}
               </div>
           },
           // {
@@ -1583,7 +1604,7 @@ export default {
     },
     handleAuditReason(data){
       const {audit_reason = ''} = data || {}
-      return audit_reason.length > 10 ? audit_reason.slice(0,10)+'...' :audit_reason
+      return audit_reason.length > 8 ? audit_reason.slice(0,8)+'...' :audit_reason
     },
     async onFreightTemplateSubmit() {
       const { item_id, templates_id } = this.freightTemplateForm
