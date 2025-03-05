@@ -76,7 +76,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="用法用量" width="160" />
+          <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="处方用量" width="160" />
           <el-table-column prop="item_holder" label="商品类型" width="100">
             <template slot-scope="scope">
               <div class="ell3">
@@ -294,9 +294,9 @@
 
     <!-- 处方药 -->
     <template v-if="orderInfo.prescription_status">
-      <el-card class="el-card--normal">
+      <el-card v-if="orderInfo.diagnosis_data && Object.keys(orderInfo.diagnosis_data).length" class="el-card--normal">
         <div slot="header">问诊信息</div>
-        <div v-if="orderInfo" class="card-panel">
+        <div class="card-panel">
           <el-row>
             <el-col
             v-for="(item, index) in interrogationInfoList"
@@ -312,9 +312,9 @@
         </div>
       </el-card>
 
-      <el-card class="el-card--normal">
+      <el-card class="el-card--normal"  v-if="orderInfo.prescription_data && Object.keys(orderInfo.prescription_data).length">
         <div slot="header">处方信息</div>
-        <div v-if="orderInfo" class="card-panel">
+        <div class="card-panel">
           <el-row>
             <el-col
             v-for="(item, index) in prescriptionInfoList"
@@ -523,9 +523,9 @@ export default {
         { label: '订单获取积分:', field: 'get_points', is_show: !this.VERSION_IN_PURCHASE },
         { label: '额外获取积分:', field: 'extra_points', is_show: !this.VERSION_IN_PURCHASE },
         { label: '积分抵扣:', field: 'point_use', is_show: !this.VERSION_IN_PURCHASE },
-        { label: '角色:', field: 'purchaseRole', is_show: true },
-        { label: '员工姓名:', field: 'employee_name', is_show: true },
-        { label: '员工所属企业:', field: 'enterprise_name', is_show: true },
+        { label: '用户身份:', field: 'purchaseRole', is_show: true },
+        { label: '姓名:', field: 'employee_name', is_show: true },
+        { label: '所属企业:', field: 'enterprise_name', is_show: true },
         { label: '来源店铺:', field: 'distributor_name', is_show: true },
       ],
       payList: [
@@ -831,12 +831,7 @@ export default {
         this.is_community = true
       }
       const _orderType = this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE
-      let fd = {}
-      if(orderInfo.prescription_status > 0){
-        fd = {title:'处方订单'}
-      }else{
-        fd = _orderType.find((k) => k.value == order_class)
-      }
+      let fd = _orderType.find((k) => k.value == order_class)
 
       let crossOrderTxt = ''
       if (order_class == 'normal' && orderInfo.type == '1') {

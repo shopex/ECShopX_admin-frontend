@@ -55,7 +55,20 @@
           />
         </el-select>
       </SpFilterFormItem>
-
+      <!-- 是否处方药 -->
+      <SpFilterFormItem v-if="is_pharma_industry" prop="is_prescription_order" label="是否处方药:">
+        <el-select v-model="params.is_prescription_order" clearable placeholder="请选择">
+          <el-option label="全部" value="" />
+          <el-option label="是" value="1" />
+          <el-option label="否" value="0" />
+        </el-select>
+      </SpFilterFormItem>
+      <SpFilterFormItem v-if="is_pharma_industry" prop="serial_no" label="处方编号:">
+        <el-input v-model="params.serial_no" placeholder="请输入客户手机号码" />
+      </SpFilterFormItem>
+      <SpFilterFormItem v-if="is_pharma_industry" prop="user_family_name" label="就诊人:">
+        <el-input v-model="params.user_family_name" placeholder="请输入客户手机号码" />
+      </SpFilterFormItem>
       <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="delivery_staff_id" label="配送员:">
         <el-select v-model="params.delivery_staff_id" clearable placeholder="请选择">
           <el-option
@@ -643,6 +656,9 @@ export default {
         order_status: '', // 订单状态
         order_class: '', // 订单类型
         delivery_staff_id: '', //配送员
+        is_prescription_order:'',
+        serial_no:'',
+        user_family_name:'',
         is_invoiced: '', // 开票状态
         time_start_begin: '', //
         time_start_end: '',
@@ -1263,7 +1279,8 @@ export default {
           tip: `1. 最多可上传9张图片，文件格式为bmp、png、jpeg、jpg或gif，大小不超过2M（建议尺寸：500px * 500px）<br />2. 相册图朋友圈分享是否生成小程序码`
         }
       ],
-      selectList: []
+      selectList: [],
+      is_pharma_industry:false
     }
   },
 
@@ -1303,10 +1320,14 @@ export default {
   },
   mounted() {
     this.origin = window.location.origin
-    const { tab } = this.$route.query
+    const { tab,order_id } = this.$route.query
     if (tab) {
       this.params.order_status = tab
     }
+    if(order_id){
+      this.params.order_id = order_id
+    }
+    this.getBaseSetting()
     this.fetchList()
     this.getOrderSourceList()
     this.getLogisticsList()
@@ -1318,6 +1339,10 @@ export default {
     })
   },
   methods: {
+    async getBaseSetting(){
+      const res = await this.$api.company.getGlobalSetting()
+      this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
+    },
     async accountManagement(distributor_id) {
       let params = {
         pageSize: 999,

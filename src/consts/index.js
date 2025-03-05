@@ -82,8 +82,7 @@ export const ORDER_TYPE = [
   { title: '团购订单', value: 'groups' },
   { title: '秒杀订单', value: 'seckill' },
   { title: '普通订单', value: 'normal' },
-  { title: '社区团购订单', value: 'community' },
-  { title: '处方订单', value: 'chufang' }
+  { title: '社区团购订单', value: 'community' }
   // { title: "导购订单", value: "shopguide" },
   // { title: "跨境订单", value: "crossborder" },
   // { title: "助力订单", value: "bargain" },
@@ -98,8 +97,7 @@ export const ORDER_TYPE_STANDARD = [
   { title: '普通订单', value: 'normal' },
   { title: '社区团购订单', value: 'community' },
   { title: '兑换订单', value: 'excard' },
-  { title: '门店订单', value: 'shopadmin' },
-  { title: '处方订单', value: 'chufang' },
+  { title: '门店订单', value: 'shopadmin' }
 ]
 
 export const INVOICE_STATUS = [

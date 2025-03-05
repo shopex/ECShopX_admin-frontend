@@ -95,8 +95,15 @@
             />
           </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem prop="yyrname" label="用药人姓名:">
-        <el-input v-model="params.yyrname" placeholder="请输入用药人姓名" />
+      <SpFilterFormItem v-if="is_pharma_industry" prop="is_prescription_order" label="是否处方药:">
+        <el-select v-model="params.is_prescription_order" clearable placeholder="请选择">
+          <el-option label="全部" value="" />
+          <el-option label="是" value="1" />
+          <el-option label="否" value="0" />
+        </el-select>
+      </SpFilterFormItem>
+      <SpFilterFormItem v-if="is_pharma_industry" prop="user_family_name" label="用药人姓名:">
+        <el-input v-model="params.user_family_name" placeholder="请输入用药人姓名" />
       </SpFilterFormItem>
       </SpFilterForm>
 
@@ -178,16 +185,6 @@
                 />
               </el-tooltip>
             </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          width="120"
-          label="订单类型"
-          header-align="center"
-          prop="order_holder"
-        >
-        <template slot-scope="scope">
-            {{  getOrderCategoryName(scope.row.order_holder) }}
           </template>
         </el-table-column>
         <el-table-column
@@ -428,7 +425,9 @@ export default {
       order_holder:undefined,
       distributor_id:undefined,
       order_class:undefined,
-      yyrname:undefined
+      yyrname:undefined,
+      is_prescription_order:undefined,
+      user_family_name:undefined
     }
     return {
       loading: false,
@@ -436,6 +435,7 @@ export default {
       params: {
         ...initialParams
       },
+      is_pharma_industry:false,
       orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
       orderCategory: ORDER_CATEGORY,
       shopList: [],
@@ -489,11 +489,16 @@ export default {
     if (this.$route.query.aftersales_status) {
       this.params.aftersales_status = this.$route.query.aftersales_status
     }
+    this.getBaseSetting()
     //获取所有店铺
     this.getStoreList()
     this.fetchList()
   },
   methods: {
+    async getBaseSetting(){
+      const res = await this.$api.company.getGlobalSetting()
+      this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
+    },
     handleSelectStore(storeItem) {
       this.params.distributor.id = storeItem.distributor_id
     },
@@ -526,6 +531,8 @@ export default {
         distributor_id: this.params.distributor_id || undefined,
         order_class:this.params.order_class || undefined,
         yyrname:this.params.yyrname || undefined,
+        is_prescription_order:this.params.is_prescription_order || undefined,
+        user_family_name:this.params.user_family_name || undefined
       }
       return params
     },
