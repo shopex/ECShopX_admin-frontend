@@ -38,7 +38,7 @@
                 <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">
-                <el-tag v-if="item.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
+                <el-tag v-if="item.medicine_data?.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
                 {{ item.title }}
               </div>
               <div v-if="value.showPrice" class="price">
@@ -65,7 +65,7 @@
                 <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">
-                <el-tag v-if="item.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
+                <el-tag v-if="item.medicine_data?.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
                 {{ item.title }}
               </div>
               <div v-if="value.showPrice" class="price">

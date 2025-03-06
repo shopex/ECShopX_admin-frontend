@@ -78,7 +78,8 @@ export default {
         market_price: item.market_price,
         distributor_id: item.distributor_id,
         item_en_name: item.itemEnName,
-        promotion_activity: item.promotionActivity
+        promotion_activity: item.promotionActivity,
+        medicine_data:item.medicine_data
       }))
       const { data } = await this.$picker.goodsitem({
         data: list,
@@ -97,7 +98,8 @@ export default {
               market_price: item.market_price,
               distributor_id: item.distributor_id,
               itemEnName: item.item_en_name,
-              promotionActivity: item.promotion_activity
+              promotionActivity: item.promotion_activity,
+              medicine_data:item.medicine_data
             }
             values.push(obj)
           }

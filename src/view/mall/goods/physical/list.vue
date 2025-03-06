@@ -1397,7 +1397,6 @@ export default {
     async getBaseSetting(){
       const res = await this.$api.company.getGlobalSetting()
       this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
-      console.log(777,this.is_pharma_industry)
     },
     async fetchWechatList() {
       const { list } = await this.$api.minimanage.gettemplateweapplist()
