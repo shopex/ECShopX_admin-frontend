@@ -69,6 +69,7 @@ export default {
         store: 1,
         item_bn: '',
         medicine_spec:'',
+        max_num: '',
         weight: '',
         volume: '',
         price: '',
@@ -145,6 +146,20 @@ export default {
           validator: async (rule, value, callback) => {
             if (!value && this.isMedicine) {
               callback('请输入药品规格')
+            } else {
+              callback()
+            }
+          },
+          isShow:()=>this.isMedicine,
+          display: 'inline'
+        },
+        {
+          label: '最大开方数',
+          key: 'max_num',
+          type: 'input',
+          validator: async (rule, value, callback) => {
+            if (!value && this.isMedicine) {
+              callback('请输入最大开方数量')
             } else {
               callback()
             }

@@ -113,7 +113,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column v-if="medicinePrescription" label="最大开方数量">
+      <el-table-column v-if="medicinePrescription" label="最大开方数">
         <template slot-scope="scope">
           <el-input
             v-model="scope.row.max_num"
@@ -229,7 +229,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="medicinePrescription" prop="max_num" label="最大开方数量" :render-header="renderRequire">
+      <el-table-column v-if="medicinePrescription" prop="max_num" label="最大开方数" :render-header="renderRequire">
         <template slot-scope="scope">
           <el-input v-model="scope.row.max_num" size="mini" />
         </template>

@@ -1039,6 +1039,7 @@ export default {
         dosage,
         is_prescription,
         use_tip,
+        max_num,
         symptom} = medicine_data || {};
       console.log(666, buy_limit_area)
       this.loading = false
@@ -1112,7 +1113,8 @@ export default {
         tax_rate_code,
         package_num,
         buy_limit_area: _limit_area,
-        package_type: 'sku' // 后端要求单规格传sku/spu
+        package_type: 'sku', // 后端要求单规格传sku/spu
+        max_num
       }
       const { goods_params, goods_spec = [] } = await this.$api.goods.getCategoryInfo(
         item_main_cat_id
