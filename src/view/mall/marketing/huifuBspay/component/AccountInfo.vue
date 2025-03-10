@@ -141,19 +141,13 @@ export default {
     }
   },
   computed: {
-    isdisabled(){
+    isdisabled() {
       // 判断分账比例是否填写，未填写则禁用提交按钮
-      return this.info.entry_apply_info.operator_type === 'distributor' && (!this.form.headquarters_proportion || 
+      return this.info.entry_apply_info.operator_type === 'distributor' && 
+        (!this.form.headquarters_proportion ||
         (this.info.is_rel_dealer && !this.form.dealer_proportion) ||
         (this.info.is_rel_merchant && !this.form.merchant_proportion))
     }
-    // 计算经销商分账占比
-    // dealer_proportion() {
-    //   const {
-    //     entry_apply_info: { operator_type },
-    //     is_rel_dealer
-    //   } = this.info
-    //   if (operator_type === 'dealer' || is_rel_dealer) {
 },
   mounted() {
     const {
@@ -262,8 +256,9 @@ export default {
   justify-content: center;
   margin-top: 30px;
 }
-.el-button--primary.is-disabled{
-  background-color: var(--themeColor)!important;
+
+.el-button--primary.is-disabled {
+  background-color: var(--themeColor) !important;
   opacity: 0.5;
   border-color: var(--themeColor);
 }
