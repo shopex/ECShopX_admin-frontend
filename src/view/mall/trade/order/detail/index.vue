@@ -76,7 +76,7 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="处方用量" width="160" />
+          <!-- <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="处方用量" width="160" /> -->
           <el-table-column prop="item_holder" label="商品类型" width="100">
             <template slot-scope="scope">
               <div class="ell3">
@@ -101,7 +101,13 @@
             </template>
           </el-table-column>
 
-          <el-table-column v-if="orderInfo.prescription_status" prop="user_symptom" label="症状" width="160" />
+          <el-table-column v-if="orderInfo.prescription_status" prop="medicine_symptom_set" label="症状" width="160" >
+            <template slot-scope="scope">
+              <div v-for="item in scope.row.medicine_symptom_set" :key="item.id">
+                {{ item }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="supplier_name" label="来源供应商" width="120">
             <template slot-scope="scope">
               {{ scope.row.supplier_name ? scope.row.supplier_name : '自营' }}
@@ -590,6 +596,7 @@ export default {
         { label: '审核不通过理由:', field: 'audit_reason', is_show: true },
         { label: '审方药师名称:', field: 'audit_apothecary_name', is_show: true },
         { label: '问诊单ID:', field: 'diagnosis_id', is_show: true },
+        // { label: '药品用法用量说明:', field: 'diagnosis_id', is_show: true },
         { label: '电子处方单:', field: 'dst_file_path', is_show: true, special:true },
       ],
 
