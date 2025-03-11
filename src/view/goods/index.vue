@@ -378,13 +378,13 @@ export default {
           key: 'special_common_name',
           type: 'input',
           isShow:()=> this.form.is_medicine == '1',
-          validator: async (rule, value, callback) => {
-            if (!value && this.form.is_medicine == '1') {
-              callback('请输入特殊通用名')
-            } else {
-              callback()
-            }
-          },
+          // validator: async (rule, value, callback) => {
+          //   if (!value && this.form.is_medicine == '1') {
+          //     callback('请输入特殊通用名1')
+          //   } else {
+          //     callback()
+          //   }
+          // },
           display: 'inline'
         },
         {
