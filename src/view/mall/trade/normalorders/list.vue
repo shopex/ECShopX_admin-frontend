@@ -64,10 +64,10 @@
         </el-select>
       </SpFilterFormItem>
       <SpFilterFormItem v-if="is_pharma_industry" prop="serial_no" label="处方编号:">
-        <el-input v-model="params.serial_no" placeholder="请输入客户手机号码" />
+        <el-input v-model="params.serial_no" placeholder="请输入处方编号" />
       </SpFilterFormItem>
       <SpFilterFormItem v-if="is_pharma_industry" prop="user_family_name" label="就诊人:">
-        <el-input v-model="params.user_family_name" placeholder="请输入客户手机号码" />
+        <el-input v-model="params.user_family_name" placeholder="请输入就诊人" />
       </SpFilterFormItem>
       <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="delivery_staff_id" label="配送员:">
         <el-select v-model="params.delivery_staff_id" clearable placeholder="请选择">

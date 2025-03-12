@@ -144,13 +144,13 @@ export default {
           key: 'medicine_spec',
           type: 'input',
           validator: async (rule, value, callback) => {
-            if (!value && this.isMedicine) {
+            if (!value && this.medicinePrescription) {
               callback('请输入药品规格')
             } else {
               callback()
             }
           },
-          isShow:()=>this.isMedicine,
+          isShow:()=>this.medicinePrescription,
           display: 'inline'
         },
         {
