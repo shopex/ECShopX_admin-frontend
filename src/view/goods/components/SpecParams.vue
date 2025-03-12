@@ -158,7 +158,7 @@ export default {
           key: 'max_num',
           type: 'input',
           validator: async (rule, value, callback) => {
-            if (!value && this.isMedicine) {
+            if (!value && this.medicinePrescription) {
               callback('请输入最大开方数量')
             } else {
               callback()
