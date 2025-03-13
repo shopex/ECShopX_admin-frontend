@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.17.22](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.21...v3.17.22) (2025-03-13)
+
+
+### Bug Fixes
+
+* 积分商城支付方式初始值 ([33f56f3](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/33f56f3c6311629e0edf164dbba78ce50151bfd2))
+* 请求参数 ([d1e57df](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d1e57df9e948d805f6062dc55e89704ec98d4977))
+* 请求参数 ([91671bb](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/91671bb6db99c1dee93513d57a4ed577ccc8ab35))
+* saas版本 ([1341e2d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/1341e2d71ec2221f71e18c72c93494e58ba9e44c))
+
 ### [3.17.21](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.20...v3.17.21) (2025-03-10)
 
 ### [3.17.20](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.19...v3.17.20) (2025-03-10)
