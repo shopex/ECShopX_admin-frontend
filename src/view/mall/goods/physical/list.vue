@@ -23,6 +23,7 @@
   width: 200px;
   height: 200px;
 }
+
 </style>
 <style lang="scss">
 .physical-cell-reason {
@@ -65,7 +66,7 @@
         <!--        <SpFilterFormItem prop="supplier_goods_bn" label="供应商货号:">-->
         <!--          <el-input v-model="searchParams.supplier_goods_bn" placeholder="请输入供应商货号" />-->
         <!--        </SpFilterFormItem>-->
-        <SpFilterFormItem v-if="!IS_SUPPLIER()" prop="approve_status" label="商品状态:">
+        <SpFilterFormItem prop="approve_status" label="商品状态:" v-if="!IS_SUPPLIER()">
           <el-select v-model="searchParams.approve_status" clearable placeholder="请选择">
             <el-option
               v-for="item in statusOption"
@@ -76,7 +77,7 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem v-if="IS_SUPPLIER()" prop="is_market" label="供应状态:">
+        <SpFilterFormItem prop="is_market" label="供应状态:" v-if="IS_SUPPLIER()">
           <el-select v-model="searchParams.is_market" clearable placeholder="请选择">
             <el-option :key="1" label="可售" :value="1" />
             <el-option :key="0" label="不可售" :value="0" />
@@ -141,8 +142,13 @@
             />
           </el-select>
         </SpFilterFormItem>
-        <SpFilterFormItem prop="item_bn" label="SKU编码:">
-          <el-input v-model="searchParams.item_bn" placeholder="请输入SKU编码" />
+        <SpFilterFormItem prop="regions_id" label="商品产地:">
+          <el-cascader
+            v-model="searchParams.regions_id"
+            placeholder="请选择"
+            clearable
+            :options="regions"
+          />
         </SpFilterFormItem>
         <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
         <!--          <el-select v-model="searchParams.delivery_data_type">-->
@@ -154,13 +160,8 @@
         <SpFilterFormItem prop="goods_bn" label="SPU编码:">
           <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="regions_id" label="商品产地:">
-          <el-cascader
-            v-model="searchParams.regions_id"
-            placeholder="请选择"
-            clearable
-            :options="regions"
-          />
+        <SpFilterFormItem prop="item_bn" label="SKU编码:">
+          <el-input v-model="searchParams.item_bn" placeholder="请输入SKU编码" />
         </SpFilterFormItem>
         <SpFilterFormItem v-if="!IS_SUPPLIER()" prop="tag_id" label="商品标签:">
           <el-cascader
@@ -186,13 +187,20 @@
         <!--        <SpFilterFormItem prop="operator_name" label="来源供应商:">-->
         <!--          <el-input v-model="searchParams.operator_name" placeholder="请输入来源供应商" />-->
         <!--        </SpFilterFormItem>-->
+        <SpFilterFormItem v-if="is_pharma_industry" prop="is_prescription" label="处方药:">
+          <el-select v-model="searchParams.is_prescription">
+            <el-option value="" label="全部" />
+            <el-option value="1" label="处方药" />
+            <el-option value="0" label="非处方药" />
+          </el-select>
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
         <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeCategory">
           更改销售分类
         </el-button>
-        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeGoodsLabel">
+        <el-button type="primary" v-if="!IS_SUPPLIER()" plain @click="changeGoodsLabel">
           打标签
         </el-button>
         <el-button type="primary" plain @click="changeFreightTemplate"> 更改运费模板 </el-button>
@@ -205,7 +213,7 @@
           批量提交审核
         </el-button>
         <el-button type="primary" plain @click="changeItemsStore"> 统一库存 </el-button>
-        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="batchChangeStore">
+        <el-button type="primary" plain v-if="!IS_SUPPLIER()" @click="batchChangeStore">
           更改状态
         </el-button>
         <el-button type="primary" plain @click="batchGifts('true')"> 设为赠品 </el-button>
@@ -248,16 +256,12 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button v-if="isBindJstErp" size="small" type="primary" @click="uploadJstErpItems()"
-          >
-上传商品到聚水潭
-</el-button
+        <el-button size="small" v-if="isBindJstErp" type="primary" @click="uploadJstErpItems()"
+          >上传商品到聚水潭</el-button
         >
         <!-- <el-button size="small" v-if="isBindJstErp" type="primary" @click="queryInventory()">同步聚水潭商品库存</el-button> -->
-        <el-button v-if="isBindWdtErp" size="small" type="primary" @click="uploadWdtErpItems()"
-          >
-上传商品到旺店通
-</el-button
+        <el-button size="small" v-if="isBindWdtErp" type="primary" @click="uploadWdtErpItems()"
+          >上传商品到旺店通</el-button
         >
         <el-dropdown v-if="VERSION_STANDARD && IS_ADMIN()">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
@@ -302,7 +306,6 @@
         :hooks="{
           beforeSearch: beforeSearch
         }"
-        row-actions-fixed-align="left"
         @selection-change="onSelectionChange"
       />
 
@@ -488,7 +491,7 @@
 
       <el-dialog :title="sunCodeTitle" :visible.sync="sunCode" width="360px">
         <div class="page-code">
-          <img class="page-code-img" :src="appCodeUrl">
+          <img class="page-code-img" :src="appCodeUrl" />
           <div class="page-btns">
             <el-button type="primary" plain @click="handleDownload(sunCodeTitle)">
               下载码
@@ -501,6 +504,14 @@
           <el-button type="primary" @click="sunCode = false">确 定</el-button>
         </span>
       </el-dialog>
+
+
+      <el-dialog title="错误信息" :visible.sync="errMessageVis" width="560px">
+        <div class="page-code">
+          {{errMessage}}
+        </div>
+      </el-dialog>
+
 
       <!-- 查看多规格信息 -->
       <SpDrawer
@@ -561,22 +572,25 @@ export default {
       statusOption = updateStatusOption
     }
 
-    let tabList = []
-    if (IS_SUPPLIER()) {
-      tabList = [
-        { name: '全部商品', value: 'all', activeName: 'first' },
-        { name: '待提交', value: 'submitting', activeName: 'submitting' },
-        { name: '待审核', value: 'processing', activeName: 'processing' },
-        { name: '已通过', value: 'approved', activeName: 'approved' },
-        { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
-        { name: '库存预警商品', value: 'true', activeName: 'second' }
-      ]
-    } else {
-      tabList = [
-        { name: '全部商品', value: 'all', activeName: 'first' },
-        { name: '库存预警商品', value: 'true', activeName: 'second' }
-      ]
-    }
+    // let tabList = []
+    // if (IS_SUPPLIER()) {
+    //   tabList = [
+    //     { name: '全部商品', value: 'all', activeName: 'first' },
+    //     { name: '待提交', value: 'submitting', activeName: 'submitting' },
+    //     { name: '待审核', value: 'processing', activeName: 'processing' },
+    //     { name: '已通过', value: 'approved', activeName: 'approved' },
+    //     { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
+    //     { name: '库存预警商品', value: 'true', activeName: 'second' }
+    //   ]
+    // } else {
+    //   tabList = [
+    //     { name: '全部商品', value: 'all', activeName: 'first' },
+    //     {name: '处方商品', value: 'chufang', activeName: 'third'},
+    //     { name: '库存预警商品', value: 'true', activeName: 'second' }
+    //   ]
+    // }
+
+
     return {
       formLoading: false,
       commissionDialog: false,
@@ -587,7 +601,7 @@ export default {
       current: '',
       currentId: '',
       currentPrice: '',
-      tabList,
+      // tabList,
       activeName: 'first',
       goodsName: '',
       isEdit: false,
@@ -635,11 +649,13 @@ export default {
         category: 0,
         item_category: 0,
         is_warning: false,
+        is_medicine:'',
         audit_status: '',
         delivery_data_type: '',
         tag_id: '',
         tax_rate_code: '',
         is_gift: undefined,
+        is_prescription:'',
         type: 0,
         barcode: '',
         distributor_id: 0,
@@ -649,6 +665,11 @@ export default {
         operator_name: '',
         cat_id: ''
       },
+      auditStatusMap:{
+        1:'未审核',
+        2:'审核通过',
+        3:'审核不通过'
+      },
       start_date: '',
       end_date: '',
       addCategorydialogVisible: false,
@@ -656,7 +677,8 @@ export default {
       isGiftsData: {},
       exportData: {},
       exportTagData: {},
-
+      errMessage:'',
+      errMessageVis: false,
       tagList: [],
       grade: [],
       vipGrade: [],
@@ -681,11 +703,11 @@ export default {
       batchChangeStateForm: {
         status: ''
       },
+      is_pharma_industry:false,
       isBindWdtErp: false,
       isBindJstErp: false,
       categoryList: [],
       templatesList: [],
-      templatesListavailable:[],
       itemCategoryList: [],
       regions: [],
       showMemberPriceDrawer: false,
@@ -781,7 +803,7 @@ export default {
           key: 'templates_id',
           component: ({ key }, value) => (
             <el-select v-model={value[key]}>
-              {this.templatesListavailable.map((item) => (
+              {this.templatesList.map((item) => (
                 <el-option label={item.name} value={item.template_id} />
               ))}
             </el-select>
@@ -854,6 +876,23 @@ export default {
                     detail: true
                   }
                 })
+              }
+            }
+          },
+          {
+            name: '重推',
+            key: 'repush',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => row.medicine_data?.audit_status == 3,
+            action: {
+              type: 'link',
+              handler: async([row]) => {
+                await this.$api.goods.medicineItemsSync({goods_id: row.goods_id})
+                this.$message.success('操作成功')
+                setTimeout(() => {
+                  this.$refs['finder'].refresh(true)
+                }, 200)
               }
             }
           },
@@ -1123,7 +1162,12 @@ export default {
               )
             }
           },
-
+          {
+            name: '是否处方',
+            key: 'item_bn',
+            width: 150,
+            render: (h, {row}) => row.is_prescription == '1' ? '是' : '否'
+          },
           {
             name: 'sku编码',
             key: 'item_bn',
@@ -1154,6 +1198,25 @@ export default {
                 ))}
               </div>
             )
+          },
+          {
+            name: '审核结果',
+            key: 'audit_status',
+            width: 150,
+            render: (h, {row}) => row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
+          },
+          {
+            name: '错误信息',
+            key: 'audit_reason',
+            width: 150,
+            render: (h, {row}) => <div>
+              {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+                <div onClick={()=>this.handleErrDetail(row.medicine_data)}>
+                  {this.handleAuditReason(row.medicine_data)}
+                  <i class="el-icon-info"></i>
+                </div>
+              )}
+              </div>
           },
           // {
           //   name: '供应商货号',
@@ -1293,6 +1356,33 @@ export default {
       }
     }
   },
+  computed:{
+    tabList(){
+      let tabList = []
+        if (IS_SUPPLIER()) {
+        tabList = [
+          { name: '全部商品', value: 'all', activeName: 'first' },
+          { name: '待提交', value: 'submitting', activeName: 'submitting' },
+          { name: '待审核', value: 'processing', activeName: 'processing' },
+          { name: '已通过', value: 'approved', activeName: 'approved' },
+          { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
+          { name: '库存预警商品', value: 'true', activeName: 'second' }
+        ]
+      } else {
+        tabList = [
+          { name: '全部商品', value: 'all', activeName: 'first' },
+
+          { name: '库存预警商品', value: 'true', activeName: 'second' }
+        ]
+      }
+
+      if(this.is_pharma_industry){
+        tabList.splice(1,0, {name: '医药商品', value: 'is_medicine', activeName: 'third'})
+      }
+
+      return tabList
+    }
+  },
   mounted() {
     this.init()
     this.getAddress()
@@ -1301,8 +1391,13 @@ export default {
     this.fetchWechatList()
     this.checkWdtErpBind()
     this.checkJstErpBind()
+    this.getBaseSetting()
   },
   methods: {
+    async getBaseSetting(){
+      const res = await this.$api.company.getGlobalSetting()
+      this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
+    },
     async fetchWechatList() {
       const { list } = await this.$api.minimanage.gettemplateweapplist()
       list.forEach((item, i) => {
@@ -1330,10 +1425,10 @@ export default {
     async getShippingTemplatesList() {
       const { list } = await this.$api.shipping.getShippingTemplatesList({
         page: 1,
-        pageSize: 1000
+        pageSize: 1000,
+        status: 1
       })
       this.templatesList = list
-      this.templatesListavailable = list.filter((item) => item.status)
     },
     async getCategory() {
       //销售分类
@@ -1343,6 +1438,11 @@ export default {
       //管理分类
       const itemCategoryList = await this.$api.goods.getCategory({ is_main_category: true })
       this.itemCategoryList = itemCategoryList
+    },
+    handleErrDetail(val){
+      if(!val || !val.audit_reason) return
+      this.errMessage = val.audit_reason
+      this.errMessageVis = true
     },
     async getMemberPriceByGoods(item_id) {
       this.currentId = item_id
@@ -1463,6 +1563,13 @@ export default {
         this.searchParams.is_warning = false
         this.searchParams.audit_status = this.activeName
       }
+
+      if(this.activeName == 'third'){
+        this.searchParams.is_medicine = 1
+        this.searchParams.audit_status = ''
+      }else{
+        this.searchParams.is_medicine = ''
+      }
       this.$refs['finder'].refresh()
     },
     onSelectionChange(selection) {
@@ -1493,6 +1600,10 @@ export default {
       } else {
         this.$message.error('请选择至少一个商品')
       }
+    },
+    handleAuditReason(data){
+      const {audit_reason = ''} = data || {}
+      return audit_reason.length > 8 ? audit_reason.slice(0,8)+'...' :audit_reason
     },
     async onFreightTemplateSubmit() {
       const { item_id, templates_id } = this.freightTemplateForm

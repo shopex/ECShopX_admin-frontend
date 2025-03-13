@@ -89,14 +89,14 @@
                 </el-select>
             </SpFilterFormItem>
         </SpFilterForm>
-        <SpFinder ref="finder" reserve-selection row-key="item_id" 
+        <SpFinder ref="finder" reserve-selection row-key="item_id"
         :other-config="{
             'max-height': 416,
             'header-cell-class-name': cellClass
-        }" 
+        }"
             :url="url"
             :show-pager-text="`已选中：${localSelection.length}`"
-            :fixed-row-action="true" 
+            :fixed-row-action="true"
             :setting="{
             columns: [
                 { name: '商品ID', key: 'item_id', width: 80 },
@@ -260,14 +260,14 @@ export default {
             } else {
                 const isAdd = selection.includes(row)
                 const idx = this.localSelection.findIndex((f) => f[this.rowKey] === row[this.rowKey])
-                
+
                 if (isAdd && idx === -1) {
                     this.localSelection.push(row)
                 } else if (!isAdd && idx !== -1) {
                     this.localSelection.splice(idx, 1)
                 }
             }
-            
+            this.localSelection = this.localSelection.filter(item=>item.itemId)
             this.updateVal(this.localSelection)
         },
         /**
@@ -279,20 +279,20 @@ export default {
             const { finderTable } = this.$refs.finder.$refs
             const currentPageData = finderTable.$refs.finderTable.list
             const currentPageDataIds = currentPageData.map((m) => m[this.rowKey])
-            
+
             // 获取当前页面已选中的数据
             const currentPageSelectList = list.filter((item) => currentPageDataIds.includes(item[this.rowKey]))
-            
+
             // 先移除当前页的所有选中项
             this.localSelection = this.localSelection.filter(item => !currentPageDataIds.includes(item[this.rowKey]))
-            
+
             // 如果有选中项，则添加到 localSelection
             if (currentPageSelectList.length > 0) {
                 this.localSelection.push(...currentPageData)
             }
-            
+
             this.updateVal(this.localSelection)
-            
+
             // 更新表格选中状态
             this.$nextTick(() => {
                 if (currentPageSelectList.length > 0) {
