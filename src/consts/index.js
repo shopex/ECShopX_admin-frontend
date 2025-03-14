@@ -162,7 +162,7 @@ export const PROFIT_TYPE = {
 
 export const PAY_TYPE = {
   offline: '线下转账',
-  offline_pay: '线下支付',
+  offline_pay: '线下转账',
   wxpay: '微信支付',
   amorepay: '微信支付',
   wechat: '微信支付',
