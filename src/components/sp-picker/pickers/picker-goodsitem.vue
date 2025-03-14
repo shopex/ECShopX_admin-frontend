@@ -88,6 +88,12 @@
                     <el-option :value="false" label="否" />
                 </el-select>
             </SpFilterFormItem>
+            <SpFilterFormItem prop="is_prescription">
+                <el-select v-model="formData.is_prescription" placeholder="是否处方药" clearable>
+                    <el-option :value="1" label="是" />
+                    <el-option :value="0" label="否" />
+                </el-select>
+            </SpFilterFormItem>
         </SpFilterForm>
         <SpFinder ref="finder" reserve-selection row-key="item_id"
         :other-config="{
@@ -182,7 +188,8 @@ export default {
             distributor_id: '',
             supplier_name: '',
             item_holder: '',
-            is_gift: ''
+            is_gift: '',
+            is_prescription:''
         }
         const formData = Object.assign(defaultParams, queryParams)
         return {
