@@ -84,6 +84,17 @@
         >
           <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
         </SpFilterFormItem>
+        <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="order_class" label="订单类型:">
+        <el-select v-model="params.order_class" clearable placeholder="请选择">
+          <el-option
+            v-for="item in orderType"
+            :key="item.value"
+            size="mini"
+            :label="item.title"
+            :value="item.value"
+          />
+        </el-select>
+      </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -379,7 +390,7 @@ import { mapGetters } from 'vuex'
 import RemarkModal from '@/components/remarkModal'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
 import { VERSION_B2C, IS_SUPPLIER } from '@/utils'
-import { ORDER_CATEGORY} from '@/consts'
+import { ORDER_CATEGORY, ORDER_TYPE_STANDARD, ORDER_TYPE} from '@/consts'
 export default {
   components: {
     RemarkModal
@@ -402,7 +413,8 @@ export default {
       item_bn: undefined,
       supplier_name:undefined,
       order_holder:undefined,
-      distributor_id:undefined
+      distributor_id:undefined,
+      order_class:undefined
     }
     return {
       loading: false,
@@ -432,7 +444,8 @@ export default {
         is_open: false
       },
       aftersalesRemindVisible: false,
-      aftersalesRemindTitle: '售后提醒内容'
+      aftersalesRemindTitle: '售后提醒内容',
+      orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
     }
   },
   computed: {
@@ -497,7 +510,7 @@ export default {
         supplier_name:this.params.supplier_name || undefined,
         order_holder:this.params.order_holder || undefined,
         distributor_id: this.params.distributor_id || undefined,
-
+        order_class: this.params.order_class || undefined,
       }
       return params
     },
