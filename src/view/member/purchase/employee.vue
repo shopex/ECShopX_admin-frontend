@@ -162,7 +162,7 @@ export default {
           },
           {
             name: '企业ID',
-            key: 'enterprise_name'
+            key: 'enterprise_id'
           },
           {
             name: '企业名称',

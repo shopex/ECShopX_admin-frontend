@@ -247,7 +247,7 @@ export default {
             // },
             action: {
               handler: async ([row]) => {
-                window.open(`/member/purchase/employee?company_id=${row.id}`, '_blank')
+                window.open(`${this.IS_DISTRIBUTOR() ? '/shopadmin' : ''}/member/purchase/employee?company_id=${row.id}`, '_blank')
 
               }
             }
@@ -541,7 +541,7 @@ export default {
 
         // 计算第二张图片的绘制位置，使其位于右下角
         const x = canvas.width - 350;
-        const y = canvas.height - 420;
+        const y = canvas.height - 430;
 
         // 设置文字样式
         ctx.font = '22px sans-serif';
