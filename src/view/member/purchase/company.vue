@@ -70,6 +70,7 @@
       :form="companyForm"
       :form-list="companyFormList"
       :confirmStatus="addDialogLoading"
+      :isShowFooter="isShowFooter"
       @onSubmit="onCompanyFormSubmit"
     />
 
@@ -165,10 +166,31 @@ export default {
             key: 'modify',
             type: 'button',
             buttonType: 'text',
+            visible: (row) => {
+              return !(this.IS_ADMIN() && row.distributor_id)
+            },
             action: {
               handler: async ([row]) => {
                 Object.keys(this.companyForm).forEach((key) => (this.companyForm[key] = row[key]))
                 this.companyForm.is_employee_check_enabled = this.companyForm.is_employee_check_enabled == 'true'
+                this.isShowFooter = true
+                this.addDialog = true
+              }
+            }
+          },
+          {
+            name: '查看',
+            key: 'modify',
+            type: 'button',
+            buttonType: 'text',
+            visible: (row) => {
+              return (this.IS_ADMIN() && row.distributor_id)
+            },
+            action: {
+              handler: async ([row]) => {
+                Object.keys(this.companyForm).forEach((key) => (this.companyForm[key] = row[key]))
+                this.companyForm.is_employee_check_enabled = this.companyForm.is_employee_check_enabled == 'true'
+                this.isShowFooter = false
                 this.addDialog = true
               }
             }
@@ -318,12 +340,13 @@ export default {
       addDialog: false,
       qrDialog: false,
       addDialogLoading:false,
+      isShowFooter:true,
       companyForm: {
         id: '',
         logo: '',
         name: '',
         enterprise_sn: '',
-        sort: '',
+        sort: '1',
         auth_type: 'mobile',
         relay_host: '',
         smtp_port: '',
