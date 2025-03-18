@@ -102,9 +102,9 @@
           <el-option label="否" value="0" />
         </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem v-if="is_pharma_industry" prop="user_family_name" label="用药人姓名:">
+      <!-- <SpFilterFormItem v-if="is_pharma_industry" prop="user_family_name" label="用药人姓名:">
         <el-input v-model="params.user_family_name" placeholder="请输入用药人姓名" />
-      </SpFilterFormItem>
+      </SpFilterFormItem> -->
       </SpFilterForm>
 
       <div class="action-container">
