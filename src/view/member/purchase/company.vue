@@ -316,8 +316,8 @@ export default {
               h('el-switch', {
                 props: {
                   'value': row.disabled,
-                  'active-value': 1,
-                  'inactive-value': 0
+                  'active-value': 0,
+                  'inactive-value': 1
                 },
                 on: {
                   change: async (e) => {
