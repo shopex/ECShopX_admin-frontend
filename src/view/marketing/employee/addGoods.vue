@@ -456,7 +456,13 @@ export default {
   },
   methods: {
     handleImport() {
-      this.$router.push({ path: `/entity/goods/goodsphysical/physicalupload?file_type=employee_purchase_activity_items` })
+      let path;
+      if(this.IS_DISTRIBUTOR()){
+        path = '/shopadmin/entity/storeshopproductanagement/physicalupload?file_type=employee_purchase_activity_items'
+      }else{
+        path = '/entity/goods/goodsphysical/physicalupload?file_type=employee_purchase_activity_items'
+      }
+      this.$router.push({ path })
     },
     handlePatchAction() {
       const selectItems = this.tableData.filter((item) => !!item.checked)
