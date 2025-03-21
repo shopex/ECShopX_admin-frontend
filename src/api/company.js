@@ -529,6 +529,15 @@ export function saveItemPriceSetting (params) {
   })
 }
 
+// 店铺隔离
+export function saveOpenDividedSetting (params) {
+  return fetch({
+    url: '/openDivided/setting',
+    method: 'post',
+    params
+  })
+}
+
 export function getGlobalSetting () {
   return fetch({
     url: '/settings',
