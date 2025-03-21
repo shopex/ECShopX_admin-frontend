@@ -76,6 +76,11 @@ export default {
       path: 'storemanager/marketinglog',
       name: `店铺记录`,
       component: () => import('@/view/mall/marketing/distributionLog')
+    },
+    {
+      path: 'storemanager/storewhitelist',
+      name: `店铺白名单`,
+      component: () => import('@/view/mall/marketing/storewhitelist')
     }
   ]
 }
