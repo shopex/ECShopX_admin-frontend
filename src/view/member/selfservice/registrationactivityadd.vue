@@ -1,14 +1,14 @@
 <template>
   <div class="section section-white">
-    <div class="section-header with-border">报名活动添加/更改</div>
-    <div class="section-body">
-      <el-form
-        ref="form"
-        :model="form"
-        label-width="150px"
-        label-position="right"
-        class="demo-ruleForm"
-      >
+    <el-form
+      ref="form"
+      :model="form"
+      label-width="150px"
+      label-position="right"
+      class="demo-ruleForm"
+    >
+      <div class="section-header with-border">基础信息</div>
+      <div class="section-body">
         <el-form-item
           label="活动名称"
           prop="activity_name"
@@ -18,13 +18,15 @@
             <el-input
               v-model.trim="form.activity_name"
               :maxlength="30"
-              placeholder="名称"
-              @change="fieldItemChange"
+              placeholder="请输入活动名称"
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="活动有效时间" prop="activity_time">
-          <el-col :span="15">
+        <el-form-item
+          label="活动有效时间"
+          prop="activity_time"
+        >
+          <el-col :span="10">
             <el-date-picker
               v-model="activity_date"
               type="datetimerange"
@@ -36,6 +38,241 @@
               :default-time="['00:00:00', '23:59:59']"
             />
           </el-col>
+          <el-form-item label="前端是否展示" prop="is_activitytime_show">
+            <el-switch
+              v-model="is_activitytime_show"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </el-form-item>
+        </el-form-item>
+        <el-form-item label="活动城市" prop="areaList">
+          <el-col :span="10">
+            <el-cascader
+              v-model="form.areaList"
+              placeholder="请选择"
+              clearable
+              :options="regions"
+              style="width: 60%;"
+            />
+          </el-col>
+          <el-form-item label="前端是否展示" prop="is_activitycity_show">
+            <el-switch
+              v-model="is_activitycity_show"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </el-form-item>
+        </el-form-item>
+        <el-form-item label="活动地点" prop="place" >
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.place"
+              :maxlength="30"
+              placeholder="请输入活动地点"
+            />
+          </el-col>
+          <el-form-item label="前端是否展示" prop="is_activityplace_show">
+            <el-switch
+              v-model="is_activityplace_show"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </el-form-item>
+        </el-form-item>
+        <el-form-item label="详细地址" prop="address" >
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.address"
+              :maxlength="30"
+              placeholder="请输入详细地址"
+            />
+          </el-col>
+          <el-form-item label="前端是否展示" prop="is_activityaddress_show">
+            <el-switch
+              v-model="is_activityaddress_show"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :active-value="1"
+              :inactive-value="0"
+            />
+          </el-form-item>
+        </el-form-item>
+        <el-form-item label="列表活动简介" prop="intro" >
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.intro"
+              :maxlength="30"
+              placeholder="请输入列表活动简介"
+            />
+          </el-col>
+        </el-form-item>
+        <el-form-item label="活动轮播图" prop="pics" >
+          <el-col :span="15">
+            <div>
+              <imgBox
+                :img-url="wximageurl + form.pics"
+                inline
+                @click="handleActivityPicsChange"
+              />
+            </div>
+            <div class="frm-tips">
+              建议尺寸:750*750，文件格式为：png、jpeg、bmp、 jpg大小不超 2M，小程序卡片分享与报名活动列表取详情第一张图展示
+            </div>
+            <imgPicker
+              :dialog-visible="activityPicsDialog"
+              :sc-status="isGetActivityImage"
+              @chooseImg="chooseActivityImg"
+              @closeImgDialog="closeImgDialog"
+            />
+          </el-col>
+      </el-form-item>
+      </div>
+      <div class="section-header with-border">活动规则</div>
+      <div class="section-body">
+        <el-form-item
+          label="获取积分"
+          prop="gift_points_switch"
+          :rules="[{ required: true, message: '请选择获取积分', trigger: 'blur'}]"
+        >
+          <el-switch
+            v-model="form.gift_points_switch"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="获取积分值"
+          prop="gift_points"
+        >
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.gift_points"
+              :maxlength="30"
+              placeholder="请输入奖励积分"
+            />
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          label="可重复报名"
+          prop="is_allow_duplicate"
+          :rules="[{ required: true, message: '请选择可重复报名', trigger: 'blur'}]"
+        >
+          <el-switch
+            v-model="form.is_allow_duplicate"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="是否审核"
+          prop="is_need_check"
+          :rules="[{ required: true, message: '请选择是否审核', trigger: 'blur'}]"
+        >
+          <el-switch
+            v-model="form.is_need_check"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="线下核销"
+          prop="is_offline_verify"
+          :rules="[{ required: true, message: '请选择线下核销', trigger: 'blur'}]"
+        >
+          <el-switch
+            v-model="form.is_offline_verify"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="允许取消报名"
+          prop="is_allow_cancel"
+          :rules="[{ required: true, message: '请选择是否允许取消报名', trigger: 'blur'}]"
+        >
+          <el-switch
+            v-model="form.is_allow_cancel"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="活动群组编号"
+          prop="group_no"
+        >
+          <el-col :span="10">
+            <el-input v-model.trim="form.group_no" placeholder="请输入活动群组编号" />
+          </el-col>
+        </el-form-item>
+        <el-form-item
+          label="进内购企业白名单"
+          prop="is_white_list"
+          :rules="[{ required: true, message: '请选择', trigger: 'blur'}]"
+        >
+          <el-radio-group v-model="form.is_white_list" @change="whiteListChange">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
+          </el-radio-group>
+          <div>开启后报名人员名单进入店铺企业员工白名单</div>
+        </el-form-item>
+        <el-form-item label="适用会员" v-if="form.is_white_list == 0">
+          <el-checkbox-group v-model="memberLevelList">
+            <el-checkbox v-for="grade in memberGrade" :key="grade.grade_id" :label="grade.grade_id+''">
+              {{ grade.grade_name }}
+            </el-checkbox>
+            <el-checkbox v-for="vipdata in vipGrade" :key="vipdata.lv_type" :label="vipdata.lv_type+''">
+              付费{{ vipdata.grade_name }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="适用店铺" v-if="form.is_white_list == 0">
+          <el-form-item prop="use_all_distributor">
+            <el-radio-group v-model="form.use_all_distributor" @change="shopTypeChange">
+              <el-radio :label="true"> 全部店铺适用 </el-radio>
+              <el-radio :label="false"> 指定店铺适用 </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <div v-if="!form.use_all_distributor">
+            <el-button type="primary" @click="addDistributorAction"> 选择店铺 </el-button>
+            <SpFinder
+              ref="finder"
+              :noSelection='true'
+              :setting="shopSetting"
+              :data="distributor_list"
+              url=""
+              v-if="distributor_list?.length > 0"
+              style="width:80%"
+            />
+          </div>
+        </el-form-item>
+        <el-form-item label="选择企业" v-if="form.is_white_list == 1">
+          <el-button type="primary" @click="onShowChange"> 选择企业 </el-button>
+          <SpFinder
+            ref="finder"
+            :noSelection='true'
+            :setting="setting"
+            :data="enterprise_list"
+            url=""
+            v-if="enterprise_list.length > 0"
+            style="width:80%"
+          />
         </el-form-item>
         <el-form-item
           label="选择报名问卷模板"
@@ -58,12 +295,31 @@
           prop="join_limit"
           :rules="[{ required: true, message: '请输入报名次数', trigger: 'blur' }]"
         >
-          <el-col :span="15">
+          <el-col :span="10">
             <el-input
               v-model.trim="form.join_limit"
               type="number"
               placeholder="次数"
-              @change="fieldItemChange"
+            />
+          </el-col>
+        </el-form-item>
+        <el-form-item label="报名结束语" prop="join_tips" v-if="form.is_white_list == 0">
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.join_tips"
+              placeholder="报名结束语"
+              type="textarea"
+              :rows="2"
+            />
+          </el-col>
+        </el-form-item>
+        <el-form-item label="报名结束语说明" prop="submit_form_tips" v-if="form.is_white_list == 0">
+          <el-col :span="10">
+            <el-input
+              v-model.trim="form.submit_form_tips"
+              placeholder="报名结束语说明"
+              type="textarea"
+              :rows="4"
             />
           </el-col>
         </el-form-item>
@@ -101,12 +357,58 @@
             </div>
           </el-col>
         </el-form-item>
-        <el-form-item>
-          <el-button @click.native="handleCancel"> 取消 </el-button>
-          <el-button type="primary" @click="submitAction"> 保存 </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+      </div>
+      <div class="section-header with-border">活动详情</div>
+      <div class="section-body" style="margin-left: 50px;">
+        <el-radio-group v-model="mode">
+          <el-radio :label="'richText'"> 富文本 </el-radio>
+          <el-radio :label="'component'"> 组件式 </el-radio>
+        </el-radio-group>
+        <div v-if="mode === 'richText'" style="margin-top: 20px;">
+          <div>
+            <SpRichText v-model="introInfo" />
+          </div>
+          <!-- <span class="tpl-btn" @click="addImgPreview" style="">
+            <i class="iconfont icon-image"></i>图片
+          </span> -->
+        </div>
+        <div v-else style="margin-top: 20px;">
+          <SpDecorate ref='decorateRef' v-model='content' scene='1002' />
+          <!-- <richTextEditor
+            :data="content"
+            :control="['film', 'slider', 'heading', 'writing']"
+            @change="handleContent"
+          /> -->
+          <!-- <imgPicker
+            :dialog-visible="thumbDialog"
+            :sc-status="isGetThumb"
+            :is-most="true"
+            @chooseImg="pickThumb"
+            @closeImgDialog="closeThumbDialog"
+          /> -->
+        </div>
+      </div>
+      <div style="margin-top: 30px;margin-left: 50%;">
+        <el-button @click.native="handleCancel"> 取消 </el-button>
+        <el-button type="primary" @click="submitAction"> 保存 </el-button>
+      </div>
+    </el-form>
+    <EnterpriseDialog
+      :visible.sync="dialogVisible"
+      type="edit"
+      :dialogSelect="enterprise_list"
+      @closeDialog="closeDialog"
+      @saveEnterprise="saveEnterprise"
+    />
+    <DistributorSelect
+      :store-visible="distributorVisible"
+      :is-valid="true"
+      :rel-data-ids="distributor_list"
+      :get-status="setDistributorStatus"
+      return-type="selectRow"
+      @chooseStore="chooseDistributorAction"
+      @closeStoreDialog="closeDistributorDialogAction"
+    />
   </div>
 </template>
 
@@ -117,27 +419,113 @@ import {
   regActivityGet,
   regActivityUpdate,
   getTemplateList
-} from '../../../api/selfhelpform'
+} from '@/api/selfhelpform'
 import imgPicker from '@/components/imageselect'
 import imgBox from '@/components/element/imgBox'
+import district from '@/common/district.json'
+import { listVipGrade } from '@/api/cardticket'
+import { getGradeList } from '@/api/membercard'
+import richTextEditor from '@/components/function/richTextEditor'
+import EnterpriseDialog from './components/enterpriseDialog'
+import { createSetting } from '@shopex/finder'
+import DistributorSelect from '@/components/storeListSelect'
 
 export default {
   inject: ['refresh'],
   components: {
     imgPicker,
-    imgBox
+    imgBox,
+    richTextEditor,
+    EnterpriseDialog,
+    DistributorSelect
+  },
+  computed: {
+    shopSetting () {
+      return createSetting({
+        columns: [
+          { name: 'ID', key: 'distributor_id'  },
+          { name: '名称', key: 'name' },
+          { name: 'address', key: '地址' },
+        ],
+        actions: [
+          { name: '删除',
+            key: 'detete',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              handler: async ([row]) => {
+                const inChecked = this.distributor_list.findIndex(v => v.id == row.id)
+                if (inChecked > -1) {
+                  this.distributor_list.splice(inChecked, 1)
+                }
+              }
+            }
+          }
+        ]
+      })
+    },
+    setting () {
+      return createSetting({
+        columns: [
+          { name: '企业ID', key: 'id'  },
+          { name: '企业名称', key: 'enterprise_sn' },
+          { name: '登录类型', key: 'enterprise_sn' },
+          { name: '来源店铺', key: 'enterprise_sn' },
+        ],
+        actions: [
+          { name: '删除',
+            key: 'detete',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              handler: async ([row]) => {
+                const inChecked = this.enterprise_list.findIndex(v => v.id == row.id)
+                if (inChecked > -1) {
+                  this.enterprise_list.splice(inChecked, 1)
+                }
+              }
+            }
+          }
+        ]
+      })
+    }
   },
   data() {
     return {
-      pickerOptions: {},
       activity_date: [],
       form: {
         activity_name: '',
         activity_time: '',
         start_time: '',
         end_time: '',
-        join_limit: ''
+        join_limit: '', // 提交报名次数
+        areaList: [],
+        area: '', // 活动城市(省市)
+        place: '', // 活动地点
+        address: '', // 详情地址
+        intro: '', // 活动简介
+        pics: '', // 活动轮播图
+        gift_points_switch: 1, // 奖励积分开关
+        gift_points: '', // 奖励积分
+        is_allow_duplicate: 1, // 是否允许重复报名
+        is_allow_cancel: 1, // 是否允许取消报名
+        is_offline_verify: 0, // 是否线下核销(1或0)
+        is_need_check: 1, // 是否需要审核(1或0)
+        is_white_list: 0, // 是否自动加入内购白名单(1或0)
+        enterprise_ids: [], // 白名单企业ID
+        group_no: '', // 活动分组编码
+        member_level: '', // 适用会员等级
+        distributor_ids: [], // 适用店铺
+        join_tips: '', // 活动参与提示信息
+        submit_form_tips: '', // 表单填写提示信息
+        use_all_distributor: false, // 适用店铺
       },
+      memberLevelList: [], // 适用会员等级
+      regions: district,
+      is_activitytime_show: 1, // 活动有效时间-前端是否展示
+      is_activitycity_show: 1, // 活动城市-前端是否展示
+      is_activityplace_show: 1, // 活动地点-前端是否展示
+      is_activityaddress_show: 1, // 详细地址-前端是否展示
       templateParams: {
         page: 1,
         pageSize: 10,
@@ -146,16 +534,20 @@ export default {
         is_valid: 1
       },
       temp_options: [],
-      formText: false,
-      formTextarea: false,
-      formRadio: false,
-      formCheckbox: false,
-      formSelect: false,
-      formLable: '',
-      formName: '',
-      imgDialog: false,
-      isGetImage: false,
-      imgIndex: 0
+      activityPicsDialog: false,
+      isGetActivityImage: false,
+      vipGrade: [],
+      memberGrade: [],
+      mode: 'richText',
+      introInfo: '', // 富文本
+      content: [], // 组件化
+      thumbDialog: false,
+      isGetThumb: false,
+      dialogVisible: false,
+      enterprise_list: [], // 企业列表
+      distributor_list: [], // 店铺列表
+      distributorVisible: false, // 店铺弹窗
+      setDistributorStatus: false, // 店铺弹窗状态
     }
   },
   mounted() {
@@ -165,25 +557,87 @@ export default {
       regActivityGet(filter).then((res) => {
         this.form = res.data.data
         this.activity_date = [this.form.start_time * 1000, this.form.end_time * 1000]
+        this.enterprise_list = this.form.enterprise_list
+        this.distributor_list = this.form.distributor_list
+        if (this.form.mode == 'component') {
+          this.content = JSON.parse(this.form.content)
+        } else {
+          this.introInfo = this.form.content
+        }
+        let json = []
+        if (this.form.show_fields) {
+          json = JSON.parse(this.form.show_fields)
+        }
+        this.is_activitytime_show = json.time
+        this.is_activitycity_show = json.city
+        this.is_activityplace_show = json.place
+        this.is_activityaddress_show = json.address
+        this.form.areaList = res.data.data.area.split(',')
+        this.memberLevelList = res.data.data.member_level.split(',')
+        if (this.form.gift_points) {
+          this.form.gift_points_switch = 1
+        }
+        if (this.form.is_white_list == 0) {
+          if (this.form.distributor_ids) {
+            this.form.use_all_distributor = false
+          } else {
+            this.form.use_all_distributor = true
+          }
+        }
+        console.log(this.form, res.data.data.member_level.split(','))
       })
     }
+    this.getGradeLevelList()
   },
   methods: {
+    getGradeLevelList () {
+      listVipGrade().then((response) => {
+        if (response != undefined && response.data.data && response.data.data.length > 0) {
+          this.vipGrade = response.data.data
+        }
+      })
+      getGradeList().then((response) => {
+        if (response != undefined && response.data.data && response.data.data.length > 0) {
+          this.memberGrade = response.data.data
+        }
+      })
+      
+    },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
     },
     selectTempId(e) {},
-    fieldItemChange(val) {},
     submitAction() {
       const that = this
       if (that.activity_date.length > 0) {
         this.form.start_time = that.activity_date[0] / 1000
         this.form.end_time = that.activity_date[1] / 1000
       }
+      let params = {...this.form}
+      const aaa = {
+        time: this.is_activitytime_show,
+        city: this.is_activitycity_show,
+        place: this.is_activityplace_show,
+        address: this.is_activityaddress_show,
+      }
+      params['show_fields'] = JSON.stringify(aaa)
+      params['distributor_ids'] = this.distributor_list?.map((item) => item.distributor_id).join(',')
+      params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',')
+      params['member_level'] = this.memberLevelList.join(',')
+      if (this.mode === 'component') {
+        params['content'] = JSON.stringify(this.content)
+      } else {
+        params['content'] = this.introInfo
+      }
+      params['area'] = this.form.areaList.join(',')
+
+      console.log('submitAction', params)
+      debugger
+      delete params.areaList
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.activity_id) {
-            regActivityUpdate(this.form).then((res) => {
+            regActivityUpdate(params).then((res) => {
               if (res.data.data) {
                 this.$message({
                   message: '更新成功',
@@ -197,7 +651,7 @@ export default {
               }
             })
           } else {
-            regActivityAdd(this.form).then((res) => {
+            regActivityAdd(params).then((res) => {
               if (res.data.data) {
                 this.$message({
                   message: '添加成功',
@@ -232,10 +686,95 @@ export default {
             value: item.id
           })
         })
-        // this.temp_options = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false
       })
+    },
+    chooseActivityImg (data) {
+      this.form.pics = data.url
+      this.activityPicsDialog = false
+    },
+    closeImgDialog () {
+      this.activityPicsDialog = false
+    },
+    handleActivityPicsChange () {
+      this.activityPicsDialog = true
+      this.isGetActivityImage = true
+    },
+    pickThumb: function (arr) {
+      if (arr.length != 0) {
+        arr.forEach((data) => {
+          if (data && data.url !== '') {
+            this.thumbDialog = false
+            var index = this.$refs.editor.$el.id
+            var loc = this.$refs.editor
+            var img = new Image()
+            img.src = this.wximageurl + data.url
+            if (loc.range) {
+              loc.range.insertNode(img)
+              var referenceNode = loc.range.endContainer
+              if (referenceNode.className !== 'content') {
+                loc.range.setStartAfter(referenceNode)
+              } else {
+                loc.range.setStart(loc.range.endContainer, loc.range.endOffset)
+              }
+            } else {
+              loc.$refs.content.appendChild(img)
+              loc.focus()
+              loc.restoreSelection()
+            }
+            this.introInfo = loc.$refs.content.innerHTML
+          }
+        })
+      }
+    },
+    closeThumbDialog: function () {
+      this.thumbDialog = false
+    },
+    handleContent(data) {
+      this.content = data
+    },
+    onShowChange () {
+      this.closeDialog(true)
+    },
+    closeDialog (visible) {
+      this.dialogVisible = visible
+    },
+    saveEnterprise (select) {
+      console.log(select)
+      this.enterprise_list = select
+      this.closeDialog(false)
+    },
+    shopTypeChange (val) {
+      if (val === false) {
+        this.form.use_all_distributor = false
+        this.distributor_list = []
+      }
+    },
+    addDistributorAction() {
+      this.distributorVisible = true
+      this.setDistributorStatus = true
+    },
+    chooseDistributorAction(data) {
+      this.distributorVisible = false
+      if (!data || data === null || data.length <= 0) {
+        this.distributor_list = []
+        return
+      }
+      this.distributor_list = data
+    },
+    closeDistributorDialogAction() {
+      this.distributorVisible = false
+    },
+    whiteListChange (val) {
+      if (val) {
+        this.distributor_list = []
+        this.form.member_level = ''
+        this.memberLevelList = []
+      } else {
+        this.enterprise_list = []
+      }
+      console.log(val)
     }
   }
 }
@@ -257,5 +796,12 @@ export default {
 }
 .box-card {
   width: 480px;
+}
+.component-block {
+  margin-bottom: 20px;
+}
+.ricktext-con {
+  width: calc(100% - 100px);
+  display: inline-block;
 }
 </style>

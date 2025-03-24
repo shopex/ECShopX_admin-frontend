@@ -217,3 +217,27 @@ export function registrationReview (query) {
     params: query
   })
 }
+
+export function registrationVerifyLog (query) { // 核销记录
+  return fetch({
+    url: '/selfhelp/registrationVerifyLog',
+    method: 'get',
+    params: query
+  })
+}
+
+export function registrationVerify (query) { // 活动核销
+  return fetch({
+    url: '/selfhelp/registrationVerify',
+    method: 'post',
+    params: query
+  })
+}
+
+export function registratioCancel (query) { // 活动中止
+  return fetch({
+    url: '/selfhelp/registrationActivity/cancel',
+    method: 'post',
+    params: query
+  })
+}

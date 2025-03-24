@@ -57,6 +57,39 @@
             placeholder="根据添加时间筛选"
           />
         </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="is_white_list"
+          label="进白名单:"
+        >
+          <el-select
+            v-model="params.is_white_list"
+            placeholder="请选择白名单"
+          >
+            <el-option
+              v-for="item in whiteOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="distributor" label="店铺:">
+          <el-autocomplete
+            v-model="params.distributor.name"
+            :fetch-suggestions="queryStoreSearch"
+            placeholder="请输入店铺名称"
+            @select="handleSelectStore"
+          />
+        </SpFilterFormItem>
+        <SpFilterFormItem
+          prop="true_name"
+          label="姓名:"
+        >
+          <el-input
+            v-model="params.true_name"
+            placeholder="姓名"
+          />
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -115,9 +148,26 @@
               label="报名编号"
             />
             <el-table-column
+              prop="activity_name"
+              label="活动名称"
+            />
+            <el-table-column
+              prop="tem_name"
+              label="报名表单"
+            />
+            <el-table-column
               prop="mobile"
               label="手机号"
             />
+            <el-table-column
+              prop="get_points"
+              label="获取积分"
+            />
+            <el-table-column label="进白名单" width="120">
+              <template slot-scope="scope">
+                {{ scope.row.is_white_list ? '是' : '否'}}
+              </template>
+            </el-table-column>
             <el-table-column
               prop="create_date"
               label="申请时间"
@@ -139,7 +189,7 @@
                   type="success"
                   size="mini"
                 >
-                  已通过
+                  已报名
                 </el-tag>
                 <el-tag
                   v-if="scope.row.status == 'rejected'"
@@ -147,6 +197,20 @@
                   size="mini"
                 >
                   已拒绝
+                </el-tag>
+                <el-tag
+                  v-if="scope.row.status == 'verified'"
+                  type="danger"
+                  size="mini"
+                >
+                  已核销
+                </el-tag>
+                <el-tag
+                  v-if="scope.row.status == 'canceled'"
+                  type="danger"
+                  size="mini"
+                >
+                  已取消
                 </el-tag>
               </template>
             </el-table-column>
@@ -167,6 +231,7 @@
                 >
                   详情
                 </router-link>
+               <el-button type="text" @click="onShowChange(scope.row)">核销</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -184,6 +249,16 @@
         </el-tab-pane>
       </el-tabs>
     </template>
+    <SpDialog
+      ref="dialogRef"
+      v-model="dialogVisible"
+      title="报名核销"
+      :modal="false"
+      width="500px"
+      :form="dialogForm"
+      :form-list="dialogFormList"
+      @onSubmit="onDialogFormSubmit"
+    />
     <router-view />
   </div>
 </template>
@@ -200,7 +275,14 @@ export default {
       activity_id: undefined,
       mobile: undefined,
       status: 'all',
-      create_time: []
+      create_time: [],
+      true_name: undefined,
+      distributor_id: '',
+      distributor: {
+        name: undefined,
+        id: undefined
+      },
+      is_white_list: '',
     }
     return {
       initialParams,
@@ -210,8 +292,10 @@ export default {
       tabList: [
         { label: '全部', name: 'all' },
         { label: '待审核', name: 'pending' },
-        { label: '已通过', name: 'passed' },
-        { label: '已拒绝', name: 'rejected' }
+        { label: '已报名', name: 'passed' },
+        { label: '已拒绝', name: 'rejected' },
+        { label: '已核销', name: 'verified' },
+        { label: '已取消', name: 'canceled' },
       ],
       activityParams: {
         page: 1,
@@ -219,7 +303,28 @@ export default {
         is_valid: true
       },
       loading: false,
-      activity_options: []
+      activity_options: [],
+      shopList: [],
+      whiteOptions: [
+        { label: '全部', value: '' },
+        { label: '是', value: 1 },
+        { label: '否', value: 0 },
+      ],
+      dialogVisible: false,
+      dialogForm: {
+        record_id: '',
+        verify_code: ''
+      },
+      dialogFormList: [
+        {
+          label: '提货码',
+          key: 'verify_code',
+          type: 'input',
+          placeholder: '请输入提货码',
+          required: true,
+          message: '不能为空'
+        }
+      ],
     }
   },
   mounted () {
@@ -228,6 +333,7 @@ export default {
     }
     this.regActivityEasylists()
     this.fetchList()
+    this.getStoreList()
   },
   methods: {
     onSearch () {
@@ -238,6 +344,13 @@ export default {
     },
     onReset () {
       this.params = { ...this.initialParams }
+      this.params = {
+        ...this.params,
+        distributor: {
+          id: undefined,
+          name: undefined
+        }
+      }
       this.onSearch()
     },
     getParams () {
@@ -253,6 +366,7 @@ export default {
         status: this.params.status === 'all' ? '' : this.params.status,
         ...time
       }
+      delete params.distributor
       return params
     },
     async fetchList () {
@@ -344,6 +458,40 @@ export default {
           return
         }
       })
+    },
+    async getStoreList() {
+      let params = { page: 1, pageSize: 500 }
+      const { list } = await this.$api.marketing.getDistributorList(params)
+      if (list) {
+        list.forEach((row) => {
+          this.shopList.push({ 'value': row.name, 'distributor_id': row.distributor_id })
+        })
+      }
+    },
+    queryStoreSearch(queryString, cb) {
+      var restaurants = this.shopList
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    handleSelectStore(storeItem) {
+      this.params.distributor_id = storeItem.distributor_id
+      this.params.distributor.id = storeItem.distributor_id
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+      }
+    },
+    async onDialogFormSubmit() {
+      await this.$api.selfhelpform.registrationVerify(this.dialogForm)
+      this.dialogVisible = false
+      this.dialogForm = {}
+      this.fetchList()
+    },
+    onShowChange (row) {
+      this.dialogForm.record_id = row.record_id
+      this.dialogVisible = true
     }
   },
   computed: {
