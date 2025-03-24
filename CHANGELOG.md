@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.18.3](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.2...v3.18.3) (2025-03-24)
+
+
+### Bug Fixes
+
+* iconfont ([fde835d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/fde835dad8365a918eea9e4dd91e1f6f8876f9b7))
+
 ### [3.18.2](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.1...v3.18.2) (2025-03-24)
 
 
