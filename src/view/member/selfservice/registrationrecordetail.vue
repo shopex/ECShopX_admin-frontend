@@ -1,16 +1,16 @@
 <template>
   <div class="section section-white">
-    <div class="section-header with-border">
-      报名详情及审核
-    </div>
-    <div class="section-body">
-      <el-form
-        ref="recorddata"
-        :model="recorddata"
-        label-width="150px"
-        label-position="right"
-        class="demo-ruleForm"
-      >
+    <el-form
+      ref="recorddata"
+      :model="recorddata"
+      label-width="150px"
+      label-position="right"
+      class="demo-ruleForm"
+    >
+      <div class="section-header with-border">
+        活动报名信息
+      </div>
+      <div class="section-body">
         <el-form-item label="活动名称">
           {{ recorddata.activity_name }}
         </el-form-item>
@@ -20,6 +20,76 @@
         >
           {{ recorddata.start_date }} ~ {{ recorddata.end_date }}
         </el-form-item>
+        <el-form-item label="活动状态">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="活动城市">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="活动地址">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="详情地址">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="是否进白名单">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="昵称">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="手机号">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="获取积分">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="可重复报名">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="是否审核">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="线下核销">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="允许取消报名">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="活动群组编号">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="进内购企业白名单">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="适用会员">
+          {{ recorddata.activity_name }}
+        </el-form-item>
+        <el-form-item label="适用店铺">
+          <SpFinder
+            :noSelection='true'
+            :setting="shopSetting"
+            :data="recorddata.distributor_list"
+            url=""
+            v-if="recorddata.distributor_list?.length > 0"
+            style="width:80%"
+          />
+        </el-form-item>
+        <el-form-item label="企业">
+          <SpFinder
+            :noSelection='true'
+            :setting="setting"
+            :data="recorddata.enterprise_list"
+            url=""
+            v-if="recorddata.enterprise_list?.length > 0"
+            style="width:80%"
+          />
+        </el-form-item>
+      </div>
+      <div class="section-header with-border">
+        报名登记信息
+      </div>
+      <div class="section-body">
         <el-form-item
           label="审核结果"
           prop="status"
@@ -67,6 +137,15 @@
             </div>
           </el-card>
         </el-form-item>
+      </div>
+      <div class="section-header with-border">
+        上传的证照信息
+      </div>
+      <div class="section-body"></div>
+      <div class="section-header with-border">
+        活动报名审核
+      </div>
+      <div class="section-body">
         <el-form-item
           v-if="recorddata.status == 'pending'"
           label="是否同意"
@@ -82,26 +161,27 @@
             type="textarea"
           />
         </el-form-item>
-        <el-form-item>
-          <el-button
-            v-if="recorddata.status == 'pending'"
-            type="primary"
-            @click="submitAction"
-          >
-            提交审核
-          </el-button>
-          <el-button @click="handleCancel">
-            取消
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+      </div>
+      <el-form-item>
+        <el-button
+          v-if="recorddata.status == 'pending'"
+          type="primary"
+          @click="submitAction"
+        >
+          提交审核
+        </el-button>
+        <el-button @click="handleCancel">
+          取消
+        </el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 import { Message } from 'element-ui'
 import { regActivityRecordinfo, registrationReview } from '@/api/selfhelpform'
+import { createSetting } from '@shopex/finder'
 
 export default {
   inject: ['refresh'],
@@ -113,7 +193,22 @@ export default {
         status: true,
         reason: ''
       },
-      recorddata: {}
+      recorddata: {},
+      shopSetting: {
+        columns: [
+          { name: 'ID', key: 'distributor_id'  },
+          { name: '名称', key: 'name' },
+          { name: 'address', key: '地址' },
+        ]
+      },
+      setting: {
+        columns: [
+          { name: '企业ID', key: 'id'  },
+          { name: '企业名称', key: 'enterprise_sn' },
+          { name: '登录类型', key: 'enterprise_sn' },
+          { name: '来源店铺', key: 'enterprise_sn' },
+        ]
+      }
     }
   },
   mounted () {
