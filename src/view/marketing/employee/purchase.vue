@@ -643,9 +643,13 @@ export default {
     },
     async onPickerCompany() {
       const ids = this.activityRule.companyList.map((item) => item.id)
-      const { data } = await this.$picker.company({
+      const params = {
         data: ids
-      })
+      }
+      if(this.IS_ADMIN()){
+        params.distributor_id = 0
+      }
+      const { data } = await this.$picker.company(params)
       this.activityRule.companyList = data
     },
     closeCompany(index) {
