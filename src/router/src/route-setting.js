@@ -155,7 +155,7 @@ export default {
     {
       path: 'systemsetting/wxaindex',
       name: `服务号管理-授权管理`,
-      component: () => import( '@/view/base/wxa/index')
+      component: () => import( '@/view/wxapp/wxappmanage/list')
     },
     {
       path: 'systemsetting/brand',
