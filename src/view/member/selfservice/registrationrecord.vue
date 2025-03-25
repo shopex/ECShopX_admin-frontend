@@ -173,10 +173,10 @@
               label="申请时间"
             />
             <el-table-column
-              prop="status"
+              prop="status_name"
               label="状态"
             >
-              <template slot-scope="scope">
+              <!-- <template slot-scope="scope">
                 <el-tag
                   v-if="scope.row.status == 'pending'"
                   type="warning"
@@ -212,7 +212,7 @@
                 >
                   已取消
                 </el-tag>
-              </template>
+              </template> -->
             </el-table-column>
             <el-table-column
               prop="status"
@@ -308,7 +308,7 @@ export default {
       whiteOptions: [
         { label: '全部', value: '' },
         { label: '是', value: 1 },
-        { label: '否', value: 0 },
+        { label: '否', value: 2 },
       ],
       dialogVisible: false,
       dialogForm: {
@@ -329,7 +329,8 @@ export default {
   },
   mounted () {
     if (this.$route.query.id) {
-      this.params.record_id = this.$route.query.id
+      // this.params.record_id = this.$route.query.id
+      this.params.activity_id = this.$route.query.id
     }
     this.regActivityEasylists()
     this.fetchList()

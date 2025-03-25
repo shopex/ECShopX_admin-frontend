@@ -113,14 +113,42 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="活动轮播图" prop="pics" >
-          <el-col :span="15">
-            <div>
+        <el-form-item label="活动轮播图" prop="picsList" >
+          <el-col>
+            <!-- <div>
               <imgBox
                 :img-url="wximageurl + form.pics"
                 inline
                 @click="handleActivityPicsChange"
               />
+            </div> -->
+            <div class="pics-box">
+              <ul class="goodspic-wrap">
+                <draggable v-model="picsList" :options="dragIssuesOptions">
+                  <li
+                    v-for="(item, index) in picsList"
+                    :key="index"
+                    class="goodspic"
+                    @mouseenter="picsEnter(index)"
+                    @mouseleave="picsLeave"
+                  >
+                    <img :src="wximageurl + item">
+                    <div class="goodspic-mask" :class="picsCurrent == index ? 'on' : ''">
+                      <div
+                        class="iconfont icon-trash-alt"
+                        @click="removePicsImg(index)"
+                      />
+                      <div class="iconfont icon-arrows-alt" />
+                    </div>
+                  </li>
+                </draggable>
+              </ul>
+              <div
+                class="upload-box"
+                @click="handleActivityPicsChange"
+              >
+                <i class="iconfont icon-camera" />
+              </div>
             </div>
             <div class="frm-tips">
               建议尺寸:750*750，文件格式为：png、jpeg、bmp、 jpg大小不超 2M，小程序卡片分享与报名活动列表取详情第一张图展示
@@ -128,6 +156,7 @@
             <imgPicker
               :dialog-visible="activityPicsDialog"
               :sc-status="isGetActivityImage"
+              :is-most="true"
               @chooseImg="chooseActivityImg"
               @closeImgDialog="closeImgDialog"
             />
@@ -243,13 +272,13 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="适用店铺" v-if="form.is_white_list == 0">
-          <el-form-item prop="use_all_distributor">
-            <el-radio-group v-model="form.use_all_distributor" @change="shopTypeChange">
+          <el-form-item prop="useAllDistributor">
+            <el-radio-group v-model="useAllDistributor" @change="shopTypeChange">
               <el-radio :label="true"> 全部店铺适用 </el-radio>
               <el-radio :label="false"> 指定店铺适用 </el-radio>
             </el-radio-group>
           </el-form-item>
-          <div v-if="!form.use_all_distributor">
+          <div v-if="!useAllDistributor">
             <el-button type="primary" @click="addDistributorAction"> 选择店铺 </el-button>
             <SpFinder
               ref="finder"
@@ -429,6 +458,7 @@ import richTextEditor from '@/components/function/richTextEditor'
 import EnterpriseDialog from './components/enterpriseDialog'
 import { createSetting } from '@shopex/finder'
 import DistributorSelect from '@/components/storeListSelect'
+import draggable from 'vuedraggable'
 
 export default {
   inject: ['refresh'],
@@ -437,7 +467,8 @@ export default {
     imgBox,
     richTextEditor,
     EnterpriseDialog,
-    DistributorSelect
+    DistributorSelect,
+    draggable
   },
   computed: {
     shopSetting () {
@@ -520,6 +551,8 @@ export default {
         submit_form_tips: '', // 表单填写提示信息
         use_all_distributor: false, // 适用店铺
       },
+      picsList: [],
+      useAllDistributor: false, // 适用店铺
       memberLevelList: [], // 适用会员等级
       regions: district,
       is_activitytime_show: 1, // 活动有效时间-前端是否展示
@@ -548,6 +581,14 @@ export default {
       distributor_list: [], // 店铺列表
       distributorVisible: false, // 店铺弹窗
       setDistributorStatus: false, // 店铺弹窗状态
+      dragIssuesOptions: {
+        animation: 300,
+        forceFallback: false,
+        scroll: true,
+        handle: '.icon-arrows-alt',
+        draggable: '.goodspic'
+      },
+      picsCurrent: -1,
     }
   },
   mounted() {
@@ -568,6 +609,9 @@ export default {
         if (this.form.show_fields) {
           json = JSON.parse(this.form.show_fields)
         }
+        if (this.form.pics) {
+          this.picsList = JSON.parse(this.form.pics)
+        }
         this.is_activitytime_show = json.time
         this.is_activitycity_show = json.city
         this.is_activityplace_show = json.place
@@ -579,9 +623,9 @@ export default {
         }
         if (this.form.is_white_list == 0) {
           if (this.form.distributor_ids) {
-            this.form.use_all_distributor = false
+            this.useAllDistributor = false
           } else {
-            this.form.use_all_distributor = true
+            this.useAllDistributor = true
           }
         }
         console.log(this.form, res.data.data.member_level.split(','))
@@ -614,16 +658,18 @@ export default {
         this.form.end_time = that.activity_date[1] / 1000
       }
       let params = {...this.form}
-      const aaa = {
+      const obj = {
         time: this.is_activitytime_show,
         city: this.is_activitycity_show,
         place: this.is_activityplace_show,
         address: this.is_activityaddress_show,
       }
-      params['show_fields'] = JSON.stringify(aaa)
+      params['show_fields'] = JSON.stringify(obj)
       params['distributor_ids'] = this.distributor_list?.map((item) => item.distributor_id).join(',')
       params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',')
       params['member_level'] = this.memberLevelList.join(',')
+      params['use_all_distributor'] = this.useAllDistributor
+      params['pics'] = JSON.stringify(this.picsList)
       if (this.mode === 'component') {
         params['content'] = JSON.stringify(this.content)
       } else {
@@ -633,7 +679,11 @@ export default {
 
       console.log('submitAction', params)
       debugger
+      delete params.distributor_list
+      delete params.enterprise_list
       delete params.areaList
+      delete params.updated
+      delete params.created
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.activity_id) {
@@ -691,7 +741,13 @@ export default {
       })
     },
     chooseActivityImg (data) {
-      this.form.pics = data.url
+      if (data.length > 0) {
+        data.forEach((data) => {
+          if (data && data.url !== '') {
+            this.picsList.push(data.url)
+          }
+        })
+      }
       this.activityPicsDialog = false
     },
     closeImgDialog () {
@@ -746,9 +802,14 @@ export default {
       this.closeDialog(false)
     },
     shopTypeChange (val) {
+      console.log(val)
+      this.useAllDistributor = val
       if (val === false) {
-        this.form.use_all_distributor = false
         this.distributor_list = []
+        this.form.distributor_ids = ''
+      } else {
+        this.enterprise_list = []
+        this.form.enterprise_ids = ''
       }
     },
     addDistributorAction() {
@@ -775,7 +836,16 @@ export default {
         this.enterprise_list = []
       }
       console.log(val)
-    }
+    },
+    picsEnter(index) {
+      this.picsCurrent = index
+    },
+    picsLeave() {
+      this.picsCurrent = -1
+    },
+    removePicsImg: function (index) {
+      this.picsList.splice(index, 1)
+    },
   }
 }
 </script>
@@ -803,5 +873,62 @@ export default {
 .ricktext-con {
   width: calc(100% - 100px);
   display: inline-block;
+}
+.pics-box {
+  overflow: hidden;
+  .goodspic-wrap {
+    float: left;
+    margin-right: 5px;
+    overflow: hidden;
+    .goodspic {
+      position: relative;
+      float: left;
+      width: 120px;
+      height: 120px;
+      margin: 0 5px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+      .goodspic-mask {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        &.on {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .iconfont {
+          margin: 0 8px;
+          font-size: 20px;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .upload-box {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+    border: 1px dashed #ddd;
+    border-radius: 8px;
+    .iconfont {
+      font-size: 30px;
+      color: #ccc;
+    }
+  }
 }
 </style>

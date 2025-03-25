@@ -92,7 +92,7 @@
 </template>
 <script>
 import mixin, { pageMixin } from '@/mixins'
-import { registratioCancel } from '@/api/selfhelpform'
+import { regActivityInvalid } from '@/api/selfhelpform'
 import EnterpriseDialog from './components/enterpriseDialog'
 export default {
   mixins: [mixin, pageMixin],
@@ -221,7 +221,7 @@ export default {
       } else if (type == 'detail') {
         this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id} })
       } else if (type == 'record') {
-        this.$router.push({ path: '/marketing/marketing/apply/Registrationrecord' })
+        this.$router.push({ path: '/marketing/marketing/apply/Registrationrecord', query: { id: row.activity_id} })
       }
     },
     onStopChange(row) {
@@ -232,7 +232,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            registratioCancel({ activity_id: row.activity_id }).then((res) => {
+            regActivityInvalid({ activity_id: row.activity_id }).then((res) => {
                 this.fetchList()
                 this.$message({
                   message: '修改活动状态成功',

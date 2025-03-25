@@ -29,7 +29,7 @@
       :row-key="getRowKeys"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column :reserve-selection="true" type="selection" width="55" />
+      <el-table-column :reserve-selection="true" type="selection" width="55" v-if="type != 'show'" />
       <el-table-column prop="id" label="企业ID" />
       <el-table-column prop="enterprise_sn" label="企业名称" />
       <el-table-column prop="enterprise_sn" label="登录类型" v-if="type != 'show'" />

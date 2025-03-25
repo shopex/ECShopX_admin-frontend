@@ -233,11 +233,3 @@ export function registrationVerify (query) { // 活动核销
     params: query
   })
 }
-
-export function registratioCancel (query) { // 活动中止
-  return fetch({
-    url: '/selfhelp/registrationActivity/cancel',
-    method: 'post',
-    params: query
-  })
-}
