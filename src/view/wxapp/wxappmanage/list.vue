@@ -251,7 +251,7 @@
                 <span v-if="scope.row.authorizer && scope.row.authorizer.authorizer_appid">
                   <router-link
                     :to="{
-                      path: '/wxapp/manage/editdashboard',
+                      path: '/setting/systemsetting/editdashboard',
                       query: { app_id: scope.row.authorizer.authorizer_appid }
                     }"
                     style="margin-left: 5px"
@@ -261,7 +261,7 @@
 
                   <router-link
                     :to="{
-                      path: '/wxapp/manage/editsourcemanagement',
+                      path: '/setting/systemsetting/editsourcemanagement',
                       query: { app_id: scope.row.authorizer.authorizer_appid }
                     }"
                     style="margin-left: 5px"
@@ -271,7 +271,7 @@
 
                   <router-link
                     :to="{
-                      path: '/wxapp/manage/noticemessage',
+                      path: '/setting/systemsetting/noticemessage',
                       query: {
                         app_id: scope.row.authorizer.authorizer_appid,
                         tmp_name: scope.row.key_name

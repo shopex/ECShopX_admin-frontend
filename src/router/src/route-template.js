@@ -115,29 +115,6 @@ export default {
       ]
     },
     {
-      path: 'manage/editdashboard',
-      name: `数据分析`,
-      component: () => import('@/view/wxapp/statistics/dataanalysis/index')
-    },
-    {
-      path: 'manage/editsourcemanagement',
-      name: `千人千码`,
-      component: () => import('@/view/wxapp/statistics/sourcemanagement/index'),
-      children: [
-        {
-          path: 'detail/:monitorId?',
-          component: () => import('@/view/wxapp/statistics/sourcemanagement/monito_detail')
-        }
-      ]
-    },
-
-    {
-      path: 'manage/noticemessage',
-      name: `消息通知`,
-      component: () => import('@/view/wxapp/messages')
-    },
-
-    {
       path: 'manage/cartremind',
       name: `购物车提醒`,
       component: () => import('@/view/wxapp/cartremind')

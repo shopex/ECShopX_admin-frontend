@@ -266,6 +266,27 @@ export default {
       component: () => import('@/view/brand/wechat/open')
     },
     {
+      path: 'systemsetting/editdashboard',
+      name: `数据分析`,
+      component: () => import('@/view/wxapp/statistics/dataanalysis/index')
+    },
+    {
+      path: 'systemsetting/editsourcemanagement',
+      name: `千人千码`,
+      component: () => import('@/view/wxapp/statistics/sourcemanagement/index'),
+      children: [
+        {
+          path: 'detail/:monitorId?',
+          component: () => import('@/view/wxapp/statistics/sourcemanagement/monito_detail')
+        }
+      ]
+    },
+    {
+      path: 'systemsetting/noticemessage',
+      name: `消息通知`,
+      component: () => import('@/view/wxapp/messages')
+    },
+    {
       path: 'systemsetting/wxappchat',
       name: `小程序客服`,
       component: () => import('@/view/base/setting/im/wxappchat')
