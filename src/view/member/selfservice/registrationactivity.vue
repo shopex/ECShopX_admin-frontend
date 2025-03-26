@@ -217,9 +217,9 @@ export default {
     },
     onOperationChange (row, type) {
       if (type == 'edit') {
-        this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id} })
+        this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id, type: 'edit'} })
       } else if (type == 'detail') {
-        this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id} })
+        this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id, type: 'detail'} })
       } else if (type == 'record') {
         this.$router.push({ path: '/marketing/marketing/apply/Registrationrecord', query: { id: row.activity_id} })
       }

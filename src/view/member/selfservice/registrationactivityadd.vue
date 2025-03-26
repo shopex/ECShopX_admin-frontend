@@ -168,7 +168,6 @@
         <el-form-item
           label="获取积分"
           prop="gift_points_switch"
-          :rules="[{ required: true, message: '请选择获取积分', trigger: 'blur'}]"
         >
           <el-switch
             v-model="form.gift_points_switch"
@@ -418,8 +417,8 @@
         </div>
       </div>
       <div style="margin-top: 30px;margin-left: 50%;">
-        <el-button @click.native="handleCancel"> 取消 </el-button>
-        <el-button type="primary" @click="submitAction"> 保存 </el-button>
+        <el-button @click.native="handleCancel"> {{ pageType === 'edit' ? '取消' : '返回'}} </el-button>
+        <el-button type="primary" v-if="pageType === 'edit'" @click="submitAction"> 保存 </el-button>
       </div>
     </el-form>
     <EnterpriseDialog
@@ -589,11 +588,13 @@ export default {
         draggable: '.goodspic'
       },
       picsCurrent: -1,
+      pageType: ''
     }
   },
   mounted() {
     this.getTemplateList()
     if (this.$route.query.id) {
+      this.pageType = this.$route.query.type
       let filter = { activity_id: this.$route.query.id }
       regActivityGet(filter).then((res) => {
         this.form = res.data.data
@@ -610,7 +611,7 @@ export default {
           json = JSON.parse(this.form.show_fields)
         }
         if (this.form.pics) {
-          this.picsList = JSON.parse(this.form.pics)
+          this.picsList = this.form.pics.split(',')
         }
         this.is_activitytime_show = json.time
         this.is_activitycity_show = json.city
@@ -669,7 +670,7 @@ export default {
       params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',')
       params['member_level'] = this.memberLevelList.join(',')
       params['use_all_distributor'] = this.useAllDistributor
-      params['pics'] = JSON.stringify(this.picsList)
+      params['pics'] = this.picsList.join(',')
       if (this.mode === 'component') {
         params['content'] = JSON.stringify(this.content)
       } else {
@@ -684,6 +685,7 @@ export default {
       delete params.areaList
       delete params.updated
       delete params.created
+      delete params.member_level_list
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.activity_id) {
