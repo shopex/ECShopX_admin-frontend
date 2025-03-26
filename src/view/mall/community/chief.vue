@@ -181,7 +181,7 @@ export default {
       if (this.login_type == 'distributor') {
         this.$router.push({ path: `/shopadmin/member/member/chiefupload` })
       } else {
-        this.$router.push({ path: `/member/member/chiefupload` })
+        this.$router.push({ path: `/applications/community/chiefupload` })
       }
     }
   },

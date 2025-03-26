@@ -180,7 +180,7 @@
         </export-tip>
         <!-- X：平台和店铺，会员里都有“团长导入”
         云店：平台有，店铺没有 -->
-        <el-button
+        <!-- <el-button
           v-if="
             (VERSION_PLATFORM && IS_ADMIN()) ||
             (VERSION_PLATFORM && IS_DISTRIBUTOR()) ||
@@ -191,7 +191,7 @@
           @click="chiefupload"
         >
           团长导入
-        </el-button>
+        </el-button> -->
       </div>
 
       <!-- <el-row>

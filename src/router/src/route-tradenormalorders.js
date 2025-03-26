@@ -73,21 +73,6 @@ export default {
       ]
     },
     {
-      path: 'entitytrade/tradecommunityorders',
-      name: `社区团购订单`,
-      component: () => import('@/view/mall/trade/normalorders/communityList'),
-      children: [
-        {
-          path: 'detail/:itemId?',
-          component: () => import('@/view/mall/trade/order/detail')
-        },
-        {
-          path: 'process/:itemId?',
-          component: () => import('@/view/mall/trade/order/process')
-        }
-      ]
-    },
-    {
       path: 'aftersales/aftersaleslist',
       name: `售后列表`,
       component: () => import('@/view/mall/aftersales/list'),
@@ -209,15 +194,5 @@ export default {
         }
       ]
     },
-    {
-      path: 'adapay_cash',
-      name: '提现',
-      component: () => import('@/view/mall/withdraw/withdraw')
-    },
-    {
-      path: 'subdistrict',
-      name: '街道社区配置',
-      component: () => import('@/view/mall/subdistrict/list')
-    }
   ]
 }
