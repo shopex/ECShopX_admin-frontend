@@ -418,7 +418,7 @@
       </div>
       <div style="margin-top: 30px;margin-left: 50%;">
         <el-button @click.native="handleCancel"> {{ pageType === 'edit' ? '取消' : '返回'}} </el-button>
-        <el-button type="primary" v-if="pageType === 'edit'" @click="submitAction"> 保存 </el-button>
+        <el-button type="primary" v-if="pageType != 'detail'" @click="submitAction"> 保存 </el-button>
       </div>
     </el-form>
     <EnterpriseDialog
