@@ -42,6 +42,10 @@ export default {
         {
           path: 'alipaysetting',
           component: () => import('@/view/mall/marketing/distributor_alipaysetting')
+        },
+        {
+          path: 'storeupload',
+          component: () => import('@/view/mall/marketing/shopUpload')
         }
       ]
     },
@@ -80,7 +84,13 @@ export default {
     {
       path: 'storemanager/storewhitelist',
       name: `店铺白名单`,
-      component: () => import('@/view/mall/marketing/storewhitelist')
-    }
+      component: () => import('@/view/mall/marketing/storewhitelist'),
+      children: [ 
+        {
+          path: 'storewhitelistUpload',
+          component: () => import('@/view/mall/marketing/storewhitelistUpload')
+        }
+      ]
+    },
   ]
 }

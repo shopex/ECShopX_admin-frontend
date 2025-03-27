@@ -12,10 +12,9 @@
           添加白名单
         </el-button>
 
-        <el-upload class="btn-upload" action="" :on-change="uploadHandleChange" :auto-upload="false"
-          :show-file-list="false">
-          <el-button type="primary"> 导入白名单 </el-button>
-        </el-upload>
+        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="uploadHandleChange()">
+          导入白名单
+        </el-button>
       </div>
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
@@ -262,14 +261,7 @@ export default {
     },
     // 导入店铺
     uploadHandleChange(file, fileList) {
-      let params = { isUploadFile: true, file_type: 'upload_distributor_white', file: file.raw }
-      handleUploadFile(params).then((response) => {
-        this.$message({
-          type: 'success',
-          message: '上传成功，等待处理'
-        })
-        this.onReset()
-      })
+      this.$router.push({ path: this.matchHidePage('storewhitelistUpload') })
     },
     // 编辑白名单
     editShopWhite(row) {
