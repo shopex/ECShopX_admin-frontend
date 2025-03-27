@@ -70,7 +70,7 @@
           <el-button v-if="(scope.row.status === 'ongoing' || scope.row.status === 'waiting') && !IS_DISTRIBUTOR()" type="text" @click="onOperationChange(scope.row, 'edit')">编辑</el-button>
           <el-button v-if="scope.row.status === 'end' || IS_DISTRIBUTOR()" type="text" @click="onOperationChange(scope.row, 'detail')">查看</el-button>
           <el-button v-if="scope.row.status === 'waiting' && !IS_DISTRIBUTOR()" type="text" @click="onStopChange(scope.row)">终止</el-button>
-          <el-button v-if="scope.row.status === 'ongoing' && !IS_DISTRIBUTOR()" type="text" @click="onShowChange(scope.row)">企业</el-button>
+          <!-- <el-button v-if="scope.row.status === 'ongoing' && !IS_DISTRIBUTOR()" type="text" @click="onShowChange(scope.row)">企业</el-button> -->
           <el-button type="text" @click="onOperationChange(scope.row, 'record')">报名记录</el-button>
         </template>
       </el-table-column>
