@@ -273,6 +273,11 @@ import mixin, { pageMixin } from '@/mixins'
 
 export default {
   mixins: [mixin, pageMixin],
+  provide() {
+    return {
+      refresh: this.fetchList
+    }
+  },
   data () {
     const initialParams = {
       activity_id: undefined,

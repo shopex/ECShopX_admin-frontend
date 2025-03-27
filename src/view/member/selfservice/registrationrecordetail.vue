@@ -284,6 +284,7 @@ export default {
       const that = this
       registrationReview(that.form).then((res) => {
         if (res.data.data.status) {
+          that.refresh()
           that.$router.go(-1)
         }
       })

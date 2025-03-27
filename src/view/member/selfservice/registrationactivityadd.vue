@@ -666,8 +666,8 @@ export default {
         address: this.is_activityaddress_show,
       }
       params['show_fields'] = JSON.stringify(obj)
-      params['distributor_ids'] = this.distributor_list?.map((item) => item.distributor_id).join(',')
-      params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',')
+      params['distributor_ids'] = this.distributor_list?.map((item) => item.distributor_id).join(',') || ''
+      params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',') || ''
       params['member_level'] = this.memberLevelList.join(',')
       params['use_all_distributor'] = this.useAllDistributor
       params['pics'] = this.picsList.join(',')

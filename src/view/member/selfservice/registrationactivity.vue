@@ -222,7 +222,7 @@ export default {
       } else if (type == 'detail') {
         this.$router.push({ path: this.matchHidePage('editor'), query: { id: row.activity_id, type: 'detail'} })
       } else if (type == 'record') {
-        this.$router.push({ path: `${this.IS_DISTRIBUTOR() ? '/shopadmin' : ''}/marketing/apply/Registrationrecord`, query: { id: row.activity_id} })
+        this.$router.push({ path: `${this.IS_DISTRIBUTOR() ? '/shopadmin' : ''}/marketing/marketing/apply/Registrationrecord`, query: { id: row.activity_id} })
       }
     },
     onStopChange(row) {
