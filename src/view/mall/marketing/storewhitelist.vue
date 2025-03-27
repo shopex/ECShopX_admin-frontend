@@ -338,6 +338,11 @@ export default {
         pageSize,
         ...this.getParams()
       }
+
+      // 如果distributor_id不是数组，则转换为数组
+      if(params.distributor_id && !Array.isArray(params.distributor_id)) {
+        params.distributor_id = [params.distributor_id]
+      }
       const { list, total_count } =
         await this.$api.company.getShopWhiteList(params)
       this.tableList = list
