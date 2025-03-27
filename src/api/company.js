@@ -538,6 +538,42 @@ export function saveOpenDividedSetting (params) {
   })
 }
 
+// 店铺白名单 list
+export function getShopWhiteList (params) {
+  return fetch({
+    url: '/distributor/whitelist/get',
+    method: 'get',
+    params
+  })
+}
+
+// 删除白名单
+export function delShopWhite (params) {
+  return fetch({
+    url: '/distributor/whitelist/delete',
+    method: 'post',
+    params
+  })
+}
+
+// 增加白名单
+export function saveShopWhiteList (params) {
+  return fetch({
+    url: '/distributor/whitelist/add',
+    method: 'post',
+    params
+  })
+}
+
+// 导出店铺白名单
+export function whitelistExport (data) {
+  return fetch({
+    url: '/distributor/whitelist/export',
+    method: 'get',
+    params: data
+  })
+}
+
 export function getGlobalSetting () {
   return fetch({
     url: '/settings',
