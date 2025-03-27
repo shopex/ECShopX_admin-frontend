@@ -1,5 +1,5 @@
 <style lang="scss">
-.picker-link {
+.picker-regactivity {
   .sp-filter-form {
     padding: 8px 8px 0px 8px;
   }
@@ -35,25 +35,34 @@
 }
 </style>
 <template>
-  <div class="picker-link">
+  <div class="picker-regactivity">
     <!-- <SpFilterForm :model="formData" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="keywords">
-        <el-input v-model="formData.keywords" placeholder="请输入页面名称" />
+        <el-input v-model="formData.keywords" placeholder="请输入活动名称" />
       </SpFilterFormItem>
     </SpFilterForm> -->
     <SpFinder
       ref="finder"
       :class="['shop-finder', { 'no-multiple': !multiple }]"
       :other-config="{
-        height: 460
+        'max-height': 460
       }"
-      :data="list"
+      url="/employeepurchase/activities"
       :fixed-row-action="true"
       :setting="{
         columns: [
-          { name: 'ID', key: 'id', width: 120 },
-          { name: '页面名称', key: 'title' }
+          { name: 'ID', key: 'id', width: 80 },
+          { name: '内购活动名称', key: 'name' },
+          { name: '来源店铺', key: 'distributor_name' },
+          { name: '购买时间', key: 'employee_end_time',formatter: (value, { employee_end_time, employee_begin_time }, col) => {
+              return `${momentFunc(employee_begin_time)} ~ ${momentFunc(employee_end_time)}`
+            } },
+          { name: '状态', key: 'status_desc' }
         ]
+      }"
+      :hooks="{
+        beforeSearch: beforeSearch,
+        afterSearch: afterSearch
       }"
       @select="onSelect"
       @selection-change="onSelectionChange"
@@ -64,12 +73,13 @@
 <script>
 import BasePicker from './base'
 import PageMixin from '../mixins/page'
+import moment from 'moment'
 export default {
   name: 'PickerPages',
   extends: BasePicker,
   mixins: [PageMixin],
   config: {
-    title: '选择页面'
+    title: '选择内购活动'
   },
   props: ['value'],
   data() {
@@ -77,30 +87,33 @@ export default {
       formData: {
         keywords: ''
       },
-      list: [
-        { id: 'vipgrades', title: '会员开通' },
-        { id: 'applyChief', title: '社区团长申请' },
-        { id: 'recharge', title: '储值卡' },
-        { id: 'purchase', title: '内购' },
-        { id: 'pointShop', title: '积分商城' },
-        { id: 'registActivity', title: '报名活动' },
-      ],
       multiple: this.value?.multiple ?? true
     }
   },
   created() {},
-  mounted() {
-    if (this.value.data) {
-      const selectRows = this.list.filter((item) => this.value.data.includes(item.id))
-      const { finderTable } = this.$refs.finder.$refs
-      setTimeout(() => {
-        finderTable.$refs.finderTable.setSelection(selectRows)
-      })
-    }
-  },
   methods: {
+    beforeSearch(params) {
+      params = {
+        ...params,
+      }
+      return params
+    },
+    afterSearch(response) {
+      const { list } = response.data.data
+      if (this.value.data) {
+        const valueData = this.multiple ? valueData : this.value.data + ''
+        const selectRows = list.filter((item) => valueData.includes(item.id))
+        const { finderTable } = this.$refs.finder.$refs
+        setTimeout(() => {
+          finderTable.$refs.finderTable.setSelection(selectRows)
+        })
+      }
+    },
     onSearch() {
       this.$refs.finder.refresh(true)
+    },
+    momentFunc(val){
+      return moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')
     },
     onSelect(selection, row) {
       if (this.multiple) {

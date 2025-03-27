@@ -135,6 +135,233 @@ export default {
           component: () => import('@/view/mall/bspay_sub_account/detail')
         }
       ]
-    }
+    },
+    {
+      path: 'ec/purchaseactivity',
+      name: `员工内购`,
+      component: () => import('@/view/member/promotions/purchase/index'),
+      children: [
+        {
+          path: 'editor',
+          component: () => import('@/view/member/promotions/purchase/editor')
+        },
+        {
+          path: 'detail',
+          component: () => import('@/view/member/promotions/purchase/detail')
+        },
+        {
+          path: 'dependents',
+          component: () => import('@/view/member/promotions/purchase/dependents')
+        }
+      ]
+    },
+     {
+      path: 'ec/employee',
+      name: '员工管理',
+      component: () => import('@/view/member/purchase/employee'),
+      children: [
+        {
+          path: 'import',
+          name: `白名单导入`,
+          component: () => import('@/view/member/purchase/employeeImport')
+        }
+      ]
+    },
+    {
+      path: 'ec/company',
+      name: '企业管理',
+      component: () => import('@/view/member/purchase/company')
+    },
+    {
+      path: 'ec/purchaseorder',
+      name: `内购订单`,
+      component: () => import('@/view/order/entitytrade/purchase'),
+      children: [
+        {
+          path: 'detail/:itemId?',
+          component: () => import('@/view/mall/trade/order/detail'),
+          meta: {
+            footerFixed: true
+          }
+        },
+        {
+          path: 'process/:itemId?',
+          component: () => import('@/view/mall/trade/order/process')
+        },
+        {
+          path: 'after-sale/:id?',
+          component: () => import('@/view/mall/trade/order/afterSale')
+        },
+        {
+          path: 'logistics/:itemId?',
+          component: () => import('@/view/mall/trade/order/logistics')
+        }
+      ]
+    },
+    {
+      path: 'guide/workwechat',
+      name: `企业微信设置`,
+      component: () => import('@/view/base/setting/workwechat/workwechat')
+    },
+    {
+      path: 'guide/salespersonshelfindex',
+      name: `导购货架首页`,
+      component: () => import('@/view/wxapp/salespersonshelfindex')
+    },
+    {
+      path: 'community/tradecommunityorders',
+      name: `社区团购订单`,
+      component: () => import('@/view/mall/trade/normalorders/communityList'),
+      children: [
+        {
+          path: 'detail/:itemId?',
+          component: () => import('@/view/mall/trade/order/detail')
+        },
+        {
+          path: 'process/:itemId?',
+          component: () => import('@/view/mall/trade/order/process')
+        }
+      ]
+    },
+    {
+      path: 'community/communitysetting',
+      name: `基础配置`,
+      component: () => import('@/view/member/promotions/community/setting')
+    },
+    {
+      path: 'community/marketingcommunity',
+      name: `社区管理`,
+      component: () => import('@/view/member/promotions/community/index'),
+      children: [
+        {
+          path: 'editor/:community_id?',
+          component: () => import('@/view/member/promotions/community/add')
+        },
+        {
+          path: 'detail',
+          meta: {
+            title: `${name}-社区活动-社区管理-详情`
+          },
+          component: () => import('@/view/member/promotions/community/points')
+        }
+      ]
+    },
+    {
+      path: 'community/marketingcommunityactivity',
+      name: `活动管理`,
+      component: () => import('@/view/member/promotions/community/activity/index'),
+      children: [
+        {
+          path: 'editor/:activity_id?',
+          component: () => import('@/view/member/promotions/community/activity/add')
+        }
+      ]
+    },
+    {
+      path: 'community/marketingdeliveryorder',
+      name: `配送单`,
+      component: () => import('@/view/member/promotions/community/deliveryorder'),
+      children: [
+        {
+          path: 'detail/:delivery_id?',
+          component: () => import('@/view/member/promotions/community/deliverydetail')
+        }
+      ]
+    },
+    {
+      path: 'community/communitywithdraw',
+      name: `积分提现`,
+      component: () => import('@/view/member/promotions/community/withdraw')
+    },
+    {
+      path: 'community/communityactivityorder',
+      name: `社区订单`,
+      component: () => import('@/view/member/promotions/community/activity/orderList'),
+      children: [
+        {
+          path: 'detail',
+          component: () => import('@/view/mall/trade/order/detail')
+        }
+      ]
+    },
+    {
+      path: 'community/chief',
+      name: `团长管理`,
+      component: () => import('@/view/mall/community/chief'),
+      children: [
+        {
+          path: 'detail/:apply_id',
+          component: () => import('@/view/mall/community/chiefDetail')
+        },
+        {
+          path: 'info/:apply_id/:distributor_id',
+          component: () => import('@/view/mall/community/chiefInfo')
+        },
+        {
+          path: 'approve',
+          component: () => import('@/view/mall/community/chiefApprove')
+        }
+      ]
+    },
+    {
+      path: 'community/activity',
+      name: `活动管理`,
+      component: () => import('@/view/mall/community/activityList')
+    },
+    {
+      path: 'community/communitygoods',
+      name: `活动商品`,
+      component: () => import('@/view/mall/community/communitygoods')
+    },
+    {
+      path: 'community/order',
+      name: `订单管理`,
+      component: () => import('@/view/mall/trade/normalorders/communityList'),
+      children: [
+        {
+          path: 'detail/:itemId?',
+          component: () => import('@/view/mall/trade/order/detail')
+        },
+        {
+          path: 'process/:itemId?',
+          component: () => import('@/view/mall/trade/order/process')
+        }
+      ]
+    },
+    {
+      path: 'community/setting',
+      name: `活动配置`,
+      component: () => import('@/view/mall/community/setting')
+    },
+    {
+      path: 'community/subdistrict',
+      name: '街道社区配置',
+      component: () => import('@/view/mall/subdistrict/list')
+    },
+    {
+      path: 'community/achievement',
+      name: `团长业绩`,
+      component: () => import('@/view/mall/community/achievement')
+    },
+    {
+      path: 'community/withdraw',
+      name: `提现申请`,
+      component: () => import('@/view/mall/community/withdraw')
+    },
+    {
+      path: 'community/adapay_cash',
+      name: '提现',
+      component: () => import('@/view/mall/withdraw/withdraw')
+    },
+    {
+      path: 'community/subdistrict',
+      name: '街道社区配置',
+      component: () => import('@/view/mall/subdistrict/list')
+    },
+    {
+      path: 'community/chiefupload',
+      name: `团长导入`,
+      component: () => import('@/view/member/members/upload_chief')
+    },
   ]
 }

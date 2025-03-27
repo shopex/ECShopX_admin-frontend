@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.19.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.9...v3.19.0) (2025-03-27)
+
+
+### Bug Fixes
+
+* 导出问题修复 ([e484294](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e484294008118da3f3c1cfa00bae486e03f1c6b9))
+* 会员详情path调整 ([5fc223b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5fc223b07d6b8d6cf8a571d1abe11786a7fbf774))
+
+### [3.18.9](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.8...v3.18.9) (2025-03-26)
+
+### [3.18.8](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.6...v3.18.8) (2025-03-26)
+
+### [3.18.6](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.5...v3.18.6) (2025-03-26)
+
+### [3.18.5](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.4...v3.18.5) (2025-03-25)
+
+### [3.18.4](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.3...v3.18.4) (2025-03-25)
+
+
+### Bug Fixes
+
+* 修复菜单 ([48d6dcf](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/48d6dcf2bd2021c15ba3d76fa6eb238ee1dc5b6f))
+
+### [3.18.3](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.2...v3.18.3) (2025-03-24)
+
+
+### Bug Fixes
+
+* iconfont ([fde835d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/fde835dad8365a918eea9e4dd91e1f6f8876f9b7))
+
+### [3.18.2](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.1...v3.18.2) (2025-03-24)
+
+
+### Bug Fixes
+
+* 固定列 ([70dc25b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/70dc25bc48d036ad98c243a004638dad65e953c7))
+
+### [3.18.1](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.18.0...v3.18.1) (2025-03-24)
+
 ## [3.18.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.24...v3.18.0) (2025-03-18)
 
 ### [3.17.25](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.17.24...v3.17.25) (2025-03-18)

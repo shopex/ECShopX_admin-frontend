@@ -139,6 +139,16 @@
             @init="init"
           ></shop-select>
         </SpFilterFormItem> -->
+        <SpFilterFormItem prop="role" label="角色:">
+          <el-select v-model="params.role" placeholder="请选择" clearable>
+            <el-option
+              v-for="item in roleList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </SpFilterFormItem>
       </SpFilterForm>
 
       <div class="action-container">
@@ -180,7 +190,7 @@
         </export-tip>
         <!-- X：平台和店铺，会员里都有“团长导入”
         云店：平台有，店铺没有 -->
-        <el-button
+        <!-- <el-button
           v-if="
             (VERSION_PLATFORM && IS_ADMIN()) ||
             (VERSION_PLATFORM && IS_DISTRIBUTOR()) ||
@@ -191,7 +201,7 @@
           @click="chiefupload"
         >
           团长导入
-        </el-button>
+        </el-button> -->
       </div>
 
       <!-- <el-row>
@@ -235,6 +245,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="username" label="昵称" width="140" />
+        <el-table-column prop="role" label="角色" width="70">
+          <template slot-scope="scope">
+            {{ roleList.find((item) => item.value == scope.row.role)?.label }}
+          </template>
+        </el-table-column>
         <el-table-column v-if="!VERSION_IN_PURCHASE" prop="sex" label="性别" width="70">
           <template slot-scope="scope">
             <span v-if="scope.row.sex == '2'">女</span>
@@ -275,6 +290,7 @@
             <span>{{ showGrade(scope.row.grade_id, scope.row.vip_grade) }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="company" label="所属公司" width="80" />
         <el-table-column v-if="!VERSION_IN_PURCHASE" prop="inviter" label="推荐人" width="130" />
         <el-table-column prop="disabled" label="禁用" width="80">
           <template slot-scope="scope">
@@ -853,6 +869,7 @@ import { giveCoupons } from '../../../api/promotions'
 import { listVipGrade, batchReceiveMemberCard } from '../../../api/cardticket'
 import shopSelect from '@/components/shopSelect'
 import { forEach } from 'jszip'
+import { ROLE_LIST } from '@/consts'
 
 export default {
   components: {
@@ -878,7 +895,7 @@ export default {
       aliyunsmsDialogInfo: {
         type: 'add'
       },
-
+      roleList: ROLE_LIST,
       panel: {
         search: false
       },
@@ -946,7 +963,8 @@ export default {
         vip_grade: '',
         tag_id: '',
         mobile: '',
-        have_consume: ''
+        have_consume: '',
+        role: ''
       },
       operateLog: [],
       currentShop: '',
@@ -1308,7 +1326,9 @@ export default {
         isShopadmin = /\/shopadmin/.test(document.location.pathname)
       } catch (e) {}
       this.$router.push({
-        path: isShopadmin ? '/shopadmin/member/member/detail' : '/member/member/detail',
+        path: isShopadmin
+          ? '/shopadmin/member/member/memberlist/detail'
+          : '/member/member/memberlist/detail',
         query: {
           user_id: userid,
           mobile: this.params.mobile,

@@ -48,6 +48,11 @@ export default {
       name: `商城信息`,
       component: () => import('@/view/wxapp/shopInfo')
     },
+    {
+      path: 'manage/openscreenad',
+      name: `开屏广告`,
+      component: () => import('@/view/base/screen/openScreenAD')
+    },
     // 小程序模板装修
     // {
     //   path: 'manage/decorate',
@@ -110,37 +115,9 @@ export default {
       ]
     },
     {
-      path: 'manage/editdashboard',
-      name: `数据分析`,
-      component: () => import('@/view/wxapp/statistics/dataanalysis/index')
-    },
-    {
-      path: 'manage/editsourcemanagement',
-      name: `千人千码`,
-      component: () => import('@/view/wxapp/statistics/sourcemanagement/index'),
-      children: [
-        {
-          path: 'detail/:monitorId?',
-          component: () => import('@/view/wxapp/statistics/sourcemanagement/monito_detail')
-        }
-      ]
-    },
-
-    {
-      path: 'manage/noticemessage',
-      name: `消息通知`,
-      component: () => import('@/view/wxapp/messages')
-    },
-
-    {
       path: 'manage/cartremind',
       name: `购物车提醒`,
       component: () => import('@/view/wxapp/cartremind')
-    },
-    {
-      path: 'manage/salespersonshelfindex',
-      name: `导购货架首页`,
-      component: () => import('@/view/wxapp/salespersonshelfindex')
     },
     {
       path: 'aliapp/template',
