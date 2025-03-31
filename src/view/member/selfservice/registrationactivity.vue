@@ -44,13 +44,13 @@
       <el-table-column prop="activity_name" label="活动名称" width="200" />
       <el-table-column label="是否核销" width="120">
         <template slot-scope="scope">
-          {{ scope.row.is_offline_verify ? '是' : '否'}}
+          {{ scope.row.is_offline_verify == 1 ? '是' : '否'}}
         </template>
       </el-table-column>
       <el-table-column prop="gift_points" label="获取积分" width="120" />
       <el-table-column label="进白名单" width="120">
         <template slot-scope="scope">
-          {{ scope.row.is_white_list ? '是' : '否'}}
+          {{ scope.row.is_white_list == 1 ? '是' : '否'}}
         </template>
       </el-table-column>
       <el-table-column label="活动时间" width="300">
