@@ -40,6 +40,7 @@
     <SpFinder
       ref="finder"
       :class="['shop-finder', { 'no-multiple': !multiple }]"
+      reserve-selection
       :other-config="{
         'max-height': 460,
         'header-cell-class-name': cellClass
@@ -51,6 +52,7 @@
         beforeSearch: beforeSearch,
         afterSearch: afterSearch
       }"
+      row-key="distributor_id"
       @select="onSelect"
       @selection-change="onSelectionChange"
     />
