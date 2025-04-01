@@ -71,7 +71,7 @@ export default {
             action: {
               handler: ([row]) => {
                 this.$router.push({
-                  path: IS_DISTRIBUTOR() ? `/shopadmin/order/logistics/addziti/${row.id}`:`/order/entitytrade/logistics/addziti/${row.id}`
+                  path: IS_DISTRIBUTOR() ? `/shopadmin/order/logistics/addziti/${row.id}`:`/setting/delivery/logistics/addziti/${row.id}`
                 })
               }
             }
@@ -154,7 +154,7 @@ export default {
     createZitiAddress() {
       const url = IS_DISTRIBUTOR()
         ? '/shopadmin/order/logistics/addziti'
-        : '/order/entitytrade/logistics/addziti'
+        : '/setting/delivery/logistics/addziti'
       this.$router.push({
         path: url
       })
