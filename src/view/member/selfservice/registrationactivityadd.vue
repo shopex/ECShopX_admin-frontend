@@ -260,7 +260,7 @@
           </el-radio-group>
           <div>开启后报名人员名单进入店铺企业员工白名单</div>
         </el-form-item>
-        <el-form-item label="适用会员" v-if="form.is_white_list == 0">
+        <el-form-item label="适用会员">
           <el-checkbox-group v-model="memberLevelList">
             <el-checkbox v-for="grade in memberGrade" :key="grade.grade_id" :label="grade.grade_id+''">
               {{ grade.grade_name }}
@@ -270,7 +270,7 @@
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="适用店铺" v-if="form.is_white_list == 0">
+        <el-form-item label="适用店铺">
           <el-form-item prop="useAllDistributor">
             <el-radio-group v-model="useAllDistributor" @change="shopTypeChange">
               <el-radio :label="true"> 全部店铺适用 </el-radio>
@@ -305,7 +305,7 @@
         <el-form-item
           label="选择报名问卷模板"
           prop="temp_id"
-          :rules="[{ required: true, message: '请选择报名问卷模板', trigger: 'blur' }]"
+          :rules="[{ required: false, message: '请选择报名问卷模板', trigger: 'blur' }]"
         >
           <el-col :span="15">
             <el-select v-model="form.temp_id" placeholder="请选择" @change="selectTempId">
@@ -331,7 +331,7 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="报名结束语" prop="join_tips" v-if="form.is_white_list == 0">
+        <el-form-item label="报名结束语" prop="join_tips">
           <el-col :span="10">
             <el-input
               v-model.trim="form.join_tips"
@@ -341,7 +341,7 @@
             />
           </el-col>
         </el-form-item>
-        <el-form-item label="报名结束语说明" prop="submit_form_tips" v-if="form.is_white_list == 0">
+        <el-form-item label="报名结束语说明" prop="submit_form_tips">
           <el-col :span="10">
             <el-input
               v-model.trim="form.submit_form_tips"
@@ -458,7 +458,6 @@ import EnterpriseDialog from './components/enterpriseDialog'
 import { createSetting } from '@shopex/finder'
 import DistributorSelect from '@/components/storeListSelect'
 import draggable from 'vuedraggable'
-import { VALIDATE_TYPES } from './consts'
 
 export default {
   inject: ['refresh'],
@@ -504,6 +503,13 @@ export default {
             name: '登录类型',
             key: 'auth_type',
             formatter: (value, { auth_type }, col) => {
+              const VALIDATE_TYPES = [
+                { name: '全部', value: '' },
+                { name: '手机号', value: 'mobile' },
+                { name: '账号密码', value: 'account' },
+                { name: '邮箱', value: 'email' },
+                { name: '二维码', value: 'qr_code' }
+              ]
               const authType = VALIDATE_TYPES.find((item) => item.value == auth_type)?.name
               return authType
             }
@@ -630,13 +636,6 @@ export default {
         if (this.form.gift_points) {
           this.form.gift_points_switch = 1
         }
-        if (this.form.is_white_list == 0) {
-          if (this.form.distributor_ids) {
-            this.useAllDistributor = false
-          } else {
-            this.useAllDistributor = true
-          }
-        }
         console.log(this.form, res.data.data.member_level.split(','))
       })
     }
@@ -687,7 +686,6 @@ export default {
       params['area'] = this.form.areaList.join(',')
 
       console.log('submitAction', params)
-      debugger
       delete params.distributor_list
       delete params.enterprise_list
       delete params.areaList
@@ -942,3 +940,4 @@ export default {
   }
 }
 </style>
+

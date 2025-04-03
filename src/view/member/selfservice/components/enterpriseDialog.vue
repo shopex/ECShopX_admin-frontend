@@ -57,7 +57,6 @@
 
 <script>
 import { getRegionauth } from '@/api/regionauth'
-import { VALIDATE_TYPES } from '../consts'
 
 export default {
   props: {
@@ -83,6 +82,13 @@ export default {
     }
   },
   data () {
+    const VALIDATE_TYPES = [
+      { name: '全部', value: '' },
+      { name: '手机号', value: 'mobile' },
+      { name: '账号密码', value: 'account' },
+      { name: '邮箱', value: 'email' },
+      { name: '二维码', value: 'qr_code' }
+    ]
     const initialParams = {
       page: 1,
       pageSize: 10,
@@ -90,6 +96,7 @@ export default {
       name: ''
     }
     return {
+      VALIDATE_TYPES,
       initialParams,
       params: {
         ...initialParams
@@ -176,3 +183,4 @@ export default {
 
 <style type="text/css">
 </style>
+
