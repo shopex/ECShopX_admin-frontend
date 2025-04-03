@@ -458,6 +458,7 @@ import EnterpriseDialog from './components/enterpriseDialog'
 import { createSetting } from '@shopex/finder'
 import DistributorSelect from '@/components/storeListSelect'
 import draggable from 'vuedraggable'
+import { VALIDATE_TYPES } from './consts'
 
 export default {
   inject: ['refresh'],
@@ -498,9 +499,16 @@ export default {
       return createSetting({
         columns: [
           { name: '企业ID', key: 'id'  },
-          { name: '企业名称', key: 'enterprise_sn' },
-          { name: '登录类型', key: 'enterprise_sn' },
-          { name: '来源店铺', key: 'enterprise_sn' },
+          { name: '企业名称', key: 'name' },
+          {
+            name: '登录类型',
+            key: 'auth_type',
+            formatter: (value, { auth_type }, col) => {
+              const authType = VALIDATE_TYPES.find((item) => item.value == auth_type)?.name
+              return authType
+            }
+          },
+          { name: '来源店铺', key: 'distributor_name'  },
         ],
         actions: [
           { name: '删除',
