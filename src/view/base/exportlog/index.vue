@@ -95,6 +95,7 @@
         <el-tab-pane v-if="IS_SUPPLIER()" label="主订单导出" name="supplier_order" />
         <el-tab-pane label="转账审核导出" name="offline_payment" />
         <el-tab-pane label="员工列表" name="employee_purchase_employees" />
+        <el-tab-pane label="店铺白名单导出" name="distributor_white_list" />
       </template>
 
       <el-table v-loading="loading" :data="exportLogLists" :height="wheight - 220">
