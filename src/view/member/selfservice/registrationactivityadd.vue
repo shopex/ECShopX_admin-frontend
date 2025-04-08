@@ -6,13 +6,13 @@
       label-width="150px"
       label-position="right"
       class="demo-ruleForm"
+      :rules="rules"
     >
       <div class="section-header with-border">基础信息</div>
       <div class="section-body">
         <el-form-item
           label="活动名称"
           prop="activity_name"
-          :rules="[{ required: true, message: '请输入活动名称', trigger: 'blur' }]"
         >
           <el-col :span="15">
             <el-input
@@ -192,7 +192,6 @@
         <el-form-item
           label="可重复报名"
           prop="is_allow_duplicate"
-          :rules="[{ required: true, message: '请选择可重复报名', trigger: 'blur'}]"
         >
           <el-switch
             v-model="form.is_allow_duplicate"
@@ -205,7 +204,6 @@
         <el-form-item
           label="是否审核"
           prop="is_need_check"
-          :rules="[{ required: true, message: '请选择是否审核', trigger: 'blur'}]"
         >
           <el-switch
             v-model="form.is_need_check"
@@ -218,7 +216,6 @@
         <el-form-item
           label="线下核销"
           prop="is_offline_verify"
-          :rules="[{ required: true, message: '请选择线下核销', trigger: 'blur'}]"
         >
           <el-switch
             v-model="form.is_offline_verify"
@@ -231,7 +228,6 @@
         <el-form-item
           label="允许取消报名"
           prop="is_allow_cancel"
-          :rules="[{ required: true, message: '请选择是否允许取消报名', trigger: 'blur'}]"
         >
           <el-switch
             v-model="form.is_allow_cancel"
@@ -252,7 +248,6 @@
         <el-form-item
           label="进内购企业白名单"
           prop="is_white_list"
-          :rules="[{ required: true, message: '请选择', trigger: 'blur'}]"
         >
           <el-radio-group v-model="form.is_white_list" @change="whiteListChange">
             <el-radio :label="1">是</el-radio>
@@ -270,6 +265,7 @@
             url=""
             v-if="enterprise_list.length > 0"
             style="width:80%"
+            :show-pager="false"
           />
         </el-form-item>
         <el-form-item label="适用会员">
@@ -299,13 +295,13 @@
               url=""
               v-if="distributor_list?.length > 0"
               style="width:80%"
+              :show-pager="false"
             />
           </div>
         </el-form-item>
         <el-form-item
           label="选择报名问卷模板"
           prop="temp_id"
-          :rules="[{ required: true, message: '请选择报名问卷模板', trigger: 'blur' }]"
         >
           <el-col :span="15">
             <el-select v-model="form.temp_id" placeholder="请选择" @change="selectTempId">
@@ -321,7 +317,6 @@
         <el-form-item
           label="提交报名次数"
           prop="join_limit"
-          :rules="[{ required: true, message: '请输入报名次数', trigger: 'blur' }]"
         >
           <el-col :span="10">
             <el-input
@@ -602,7 +597,17 @@ export default {
         draggable: '.goodspic'
       },
       picsCurrent: -1,
-      pageType: ''
+      pageType: '',
+      rules: {
+        activity_name: [{ required: true, message: '请输入活动名称', trigger: 'blur' }],
+        is_allow_duplicate: [{ required: true, message: '请选择', trigger: 'change' }],
+        is_need_check: [{ required: true, message: '请选择', trigger: 'change' }],
+        is_offline_verify: [{ required: true, message: '请选择', trigger: 'change' }],
+        is_allow_cancel: [{ required: true, message: '请选择', trigger: 'blur' }],
+        is_white_list: [{ required: true, message: '请选择', trigger: 'blur' }],
+        temp_id: [{ required: true, message: '请选择报名问卷模板', trigger: 'blur' }],
+        join_limit: [{ required: true, message: '请输入报名次数', trigger: 'blur' }],
+      }
     }
   },
   mounted() {
@@ -663,12 +668,6 @@ export default {
     },
     selectTempId(e) {},
     submitAction() {
-      if (!this.useAllDistributor && this.distributor_list.length == 0) {
-        return this.$Message.error('请选择店铺')
-      }
-      if (this.form.is_white_list && this.enterprise_list.length == 0) {
-        return this.$Message.error('请选择企业')
-      }
       const that = this
       if (that.activity_date.length > 0) {
         this.form.start_time = that.activity_date[0] / 1000
@@ -703,6 +702,12 @@ export default {
       delete params.member_level_list
       this.$refs['form'].validate((valid) => {
         if (valid) {
+          if (!this.useAllDistributor && this.distributor_list.length == 0) {
+            return this.$message.error('请选择店铺')
+          }
+          if (this.form.is_white_list && this.enterprise_list.length == 0) {
+            return this.$message.error('请选择企业')
+          }
           if (this.form.activity_id) {
             regActivityUpdate(params).then((res) => {
               if (res.data.data) {
@@ -733,10 +738,10 @@ export default {
             })
           }
         } else {
-          this.$message({
-            type: 'error',
-            message: '请录入正确的数据'
-          })
+          // this.$message({
+          //   type: 'error',
+          //   message: '请录入正确的数据'
+          // })
           return false
         }
       })

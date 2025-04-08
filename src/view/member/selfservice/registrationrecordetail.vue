@@ -78,6 +78,7 @@
             :setting="shopSetting"
             :data="recorddata.distributor_list"
             style="width:80%"
+            :show-pager="false"
           />
         </el-form-item>
         <el-form-item label="企业：" v-if="recorddata.is_white_list == 1">
@@ -86,6 +87,7 @@
             :setting="setting"
             :data="recorddata.enterprise_list"
             style="width:80%"
+            :show-pager="false"
           />
         </el-form-item>
       </div>
@@ -219,8 +221,22 @@ export default {
       setting: {
         columns: [
           { name: '企业ID', key: 'id'  },
-          { name: '企业名称', key: 'enterprise_sn' },
-          { name: '登录类型', key: 'login_type' },
+          { name: '企业名称', key: 'name' },
+          {
+            name: '登录类型',
+            key: 'auth_type',
+            formatter: (value, { auth_type }, col) => {
+              const VALIDATE_TYPES = [
+                { name: '全部', value: '' },
+                { name: '手机号', value: 'mobile' },
+                { name: '账号密码', value: 'account' },
+                { name: '邮箱', value: 'email' },
+                { name: '二维码', value: 'qr_code' }
+              ]
+              const authType = VALIDATE_TYPES.find((item) => item.value == auth_type)?.name
+              return authType
+            }
+          },
           { name: '来源店铺', key: 'distributor_name' },
         ]
       },
