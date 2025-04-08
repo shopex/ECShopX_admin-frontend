@@ -637,14 +637,13 @@ export default {
         this.is_activityplace_show = json.place
         this.is_activityaddress_show = json.address
         this.form.areaList = res.data.data.area && res.data.data.area.split(',')
-        this.memberLevelList = res.data.data.member_level.split(',')
+        this.memberLevelList =res.data.data.member_level && res.data.data.member_level.split(',')
         if (res.data.data.distributor_list.length == 0) {
           this.useAllDistributor = true
         }
         if (this.form.gift_points) {
           this.form.gift_points_switch = 1
         }
-        console.log(this.form, res.data.data.member_level.split(','))
       })
     }
     this.getGradeLevelList()
