@@ -636,7 +636,7 @@ export default {
         this.is_activitycity_show = json.city
         this.is_activityplace_show = json.place
         this.is_activityaddress_show = json.address
-        this.form.areaList = res.data.data.area.split(',')
+        this.form.areaList = res.data.data.area && res.data.data.area.split(',')
         this.memberLevelList = res.data.data.member_level.split(',')
         if (res.data.data.distributor_list.length == 0) {
           this.useAllDistributor = true
