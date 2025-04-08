@@ -181,14 +181,14 @@ export default {
       })
       if (isArray(this.localValue)) {
         if (this.type == 'string') {
-          Vue.set(this.localValue, index, data.url)
+          Vue.set(this.localValue, index, data.url || val)
         } else {
           Vue.set(this.localValue, index, data)
         }
       } else if (isObject(this.localValue)) {
         this.localValue = data
       } else {
-        this.localValue = data.url
+        this.localValue = data.url || val
       }
       this.updateValue(this.localValue)
     },
