@@ -14,7 +14,7 @@
   <div>
     <div class="action-container">
       <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="createActivity">
-        新建活动1
+        新建活动
       </el-button>
     </div>
     <SpFilterForm :model="queryForm" @onSearch="onSearch" @onReset="onSearch">
@@ -183,10 +183,9 @@ export default {
             action: {
               handler: async ([row]) => {
                 // const preUrl = this.$route.path.replace('/marketing/employee/purchase','')
-                // this.$router.push({ path: `${preUrl}/order/entitytrade/purchase?activity_id=${row.id}` })
                 this.$router.push({
                   path: `${
-                    IS_DISTRIBUTOR ? '/shopadmin' : ''
+                    IS_DISTRIBUTOR() ? '/shopadmin' : ''
                   }/applications/ec/purchaseorder?activity_id=${row.id}`
                 })
               }
