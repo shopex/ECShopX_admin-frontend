@@ -34,6 +34,11 @@ export default {
       ]
     },
     {
+      path: 'storewhitelist',
+      name: `店铺白名单`,
+      component: () => import('@/view/mall/marketing/storewhitelist')
+    },
+    {
       path: 'distributorCode',
       name: `店铺码`,
       component: () => import('@/view/mall/marketing/distributorCode')

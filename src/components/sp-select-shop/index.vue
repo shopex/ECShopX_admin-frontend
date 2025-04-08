@@ -32,9 +32,13 @@
 export default {
   name: 'SpSelectShop',
   props: {
-    value: [Number, String],
+    value: [Number, String, Array],
     placeholder: String,
-    clearable: Boolean
+    clearable: Boolean,
+    multiple: {
+      type: Boolean,
+      default: false
+    },
   },
   provide() {
     return {
@@ -67,16 +71,35 @@ export default {
   created() {},
   methods: {
     async onSelectShop() {
+      const params = {
+        multiple: this.multiple
+      }
+      if (this.value) {
+        if (Array.isArray(this.value)) {
+          params.data = this.value
+        } else {
+          params.data = [this.value]
+        }
+      } else {
+        params.data = []
+      }
       const { data } = await this.$picker.shop({
-        data: this.value ? [this.value] : [],
-        multiple: false
+        ...params
       })
       if (data) {
-        const [{ distributor_id, name }] = data
-        this.onChange({
-          name: name,
-          value: distributor_id
-        })
+        if (data.length > 1) {
+          const distributorIds = data.map(item => item.distributor_id)
+          this.onChange({
+            name: `已选择${data.length}个店铺`,
+            value: distributorIds
+          })
+        } else {
+          const [{ distributor_id, name }] = data
+          this.onChange({
+            name: name,
+            value: distributor_id
+          })
+        }
       } else {
         this.onChange({
           name: '',
