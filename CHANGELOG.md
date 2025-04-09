@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.19.5](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.19.4...v3.19.5) (2025-04-09)
+
+
+### Bug Fixes
+
+* ugc 编辑路由404 ([786489f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/786489fb6553c73ea7f491e73e3aa0e9389b0737))
+
 ### [3.19.4](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.19.3...v3.19.4) (2025-04-08)
 
 
