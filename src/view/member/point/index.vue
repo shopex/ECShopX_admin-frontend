@@ -117,6 +117,25 @@
               />
               积分 抵扣1元人民币
             </el-form-item>
+            <el-form-item label="积分抵扣运费：">
+              <el-radio-group v-model="form.can_deduct_freight">
+                <el-radio label="1"> 包含 </el-radio>
+                <el-radio label="0"> 不包含 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="优先积分抵扣">
+              <el-switch
+                v-model="form.point_pay_first"
+                :width="60"
+                active-value="1"
+                inactive-value="0"
+                inactive-color="#ccc"
+                active-text="开启"
+                inactive-text="关闭"
+                active-color="#13ce66"
+              />
+              <span class="frm-tips"> 开启优先积分抵扣功能，消费者下单时优先使用积分抵扣</span>
+            </el-form-item>
             <el-form-item label="积分规则：">
               <SpRichText v-model="form.rule_desc" />
             </el-form-item>
@@ -148,7 +167,9 @@ export default {
         deduct_proportion_limit: 1,
         access: 'order',
         include_freight: 'true',
-        rule_desc: ''
+        rule_desc: '',
+        point_pay_first: "1",
+        can_deduct_freight: "1"
       },
       access: 'order',
       include_freight: 'true'
@@ -184,7 +205,8 @@ export default {
     getPointRule() {
       getPointRule().then((response) => {
         this.form = response.data.data
-        ;(this.access = this.form.access), (this.include_freight = this.form.include_freight)
+        this.access = this.form.access
+        this.include_freight = this.form.include_freight
       })
     },
     save() {
