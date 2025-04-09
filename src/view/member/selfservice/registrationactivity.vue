@@ -29,13 +29,8 @@
           placeholder="根据添加时间筛选"
         />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="distributor" label="店铺名称:">
-        <el-autocomplete
-          v-model="params.distributor.name"
-          :fetch-suggestions="queryStoreSearch"
-          placeholder="请输入店铺名称"
-          @select="handleSelectStore"
-        />
+      <SpFilterFormItem prop="distributor_id" label="店铺名称:">
+        <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
       </SpFilterFormItem>
     </SpFilterForm>
 
@@ -87,7 +82,7 @@
         @size-change="onSizeChange"
       />
     </div>
-    <EnterpriseDialog :visible.sync="dialogVisible" @closeDialog="closeDialog"/>
+    <EnterpriseDialog :visible.sync="dialogVisible" :data="dialogData" @closeDialog="closeDialog"/>
   </SpRouterView>
 </template>
 <script>
@@ -111,10 +106,6 @@ export default {
       status: '',
       create_time: [],
       distributor_id: '',
-      distributor: {
-        id: undefined,
-        name: undefined
-      }
     }
     return {
       initialParams,
@@ -152,13 +143,6 @@ export default {
     },
     onReset() {
       this.params = { ...this.initialParams }
-      this.params = {
-        ...this.params,
-        distributor: {
-          id: undefined,
-          name: undefined
-        }
-      }
       this.onSearch()
     },
     getParams() {
@@ -173,7 +157,6 @@ export default {
         create_time: [],
         ...time
       }
-      delete params.distributor
       return params
     },
     async fetchList() {
@@ -191,21 +174,6 @@ export default {
     },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
-    },
-    queryStoreSearch(queryString, cb) {
-      var restaurants = this.shopList
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-      }
-    },
-    handleSelectStore(storeItem) {
-      this.params.distributor_id = storeItem.distributor_id
-      this.params.distributor.id = storeItem.distributor_id
     },
     async getStoreList() {
       let params = { page: 1, pageSize: 500 }

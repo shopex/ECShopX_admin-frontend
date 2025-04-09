@@ -7,16 +7,11 @@
   >
     <div style="margin-bottom: 15px">
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
-        <SpFilterFormItem prop="distributor">
-          <el-autocomplete
-            v-model="params.distributor.name"
-            :fetch-suggestions="queryStoreSearch"
-            placeholder="请输入店铺名称"
-            @select="handleSelectStore"
-          />
+        <SpFilterFormItem prop="distributor_id">
+          <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="enterName">
-          <el-input v-model="params.enterName" placeholder="请输入企业名称" />
+        <SpFilterFormItem prop="name">
+          <el-input v-model="params.name" placeholder="请输入企业名称" />
         </SpFilterFormItem>
       </SpFilterForm>
     </div>
@@ -29,10 +24,14 @@
       :row-key="getRowKeys"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column :reserve-selection="true" type="selection" width="55" v-if="type != 'show'" />
+      <el-table-column v-if="type != 'show'" :reserve-selection="true" type="selection" width="55" />
       <el-table-column prop="id" label="企业ID" />
-      <el-table-column prop="enterprise_sn" label="企业名称" />
-      <el-table-column prop="enterprise_sn" label="登录类型" v-if="type != 'show'" />
+      <el-table-column prop="name" label="企业名称" />
+      <el-table-column v-if="type != 'show'" prop="auth_type" label="登录类型">
+        <template slot-scope="scope">
+          <div>{{ VALIDATE_TYPES.find((item) => item.value == scope.row.auth_type)?.name }}</div>
+        </template>
+      </el-table-column>
       <el-table-column prop="distributor_name" label="来源店铺" />
     </el-table>
     <div
@@ -74,19 +73,30 @@ export default {
     type: {
       type: String,
       default: 'show' // show查看  edit编辑
+    },
+    data: {
+      type: Object,
+      default: function () {
+        return {}
+      }
     }
   },
   data () {
+    const VALIDATE_TYPES = [
+      { name: '全部', value: '' },
+      { name: '手机号', value: 'mobile' },
+      { name: '账号密码', value: 'account' },
+      { name: '邮箱', value: 'email' },
+      { name: '二维码', value: 'qr_code' }
+    ]
     const initialParams = {
       page: 1,
       pageSize: 10,
-      distributor: {
-        id: undefined,
-        name: undefined
-      },
-      enterName: ''
+      distributor_id: '',
+      name: ''
     }
     return {
+      VALIDATE_TYPES,
       initialParams,
       params: {
         ...initialParams
@@ -98,8 +108,7 @@ export default {
       multipleSelection: [],
       pageLimit: 10,
       total_count: '',
-      selectRows: [],
-      shopList: [],
+      selectRows: []
     }
   },
   computed: {
@@ -113,7 +122,6 @@ export default {
     },
     visible (newVal, oldVal) {
       if (newVal) {
-        this.getStoreList()
         this.fetchList()
       }
     }
@@ -127,31 +135,6 @@ export default {
         this.multipleSelection = val
       }
     },
-    queryStoreSearch(queryString, cb) {
-      var restaurants = this.shopList
-      console.log(restaurants, this.shopList)
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      debugger
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-      }
-    },
-    handleSelectStore(storeItem) {
-      this.params.distributor.id = storeItem.distributor_id
-    },
-    async getStoreList() {
-      let params = { page: 1, pageSize: 500 }
-      const { list } = await this.$api.marketing.getDistributorList(params)
-      if (list.length > 0) {
-        list.forEach((row) => {
-          this.shopList.push({ 'value': row.name, 'distributor_id': row.distributor_id })
-        })
-      }
-    },
     onSearch() {
       this.params.page = 1
       this.$nextTick(() => {
@@ -160,13 +143,6 @@ export default {
     },
     onReset() {
       this.params = { ...this.initialParams }
-      this.params = {
-        ...this.params,
-        distributor: {
-          id: undefined,
-          name: undefined
-        }
-      }
       this.onSearch()
     },
     async fetchList () {
@@ -174,10 +150,9 @@ export default {
       let params = {
         ...this.params,
       }
-      if (params.distributor.id) {
-        params.distributor_id = params.distributor.id
+      if (this.data.activity_id) {
+        params.activity_id = this.data.activity_id
       }
-      delete params.distributor
       const { list, total_count } = await this.$api.member.getPurchaseCompanyList(params)
       this.tableData = list
       this.total_count = parseInt(total_count)
@@ -189,7 +164,6 @@ export default {
       this.fetchList()
     },
     cancelAction () {
-      this.onReset()
       this.multipleSelection = []
       this.$emit('closeDialog', false)
     },
@@ -209,3 +183,4 @@ export default {
 
 <style type="text/css">
 </style>
+
