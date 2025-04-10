@@ -682,7 +682,7 @@ export default {
       params['show_fields'] = JSON.stringify(obj)
       params['distributor_ids'] = this.distributor_list?.map((item) => item.distributor_id).join(',') || ''
       params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',') || ''
-      params['member_level'] = this.memberLevelList.join(',')
+      params['member_level'] = this.memberLevelList ? this.memberLevelList.join(',') : ''
       // params['use_all_distributor'] = this.useAllDistributor
       params['pics'] = this.picsList.join(',')
       if (this.mode === 'component') {
