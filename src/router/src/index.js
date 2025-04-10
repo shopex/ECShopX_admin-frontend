@@ -6,6 +6,7 @@ import RouteTradenormalorders from './route-tradenormalorders'
 import RouteMember from './route-member'
 import RouteSellers from './route-sellers'
 import RouteStore from './route-store'
+import RouteSupply from './route-supply'
 import RoutePc from './route-pc'
 import RouteMarketing from './route-marketing'
 import RouteGuide from './route-guide'
@@ -62,6 +63,7 @@ export default {
   RouteMember,
   RouteSellers,
   RouteStore,
+  RouteSupply,
   RoutePc,
   RouteMarketing,
   RouteGuide,

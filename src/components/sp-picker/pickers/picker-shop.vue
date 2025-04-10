@@ -33,10 +33,14 @@
       <SpFilterFormItem prop="keywords">
         <el-input v-model="formData.keywords" placeholder="请输入店铺名称" />
       </SpFilterFormItem>
+      <SpFilterFormItem prop="shop_code">
+        <el-input v-model="formData.shop_code" placeholder="请输入店铺号" />
+      </SpFilterFormItem>
     </SpFilterForm>
     <SpFinder
       ref="finder"
       :class="['shop-finder', { 'no-multiple': !multiple }]"
+      reserve-selection
       :other-config="{
         'max-height': 460,
         'header-cell-class-name': cellClass
@@ -48,6 +52,7 @@
         beforeSearch: beforeSearch,
         afterSearch: afterSearch
       }"
+      row-key="distributor_id"
       @select="onSelect"
       @selection-change="onSelectionChange"
     />
@@ -71,7 +76,8 @@ export default {
     return {
       formData: {
         region: [],
-        keywords: ''
+        keywords: '',
+        shop_code: '',
       },
       district,
       regionArea: [],
@@ -96,6 +102,7 @@ export default {
           },
           visible: this.VERSION_PLATFORM
         },
+        { name: '店铺号', key: 'shop_code' },
         { name: '店铺地址', key: 'store_address' }
       ]
       return createSetting({
@@ -125,6 +132,7 @@ export default {
       params = {
         ...params,
         name: this.formData.keywords,
+        shop_code: this.formData.shop_code,
         province: province,
         city: city,
         area: area,

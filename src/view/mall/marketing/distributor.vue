@@ -20,19 +20,64 @@
   color: #777;
   line-height: initial;
 }
+
+.el-button {
+  &--success {
+    &.is-plain {
+      color: #67C23A;
+      background: #f0f9eb;
+      border-color: #c2e7b0;
+      &:hover,&:focus {
+        background-color: inherit;
+        border-color: inherit;
+        color: inherit;
+      }
+    }
+  }
+  &--danger {
+    &.is-plain {
+      color: #F56C6C;
+      background: #fef0f0;
+      border-color: #fbc4c4;
+      &:hover,&:focus {
+        background-color: inherit;
+        border-color: inherit;
+        color: inherit;
+      }
+    }
+  }
+
+  &--info {
+    &.is-plain {
+      color: #909399;
+      background: #f4f4f5;
+      border-color: #d3d4d6;
+      &:hover,&:focus {
+        background-color: inherit;
+        border-color: inherit;
+        color: inherit;
+      }
+    }
+  }
+
+  .more {
+    margin-left: 10px;
+  }
+}
+
 </style>
 
 <template>
   <div class="page-body">
     <SpRouterView>
       <SpPlatformTip h5 app alipay />
-      <div v-if="VERSION_STANDARD" class="content-bottom-padded">
+      <!-- <div v-if="VERSION_STANDARD" class="content-bottom-padded">
         <el-alert type="info" title="操作说明" show-icon>
           <div>
             自动同步：开启自动同步后，总部添加编辑商品会自动同步上架到到店铺，保留开启前的商品状态。关闭同步后将保留已同步的商品数据
           </div>
         </el-alert>
-      </div>
+      </div> -->
       <div v-if="IS_MERCHANT()" style="margin-bottom: 10px">
         <el-alert type="info" title="" show-icon>
           <div>可在设置-店铺管理员添加店铺端账号，登录地址 【 {{ origin }}/shopadmin/login 】</div>
@@ -44,29 +89,27 @@
           添加店铺
         </el-button>
 
-        <el-button v-if="!distributor_self" type="primary" @click="addDistributorSelf()">
-          新增总部自提点
+        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="uploadHandleChange()">
+          导入店铺
         </el-button>
-        <template v-else>
-          <el-button v-if="!IS_MERCHANT()" type="primary" @click="editDistributorSelf()">
-            编辑总部自提点
-          </el-button>
-        </template>
       </div>
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
-        <SpFilterFormItem prop="is_valid" label="启用状态:">
-          <el-select v-model="params.is_valid" placeholder="是否启用">
+        <SpFilterFormItem prop="distributor_id" label="店铺:">
+          <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="distributor_id" label="店铺号:">
+          <el-input v-model="params.shop_code" placeholder="店铺号" />
+        </SpFilterFormItem>
+        <SpFilterFormItem prop="open_divided" label="开启白名单:">
+          <el-select v-model="params.open_divided" placeholder="是否开启">
             <el-option
-              v-for="(item, index) in isValidList"
+              v-for="(item, index) in isOpenList"
               :key="index"
               :label="item.name"
               :value="item.value"
             />
           </el-select>
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="distributor_id" label="店铺:">
-          <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
         </SpFilterFormItem>
         <SpFilterFormItem v-if="VERSION_PLATFORM" prop="tag_id" label="标签:">
           <el-cascader
@@ -118,9 +161,25 @@
           plain
           @click="showSettingDistance('')"
         >
-          全部店铺范围配置
+          设置店铺默认可见范围
         </el-button>
+        <el-button v-if="!IS_DISTRIBUTOR() && !distributor_self" type="primary" plain @click="addDistributorSelf()">
+          新增默认虚拟店信息
+        </el-button>
+        <template v-else>
+          <el-button v-if="!IS_MERCHANT()" type="primary" plain @click="editDistributorSelf()">
+            编辑默认虚拟店信息
+          </el-button>
+        </template>
       </div>
+
+      <el-tabs v-model="params.is_valid" type="card" @tab-click="onSearch">
+        <el-tab-pane
+          v-for="(item, index) in isValidList"
+          :key="index"
+          :label="item.name"
+          :name="item.value" />
+      </el-tabs>
 
       <el-table
         v-loading="loading"
@@ -140,23 +199,14 @@
             <div class="store-name">
               {{ scope.row.name }}
             </div>
-            <div class="store-contact">
-              <span v-if="scope.row.contact">
-                <i class="el-icon-user" />
-                {{ scope.row.contact }}
-              </span>
-              <span>
-                <i class="el-icon-mobile" />
-                {{ scope.row.mobile }}
-              </span>
-            </div>
             <div v-if="scope.row.store_address" class="store-address">
               <i class="el-icon-place" />
               {{ scope.row.store_address }}
             </div>
           </template>
         </el-table-column>
-        <el-table-column v-if="VERSION_STANDARD" width="200" label="自动同步商品至店铺">
+        <el-table-column width="100" prop="shop_code" label="店铺号" />
+        <el-table-column v-if="VERSION_STANDARD" width="200" label="自动同步商品" :render-header="renderHeader">
           <template v-if="scope.row.is_valid !== 'delete'" slot-scope="scope">
             <el-switch
               v-model="scope.row.auto_sync_goods"
@@ -231,7 +281,17 @@
             {{ scope.row.is_self_delivery ? '是' : '否' }}
           </template>
         </el-table-column>
-        <el-table-column width="70" label="状态">
+        <el-table-column width="100" label="进店白名单" v-if="VERSION_STANDARD && $store.getters.login_type == 'admin'">
+          <template v-if="scope.row.is_valid !== 'delete'" slot-scope="scope">
+            <el-switch
+              v-model="scope.row.open_divided"
+              active-color="#13ce66"
+              inactive-color="#cccccc"
+              @change="switchChange(scope.$index, scope.row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column width="100" label="状态">
           <template slot-scope="scope">
             <el-button
               v-if="scope.row.is_valid !== 'delete'"
@@ -239,15 +299,15 @@
               @click="editValid(scope.row)"
             >
               <span v-if="scope.row.is_valid == 'true'" class="green">
-                启用
-                <i class="el-icon-s-tools" />
+                <el-button type="success" size="mini" plain>启用<i class="el-icon-edit" /></el-button>
               </span>
               <span v-else class="red">
-                禁用
-                <i class="el-icon-s-tools" />
+                <el-button type="danger" size="mini" plain>禁用<i class="el-icon-edit" /></el-button>
               </span>
             </el-button>
-            <span v-else class="muted">废弃</span>
+            <span v-else class="muted">
+              <el-button type="info" size="mini" plain>废弃</el-button>
+            </span>
           </template>
         </el-table-column>
         <el-table-column
@@ -361,7 +421,7 @@
                   店铺范围配置
                 </el-button>
               </div>
-              <el-button slot="reference" type="text">更多>></el-button>
+              <el-button slot="reference" type="text">更多<i class="el-icon-arrow-down more" /></el-button>
             </el-popover>
 
             <!-- <router-link
@@ -603,10 +663,11 @@ import shopDecoration from '@/components/function/shopDecoration'
 import pcDecoration from '@/view/pc/homePage/default'
 import { getSetting } from '@/api/fenzhang'
 import { setPaymentSetting, getPaymentSetting } from '@/api/trade'
-import shopSelect from '@/components/shopSelect'
 import mixin, { pageMixin } from '@/mixins'
 import { IS_ADMIN } from '@/utils'
-
+import {
+  handleUploadFile
+} from '../../../api/common'
 import store from '@/store'
 // 取选中地区的值
 function getCascaderObj(val, opt) {
@@ -622,13 +683,15 @@ function getCascaderObj(val, opt) {
 }
 
 export default {
-  components: { shopDecoration, pcDecoration, shopSelect },
+  components: { shopDecoration, pcDecoration },
   mixins: [mixin, pageMixin],
   data() {
     const initialParams = {
       is_valid: undefined,
       distributor_id: undefined,
-      tag_id: []
+      tag_id: [],
+      shop_code: undefined,
+      open_divided: undefined
     }
 
     const validateLink = (rule, value, callback) => {
@@ -684,6 +747,10 @@ export default {
         { name: '启用', value: 'true' },
         { name: '禁用', value: 'false' },
         { name: '废弃', value: 'delete' }
+      ],
+      isOpenList: [
+        { name: '开启白名单', value: true },
+        { name: '未开启白名单', value: false },
       ],
       changeStatus: true,
       activeName: 'first',
@@ -861,6 +928,35 @@ export default {
     })
   },
   methods: {
+    // 导入店铺
+    uploadHandleChange(file, fileList) {
+      this.$router.push({ path: this.matchHidePage('storeupload') })
+    },
+    renderHeader(h, { column }) {
+      return h('span', null, [
+        column.label,
+        h('el-tooltip', {
+          props: {
+            placement: 'bottom',
+            effect: 'dark'
+          }
+        }, [
+          h('i', {
+            class: 'el-icon-warning-outline',
+            style: 'margin-left: 4px; cursor: pointer;'
+          }),
+          h('div', {
+            slot: 'content'
+          }, [
+            '自动同步：开启自动同步后，总部添加编辑商品会自动',
+            h('br'),
+            '同步上架到店铺，保留开启前的商品状态。',
+            h('br'),
+            '关闭同步后将保留已同步的商品数据'
+          ])
+        ])
+      ])
+    },
     onSearch() {
       this.page.pageIndex = 1
       this.$nextTick(() => {
@@ -873,8 +969,9 @@ export default {
     },
     getParams() {
       let params = {
-        ...this.params
+        ...this.params,
       }
+      params.is_valid = this.params.is_valid === '0' ? undefined : this.params.is_valid
       return params
     },
     async fetchList() {
@@ -1070,7 +1167,8 @@ export default {
         distributor_id: row.distributor_id,
         is_ziti: row.is_ziti,
         is_delivery: row.is_delivery,
-        is_open_salesman: row.is_open_salesman
+        is_open_salesman: row.is_open_salesman,
+        open_divided: row.open_divided
       }
       saveDistributor(params).then((response) => {
         this.detailDialog = false

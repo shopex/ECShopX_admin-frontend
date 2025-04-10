@@ -169,7 +169,7 @@
             />
             <el-table-column label="进白名单" width="120">
               <template slot-scope="scope">
-                {{ scope.row.is_white_list ? '是' : '否'}}
+                {{ scope.row.is_white_list == 1 ? '是' : '否'}}
               </template>
             </el-table-column>
             <el-table-column

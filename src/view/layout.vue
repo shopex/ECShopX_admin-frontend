@@ -36,7 +36,7 @@
                 :index="item.url"
               >
                 <router-link :to="getMenuUrl(item)">
-                  <i :class="['ecx-icon', `icon-${getIconName(item.icon)}`]" />
+                  <i :class="['iconfont', `icon-${getIconName(item.icon)}`]" />
                   <span>{{ item.name }}</span>
                 </router-link>
               </el-menu-item>
@@ -434,10 +434,10 @@ export default {
       // align-items: center;
       // justify-content: center;
     }
-    .ecx-icon {
+    .iconfont {
       color: #fff;
       font-size: 15px;
-      margin-right: 4px;
+      margin-right: 10px;
     }
   }
 }
