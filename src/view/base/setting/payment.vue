@@ -22,9 +22,9 @@
       <el-tab-pane label="线下转帐" name="offline">
         <offlinePay />
       </el-tab-pane>
-      <el-tab-pane label="默认积分抵扣配置" name="point">
+      <!-- <el-tab-pane label="默认积分抵扣配置" name="point">
         <pointpay />
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

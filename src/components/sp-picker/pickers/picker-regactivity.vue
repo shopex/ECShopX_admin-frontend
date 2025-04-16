@@ -53,8 +53,11 @@
         columns: [
           { name: 'ID', key: 'activity_id', width: 80 },
           { name: '活动名称', key: 'activity_name' },
-          { name: '模板名称', key: 'template_name' },
-          { name: '店铺', key: 'shop_name' },
+          { name: '模板名称', key: 'tem_name' },
+          {name: '店铺',
+            key: 'distributor_name',
+            render: (h, { row }) => h('span', {}, this.getCycle([row.distributor_name]))
+          },
         ]
       }"
       :hooks="{
@@ -89,10 +92,15 @@ export default {
   created() {},
   methods: {
     beforeSearch(params) {
-      params = {
-        ...params,
-        is_valid: true
-      }
+    const urlParams = new URLSearchParams(window.location.search)
+    const distributor_id = urlParams.get('distributor_id')
+    params = {
+      ...params,
+      is_valid: true
+    }
+    if (distributor_id) {
+        params['distributor_id'] = distributor_id
+    }
       return params
     },
     afterSearch(response) {
@@ -123,6 +131,10 @@ export default {
     },
     onSelectionChange(selection) {
       this.updateVal(selection)
+    },
+    getCycle (distributor_name) {
+      const name = distributor_name ? distributor_name.join(',') : ''
+      return name
     }
   }
 }
