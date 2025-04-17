@@ -36,7 +36,8 @@
                   :value="item"
                 />
               </el-select>
-              分钟{{ currentTemplate.send_time_desc.end_title }}
+              {{ currentTemplate.send_time_desc.time_unit || '分钟' }}
+              {{ currentTemplate.send_time_desc.end_title }}
             </span>
           </el-form-item>
           <el-form-item label="内容">
