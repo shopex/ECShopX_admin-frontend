@@ -160,12 +160,14 @@
     />
 
     <GoodsSelector
+      v-if="itemVisible && setItemStatus"
       :items-visible="itemVisible"
       :get-status="setItemStatus"
       :rel-items-ids="selectGoodsList"
       item-type="normal"
       :limit-count="200"
       :set-search="true"
+      :gift="false"
       @chooseStore="handleGoodsSubmit"
       @closeStoreDialog="handleGoodsDialogHide"
     />
