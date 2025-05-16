@@ -167,6 +167,7 @@
       item-type="normal"
       :limit-count="200"
       :set-search="true"
+      :is-change-store="true"
       :gift="false"
       @chooseStore="handleGoodsSubmit"
       @closeStoreDialog="handleGoodsDialogHide"

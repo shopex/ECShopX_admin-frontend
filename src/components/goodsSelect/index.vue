@@ -420,8 +420,8 @@ export default {
     }
   },
   mounted() {
-    if(!this.gift) this.params.is_gift = !this.gift
-    this.getNewsList()
+    // if(!this.gift) this.params.is_gift = !this.gift
+    if(!this.gift) this.onOpen()
   },
 
   methods: {
