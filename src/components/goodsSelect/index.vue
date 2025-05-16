@@ -120,7 +120,7 @@
           <el-select v-model="params.is_gift"
             placeholder="是否为赠品"
             clearable
-            :disabled="setSearch"
+            :disabled="gift?setSearch:gift"
             @change="searchByKey">
             <el-option :value="true" label="是" />
             <el-option :value="false" label="否" />
@@ -336,6 +336,10 @@ export default {
     setSearch: {
       type: Boolean,
       default: false
+    },
+    gift: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -415,7 +419,10 @@ export default {
       templateRadio: ''
     }
   },
-  mounted() {},
+  mounted() {
+    if(!this.gift) this.params.is_gift = !this.gift
+    this.getNewsList()
+  },
 
   methods: {
    async onOpen() {
