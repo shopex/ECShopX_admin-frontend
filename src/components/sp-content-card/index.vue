@@ -2,7 +2,9 @@
   <div
     class="sp-content-card bg-white rounded-lg border border-solid border-gray-200 overflow-hidden"
   >
-    <div class="sp-content-card__head">
+    <div class="sp-content-card__head relative">
+      <slot name="head-slot" />
+
       <div class="relative w-full cursor-pointer" style="padding-bottom: 100%">
         <SpImage
           :src="data.image_url"
@@ -43,10 +45,9 @@
           type="text-default"
           size="mini"
           class="text-gray-400"
-          >
-复制文章链接
-</el-button
         >
+          复制文章链接
+        </el-button>
       </div>
       <div class="flex h-10">
         <div class="flex-1 text-xs text-center h-full leading-10">
@@ -81,10 +82,9 @@
                 type="text-default"
                 size="mini"
                 class="text-gray-400"
-                >
-排序
-</el-button
               >
+                排序
+              </el-button>
             </div>
           </el-popover>
         </div>
@@ -95,70 +95,12 @@
             size="mini"
             class="text-gray-400"
             @click="handleDelete"
-            >
-删除
-</el-button
           >
-        </div>
-      </div>
-    </div>
-    <!-- <router-link :to="{ path: matchRoutePath('editor'), query: { id: item.article_id } }">
-      <div
-        class="thumbnail"
-        :style="
-          'background: url(' +
-          (item.image_url || 'https://fakeimg.pl/200x180/EFEFEF/CCC/?text=image&font=lobster') +
-          ') 0% 0% / cover no-repeat;'
-        "
-      />
-      <div class="caption">
-        <div class="title">
-          {{ item.title }}
-        </div>
-        <div class="update-time">
-          {{ item.updated | datetime('YYYY-MM-DD HH:mm:ss') }}
-        </div>
-        <div class="view-flex">
-          <div class="attention-count">
-            <i class="iconfont icon-eye" />{{ item.articleFocusNum.count || 0 }}
-          </div>
-          <div class="attention-count">
-            <i class="iconfont icon-heart" />{{ item.articlePraiseNum.count || 0 }}
-          </div>
-        </div>
-      </div>
-    </router-link> -->
-    <!-- <div class="footer">
-      <div
-        v-clipboard:copy="item.link"
-        v-clipboard:success="onCopySuccess"
-        class="footer-item copy-btn"
-      >
-        <input v-model="item.link" class="copy-link" type="text" />
-        <i class="iconfont icon-copy" /> 复制文章链接
-      </div>
-    </div>
-    <div class="footer">
-      <div class="footer-item" @click="handlePublish(item.article_id, item.release_status)">
-        <template v-if="item.release_status"> <i class="iconfont icon-undo-alt" /> 撤回 </template>
-        <template v-else> <i class="iconfont icon-broadcast-tower" /> 发布 </template>
-      </div>
-      <el-popover v-model="item.visible" class="footer-item" placement="top" width="160">
-        <div class="content-bottom-padded">
-          <el-input v-model="item.sort" size="mini" placeholder="请输入排序" />
-        </div>
-        <div style="text-align: right; margin: 0">
-          <el-button size="mini" type="text" @click="item.visible = false"> 取消 </el-button>
-          <el-button type="primary" size="mini" @click="handleSort(item.article_id)">
-            确定
+            删除
           </el-button>
         </div>
-        <div slot="reference"><i class="iconfont icon-sort-amount-up" /> 排序</div>
-      </el-popover>
-      <div class="footer-item" @click="articleDelete(item.article_id)">
-        <i class="iconfont icon-trash-alt" /> 删除
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -196,9 +138,8 @@ export default {
 
 <style lang="scss" scoped>
 .sp-content-card {
-  .thumbnail {
-    width: 100%;
-    height: 180px;
+  &__head {
+    position: relative;
   }
 }
 </style>

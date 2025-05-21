@@ -258,7 +258,6 @@ export default {
   },
   created() {
     this.localSelection = cloneDeep(this.value.data) || []
-    console.log('????')
     this.rowKey = this.value?.rowKey || 'item_id'
   },
   mounted() {

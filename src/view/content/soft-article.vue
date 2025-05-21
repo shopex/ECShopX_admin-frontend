@@ -2,6 +2,29 @@
 .sp-filter-form {
   margin-bottom: 16px;
 }
+
+.ai-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: var(--themeColor);
+  font-size: 12px;
+  width: 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.ai-publish {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 999;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ff0000;
+}
 </style>
 
 <template>
@@ -19,7 +42,7 @@
       <el-button icon="plus" @click="createArticleByAI"> AI创作 </el-button>
     </div>
 
-    <SpPagination auto-fetch :fetch="fetchList">
+    <SpPagination ref="paginationRef" auto-fetch :fetch="fetchList">
       <div class="grid grid-cols-5 gap-4">
         <SpContentCard
           v-for="(item, index) in articleList"
@@ -29,7 +52,14 @@
           @onChange="handlePublishOrWithdraw"
           @onSort="handleSort"
           @onClick="handleClick"
-        />
+        >
+          <template slot="head-slot">
+            <div class="flex justify-between">
+              <div v-if="item.is_ai" class="ai-tag">AI</div>
+              <div v-if="item.is_ai && !item.release_status" class="ai-publish" />
+            </div>
+          </template>
+        </SpContentCard>
       </div>
     </SpPagination>
 
@@ -57,12 +87,7 @@
 </template>
 
 <script>
-import DataPlaceholder from '@/components/element/dataPlaceholder'
-
 export default {
-  components: {
-    dataPlaceholder: DataPlaceholder
-  },
   data() {
     return {
       articleList: [],
@@ -158,6 +183,13 @@ export default {
   },
   mounted() {
     this.getArticleCategory()
+    this.$activated = (to, from) => {
+      if (from.meta.name == 'edit') {
+        this.$refs['paginationRef'].refresh()
+      } else if (from.meta.name == 'create') {
+        this.$refs['paginationRef'].refresh(true)
+      }
+    }
   },
   methods: {
     onSearch() {},
@@ -180,7 +212,7 @@ export default {
         await this.$confirm('确认删除当前软文吗？', '提示')
         await this.$api.article.deleteArticle(article_id)
         this.$message.success('删除成功')
-        this.fetchList()
+        this.$refs['paginationRef'].refresh()
       } catch (error) {}
     },
     async handleSort({ article_id, sort }) {
@@ -192,7 +224,7 @@ export default {
           }
         ]
       })
-      this.fetchList()
+      this.$refs['paginationRef'].refresh()
     },
     async handlePublishOrWithdraw({ article_id, release_status }) {
       try {
@@ -209,21 +241,21 @@ export default {
           ]
         })
         this.$message.success(release_status ? '撤回成功' : '发布成功')
-        this.fetchList()
+        this.$refs['paginationRef'].refresh()
       } catch (error) {}
     },
     handleClick(item) {
       this.$router.push({ path: this.matchRoutePath('editor'), query: { id: item.article_id } })
     },
-    async fetchList({ pageIndex, pageSize }) {
+    async fetchList({ page, pageSize }) {
       const params = {
-        page: pageIndex,
+        page,
         pageSize,
         article_type: 'bring',
         title: this.searchForm.title
       }
       const { list, total_count } = await this.$api.article.getArticleList(params)
-      this.articleList = this.articleList.concat(list)
+      this.articleList = list
       return {
         total: total_count,
         list: this.articleList
@@ -275,9 +307,11 @@ export default {
             ? this.aiArticleForm.product_review
             : this.aiArticleForm.seasonal_recommend
       }
-      console.log(this.aiArticleForm)
 
       await this.$api.article.createArticleByAI(params)
+      this.drawerShow = false
+      this.$message.success('提交成功，AI生成软文预计需要3分钟，请稍后在待发布中查看。')
+      this.$refs['paginationRef'].refresh(true)
     }
   }
 }

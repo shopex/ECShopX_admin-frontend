@@ -342,7 +342,9 @@ $color-secondary: rgba(var(--themeColorRgb), 0.8);
   }
 }
 
+/* 分页 */
 .el-pagination {
+  font-weight: 500;
   &.is-background {
     .el-pager {
       li:not(.disabled) {
@@ -355,6 +357,12 @@ $color-secondary: rgba(var(--themeColorRgb), 0.8);
           color: $color-primary;
         }
       }
+    }
+  }
+  .btn-prev,
+  .btn-next {
+    .el-icon {
+      margin: 0 auto;
     }
   }
 }
@@ -422,7 +430,14 @@ $color-secondary: rgba(var(--themeColorRgb), 0.8);
   border-color: $color-primary;
 }
 
+/* el-loading-spinner */
 .el-loading-spinner {
+  top: 50%;
+  left: 50%;
+  width: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+
   .path {
     stroke: $color-primary;
   }

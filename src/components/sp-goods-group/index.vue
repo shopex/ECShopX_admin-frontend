@@ -1,6 +1,8 @@
 <template>
   <div class="sp-goods-group">
-    <div v-if="value.length == 0" class="sp-goods-group__empty">暂无商品</div>
+    <div v-if="value.length == 0" class="sp-goods-group__empty">
+      <el-empty description="暂无商品" :image-size="60" />
+    </div>
     <div v-else class="sp-goods-group__list" :style="computedStyle">
       <SpGoodsCard v-for="item in value" :key="item.item_id" :info="item" />
     </div>

@@ -87,13 +87,8 @@
 <script>
 import Vue from 'vue'
 import draggable from 'vuedraggable'
-import { SYSTEM_CONFIG } from '@/consts'
-import store from '@/store'
-import { hex2rgb } from '@/utils'
-import { cloneDeep } from 'lodash'
 import gWgts from '@/view/decorate/wgts'
 import DecorateView from '@/view/decorate'
-// import comps from './comps'
 export default {
   name: 'SpDecorate',
   components: {
@@ -107,7 +102,7 @@ export default {
     },
     scene: {
       type: String,
-      default: ''
+      default: '1001'
     },
     title: {
       type: String,
@@ -123,14 +118,6 @@ export default {
     }
   },
   watch: {
-    // value: {
-    //   handler(nVal, oVal) {
-    //     this.localValue = this.getWgtsValue(nVal)
-    //   },
-    //   // deep: true,
-    //   // immediate: true
-    // }
-
     value: function (nVal, oVal) {
       this.localValue = this.getWgtsValue(nVal)
     }
@@ -156,8 +143,8 @@ export default {
       return filterWidget
     },
     registerWgts() {
-      const { scene = '1001' } = this.$route.query
-      const wgts = gWgts[scene]
+      // const { scene = '1001' } = this.$route.query
+      const wgts = gWgts[this.scene]
       Object.keys(wgts).forEach((index) => {
         this.widgets.push(wgts[index])
         Vue.component(wgts[index].name, wgts[index])

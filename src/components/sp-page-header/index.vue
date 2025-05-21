@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     goBack() {
-      this.$emit('back')
       this.$router.go(-1)
+      this.$emit('onBack')
     }
   }
 }

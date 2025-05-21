@@ -3,7 +3,15 @@
  * @param {Function} fetchFn - (params) => Promise<{list, total}>
  * @param {Object} defaultParams - 额外的查询参数
  */
-function usePagination(fetchFn, defaultParams = {}) {
+function usePagination(
+  fetchFn,
+  {
+    defaultParams = {},
+    onBeforeFetch = () => {},
+    onAfterFetch = () => {},
+    onFetchFinally = () => {}
+  }
+) {
   const state = {
     loading: false,
     data: [],
@@ -16,6 +24,7 @@ function usePagination(fetchFn, defaultParams = {}) {
 
   function fetchData(extra = {}) {
     state.loading = true
+    onBeforeFetch(state)
     return fetchFn(
       Object.assign(
         {
@@ -27,14 +36,15 @@ function usePagination(fetchFn, defaultParams = {}) {
       )
     )
       .then((res) => {
-        console.log('fetchData', res)
         state.data = res.list || []
         state.total = res.total || 0
         state.hasNext = state.page * state.pageSize < state.total
+        onAfterFetch(state)
         return res
       })
       .finally(() => {
         state.loading = false
+        onFetchFinally(state)
       })
   }
 
