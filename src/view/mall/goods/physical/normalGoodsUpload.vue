@@ -139,7 +139,7 @@ export default {
   data () {
     return {
       pane_list: [
-        { name: 'normal_goods', label: '上传实体类商品' },
+        { name: 'supplier_goods', label: '上传实体类商品' },
         { name: 'employee_purchase_activity_items', label: '上传内购活动商品' }
       ],
       loading: false,
@@ -154,7 +154,7 @@ export default {
     ...mapGetters(['wheight'])
   },
   mounted() {
-    const {file_type='normal_goods'} = this.$route.query
+    const {file_type='supplier_goods'} = this.$route.query
     this.activeName = file_type
     this.getUploadList()
   },
