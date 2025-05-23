@@ -2,15 +2,11 @@
   <div
     class="sp-content-card bg-white rounded-lg border border-solid border-gray-200 overflow-hidden"
   >
-    <div class="sp-content-card__head relative">
+    <div class="sp-content-card__head relative" @click="handleImageClick">
       <slot name="head-slot" />
 
       <div class="relative w-full cursor-pointer" style="padding-bottom: 100%">
-        <SpImage
-          :src="data.image_url"
-          class="absolute top-0 left-0 w-full h-full"
-          @click="handleImageClick"
-        />
+        <SpImage :src="data.image_url" class="absolute top-0 left-0 w-full h-full" />
       </div>
     </div>
     <div class="sp-content-card__body pt-1 pb-1">
