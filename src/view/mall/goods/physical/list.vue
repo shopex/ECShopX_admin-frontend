@@ -1325,7 +1325,7 @@ export default {
             componentProps: {
               icon: 'el-icon-plus',
               change: async (v, row) => {
-                await this.$api.goods.setItemsSort({ 'sort': v, 'item_id': row.itemId })
+                await this.$api.goods.setItemsSort({ 'sort': v, 'item_id': row.item_id ,'operate_source': this.IS_SUPPLIER()?'supplier':''})
                 this.$refs['finder'].refresh()
               }
             }
