@@ -134,6 +134,7 @@ import {
   exportUploadErrorFile,
   exportUploadTemplate
 } from '../../../../api/common'
+import { IS_ADMIN, IS_SUPPLIER } from '@/utils'
 
 export default {
   data () {
@@ -187,7 +188,7 @@ export default {
       if (this.activeName == 'employee_purchase_activity_items') {
         fileName = '新增内购活动商品'
       } 
-      let params = { file_type: this.activeName, file_name: fileName }
+      let params = { file_type: IS_SUPPLIER()?'supplier_goods':'normal_goods', file_name: fileName }
       exportUploadTemplate(params).then((response) => {
         if (response.data.data.file) {
           var a = document.createElement('a')
