@@ -316,7 +316,7 @@
           </el-col>
         </el-form-item>
         <el-form-item
-          label="提交报名次数"
+          label="累计报名人数"
           prop="join_limit"
         >
           <el-col :span="10">
