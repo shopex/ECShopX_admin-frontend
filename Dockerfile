@@ -43,7 +43,7 @@ ENV VUE_APP_H5_HOST ${VUE_APP_H5_HOST}
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm config set registry https://registry.npmmirror.com && npm config set @shopex:registry http://registry.npm.ishopex.cn && npm ci
+RUN npm config set registry https://registry.npmmirror.com && npm config set @shopex:registry http://registry.npm.ishopex.cn && npm config set python /usr/bin/python && npm ci
 
 COPY . .
 COPY .env ./
