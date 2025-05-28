@@ -171,9 +171,9 @@ export default {
     uploadHandleChange (file, fileList) {
       let params = {
         isUploadFile: true,
-        file_type: IS_SUPPLIER()?'supplier_goods':'normal_goods',
         file: file.raw,
-        ...this.getDistributorId()
+        ...this.getDistributorId(),
+        file_type: IS_SUPPLIER()?'supplier_goods':'normal_goods',
       }
       handleUploadFile(params).then((response) => {
         this.$message({
