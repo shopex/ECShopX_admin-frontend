@@ -286,7 +286,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import district from '@/common/district.json'
 import SideBar from '@/components/element/sideBar'
 import {

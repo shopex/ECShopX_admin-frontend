@@ -222,16 +222,12 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button v-if="isBindWdtErp" size="small" type="primary" @click="uploadWdtErpItems()"
-          >
-上传商品到旺店通
-</el-button
-        >
-        <el-button v-if="isBindJstErp" size="small" type="primary" @click="uploadJstErpItems()"
-          >
-上传商品到聚水潭
-</el-button
-        >
+        <el-button v-if="isBindWdtErp" size="small" type="primary" @click="uploadWdtErpItems()">
+          上传商品到旺店通
+        </el-button>
+        <el-button v-if="isBindJstErp" size="small" type="primary" @click="uploadJstErpItems()">
+          上传商品到聚水潭
+        </el-button>
       </div>
 
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -840,7 +836,6 @@
 import { mapGetters } from 'vuex'
 import Treeselect from '@riophae/vue-treeselect'
 import SideBar from '@/components/element/sideBar'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getDefaultCurrency } from '@/api/company'
 import district from '@/common/district.json'
 import {

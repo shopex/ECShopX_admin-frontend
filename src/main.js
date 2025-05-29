@@ -9,7 +9,8 @@ import VueClipboard from 'vue-clipboard2'
 
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
-
+import 'nprogress/nprogress.css'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 // import { install as H5EditorInstall } from '@/utils/vue-h5-editor'
 
 import App from './App'
