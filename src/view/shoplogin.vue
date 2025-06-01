@@ -116,7 +116,7 @@ export default {
     ...mapMutations(['SET_TOKEN', 'SET_TOKEN_EXP', 'SET_USERINFO', 'SET_LOGIN_TYPE']),
     handleSubmit1() {
       this.$store.dispatch('setLoginType', 'distributor')
-      this.$refs.ruleForm1.validate(async (valid) => {
+      this.$refs.ruleForm1.validate(async valid => {
         if (valid) {
           this.loading = true
           this.submitDisabled = true
@@ -181,7 +181,6 @@ body {
 }
 .log-body {
   padding: 118px 0;
-  // background: url(./assets/img/login_bg.jpg) no-repeat center center;
   background-size: cover;
 }
 .log-img {

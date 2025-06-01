@@ -1,25 +1,24 @@
 {
   "name": "ecshopx-admin",
-  "version": "3.20.3",
+  "version": "3.21.0",
   "description": "ecshopx admin",
   "author": "shopex",
   "private": true,
   "repository": "https://git.ishopex.cn/ecshopx/ecshopx-admin.git",
   "scripts": {
-    "build": "vue-cli-service build",
-    "build:yd": "vue-cli-service build --mode yd",
-    "build:bbc": "vue-cli-service build --mode bbc",
-    "build:sy": "vue-cli-service build --mode sy",
-    "build:ng": "vue-cli-service build --mode ng",
-    "build:b2c": "vue-cli-service build --mode b2c",
-    "dev": "vue-cli-service serve",
-    "dev:yd": "vue-cli-service serve --mode yd",
-    "dev:bbc": "vue-cli-service serve --mode bbc",
-    "dev:sy": "vue-cli-service serve --mode sy",
-    "dev:ng": "vue-cli-service serve --mode ng",
-    "dev:b2c": "vue-cli-service serve --mode b2c",
+    "build:yd": "PLATFORM=yd vue-cli-service build",
+    "build:bbc": "PLATFORM=bbc vue-cli-service build",
+    "build:shuyun": "PLATFORM=shuyun vue-cli-service build",
+    "build:ng": "PLATFORM=ng vue-cli-service build",
+    "build:b2c": "PLATFORM=b2c vue-cli-service build",
+    "dev:yd": "PLATFORM=yd vue-cli-service serve",
+    "dev:bbc": "PLATFORM=bbc vue-cli-service serve",
+    "dev:shuyun": "PLATFORM=shuyun vue-cli-service serve",
+    "dev:ng": "PLATFORM=ng vue-cli-service serve",
+    "dev:b2c": "PLATFORM=b2c vue-cli-service serve",
     "sh": "node ./cli.js",
-    "lint": "prettier-eslint --write --list-different 'src/**/*.{js,vue}'"
+    "lint": "prettier-eslint --write --list-different 'src/**/*.{js,vue}'",
+    "preinstall": "mkdir -p .npm-cache && cp .npm-cache/* ~/.npm/_cacache/content-v2/sha512/ || true"
   },
   "dependencies": {
     "@antv/g2plot": "^2.4.31",
@@ -71,7 +70,9 @@
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.7.0",
+    "compression-webpack-plugin": "^11.1.0",
     "core-js": "^3.9.1",
+    "css-minimizer-webpack-plugin": "^7.0.2",
     "dotenv-flow": "^3.2.0",
     "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.20.2",
@@ -80,7 +81,9 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.0.0",
     "exec-sh": "^0.4.0",
+    "image-minimizer-webpack-plugin": "^4.1.3",
     "lint-staged": "^12.1.5",
+    "mini-css-extract-plugin": "^2.9.2",
     "node-sass-js-importer": "^4.0.2",
     "postcss": "^8.4.21",
     "prettier": "^2.5.1",
@@ -100,7 +103,8 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
+    "not dead",
+    "not ie 11"
   ],
   "lint-staged": {
     "src/**/*.{js,vue,scss}": [

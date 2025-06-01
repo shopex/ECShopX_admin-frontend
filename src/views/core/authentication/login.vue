@@ -11,11 +11,9 @@
     </div>
 
     <div class="mt-16">
-      <el-button type="primary" class="w-full" :loading="loading" @click="handleLogin"
-        >
-登录
-</el-button
-      >
+      <el-button type="primary" class="w-full" :loading="loading" @click="handleLogin">
+        登录
+      </el-button>
     </div>
 
     <div class="absolute -bottom-0.5 left-0 w-full text-center text-xs text-muted-foreground">
@@ -44,9 +42,10 @@ const [Form, FormApi] = useForm({
             label: '员工',
             value: 'staff'
           }
-        ]
+        ],
+        value: 'admin'
       },
-      fieldName: 'type'
+      fieldName: 'loginType'
     },
     {
       component: 'Input',
@@ -109,12 +108,14 @@ export default {
         const { token } = await this.$api.auth.login({
           username: formData.account,
           password: formData.pwd,
-          logintype: formData.admin
+          logintype: formData.loginType
           // product_model: this.VUE_APP_PRODUCT_MODEL,
           // agreement_id
         })
         if (token) {
+          this.$store.commit('user/setToken', { token })
           this.$message.success('登录成功')
+          await this.$store.dispatch('user/fetchPermission')
           this.$router.push('/')
         }
       } catch (error) {

@@ -177,6 +177,18 @@
           />
         </template>
       </el-table-column>
+      <el-table-column label="起订量">
+        <template slot-scope="scope">
+          <el-input
+            v-model="scope.row.start_num"
+            type="number"
+            required
+            min="0"
+            size="mini"
+            placeholder="起订量"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="条形码">
         <template slot-scope="scope">
           <el-input
@@ -279,6 +291,11 @@
           <el-input v-model="scope.row.market_price" type="number" min="0" size="mini" />
         </template>
       </el-table-column>
+      <el-table-column prop="start_num" label="起订量">
+        <template slot-scope="scope">
+          <el-input v-model="scope.row.start_num" type="number" min="0" size="mini" />
+        </template>
+      </el-table-column>
       <el-table-column prop="barcode" label="条形码">
         <template slot-scope="scope">
           <el-input v-model="scope.row.barcode" size="mini" />
@@ -361,6 +378,7 @@ export default {
           price: '',
           cost_price: '',
           market_price: '',
+          start_num: 0,
           barcode: '',
           point_num: '',
           weight: '',
@@ -382,10 +400,10 @@ export default {
           //解决第一次渲染改数据时触发组件的验证报错
           this.isFirst = false
         } else {
-          this.bulkFilling.forEach((item) => (item.approve_status = 'instock'))
+          this.bulkFilling.forEach(item => (item.approve_status = 'instock'))
         }
         if (this.value.specItems.length) {
-          this.value.specItems.forEach((item) => (item.approve_status = 'instock'))
+          this.value.specItems.forEach(item => (item.approve_status = 'instock'))
         }
       }
     }
@@ -438,13 +456,13 @@ export default {
       const { skuValue = [], checkedSku = [] } =
         JSON.parse(JSON.stringify(this.value.skus))
           .reverse()
-          .find((item) => item.isImage) || {}
+          .find(item => item.isImage) || {}
       if (!skuValue) {
         return
       }
       this.value.skuItemImages = skuValue
         .filter(({ attribute_value_id }) => checkedSku.includes(attribute_value_id))
-        .map((item) => {
+        .map(item => {
           if (!value) {
             // 与前一次编辑的缓存数据合并
             const fd = this.value.skuItemImages.find(
@@ -490,6 +508,7 @@ export default {
             price,
             cost_price,
             market_price,
+            start_num,
             barcode,
             point_num,
             item_spec,
@@ -515,6 +534,7 @@ export default {
               price: isNaN(price / 100) ? '' : price / 100,
               cost_price: isNaN(cost_price / 100) ? '' : cost_price / 100,
               market_price: isNaN(market_price / 100) ? '' : market_price / 100,
+              start_num,
               barcode,
               point_num,
               supplier_goods_bn,
@@ -524,7 +544,7 @@ export default {
         )
       }
       // 新生成的sku
-      specItems.forEach((item) => {
+      specItems.forEach(item => {
         const key = item.join('_')
         if (!_specItems.find(({ sku_id }) => sku_id == key)) {
           const {
@@ -537,6 +557,7 @@ export default {
             price,
             cost_price,
             market_price,
+            start_num,
             barcode,
             point_num,
             supplier_goods_bn,
@@ -555,6 +576,7 @@ export default {
             price: isNaN(price / 100) ? '' : price / 100,
             cost_price: isNaN(cost_price / 100) ? '' : cost_price / 100,
             market_price: isNaN(market_price / 100) ? '' : market_price / 100,
+            start_num,
             barcode,
             point_num,
             supplier_goods_bn,
@@ -563,7 +585,7 @@ export default {
         }
       })
       // 与前一次编辑的缓存数据合并
-      this.value.specItems = _specItems.map((item) => {
+      this.value.specItems = _specItems.map(item => {
         const fd = this.value.specItems.find(({ sku_id }) => sku_id == item.sku_id)
         if (fd) {
           return {
@@ -581,7 +603,7 @@ export default {
       const specNames = []
       keys.forEach((key, index) => {
         const { attribute_value, custom_attribute_value } = skus[index].skuValue.find(
-          (s) => s.attribute_value_id == key
+          s => s.attribute_value_id == key
         )
         specNames.push(custom_attribute_value || attribute_value)
       })
@@ -599,13 +621,14 @@ export default {
         price,
         cost_price,
         market_price,
+        start_num,
         barcode,
         point_num,
         supplier_goods_bn,
         tax_rate
       } = this.bulkFilling[0]
 
-      this.value.specItems.forEach((item) => {
+      this.value.specItems.forEach(item => {
         item.approve_status = approve_status
         item.store = store
         item.max_num = max_num
@@ -615,6 +638,7 @@ export default {
         item.price = price
         item.cost_price = cost_price
         item.market_price = market_price
+        item.start_num = start_num
         item.barcode = barcode
         item.point_num = point_num
         item.supplier_goods_bn = supplier_goods_bn
@@ -638,6 +662,7 @@ export default {
         price: '',
         cost_price: '',
         market_price: '',
+        start_num: 0,
         barcode: '',
         point_num: '',
         supplier_goods_bn: '',

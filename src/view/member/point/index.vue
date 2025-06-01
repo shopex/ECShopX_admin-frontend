@@ -203,7 +203,7 @@ export default {
       console.log(val)
     },
     getPointRule() {
-      getPointRule().then((response) => {
+      getPointRule().then(response => {
         this.form = response.data.data
         this.access = this.form.access
         this.include_freight = this.form.include_freight
@@ -211,7 +211,7 @@ export default {
     },
     save() {
       if (this.form.isOpenMemberPoint) {
-        if (this.form.gain_point <= 0 || this.form.gain_time <= 0) {
+        if (this.form.gain_point <= 0 || this.form.gain_time < 0) {
           this.$message({ message: '请配置获取积分参数', type: 'error' })
           return
         }
@@ -233,7 +233,7 @@ export default {
           }
         }
       }
-      savePointRule(this.form).then((response) => {
+      savePointRule(this.form).then(response => {
         this.getPointRule()
         this.$message({
           message: '保存成功',

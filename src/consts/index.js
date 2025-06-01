@@ -3,14 +3,14 @@ export const ICON_MAP = {
   'shopping-bag': 'shangpin',
   'clipboard-list': 'jiaoyi',
   'store-alt': 'jingxiaoshang',
-  'gem1': 'huiyuan',
-  'brush': 'moban',
-  'gift': 'yingxiao',
+  gem1: 'huiyuan',
+  brush: 'moban',
+  gift: 'yingxiao',
   'file-invoice-dollar': 'caiwu',
   'chart-bar': 'tongji',
-  'sitemap': 'zhandian',
+  sitemap: 'zhandian',
   'yingyong-01': 'yingyong',
-  'cog': 'shezhi'
+  cog: 'shezhi'
 }
 
 export const SALES_STATUS = [
@@ -115,9 +115,9 @@ export const GOOD_CATEGORY = [
 ]
 
 export const GOOD_CATEGORY_MAP = {
-  'self': '自营',
-  'distributor': '商户商品',
-  'supplier': '供应商商品'
+  self: '自营',
+  distributor: '商户商品',
+  supplier: '供应商商品'
 }
 
 export const ORDER_CATEGORY = [
@@ -242,41 +242,41 @@ export const FORM_COMP = {
 
 export const SYSTEM_CONFIG = {
   platform: { name: 'Powered By ShopeX', theme: '#CB060F' },
-  standard: { name: '商派Onex云店', theme: '#FF9D00' },
+  standard: { name: '新零售云店', theme: '#FF9D00' },
   b2c: { name: '官方商城', theme: '#157FE3' },
   in_purchase: { name: '商派Onex内购', theme: '#EC442E' }
 }
 
 export const LINK_PATH = {
-  'goods': '商品',
-  'store': '店铺',
-  'sale_category': '销售分类',
-  'category': '管理分类',
-  'tag': '商品标签',
-  'article': '文章',
-  'planting': '软文',
-  'link': '页面',
-  'marketing': '营销',
-  'regactivity': '活动报名',
-  'purchase_activity': '内购活动',
-  'seckill': '秒杀',
-  'custom_page': '自定义页面',
-  'liverooms': '直播',
-  'other_wxapp': '外部小程序',
-  'shop_tag': '商家'
+  goods: '商品',
+  store: '店铺',
+  sale_category: '销售分类',
+  category: '管理分类',
+  tag: '商品标签',
+  article: '文章',
+  planting: '软文',
+  link: '页面',
+  marketing: '营销',
+  regactivity: '活动报名',
+  purchase_activity: '内购活动',
+  seckill: '秒杀',
+  custom_page: '自定义页面',
+  liverooms: '直播',
+  other_wxapp: '外部小程序',
+  shop_tag: '商家'
 }
 
 export const CARD_TYPE = {
-  'discount': '折扣券',
-  'cash': '满减券',
-  'new_gift': '兑换券'
+  discount: '折扣券',
+  cash: '满减券',
+  new_gift: '兑换券'
 }
 
 export const SECKILL_ACTIVITY_STATUS = {
-  'waiting': '待开始',
-  'in_the_notice': '预热中',
-  'in_sale': '进行中',
-  'it_has_ended': '已结束'
+  waiting: '待开始',
+  in_the_notice: '预热中',
+  in_sale: '进行中',
+  it_has_ended: '已结束'
 }
 
 // 商品审核状态

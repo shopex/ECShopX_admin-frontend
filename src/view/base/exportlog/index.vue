@@ -45,6 +45,7 @@
         /> -->
         <el-tab-pane label="商品统计导出" name="goods_data" />
         <el-tab-pane label="商品导出" name="items" />
+        <el-tab-pane label="供应商商品导出" name="supplier_goods" />
         <el-tab-pane label="商品标签导出" name="normal_items_tag" />
         <el-tab-pane v-if="!VERSION_IN_PURCHASE()" label="店铺商品导出" name="distributor_items" />
         <!-- <el-tab-pane
@@ -193,7 +194,7 @@ export default {
     getExportLogLists(params) {
       this.loading = true
       params.export_type = this.activeName
-      ExportLogList(params).then((response) => {
+      ExportLogList(params).then(response => {
         this.exportLogLists = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false
@@ -219,7 +220,7 @@ export default {
         return
       }
 
-      ExportLogFileDown({ 'log_id': log_id }).then((response) => {
+      ExportLogFileDown({ log_id: log_id }).then(response => {
         const url = this.genUrl(response.data.data.csv_data, {}) //{}指的是表头，response.data.data.csv_data是后台返回来的数据
         const a = document.createElement('a')
         a.href = url

@@ -15,6 +15,10 @@ const vuexLocal = new VuexPersistence({
 })
 
 const store = new Vuex.Store({
+  // 全局状态
+  // state: {
+  //   productConfig: null
+  // },
   modules: {
     menu,
     user,

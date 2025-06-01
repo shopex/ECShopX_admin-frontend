@@ -102,18 +102,17 @@ import { SYSTEM_CONFIG } from '@/consts'
 import store from '@/store'
 import { hex2rgb } from '@/utils'
 import gWgts from './wgts'
-import comps from './comps'
 import attrPanel from './attr_panel'
 import Header from './wgts/wgt-page'
 export default {
-  async beforeRouteLeave(to, from, next) {
-    this.resetDecorateTheme()
-    next()
-  },
   components: {
     draggable,
     attrPanel,
     Header
+  },
+  async beforeRouteLeave(to, from, next) {
+    this.resetDecorateTheme()
+    next()
   },
   props: {
     value: {
@@ -203,10 +202,9 @@ export default {
   },
   methods: {
     regsiterWgts() {
-      console.log('wgts:', wgts, comps)
       // const { scene = '1001' } = this.$route.query
       const wgts = gWgts[this.localScene]
-      Object.keys(wgts).forEach((index) => {
+      Object.keys(wgts).forEach(index => {
         this.widgets.push(wgts[index])
         Vue.component(wgts[index].name, wgts[index])
       })
@@ -220,7 +218,7 @@ export default {
       document.body.style.setProperty('--themeColorRgb', [red, green, blue].join(','))
     },
     getComponentAttr(item) {
-      const { wgtName, config } = this.widgets.find((wgt) => {
+      const { wgtName, config } = this.widgets.find(wgt => {
         return wgt.name.toLowerCase() == item.name.toLowerCase()
       })
       return {
@@ -236,7 +234,7 @@ export default {
         wgtName,
         wgtDesc
       }
-      setting.forEach((item) => {
+      setting.forEach(item => {
         compData[item.key] = item.value
       })
       // console.log('compData', compData)
@@ -289,10 +287,10 @@ export default {
         wgtName: Header.wgtName,
         wgtDesc: Header.wgtDesc
       }
-      setting.forEach((item) => {
+      setting.forEach(item => {
         headerData[item.key] = item.value
       })
-      const wgtHeader = list.find((item) => item.name == 'page')
+      const wgtHeader = list.find(item => item.name == 'page')
       if (wgtHeader) {
         const headParams = Header.config.transformIn(wgtHeader.params)
         headerData = {
@@ -307,9 +305,9 @@ export default {
         ...Header.config
       }
 
-      list.forEach((li) => {
+      list.forEach(li => {
         // 是否存在挂件
-        const wgt = this.widgets.find((item) => item.name.toLowerCase() == li.name.toLowerCase())
+        const wgt = this.widgets.find(item => item.name.toLowerCase() == li.name.toLowerCase())
         if (wgt) {
           // console.log('getTemplateDetial wgt:', wgt)
           const wgtInitParams = this.cloneDefaultField(wgt)
@@ -345,9 +343,9 @@ export default {
         this.$emit('change', this.contentComps)
         return
       }
-      const data = this.contentComps.map((item) => {
+      const data = this.contentComps.map(item => {
         const { transformOut } = this.widgets.find(
-          (wgt) => wgt.name.toLowerCase() == item.name.toLowerCase()
+          wgt => wgt.name.toLowerCase() == item.name.toLowerCase()
         )?.config
         return transformOut(item)
       })

@@ -118,7 +118,7 @@
         'max-height': 416,
         'header-cell-class-name': cellClass
       }"
-      :url="IS_DISTRIBUTOR() || VERSION_STANDARD() ? 'distributor/items' : '/goods/items'"
+      :url="urls"
       show-pager-text="已选中：${n}"
       :fixed-row-action="true"
       :setting="{
@@ -228,7 +228,8 @@ export default {
       },
       categoryList: [],
       multiple: this.value?.multiple ?? true,
-      localSelection: []
+      localSelection: [],
+      urls: '/goods/items'
     }
   },
   created() {
@@ -241,6 +242,8 @@ export default {
   methods: {
     beforeSearch(params) {
       const { category } = this.formData
+      //嘉实多需求，嘉实多只有一个虚拟店
+      this.urls = this.formData.distributor_id ? 'distributor/items' : '/goods/items'
       params = {
         ...params,
         item_type: 'normal',
@@ -255,14 +258,14 @@ export default {
     afterSearch(response) {
       const ids = this.localSelection
       const { list } = response.data.data
-      const selectRow = list.filter((f) => ids.includes(f.item_id))
+      const selectRow = list.filter(f => ids.includes(f.item_id))
       this.$nextTick(() => {
         const finderTable = this.$refs.finder.$refs.finderTable.$refs.finderTable
-        const sids = finderTable.selection.map((m) => m.item_id)
+        const sids = finderTable.selection.map(m => m.item_id)
 
-        finderTable.setSelection(selectRow.filter((f) => !sids.includes(f.item_id)))
+        finderTable.setSelection(selectRow.filter(f => !sids.includes(f.item_id)))
         console.log(
-          selectRow.filter((f) => !sids.includes(f.item_id)),
+          selectRow.filter(f => !sids.includes(f.item_id)),
           '33333333========'
         )
       })

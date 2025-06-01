@@ -177,7 +177,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { Message } from 'element-ui'
 import shopSelect from '@/components/shopSelect'
 import district from '@/common/district.json'
@@ -187,12 +186,12 @@ export default {
   components: {
     shopSelect
   },
-  props: ['getStatus'],
   provide() {
     return {
       refresh: this.getGoodsList
     }
   },
+  props: ['getStatus'],
   data() {
     return {
       dialogVisible: false,
@@ -239,7 +238,7 @@ export default {
     ...mapGetters(['wheight'])
   },
   watch: {
-    '$route'() {
+    $route() {
       this.getGoodsList()
     }
   },
@@ -249,7 +248,7 @@ export default {
   methods: {
     onSubmit() {
       var rebate = this.form.audit_status == 'approved' ? 1 : 3
-      updateGoodsInfo({ goods_id: this.goods_id, rebate: rebate }).then((res) => {
+      updateGoodsInfo({ goods_id: this.goods_id, rebate: rebate }).then(res => {
         this.$message({ type: 'success', message: '操作成功' })
         this.dialogVisible = false
         this.getGoodsList()
@@ -304,7 +303,7 @@ export default {
     },
     getGoodsList() {
       this.loading = true
-      getItemsListAll(this.params).then((response) => {
+      getItemsListAll(this.params).then(response => {
         this.ItemsList = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false

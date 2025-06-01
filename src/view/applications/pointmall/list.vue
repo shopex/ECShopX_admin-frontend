@@ -328,7 +328,6 @@
 import { mapGetters } from 'vuex'
 import Treeselect from '@riophae/vue-treeselect'
 import SideBar from '@/components/element/sideBar'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getShippingTemplatesList } from '@/api/shipping'
 import { getDefaultCurrency } from '@/api/company'
 import district from '@/common/district.json'
@@ -451,7 +450,7 @@ export default {
     ...mapGetters(['wheight'])
   },
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       this.init()
     },
     getStatus(val) {
@@ -498,7 +497,7 @@ export default {
     exportItemsData() {
       if (this.item_id.length) {
         this.exportData.item_id = Object.assign({}, this.item_id)
-        exportItemsData(this.exportData).then((res) => {
+        exportItemsData(this.exportData).then(res => {
           if (res.data.data.status == true) {
             this.$message({
               type: 'success',
@@ -514,7 +513,7 @@ export default {
         })
       } else {
         this.exportData = Object.assign({}, this.params)
-        exportItemsData(this.exportData).then((res) => {
+        exportItemsData(this.exportData).then(res => {
           if (res.data.data.status == true) {
             this.$message({
               type: 'success',
@@ -555,7 +554,7 @@ export default {
       this.getGoodsList()
     },
     setWarningStore() {
-      getItemWarningStore({ store: this.warning_store }).then((res) => {
+      getItemWarningStore({ store: this.warning_store }).then(res => {
         this.params.pageIndex = 1
         this.getGoodsList()
       })
@@ -596,8 +595,8 @@ export default {
           return false
         }
         this.addTemplatesdialogVisible = false
-        setItemsTemplate({ 'templates_id': this.templates_new_id, 'item_id': this.item_id }).then(
-          (response) => {
+        setItemsTemplate({ templates_id: this.templates_new_id, item_id: this.item_id }).then(
+          response => {
             this.getGoodsList()
           }
         )
@@ -609,7 +608,7 @@ export default {
       }
     },
     editItemsSort(index, row) {
-      setItemsSort({ 'sort': row.sort, 'item_id': row.itemId }).then((response) => {
+      setItemsSort({ sort: row.sort, item_id: row.itemId }).then(response => {
         this.getGoodsList()
       })
     },
@@ -623,8 +622,8 @@ export default {
           return false
         }
         this.addCategorydialogVisible = false
-        setItemsCategory({ 'category_id': this.category_id, 'item_id': this.item_id }).then(
-          (response) => {
+        setItemsCategory({ category_id: this.category_id, item_id: this.item_id }).then(
+          response => {
             this.getGoodsList()
             this.category_id = []
           }
@@ -685,7 +684,7 @@ export default {
       }
       const { list, total_count, warning_store } = await this.$api.pointsmall.getItemsList(params)
       this.ItemsList = list
-      this.ItemsList.forEach((item) => {
+      this.ItemsList.forEach(item => {
         item.price = item.price / 100
         item.market_price = item.market_price / 100
         item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
@@ -703,7 +702,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteItems(row.itemId).then((response) => {
+          deleteItems(row.itemId).then(response => {
             this.ItemsList.splice(index, 1)
             this.$message({
               message: '删除商品成功',
@@ -734,7 +733,7 @@ export default {
     },
     getShippingTemplatesList() {
       this.loading = true
-      getShippingTemplatesList(this.templatesParams).then((response) => {
+      getShippingTemplatesList(this.templatesParams).then(response => {
         this.templatesList = response.data.data.list
       })
     },
@@ -748,7 +747,7 @@ export default {
       this.categoryList = data
     },
     getCurrencyInfo() {
-      getDefaultCurrency().then((res) => {
+      getDefaultCurrency().then(res => {
         this.currency = res.data.data
         this.cursymbol = this.currency.symbol
       })
@@ -783,16 +782,16 @@ export default {
       let params = {}
       if (this.goods_id.length > 0) {
         let data = []
-        this.goods_id.forEach((goods_id) => {
+        this.goods_id.forEach(goods_id => {
           data.push({ goods_id: goods_id })
         })
         params = {
-          'items': JSON.stringify(data),
-          'status': status
+          items: JSON.stringify(data),
+          status: status
         }
       }
       this.submitLoading = true
-      updateItemsStatus(params).then((res) => {
+      updateItemsStatus(params).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '修改成功',
@@ -809,10 +808,10 @@ export default {
       this.loading = true
       let params = {}
       params = {
-        'items': [{ 'goods_id': items.goods_id }],
-        'status': items.approve_status === 'instock' ? 'onsale' : 'instock'
+        items: [{ goods_id: items.goods_id }],
+        status: items.approve_status === 'instock' ? 'onsale' : 'instock'
       }
-      updateItemsStatus(params).then((res) => {
+      updateItemsStatus(params).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '操作成功',
@@ -831,10 +830,10 @@ export default {
       param.item_id = items.item_id
       param.is_sku = true
       this.storeItemsList = []
-      getItemsList(param).then((response) => {
+      getItemsList(param).then(response => {
         let list = response.data.data.list
         let data = {}
-        list.forEach((item) => {
+        list.forEach(item => {
           let data = {
             item_id: item.item_id,
             store: item.store,
@@ -859,21 +858,21 @@ export default {
       let params = {}
       if (this.storeItemsList.length > 0) {
         params = {
-          'items': JSON.stringify(this.storeItemsList)
+          items: JSON.stringify(this.storeItemsList)
         }
       } else if (this.item_id.length > 0) {
         let data = []
-        this.item_id.forEach((itemid) => {
+        this.item_id.forEach(itemid => {
           data.push({ item_id: itemid, store: this.itemstore, is_default: true })
         })
         params = {
-          'items': JSON.stringify(data)
+          items: JSON.stringify(data)
         }
       }
       this.submitLoading = true
       const _self = this
       updateItemsStore(params)
-        .then((res) => {
+        .then(res => {
           if (res.data.data.status) {
             this.$message({
               message: '修改成功',
@@ -886,7 +885,7 @@ export default {
           this.skuLoading = false
           this.storeUpdate = false
         })
-        .catch((err) => {
+        .catch(err => {
           this.submitLoading = false
           this.skuLoading = false
         })

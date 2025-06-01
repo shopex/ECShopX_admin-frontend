@@ -83,6 +83,11 @@ export default {
       component: () => import('@/view/mall/goods/attributes/attributes')
     },
     {
+      path: 'goodsbase/goodsstartnum',
+      name: `起订量`,
+      component: () => import('@/view/mall/goods/attributes/goodsattributes')
+    },
+    {
       path: 'goodsbase/goodsbrand',
       name: `商品品牌`,
       component: () => import('@/view/mall/goods/attributes/brand')

@@ -309,7 +309,6 @@
 
 <script>
 import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import draggable from 'vuedraggable'
 import imgPicker from '@/components/imageselect'
 import videoPicker from '@/components/videoselect'
@@ -355,7 +354,7 @@ export default {
   computed: {
     isAllCheck() {
       const { pics_create_qrcode } = this.value
-      const isNotAll = pics_create_qrcode.some((item) => !item)
+      const isNotAll = pics_create_qrcode.some(item => !item)
       return !isNotAll
     }
   },
@@ -419,7 +418,7 @@ export default {
         return false
       } else {
         if (data.length != 0) {
-          data.forEach((data) => {
+          data.forEach(data => {
             this.value.pics.push(data.url)
             this.value.pics_create_qrcode.push(false)
           })
@@ -432,7 +431,7 @@ export default {
     },
     handleAllSelect(e) {
       const { pics_create_qrcode } = this.value
-      this.value.pics_create_qrcode = pics_create_qrcode.map((item) => {
+      this.value.pics_create_qrcode = pics_create_qrcode.map(item => {
         return e
       })
     },

@@ -849,7 +849,7 @@ export default {
             page_name: `custom_${newName}`,
             template_name: this.template_name
           })
-        getParamByTempName(filter).then((res) => {
+        getParamByTempName(filter).then(res => {
           this.components = res.data.data.config
         })
       },
@@ -861,8 +861,8 @@ export default {
   },
   methods: {
     async getData() {
-      const isHaveStore = this.initData.some((item) => item.name === 'store')
-      const isHaveNearbyShop = this.initData.some((item) => item.name === 'nearbyShop')
+      const isHaveStore = this.initData.some(item => item.name === 'store')
+      const isHaveNearbyShop = this.initData.some(item => item.name === 'nearbyShop')
       if (this.VERSION_PLATFORM() && !isHaveStore) {
         this.initData.push({
           name: 'store',
@@ -898,7 +898,7 @@ export default {
       }
       const res = await getRecommendLikeItemList()
       let data = []
-      res.data.data.list.forEach((item) => {
+      res.data.data.list.forEach(item => {
         data.push({
           imgUrl: item.pics ? item.pics[0] : '',
           title: item.itemName,
@@ -970,13 +970,13 @@ export default {
     // 删除当前组件
     removeCurrent() {
       this.$confirm('确认删除当前组件？')
-        .then((_) => {
+        .then(_ => {
           this.editorData = {}
           this.components.splice(this.editorIndex, 1)
           this.editorIndex = null
           this.editorDataIndex = null
         })
-        .catch((_) => {})
+        .catch(_ => {})
     },
     // 视频选择器绑定事件
     getVideo(data) {
@@ -1037,7 +1037,7 @@ export default {
         }
       }
       if (items && items.length > 0 && items[0].goodsId) {
-        items.forEach((item) => {
+        items.forEach(item => {
           ids.push(item.key || item.goodsId)
         })
         let itemParams = {
@@ -1050,7 +1050,7 @@ export default {
         if (index !== undefined) {
           Object(itemParams, { distributor_id: this.relStore.id })
         }
-        getItemsList(itemParams).then((res) => {
+        getItemsList(itemParams).then(res => {
           this.relItemsIds = res.data.data.list
           setTimeout(() => {
             this.setItemStatus = true
@@ -1104,7 +1104,7 @@ export default {
       let values = []
 
       if (data.length > 0) {
-        data.forEach((item) => {
+        data.forEach(item => {
           let obj = {
             imgUrl: item.pics[0],
             title: item.itemName,
@@ -1245,7 +1245,7 @@ export default {
           page_name: `custom_${this.id}`,
           template_name: this.template_name
         })
-      savePageParams(filter).then((res) => {
+      savePageParams(filter).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '保存成功',
@@ -1506,121 +1506,10 @@ export default {
   width: 200px;
   border-radius: 60px;
 }
-</style>
-
-<style lang="scss">
-// .components-container {
-//   position: relative;
-//   padding-top: 80px;
-//   padding-bottom: 69px;
-//   overflow-y: overlay;
-//   height: calc(100vh - 170px);
-//   .components-wrap {
-//     height: 100%;
-//   }
-//   &.componentFixed {
-//     padding-top: 58.5px;
-//   }
-//   &.is-distributor {
-//     padding-top: 40px;
-//   }
-//   &.componentFixed.is-distributor {
-//     padding-top: 98.5px;
-//   }
-
-//   .component-item {
-//     position: relative;
-//     .icon-trash-alt {
-//       position: absolute;
-//       right: 20px;
-//       color: #ff5000;
-//       cursor: pointer;
-//     }
-//   }
-//   .component-wrap {
-//     position: relative;
-//     width: 320px;
-//     margin: 0 auto;
-//     cursor: pointer;
-//     background: #fff;
-//     &.component-padded {
-//       padding: 10px 0;
-//     }
-//     .current-active {
-//       position: absolute;
-//       left: -3px;
-//       top: -3px;
-//       right: -3px;
-//       bottom: -3px;
-//       border: 3px solid #ff5000;
-//       z-index: -1;
-//       opacity: 0;
-//       box-shadow: 0 0 5px rgba(255, 80, 0, 0.3);
-//       background: rgba(255, 80, 0, 0.2);
-//       transition: all 0.3s ease;
-//     }
-//     &.active .current-active {
-//       opacity: 1;
-//       z-index: 999;
-//     }
-//     .component-header {
-//       display: flex;
-//       align-items: center;
-//       padding: 0 10px 5px 10px;
-//       .component-title {
-//         display: flex;
-//         align-items: flex-end;
-//         flex: 1;
-//         font-size: 16px;
-//         &.middle {
-//           align-items: center;
-//         }
-//         .subtitle {
-//           padding-left: 5px;
-//           font-size: 12px;
-//           color: #999;
-//         }
-//       }
-//       .component-more {
-//         display: flex;
-//         justify-content: center;
-//         width: 25px;
-//         .three-dot {
-//           position: relative;
-//           width: 4px;
-//           height: 4px;
-//           background: #333;
-//           border-radius: 50%;
-//           &::before,
-//           &::after {
-//             position: absolute;
-//             width: 4px;
-//             height: 4px;
-//             background: #333;
-//             border-radius: 50%;
-//             content: '';
-//           }
-//           &::before {
-//             transform: translateX(-160%);
-//           }
-//           &::after {
-//             transform: translateX(160%);
-//           }
-//         }
-//       }
-//     }
-//     .component-body {
-//       &.with-padding {
-//         padding: 0 10px;
-//       }
-//     }
-//   }
-// }
 .components-container {
   position: relative;
   padding-top: 80px;
   padding-bottom: 69px;
-  // overflow-y: overlay;
   height: calc(100vh - 170px);
   .components-wrap {
     height: 100%;

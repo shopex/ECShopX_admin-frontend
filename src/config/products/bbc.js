@@ -2,12 +2,16 @@
  * BBC产品配置
  */
 export default {
-  productName: 'BBC',
+  productName: 'B2B2C',
+  logo: 'logo-b2b2c.png',
+  loginBackground: 'login-b2b2c.jpg',
 
   // 主题配置
   themeConfig: {
-    primaryColor: '#FF9D00',
-    logo: 'https://yun-dian-static.oss-cn-hangzhou.aliyuncs.com/logo.png',
-    loginBackground: 'https://yun-dian-static.oss-cn-hangzhou.aliyuncs.com/login-background.png'
+    primaryColor: 'hsl(347 77% 60%)',
+    successColor: 'hsl(144 57% 58%)',
+    destructiveColor: 'hsl(348 100% 61%)',
+    warningColor: 'hsl(42 84% 61%)',
+    type: 'pink'
   }
 }

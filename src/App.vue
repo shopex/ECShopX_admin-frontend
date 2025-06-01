@@ -6,15 +6,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { useTheme } from '@/composables'
 export default {
-  data () {
+  data() {
     return {
       throttleTimer: null
     }
   },
   computed: {
     ...mapGetters(['isInFrame'])
+  },
+  mounted() {
+    const { updateThemeColor } = useTheme()
+    updateThemeColor()
   },
   methods: {}
 }

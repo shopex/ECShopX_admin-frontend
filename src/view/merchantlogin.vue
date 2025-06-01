@@ -132,7 +132,7 @@ export default {
       this.SET_TOKEN({ token })
       this.SET_TOKEN_EXP({ exp: new Date().getTime() })
       this.loading = false
-      fetch({ url: '/permission', method: 'get' }).then((res) => {
+      fetch({ url: '/permission', method: 'get' }).then(res => {
         if (res.data.data) {
           // const url = this.path_prefixes ? (res.data.data[0]['url'] == '/' ? `/${this.path_prefixes}` : `${this.path_prefixes}${res.data.data[0]['url']}`) : res.data.data[0]['url']
           let url = ''
@@ -147,7 +147,7 @@ export default {
             url = _menu[0].url
           }
 
-          getAdminInfo().then((info) => {
+          getAdminInfo().then(info => {
             // console.log(info.data.data.logintype)
             // return
             const _self = this
@@ -176,7 +176,7 @@ export default {
     },
     handleSubmit1() {
       this.$store.dispatch('setLoginType', this.symbol)
-      this.$refs.ruleForm1.validate(async (valid) => {
+      this.$refs.ruleForm1.validate(async valid => {
         if (valid) {
           this.loading = true
           this.submitDisabled = true
@@ -230,7 +230,6 @@ body {
 }
 .log-body {
   padding: 118px 0;
-  // background: url(./assets/img/login_bg.jpg) no-repeat center center;
   background-size: cover;
 }
 .log-img {

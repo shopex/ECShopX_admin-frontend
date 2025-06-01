@@ -1,5 +1,10 @@
-$--color-primary: #ff9d00;
+$--color-primary: var(--primary, #ff0000) !default;
+
 $--border-radius-base: 6px;
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@function mix($color1, $color2, $p: 50%) {
+  @return color-mix(in srgb, $color1 $p, $color2);
+}
 
 @import '~element-ui/packages/theme-chalk/src/index';

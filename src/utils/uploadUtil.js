@@ -1,13 +1,3 @@
-/*
- * @Author: Arvin
- * @GitHub: https://github.com/973749104
- * @Blog: https://liuhgxu.com
- * @Description: oss上传
- * @FilePath: /app/src/utils/uploadUtil.js
- * @Date: 2020-03-06 10:28:22
- * @LastEditors: Arvin
- * @LastEditTime: 2020-11-16 15:42:26
- */
 // 阿里云
 // import Oss from 'ali-oss'
 // 亚马逊
@@ -48,12 +38,12 @@ class UploadUtil {
 
   // 阿里云
   aliInit(tokenRes) {
-    this.client.upload = (file) => AliUpload(tokenRes, file)
+    this.client.upload = file => AliUpload(tokenRes, file)
   }
 
   // 本地
   local(tokenRes) {
-    this.client.upload = (file) => LocalUpload(tokenRes, file, this.fileType)
+    this.client.upload = file => LocalUpload(tokenRes, file, this.fileType)
   }
 
   // 亚马逊
@@ -67,7 +57,7 @@ class UploadUtil {
       secretAccessKey: SecretAccessKey,
       sessionToken: SessionToken
     })
-    this.client.upload = (file) => {
+    this.client.upload = file => {
       return new Promise((resolve, reject) => {
         s3.upload(
           {
@@ -99,7 +89,7 @@ class UploadUtil {
       }
     })
     try {
-      this.client.upload = (file) => {
+      this.client.upload = file => {
         return new Promise((resolve, reject) => {
           console.log(file)
           cos.uploadFile(
@@ -108,7 +98,10 @@ class UploadUtil {
               Region: tokenRes.region /* 存储桶所在地域，必须字段 */,
               Key: tokenRes.url /* 存储在桶里的对象键（例如1.jpg，a/b/test.txt），必须字段 */,
               Body: file, // 上传文件对象
-              SliceSize: 1024 * 1024 * 20 /* 触发分块上传的阈值，超过20MB 使用分块上传，小于20MB使用简单上传。可自行设置，非必须 */
+              SliceSize:
+                1024 *
+                1024 *
+                20 /* 触发分块上传的阈值，超过20MB 使用分块上传，小于20MB使用简单上传。可自行设置，非必须 */
             },
             (err, data) => {
               if (data) {
@@ -138,8 +131,8 @@ class UploadUtil {
         const observable = QiNiu.upload(flie, key, tokenRes.token)
         observable.subscribe({
           next: () => {},
-          error: (err) => reject(err),
-          complete: (res) => resolve(res)
+          error: err => reject(err),
+          complete: res => resolve(res)
         })
       })
     }
@@ -167,7 +160,7 @@ class UploadUtil {
       // console.log(data)
       // 生成文件名~
       // const fileName = this.setFileName()
-      const res = await this.client.upload(file, data.key).catch((e) => console.error(e))
+      const res = await this.client.upload(file, data.key).catch(e => console.error(e))
       if (res.data || res.key) {
         if (res.data && res.data.data) {
           return {

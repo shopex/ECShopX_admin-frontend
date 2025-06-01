@@ -64,17 +64,13 @@
               <div slot="header">其他信息</div>
               <div class="body">
                 <el-row class="load-btn">
-                  <el-col :span="4" style="text-align: right; padding-right: 10px"
-                    >
-附件信息：
-</el-col
-                  >
+                  <el-col :span="4" style="text-align: right; padding-right: 10px">
+                    附件信息：
+                  </el-col>
                   <el-col v-if="infoList.member_type === 'corp'" :span="20" class="cus-btn">
-                    <el-button type="text" @click="dowloadFile(infoList.attach_file)"
-                      >
-附件
-</el-button
-                    >
+                    <el-button type="text" @click="dowloadFile(infoList.attach_file)">
+                      附件
+                    </el-button>
                   </el-col>
                   <span v-else>-</span>
                 </el-row>
@@ -127,11 +123,9 @@
           {{ modalContent }}
         </el-row>
         <el-row style="text-align: right">
-          <el-button type="primary" size="small" plain @click="handleModalConfirm(false)"
-            >
-取消
-</el-button
-          >
+          <el-button type="primary" size="small" plain @click="handleModalConfirm(false)">
+            取消
+          </el-button>
           <el-button type="primary" size="small" @click="handleModalConfirm(true)">确认</el-button>
         </el-row>
       </el-dialog>
@@ -219,11 +213,11 @@ export default {
     },
     getTabDetail(id) {
       getDealerDetail(id)
-        .then((response) => {
+        .then(response => {
           this.infoList = response.data.data
           this.split_ledger_info = response.data.data.split_ledger_info || {}
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false
           this.$message({
             type: 'error',
@@ -233,11 +227,11 @@ export default {
     },
     getLogList() {
       getAdapayLogList({ log_type: 'dealer', ...this.params, operator_id: this.operator_id })
-        .then((response) => {
+        .then(response => {
           this.logList = response.data.data.list || {}
           this.total_count = response.data.data.total_count || 0
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false
           this.$message({
             type: 'error',

@@ -286,7 +286,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import district from '@/common/district.json'
 import SideBar from '@/components/element/sideBar'
 import {
@@ -403,7 +402,7 @@ export default {
     // 审核确定
     onSubmit() {
       this.form.goods_id = this.goods_id
-      auditItems(this.form).then((res) => {
+      auditItems(this.form).then(res => {
         this.$message.success('保存成功')
         this.dialogVisible = false
         this.fetchList()
@@ -449,7 +448,7 @@ export default {
       }
 
       const { list, total_count } = await this.$api.goods.getItemsList(params)
-      list.forEach((item) => {
+      list.forEach(item => {
         item.price = item.price / 100
         item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
       })
@@ -467,7 +466,7 @@ export default {
       let params = {}
       if (this.goods_id.length > 0) {
         let data = []
-        this.goods_id.forEach((goods_id) => {
+        this.goods_id.forEach(goods_id => {
           data.push({ goods_id: goods_id })
         })
         params = {
@@ -476,7 +475,7 @@ export default {
         }
       }
       this.submitLoading = true
-      updateItemsStatus(params).then((res) => {
+      updateItemsStatus(params).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '修改成功',
@@ -493,7 +492,7 @@ export default {
       this.show_commission_sideBar = true
       this.skuLoading = true
       this.current = data
-      getGoodsCommission(data.item_id).then((res) => {
+      getGoodsCommission(data.item_id).then(res => {
         var commissionSpecItems = res.data.data
         this.commissionSpecItems = commissionSpecItems
         this.skuLoading = false
@@ -509,17 +508,17 @@ export default {
       }
       var rebateConf = []
       let params = {
-        'item_id': this.current.item_id,
-        'goods_id': this.current.goods_id,
-        'commission_type': this.commissionSpecItems.commission_type
+        item_id: this.current.item_id,
+        goods_id: this.current.goods_id,
+        commission_type: this.commissionSpecItems.commission_type
       }
       if (params.commission_type == '1') {
         params.commission = this.commissionSpecItems.commission
       } else {
         params.commission = this.commissionSpecItems.commission * 100
       }
-      this.commissionSpecItems.sku_commission.forEach((item) => {
-        var sku_commission = { 'item_id': item.item_id }
+      this.commissionSpecItems.sku_commission.forEach(item => {
+        var sku_commission = { item_id: item.item_id }
         if (this.commissionSpecItems.commission_type == '2') {
           sku_commission.commission = item.commission * 100
         } else {
@@ -528,7 +527,7 @@ export default {
         rebateConf.push(sku_commission)
       })
       params.sku_commission = JSON.stringify(rebateConf)
-      saveGoodsCommission(params).then((res) => {
+      saveGoodsCommission(params).then(res => {
         this.$message({
           message: '保存成功',
           type: 'success',

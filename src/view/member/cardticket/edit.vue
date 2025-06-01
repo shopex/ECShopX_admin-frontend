@@ -492,7 +492,6 @@
 <script>
 import Treeselect from '@riophae/vue-treeselect'
 import store from '@/store'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import StoreSelect from '@/components/function/shopSelect'
 import DistributorSelect from '@/components/storeListSelect'
 import SkuSelector from '@/components/function/skuSelector'
@@ -774,7 +773,7 @@ export default {
       this.form.use_scenes = 'SELF'
     }
     if (this.form.card_id) {
-      getCardDetail(params).then((res) => {
+      getCardDetail(params).then(res => {
         this.form = Object.assign({}, this.form, res.data.data)
         if (res.data.data.distributor_id == ',0,') {
           this.form.store_self = true
@@ -844,7 +843,7 @@ export default {
             pageSize: 500,
             isValid: true
           }
-          getWxShopsList(shopParams).then((res) => {
+          getWxShopsList(shopParams).then(res => {
             this.relStores = res.data.data.list
           })
         }
@@ -874,7 +873,7 @@ export default {
   methods: {
     getItems(data) {
       let ids = []
-      data.forEach((item) => {
+      data.forEach(item => {
         ids.push(item.itemId)
       })
       this.form.rel_item_ids = ids
@@ -1016,13 +1015,13 @@ export default {
         params.most_cost = 999999
       }
 
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.submitDisabled = true
           if (this.form.card_id) {
             params.if_push_wechat = false
             updateCard(params)
-              .then((res) => {
+              .then(res => {
                 if (res.data.data && res.data.data.status) {
                   this.$message({
                     message: '更新成功',
@@ -1044,7 +1043,7 @@ export default {
               })
           } else {
             creatCard(params)
-              .then((res) => {
+              .then(res => {
                 if (res.data.data.status) {
                   this.$message({
                     message: '添加成功',
@@ -1197,7 +1196,7 @@ export default {
       this.tag.tags = [...this.tag.list]
       let active_tags = [] //可选标签
       this.tag.tags.forEach((item, index) => {
-        let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+        let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
         if (isInArr == -1) active_tags.push(item)
       })
       this.tag.tags = active_tags
@@ -1206,18 +1205,18 @@ export default {
       this.tag.tags.unshift(this.tag.currentTags[index])
       this.tag.currentTags.splice(index, 1)
       this.form.tag_ids = []
-      this.tag.currentTags.forEach((item) => {
+      this.tag.currentTags.forEach(item => {
         this.form.tag_ids.push(item.tag_id)
       })
     },
     tagAdd(item, index) {
-      let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+      let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
       if (isInArr == -1) {
         this.tag.currentTags.push(item)
         this.tag.tags.splice(index, 1)
       }
       this.form.tag_ids = []
-      this.tag.currentTags.forEach((item) => {
+      this.tag.currentTags.forEach(item => {
         this.form.tag_ids.push(item.tag_id)
       })
     },
@@ -1226,7 +1225,7 @@ export default {
         page: 1,
         pageSize: 500
       }
-      getTagList(params).then((response) => {
+      getTagList(params).then(response => {
         this.tag.list = response.data.data.list
         this.showTags()
       })
@@ -1240,7 +1239,7 @@ export default {
         attribute_type: 'brand',
         attribute_name: searchVal,
         attribute_ids: isInit ? this.form.brand_id : ''
-      }).then((res) => {
+      }).then(res => {
         for (let item of res.data.data.list) {
           list.push({ attribute_name: item.attribute_name, attribute_id: item.attribute_id })
         }
@@ -1252,20 +1251,20 @@ export default {
       this.brand.brands = [...this.brand.list]
       let active_brands = []
       this.brand.brands.forEach((item, index) => {
-        let isInArr = this.brand.currentBrands.findIndex((n) => n.attribute_id == item.attribute_id)
+        let isInArr = this.brand.currentBrands.findIndex(n => n.attribute_id == item.attribute_id)
         //if (isInArr != -1) this.brand.brands.splice(index, 1)
         if (isInArr == -1) active_brands.push(item)
       })
       this.brand.brands = active_brands
     },
     brandAdd(item, index) {
-      let isInArr = this.brand.currentBrands.findIndex((n) => n.attribute_id == item.attribute_id)
+      let isInArr = this.brand.currentBrands.findIndex(n => n.attribute_id == item.attribute_id)
       if (isInArr == -1) {
         this.brand.currentBrands.push(item)
         this.brand.brands.splice(index, 1)
       }
       this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
+      this.brand.currentBrands.forEach(item => {
         this.form.brand_ids.push(item.attribute_id)
       })
     },
@@ -1273,7 +1272,7 @@ export default {
       this.brand.brands.unshift(this.brand.currentBrands[index])
       this.brand.currentBrands.splice(index, 1)
       this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
+      this.brand.currentBrands.forEach(item => {
         this.form.brand_ids.push(item.attribute_id)
       })
     },
@@ -1282,7 +1281,7 @@ export default {
      * */
     uploadHandleTemplate() {
       let params = { file_type: 'marketing_goods', file_name: '商品模板' }
-      exportUploadTemplate(params).then((response) => {
+      exportUploadTemplate(params).then(response => {
         let { data } = response.data
         if (data.file) {
           var a = document.createElement('a')
@@ -1304,7 +1303,7 @@ export default {
      * */
     uploadHandleChange(file, fileList) {
       let params = { isUploadFile: true, file_type: 'marketing_goods', file: file.raw }
-      handleUploadFile(params).then((response) => {
+      handleUploadFile(params).then(response => {
         this.$message({
           type: 'success',
           message: '上传成功'
@@ -1313,7 +1312,7 @@ export default {
         let { data } = response.data
 
         if (data.fail.length > 0) {
-          let str = data.fail.map((item) => {
+          let str = data.fail.map(item => {
             return item.item_bn
           })
 
@@ -1329,7 +1328,7 @@ export default {
         if (data.succ.length <= 0) return
         this.relItems = data.succ
         let list = []
-        data.succ.forEach((item) => {
+        data.succ.forEach(item => {
           if (!item.nospec) {
             list.push(Object.assign(item, { spec_items: [] }))
           } else {

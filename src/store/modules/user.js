@@ -1,8 +1,12 @@
+import api from '@/api'
 import { getUserInfo } from '@/api/auth'
 
 const user = {
+  namespaced: true,
   state: {
+    permissions: [],
     token: '',
+
     exp: '',
     name: '',
     is_authorizer: false,
@@ -20,13 +24,13 @@ const user = {
     ali_template_name: '',
     app_type: '',
     color_theme: '',
-    versionMode: 'platform',
+    // versionMode: 'platform',
     sys_logo: '',
     readLicense: 0
   },
 
   mutations: {
-    SET_TOKEN(state, { token }) {
+    setToken(state, { token }) {
       const tokenArray = token.split('.')
       const user = JSON.parse(atob(tokenArray[1]))
       console.log('userInfo: ', user)
@@ -36,6 +40,11 @@ const user = {
       state.is_authorizer = user.is_authorizer
       state.license_authorize = user.license_authorize
     },
+    // 设置权限
+    setPermissions(state, permissions) {
+      state.permissions = permissions
+    },
+
     SET_TOKEN_EXP(state, { exp }) {
       state.exp = exp
     },
@@ -67,7 +76,7 @@ const user = {
       state.ali_template_name = ''
       state.app_type = ''
       state.color_theme = ''
-      state.versionMode = 'platform'
+      // state.versionMode = 'platform'
       state.sys_logo = ''
     },
     SET_LOGIN_TYPE: (state, payload) => {
@@ -78,9 +87,9 @@ const user = {
       const { productionCode } = payload
       state.product_code = productionCode
     },
-    SET_VERSION_MODE: (state, payload) => {
-      state.versionMode = payload
-    },
+    // SET_VERSION_MODE: (state, payload) => {
+    //   state.versionMode = payload
+    // },
     SET_READ_LICENSE: (state, payload) => {
       state.readLicense = payload
     },
@@ -142,6 +151,10 @@ const user = {
   },
 
   actions: {
+    async fetchPermission({ commit }) {
+      const permissions = await api.auth.getPermission()
+      commit('setPermissions', permissions)
+    },
     setIsFrame({ commit }, isInFrame) {
       commit('setIsFrame', isInFrame)
     },

@@ -3,7 +3,7 @@ import req, { createAxios } from '@/utils/fetch'
 
 const api = {}
 
-const callbackWrap = (fn) => {
+const callbackWrap = fn => {
   const _fn = async (...arg) => {
     // console.log(arguments.length, ...arg)
     const res = await fn(...arg)
@@ -12,17 +12,17 @@ const callbackWrap = (fn) => {
   return _fn
 }
 importAll(require.context('./', false, /\.js$/), (key, r) => {
-  const keyPath = key.match(/\.\/(.+)\.js$/)[1]
+  const keyPath = key.match(/\.\/(.+)\.js$/)?.[1]
   if (!['index'].includes(keyPath)) {
     const fn = {}
-    Object.keys(r(key)).forEach((n) => {
+    Object.keys(r(key)).forEach(n => {
       fn[n] = callbackWrap(r(key)[n])
     })
     api[keyPath] = fn
   }
 })
 
-function install (Vue) {
+function install(Vue) {
   Vue.prototype.$api = api
   Vue.prototype.$http = req
 }

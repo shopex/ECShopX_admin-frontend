@@ -69,32 +69,27 @@
             "
             type="text"
             @click="onOperationChange(scope.row, 'edit')"
-            >
-编辑
-</el-button
           >
+            编辑
+          </el-button>
           <el-button
             v-if="scope.row.status === 'end' || IS_DISTRIBUTOR()"
             type="text"
             @click="onOperationChange(scope.row, 'detail')"
-            >
-查看
-</el-button
           >
+            查看
+          </el-button>
           <el-button
             v-if="scope.row.status === 'waiting' && !IS_DISTRIBUTOR()"
             type="text"
             @click="onStopChange(scope.row)"
-            >
-终止
-</el-button
           >
+            终止
+          </el-button>
           <!-- <el-button v-if="scope.row.status === 'ongoing' && !IS_DISTRIBUTOR()" type="text" @click="onShowChange(scope.row)">企业</el-button> -->
-          <el-button type="text" @click="onOperationChange(scope.row, 'record')"
-            >
-报名记录
-</el-button
-          >
+          <el-button type="text" @click="onOperationChange(scope.row, 'record')">
+            报名记录
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -206,8 +201,8 @@ export default {
       let params = { page: 1, pageSize: 500 }
       const { list } = await this.$api.marketing.getDistributorList(params)
       if (list) {
-        list.forEach((row) => {
-          this.shopList.push({ 'value': row.name, 'distributor_id': row.distributor_id })
+        list.forEach(row => {
+          this.shopList.push({ value: row.name, distributor_id: row.distributor_id })
         })
       }
     },
@@ -239,7 +234,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            regActivityInvalid({ activity_id: row.activity_id }).then((res) => {
+            regActivityInvalid({ activity_id: row.activity_id }).then(res => {
               this.fetchList()
               this.$message({
                 message: '修改活动状态成功',

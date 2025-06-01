@@ -336,7 +336,6 @@
 
 <script>
 import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import {
   addMarketingActivity,
   updateMarketingActivity,
@@ -476,12 +475,12 @@ export default {
     if (this.$route.query.isnodata) {
       this.hasSaveButton = false
     }
-    listVipGrade().then((response) => {
+    listVipGrade().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         this.vipGrade = response.data.data
       }
     })
-    getGradeList().then((response) => {
+    getGradeList().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         var result = response.data.data
         if (result) {
@@ -496,7 +495,7 @@ export default {
   methods: {
     getItems(data) {
       let ids = []
-      data.forEach((item) => {
+      data.forEach(item => {
         ids.push(item.itemId)
       })
       this.form.item_ids = ids
@@ -542,7 +541,7 @@ export default {
 
       this.form.shop_ids = []
       if (this.relStores && this.relStores.length > 0) {
-        this.relStores.forEach((item) => {
+        this.relStores.forEach(item => {
           this.form.shop_ids.push(item.distributor_id)
         })
       }
@@ -563,15 +562,15 @@ export default {
       // }
       let giftGifts = []
       let giftData = []
-      this.conditionValue.forEach((item) => {
-        item.relGifts.forEach((val) => {
+      this.conditionValue.forEach(item => {
+        item.relGifts.forEach(val => {
           val.filter_full = item.full
         })
       })
-      this.conditionValue.forEach((item) => {
+      this.conditionValue.forEach(item => {
         giftGifts = [...giftGifts, ...item.relGifts]
       })
-      giftGifts.forEach((item) => {
+      giftGifts.forEach(item => {
         let itemdata = {
           item_id: item.item_id,
           item_name: item.item_name,
@@ -601,7 +600,7 @@ export default {
       thisform.item_ids = JSON.stringify(thisform.item_ids)
       thisform.shop_ids = JSON.stringify(this.form.shop_ids)
       if (this.form.marketing_id) {
-        updateMarketingActivity(thisform).then((res) => {
+        updateMarketingActivity(thisform).then(res => {
           if (res.data.data.marketing_id) {
             this.loading = false
             this.$message({
@@ -619,7 +618,7 @@ export default {
           }
         })
       } else {
-        addMarketingActivity(thisform).then((res) => {
+        addMarketingActivity(thisform).then(res => {
           if (res.data.data.marketing_id) {
             this.loading = false
             this.$message({
@@ -639,13 +638,13 @@ export default {
       }
     },
     getActivityDetail(id) {
-      getMarketingActivityInfo({ marketing_id: id }).then((res) => {
+      getMarketingActivityInfo({ marketing_id: id }).then(res => {
         let response = res.data.data
         let gift = response.condition_value
         if (gift.length > 1) {
-          gift.forEach((item) => {
+          gift.forEach(item => {
             item.relGifts = []
-            response.gifts.forEach((val) => {
+            response.gifts.forEach(val => {
               if (item.full == val.filter_full.split('.')[0]) {
                 item.relGifts.push(val)
               }
@@ -746,7 +745,7 @@ export default {
       //去重
       const seen = {}
       const uniqueList = []
-      list.forEach((obj) => {
+      list.forEach(obj => {
         if (!seen[obj.item_id]) {
           uniqueList.push(obj)
           seen[obj.item_id] = true
@@ -767,7 +766,7 @@ export default {
         item.without_return = false
       })
       //每个数据单独存起来,并且带上自己的filter_ful
-      list.forEach((item) => {
+      list.forEach(item => {
         item.filter_full = this.conditionValue[this.addNum].full
       })
       this.conditionValue[this.addNum].relGifts = list
@@ -812,7 +811,7 @@ export default {
       }
     },
     fetchMainCate: function () {
-      getCategory({ is_main_category: true, ignore_none: true }).then((response) => {
+      getCategory({ is_main_category: true, ignore_none: true }).then(response => {
         this.categoryList = transformTree(response.data.data, {
           id: 'category_id',
           label: 'category_name',
@@ -836,7 +835,7 @@ export default {
       let remainTags = []
       this.tag.tags = [...this.tag.list]
       this.tag.tags.forEach((item, index) => {
-        let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+        let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
         //if (isInArr != -1) this.tag.tags.splice(index, 1)
         if (isInArr == -1) remainTags.push(item)
       })
@@ -848,17 +847,17 @@ export default {
       this.form.tag_ids = []
       let tagItems = []
       let tagInvalidItems = []
-      this.tag.currentTags.forEach((item) => {
+      this.tag.currentTags.forEach(item => {
         this.form.tag_ids.push(item.tag_id)
         let items = []
 
-        this.ItemsList.forEach((i) => {
+        this.ItemsList.forEach(i => {
           if (i.tag_ids.indexOf(item.tag_id) != -1) items.push(i)
         })
         tagItems = items
 
         let invalidItems = []
-        this.invalidItemsList.forEach((i) => {
+        this.invalidItemsList.forEach(i => {
           if (i.tag_ids.indexOf(item.tag_id) != -1) invalidItems.push(i)
         })
         tagInvalidItems = invalidItems
@@ -875,13 +874,13 @@ export default {
         })
         return false
       }
-      let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+      let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
       if (isInArr == -1) {
         this.tag.currentTags.push(item)
         this.tag.tags.splice(index, 1)
       }
       this.form.tag_ids = []
-      this.tag.currentTags.forEach((item) => {
+      this.tag.currentTags.forEach(item => {
         this.form.tag_ids.push(item.tag_id)
       })
       this.params.tag_id = item.tag_id
@@ -892,7 +891,7 @@ export default {
         page: 1,
         pageSize: 500
       }
-      getTagList(params).then((response) => {
+      getTagList(params).then(response => {
         this.tag.list = response.data.data.list
         this.showTags()
       })
@@ -906,7 +905,7 @@ export default {
         attribute_type: 'brand',
         attribute_name: searchVal,
         attribute_ids: isInit ? this.form.brand_id : ''
-      }).then((res) => {
+      }).then(res => {
         for (let item of res.data.data.list) {
           list.push({ attribute_name: item.attribute_name, attribute_id: item.attribute_id })
         }
@@ -918,7 +917,7 @@ export default {
       let remainBrands = []
       this.brand.brands = [...this.brand.list]
       this.brand.brands.forEach((item, index) => {
-        let isInArr = this.brand.currentBrands.findIndex((n) => n.attribute_id == item.attribute_id)
+        let isInArr = this.brand.currentBrands.findIndex(n => n.attribute_id == item.attribute_id)
         //if (isInArr != -1) this.brand.brands.splice(index, 1)
         if (isInArr == -1) remainBrands.push(item)
       })
@@ -932,13 +931,13 @@ export default {
         })
         return false
       }
-      let isInArr = this.brand.currentBrands.findIndex((n) => n.attribute_id == item.attribute_id)
+      let isInArr = this.brand.currentBrands.findIndex(n => n.attribute_id == item.attribute_id)
       if (isInArr == -1) {
         this.brand.currentBrands.push(item)
         this.brand.brands.splice(index, 1)
       }
       this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
+      this.brand.currentBrands.forEach(item => {
         this.form.brand_ids.push(item.attribute_id)
       })
       this.params.brand_id = item.attribute_id
@@ -946,11 +945,11 @@ export default {
     },
     brandRemove: function (index) {
       let items = []
-      this.ItemsList.forEach((item) => {
+      this.ItemsList.forEach(item => {
         if (this.brand.currentBrands[index].attribute_id != item.brand_id) items.push(item)
       })
       let invalidItems = []
-      this.invalidItemsList.forEach((i) => {
+      this.invalidItemsList.forEach(i => {
         if (this.brand.currentBrands[index].attribute_id != i.brand_id) invalidItems.push(i)
       })
 
@@ -961,7 +960,7 @@ export default {
       this.brand.brands.unshift(this.brand.currentBrands[index])
       this.brand.currentBrands.splice(index, 1)
       this.form.brand_ids = []
-      this.brand.currentBrands.forEach((item) => {
+      this.brand.currentBrands.forEach(item => {
         this.form.brand_ids.push(item.attribute_id)
       })
     },
@@ -976,16 +975,16 @@ export default {
       if (params.is_gift == 'all') {
         this.$delete(params, 'is_gift')
       }
-      seckillActivityGetItemsList(params).then((response) => {
+      seckillActivityGetItemsList(params).then(response => {
         let itemList = response.data.data.list.validItems.concat(this.ItemsList)
         let invalidItemList = response.data.data.list.invalidItems.concat(this.invalidItemsList)
         let newItemList = []
         let invalidItems = []
         let obj = {}
         let obj1 = {}
-        itemList.forEach((item) => {
+        itemList.forEach(item => {
           let tag_ids = []
-          item.tagList.forEach((tag) => {
+          item.tagList.forEach(tag => {
             tag_ids.push(tag.tag_id)
           })
           item.tag_ids = tag_ids
@@ -994,9 +993,9 @@ export default {
             obj[item.item_id] = true
           }
         })
-        invalidItemList.forEach((item) => {
+        invalidItemList.forEach(item => {
           let tag_ids = []
-          item.tagList.forEach((tag) => {
+          item.tagList.forEach(tag => {
             tag_ids.push(tag.tag_id)
           })
           item.tag_ids = tag_ids
@@ -1022,7 +1021,7 @@ export default {
         if (node.category_id != item.item_main_cat_id) items.push(item)
       })
       let invalidItems = []
-      this.invalidItemsList.forEach((i) => {
+      this.invalidItemsList.forEach(i => {
         if (node.category_id != i.item_main_cat_id) invalidItems.push(i)
       })
 
@@ -1035,7 +1034,7 @@ export default {
       noSkuItem = []
       let response = []
       let goodsList = JSON.parse(JSON.stringify(this.relItems))
-      goodsList.forEach((item) => {
+      goodsList.forEach(item => {
         if (!item.nospec && item.spec_items.length === 0) {
           noSkuItem.push(item.default_item_id)
         }
@@ -1043,17 +1042,17 @@ export default {
       if (noSkuItem.length > 0) {
         let param = this.params
         param.item_id = noSkuItem
-        getItemsList(this.params).then((res) => {
-          goodsList.forEach((item) => {
+        getItemsList(this.params).then(res => {
+          goodsList.forEach(item => {
             if (!item.nospec) {
-              res.data.data.list.forEach((sku) => {
+              res.data.data.list.forEach(sku => {
                 if (item.item_id === sku.default_item_id) {
                   item.spec_items.push(sku)
                 }
               })
             }
           })
-          goodsList.forEach((item) => {
+          goodsList.forEach(item => {
             if (!item.nospec) {
               response = [...response, ...item.spec_items]
             } else {
@@ -1064,7 +1063,7 @@ export default {
           this.getItems(response)
         })
       } else {
-        goodsList.forEach((item) => {
+        goodsList.forEach(item => {
           if (!item.nospec) {
             response = [...response, ...item.spec_items]
           } else {
@@ -1080,7 +1079,7 @@ export default {
      * */
     uploadHandleTemplate() {
       let params = { file_type: 'marketing_goods', file_name: '商品模板' }
-      exportUploadTemplate(params).then((response) => {
+      exportUploadTemplate(params).then(response => {
         let { data } = response.data
         if (data.file) {
           var a = document.createElement('a')
@@ -1102,7 +1101,7 @@ export default {
      * */
     uploadHandleChange(file, fileList) {
       let params = { isUploadFile: true, file_type: 'marketing_goods', file: file.raw }
-      handleUploadFile(params).then((response) => {
+      handleUploadFile(params).then(response => {
         this.$message({
           type: 'success',
           message: '上传成功'
@@ -1111,7 +1110,7 @@ export default {
         let { data } = response.data
 
         if (data.fail.length > 0) {
-          let str = data.fail.map((item) => {
+          let str = data.fail.map(item => {
             return item.item_bn
           })
 
@@ -1127,7 +1126,7 @@ export default {
         if (data.succ.length <= 0) return
         this.relItems = data.succ
         let list = []
-        data.succ.forEach((item) => {
+        data.succ.forEach(item => {
           if (!item.nospec) {
             list.push(Object.assign(item, { spec_items: [] }))
           } else {

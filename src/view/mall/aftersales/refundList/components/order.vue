@@ -131,7 +131,7 @@
                       '/shopadmin/order/aftersaleslist/detail') ||
                     (`${$store.getters.login_type}` == 'merchant' &&
                       '/merchant/order/aftersaleslist/detail') ||
-                    '/order/entitytrade/aftersaleslist/detail',
+                    '/order/aftersales/aftersaleslist/detail',
 
                   query: { aftersales_bn: scope.row.aftersales_bn }
                 }"
@@ -551,7 +551,7 @@ export default {
       this.loading = false
     },
     createFilter(queryString) {
-      return (restaurant) => {
+      return restaurant => {
         return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
       }
     },
@@ -615,8 +615,8 @@ export default {
       var params = { page: 1, pageSize: 500 }
       const { list } = await this.$api.marketing.getDistributorList(params)
       if (list) {
-        list.forEach((row) => {
-          this.shopList.push({ 'value': row.name, 'distributor_id': row.distributor_id })
+        list.forEach(row => {
+          this.shopList.push({ value: row.name, distributor_id: row.distributor_id })
         })
       }
     }
