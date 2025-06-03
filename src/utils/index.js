@@ -7,6 +7,8 @@ import { isEmpty } from 'lodash'
 
 export * from './src/type-helper'
 
+export { install as VuePrototype } from './prototype'
+
 // 云店
 export const VERSION_STANDARD = () => store.getters.versionMode === 'standard'
 // ecshopx
@@ -64,10 +66,10 @@ export function isInMerchant() {
 }
 
 export function importAll(r, fn = (key, r) => r(key)) {
-  console.log(
-    'importAll',
-    r.keys().filter(key => key.startsWith('./'))
-  )
+  // console.log(
+  //   'importAll',
+  //   r.keys().filter(key => key.startsWith('./'))
+  // )
   r.keys()
     .filter(key => key.startsWith('./'))
     .forEach(key => fn(key, r))

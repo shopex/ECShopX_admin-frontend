@@ -1,5 +1,26 @@
 <template>
-  <i class="iconfont" :class="`${name}`" :style="{ fontSize: `${size}px` }" />
+  <svg
+    :class="['sp-icon', customClass]"
+    :style="{
+      width: `${size}px`,
+      height: `${size}px`,
+      color: color
+    }"
+    aria-hidden="true"
+  >
+    <use :xlink:href="iconName" />
+    <!-- 开发环境下显示调试信息 -->
+    <text
+      v-if="isDev && !iconExists"
+      x="50%"
+      y="50%"
+      text-anchor="middle"
+      font-size="12"
+      fill="red"
+    >
+      {{ name }}
+    </text>
+  </svg>
 </template>
 
 <script>
@@ -11,11 +32,37 @@ export default {
       required: true
     },
     size: {
+      type: [Number, String],
+      default: 24
+    },
+    color: {
       type: String,
-      default: '16'
+      default: 'currentColor'
+    },
+    customClass: {
+      type: String,
+      default: ''
     }
-  }
+  },
+  data() {
+    return {
+      iconExists: true,
+      isDev: process.env.NODE_ENV === 'development'
+    }
+  },
+  computed: {
+    iconName() {
+      return `#icon-${this.name}`
+    }
+  },
+  mounted() {}
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.sp-icon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: middle;
+}
+</style>

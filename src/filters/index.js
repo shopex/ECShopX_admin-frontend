@@ -71,6 +71,7 @@ const install = function (Vue) {
     }
     return area_str.substring(0, area_str.lastIndexOf(','))
   })
+
   //格式化价格保留小数点后两位
   Vue.filter('keepTwoDecimalFull', function (num) {
     var result = parseFloat(num)
@@ -90,6 +91,28 @@ const install = function (Vue) {
     }
     return s_x
   })
+
+  // 格式化金钱
+  Vue.filter('formatNumMoney', function formatNum(number) {
+    return number.toFixed(2).toLocaleString()
+  })
+
+  // 格式化时间
+  Vue.filter('formatTimestamp', function formatTimestamp(timestamp) {
+    if (timestamp) {
+      var date = new Date(timestamp * 1000) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var YY = date.getFullYear() + '-'
+      var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+      var DD = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+      var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+      var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+      var ss = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+      return YY + MM + DD + ' ' + hh + mm + ss
+    } else {
+      return '-'
+    }
+  })
+
   //匹配券类别字符串
   Vue.filter('formatCardStr', function (str) {
     switch (str) {

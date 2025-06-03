@@ -8,7 +8,7 @@ const coreRoutes = [
     },
     name: 'Authentication',
     path: '/',
-    redirect: '/login',
+    // redirect: '/login',
     children: [
       {
         component: () => import('@/views/core/authentication/login.vue'),
@@ -24,7 +24,7 @@ const coreRoutes = [
     },
     name: 'ShopAdminAuthentication',
     path: '/shopadmin',
-    redirect: '/shopadmin/login',
+    // redirect: '/shopadmin/login',
     children: [
       {
         component: () => import('@/views/core/authentication/shop-login.vue'),

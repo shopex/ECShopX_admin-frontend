@@ -6,14 +6,23 @@ import App from '@/App.vue'
 import { SYSTEM_CONFIG } from '@/config'
 import ElementUI from 'element-ui'
 import { install as API } from '@/api'
-import { installComponent } from './component'
+import { install as Filter } from '@/filters'
+import { install as Directives } from '@/directives'
+import { VuePrototype } from '@/utils'
+import { install as Component } from './component'
 
 async function bootstrap() {
   Vue.use(API)
 
   Vue.use(ElementUI)
 
-  installComponent(Vue)
+  Vue.use(Filter)
+
+  Vue.use(Directives)
+
+  Vue.use(Component)
+
+  Vue.use(VuePrototype)
 
   new Vue({
     router,
@@ -27,7 +36,7 @@ async function bootstrap() {
       // document.body.style.setProperty('--themeColor', theme)
       // document.body.style.setProperty('--themeColorRgb', [red, green, blue].join(','))
     },
-    render: (h) => h(App)
+    render: h => h(App)
   }).$mount('#app')
 }
 

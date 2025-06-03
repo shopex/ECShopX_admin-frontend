@@ -1,13 +1,23 @@
 <template>
-  <aside :style="style">
+  <aside>
     <!-- Logo -->
-    <div class="menu-item flex h-12 items-center px-3">
-      <el-avatar :size="36">
-        <img
-          src="https://shopex-onex-yundian-image.oss-cn-shanghai.aliyuncs.com/demo-ecshopx/image/38/2025/04/01/9a5087ce16d15ec7fc7b4cd326aa55161743460927000.亚朵47.png"
-        >
-      </el-avatar>
-      <span class="text-foreground font-semibold text-nowrap">管理后台</span>
+    <div class="w-[80px]">
+      <div class="flex h-12 items-center px-3">
+        <el-avatar :size="36">
+          <img
+            src="https://shopex-onex-yundian-image.oss-cn-shanghai.aliyuncs.com/demo-ecshopx/image/38/2025/04/01/9a5087ce16d15ec7fc7b4cd326aa55161743460927000.亚朵47.png"
+          >
+        </el-avatar>
+        <!-- <span class="text-foreground font-semibold text-nowrap">管理后台</span> -->
+      </div>
+
+      <ul class="main-menu-list">
+        <li v-for="item in mainMenus" :key="item.alias_name" class="main-menu-item py-2 mx-1 my-2">
+          <SpIcon name="fujinshangjia" />
+          <!-- <sp-icon name="example" :size="24" color="#333" /> -->
+          {{ item.name }}
+        </li>
+      </ul>
     </div>
 
     <!-- 菜单 -->
@@ -22,7 +32,16 @@
 // import { preferences } from '../../preferences'
 
 export default {
-  name: 'LayoutSidebar'
+  name: 'LayoutSidebar',
+  data() {
+    return {
+      mainMenus: []
+    }
+  },
+  computed: {},
+  mounted() {
+    this.mainMenus = this.$store.state.user.accessMenus || []
+  }
 }
 </script>
 

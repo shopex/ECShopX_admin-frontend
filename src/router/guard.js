@@ -12,9 +12,7 @@ function setupCommonGuard(router) {
   })
 
   router.afterEach((to, from, next) => {
-    debugger
     stopProgress()
-    // next()
   })
 }
 
@@ -29,20 +27,76 @@ function setupAccessGuard(router) {
       //   },
       //   replace: true
       // }
-      debugger
+      if (/^\/(shopadmin|supplier|merchant)?\/?login$/.test(to.path)) {
+        next()
+      } else {
+        next('/login')
+      }
+      return
+    }
+
+    // 菜单已加载标志
+    if (store.state.access.isAccessChecked) {
+      // to.path如果访问的不在路由中，重定向到路由默认菜单的第一个
+
       next()
       return
     }
 
     // 生成菜单和路由
-    const { accessibleMenus, accessibleRoutes } = await generateAccess({
+    const { accessibleRoutes } = await generateAccess({
       router,
       routes: accessRoutes
     })
 
-    debugger
+    store.commit('access/setIsAccessChecked', true)
 
-    stopProgress()
+    // return {
+    //   path: '/dashboard',
+    //   replace: true
+    // }
+
+    // next('/dashboard')
+    // 检查目标路径是否在可访问路由中
+    const isPathAccessible = (path, routes, parentPath = '') => {
+      for (const route of routes) {
+        // 拼接当前路径
+        parentPath = parentPath + route.path
+        // 递归检查子路由,传入当前拼接的路径作为父路径
+        if (route.children) {
+          return isPathAccessible(path, route.children, parentPath)
+        } else {
+          // 判断完整路径是否匹配
+          return parentPath === path
+        }
+      }
+      return false
+    }
+
+    // 获取第一个可访问路由的路径
+    const getFirstRoutePath = routes => {
+      if (!routes || !routes.length) return '/dashboard'
+
+      const findFirstPath = (route, parentPath = '') => {
+        const currentPath = parentPath + route.path
+
+        if (!route.children || !route.children.length) {
+          return currentPath
+        }
+
+        return findFirstPath(route.children[0], currentPath)
+      }
+
+      return findFirstPath(routes[0])
+    }
+
+    // 如果目标路径不可访问，重定向到第一个可访问路由
+    if (!isPathAccessible(to.path, accessibleRoutes)) {
+      const firstPath = getFirstRoutePath(accessibleRoutes)
+      next(firstPath)
+      return
+    }
+    next(to)
   })
 }
 

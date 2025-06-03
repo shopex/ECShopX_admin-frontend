@@ -1,10 +1,10 @@
 import api from '@/api'
 import { getUserInfo } from '@/api/auth'
 
-const user = {
+const userStore = {
   namespaced: true,
   state: {
-    permissions: [],
+    accessMenus: [],
     token: '',
 
     exp: '',
@@ -40,59 +40,11 @@ const user = {
       state.is_authorizer = user.is_authorizer
       state.license_authorize = user.license_authorize
     },
-    // 设置权限
-    setPermissions(state, permissions) {
-      state.permissions = permissions
+    // 设置菜单
+    setAccessMenus(state, { accessMenus }) {
+      state.accessMenus = accessMenus
     },
 
-    SET_TOKEN_EXP(state, { exp }) {
-      state.exp = exp
-    },
-    CLEAR_TOKEN(state) {
-      state.token = ''
-      state.exp = ''
-    },
-    SET_USERINFO(state, payload) {
-      const { username, head_portrait } = payload
-      state.nick_name = username
-      state.avatar = head_portrait
-    },
-    SYSTEM_EXIT(state, payload) {
-      state.token = ''
-      state.exp = ''
-      state.name = ''
-      state.is_authorizer = false
-      state.license_authorize = ''
-      state.route_app = ''
-      state.wxapp_id = ''
-      state.template_name = 'yykweishop'
-      state.login_type = ''
-      state.nick_name = ''
-      state.avatar = ''
-      state.shopid = ''
-      state.isInFrame = false
-      state.product_code = ''
-      state.ali_appid = ''
-      state.ali_template_name = ''
-      state.app_type = ''
-      state.color_theme = ''
-      // state.versionMode = 'platform'
-      state.sys_logo = ''
-    },
-    SET_LOGIN_TYPE: (state, payload) => {
-      const { loginType } = payload
-      state.login_type = loginType
-    },
-    SET_PRODUCTION_CODE: (state, payload) => {
-      const { productionCode } = payload
-      state.product_code = productionCode
-    },
-    // SET_VERSION_MODE: (state, payload) => {
-    //   state.versionMode = payload
-    // },
-    SET_READ_LICENSE: (state, payload) => {
-      state.readLicense = payload
-    },
     setUserInfo(state, payload) {
       const { username, head_portrait } = payload
       state.userInfo = {
@@ -151,10 +103,11 @@ const user = {
   },
 
   actions: {
-    async fetchPermission({ commit }) {
-      const permissions = await api.auth.getPermission()
-      commit('setPermissions', permissions)
+    async fetchAccessMenus({ commit }) {
+      const accessMenus = await api.auth.getPermission()
+      commit('setAccessMenus', { accessMenus })
     },
+
     setIsFrame({ commit }, isInFrame) {
       commit('setIsFrame', isInFrame)
     },
@@ -224,4 +177,4 @@ const user = {
   }
 }
 
-export default user
+export default userStore

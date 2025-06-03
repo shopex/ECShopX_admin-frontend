@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
-import user from './modules/user'
-import menu from './modules/menu'
+import accessStore from './modules/access'
+import userStore from './modules/user'
+
 import sku from './modules/sku'
 import getters from './getters'
 
@@ -20,8 +21,8 @@ const store = new Vuex.Store({
   //   productConfig: null
   // },
   modules: {
-    menu,
-    user,
+    access: accessStore,
+    user: userStore,
     sku
   },
   getters,

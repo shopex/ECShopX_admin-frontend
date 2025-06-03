@@ -115,8 +115,11 @@ export default {
         if (token) {
           this.$store.commit('user/setToken', { token })
           this.$message.success('登录成功')
-          await this.$store.dispatch('user/fetchPermission')
-          this.$router.push('/')
+          await this.$store.dispatch('user/fetchAccessMenus')
+          // this.$router.push('/')
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 700)
         }
       } catch (error) {
         // console.error('登录失败:', error)
