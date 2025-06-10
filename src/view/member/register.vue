@@ -8,7 +8,7 @@
             <span>会员中心个人信息录入项配置</span>
 
             <div>
-              <el-button type="primary" @click="showAddDialog()"> 新增配置 </el-button>
+              <el-button v-if="!VERSION_SHUYUN" type="primary" @click="showAddDialog()"> 新增配置 </el-button>
               <!-- <label>初次授权时强制填写</label>
               <el-switch v-model="isMustAuth" @change="onChangeMustAuth" /> -->
             </div>
@@ -75,7 +75,7 @@
               <template slot-scope="scope">
                 <el-button type="text" @click="showAddDialog(scope.row)"> 编辑 </el-button>
                 <el-button
-                  v-if="!scope.row.is_default"
+                  v-if="!VERSION_SHUYUN && !scope.row.is_default"
                   type="text"
                   class="delete"
                   @click="deleteField(scope.row)"

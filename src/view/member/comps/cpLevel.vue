@@ -50,6 +50,7 @@
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
+                :disabled="VERSION_SHUYUN"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
             </div>
@@ -147,7 +148,7 @@
       </div>
     </template>
     <div class="section-footer content-center">
-      <el-button @click="addGrade"> 添加等级卡 </el-button>
+      <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
       <el-button type="primary" @click="saveGrade"> 保存 </el-button>
     </div>
     <template v-if="visible">

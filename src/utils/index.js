@@ -39,6 +39,8 @@ export const VERSION_PLATFORM = store.getters.versionMode == 'platform'
 export const VERSION_B2C = store.getters.versionMode == 'b2c'
 // 内购
 export const VERSION_IN_PURCHASE = store.getters.versionMode == 'in_purchase'
+// 数云
+export const VERSION_SHUYUN = store.getters.versionMode == 'shuyun'
 
 // 平台端
 export const IS_ADMIN = () => {

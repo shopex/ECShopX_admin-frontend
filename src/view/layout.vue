@@ -287,6 +287,8 @@ export default {
           this.brandIco = require(`@/assets/logo/logo_ecshopx.png`)
         } else if (this.VERSION_PLATFORM && !this.VUE_APP_FREE) {
           this.brandIco = require(`@/assets/logo/logo_ecshopx.png`)
+        } else if (this.VERSION_SHUYUN){
+          this.brandIco = require(`@/assets/logo/logo_shuyun.png`)
         }
       }
       this.$store.dispatch('setSysLogo', this.brandIco)

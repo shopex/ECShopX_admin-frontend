@@ -5,7 +5,7 @@
     </div>
     <el-form ref="form" :model="form" label-position="left" label-width="180px">
       <div class="section-body">
-        <el-form-item label="积分：">
+        <el-form-item v-if="!VERSION_SHUYUN" label="积分：">
           <el-switch
             v-model="form.isOpenMemberPoint"
             :width="60"
@@ -18,7 +18,7 @@
             @change="isOpenMemberPointHandle"
           />
         </el-form-item>
-        <el-form-item label="展示名称：">
+        <el-form-item v-if="!VERSION_SHUYUN" label="展示名称：">
           <el-input v-model="form.name" placeholder="" style="width: 120px" :max="8" />
           <el-tooltip
             class="item"
@@ -29,8 +29,8 @@
             <i class="el-icon-question" />
           </el-tooltip>
         </el-form-item>
-        <div v-if="form.isOpenMemberPoint == 'true'">
-          <el-form-item label="获取方式：">
+        <div>
+          <el-form-item v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'" label="获取方式：">
             <el-radio-group v-model="form.access" @change="changeAccess">
               <el-radio label="order"> 订单 </el-radio>
               <el-radio label="items"> 商品 </el-radio>
@@ -38,7 +38,7 @@
             <p v-if="access == 'order'" class="frm-tips">说明：可按订单金额比例获取</p>
             <p v-if="access == 'items'" class="frm-tips">说明：可按单商品设置的积分值获取</p>
           </el-form-item>
-          <el-form-item v-if="access == 'order'" label="获取比例：">
+          <el-form-item v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true' && access == 'order'" label="获取比例：">
             订单金额1元人民币 获得<el-input
               v-model="form.gain_point"
               type="number"
@@ -49,7 +49,7 @@
             />积分
           </el-form-item>
 
-          <el-form-item v-if="access == 'order'" label="运费配置：">
+          <el-form-item v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true' && access == 'order'" label="运费配置：">
             <el-radio-group v-model="form.include_freight">
               <el-radio label="true"> 包含 </el-radio>
               <el-radio label="false"> 不包含 </el-radio>
@@ -61,7 +61,7 @@
               说明：可设置订单中运费部分金额是否可获取积分
             </p>
           </el-form-item>
-          <el-form-item label="积分获取限制：">
+          <el-form-item v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'" label="积分获取限制：">
             每月最多获取<el-input
               v-model="form.gain_limit"
               type="number"
@@ -72,7 +72,7 @@
             />积分
             <div class="frm-tips">不限制请填写999999</div>
           </el-form-item>
-          <el-form-item label="获取时间：">
+          <el-form-item v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'" label="获取时间：">
             订单完成<el-input
               v-model="form.gain_time"
               type="number"
@@ -82,8 +82,8 @@
               :max="9999999"
             />天，获取积分
           </el-form-item>
-          <template v-if="!VERSION_IN_PURCHASE">
-            <el-form-item label="积分抵扣：">
+          <template>
+            <el-form-item v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)" label="积分抵扣：">
               <el-switch
                 v-model="form.isOpenDeductPoint"
                 :width="60"
@@ -96,7 +96,7 @@
                 @change="isOpenMemberPointHandle"
               />
             </el-form-item>
-            <el-form-item label="每单抵扣上限：">
+            <el-form-item v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)" label="每单抵扣上限：">
               <el-input
                 v-model="form.deduct_proportion_limit"
                 type="number"
@@ -106,7 +106,7 @@
                 :max="100"
               />% 上限范围：1<=x<=100
             </el-form-item>
-            <el-form-item label="抵扣比例：">
+            <el-form-item v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)" label="抵扣比例：">
               <el-input
                 v-model="form.deduct_point"
                 type="number"
@@ -117,13 +117,13 @@
               />
               积分 抵扣1元人民币
             </el-form-item>
-            <el-form-item label="积分抵扣运费：">
+            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE" label="积分抵扣运费：">
               <el-radio-group v-model="form.can_deduct_freight">
                 <el-radio label="1"> 包含 </el-radio>
                 <el-radio label="0"> 不包含 </el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item label="优先积分抵扣">
+            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE" label="优先积分抵扣">
               <el-switch
                 v-model="form.point_pay_first"
                 :width="60"
@@ -136,8 +136,9 @@
               />
               <span class="frm-tips"> 开启优先积分抵扣功能，消费者下单时优先使用积分抵扣</span>
             </el-form-item>
-            <el-form-item label="积分规则：">
+            <el-form-item v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)" label="积分规则：">
               <SpRichText v-model="form.rule_desc" />
+              <div>(注：积分规则会在c端展示！)</div>
             </el-form-item>
           </template>
           <!-- <el-form-item label="购物赠送积分">

@@ -204,6 +204,10 @@ export default {
           this.title = this.getLoginTitle('官方商城管理中心')
           this.login_bg = login_bg_b2c
           break
+        case 'shuyun':
+          this.title = this.getLoginTitle('官方商城管理中心')
+          this.login_bg = login_bg_b2c
+          break
         default:
           this.title = this.getLoginTitle('平台管理中心')
           this.login_bg = login_bg_ecshopx
