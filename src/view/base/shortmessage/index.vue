@@ -45,6 +45,13 @@ export default {
       aliyunsms_status: false
     }
   },
+  created(){
+    if(this.VERSION_SHUYUN){
+      this.$router.push({
+            path: this.matchRoutePath('shopex_sms')
+          })
+    }
+  },
   async mounted() {
     const result = await getaliSmsStatus()
     this.aliyunsms_status = result.data.data.aliyunsms_status

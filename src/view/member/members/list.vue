@@ -225,6 +225,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" align="center" label="全选" />
+        <el-table-column v-if="VERSION_SHUYUN" prop="userid" label="平台账号" width="100" />
         <el-table-column prop="mobile" label="手机号" width="160">
           <template slot-scope="scope">
             {{ scope.row.mobile }}

@@ -271,6 +271,7 @@ export default {
       }
       exportPopularizeData(params).then((res) => {
         if (res.data.data.status == true) {
+          this.$export_open('popularize')
           this.$message({
             type: 'success',
             message: '已加入执行队列，请在设置-导出列表中下载'
