@@ -15,6 +15,7 @@ const userStore = {
     wxapp_id: '',
     template_name: 'yykweishop',
     login_type: '',
+    login_from: '',
     nick_name: '',
     avatar: '',
     shopid: '',
@@ -49,6 +50,56 @@ const userStore = {
       state.accountInfo = accountInfo
     },
 
+    CLEAR_TOKEN(state) {
+      state.token = ''
+      state.exp = ''
+    },
+    SET_USERINFO(state, payload) {
+      const { username, head_portrait } = payload
+      state.nick_name = username
+      state.avatar = head_portrait
+    },
+    SYSTEM_EXIT(state, payload) {
+      state.token = ''
+      state.exp = ''
+      state.name = ''
+      state.is_authorizer = false
+      state.license_authorize = ''
+      state.route_app = ''
+      state.wxapp_id = ''
+      state.template_name = 'yykweishop'
+      state.login_type = ''
+      state.nick_name = ''
+      state.avatar = ''
+      state.shopid = ''
+      state.isInFrame = false
+      state.product_code = ''
+      state.ali_appid = ''
+      state.ali_template_name = ''
+      state.app_type = ''
+      state.color_theme = ''
+      state.versionMode = 'platform'
+      state.sys_logo = ''
+    },
+    SET_LOGIN_TYPE: (state, payload) => {
+      const { loginType } = payload
+      state.login_type = loginType
+    },
+    SET_LOGIN_FROM: (state, payload) => {
+      const { loginFrom } = payload
+      state.login_from = loginFrom
+    },
+    SET_PRODUCTION_CODE: (state, payload) => {
+      const { productionCode } = payload
+      state.product_code = productionCode
+    },
+    SET_VERSION_MODE: (state, payload) => {
+      state.versionMode = payload
+    },
+    SET_READ_LICENSE: (state, payload) => {
+      state.readLicense = payload
+    },
+
     setUserInfo(state, payload) {
       const { username, head_portrait } = payload
       state.userInfo = {
@@ -79,6 +130,9 @@ const userStore = {
     },
     setLoginType: (state, loginType) => {
       state.login_type = loginType
+    },
+    setLoginFrom: (state, login_from) => {
+      state.login_from = login_from
     },
     setCompanyType: (state, companyType) => {
       state.company_type = companyType
@@ -161,6 +215,9 @@ const userStore = {
     },
     setLoginType({ commit }, login_type) {
       commit('setLoginType', login_type)
+    },
+    setLoginFrom({ commit }, login_from) {
+      commit('setLoginFrom', login_from)
     },
     setShopId({ commit }, id) {
       commit('setShopId', id)

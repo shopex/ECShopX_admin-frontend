@@ -18,6 +18,10 @@ export default {
       type: String,
       required: true
     },
+    formItemClass: {
+      type: String,
+      default: ''
+    },
     label: {
       type: String,
       default: ''
@@ -43,12 +47,13 @@ export default {
       this.$emit('change', val)
     },
     // 渲染 input 组件
-    renderInput(props = {}) {
+    renderInput() {
       return h('el-input', {
+        attrs: {
+          ...this.componentProps
+        },
         props: {
-          value: this.modelValue,
-          placeholder: `请输入${this.label}`,
-          ...props
+          value: this.modelValue
         },
         on: {
           input: this.handleInput
@@ -57,7 +62,7 @@ export default {
     },
     // 渲染 select 组件
     renderSelect(props = {}) {
-      const options = (props.options || []).map((option) =>
+      const options = (props.options || []).map(option =>
         h('el-option', {
           props: {
             key: option.value,
@@ -85,7 +90,7 @@ export default {
     },
     // 渲染 radio 组件
     renderRadio(props = {}) {
-      const radios = (props.options || []).map((option) =>
+      const radios = (props.options || []).map(option =>
         h(
           'el-radio',
           {
@@ -114,7 +119,7 @@ export default {
     },
     // 渲染 checkbox 组件
     renderCheckbox(props = {}) {
-      const checkboxes = (props.options || []).map((option) =>
+      const checkboxes = (props.options || []).map(option =>
         h(
           'el-checkbox',
           {
@@ -155,7 +160,7 @@ export default {
           },
           class: props.class || '',
           on: {
-            click: (event) => {
+            click: event => {
               this.$emit('click', event)
               if (props.onClick) {
                 props.onClick(event)
@@ -166,6 +171,19 @@ export default {
         props.text || this.label || '按钮'
       )
     },
+    // 渲染 datetime-range 组件
+    renderDateTimePicker(props = {}) {
+      return h('el-date-picker', {
+        attrs: {
+          ...this.componentProps
+        },
+        props: {
+          startPlaceholder: '开始日期',
+          endPlaceholder: '结束日期',
+          value: this.modelValue
+        }
+      })
+    },
     // 获取组件渲染函数
     getComponentRender() {
       if (isString(this.component)) {
@@ -175,7 +193,8 @@ export default {
           select: this.renderSelect,
           radio: this.renderRadio,
           checkbox: this.renderCheckbox,
-          button: this.renderButton
+          button: this.renderButton,
+          datetimepicker: this.renderDateTimePicker
         }
         return renderMap[type] || this.renderInput
       }
@@ -204,9 +223,8 @@ export default {
   render(h) {
     // 获取对应的渲染函数
     const renderComponent = this.getComponentRender()
-
     // 渲染表单项
-    return h('div', { class: 'form-field' }, [
+    return h('div', { class: ['form-field', this.formItemClass] }, [
       h(
         'el-form-item',
         {

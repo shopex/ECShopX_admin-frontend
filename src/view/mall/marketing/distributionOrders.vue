@@ -1,130 +1,120 @@
 <template>
-  <div>
-    <div v-if="$route.path.indexOf('detail') === -1">
-      <SpPlatformTip h5 app alipay />
-      <el-row class="filter-header" :gutter="20">
-        <el-col>
-          <el-date-picker
-            v-model="create_time"
-            type="daterange"
-            value-format="yyyy/MM/dd"
-            placeholder="选择日期范围"
-            @change="dateChange"
+  <SpRouterView>
+    <SpPlatformTip h5 app alipay />
+
+    <SearchForm />
+
+    <el-row class="filter-header" :gutter="20">
+      <el-col>
+        <el-date-picker
+          v-model="create_time"
+          type="daterange"
+          value-format="yyyy/MM/dd"
+          placeholder="选择日期范围"
+          @change="dateChange"
+        />
+        <el-input v-model="identifier" class="input-m" placeholder="手机号/订单号">
+          <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
+        </el-input>
+        <el-select v-model="order_class" placeholder="请选择订单类型" @change="TypeHandle">
+          <el-option
+            v-for="(item, index) in order_class_array"
+            :key="index"
+            :label="item.title"
+            :value="item.value"
           />
-          <el-input v-model="identifier" class="input-m" placeholder="手机号/订单号">
-            <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
-          </el-input>
-          <el-select v-model="order_class" placeholder="请选择订单类型" @change="TypeHandle">
-            <el-option
-              v-for="(item, index) in order_class_array"
-              :key="index"
-              :label="item.title"
-              :value="item.value"
-            />
-          </el-select>
-          <!-- <el-autocomplete
-            v-model="source_name"
-            class="inline-input"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入来源"
-            @select="sourceSearch"
-          /> -->
-          <el-select
-            v-model="distributor_id"
-            placeholder="请选择店铺"
-            @change="distributorSelectHandle"
-          >
-            <el-option
-              v-for="(item, index) in distributorList"
-              :key="index"
-              :label="item.name"
-              :value="item.distributor_id"
-            />
-          </el-select>
-        </el-col>
-      </el-row>
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="all" />
-        <el-tab-pane label="待发货" name="notship" />
-        <el-tab-pane label="已完成" name="done" />
-        <el-tab-pane label="未支付" name="notpay" />
-        <el-tab-pane label="已取消" name="cancel" />
-        <el-table
-          v-loading="loading"
-          :data="list"
-          style="width: 100%"
-          :height="wheight - 190"
-          element-loading-text="数据加载中"
+        </el-select>
+        <el-select
+          v-model="distributor_id"
+          placeholder="请选择店铺"
+          @change="distributorSelectHandle"
         >
-          <el-table-column prop="order_id" label="订单号">
-            <template slot-scope="scope">
-              <div class="order-num">
-                {{ scope.row.order_id }}
-                <el-tooltip effect="dark" content="复制" placement="top-start">
-                  <i
-                    v-clipboard:copy="scope.row.order_id"
-                    v-clipboard:success="onCopy"
-                    class="el-icon-document-copy"
-                  />
-                </el-tooltip>
-              </div>
-              <div v-if="scope.row.distributor_name" class="order-store">
-                <el-tooltip effect="dark" content="店铺名" placement="top-start">
-                  <i class="el-icon-office-building" />
-                </el-tooltip>
-                {{ scope.row.distributor_name }}
-              </div>
-              <div class="order-time">
-                <el-tooltip effect="dark" content="下单时间" placement="top-start">
-                  <i class="el-icon-time" />
-                </el-tooltip>
-                {{ scope.row.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="运费">
-            <template slot-scope="scope">
-              <span class="cur">{{ scope.row.fee_symbol }}</span
-              >{{ scope.row.freight_fee / 100 }}
-            </template>
-          </el-table-column>
-          <!--
+          <el-option
+            v-for="(item, index) in distributorList"
+            :key="index"
+            :label="item.name"
+            :value="item.distributor_id"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
+
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <el-tab-pane label="全部" name="all" />
+      <el-tab-pane label="待发货" name="notship" />
+      <el-tab-pane label="已完成" name="done" />
+      <el-tab-pane label="未支付" name="notpay" />
+      <el-tab-pane label="已取消" name="cancel" />
+      <el-table v-loading="loading" :data="list" style="width: 100%">
+        <el-table-column prop="order_id" label="订单号">
+          <template slot-scope="scope">
+            <div class="order-num">
+              {{ scope.row.order_id }}
+              <el-tooltip effect="dark" content="复制" placement="top-start">
+                <i
+                  v-clipboard:copy="scope.row.order_id"
+                  v-clipboard:success="onCopy"
+                  class="el-icon-document-copy"
+                />
+              </el-tooltip>
+            </div>
+            <div v-if="scope.row.distributor_name" class="order-store">
+              <el-tooltip effect="dark" content="店铺名" placement="top-start">
+                <i class="el-icon-office-building" />
+              </el-tooltip>
+              {{ scope.row.distributor_name }}
+            </div>
+            <div class="order-time">
+              <el-tooltip effect="dark" content="下单时间" placement="top-start">
+                <i class="el-icon-time" />
+              </el-tooltip>
+              {{ scope.row.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="运费">
+          <template slot-scope="scope">
+            <span class="cur">{{ scope.row.fee_symbol }}</span
+            >{{ scope.row.freight_fee / 100 }}
+          </template>
+        </el-table-column>
+        <!--
           <el-table-column width="70" label="商品金额">
             <template slot-scope="scope">
               {{scope.row.fee_symbol}}{{scope.row.item_fee / 100}}
             </template>
           </el-table-column>
           -->
-          <el-table-column prop="total_fee" label="订单金额">
-            <template slot-scope="scope">
-              <span class="cur">{{ scope.row.fee_symbol }}</span
-              >{{ scope.row.total_fee / 100 }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="mobile" label="联系手机">
-            <template slot-scope="scope">
-              <i class="el-icon-mobile" />
-              {{ scope.row.mobile }}
-              <el-tooltip
-                v-if="datapass_block == 0"
-                effect="dark"
-                content="复制"
-                placement="top-start"
-              >
-                <i
-                  v-clipboard:copy="scope.row.mobile"
-                  v-clipboard:success="onCopy"
-                  class="el-icon-document-copy"
-                />
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column label="订单类型">
-            <template slot-scope="scope">
-              {{ getOrderType(scope.row) }}
-            </template>
-          </el-table-column>
-          <!--
+        <el-table-column prop="total_fee" label="订单金额">
+          <template slot-scope="scope">
+            <span class="cur">{{ scope.row.fee_symbol }}</span
+            >{{ scope.row.total_fee / 100 }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="mobile" label="联系手机">
+          <template slot-scope="scope">
+            <i class="el-icon-mobile" />
+            {{ scope.row.mobile }}
+            <el-tooltip
+              v-if="datapass_block == 0"
+              effect="dark"
+              content="复制"
+              placement="top-start"
+            >
+              <i
+                v-clipboard:copy="scope.row.mobile"
+                v-clipboard:success="onCopy"
+                class="el-icon-document-copy"
+              />
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column label="订单类型">
+          <template slot-scope="scope">
+            {{ getOrderType(scope.row) }}
+          </template>
+        </el-table-column>
+        <!--
           <el-table-column prop="is_distribution" label="是否分销">
             <template slot-scope="scope">
               <span v-if="scope.row.is_distribution == 1"> 是 </span>
@@ -132,164 +122,210 @@
             </template>
           </el-table-column>
           -->
-          <el-table-column label="状态">
-            <template slot-scope="scope">
-              <!-- 订单状态 -->
-              <el-tag v-if="scope.row.order_status == 'PAYED'" type="success" size="mini">
-                已支付
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <!-- 订单状态 -->
+            <el-tag v-if="scope.row.order_status == 'PAYED'" type="success" size="mini">
+              已支付
+            </el-tag>
+            <el-tag v-if="scope.row.order_status == 'NOTPAY'" size="mini"> 未支付 </el-tag>
+            <el-tag v-if="scope.row.order_status == 'CANCEL'" type="danger" size="mini">
+              已取消
+            </el-tag>
+            <el-tag v-if="scope.row.order_status == 'WAIT_BUYER_CONFIRM'" type="danger" size="mini">
+              待收货
+            </el-tag>
+            <template v-if="scope.row.order_status != 'CANCEL'">
+              <!-- 发货状态 -->
+              <el-tag v-if="scope.row.delivery_status == 'DONE'" type="success" size="mini">
+                已发货
               </el-tag>
-              <el-tag v-if="scope.row.order_status == 'NOTPAY'" size="mini"> 未支付 </el-tag>
-              <el-tag v-if="scope.row.order_status == 'CANCEL'" type="danger" size="mini">
-                已取消
+              <el-tag v-else-if="scope.row.delivery_status == 'PARTAIL'" type="danger" size="mini">
+                部分发货
               </el-tag>
-              <el-tag
-                v-if="scope.row.order_status == 'WAIT_BUYER_CONFIRM'"
-                type="danger"
-                size="mini"
-              >
-                待收货
+              <el-tag v-else-if="scope.row.ziti_status == 'PENDING'" type="danger" size="mini">
+                待自提
               </el-tag>
-              <template v-if="scope.row.order_status != 'CANCEL'">
-                <!-- 发货状态 -->
-                <el-tag v-if="scope.row.delivery_status == 'DONE'" type="success" size="mini">
-                  已发货
-                </el-tag>
-                <el-tag
-                  v-else-if="scope.row.delivery_status == 'PARTAIL'"
-                  type="danger"
-                  size="mini"
-                >
-                  部分发货
-                </el-tag>
-                <el-tag v-else-if="scope.row.ziti_status == 'PENDING'" type="danger" size="mini">
-                  待自提
-                </el-tag>
-                <el-tag v-else-if="scope.row.ziti_status == 'DONE'" type="danger" size="mini">
-                  已自提
-                </el-tag>
-                <el-tag v-else size="mini"> 待发货 </el-tag>
-              </template>
+              <el-tag v-else-if="scope.row.ziti_status == 'DONE'" type="danger" size="mini">
+                已自提
+              </el-tag>
+              <el-tag v-else size="mini"> 待发货 </el-tag>
             </template>
-          </el-table-column>
-          <!-- <el-table-column
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
             prop="source_name"
             label="来源"
           /> -->
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button type="text">
-                <router-link
-                  :to="{
-                    path: matchRoutePath('detail'),
-                    query: { orderId: scope.row.order_id, resource: '/mall/trade/normalorders' }
-                  }"
-                >
-                  详情
-                </router-link>
-              </el-button>
-              <el-button
-                v-if="
-                  scope.row.receipt_type == 'logistics' &&
-                  scope.row.order_status == 'PAYED' &&
-                  scope.row.delivery_status != 'DONE' &&
-                  !IS_ADMIN()
-                "
-                type="text"
-                @click="deliveryAction(scope.row.order_id)"
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="text">
+              <router-link
+                :to="{
+                  path: matchRoutePath('detail'),
+                  query: { orderId: scope.row.order_id, resource: '/mall/trade/normalorders' }
+                }"
               >
-                发货
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="mt-4 text-right">
-          <el-pagination
-            layout="prev, pager, next"
-            :current-page.sync="params.page"
-            :total="total_count"
-            :page-size="params.pageSize"
-            @current-change="handleCurrentChange"
-          />
-        </div>
-      </el-tabs>
+                详情
+              </router-link>
+            </el-button>
+            <el-button
+              v-if="
+                scope.row.receipt_type == 'logistics' &&
+                scope.row.order_status == 'PAYED' &&
+                scope.row.delivery_status != 'DONE' &&
+                !IS_ADMIN()
+              "
+              type="text"
+              @click="deliveryAction(scope.row.order_id)"
+            >
+              发货
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="mt-4 text-right">
+        <el-pagination
+          layout="prev, pager, next"
+          :current-page.sync="params.page"
+          :total="total_count"
+          :page-size="params.pageSize"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+    </el-tabs>
 
-      <!-- 发货-开始 -->
-      <el-dialog
-        :title="deliveryTitle"
-        :visible.sync="deliveryVisible"
-        :before-close="handleCancel"
-      >
-        <template>
-          <el-form
-            ref="deliveryForm"
-            :model="deliveryForm"
-            class="demo-ruleForm"
-            label-width="90px"
-          >
-            <el-form-item label="订单号">
-              <el-col :span="20">
-                {{ deliveryData.orderInfo.order_id }}
-              </el-col>
-            </el-form-item>
-            <el-form-item label="商品信息">
-              <el-col :span="30">
-                <el-table :data="deliveryData.orderInfo.items" style="width: 100%">
-                  <el-table-column prop="item_name" label="商品名" width="180" />
-                  <el-table-column prop="num" label="数量" width="180" />
-                  <el-table-column label="总价(元)">
-                    <template slot-scope="scope">
-                      <span>￥{{ scope.row.total_fee / 100 }}</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="快递公司">
-              <el-col>
-                <el-select
-                  v-model="deliveryForm.delivery_corp"
-                  filterable
-                  placeholder="请选择快递公司，可搜索"
-                >
-                  <el-option
-                    v-for="item in dlycorps"
-                    :key="item.value"
-                    :label="item.name"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="快递单号">
-              <el-col :span="14">
-                <el-input
-                  v-model="deliveryForm.delivery_code"
-                  :maxlength="20"
-                  placeholder="物流公司单号"
+    <!-- 发货-开始 -->
+    <el-dialog :title="deliveryTitle" :visible.sync="deliveryVisible" :before-close="handleCancel">
+      <template>
+        <el-form ref="deliveryForm" :model="deliveryForm" class="demo-ruleForm" label-width="90px">
+          <el-form-item label="订单号">
+            <el-col :span="20">
+              {{ deliveryData.orderInfo.order_id }}
+            </el-col>
+          </el-form-item>
+          <el-form-item label="商品信息">
+            <el-col :span="30">
+              <el-table :data="deliveryData.orderInfo.items" style="width: 100%">
+                <el-table-column prop="item_name" label="商品名" width="180" />
+                <el-table-column prop="num" label="数量" width="180" />
+                <el-table-column label="总价(元)">
+                  <template slot-scope="scope">
+                    <span>￥{{ scope.row.total_fee / 100 }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="快递公司">
+            <el-col>
+              <el-select
+                v-model="deliveryForm.delivery_corp"
+                filterable
+                placeholder="请选择快递公司，可搜索"
+              >
+                <el-option
+                  v-for="item in dlycorps"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
                 />
-              </el-col>
-            </el-form-item>
-          </el-form>
-        </template>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="handleCancel"> 取消 </el-button>
-          <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
-        </div>
-      </el-dialog>
-    </div>
-    <router-view />
-  </div>
+              </el-select>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="快递单号">
+            <el-col :span="14">
+              <el-input
+                v-model="deliveryForm.delivery_code"
+                :maxlength="20"
+                placeholder="物流公司单号"
+              />
+            </el-col>
+          </el-form-item>
+        </el-form>
+      </template>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="handleCancel"> 取消 </el-button>
+        <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
+      </div>
+    </el-dialog>
+  </SpRouterView>
 </template>
+
 <script>
-import { mapGetters } from 'vuex'
 import { getOrderList, getOrderDetail, delivery } from '../../../api/trade'
 import { getSourcesList } from '../../../api/datacube'
 import hqbdlycorp from '../../../common/hqbdlycorp.json'
 import { getDistributorList } from '../../../api/marketing'
 import { ORDER_TYPE, ORDER_TYPE_STANDARD } from '@/consts'
-import { IS_ADMIN } from '../../../utils'
+import { useForm } from '@/composables'
+
+const [Form, FormApi] = useForm({
+  formType: 'searchForm',
+  formItems: [
+    {
+      component: 'DateTimePicker',
+      componentProps: {
+        type: 'datetimerange'
+      },
+      fieldName: 'create_time',
+      formItemClass: 'col-span-2',
+      label: '订单时间'
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入手机号'
+      },
+      fieldName: 'mobile',
+      formItemClass: 'col-start-3',
+      label: '手机号'
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入订单号'
+      },
+      fieldName: 'order_id',
+      label: '订单号'
+    },
+    {
+      component: 'Select',
+      componentProps: {
+        placeholder: '请选择订单类型',
+        options: [
+          { label: '全部订单', value: '' },
+          { label: '团购订单', value: 'groups' },
+          { label: '秒杀订单', value: 'seckill' },
+          { label: '社区订单', value: 'community' },
+          { label: '导购订单', value: 'shopguide' }
+        ]
+      },
+      fieldName: 'order_class',
+      label: '订单类型',
+      value: ''
+    },
+    {
+      component: 'Select',
+      componentProps: {
+        placeholder: '请选择店铺',
+        options: []
+      },
+      fieldName: 'distributor_id',
+      label: '店铺',
+      value: ''
+    }
+  ],
+  formProps: {
+    colon: true,
+    inline: true
+  }
+})
 
 export default {
+  components: {
+    SearchForm: Form
+  },
   data() {
     return {
       activeName: 'all',
@@ -328,9 +364,6 @@ export default {
       distributorList: [],
       datapass_block: 1
     }
-  },
-  computed: {
-    ...mapGetters(['wheight'])
   },
   mounted() {
     this.getDistributor()

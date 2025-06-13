@@ -50,6 +50,7 @@
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
+                :disabled="VERSION_SHUYUN"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
             </div>
@@ -147,7 +148,7 @@
       </div>
     </template>
     <div class="section-footer content-center">
-      <el-button @click="addGrade"> 添加等级卡 </el-button>
+      <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
       <el-button type="primary" @click="saveGrade"> 保存 </el-button>
     </div>
     <template v-if="visible">
@@ -251,7 +252,7 @@ export default {
       console.log(this.levelData)
       this.params.grade_info = JSON.stringify(this.levelData)
 
-      updateGrade(this.params).then((res) => {
+      updateGrade(this.params).then(res => {
         if (res.data.data.status) {
           this.$message.success('保存成功')
         }
@@ -319,7 +320,11 @@ export default {
           })
           return
         }
-        if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
+        if (
+          !this.VERSION_SHUYUN &&
+          index > 0 &&
+          Number(value) >= Number(this.levelData[index - 1].privileges.discount)
+        ) {
           this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
           return
         }
@@ -396,6 +401,7 @@ export default {
             })
             break
           } else if (
+            !this.VERSION_SHUYUN &&
             i > 0 &&
             Number(this.levelData[i].privileges.discount) >=
               Number(this.levelData[i - 1].privileges.discount)
@@ -425,7 +431,7 @@ export default {
       this.imgDialog = false
     },
     getGradeList() {
-      getGradeList().then((response) => {
+      getGradeList().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           var result = response.data.data
           if (result) {

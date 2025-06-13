@@ -43,7 +43,7 @@ const routes = [
       {
         name: `selfOrderList`,
         path: 'order-manage/self-order-list',
-        component: () => import('@/view/mall/trade/normalorders/shopList'),
+        component: () => import('@/view/mall/marketing/distributionOrders'),
         meta: {
           aliasName: 'marketingdistribution_orders',
           icon: 'icon-products',

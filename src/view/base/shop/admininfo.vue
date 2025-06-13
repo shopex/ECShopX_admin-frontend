@@ -47,13 +47,13 @@ export default {
           label: '修改密码',
           key: 'pwd',
           type: 'input',
-          isShow: () => this.changePwdEnabled
+          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN
         },
         {
           label: '确认密码',
           key: 'repwd',
           type: 'input',
-          isShow: () => this.changePwdEnabled
+          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN
         },
         {
           label: '修改密码',
@@ -62,16 +62,16 @@ export default {
           component: () => {
             return (
               <el-link
-                type='primary'
-                href='https://account.shopex.cn/account/security'
-                target='_blank'
+                type="primary"
+                href="https://account.shopex.cn/account/security"
+                target="_blank"
               >
                 商派账号中心
               </el-link>
             )
           },
           tip: '超级管理员需通过商派账号中心进行修改密码',
-          isShow: () => !this.changePwdEnabled
+          isShow: () => !this.changePwdEnabled && !this.VERSION_SHUYUN
         }
       ]
     }
@@ -89,6 +89,18 @@ export default {
     },
     onSubmit() {
       console.log(this.form)
+      const that = this
+      this.$api.login.updateAdminInfo(this.form).then(response => {
+        if (response.status) {
+          this.$message({
+            message: '更新成功',
+            type: 'success',
+            onClose() {
+              that.$router.go(-1)
+            }
+          })
+        }
+      })
     }
   }
 }

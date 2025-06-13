@@ -5,6 +5,7 @@
       <div class="section-body">
         <el-form-item label="商城名称">
           <el-input v-model="form.brand_name" type="text" style="width: 300px" />
+          {{ VERSION_SHUYUN ? '（注：商城名称展示到小程序端）' : '' }}
         </el-form-item>
         <el-form-item label="商城简介">
           <el-row>
@@ -79,7 +80,7 @@ export default {
     }
   },
   mounted() {
-    getSettingWxShops().then((res) => {
+    getSettingWxShops().then(res => {
       this.form.logo = res.data.data.logo
       this.pic = this.wximageurl + res.data.data.logo
       this.form.intro = res.data.data.intro
@@ -106,7 +107,7 @@ export default {
         background: this.form.background
       }
       console.log(params)
-      putSettingWxShops(params).then((response) => {
+      putSettingWxShops(params).then(response => {
         if (response.data.data) {
           this.$message({
             message: '保存配置信息成功！',

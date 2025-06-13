@@ -1,204 +1,207 @@
 <template>
-  <SpRouterView>
-    <el-row class="filter-header" :gutter="20">
-      <el-col>
-        <el-date-picker
-          v-model="create_time"
-          type="daterange"
-          start-placeholder="开始日期"
-          ange-separator="至"
-          end-placeholder="结束日期"
-          value-format="yyyy/MM/dd"
-          placeholder="选择日期范围"
-          @change="dateChange"
-        />
-        <el-select v-model="order_class" placeholder="请选择订单类型" @change="TypeHandle">
-          <el-option
-            v-for="(item, index) in order_class_array"
-            :key="index"
-            :label="item.name"
-            :value="item.value"
+  <div class="">
+    <div v-if="$route.path.indexOf('detail') === -1">
+      <el-row class="filter-header" :gutter="20">
+        <el-col>
+          <el-date-picker
+            v-model="create_time"
+            type="daterange"
+            start-placeholder="开始日期"
+            ange-separator="至"
+            end-placeholder="结束日期"
+            value-format="yyyy/MM/dd"
+            placeholder="选择日期范围"
+            @change="dateChange"
           />
-        </el-select>
-        <el-select
-          v-model="order_holder"
-          clearable
-          placeholder="请选择订单分类"
-          @change="TypeHandle"
-        >
-          <el-option
-            v-for="item in orderCategory"
-            :key="item.value"
-            size="mini"
-            :label="item.title"
-            :value="item.value"
-          />
-        </el-select>
-        <!-- <el-input v-model="supplier_name" clearable placeholder="来源供应商" >
+          <el-select v-model="order_class" placeholder="请选择订单类型" @change="TypeHandle">
+            <el-option
+              v-for="(item, index) in order_class_array"
+              :key="index"
+              :label="item.name"
+              :value="item.value"
+            />
+          </el-select>
+          <el-select
+            v-model="order_holder"
+            clearable
+            placeholder="请选择订单分类"
+            @change="TypeHandle"
+          >
+            <el-option
+              v-for="item in orderCategory"
+              :key="item.value"
+              size="mini"
+              :label="item.title"
+              :value="item.value"
+            />
+          </el-select>
+          <!-- <el-input v-model="supplier_name" clearable placeholder="来源供应商" >
           <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
         </el-input> -->
-        <el-autocomplete
-          v-model="source_name"
-          class="inline-input"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入来源"
-          @select="sourceSearch"
-        />
-        <el-input v-model="salesman_mobile" class="input-m" placeholder="导购员手机号">
-          <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
-        </el-input>
-        <el-input v-model="identifier" class="input-m" placeholder="手机号/订单号">
-          <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
-        </el-input>
-        <el-select v-model="source_from" placeholder="请选择渠道" clearable @change="TypeHandle">
-          <el-option
-            v-for="(item, index) in sourceFromList"
-            :key="index"
-            :label="item.name"
-            :value="item.value"
+          <el-autocomplete
+            v-model="source_name"
+            class="inline-input"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入来源"
+            @select="sourceSearch"
           />
-        </el-select>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col>
-        <el-button-group>
-          <export-tip params="normal_master_order" @exportHandle="exportData">
-            <el-button type="primary"> 导出主订单 </el-button>
-          </export-tip>
-          <export-tip params="normal_order" @exportHandle="exportData">
-            <el-button type="primary"> 导出子订单 </el-button>
-          </export-tip>
-        </el-button-group>
-        <el-popover
-          placement="top-start"
-          width="200"
-          trigger="hover"
-          content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据"
-        >
-          <i slot="reference" class="el-icon-question" />
-        </el-popover>
-      </el-col>
-    </el-row>
-    <el-dialog title="订单下载" :visible.sync="downloadView" :close-on-click-modal="false">
-      <template v-if="downloadUrl">
-        <a :href="downloadUrl" download>{{ downloadName }}</a>
-      </template>
-    </el-dialog>
+          <el-input v-model="salesman_mobile" class="input-m" placeholder="导购员手机号">
+            <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
+          </el-input>
+          <el-input v-model="identifier" class="input-m" placeholder="手机号/订单号">
+            <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
+          </el-input>
+          <el-select v-model="source_from" placeholder="请选择渠道" clearable @change="TypeHandle">
+            <el-option
+              v-for="(item, index) in sourceFromList"
+              :key="index"
+              :label="item.name"
+              :value="item.value"
+            />
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col>
+          <el-button-group>
+            <export-tip params="normal_master_order" @exportHandle="exportData">
+              <el-button type="primary"> 导出主订单 </el-button>
+            </export-tip>
+            <export-tip params="normal_order" @exportHandle="exportData">
+              <el-button type="primary"> 导出子订单 </el-button>
+            </export-tip>
+          </el-button-group>
+          <el-popover
+            placement="top-start"
+            width="200"
+            trigger="hover"
+            content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据"
+          >
+            <i slot="reference" class="el-icon-question" />
+          </el-popover>
+        </el-col>
+      </el-row>
+      <el-dialog title="订单下载" :visible.sync="downloadView" :close-on-click-modal="false">
+        <template v-if="downloadUrl">
+          <a :href="downloadUrl" download>{{ downloadName }}</a>
+        </template>
+      </el-dialog>
 
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane label="全部" name="all" />
-      <el-tab-pane label="待发货" name="notship" />
-      <el-tab-pane label="待退款" name="cancelapply" />
-      <el-tab-pane label="待收货" name="shipping" />
-      <el-tab-pane label="待自提" name="ziti" />
-      <el-tab-pane label="未支付" name="notpay" />
-      <el-tab-pane label="已取消/已关闭" name="cancel" />
-      <el-tab-pane label="已完成" name="done" />
-      <el-table
-        v-loading="loading"
-        :data="list"
-        style="width: 100%"
-        :height="wheight - 190"
-        element-loading-text="数据加载中"
-      >
-        <el-table-column label="操作" fixed="left">
-          <template slot-scope="scope">
-            <router-link
-              :to="{
-                path: matchRoutePath('detail'),
-                query: { orderId: scope.row.order_id, resource: $route.path }
-              }"
-              style="margin-right: 5px"
-            >
-              详情
-            </router-link>
-            <el-button
-              v-if="
-                scope.row.cancel_status == 'NO_APPLY_CANCEL' &&
-                (scope.row.order_status == 'NOTPAY' || scope.row.order_status == 'PAYED')
-              "
-              type="text"
-              style="margin-right: 5px"
-              @click="cancelOrderAction(scope.row.order_id)"
-            >
-              取消订单
-            </el-button>
-            <el-button
-              v-if="
-                scope.row.receipt_type == 'logistics' &&
-                scope.row.order_status == 'PAYED' &&
-                scope.row.delivery_status != 'DONE'
-              "
-              type="text"
-              style="margin-right: 5px"
-              @click="deliveryAction(scope.row)"
-            >
-              发货
-            </el-button>
-            <el-button
-              v-if="
-                scope.row.receipt_type == 'ziti' &&
-                scope.row.ziti_status == 'PENDING' &&
-                scope.row.order_status == 'PAYED'
-              "
-              type="text"
-              style="margin-right: 5px"
-              @click="writeoffOrderAction(scope.row.order_id)"
-            >
-              核销
-            </el-button>
-            <el-button
-              v-if="scope.row.cancel_status == 'WAIT_PROCESS' && scope.row.order_status == 'PAYED'"
-              type="text"
-              style="margin-right: 5px"
-              @click="confirmCancelOrderAction(scope.row.order_id)"
-            >
-              退款
-            </el-button>
-            <el-button type="text" @click="clickShowRemark(scope.row, 'normalList2')">
-              备注
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column prop="order_id" width="150" label="订单号" fixed />
-        <el-table-column prop="create_time" width="160" label="创建时间">
-          <template slot-scope="scope">
-            <span>{{ scope.row.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column width="70" label="运费">
-          <template slot-scope="scope">
-            {{ scope.row.fee_symbol }}{{ scope.row.freight_fee / 100 }}
-          </template>
-        </el-table-column>
-        <!--
+      <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+        <el-tab-pane label="全部" name="all" />
+        <el-tab-pane label="待发货" name="notship" />
+        <el-tab-pane label="待退款" name="cancelapply" />
+        <el-tab-pane label="待收货" name="shipping" />
+        <el-tab-pane label="待自提" name="ziti" />
+        <el-tab-pane label="未支付" name="notpay" />
+        <el-tab-pane label="已取消/已关闭" name="cancel" />
+        <el-tab-pane label="已完成" name="done" />
+        <el-table
+          v-loading="loading"
+          :data="list"
+          style="width: 100%"
+          :height="wheight - 190"
+          element-loading-text="数据加载中"
+        >
+          <el-table-column label="操作" fixed="left">
+            <template slot-scope="scope">
+              <router-link
+                :to="{
+                  path: matchRoutePath('detail'),
+                  query: { orderId: scope.row.order_id, resource: $route.path }
+                }"
+                style="margin-right: 5px"
+              >
+                详情
+              </router-link>
+              <el-button
+                v-if="
+                  scope.row.cancel_status == 'NO_APPLY_CANCEL' &&
+                  (scope.row.order_status == 'NOTPAY' || scope.row.order_status == 'PAYED')
+                "
+                type="text"
+                style="margin-right: 5px"
+                @click="cancelOrderAction(scope.row.order_id)"
+              >
+                取消订单
+              </el-button>
+              <el-button
+                v-if="
+                  scope.row.receipt_type == 'logistics' &&
+                  scope.row.order_status == 'PAYED' &&
+                  scope.row.delivery_status != 'DONE'
+                "
+                type="text"
+                style="margin-right: 5px"
+                @click="deliveryAction(scope.row)"
+              >
+                发货
+              </el-button>
+              <el-button
+                v-if="
+                  scope.row.receipt_type == 'ziti' &&
+                  scope.row.ziti_status == 'PENDING' &&
+                  scope.row.order_status == 'PAYED'
+                "
+                type="text"
+                style="margin-right: 5px"
+                @click="writeoffOrderAction(scope.row.order_id)"
+              >
+                核销
+              </el-button>
+              <el-button
+                v-if="
+                  scope.row.cancel_status == 'WAIT_PROCESS' && scope.row.order_status == 'PAYED'
+                "
+                type="text"
+                style="margin-right: 5px"
+                @click="confirmCancelOrderAction(scope.row.order_id)"
+              >
+                退款
+              </el-button>
+              <el-button type="text" @click="clickShowRemark(scope.row, 'normalList2')">
+                备注
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="order_id" width="150" label="订单号" fixed />
+          <el-table-column prop="create_time" width="160" label="创建时间">
+            <template slot-scope="scope">
+              <span>{{ scope.row.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column width="70" label="运费">
+            <template slot-scope="scope">
+              {{ scope.row.fee_symbol }}{{ scope.row.freight_fee / 100 }}
+            </template>
+          </el-table-column>
+          <!--
           <el-table-column width="70" label="商品金额">
             <template slot-scope="scope">
               {{scope.row.fee_symbol}}{{scope.row.item_fee / 100}}
             </template>
           </el-table-column>
           -->
-        <el-table-column prop="total_fee" width="70" label="金额">
-          <template slot-scope="scope">
-            {{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="point_fee" width="120" label="积分抵扣">
-          <template slot-scope="scope">
-            {{ scope.row.point_fee / 100 }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="mobile" width="110" label="手机号" />
-        <el-table-column width="90" label="订单类型">
-          <template slot-scope="scope">
-            <span v-if="scope.row.order_class == 'normal'">普通订单</span>
-            <span v-if="scope.row.order_class == 'groups'">团购订单</span>
-            <span v-if="scope.row.order_class == 'seckill'">秒杀订单</span>
-            <span v-if="scope.row.order_class == 'community'">社区订单</span>
-          </template>
-        </el-table-column>
-        <!--
+          <el-table-column prop="total_fee" width="70" label="金额">
+            <template slot-scope="scope">
+              {{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="point_fee" width="120" label="积分抵扣">
+            <template slot-scope="scope">
+              {{ scope.row.point_fee / 100 }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="mobile" width="110" label="手机号" />
+          <el-table-column width="90" label="订单类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.order_class == 'normal'">普通订单</span>
+              <span v-if="scope.row.order_class == 'groups'">团购订单</span>
+              <span v-if="scope.row.order_class == 'seckill'">秒杀订单</span>
+              <span v-if="scope.row.order_class == 'community'">社区订单</span>
+            </template>
+          </el-table-column>
+          <!--
           <el-table-column prop="is_distribution" label="是否分销">
             <template slot-scope="scope">
               <span v-if="scope.row.is_distribution == 1"> 是 </span>
@@ -206,179 +209,288 @@
             </template>
           </el-table-column>
           -->
-        <el-table-column prop="order_status" label="订单状态">
-          <template slot-scope="scope">
-            <!-- 订单状态 -->
-            <el-tag v-if="scope.row.order_status == 'PAYED'" type="success" size="mini">
-              已支付
-            </el-tag>
-            <el-tag v-else-if="scope.row.order_status == 'NOTPAY'" size="mini"> 未支付 </el-tag>
-            <el-tag v-else-if="scope.row.order_status_des == 'CANCEL'" type="danger" size="mini">
-              已取消
-            </el-tag>
-            <el-tag v-else-if="scope.row.order_status_des == 'CLOSED'" type="info" size="mini">
-              {{ scope.row.order_status_msg }}
-            </el-tag>
-            <el-tag
-              v-else-if="scope.row.order_status == 'WAIT_BUYER_CONFIRM'"
-              type="danger"
-              size="mini"
-            >
-              待收货
-            </el-tag>
-            <el-tag
-              v-else-if="scope.row.order_status == 'REFUND_SUCCESS'"
-              type="warning"
-              size="mini"
-            >
-              已退款
-            </el-tag>
-            <el-tag
-              v-else-if="scope.row.order_status == 'WAIT_GROUPS_SUCCESS'"
-              type="warning"
-              size="mini"
-            >
-              等待成团
-            </el-tag>
-            <el-tag v-else-if="scope.row.order_status == 'DONE'" type="success" size="mini">
-              已完成
-            </el-tag>
-            <template
-              v-if="
-                scope.row.order_status != 'CANCEL' &&
-                scope.row.order_status != 'REFUND_SUCCESS' &&
-                scope.row.order_status != 'WAIT_GROUPS_SUCCESS'
-              "
-            >
-              <!-- 发货状态 -->
-              <el-tag v-if="scope.row.cancel_status == 'WAIT_PROCESS'" type="warning" size="mini">
-                取消待退款
+          <el-table-column prop="order_status" label="订单状态">
+            <template slot-scope="scope">
+              <!-- 订单状态 -->
+              <el-tag v-if="scope.row.order_status == 'PAYED'" type="success" size="mini">
+                已支付
               </el-tag>
-              <el-tag v-else-if="scope.row.delivery_status == 'PARTAIL'" type="danger" size="mini">
-                部分发货
+              <el-tag v-else-if="scope.row.order_status == 'NOTPAY'" size="mini"> 未支付 </el-tag>
+              <el-tag v-else-if="scope.row.order_status_des == 'CANCEL'" type="danger" size="mini">
+                已取消
               </el-tag>
-              <el-tag v-else-if="scope.row.ziti_status == 'PENDING'" type="danger" size="mini">
-                待自提
+              <el-tag v-else-if="scope.row.order_status_des == 'CLOSED'" type="info" size="mini">
+                {{ scope.row.order_status_msg }}
               </el-tag>
-              <el-tag v-else-if="scope.row.delivery_status == 'PENDING'" size="mini">
-                待发货
+              <el-tag
+                v-else-if="scope.row.order_status == 'WAIT_BUYER_CONFIRM'"
+                type="danger"
+                size="mini"
+              >
+                待收货
               </el-tag>
+              <el-tag
+                v-else-if="scope.row.order_status == 'REFUND_SUCCESS'"
+                type="warning"
+                size="mini"
+              >
+                已退款
+              </el-tag>
+              <el-tag
+                v-else-if="scope.row.order_status == 'WAIT_GROUPS_SUCCESS'"
+                type="warning"
+                size="mini"
+              >
+                等待成团
+              </el-tag>
+              <el-tag v-else-if="scope.row.order_status == 'DONE'" type="success" size="mini">
+                已完成
+              </el-tag>
+              <template
+                v-if="
+                  scope.row.order_status != 'CANCEL' &&
+                  scope.row.order_status != 'REFUND_SUCCESS' &&
+                  scope.row.order_status != 'WAIT_GROUPS_SUCCESS'
+                "
+              >
+                <!-- 发货状态 -->
+                <el-tag v-if="scope.row.cancel_status == 'WAIT_PROCESS'" type="warning" size="mini">
+                  取消待退款
+                </el-tag>
+                <el-tag
+                  v-else-if="scope.row.delivery_status == 'PARTAIL'"
+                  type="danger"
+                  size="mini"
+                >
+                  部分发货
+                </el-tag>
+                <el-tag v-else-if="scope.row.ziti_status == 'PENDING'" type="danger" size="mini">
+                  待自提
+                </el-tag>
+                <el-tag v-else-if="scope.row.delivery_status == 'PENDING'" size="mini">
+                  待发货
+                </el-tag>
+              </template>
             </template>
-          </template>
-        </el-table-column>
-        <el-table-column prop="source_name" label="订单来源" />
-        <el-table-column prop="supplier_name" label="来源供应商" />
+          </el-table-column>
+          <el-table-column prop="source_name" label="订单来源" />
+          <el-table-column prop="supplier_name" label="来源供应商" />
 
-        <el-table-column label="订单分类">
-          <template slot-scope="scope">
-            {{ getOrderCategoryName(scope.row.order_holder) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="配送方式">
-          <template slot-scope="scope">
-            {{ getDistributionType(scope.row) }}
-          </template>
-        </el-table-column>
+          <el-table-column label="订单分类">
+            <template slot-scope="scope">
+              {{ getOrderCategoryName(scope.row.order_holder) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="配送方式">
+            <template slot-scope="scope">
+              {{ getDistributionType(scope.row) }}
+            </template>
+          </el-table-column>
 
-        <el-table-column label="配送状态">
-          <template slot-scope="scope">
-            {{ getDistributionStatus(scope.row) }}
-          </template>
-        </el-table-column>
+          <el-table-column label="配送状态">
+            <template slot-scope="scope">
+              {{ getDistributionStatus(scope.row) }}
+            </template>
+          </el-table-column>
 
-        <el-table-column label="配送员">
-          <template slot-scope="scope">
-            {{ scope.row.username }}
-          </template>
-        </el-table-column>
+          <el-table-column label="配送员">
+            <template slot-scope="scope">
+              {{ scope.row.username }}
+            </template>
+          </el-table-column>
 
-        <el-table-column label="配送费">
-          <template slot-scope="scope">
-            {{ scope.row.payment_fee }}
-          </template>
-        </el-table-column>
+          <el-table-column label="配送费">
+            <template slot-scope="scope">
+              {{ scope.row.payment_fee }}
+            </template>
+          </el-table-column>
 
-        <el-table-column label="配送员电话">
-          <template slot-scope="scope">
-            {{ scope.row.mobile }}
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="mt-4 text-right">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next"
-          :current-page.sync="params.page"
-          :page-sizes="[10, 20, 50]"
-          :total="total_count"
-          :page-size="params.pageSize"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
-      </div>
-    </el-tabs>
+          <el-table-column label="配送员电话">
+            <template slot-scope="scope">
+              {{ scope.row.mobile }}
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="mt-4 text-right">
+          <el-pagination
+            background
+            layout="total, sizes, prev, pager, next"
+            :current-page.sync="params.page"
+            :page-sizes="[10, 20, 50]"
+            :total="total_count"
+            :page-size="params.pageSize"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          />
+        </div>
+      </el-tabs>
 
-    <!-- 发货-开始 -->
-    <el-dialog
-      :title="deliveryTitle"
-      :visible.sync="deliveryVisible"
-      :before-close="handleCancel"
-      width="57%"
-    >
-      <template>
-        <el-form ref="deliveryForm" :model="deliveryForm" class="demo-ruleForm" label-width="100px">
-          <el-form-item label="订单号">
-            <el-col :span="20">
-              {{ deliveryData.orderInfo.order_id }}
-            </el-col>
-          </el-form-item>
-          <el-form-item label="发货类型">
-            <el-radio-group v-model="deliveryForm.delivery_type" :disabled="IsDisabled">
-              <el-radio label="batch"> 整单发货 </el-radio>
-              <el-radio label="sep"> 拆分发货 </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="商品信息">
-            <el-col :span="30">
-              <el-table :data="deliveryData.orderInfo.items" style="width: 100%">
+      <!-- 发货-开始 -->
+      <el-dialog
+        :title="deliveryTitle"
+        :visible.sync="deliveryVisible"
+        :before-close="handleCancel"
+        width="57%"
+      >
+        <template>
+          <el-form
+            ref="deliveryForm"
+            :model="deliveryForm"
+            class="demo-ruleForm"
+            label-width="100px"
+          >
+            <el-form-item label="订单号">
+              <el-col :span="20">
+                {{ deliveryData.orderInfo.order_id }}
+              </el-col>
+            </el-form-item>
+            <el-form-item label="发货类型">
+              <el-radio-group v-model="deliveryForm.delivery_type" :disabled="IsDisabled">
+                <el-radio label="batch"> 整单发货 </el-radio>
+                <el-radio label="sep"> 拆分发货 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="商品信息">
+              <el-col :span="30">
+                <el-table :data="deliveryData.orderInfo.items" style="width: 100%">
+                  <el-table-column prop="item_name" label="商品名" width="180" />
+                  <el-table-column prop="num" label="数量" width="180" />
+                  <el-table-column label="总价(元)">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}</span>
+                    </template>
+                  </el-table-column>
+                  <template v-if="deliveryForm.delivery_type == 'sep'">
+                    <el-table-column label="快递公司" width="200">
+                      <template slot-scope="scope">
+                        <el-select
+                          v-model="scope.row.delivery_corp"
+                          filterable
+                          placeholder="请选择快递公司，可搜索"
+                        >
+                          <el-option
+                            v-for="item in dlycorps"
+                            :key="item.value"
+                            :label="item.name"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="物流单号" width="200">
+                      <template slot-scope="scope">
+                        <el-input
+                          v-model="scope.row.delivery_code"
+                          :maxlength="20"
+                          placeholder="物流公司单号"
+                        />
+                      </template>
+                    </el-table-column>
+                  </template>
+                </el-table>
+              </el-col>
+            </el-form-item>
+            <template v-if="deliveryForm.delivery_type == 'batch'">
+              <el-form-item label="快递公司">
+                <el-col>
+                  <el-select
+                    v-model="deliveryForm.delivery_corp"
+                    filterable
+                    placeholder="请选择快递公司，可搜索"
+                  >
+                    <el-option
+                      v-for="item in dlycorps"
+                      :key="item.value"
+                      :label="item.name"
+                      :value="item.value"
+                    />
+                  </el-select>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="物流单号">
+                <el-col :span="14">
+                  <el-input
+                    v-model="deliveryForm.delivery_code"
+                    :maxlength="20"
+                    placeholder="物流公司单号"
+                  />
+                </el-col>
+              </el-form-item>
+            </template>
+          </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleCancel"> 取消 </el-button>
+          <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
+      <el-dialog
+        :title="deliveryTitle"
+        :visible.sync="deliveryVisibleNew"
+        :before-close="handleCancel"
+        width="65%"
+      >
+        <template>
+          <el-form
+            ref="deliveryForm"
+            :model="deliveryForm"
+            class="demo-ruleForm"
+            label-width="100px"
+          >
+            <el-form-item label="订单号">
+              <el-col :span="20">
+                {{ deliveryData.orderInfo.order_id }}
+              </el-col>
+            </el-form-item>
+            <el-form-item label="发货类型">
+              <el-radio-group v-model="deliveryForm.delivery_type" :disabled="IsDisabled">
+                <el-radio label="batch"> 整单发货 </el-radio>
+                <el-radio v-if="deliveryForm.delivery_type != 'merchant'" label="sep">
+                  拆分发货
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="商品信息">
+              <el-table :data="deliveryData.orderInfo.items">
                 <el-table-column prop="item_name" label="商品名" width="180" />
-                <el-table-column prop="num" label="数量" width="180" />
-                <el-table-column label="总价(元)">
+                <el-table-column label="商品类型" width="120">
+                  <template slot-scope="scope">
+                    <span>{{ goodCategoryMap[scope.row.item_holder] }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="supplier_name" label="来源供应商" width="130" />
+                <el-table-column prop="num" label="数量" width="100" />
+                <el-table-column prop="delivery_item_num" label="已发货数量" width="100" />
+                <el-table-column label="总支付价(元)" width="130">
                   <template slot-scope="scope">
                     <span>{{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}</span>
                   </template>
                 </el-table-column>
+                <el-table-column label="成本价(元)" width="130">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.fee_symbol }}{{ scope.row.cost_price / 100 }}</span>
+                  </template>
+                </el-table-column>
                 <template v-if="deliveryForm.delivery_type == 'sep'">
-                  <el-table-column label="快递公司" width="200">
+                  <el-table-column label="发货数量" width="200" fixed="right">
                     <template slot-scope="scope">
-                      <el-select
-                        v-model="scope.row.delivery_corp"
-                        filterable
-                        placeholder="请选择快递公司，可搜索"
-                      >
-                        <el-option
-                          v-for="item in dlycorps"
-                          :key="item.value"
-                          :label="item.name"
-                          :value="item.value"
-                        />
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="物流单号" width="200">
-                    <template slot-scope="scope">
-                      <el-input
-                        v-model="scope.row.delivery_code"
-                        :maxlength="20"
-                        placeholder="物流公司单号"
+                      <el-input-number
+                        v-if="scope.row.num - scope.row.delivery_item_num != 0"
+                        v-model="scope.row.delivery_num"
+                        placeholder="发货数量"
+                        controls-position="right"
+                        :min="0"
+                        :max="scope.row.num - scope.row.delivery_item_num"
+                        :disabled="IS_ADMIN() && scope.row.supplier_id > 0"
                       />
+                      <!-- <el-input v-model="scope.row.delivery_num" :maxlength=20 placeholder="发货数量"></el-input> -->
+                      <span v-if="scope.row.num - scope.row.delivery_item_num == 0">已发完</span>
                     </template>
                   </el-table-column>
                 </template>
               </el-table>
-            </el-col>
-          </el-form-item>
-          <template v-if="deliveryForm.delivery_type == 'batch'">
+            </el-form-item>
+
             <el-form-item label="快递公司">
               <el-col>
                 <el-select
@@ -395,6 +507,51 @@
                 </el-select>
               </el-col>
             </el-form-item>
+            <template v-if="deliveryForm.delivery_type == 'merchant'">
+              <el-form-item label="配送编号" width="200">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.delivery_code"
+                    :maxlength="20"
+                    placeholder="清填写配送编号"
+                  />
+                </template>
+              </el-form-item>
+              <el-form-item label="配送员" width="200">
+                <el-select v-model="deliveryForm.delivery_ersonnel" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in deliveryPersonnel"
+                    :key="item.value"
+                    size="mini"
+                    :label="item.title"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="配送状态" width="200">
+                <el-select
+                  v-model="deliveryForm.self_delivery_status"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in DISTRIBUTION_STATUS"
+                    :key="item.value"
+                    size="mini"
+                    :label="item.title"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="图片上传">
+                <template>
+                  <div class="img-container">
+                    <SpImagePicker :src="deliveryForm.delivery_pics" :width="48" :height="48" />
+                  </div>
+                </template>
+              </el-form-item>
+            </template>
+
             <el-form-item label="物流单号">
               <el-col :span="14">
                 <el-input
@@ -404,331 +561,196 @@
                 />
               </el-col>
             </el-form-item>
-          </template>
-        </el-form>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleCancel"> 取消 </el-button>
-        <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      :title="deliveryTitle"
-      :visible.sync="deliveryVisibleNew"
-      :before-close="handleCancel"
-      width="65%"
-    >
-      <template>
-        <el-form ref="deliveryForm" :model="deliveryForm" class="demo-ruleForm" label-width="100px">
-          <el-form-item label="订单号">
-            <el-col :span="20">
-              {{ deliveryData.orderInfo.order_id }}
+          </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleCancel"> 取消 </el-button>
+          <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
+      <!-- 取消订单退款审核-开始 -->
+      <el-dialog
+        title="取消订单退款审核"
+        :visible.sync="cancelVisible"
+        :before-close="handleCancelOrderCancel"
+        width="57%"
+      >
+        <template>
+          <el-row :gutter="100">
+            <el-col :span="24">
+              <span class="grid-content">订单号:{{ cancelData.order_id }}</span>
             </el-col>
-          </el-form-item>
-          <el-form-item label="发货类型">
-            <el-radio-group v-model="deliveryForm.delivery_type" :disabled="IsDisabled">
-              <el-radio label="batch"> 整单发货 </el-radio>
-              <el-radio v-if="deliveryForm.delivery_type != 'merchant'" label="sep">
-                拆分发货
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="商品信息">
-            <el-table :data="deliveryData.orderInfo.items">
-              <el-table-column prop="item_name" label="商品名" width="180" />
-              <el-table-column label="商品类型" width="120">
-                <template slot-scope="scope">
-                  <span>{{ goodCategoryMap[scope.row.item_holder] }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="supplier_name" label="来源供应商" width="130" />
-              <el-table-column prop="num" label="数量" width="100" />
-              <el-table-column prop="delivery_item_num" label="已发货数量" width="100" />
-              <el-table-column label="总支付价(元)" width="130">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.fee_symbol }}{{ scope.row.total_fee / 100 }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="成本价(元)" width="130">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.fee_symbol }}{{ scope.row.cost_price / 100 }}</span>
-                </template>
-              </el-table-column>
-              <template v-if="deliveryForm.delivery_type == 'sep'">
-                <el-table-column label="发货数量" width="200" fixed="right">
-                  <template slot-scope="scope">
-                    <el-input-number
-                      v-if="scope.row.num - scope.row.delivery_item_num != 0"
-                      v-model="scope.row.delivery_num"
-                      placeholder="发货数量"
-                      controls-position="right"
-                      :min="0"
-                      :max="scope.row.num - scope.row.delivery_item_num"
-                      :disabled="IS_ADMIN() && scope.row.supplier_id > 0"
-                    />
-                    <!-- <el-input v-model="scope.row.delivery_num" :maxlength=20 placeholder="发货数量"></el-input> -->
-                    <span v-if="scope.row.num - scope.row.delivery_item_num == 0">已发完</span>
+            <el-col :span="24">
+              <span v-if="cancelData.cancel_from == 'buyer'">取消来源:消费者申请</span>
+              <span v-else>取消来源:系统自动取消</span>
+            </el-col>
+            <el-col :span="24">
+              <span>申请时间:{{ cancelData.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
+            </el-col>
+            <el-col :span="24">
+              <span>退款状态:</span>
+              <span v-if="cancelData.refund_status == 'READY'">待审核</span>
+              <span v-if="cancelData.refund_status == 'AUDIT_SUCCESS'">审核成功待退款</span>
+              <span v-if="cancelData.refund_status == 'SUCCESS'">退款成功</span>
+              <span v-if="cancelData.refund_status == 'SHOP_CHECK_FAILS'">商家审核不通过</span>
+              <span v-if="cancelData.refund_status == 'CANCEL'">撤销退款</span>
+              <span v-if="cancelData.refund_status == 'PROCESSING'">已发起退款等待到账</span>
+              <span v-if="cancelData.refund_status == 'FAILS'">退款失败</span>
+            </el-col>
+            <el-col :span="24">
+              <span>处理进度:</span>
+              <span v-if="cancelData.progress == '0'">待处理</span>
+              <span v-if="cancelData.progress == '1'">已取消</span>
+              <span v-if="cancelData.progress == '2'">退款中</span>
+              <span v-if="cancelData.progress == '3'">已完成</span>
+              <span v-if="cancelData.progress == '4'">已驳回</span>
+            </el-col>
+            <el-col :span="24">
+              <span>退款金额:{{ cancelData.fee_symbol }}{{ cancelData.total_fee / 100 }}</span>
+            </el-col>
+            <el-col :span="24">
+              <span v-if="cancelData.pay_type == 'wxpay'">支付方式:微信支付</span>
+            </el-col>
+            <el-col :span="24">
+              <span>取消原因:{{ cancelData.cancel_reason }}</span>
+            </el-col>
+          </el-row>
+          <el-divider />
+          <el-form ref="cancelForm" :model="cancelForm" class="" label-width="100px">
+            <el-form-item label="处理结果:">
+              <el-row>
+                <el-col :span="20">
+                  <template>
+                    <el-radio v-model="cancelForm.check_cancel" label="0"> 不同意 </el-radio>
+                    <el-radio v-model="cancelForm.check_cancel" label="1"> 同意 </el-radio>
                   </template>
-                </el-table-column>
-              </template>
-            </el-table>
-          </el-form-item>
-
-          <el-form-item label="快递公司">
-            <el-col>
-              <el-select
-                v-model="deliveryForm.delivery_corp"
-                filterable
-                placeholder="请选择快递公司，可搜索"
-              >
-                <el-option
-                  v-for="item in dlycorps"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-col>
-          </el-form-item>
-          <template v-if="deliveryForm.delivery_type == 'merchant'">
-            <el-form-item label="配送编号" width="200">
-              <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.delivery_code"
-                  :maxlength="20"
-                  placeholder="清填写配送编号"
-                />
-              </template>
+                </el-col>
+              </el-row>
             </el-form-item>
-            <el-form-item label="配送员" width="200">
-              <el-select v-model="deliveryForm.delivery_ersonnel" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in deliveryPersonnel"
-                  :key="item.value"
-                  size="mini"
-                  :label="item.title"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="配送状态" width="200">
-              <el-select v-model="deliveryForm.self_delivery_status" clearable placeholder="请选择">
-                <el-option
-                  v-for="item in DISTRIBUTION_STATUS"
-                  :key="item.value"
-                  size="mini"
-                  :label="item.title"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="图片上传">
-              <template>
-                <div class="img-container">
-                  <SpImagePicker :src="deliveryForm.delivery_pics" :width="48" :height="48" />
-                </div>
-              </template>
-            </el-form-item>
-          </template>
-
-          <el-form-item label="物流单号">
-            <el-col :span="14">
-              <el-input
-                v-model="deliveryForm.delivery_code"
-                :maxlength="20"
-                placeholder="物流公司单号"
-              />
-            </el-col>
-          </el-form-item>
-        </el-form>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleCancel"> 取消 </el-button>
-        <el-button type="primary" @click="submitDeliveryAction"> 确定 </el-button>
-      </div>
-    </el-dialog>
-    <!-- 取消订单退款审核-开始 -->
-    <el-dialog
-      title="取消订单退款审核"
-      :visible.sync="cancelVisible"
-      :before-close="handleCancelOrderCancel"
-      width="57%"
-    >
-      <template>
-        <el-row :gutter="100">
-          <el-col :span="24">
-            <span class="grid-content">订单号:{{ cancelData.order_id }}</span>
-          </el-col>
-          <el-col :span="24">
-            <span v-if="cancelData.cancel_from == 'buyer'">取消来源:消费者申请</span>
-            <span v-else>取消来源:系统自动取消</span>
-          </el-col>
-          <el-col :span="24">
-            <span>申请时间:{{ cancelData.create_time | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
-          </el-col>
-          <el-col :span="24">
-            <span>退款状态:</span>
-            <span v-if="cancelData.refund_status == 'READY'">待审核</span>
-            <span v-if="cancelData.refund_status == 'AUDIT_SUCCESS'">审核成功待退款</span>
-            <span v-if="cancelData.refund_status == 'SUCCESS'">退款成功</span>
-            <span v-if="cancelData.refund_status == 'SHOP_CHECK_FAILS'">商家审核不通过</span>
-            <span v-if="cancelData.refund_status == 'CANCEL'">撤销退款</span>
-            <span v-if="cancelData.refund_status == 'PROCESSING'">已发起退款等待到账</span>
-            <span v-if="cancelData.refund_status == 'FAILS'">退款失败</span>
-          </el-col>
-          <el-col :span="24">
-            <span>处理进度:</span>
-            <span v-if="cancelData.progress == '0'">待处理</span>
-            <span v-if="cancelData.progress == '1'">已取消</span>
-            <span v-if="cancelData.progress == '2'">退款中</span>
-            <span v-if="cancelData.progress == '3'">已完成</span>
-            <span v-if="cancelData.progress == '4'">已驳回</span>
-          </el-col>
-          <el-col :span="24">
-            <span>退款金额:{{ cancelData.fee_symbol }}{{ cancelData.total_fee / 100 }}</span>
-          </el-col>
-          <el-col :span="24">
-            <span v-if="cancelData.pay_type == 'wxpay'">支付方式:微信支付</span>
-          </el-col>
-          <el-col :span="24">
-            <span>取消原因:{{ cancelData.cancel_reason }}</span>
-          </el-col>
-        </el-row>
-        <el-divider />
-        <el-form ref="cancelForm" :model="cancelForm" class="" label-width="100px">
-          <el-form-item label="处理结果:">
-            <el-row>
-              <el-col :span="20">
-                <template>
-                  <el-radio v-model="cancelForm.check_cancel" label="0"> 不同意 </el-radio>
-                  <el-radio v-model="cancelForm.check_cancel" label="1"> 同意 </el-radio>
-                </template>
-              </el-col>
-            </el-row>
-          </el-form-item>
-          <el-form-item v-if="cancelForm.check_cancel == '0'" label="拒绝原因:">
-            <el-row>
-              <el-col :span="24">
-                <el-input
-                  v-model="cancelForm.shop_reject_reason"
-                  type="textarea"
-                  :rows="3"
-                  placeholder="请输入拒绝原因"
-                />
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-form>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleCancelOrderCancel"> 取消 </el-button>
-        <el-button type="primary" @click="submitCancelConfirmAction"> 确定 </el-button>
-      </div>
-    </el-dialog>
-    <!-- 取消订单 -->
-    <el-dialog
-      title="取消订单"
-      :visible.sync="cancelOrderVisible"
-      :before-close="handleCancelOrder"
-      width="57%"
-    >
-      <template>
-        <el-form ref="cancelForm" :model="cancelOrderForm" class="" label-width="100px">
-          <el-form-item label="订单号:">
-            <el-col :span="20">
-              {{ cancelOrderData.orderInfo.order_id }}
-            </el-col>
-          </el-form-item>
-          <el-form-item label="取消原因:">
-            <el-row>
-              <el-col :span="20">
-                <template>
-                  <el-select
-                    v-model="cancel_order"
-                    filterable
-                    placeholder="请选择取消订单原因"
-                    @change="cancelReasonSelect"
-                  >
-                    <el-option
-                      v-for="item in order_cancel_reason"
-                      :key="item.value"
-                      :label="item.name"
-                      :value="item.value"
-                    />
-                  </el-select>
+            <el-form-item v-if="cancelForm.check_cancel == '0'" label="拒绝原因:">
+              <el-row>
+                <el-col :span="24">
                   <el-input
-                    v-show="cancelOrderInput"
-                    v-model="cancelOrderForm.other_reason"
+                    v-model="cancelForm.shop_reject_reason"
                     type="textarea"
                     :rows="3"
-                    resize="none"
-                    style="width: 200px; margin-top: 10px"
-                    placeholder="请填写取消订单原因"
+                    placeholder="请输入拒绝原因"
                   />
-                </template>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleCancelOrderCancel"> 取消 </el-button>
+          <el-button type="primary" @click="submitCancelConfirmAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
+      <!-- 取消订单 -->
+      <el-dialog
+        title="取消订单"
+        :visible.sync="cancelOrderVisible"
+        :before-close="handleCancelOrder"
+        width="57%"
+      >
+        <template>
+          <el-form ref="cancelForm" :model="cancelOrderForm" class="" label-width="100px">
+            <el-form-item label="订单号:">
+              <el-col :span="20">
+                {{ cancelOrderData.orderInfo.order_id }}
               </el-col>
-            </el-row>
-          </el-form-item>
-        </el-form>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleCancelOrder"> 取消 </el-button>
-        <el-button type="primary" @click="submitCancelOrderConfirmAction"> 确定 </el-button>
-      </div>
-    </el-dialog>
+            </el-form-item>
+            <el-form-item label="取消原因:">
+              <el-row>
+                <el-col :span="20">
+                  <template>
+                    <el-select
+                      v-model="cancel_order"
+                      filterable
+                      placeholder="请选择取消订单原因"
+                      @change="cancelReasonSelect"
+                    >
+                      <el-option
+                        v-for="item in order_cancel_reason"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
+                      />
+                    </el-select>
+                    <el-input
+                      v-show="cancelOrderInput"
+                      v-model="cancelOrderForm.other_reason"
+                      type="textarea"
+                      :rows="3"
+                      resize="none"
+                      style="width: 200px; margin-top: 10px"
+                      placeholder="请填写取消订单原因"
+                    />
+                  </template>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleCancelOrder"> 取消 </el-button>
+          <el-button type="primary" @click="submitCancelOrderConfirmAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
 
-    <!-- 自提订单核销 -->
-    <el-dialog
-      title="自提订单核销"
-      :visible.sync="writeoffOrderVisible"
-      :before-close="handleWriteoffOrder"
-      width="57%"
-    >
-      <template>
-        <el-form ref="cancelForm" :model="writeoffOrderForm" class="" label-width="100px">
-          <el-form-item label="订单号:">
-            <el-col :span="20">
-              {{ writeoffOrderData.order_id }}
-            </el-col>
-          </el-form-item>
-          <el-form-item label="商品:">
-            <el-col v-for="item in writeoffOrderData.items" :key="item.item_id">
-              {{ item.item_name }} {{ item.item_spec_desc }} × {{ item.num }}
-            </el-col>
-          </el-form-item>
-          <el-form-item v-if="writeoffOrderData.pickupcode_status" label="提货码:">
-            <el-input
-              v-model="writeoffOrderForm.pickupcode"
-              :maxlength="6"
-              type="text"
-              placeholder="请输入手机6位提货码"
-              style="width: 180px"
-            />
-          </el-form-item>
-        </el-form>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleWriteoffOrder"> 取消 </el-button>
-        <el-button type="primary" @click="submitWriteoffOrderConfirmAction"> 确定 </el-button>
-      </div>
-    </el-dialog>
-    <!-- 自提订单核销完成 -->
-    <el-dialog
-      title="自提核销"
-      :visible.sync="writeoffOrderSuccVisible"
-      :before-close="handleWriteoffOrderSucc"
-      width="57%"
-    >
-      <template>
-        <span>{{ writeoffOrderSucc.msg }}</span>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="handleWriteoffOrderSucc"> 知道了 </el-button>
-      </div>
-    </el-dialog>
-    <RemarkModal ref="modalRef" @onDone="handleRemarksDone" />
-  </SpRouterView>
+      <!-- 自提订单核销 -->
+      <el-dialog
+        title="自提订单核销"
+        :visible.sync="writeoffOrderVisible"
+        :before-close="handleWriteoffOrder"
+        width="57%"
+      >
+        <template>
+          <el-form ref="cancelForm" :model="writeoffOrderForm" class="" label-width="100px">
+            <el-form-item label="订单号:">
+              <el-col :span="20">
+                {{ writeoffOrderData.order_id }}
+              </el-col>
+            </el-form-item>
+            <el-form-item label="商品:">
+              <el-col v-for="item in writeoffOrderData.items" :key="item.item_id">
+                {{ item.item_name }} {{ item.item_spec_desc }} × {{ item.num }}
+              </el-col>
+            </el-form-item>
+            <el-form-item v-if="writeoffOrderData.pickupcode_status" label="提货码:">
+              <el-input
+                v-model="writeoffOrderForm.pickupcode"
+                :maxlength="6"
+                type="text"
+                placeholder="请输入手机6位提货码"
+                style="width: 180px"
+              />
+            </el-form-item>
+          </el-form>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleWriteoffOrder"> 取消 </el-button>
+          <el-button type="primary" @click="submitWriteoffOrderConfirmAction"> 确定 </el-button>
+        </div>
+      </el-dialog>
+      <!-- 自提订单核销完成 -->
+      <el-dialog
+        title="自提核销"
+        :visible.sync="writeoffOrderSuccVisible"
+        :before-close="handleWriteoffOrderSucc"
+        width="57%"
+      >
+        <template>
+          <span>{{ writeoffOrderSucc.msg }}</span>
+        </template>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="handleWriteoffOrderSucc"> 知道了 </el-button>
+        </div>
+      </el-dialog>
+      <RemarkModal ref="modalRef" @onDone="handleRemarksDone" />
+    </div>
+    <router-view />
+  </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -1278,7 +1300,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style>
 .el-row {
   margin-bottom: 20px;
   &:last-child {

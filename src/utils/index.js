@@ -4,6 +4,7 @@ import _pickBy from 'lodash/pickBy'
 import _get from 'lodash/get'
 import store from '@/store'
 import { isEmpty } from 'lodash'
+import { isArray } from './src/type-helper'
 
 export * from './src/type-helper'
 
@@ -19,6 +20,8 @@ export const VERSION_PLATFORM = () => store.getters.versionMode === 'platform'
 export const VERSION_B2C = () => store.getters.versionMode === 'b2c'
 // 内购
 export const VERSION_IN_PURCHASE = () => store.getters.versionMode === 'in_purchase'
+// 数云
+export const VERSION_SHUYUN = () => store.getters.versionMode == 'shuyun'
 
 // 平台端
 export const IS_ADMIN = () => {

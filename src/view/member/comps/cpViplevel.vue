@@ -37,6 +37,7 @@
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
+                :disabled="VERSION_SHUYUN"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
               <el-input v-model="item.lv_type" type="hidden" :name="index + ''" />
@@ -150,7 +151,7 @@
       </div>
     </template>
     <div class="section-footer content-center">
-      <el-button @click="addGrade"> 添加等级卡 </el-button>
+      <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
       <el-button type="primary" @click="saveGrade"> 保存 </el-button>
     </div>
     <template v-if="visible">
@@ -273,7 +274,7 @@ export default {
       }
       var check = this.isInArray(this.levelData, true)
       let canSaveResult = true
-      this.levelData.forEach((item) => {
+      this.levelData.forEach(item => {
         // if (check === true) {
         if (item.lv_type == this.IsDefault) {
           if (!item.guide_title) {
@@ -302,7 +303,7 @@ export default {
         return
       }
       saveVipGrade(this.params).then(
-        (res) => {
+        res => {
           if (res.data.data.status) {
             this.$message.success('保存成功')
           }
@@ -334,7 +335,11 @@ export default {
           })
           return
         }
-        if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
+        if (
+          !this.VERSION_SHUYUN &&
+          index > 0 &&
+          Number(value) >= Number(this.levelData[index - 1].privileges.discount)
+        ) {
           this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
           return
         }
@@ -398,6 +403,7 @@ export default {
           })
           break
         } else if (
+          !this.VERSION_SHUYUN &&
           i > 0 &&
           Number(this.levelData[i].privileges.discount) >
             Number(this.levelData[i - 1].privileges.discount)
@@ -445,7 +451,7 @@ export default {
       this.imgDialog = false
     },
     getListVipGrade() {
-      listVipGrade().then((response) => {
+      listVipGrade().then(response => {
         // this.IsDefault = 'svip'
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           var result = response.data.data
