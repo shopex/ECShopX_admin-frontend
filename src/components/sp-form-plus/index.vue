@@ -1,5 +1,14 @@
 <template>
-  <el-form ref="form" class="sp-form-plus" :model="formData" :label-width="labelWidth">
+  <el-form
+    ref="form"
+    class="sp-form-plus"
+    :class="{
+      'sp-form-plus--search-form': formType === 'searchForm',
+      'sp-form-plus--inline': inline
+    }"
+    :model="formData"
+    :label-width="labelWidth"
+  >
     <div ref="wapperRef" class="sp-form-plus__wapper">
       <FormField
         v-for="item in formItems"
@@ -7,19 +16,43 @@
         :component="item.component || 'input'"
         :component-props="item.componentProps"
         :field-name="item.fieldName"
-        :label="item.label"
+        :form-item-class="item.formItemClass"
+        :label="`${item.label}${colon ? ':' : ''}`"
         :rules="item.rules"
         :value="formData[item.fieldName]"
-        @input="(val) => handleFieldChange(item.fieldName, val)"
+        @input="val => handleFieldChange(item.fieldName, val)"
       />
-    </div>
 
-    <template v-if="showDefaultActions">
-      <div class="sp-form-plus__actions">
-        <el-button @click="handleSubmit">提交</el-button>
-        <el-button @click="handleReset">重置</el-button>
-      </div>
-    </template>
+      <template v-if="showDefaultActions">
+        <div class="sp-form-plus__actions w-full text-right">
+          <el-button type="primary" @click="handleSubmit">
+            <div class="flex items-center">
+              <SpIcon name="search" :size="14" />
+              <span class="ml-1">查询</span>
+            </div>
+          </el-button>
+          <el-button @click="handleReset"
+            >
+<div class="flex items-center">
+              <SpIcon name="rotate-ccw" :size="14" />
+              <span class="ml-1">重置</span>
+            </div>
+</el-button
+          >
+
+          <!-- 搜索表单的扩展按钮 -->
+          <el-button v-if="formType === 'searchForm'" type="text" @click="toggleExtend">
+            <div class="flex items-center">
+              <span>{{ `${extend ? '收起' : '展开'}` }}</span>
+              <SpIcon
+                :class="{ 'extend-icon': true, 'extend-active': extend }"
+                name="chevrons-down"
+              />
+            </div>
+          </el-button>
+        </div>
+      </template>
+    </div>
   </el-form>
 </template>
 
@@ -32,6 +65,14 @@ export default {
     FormField
   },
   props: {
+    colon: {
+      type: Boolean,
+      default: false
+    },
+    formType: {
+      type: String,
+      default: ['searchForm']
+    },
     formItems: {
       type: Array,
       default: () => []
@@ -40,9 +81,17 @@ export default {
       type: Object,
       default: () => ({})
     },
+    inline: {
+      type: Boolean,
+      default: false
+    },
     labelWidth: {
       type: String,
       default: '160px'
+    },
+    layout: {
+      type: String,
+      default: 'horizontal'
     },
     showDefaultActions: {
       type: Boolean,
@@ -51,7 +100,8 @@ export default {
   },
   data() {
     return {
-      formData: this.initFormData()
+      formData: this.initFormData(),
+      extend: false
     }
   },
   watch: {
@@ -69,7 +119,7 @@ export default {
     // 初始化表单数据
     initFormData() {
       const formData = {}
-      this.formItems.forEach((item) => {
+      this.formItems.forEach(item => {
         formData[item.fieldName] = item.value || ''
       })
       return formData
@@ -82,7 +132,7 @@ export default {
     },
     // 提交表单
     handleSubmit() {
-      this.$refs.form.validate((valid) => {
+      this.$refs.form.validate(valid => {
         if (valid) {
           this.$emit('submit', this.formData)
         }
@@ -97,7 +147,7 @@ export default {
     validate() {
       debugger
       return new Promise((resolve, reject) => {
-        this.$refs.form.validate((valid) => {
+        this.$refs.form.validate(valid => {
           valid ? resolve(this.formData) : reject(new Error('表单验证失败'))
         })
       })
@@ -109,7 +159,8 @@ export default {
     // 清除验证
     clearValidate(props) {
       this.$refs.form.clearValidate(props)
-    }
+    },
+    toggleExtend() {}
   }
 }
 </script>
@@ -119,10 +170,26 @@ export default {
   ::v-deep .el-select {
     display: block;
   }
-}
-
-.form-actions {
-  margin-top: 20px;
-  text-align: center;
+  &--inline {
+    .sp-form-plus__wapper {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      .form-field {
+        margin-bottom: 0;
+      }
+    }
+  }
+  &--search-form {
+    background-color: #f6f7f9;
+    box-sizing: content-box;
+    padding: 16px 16px 16px;
+  }
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-column: -2 / -1;
+  }
 }
 </style>

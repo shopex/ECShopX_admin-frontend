@@ -3,8 +3,10 @@ import Vue from 'vue'
 
 export function useForm(options = {}) {
   const {
-    formProps = {}, // 表单属性
     formItems = [], // 表单项配置
+    formProps = {}, // 表单属性
+    formType = 'search-form', // 表单类型: 搜索表单、编辑表单等
+    labelWidth = '120px', // 标签宽度
     rules = {}, // 校验规则
     initialValues = {}, // 初始值
     showDefaultActions = true // 是否显示默认操作按钮
@@ -39,7 +41,7 @@ export function useForm(options = {}) {
       // 表单验证
       validate() {
         return new Promise((resolve, reject) => {
-          this.$refs.form.validate((valid) => {
+          this.$refs.form.validate(valid => {
             if (valid) {
               resolve(this.form)
             } else {
@@ -58,7 +60,7 @@ export function useForm(options = {}) {
       },
       // 设置表单字段值
       setFieldsValue(values) {
-        Object.keys(values).forEach((key) => {
+        Object.keys(values).forEach(key => {
           this.$set(this.form, key, values[key])
         })
       },
@@ -66,7 +68,7 @@ export function useForm(options = {}) {
       getFieldsValue(fields) {
         if (Array.isArray(fields)) {
           const values = {}
-          fields.forEach((field) => {
+          fields.forEach(field => {
             values[field] = this.form[field]
           })
           return values
@@ -75,13 +77,13 @@ export function useForm(options = {}) {
       },
       // 设置表单字段验证状态
       setFields(fields) {
-        Object.keys(fields).forEach((key) => {
+        Object.keys(fields).forEach(key => {
           const field = fields[key]
           if (field.value !== undefined) {
             this.$set(this.form, key, field.value)
           }
           if (field.errors) {
-            this.$refs.form.fields.forEach((item) => {
+            this.$refs.form.fields.forEach(item => {
               if (item.prop === key) {
                 item.validateMessage = field.errors[0]
                 item.validateState = 'error'
@@ -95,12 +97,14 @@ export function useForm(options = {}) {
       return h('sp-form-plus', {
         ref: 'form',
         props: {
-          formItems: formItems.map((item) => ({
+          formItems: formItems.map(item => ({
             ...item,
             value: this.form[item.fieldName]
           })),
-          labelWidth: formProps.labelWidth || '120px',
-          showDefaultActions: !formProps.hideButtons,
+          formType: formType,
+          ...formProps,
+          labelWidth: labelWidth || '120px',
+          showDefaultActions: showDefaultActions,
           formApi: FormApi
         },
         on: {
@@ -109,10 +113,10 @@ export function useForm(options = {}) {
           },
           submit: () => {
             this.validate()
-              .then((formData) => {
+              .then(formData => {
                 this.$emit('submit', formData)
               })
-              .catch((err) => {
+              .catch(err => {
                 this.$emit('error', err)
               })
           },

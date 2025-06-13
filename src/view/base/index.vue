@@ -562,7 +562,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="7">
+          <el-col v-if="!VERSION_SHUYUN" :span="7">
             <template v-if="!isBind">
               <div class="unbind-box">
                 <div class="content-center">
@@ -637,7 +637,7 @@
               </section>
             </template>
           </el-col>
-          <el-col :span="17">
+          <el-col :span="VERSION_SHUYUN ? 24 : 17">
             <section v-loading="userloading" class="section-card realtime-statics">
               <div class="section-card-header">
                 <div class="section-card-title">实时概况</div>
@@ -859,7 +859,7 @@
             </section>
           </el-col>
         </el-row>
-        <el-row v-if="system_is_saas == 'false'" :gutter="20">
+        <el-row v-if="!VERSION_SHUYUN && system_is_saas == 'false'" :gutter="20">
           <el-col :span="24">
             <section class="section-card">
               <div class="section-card-header">
@@ -997,7 +997,7 @@
           </el-row>
         </section>
         <section
-          v-if="activateInfo.source == 'demo' && !VUE_APP_FREE"
+          v-if="activateInfo.source == 'demo' && !VUE_APP_FREE && !VERSION_SHUYUN"
           class="section-card fn-b-20 sl-img"
           :style="'background:  url(' + img.bcg_2 + ')'"
         >

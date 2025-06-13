@@ -1,10 +1,12 @@
 <template>
   <div class="shopex-sms-page">
     <div class="btn">
-      <router-link class="link" to="/setting/datamessage"> 切换短信商 </router-link>
+      <router-link v-if="!VERSION_SHUYUN" class="link" to="/setting/datamessage">
+        切换短信商
+      </router-link>
     </div>
     <el-tabs v-model="activeName" type="border-card">
-      <el-tab-pane label="短信账户" name="first">
+      <el-tab-pane v-if="!VERSION_SHUYUN" label="短信账户" name="first">
         <el-alert
           type="warning"
           title="短信推送"
@@ -95,8 +97,17 @@
       <el-tab-pane label="短信签名" name="third">
         <div class="content-padded message-autograph">
           短信签名：
-          <el-input v-model="messageAutograph" placeholder="请输入短信签名" />
-          <el-button type="primary" @click="saveSmsSignAction"> 确定 </el-button>
+          <el-input
+            v-model="messageAutograph"
+            :disabled="messageAutographDis"
+            placeholder="请输入短信签名"
+          />
+          <el-button @click="editSmsSignAction"
+            >{{ messageAutographDis ? '编辑' : '取消' }}
+          </el-button>
+          <el-button v-if="!messageAutographDis" type="primary" @click="saveSmsSignAction">
+            确定
+          </el-button>
         </div>
         <div class="message-prompt">
           <div class="prompt-title">
@@ -155,7 +166,7 @@ export default {
   data() {
     return {
       detailDialog: false,
-      activeName: 'first',
+      activeName:this.VERSION_SHUYUN ? 'second' : 'first',
       messageCount: 0,
       smsTemlateList: {},
       messageAutograph: '',
@@ -166,10 +177,14 @@ export default {
         send_time_desc: {
           title: ''
         }
-      }
+      },
+      messageAutographDis:true,
     }
   },
   mounted() {
+    if(this.VERSION_SHUYUN){
+      this.activeName = 'second'
+    }
     getSmsBasic().then((response) => {
       if (response.data.data.sms_remainder) {
         let sms_remainder = response.data.data.sms_remainder.info
@@ -179,15 +194,17 @@ export default {
     })
     getSmsTemplateList().then((res) => {
       const { list } = res.data.data
+      const _list = {}
       Object.keys(list).forEach((key) => {
         if (VERSION_STANDARD()) {
           if (key != 'merchant') {
-            this.smsTemlateList[key] = list[key]
+            _list[key] = list[key]
           }
         } else {
-          this.smsTemlateList[key] = list[key]
+          _list[key] = list[key]
         }
       })
+      this.smsTemlateList = _list
       console.log(this.smsTemlateList)
     })
     getSmsSign().then((res) => {
@@ -215,8 +232,13 @@ export default {
           type: 'success',
           message: '设置短信签名成功'
         })
+        this.messageAutographDis = true
       })
+    },
+    editSmsSignAction() {
+      this.messageAutographDis = !this.messageAutographDis
     }
+
   }
 }
 </script>

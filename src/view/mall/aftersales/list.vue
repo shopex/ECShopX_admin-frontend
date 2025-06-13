@@ -327,9 +327,8 @@
         </el-table-column>
         <el-table-column width="100" label="操作" fixed="left">
           <template slot-scope="scope">
-            <el-button type="text"
-              >
-<router-link
+            <el-button type="text">
+              <router-link
                 :to="{
                   path: matchRoutePath('detail'),
                   query: { aftersales_bn: scope.row.aftersales_bn, resource: $route.path }
@@ -337,8 +336,7 @@
               >
                 详情
               </router-link>
-</el-button
-            >
+            </el-button>
             <template
               v-if="scope.row.distributor_id == '0' || $store.getters.login_type == 'distributor'"
             >
@@ -510,7 +508,7 @@ export default {
   methods: {
     async getBaseSetting() {
       const res = await this.$api.company.getGlobalSetting()
-      this.is_pharma_industry = res.medicine_setting.is_pharma_industry == '1'
+      this.is_pharma_industry = res.medicine_setting?.is_pharma_industry == '1'
     },
     handleSelectStore(storeItem) {
       this.params.distributor.id = storeItem.distributor_id

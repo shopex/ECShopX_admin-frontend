@@ -156,7 +156,7 @@ export default {
     this.SET_VERSION_MODE(this.VUE_APP_PRODUCT_MODEL)
     console.log(this.VUE_APP_PRODUCT_MODEL, '----version----')
     this.init()
-    this.$api.login.getAuthorizeLeve().then((res) => {
+    this.$api.login.getAuthorizeLeve().then(res => {
       this.level = res.level
       if (this.level === 'img_code') {
         this._getImagesCode()
@@ -183,7 +183,7 @@ export default {
     _getImagesCode() {
       if (this.checkCode) return
       this.checkCode = true
-      this.$api.login.getImageCode({ type: 'login' }).then((res) => {
+      this.$api.login.getImageCode({ type: 'login' }).then(res => {
         let { imageData, imageToken } = res
         this.imageData = imageData
         this.imageToken = imageToken
@@ -201,6 +201,10 @@ export default {
           this.login_bg = login_bg_inpurchase
           break
         case 'b2c':
+          this.title = this.getLoginTitle('官方商城管理中心')
+          this.login_bg = login_bg_b2c
+          break
+        case 'shuyun':
           this.title = this.getLoginTitle('官方商城管理中心')
           this.login_bg = login_bg_b2c
           break
@@ -238,7 +242,7 @@ export default {
       this.size = document.body.clientHeight
     },
     fnLogin(formName, agreement_id) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           const params = {
             username: this.form.account,
