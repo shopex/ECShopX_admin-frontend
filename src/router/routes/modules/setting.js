@@ -361,27 +361,27 @@ const routes = [
           title: '配送员管理',
           permissions: ['setting.delivery.setting_staffself_deliverystaff']
         },
-        component: () => import('@/'),
+        component: () => import('@/view/base/account/delivery'),
       },{
-        name: ``,
-        path: '',
+        name: `performance`,
+        path: 'delivery-personnel/performance',
         meta: {
-          aliasName: '',
+          aliasName: 'companydata_deliverystaffstatistics',
           icon: 'icon-products',
-          title: '',
-          permissions: ['']
+          title: '配送员业绩',
+          permissions: ['setting.delivery.companydata_deliverystaffstatistics']
         },
-        component: () => import('@/'),
+        component: () => import('@/view/mall/datacube/companydata/delivery'),
       },{
-        name: ``,
-        path: '',
+        name: `account`,
+        path: 'dada-account',
         meta: {
-          aliasName: '',
+          aliasName: 'dada',
           icon: 'icon-products',
-          title: '',
-          permissions: ['']
+          title: '达达账户',
+          permissions: ['setting.delivery.dada']
         },
-        component: () => import('@/'),
+        component: () => import('@/view/mall/distribution/account'),
       },
 
     ]
