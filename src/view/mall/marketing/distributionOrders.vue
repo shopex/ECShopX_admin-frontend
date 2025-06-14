@@ -2,9 +2,22 @@
   <SpRouterView>
     <SpPlatformTip h5 app alipay />
 
-    <SearchForm />
+    <SearchForm class="mb-4" />
 
-    <SpFinder />
+    <SpTabs :tab-list="tabList" v-model="activeTab" @change="handleTabChange" />
+
+    <SpFinder
+      no-selection
+      ref="finder"
+      url="/orders"
+      row-actions-fixed-align="left"
+      :fixed-row-action="true"
+      :setting="finderSetting"
+      :hooks="{
+        beforeSearch: beforeSearch,
+        afterSearch: afterSearch
+      }"
+    />
 
     <!-- <el-row class="filter-header" :gutter="20">
       <el-col>
@@ -41,7 +54,7 @@
       </el-col>
     </el-row> -->
 
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <!-- <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="全部" name="all" />
       <el-tab-pane label="待发货" name="notship" />
       <el-tab-pane label="已完成" name="done" />
@@ -80,13 +93,6 @@
             >{{ scope.row.freight_fee / 100 }}
           </template>
         </el-table-column>
-        <!--
-          <el-table-column width="70" label="商品金额">
-            <template slot-scope="scope">
-              {{scope.row.fee_symbol}}{{scope.row.item_fee / 100}}
-            </template>
-          </el-table-column>
-          -->
         <el-table-column prop="total_fee" label="订单金额">
           <template slot-scope="scope">
             <span class="cur">{{ scope.row.fee_symbol }}</span
@@ -116,17 +122,8 @@
             {{ getOrderType(scope.row) }}
           </template>
         </el-table-column>
-        <!--
-          <el-table-column prop="is_distribution" label="是否分销">
-            <template slot-scope="scope">
-              <span v-if="scope.row.is_distribution == 1"> 是 </span>
-              <span v-else> - </span>
-            </template>
-          </el-table-column>
-          -->
         <el-table-column label="状态">
           <template slot-scope="scope">
-            <!-- 订单状态 -->
             <el-tag v-if="scope.row.order_status == 'PAYED'" type="success" size="mini">
               已支付
             </el-tag>
@@ -138,7 +135,6 @@
               待收货
             </el-tag>
             <template v-if="scope.row.order_status != 'CANCEL'">
-              <!-- 发货状态 -->
               <el-tag v-if="scope.row.delivery_status == 'DONE'" type="success" size="mini">
                 已发货
               </el-tag>
@@ -155,10 +151,6 @@
             </template>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-            prop="source_name"
-            label="来源"
-          /> -->
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text">
@@ -195,7 +187,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-    </el-tabs>
+    </el-tabs> -->
 
     <!-- 发货-开始 -->
     <el-dialog :title="deliveryTitle" :visible.sync="deliveryVisible" :before-close="handleCancel">
@@ -260,7 +252,15 @@ import { getSourcesList } from '../../../api/datacube'
 import hqbdlycorp from '../../../common/hqbdlycorp.json'
 import { getDistributorList } from '../../../api/marketing'
 import { ORDER_TYPE, ORDER_TYPE_STANDARD } from '@/consts'
+import { createSetting } from '@shopex/finder'
+import _map from 'lodash/map'
+import moment from 'moment'
+import { VERSION_STANDARD, formatPrice } from '@/utils'
 import { useForm } from '@/composables'
+
+const LOCAL_ORDER_TYPE = VERSION_STANDARD()
+  ? _map(ORDER_TYPE_STANDARD, item => ({ label: item.title, value: item.value }))
+  : _map(ORDER_TYPE, item => ({ label: item.title, value: item.value }))
 
 const [Form, FormApi] = useForm({
   formType: 'searchForm',
@@ -296,13 +296,7 @@ const [Form, FormApi] = useForm({
       component: 'Select',
       componentProps: {
         placeholder: '请选择订单类型',
-        options: [
-          { label: '全部订单', value: '' },
-          { label: '团购订单', value: 'groups' },
-          { label: '秒杀订单', value: 'seckill' },
-          { label: '社区订单', value: 'community' },
-          { label: '导购订单', value: 'shopguide' }
-        ]
+        options: LOCAL_ORDER_TYPE
       },
       fieldName: 'order_class',
       label: '订单类型',
@@ -331,7 +325,102 @@ export default {
   },
   data() {
     return {
-      activeName: 'all',
+      finderSetting: createSetting({
+        actions: [],
+        columns: [
+          {
+            name: '订单号',
+            key: 'order_id',
+            // showType: 'copiable', // 可复制
+            render(h, { row }) {
+              return (
+                <div>
+                  <div>{row.order_id}</div>
+                  <div class="flex items-center">
+                    <SpIcon class="mr-1" name="store" />
+                    {row.distributor_name}
+                  </div>
+                  <div>{moment(row.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
+                </div>
+              )
+            }
+          },
+          {
+            name: '运费',
+            key: 'freight_fee',
+            width: 100,
+            formatter: (value, row, col) => {
+              return `${formatPrice(value || 0)}`
+            }
+          },
+          {
+            name: '订单金额',
+            key: 'total_fee',
+            width: 120,
+            formatter: (value, row, col) => `${formatPrice(value)}`
+          },
+          {
+            name: '联系电话',
+            key: 'mobile',
+            showType: 'copiable'
+          },
+          {
+            name: '订单类型',
+            key: 'order_type',
+            formatter: value => {
+              return LOCAL_ORDER_TYPE.find(item => item.value == value)?.label
+            }
+          },
+          {
+            name: '状态',
+            key: 'order_status',
+            render(h, { row }) {
+              // 可根据状态自定义颜色
+              const statusMap = {
+                未支付: 'primary',
+                待发货: 'primary',
+                已取消: 'danger',
+                已发货: 'success',
+                待收货: 'success'
+              }
+              return h(
+                'el-tag',
+                {
+                  props: {
+                    type: statusMap[row.order_status] || 'info',
+                    size: 'mini'
+                  }
+                },
+                row.order_status
+              )
+            }
+          }
+        ]
+        // actions: [
+        //   {
+        //     name: '发货',
+        //     type: 'primary',
+        //     click: this.deliveryAction
+        //   }
+        // ],
+        // columns: [
+        //   { name: '订单号', key: 'order_id' },
+        //   { name: '订单金额（¥）', key: 'total_fee' },
+        //   { name: '运费（¥）', key: 'create_time' },
+        //   { name: '联系手机号', key: 'order_status' },
+        //   { name: '订单状态', key: 'order_status' },
+        //   { name: '订单类型', key: 'order_status' }
+        // ]
+      }),
+      activeTab: 'all',
+      tabList: [
+        { label: '全部订单', name: 'all' },
+        { label: '待发货', name: 'notship' },
+        { label: '已完成', name: 'done' },
+        { label: '未支付', name: 'notpay' },
+        { label: '已取消', name: 'cancel' }
+      ],
+
       loading: false,
       create_time: '',
       params: {
@@ -369,12 +458,29 @@ export default {
     }
   },
   mounted() {
-    this.getDistributor()
-    this.getParams()
-    this.getOrders(this.params)
-    this.getAllSourcesList()
+    // this.getDistributor()
+    // this.getParams()
+    // this.getOrders(this.params)
+    // this.getAllSourcesList()
   },
   methods: {
+    beforeSearch(params) {
+      const res = FormApi.getFieldsValue()
+      return {
+        ...params,
+        order_type: 'normal',
+        order_class_exclude: 'community',
+        is_distribution: 1
+      }
+    },
+    afterSearch(response) {
+      response.data.data['total_count'] = response.data.data.pager.count
+      return response
+    },
+    handleTabChange(tab) {
+      this.$refs.finder.refresh(true)
+    },
+
     onCopy() {
       this.$notify({
         message: '复制成功',

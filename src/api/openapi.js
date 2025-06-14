@@ -1,6 +1,6 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
-export function saveShopSetting (query) {
+export function saveShopSetting(query) {
   return fetch({
     url: '/setting/openapi/developer',
     method: 'post',
@@ -8,7 +8,7 @@ export function saveShopSetting (query) {
   })
 }
 
-export function saveSalesSetting (query) {
+export function saveSalesSetting(query) {
   return fetch({
     url: '/setting/openapi/external',
     method: 'post',
@@ -16,14 +16,14 @@ export function saveSalesSetting (query) {
   })
 }
 
-export function getShopSetting () {
+export function getShopSetting() {
   return fetch({
     url: '/setting/openapi/developer',
     method: 'get'
   })
 }
 
-export function getSalesSetting (query) {
+export function getSalesSetting(query) {
   return fetch({
     url: '/setting/openapi/external',
     method: 'get',

@@ -13,7 +13,7 @@ Vue.use(Vuex)
 const vuexLocal = new VuexPersistence({
   key: '__presist',
   storage: window.localStorage,
-  modules: ['user']
+  modules: ['user', 'system']
 })
 
 const store = new Vuex.Store({

@@ -1,11 +1,15 @@
 const systemStore = {
   namespaced: true,
   state: {
-    logo: ''
+    logo: '',
+    versionMode: ''
   },
   mutations: {
     setSystemLogo(state, { logo }) {
       state.logo = logo
+    },
+    setVersionMode(state, { versionMode }) {
+      state.versionMode = versionMode
     }
   }
 }

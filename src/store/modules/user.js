@@ -26,20 +26,19 @@ const userStore = {
     app_type: '',
     color_theme: '',
     // versionMode: 'platform',
-    sys_logo: '',
     readLicense: 0
   },
 
   mutations: {
     setToken(state, { token }) {
-      const tokenArray = token.split('.')
-      const user = JSON.parse(atob(tokenArray[1]))
-      console.log('userInfo: ', user)
+      // const tokenArray = token.split('.')
+      // const user = JSON.parse(atob(tokenArray[1]))
+      // console.log('userInfo: ', user)
       state.token = token
-      state.exp = user.exp
-      state.mobile = user.mobile
-      state.is_authorizer = user.is_authorizer
-      state.license_authorize = user.license_authorize
+      // state.exp = user.exp
+      // state.mobile = user.mobile
+      // state.is_authorizer = user.is_authorizer
+      // state.license_authorize = user.license_authorize
     },
     // 设置菜单
     setAccessMenus(state, { accessMenus }) {
@@ -79,7 +78,6 @@ const userStore = {
       state.app_type = ''
       state.color_theme = ''
       state.versionMode = 'platform'
-      state.sys_logo = ''
     },
     SET_LOGIN_TYPE: (state, payload) => {
       const { loginType } = payload
@@ -154,15 +152,13 @@ const userStore = {
     },
     setThemeColor: (state, color_theme) => {
       state.color_theme = color_theme
-    },
-    setSysLogo: (state, sys_logo) => {
-      state.sys_logo = sys_logo
     }
   },
 
   actions: {
     async fetchAccessMenus({ commit }) {
       const accessMenus = await api.auth.getPermission()
+      debugger
       commit('setAccessMenus', { accessMenus })
     },
     async fetchAccountInfo({ commit }) {
@@ -235,9 +231,6 @@ const userStore = {
     },
     setThemeColor: ({ commit }, color_theme) => {
       commit('setThemeColor', color_theme)
-    },
-    setSysLogo: ({ commit }, sys_logo) => {
-      commit('setSysLogo', sys_logo)
     }
   }
 }

@@ -101,6 +101,7 @@
         :name="item.value"
       />
     </el-tabs>
+
     <SpFinder
       ref="finder"
       fixed-row-action
@@ -373,6 +374,7 @@ export default {
   },
   methods: {
     onSearch() {
+      debugger
       console.log('this.$refs:', this.$refs)
       this.$refs.finder.refresh(true)
     },

@@ -20,7 +20,7 @@ import { install as Filter } from '@/filters'
 // import './style/common.scss'
 // import './style/index.scss'
 
-import fetch from '@/utils/fetch'
+import { fetch } from './request'
 import { initFinder } from '@shopex/finder'
 import '@shopex/finder/lib/finder.css'
 import exportTip from '@/utils/components'

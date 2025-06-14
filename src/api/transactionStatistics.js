@@ -1,6 +1,6 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
-export function get_all (params) {
+export function get_all(params) {
   return fetch({
     url: '/hfpay/statistics/company',
     method: 'get',
@@ -8,7 +8,7 @@ export function get_all (params) {
   })
 }
 
-export function exportData (params) {
+export function exportData(params) {
   return fetch({
     url: '/hfpay/statistics/exportData',
     method: 'get',

@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 // 员工内购
 export function getPurchaseList(query) {

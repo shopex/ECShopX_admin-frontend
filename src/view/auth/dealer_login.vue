@@ -81,7 +81,7 @@
 <script>
 import { Message } from 'element-ui'
 import { isMobile } from '@/utils/validate'
-import fetch from '@/utils/fetch'
+import { fetch } from './request'
 import { login, getAdminInfo } from '@/api/login'
 import { mapMutations } from 'vuex'
 export default {

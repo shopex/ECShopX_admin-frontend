@@ -1,5 +1,6 @@
 import { importAll } from '@/utils'
-import req, { createAxios } from '@/utils/fetch'
+// import req, { createAxios } from '@/utils/fetch'
+import { fetch } from './request'
 
 const api = {}
 
@@ -24,8 +25,8 @@ importAll(require.context('./', false, /\.js$/), (key, r) => {
 
 function install(Vue) {
   Vue.prototype.$api = api
-  Vue.prototype.$http = req
+  Vue.prototype.$http = fetch
 }
 
 export default api
-export { req, createAxios, install }
+export { fetch, install }

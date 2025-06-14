@@ -113,6 +113,9 @@ export default {
           // agreement_id
         })
         if (token) {
+          const tokenArray = token.split('.')
+          const { menu_type } = JSON.parse(atob(tokenArray[1]))
+          this.$store.commit('system/setVersionMode', { versionMode: menu_type })
           this.$store.commit('user/setToken', { token })
           this.$message.success('登录成功')
           await this.$store.dispatch('user/fetchAccessMenus')

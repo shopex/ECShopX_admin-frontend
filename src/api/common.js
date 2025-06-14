@@ -1,5 +1,6 @@
-import fetch, { axios } from '@/utils/fetch'
+import axios from 'axios'
 import store from '@/store'
+import { fetch } from './request'
 
 export function handleUploadFile(query) {
   return fetch({
@@ -33,13 +34,6 @@ export function exportUploadTemplate(query) {
   })
 }
 
-export function getBrandLogo() {
-  return fetch({
-    url: '/companys/setting',
-    method: 'get'
-  })
-}
-
 export function getAddress() {
   return fetch({
     url: '/espier/address',
@@ -65,12 +59,12 @@ export function getFileBlob(url) {
       method: 'get',
       url,
       responseType: 'arraybuffer',
-      headers: { 'Authorization': 'bearer ' + store.getters.token }
+      headers: { Authorization: 'bearer ' + store.getters.token }
     })
-      .then((data) => {
+      .then(data => {
         resolve(data.data)
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error.toString())
       })
   })

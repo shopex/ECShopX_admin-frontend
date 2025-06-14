@@ -1,6 +1,6 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
-export function saveAgent (query) {
+export function saveAgent(query) {
   return fetch({
     url: '/supplier/save_agent',
     method: 'post',
@@ -8,7 +8,7 @@ export function saveAgent (query) {
   })
 }
 
-export function deleteAgent (query) {
+export function deleteAgent(query) {
   return fetch({
     url: '/supplier/delete_agent',
     method: 'post',
@@ -16,7 +16,7 @@ export function deleteAgent (query) {
   })
 }
 
-export function getAgentList (query) {
+export function getAgentList(query) {
   return fetch({
     url: '/supplier/get_agent_list',
     method: 'get',
@@ -24,7 +24,7 @@ export function getAgentList (query) {
   })
 }
 
-export function getSupplierShops (query) {
+export function getSupplierShops(query) {
   return fetch({
     url: '/supplier/get_supplier_shops',
     method: 'get',
@@ -32,7 +32,7 @@ export function getSupplierShops (query) {
   })
 }
 
-export function checkSupplierShop (query) {
+export function checkSupplierShop(query) {
   return fetch({
     url: '/supplier/check_supplier_shop',
     method: 'post',
@@ -40,8 +40,7 @@ export function checkSupplierShop (query) {
   })
 }
 
-
-export function getSupplierList (query) {
+export function getSupplierList(query) {
   return fetch({
     url: '/supplier/get_supplier_list',
     method: 'get',
@@ -49,7 +48,7 @@ export function getSupplierList (query) {
   })
 }
 
-export function checkSupplier (query) {
+export function checkSupplier(query) {
   return fetch({
     url: '/supplier/check_supplier',
     method: 'post',
@@ -57,14 +56,14 @@ export function checkSupplier (query) {
   })
 }
 
-export function getSupplierInfo (query) {
+export function getSupplierInfo(query) {
   return fetch({
     url: '/supplier/get_supplier_info',
     method: 'get'
   })
 }
 
-export function createSupplier (query) {
+export function createSupplier(query) {
   return fetch({
     url: '/supplier/register',
     method: 'post',
@@ -72,7 +71,7 @@ export function createSupplier (query) {
   })
 }
 
-export function getOrderList (query) {
+export function getOrderList(query) {
   return fetch({
     url: '/supplier/get_order_list',
     method: 'get',
@@ -80,7 +79,7 @@ export function getOrderList (query) {
   })
 }
 
-export function getAgentOrders (query) {
+export function getAgentOrders(query) {
   return fetch({
     url: '/supplier/get_agent_orders',
     method: 'get',
@@ -88,11 +87,10 @@ export function getAgentOrders (query) {
   })
 }
 
-export function orderPaidConfirm (query) {
+export function orderPaidConfirm(query) {
   return fetch({
     url: '/supplier/order_paid_confirm',
     method: 'post',
     params: query
   })
 }
-

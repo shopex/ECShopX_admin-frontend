@@ -16,7 +16,7 @@
 
     <div class="mt-4 flex gap-4">
       <div class="bg-white rounded-lg border p-4 flex-1">
-        <SpTabbar :tab-list="tabList" v-model="activeTab" @change="handleTabChange" />
+        <SpTabs :tab-list="tabList" v-model="activeTab" @change="handleTabChange" />
         <div id="member-chart" class="h-[300px] mt-4" />
       </div>
       <div class="bg-white rounded-lg border p-4 notice-box">1</div>

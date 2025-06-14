@@ -1,6 +1,6 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
-export function getInfo (params) {
+export function getInfo(params) {
   return fetch({
     url: '/shops/protocol',
     method: 'get',
@@ -8,7 +8,7 @@ export function getInfo (params) {
   })
 }
 
-export function saveInfo (params) {
+export function saveInfo(params) {
   return fetch({
     url: '/shops/protocol',
     method: 'put',

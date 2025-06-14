@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 export function saveDistributor(query) {
   if (query.distributor_id) {
@@ -677,7 +677,6 @@ export function aheadPurchaseActivity(activityId) {
     method: 'post'
   })
 }
-
 
 // 修改活动记录备注
 export function updateRegistrationRecord(params) {

@@ -1,4 +1,4 @@
-import fetch from '@/utils/fetch'
+import { fetch } from './request'
 
 // 申请脱敏
 export function createEncrypt(params) {

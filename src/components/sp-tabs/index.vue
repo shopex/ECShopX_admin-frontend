@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'SpTabbar',
+  name: 'SpTabs',
   props: {
     tabList: {
       type: Array,

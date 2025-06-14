@@ -1,9 +1,9 @@
 import { initFinder } from '@shopex/finder'
-import fetch from '@/utils/fetch'
+import { requestClient } from '@/api/request'
 
 function install(Vue) {
   initFinder(Vue, {
-    fetchLibrary: fetch,
+    fetchLibrary: requestClient.instance,
     context: {
       qs: false,
       globalHooks: {

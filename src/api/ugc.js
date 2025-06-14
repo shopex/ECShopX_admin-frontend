@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 export function getNotes(query) {
   return fetch({

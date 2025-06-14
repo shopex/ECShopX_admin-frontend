@@ -1,7 +1,7 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 //实体订单列表/自营订单列表 （备注）
-export function remarks ({ orderId, ...restParams }) {
+export function remarks({ orderId, ...restParams }) {
   return fetch({
     url: `/remarks/${orderId}`,
     method: 'put',
@@ -10,7 +10,7 @@ export function remarks ({ orderId, ...restParams }) {
 }
 
 //售后列表添加备注功能
-export function afterRemarks (params) {
+export function afterRemarks(params) {
   return fetch({
     url: `/aftersales/remark`,
     method: 'put',

@@ -1,7 +1,7 @@
-import fetch from '@/utils/fetch'
+import { fetch } from './request'
 
 // 获取短信状态
-export function getaliSmsStatus () {
+export function getaliSmsStatus() {
   return fetch({
     url: `/aliyunsms/status`,
     method: 'get'
@@ -10,7 +10,7 @@ export function getaliSmsStatus () {
 
 // 基础配置
 
-export function getSmsConfig (params = {}) {
+export function getSmsConfig(params = {}) {
   return fetch({
     url: `/aliyunsms/config`,
     method: 'get',
@@ -18,7 +18,7 @@ export function getSmsConfig (params = {}) {
   })
 }
 // 修改基础配置
-export function setSmsConfig (params = {}) {
+export function setSmsConfig(params = {}) {
   return fetch({
     url: `/aliyunsms/config`,
     method: 'post',
@@ -27,7 +27,7 @@ export function setSmsConfig (params = {}) {
 }
 
 // 修改阿里短信状态
-export function setAlisms (params = {}) {
+export function setAlisms(params = {}) {
   return fetch({
     url: `/aliyunsms/status`,
     method: 'post',
@@ -35,7 +35,7 @@ export function setAlisms (params = {}) {
   })
 }
 
-export function setTheNewSignature (params = {}) {
+export function setTheNewSignature(params = {}) {
   return fetch({
     url: '/aliyunsms/sign/add',
     method: 'post',
@@ -43,7 +43,7 @@ export function setTheNewSignature (params = {}) {
   })
 }
 
-export function getTheSignature (params) {
+export function getTheSignature(params) {
   return fetch({
     url: `/aliyunsms/sign/info`,
     method: 'get',
@@ -51,7 +51,7 @@ export function getTheSignature (params) {
   })
 }
 
-export function editTheSignature (params) {
+export function editTheSignature(params) {
   return fetch({
     url: `/aliyunsms/sign/modify`,
     method: 'post',
@@ -59,7 +59,7 @@ export function editTheSignature (params) {
   })
 }
 
-export function deleteTheSignature (id) {
+export function deleteTheSignature(id) {
   return fetch({
     url: `/aliyunsms/sign/delete/${id}`,
     method: 'delete'
@@ -69,7 +69,7 @@ export function deleteTheSignature (id) {
 // 发送短信
 
 // 短信场景列表
-export function getScenarioList (params = {}) {
+export function getScenarioList(params = {}) {
   return fetch({
     url: `/aliyunsms/scene/list`,
     method: 'get',
@@ -78,7 +78,7 @@ export function getScenarioList (params = {}) {
 }
 
 // 停用短信场景
-export function offDisablingSms (params) {
+export function offDisablingSms(params) {
   return fetch({
     url: `/aliyunsms/scene/disableItem`,
     method: 'get',
@@ -87,7 +87,7 @@ export function offDisablingSms (params) {
 }
 
 // 启用短信场景
-export function onDisablingSms (params) {
+export function onDisablingSms(params) {
   return fetch({
     url: `/aliyunsms/scene/enableItem`,
     method: 'get',
@@ -96,7 +96,7 @@ export function onDisablingSms (params) {
 }
 
 // 删除短信场景
-export function deletedDisablingSms (id) {
+export function deletedDisablingSms(id) {
   return fetch({
     url: `/aliyunsms/scene/deleteItem/${id}`,
     method: 'delete'
@@ -104,7 +104,7 @@ export function deletedDisablingSms (id) {
 }
 
 // 短信签名列表
-export function getSmsSignatureList (params) {
+export function getSmsSignatureList(params) {
   return fetch({
     url: `/aliyunsms/sign/list`,
     method: 'get',
@@ -113,7 +113,7 @@ export function getSmsSignatureList (params) {
 }
 
 // 短信模板列表
-export function getSmsTemplateList (params) {
+export function getSmsTemplateList(params) {
   return fetch({
     url: `/aliyunsms/template/list`,
     method: 'get',
@@ -122,7 +122,7 @@ export function getSmsTemplateList (params) {
 }
 
 // 添加短信场景条目
-export function addSceneItem (params) {
+export function addSceneItem(params) {
   return fetch({
     url: `/aliyunsms/scene/addItem`,
     method: 'post',
@@ -133,7 +133,7 @@ export function addSceneItem (params) {
 // 短信模板
 
 // 签名模板列表
-export function getTemplateList (params = {}) {
+export function getTemplateList(params = {}) {
   return fetch({
     url: `/aliyunsms/template/list`,
     method: 'get',
@@ -142,7 +142,7 @@ export function getTemplateList (params = {}) {
 }
 
 // 下拉短信场景列表
-export function getTemplateSeleteList (params = {}) {
+export function getTemplateSeleteList(params = {}) {
   return fetch({
     url: `/aliyunsms/scene/simpleList`,
     method: 'get',
@@ -151,7 +151,7 @@ export function getTemplateSeleteList (params = {}) {
 }
 
 // 短信场景内容label
-export function getTemplateContentLabel (params = {}) {
+export function getTemplateContentLabel(params = {}) {
   return fetch({
     url: `/aliyunsms/scene/detail`,
     method: 'get',
@@ -160,7 +160,7 @@ export function getTemplateContentLabel (params = {}) {
 }
 
 // 添加短信模板
-export function addSmsTemplate (params = {}) {
+export function addSmsTemplate(params = {}) {
   return fetch({
     url: `/aliyunsms/template/add`,
     method: 'post',
@@ -169,7 +169,7 @@ export function addSmsTemplate (params = {}) {
 }
 
 // 短信模板detail
-export function SmsTemplateDetail (params = {}) {
+export function SmsTemplateDetail(params = {}) {
   return fetch({
     url: `/aliyunsms/template/info`,
     method: 'get',
@@ -178,7 +178,7 @@ export function SmsTemplateDetail (params = {}) {
 }
 
 // 修改短信模板
-export function editSmsTemplate (params = {}) {
+export function editSmsTemplate(params = {}) {
   return fetch({
     url: `/aliyunsms/template/modify`,
     method: 'post',
@@ -187,7 +187,7 @@ export function editSmsTemplate (params = {}) {
 }
 
 // 删除短信模板
-export function deleteSmsTemplate (id) {
+export function deleteSmsTemplate(id) {
   return fetch({
     url: `/aliyunsms/template/delete/${id}`,
     method: 'delete'
@@ -197,7 +197,7 @@ export function deleteSmsTemplate (id) {
 // 群发信息
 
 // 添加短信任务
-export function addTaskSms (params = {}) {
+export function addTaskSms(params = {}) {
   return fetch({
     url: `/aliyunsms/task/add`,
     method: 'post',
@@ -206,7 +206,7 @@ export function addTaskSms (params = {}) {
 }
 
 // 群发任务详情
-export function taskSmsDetail (params = {}) {
+export function taskSmsDetail(params = {}) {
   return fetch({
     url: `/aliyunsms/task/info`,
     method: 'get',
@@ -215,7 +215,7 @@ export function taskSmsDetail (params = {}) {
 }
 
 // 修改群发短信
-export function editTaskSms (params = {}) {
+export function editTaskSms(params = {}) {
   return fetch({
     url: `/aliyunsms/task/modify`,
     method: 'post',
@@ -224,7 +224,7 @@ export function editTaskSms (params = {}) {
 }
 
 // 撤销删除群发短信
-export function deleteTaskSms (params = {}) {
+export function deleteTaskSms(params = {}) {
   return fetch({
     url: `/aliyunsms/task/revoke`,
     method: 'post',

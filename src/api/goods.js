@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 // 基础物料
 export function getServiceLabelsList(query) {

@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 export function getMembers(query) {
   return fetch({
@@ -482,12 +482,11 @@ export function sendEmployeeEmail(params) {
   })
 }
 
-
 // 邮件发送测试
 export function getEnterpriseQrcode({ enterprise_id }) {
   return fetch({
     url: `/enterprise/qrcode/${enterprise_id}`,
-    method: 'get',
+    method: 'get'
   })
 }
 

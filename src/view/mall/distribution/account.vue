@@ -1,9 +1,6 @@
 <template>
   <el-card class="box-card">
-    <div
-      slot="header"
-      class="clearfix"
-    >
+    <div slot="header" class="clearfix">
       <span>充值</span>
     </div>
     <div class="content">
@@ -18,22 +15,11 @@
           label-width="100px"
           class="demo-ruleForm"
         >
-          <el-form-item
-            class="item"
-            label="充值金额"
-            prop="money"
-          >
-            <el-input
-              v-model="numberValidateForm.money"
-              type="money"
-              autocomplete="off"
-            />
+          <el-form-item class="item" label="充值金额" prop="money">
+            <el-input v-model="numberValidateForm.money" type="money" autocomplete="off" />
           </el-form-item>
           <el-form-item class="formItem">
-            <el-button
-              class="btn"
-              @click="submitForm('numberValidateForm')"
-            >
+            <el-button type="primary" @click="submitForm('numberValidateForm')">
               确定充值
             </el-button>
           </el-form-item>
@@ -47,7 +33,7 @@
 import { get_DD_Account, getRechargeURL } from '@/api/account.js'
 import { Message } from 'element-ui'
 export default {
-  data () {
+  data() {
     return {
       account: 1000,
       numberValidateForm: {
@@ -61,12 +47,12 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.getAccount()
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate(async (valid) => {
+    submitForm(formName) {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           const amount = {
             amount: Number(this.numberValidateForm.money)
@@ -86,7 +72,7 @@ export default {
         }
       })
     },
-    async getAccount () {
+    async getAccount() {
       const result = await get_DD_Account()
       console.log(result)
       if (result.status == 200) {
@@ -95,7 +81,7 @@ export default {
       }
     },
 
-    validateMoney (rule, value, callback) {
+    validateMoney(rule, value, callback) {
       const reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
       if (!Number(value)) {
         callback(new Error('请输入正确的数字'))
@@ -139,11 +125,6 @@ export default {
     margin: 0 auto;
     margin-top: 50px;
   }
-  .btn {
-    width: 120px;
-    background: $primary_active;
-    color: #fff;
-  }
 }
 </style>
 
@@ -173,11 +154,6 @@ export default {
       font-size: 16px;
       font-weight: 400;
     }
-  }
-  .btn {
-    height: 40px;
-    line-height: 40px;
-    padding: 0;
   }
 }
 </style>

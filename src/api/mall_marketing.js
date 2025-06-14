@@ -1,9 +1,9 @@
-import fetch from '@/utils/fetch'
+import { fetch } from './request'
 
 /* 商家入驻 */
 
 // 获取省市区
-export function getArea (params = {}) {
+export function getArea(params = {}) {
   return fetch({
     url: '/espier/address',
     method: 'get',
@@ -12,7 +12,7 @@ export function getArea (params = {}) {
 }
 
 // 商家分类列表
-export function getMerchantsClassification (params = {}) {
+export function getMerchantsClassification(params = {}) {
   return fetch({
     url: '/merchant/type/list',
     method: 'get',
@@ -20,7 +20,7 @@ export function getMerchantsClassification (params = {}) {
   })
 }
 //新增商家分类
-export function addMerchantsClassification (params = {}) {
+export function addMerchantsClassification(params = {}) {
   return fetch({
     url: '/merchant/type/create',
     method: 'post',
@@ -29,7 +29,7 @@ export function addMerchantsClassification (params = {}) {
 }
 
 // 编辑商家分类
-export function editMerchantsClassification (id, params = {}) {
+export function editMerchantsClassification(id, params = {}) {
   return fetch({
     url: `/merchant/type/${id}`,
     method: 'put',
@@ -38,7 +38,7 @@ export function editMerchantsClassification (id, params = {}) {
 }
 
 // 删除商家分类
-export function deleteMerchantsClassification (id) {
+export function deleteMerchantsClassification(id) {
   return fetch({
     url: `/merchant/type/${id}`,
     method: 'delete'
@@ -46,14 +46,14 @@ export function deleteMerchantsClassification (id) {
 }
 
 //获取商家基础配置
-export function getShopConfig () {
+export function getShopConfig() {
   return fetch({
     url: '/merchant/basesetting',
     method: 'get'
   })
 }
 // b保存商家基础设置
-export function saveShopConfig (params) {
+export function saveShopConfig(params) {
   return fetch({
     url: '/merchant/basesetting',
     method: 'post',
@@ -62,7 +62,7 @@ export function saveShopConfig (params) {
 }
 
 // 添加/更新 商家
-export function addTheBusinessman (params, id) {
+export function addTheBusinessman(params, id) {
   return fetch({
     url: `/merchant${id ? `/${id}` : ''}`,
     method: 'post',
@@ -71,7 +71,7 @@ export function addTheBusinessman (params, id) {
 }
 
 // 商户入驻申请列表
-export function getApplicationListForMerchantEntry (params = {}) {
+export function getApplicationListForMerchantEntry(params = {}) {
   return fetch({
     url: `/merchant/settlement/apply/list`,
     method: 'get',
@@ -80,7 +80,7 @@ export function getApplicationListForMerchantEntry (params = {}) {
 }
 
 // 商户账号管理列表
-export function getMerchantAccountList (params = {}) {
+export function getMerchantAccountList(params = {}) {
   return fetch({
     url: '/merchant/operator',
     method: 'get',
@@ -89,7 +89,7 @@ export function getMerchantAccountList (params = {}) {
 }
 
 // 获取商户详情
-export function getTheMerchant (params, id) {
+export function getTheMerchant(params, id) {
   return fetch({
     url: `/merchant/detail/${id}`,
     method: 'get',
@@ -98,14 +98,14 @@ export function getTheMerchant (params, id) {
 }
 
 //更新商户的商品审核状态
-export function setCommodityAudit (params, id) {
+export function setCommodityAudit(params, id) {
   return fetch({
     url: `/merchant/auditgoods/update/${id}`,
     method: 'post',
     params
   })
 }
-export function setMerchantsState (params, id) {
+export function setMerchantsState(params, id) {
   return fetch({
     url: `/merchant/disabled/update/${id}`,
     method: 'post',
@@ -114,7 +114,7 @@ export function setMerchantsState (params, id) {
 }
 
 // 重置商户密码
-export function setChangePassword (id) {
+export function setChangePassword(id) {
   return fetch({
     url: `/merchant/operator/${id}`,
     method: 'put'
@@ -122,7 +122,7 @@ export function setChangePassword (id) {
 }
 
 // 商户入驻详情
-export function merchantsInDetail (id) {
+export function merchantsInDetail(id) {
   return fetch({
     url: `/merchant/settlement/apply/${id}`,
     method: 'get'
@@ -130,7 +130,7 @@ export function merchantsInDetail (id) {
 }
 
 // 审核商户入驻
-export function setCheckTheEntryOfMerchants (params = {}) {
+export function setCheckTheEntryOfMerchants(params = {}) {
   return fetch({
     url: `/merchant/settlement/apply/audit`,
     method: 'post',
@@ -139,13 +139,13 @@ export function setCheckTheEntryOfMerchants (params = {}) {
 }
 
 // 商家端获取商户信息
-export function getTheMerchantInfo () {
+export function getTheMerchantInfo() {
   return fetch({
     url: '/merchant/info',
     method: 'get'
   })
 }
-export function updateTheMerchantInfo (params = {}) {
+export function updateTheMerchantInfo(params = {}) {
   return fetch({
     url: '/merchant/operator',
     method: 'post',
@@ -154,7 +154,7 @@ export function updateTheMerchantInfo (params = {}) {
 }
 
 // 获取商户类型
-export function getMerchantsType (params) {
+export function getMerchantsType(params) {
   return fetch({
     url: '/merchant/visibletype/list',
     method: 'get',
@@ -163,7 +163,7 @@ export function getMerchantsType (params) {
 }
 
 // 获取商户列表
-export function getMerchantsList (params) {
+export function getMerchantsList(params) {
   return fetch({
     url: '/merchant/list',
     method: 'get',

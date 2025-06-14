@@ -1,168 +1,193 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import Vue from 'vue'
+import qs from 'qs'
 import store from '../store'
-import errorMsg from './errorMsg.js'
-import Qs from 'qs'
-import NProgress from 'nprogress'
-import router from '@/router/index'
+import Router from '../router'
+import {
+  isInSalesCenter,
+  goLink,
+  isInMerchant,
+  isObject,
+  IS_DISTRIBUTOR,
+  IS_SUPPLIER
+} from '@/utils'
 
-// 创建axios实例
-const service = axios.create({
-  baseURL:
-    process.env.VUE_APP_BASE_API.indexOf('http') !== -1
-      ? process.env.VUE_APP_BASE_API
-      : window.location.origin + '/api',
-  timeout: 50000 // 请求超时时间
-})
-
-// console.log(process.env.VUE_APP_INSET, 'process.env.VUE_APP_INSET')
-// // 获取父组件传值，并保存
-// if (process.env.VUE_APP_INSET) {
-//   console.log('shop端嵌入式...')
-//   window.addEventListener(
-//     'message',
-//     function(e) {
-//       let data = e.data
-//       if (data && data.cmd === 'getTokenInfo') {
-//         console.log('shop端成功接收message...')
-//         localStorage.setItem('tokenInfo', JSON.stringify(data.params));
-
-//         service({ url: "/permission", method: "get" }).then((response) => {
-//           store.dispatch("setMenu", response.data.data);
-//           let extendsRoutes = loadRouters.addRouters(response.data.data);
-//           // this.$router.addRoutes(extendsRoutes)
-//           routerBefore.goToPath(to, from, next);
-//         });
-//         // 向父vue页面发送信息
-//         window.parent.postMessage(
-//           {
-//             cmd: 'getToken',
-//             params: {
-//               success: true
-//             }
-//           },
-//           '*'
-//         )
-//       }
-//     },
-//     false
-//   )
-// }
-
-async function transformConfig (config) {
-  if (config.refreshToken && store.getters.token) {
-    let timestamp = Date.parse(new Date()) / 1000
-    if (Number(store.getters.exp) - timestamp <= 300) {
-      await getRefresh()
-    }
-  }
-
-  // if (localStorage.getItem('tokenInfo') && store.getters.isInFrame) {
-  //   config.headers['Authorization'] =
-  //     'Bearer ' + JSON.parse(localStorage.getItem('tokenInfo')).token
-  // } else
-  if (store.getters.token) {
-    config.headers['Authorization'] = 'bearer ' + store.getters.token // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-  }
-
-  config.transformRequest = function (data) {
-    if (data && data.isUploadFile) {
-      let params = new FormData()
-      for (var key in data) {
-        if (key !== 'isUploadFile') {
-          params.append(key, data[key])
+function resolveGetMethod(inst) {
+  const origGetMethod = inst.get
+  inst.get = function (url, _params, config = {}) {
+    // 兼容finder params
+    if (_params) {
+      const { params } = _params
+      if (params && params.finderId) {
+        config = {
+          ..._params,
+          ...config
+        }
+      } else {
+        config = {
+          params: _params,
+          ...config
         }
       }
-      return params
-    } else {
-      return Qs.stringify(data)
     }
+    return origGetMethod(url, config)
   }
-
-  return config
 }
 
-// request拦截器
-service.interceptors.request.use(
-  (config) => {
-    return transformConfig(config)
-  },
-  (error) => {
-    // Do something with request error
-    return Promise.reject(error)
-  }
-)
+export function errorToast(data) {
+  console.log(data, 'toast数据')
 
-// 刷新token
-function getRefresh () {
-  return service
-    .get('/token/refresh', {
-      params: {
-        token_refresh: true
-      }
-    })
-    .then(function (response) {
-      if (response.headers.authorization) {
-        store.dispatch('setToken', response.headers.authorization)
-      }
-    })
+  const { status_code, message } = data
+  if (status_code == 40101) {
+    Vue.prototype.$message.error('账号密码错误，请重新登录')
+  } else if (status_code == 401) {
+    // Token has expired
+    if (isInSalesCenter()) {
+      goLink()
+    }
+    // Vue.prototype.$message.error( '登录信息已过期，请重新登录' )
+    store.commit('CLEAR_TOKEN')
+    // Router.push( { path: '/auth/login', replace: true } )
+    // 如果是商家入驻
+    if (isInMerchant()) {
+      window.location.href = '/merchant'
+    } else if (IS_DISTRIBUTOR()) {
+      window.location.href = '/shopadmin'
+    } else if (IS_SUPPLIER()) {
+      window.location.href = '/supplier'
+    } else {
+      window.location.href = '/'
+    }
+  } else {
+    Vue.prototype.$message.error(message)
+  }
 }
 
-// response拦截器
-service.interceptors.response.use(
-  (response) => {
-    if (response.config.method != 'get') {
-      Message.closeAll()
-    }
-    return response
-    /**
-     * 下面的注释为通过response自定义code来标示请求状态，当code返回如下情况为权限有问题，登出并返回到登录页
-     * 如通过xmlhttprequest 状态码标识 逻辑可写在下面error中
-     */
-  },
-  (error) => {
-    const loginPath = process.env.PREFIXES ? `/${process.env.PREFIXES}/login` : '/login'
-    Message.closeAll()
-    var msg = ''
-    // 如果token已经过期，则刷新token
-    if (
-      error.response.data.error.message === 'The token has been blacklisted' ||
-      error.response.data.error.message === 'Token has expired'
-    ) {
-      msg = '当前页面已过期，请刷新'
-    } else if (
-      error.response &&
-      error.response.status === 403 &&
-      error.response.data.error.message == 'access denied, username password are not match'
-    ) {
-      msg = '用户名或密码错误'
-    } else if (
-      error.response &&
-      error.response.status === 403 &&
-      error.response.data.error.message == 'Token Signature could not be verified.'
-    ) {
-      router.push({ path: loginPath })
-      NProgress.done()
-    } else {
-      if (
-        error.response &&
-        error.response.data.error.code &&
-        errorMsg['code' + error.response.data.error.code]
-      ) {
-        msg = errorMsg['code' + error.response.data.error.code]
+function createAxios(inst, isJson = true) {
+  inst = inst || axios.create()
+  inst.defaults.timeout = process.env.NODE_ENV === 'production' ? 30000 : 30 * 1000
+  inst.defaults.baseURL = inst.defaults.baseURL || process.env.VUE_APP_BASE_API || '/'
+  inst.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+  inst.interceptors.request.use(config => {
+    debugger
+    const isGetMethod = config.method === 'get'
+    const isPutMethod = config.method === 'put'
+    const isDeleteMethod = config.method === 'delete'
+    const showError = config.showError === undefined ? true : config.showError
+    config.headers['Authorization'] = 'Bearer ' + store.getters.token
+    if (isGetMethod || isDeleteMethod) {
+      if (isObject(config.params)) {
+        let params = {}
+        Object.keys(config.params).forEach(key => {
+          if (config.params[key] !== '') {
+            params[key] = config.params[key]
+          }
+        })
+        config.params = params
       } else {
-        msg = error.response.data.error.message
+        config.params = {
+          ...config.params
+        }
+      }
+    } else {
+      if (isJson) {
+        const { params } = config
+        if (params) {
+          const { isUploadFile } = params
+          if (isUploadFile) {
+            let formParams = new FormData()
+            for (var key in config.params) {
+              if (key !== 'isUploadFile') {
+                formParams.append(key, config.params[key])
+              }
+            }
+            config.data = formParams
+            delete config.params
+          } else {
+            config.data = qs.stringify(config.params)
+            delete config.params
+          }
+        }
       }
     }
+    config.showError = showError
+    return config
+  })
 
-    if (!msg) {
-      msg = '系统繁忙，请重试'
+  // 是否正在刷新的标记
+  let isRefreshing = false
+  // 重试队列，每一项将是一个待执行的函数形式
+  let requests = []
+  inst.interceptors.response.use(
+    res => {
+      const {
+        data,
+        status,
+        config: { showError }
+      } = res
+      debugger
+      if (status >= 200 && status < 300) {
+        const resData = data.data
+        if (!resData) {
+          return
+        }
+        const { status_code } = resData
+        if (status_code) {
+          if (status_code == 40103) {
+            // token过期，刷新token，重新请求接口
+            const config = res.config
+            if (!isRefreshing) {
+              isRefreshing = true
+              return refresh()
+                .then(data => {
+                  const { token } = data
+                  store.commit('user/setToken', { token })
+                  config.headers['Authorization'] = 'Bearer ' + token
+                  // 已经刷新了token，将所有队列中的请求进行重试
+                  requests.forEach(cb => cb(token))
+                  // 重试完了清空这个队列
+                  requests = []
+                  return inst(config)
+                })
+                .catch(() => {
+                  Router.push({ path: '/auth/login', replace: true })
+                })
+                .finally(() => {
+                  isRefreshing = false
+                })
+            } else {
+              // 正在刷新token，返回一个未执行resolve的promise
+              return new Promise(resolve => {
+                // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
+                requests.push(token => {
+                  store.commit('user/setToken', { token })
+                  config.headers['Authorization'] = 'Bearer ' + token
+                  resolve(inst(config))
+                })
+              })
+            }
+          } else {
+            errorToast(resData)
+          }
+        } else {
+          return res
+        }
+      }
+      return Promise.reject(res)
+    },
+
+    err => {
+      //
+      console.log('req-err', err)
+      err.response && errorToast(err.response.data.data)
+      return Promise.reject(err)
     }
+  )
 
-    Message({ message: msg, type: 'error', duration: 3 * 1000 })
+  resolveGetMethod(inst)
+  return inst
+}
 
-    return Promise.reject(error)
-  }
-)
+export default createAxios()
 
-export default service
+export { createAxios, axios }

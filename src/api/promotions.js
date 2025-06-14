@@ -1,4 +1,4 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 export function saveRegisterPromotions(query) {
   return fetch({
@@ -296,17 +296,15 @@ export function getPopularizeSetting() {
   })
 }
 
-export function getPopularizeSettingStore (data) {
+export function getPopularizeSettingStore(data) {
   return fetch({
     url: '/popularize/config',
     method: 'get',
     params: data
-
   })
 }
 
-
-export function setPopularizeSetting (data) {
+export function setPopularizeSetting(data) {
   return fetch({
     url: '/popularize/config',
     method: 'post',

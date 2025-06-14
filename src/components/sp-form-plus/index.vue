@@ -31,14 +31,12 @@
               <span class="ml-1">查询</span>
             </div>
           </el-button>
-          <el-button @click="handleReset"
-            >
-<div class="flex items-center">
+          <el-button @click="handleReset">
+            <div class="flex items-center">
               <SpIcon name="rotate-ccw" :size="14" />
               <span class="ml-1">重置</span>
             </div>
-</el-button
-          >
+          </el-button>
 
           <!-- 搜索表单的扩展按钮 -->
           <el-button v-if="formType === 'searchForm'" type="text" @click="toggleExtend">

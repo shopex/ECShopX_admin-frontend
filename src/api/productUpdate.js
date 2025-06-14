@@ -1,7 +1,7 @@
-import fetch from '../utils/fetch'
+import { fetch } from './request'
 
 // 获取模板
-export function getTemplate (query) {
+export function getTemplate(query) {
   return fetch({
     url: '/espier/upload_template',
     method: 'get',
@@ -10,7 +10,7 @@ export function getTemplate (query) {
 }
 
 // 上传文件
-export function uploadFiles (query) {
+export function uploadFiles(query) {
   return fetch({
     url: '/espier/upload_file',
     method: 'post',
@@ -19,7 +19,7 @@ export function uploadFiles (query) {
 }
 
 // 获取上传文件列表
-export function getFlieList (query) {
+export function getFlieList(query) {
   return fetch({
     url: '/espier/upload_files',
     method: 'get',
@@ -28,7 +28,7 @@ export function getFlieList (query) {
 }
 
 // 处理失败
-export function exportUploadErrorFile (id, query) {
+export function exportUploadErrorFile(id, query) {
   return fetch({
     url: '/espier/upload_error_file_export/' + id,
     method: 'get',
