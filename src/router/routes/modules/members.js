@@ -10,7 +10,7 @@ const routes = [
             aliasName: 'member',
             icon: 'shopping-bag',
             keepAlive: true,
-            title: '商户'
+            title: '会员'
         },
         name: 'member',
         path: '/member',

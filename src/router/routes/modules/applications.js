@@ -31,11 +31,11 @@ const routes = [
                 ],
             },
             {
-                name: 'subAccount',
+                name: 'trades',
                 path: 'trades',
                 component: () => import('@/view/mall/bspay_sub_account/sub_account'),
                 meta: {
-                    aliasName: 'bspayTrades',
+                    aliasName: 'bspay_trades',
                     icon: 'pay-circle',
                     title: '分账明细',
                     permissions: ['applications.bspay.bspay_trades']
@@ -167,21 +167,15 @@ const routes = [
                 component: () => import('@/view/wxapp/salespersonshelfindex')
             },
             {
-                name: 'management',
-                path: 'event/management',
+                name: 'management1',
+                path: 'event/management1',
                 meta: {
                     aliasName: 'activity',
                     icon: 'pay-circle',
                     title: '活动管理',
                     permissions: ['applications.community.activity']
                 },
-                component: () => import('@/view/member/promotions/community/activity/index'),
-                children: [
-                    {
-                        path: 'editor/:activity_id?',
-                        component: () => import('@/view/member/promotions/community/activity/add')
-                    }
-                ]
+                component: () => import('@/view/mall/community/activityList')
             },
             {
                 name: 'products',

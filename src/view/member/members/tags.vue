@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="3">
         <el-button
           type="primary"
@@ -24,7 +24,7 @@
           />
         </el-input>
       </el-col>
-      <!-- <el-col :span="5">
+      <el-col :span="5">
         <el-select
           v-model="params.tag_status"
           clearable
@@ -53,8 +53,22 @@
             :value="item.category_id"
           ></el-option>
         </el-select>
-      </el-col> -->
-    </el-row>
+      </el-col>
+    </el-row> -->
+
+    <SpFilterForm :model="params" @onSearch="searchData" @onReset="onSearch">
+      <SpFilterFormItem prop="tag_name" label="标签名:">
+        <el-input v-model="params.tag_name" placeholder="标签名" style="width: 100%">
+          <!-- <el-button slot="append" icon="el-icon-search" @click="searchData" /> -->
+        </el-input>
+      </SpFilterFormItem>
+    </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" @click="addTemplate"> 添加标签 </el-button>
+    </div>
+
+
     <el-table
       v-loading="loading"
       :data="tagsList"

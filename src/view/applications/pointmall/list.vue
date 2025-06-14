@@ -91,10 +91,6 @@
             <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </div>
-
-
-      <div class="action-container">
         <el-button type="primary" plain @click="addCategory"> 更改销售分类 </el-button>
         <el-button type="primary" plain @click="addTemplates"> 更改运费模板 </el-button>
         <el-button type="primary" plain @click="batchItemsStore"> 统一库存 </el-button>

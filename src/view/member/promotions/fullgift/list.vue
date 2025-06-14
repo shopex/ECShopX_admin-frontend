@@ -8,11 +8,7 @@
   <div>
     <template v-if="$route.path.indexOf('editor') === -1">
       <SpPlatformTip h5 app pc alipay />
-      <div class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
-          添加满赠促销
-        </el-button>
-      </div>
+      
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="create_time" label="时间:">
           <el-date-picker
@@ -24,6 +20,12 @@
           />
         </SpFilterFormItem>
       </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
+          添加满赠促销
+        </el-button>
+      </div>
 
       <el-tabs v-model="params.status" type="card" @tab-click="handleTabClick">
         <el-tab-pane

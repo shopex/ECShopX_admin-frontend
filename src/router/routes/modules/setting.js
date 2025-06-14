@@ -35,6 +35,17 @@ const routes = [
         component: () => import('@/view/base/account/storestaff'),
       },
       {
+        name: `account`,
+        path: 'merchant/account',
+        meta: {
+          aliasName: 'storemanager_account',
+          icon: 'icon-products',
+          title: '商户账号',
+          permissions: ['setting.staff.storemanager_account']
+        },
+        component: () => import('@/view/mall/marketing/merchantAccount')
+      },
+      {
         name: `role`,
         path: 'system/role',
         meta: {

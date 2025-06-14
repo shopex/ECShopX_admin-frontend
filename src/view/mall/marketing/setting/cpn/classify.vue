@@ -31,7 +31,7 @@
     <div class="control">
       <el-button
         plain
-        size="mini"
+         type="primary"
         style="margin-right: 10px"
         @click="addClassify"
       >

@@ -1,11 +1,6 @@
 <template>
   <SpRouterView>
     <SpPlatformTip h5 app alipay />
-    <div class="action-container">
-      <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addElement">
-        活动添加
-      </el-button>
-    </div>
 
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
       <SpFilterFormItem prop="field_title" label="活动名称:">
@@ -33,6 +28,13 @@
         <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
       </SpFilterFormItem>
     </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addElement">
+        活动添加
+      </el-button>
+    </div>
+
 
     <el-table v-loading="loading" border :data="tableList" style="width: 100%">
       <el-table-column prop="activity_id" label="编号" width="100" />

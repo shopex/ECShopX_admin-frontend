@@ -47,7 +47,7 @@
         </SpFilterFormItem>
       </SpFilterForm>
 
-      <export-tip class="export-box" @exportHandle="exportData">
+      <export-tip  class="action-container" @exportHandle="exportData">
         <el-button type="primary" plain> 导出 </el-button>
       </export-tip>
 

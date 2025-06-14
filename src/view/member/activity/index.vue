@@ -14,8 +14,8 @@
         :name="item.activeName"
       >
         <template v-if="activeName === 'valid'">
-          <div class="content-bottom-padded">
-            <el-button size="medium" @click="add"> 添加活动 </el-button>
+          <div class="action-container">
+            <el-button type="primary" size="medium" @click="add"> 添加活动 </el-button>
           </div>
 
           <el-table :data="activity" border style="width: 100%">

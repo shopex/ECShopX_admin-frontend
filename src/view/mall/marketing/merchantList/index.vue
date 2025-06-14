@@ -1,12 +1,6 @@
 <template>
   <div>
     <SpRouterView class="merchantList">
-      <div class="action-container">
-        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="addMerchant">
-          新增商户
-        </el-button>
-      </div>
-
       <SpFilterForm :model="formParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="merchant_name" label="商户名称:">
           <el-input v-model="formParams.merchant_name" placeholder="请输入商户名称" />
@@ -33,6 +27,12 @@
           />
         </SpFilterFormItem>
       </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="addMerchant">
+          新增商户
+        </el-button>
+      </div>
 
       <SpFinder
         ref="finder"

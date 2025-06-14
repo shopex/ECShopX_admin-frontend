@@ -45,10 +45,10 @@ const routes = [
         path: 'order-manage/self-order-list',
         component: () => import('@/view/mall/marketing/distributionOrders'),
         meta: {
-          aliasName: 'marketingdistribution_orders',
+          aliasName: 'tradenormalshoporders',
           icon: 'icon-products',
           title: '自营订单',
-          permissions: ['order.entitytrade.marketingdistribution_orders']
+          permissions: ['order.entitytrade.tradenormalshoporders']
         },
         children: [
           {

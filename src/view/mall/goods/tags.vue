@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="action-container">
-      <el-button type="primary" @click="addTemplate"> 添加商品标签 </el-button>
-    </div>
-
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="tag_name" label="标签名:">
         <el-input v-model="params.tag_name" placeholder="请输入标签名" />
@@ -23,6 +19,11 @@
         </el-select>
       </SpFilterFormItem>
     </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" @click="addTemplate"> 添加商品标签 </el-button>
+    </div>
+
 
     <el-table v-loading="loading" border :data="tagsList" element-loading-text="数据加载中">
       <el-table-column prop="tag_id" label="操作" width="100">

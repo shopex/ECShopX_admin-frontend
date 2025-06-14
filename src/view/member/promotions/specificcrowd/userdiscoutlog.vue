@@ -6,12 +6,6 @@
 
 <template>
   <div>
-    <template>
-      <div class="action-container">
-        <el-button type="primary" @click="handleCancel"> 返回 </el-button>
-      </div>
-    </template>
-
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
       <SpFilterFormItem prop="order_id" label="订单号:">
         <el-input v-model="params.order_id" />
@@ -30,6 +24,10 @@
         />
       </SpFilterFormItem>
     </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" @click="handleCancel"> 返回 </el-button>
+      </div>
 
     <el-table v-loading="loading" :data="tableList" :height="wheight - 150" border>
       <el-table-column prop="order_id" label="订单号" width="150" />

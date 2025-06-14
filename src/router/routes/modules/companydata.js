@@ -8,7 +8,7 @@ const routes = [
             aliasName: 'companydata',
             icon: 'shopping-bag',
             keepAlive: true,
-            title: '装修'
+            title: '数据'
         },
         name: 'companydata',
         path: '/companydata',

@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="action-container">
-      <el-button type="primary" @click="addDeliveryman">添加配送员</el-button>
-    </div>
-
     <SpFilterForm :model="params" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="username" label="配送员姓名:">
         <el-input v-model="params.username" placeholder="请输入配送员姓名" />
@@ -22,6 +18,10 @@
         </el-select>
       </SpFilterFormItem>
     </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" @click="addDeliveryman">添加配送员</el-button>
+    </div>
 
     <SpFinder
       ref="finder"

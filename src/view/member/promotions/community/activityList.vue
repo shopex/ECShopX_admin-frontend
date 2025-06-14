@@ -103,7 +103,7 @@
 import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
-import { VERSION_STANDARD, isArray, VERSION_B2C(), VERSION_IN_PURCHASE() } from '@/utils'
+import { VERSION_STANDARD, isArray, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import { getCommunityActivity, communityDeliver } from '@/api/promotions'
 import moment from 'moment'
 import {
