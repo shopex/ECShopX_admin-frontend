@@ -863,7 +863,7 @@ import {
   flowItems
 } from '@/api/goods'
 import { getPageCode } from '@/api/marketing'
-import { VERSION_IN_PURCHASE() } from '@/utils'
+import { VERSION_IN_PURCHASE } from '@/utils'
 import mixins from '@/mixins'
 import { GOOD_CATEGORY, GOOD_CATEGORY_MAP } from '@/consts'
 
@@ -1065,14 +1065,14 @@ export default {
       itemSkuDrawerTitle: '',
       itemSkuList: [],
       goodCategoryMap: GOOD_CATEGORY_MAP,
-      goodCategory: GOOD_CATEGORY.filter((item) => item.value != 'distributor')
+      goodCategory: GOOD_CATEGORY.filter(item => item.value != 'distributor')
     }
   },
   computed: {
     ...mapGetters(['wheight', 'login_type', 'shopId'])
   },
   watch: {
-    '$route'(to, from) {
+    $route(to, from) {
       this.init()
     },
     getStatus(val) {
@@ -1149,7 +1149,7 @@ export default {
       let distributorIds = '_all'
       if (!isAll) {
         const { data } = await this.$picker.shop()
-        distributorIds = data.map((item) => item.distributor_id)
+        distributorIds = data.map(item => item.distributor_id)
       }
       await this.$api.marketing.saveDistributorItems({
         distributor_ids: distributorIds,
@@ -1175,7 +1175,7 @@ export default {
         page,
         id
       }
-      getPageCode(params).then((response) => {
+      getPageCode(params).then(response => {
         this.appCodeUrl = response.data.data.base64Image
       })
     },
@@ -1210,7 +1210,7 @@ export default {
       this.xpGoodsVisible = false
       let list = JSON.parse(JSON.stringify(data))
       if (list === null || list.length === 0) return
-      const items = list.map((item) => {
+      const items = list.map(item => {
         return {
           goods_id: item.goods_id
         }
@@ -1260,7 +1260,7 @@ export default {
       if (this.item_id.length) {
         this.isGiftsData.item_id = Object.assign({}, this.item_id)
         this.isGiftsData.status = status
-        saveIsGifts(this.isGiftsData).then((res) => {
+        saveIsGifts(this.isGiftsData).then(res => {
           if (res.data.data.status == true) {
             this.$message({
               type: 'success',
@@ -1289,7 +1289,7 @@ export default {
         ...this.params
       }
       if (this.item_id.length > 0) {
-        exportParams['item_id'] = this.item_id.map((item) => item)
+        exportParams['item_id'] = this.item_id.map(item => item)
       }
       const { status } = await this.$api.goods.exportItemsData(exportParams)
       if (status) {
@@ -1304,7 +1304,7 @@ export default {
         ...this.params
       }
       if (this.item_id.length > 0) {
-        exportParams['item_id'] = this.item_id.map((item) => item)
+        exportParams['item_id'] = this.item_id.map(item => item)
       }
       const { status } = await this.$api.goods.exportItemsTagData(exportParams)
       if (status) {
@@ -1319,7 +1319,7 @@ export default {
         ...this.params
       }
       if (this.item_id.length > 0) {
-        exportParams['item_id'] = this.item_id.map((item) => item)
+        exportParams['item_id'] = this.item_id.map(item => item)
       }
       const { status } = await this.$api.goods.exportGoodsCode({
         ...exportParams,
@@ -1334,7 +1334,7 @@ export default {
       }
     },
     syncItems() {
-      syncItems().then((res) => {
+      syncItems().then(res => {
         if (res.data.data.status == true) {
           this.$message({
             type: 'success',
@@ -1362,7 +1362,7 @@ export default {
         this.currentPrice = ''
         return
       }
-      updateGoodsInfo({ item_id: this.currentId, price: this.currentPrice }).then((res) => {
+      updateGoodsInfo({ item_id: this.currentId, price: this.currentPrice }).then(res => {
         this.$message({
           type: 'success',
           message: '操作成功'
@@ -1413,7 +1413,7 @@ export default {
       if (this.item_id.length) {
         this.showTags()
         this.tag.form.item_ids = this.item_id
-        this.tag.editItem = this.selections.map((v) => v.itemName)
+        this.tag.editItem = this.selections.map(v => v.itemName)
       } else {
         this.$message({
           type: 'error',
@@ -1424,7 +1424,7 @@ export default {
     showTags() {
       let tags = []
       this.tag.list.forEach((item, index) => {
-        let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+        let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
         if (isInArr === -1) {
           tags.push(item)
         }
@@ -1437,7 +1437,7 @@ export default {
       this.tag.currentTags.splice(index, 1)
     },
     tagAdd(item, index) {
-      let isInArr = this.tag.currentTags.findIndex((n) => n.tag_id == item.tag_id)
+      let isInArr = this.tag.currentTags.findIndex(n => n.tag_id == item.tag_id)
       if (isInArr == -1) {
         this.tag.currentTags.push(item)
         this.tag.tags.splice(index, 1)
@@ -1445,12 +1445,12 @@ export default {
     },
     submitItemTag() {
       this.tag.form.tag_ids = []
-      this.tag.currentTags.forEach((item) => {
+      this.tag.currentTags.forEach(item => {
         this.tag.form.tag_ids.push(item.tag_id)
       })
       this.tag.dialog = false
       itemsRelTags(this.tag.form)
-        .then((res) => {
+        .then(res => {
           if (res.data.data.status) {
             this.$message({
               type: 'success',
@@ -1459,7 +1459,7 @@ export default {
             this.getGoodsList()
           }
         })
-        .catch((e) => {
+        .catch(e => {
           this.getGoodsList()
         })
     },
@@ -1473,7 +1473,7 @@ export default {
         page: 1,
         pageSize: 500
       }
-      getTagList(params).then((response) => {
+      getTagList(params).then(response => {
         this.tag.list = response.data.data.list
       })
     },
@@ -1487,8 +1487,8 @@ export default {
           return false
         }
         this.addTemplatesdialogVisible = false
-        setItemsTemplate({ 'templates_id': this.templates_new_id, 'item_id': this.item_id }).then(
-          (response) => {
+        setItemsTemplate({ templates_id: this.templates_new_id, item_id: this.item_id }).then(
+          response => {
             this.getGoodsList()
           }
         )
@@ -1500,7 +1500,7 @@ export default {
       }
     },
     editItemsSort(index, row) {
-      setItemsSort({ 'sort': row.sort, 'item_id': row.itemId }).then((response) => {
+      setItemsSort({ sort: row.sort, item_id: row.itemId }).then(response => {
         this.getGoodsList()
       })
     },
@@ -1514,8 +1514,8 @@ export default {
           return false
         }
         this.addCategorydialogVisible = false
-        setItemsCategory({ 'category_id': this.category_id, 'item_id': this.item_id }).then(
-          (response) => {
+        setItemsCategory({ category_id: this.category_id, item_id: this.item_id }).then(
+          response => {
             this.getGoodsList()
             this.category_id = []
           }
@@ -1570,18 +1570,18 @@ export default {
     },
     saveRebateConf() {
       var rebateConf = []
-      this.rebateSpecItems.forEach((item) => {
+      this.rebateSpecItems.forEach(item => {
         var rebate_conf = item.rebate_conf
         rebate_conf.ratio_type = this.popularizeSetting.popularize_ratio.type
         rebateConf.push(rebate_conf)
       })
-      updateItemRebateConf({ rebateConf: JSON.stringify(rebateConf) }).then((res) => {
+      updateItemRebateConf({ rebateConf: JSON.stringify(rebateConf) }).then(res => {
         this.$message({ message: '保存成功', type: 'success', duration: 2 * 1000 })
       })
     },
     saveProfitConf() {
       var profitConf = []
-      this.profitSpecItems.forEach((item) => {
+      this.profitSpecItems.forEach(item => {
         var profit_conf = {}
         profit_conf.item_id = item.item_id
         profit_conf.profit_type = item.profit_type
@@ -1596,7 +1596,7 @@ export default {
 
         profitConf.push(profit_conf)
       })
-      saveGoodsProfitPrice({ profit_conf: JSON.stringify(profitConf) }).then((res) => {
+      saveGoodsProfitPrice({ profit_conf: JSON.stringify(profitConf) }).then(res => {
         this.$message({
           message: '保存成功',
           type: 'success',
@@ -1616,9 +1616,9 @@ export default {
         is_sku: true,
         item_id: data.item_id,
         item_type: 'normal'
-      }).then((res) => {
+      }).then(res => {
         var rebateSpecItems = []
-        res.data.data.list.forEach((item) => {
+        res.data.data.list.forEach(item => {
           if (item.rebate_conf.length === 0) {
             item.rebate_conf = {}
             item.rebate_conf.type = 'money'
@@ -1659,10 +1659,10 @@ export default {
     },
     getGoodsPrice(item_id) {
       this.skuLoading = true
-      getGoodsPrice(item_id).then((res) => {
+      getGoodsPrice(item_id).then(res => {
         let specItems = []
         let colConfigs = []
-        res.data.data.list.forEach((item) => {
+        res.data.data.list.forEach(item => {
           specItems.push({
             item_id: item.item_id,
             item_spec_desc: item.item_spec_desc || item.itemName,
@@ -1680,10 +1680,10 @@ export default {
     },
     getGoodsProfitPrice(item_id) {
       this.skuLoading = true
-      getGoodsProfitPrice(item_id).then((res) => {
+      getGoodsProfitPrice(item_id).then(res => {
         let profitSpecItems = []
         let colConfigs = []
-        res.data.data.list.forEach((item) => {
+        res.data.data.list.forEach(item => {
           let arr = {
             item_id: item.item_id,
             item_spec_desc: item.item_spec_desc || item.itemName,
@@ -1720,13 +1720,13 @@ export default {
         mprice: ''
       }
       let skus = {}
-      this.specItems.forEach((item) => {
+      this.specItems.forEach(item => {
         let grade = {}
-        item.grade.forEach((child) => {
+        item.grade.forEach(child => {
           Object.assign(grade, { [child.vip_grade_id]: child.mprice })
         })
         let vipGrade = {}
-        item.vipGrade.forEach((child) => {
+        item.vipGrade.forEach(child => {
           Object.assign(vipGrade, { [child.vip_grade_id]: child.mprice })
         })
         Object.assign(skus, {
@@ -1741,7 +1741,7 @@ export default {
       this.submitLoading = true
       const _self = this
       updateGoodsPrice(param)
-        .then((res) => {
+        .then(res => {
           this.$message({
             type: 'success',
             message: '更新成功',
@@ -1754,7 +1754,7 @@ export default {
             }
           })
         })
-        .catch((res) => {
+        .catch(res => {
           _self.submitLoading = false
         })
     },
@@ -1789,7 +1789,7 @@ export default {
       const { list, total_count, warning_store } = await this.$api.marketing.getDistributorItems(
         params
       )
-      list.forEach((item) => {
+      list.forEach(item => {
         item.price = item.price / 100
         item.market_price = item.market_price / 100
         item.link = `pages/item/espier-detail?gid=${item.goods_id}&id=${item.item_id}`
@@ -1806,7 +1806,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteItems(row.itemId).then((response) => {
+          deleteItems(row.itemId).then(response => {
             this.ItemsList.splice(index, 1)
             this.$message({
               message: '删除商品成功',
@@ -1828,13 +1828,13 @@ export default {
         pageSize: 1000
       })
       this.templatesList = list
-      this.templatesListavailable = list.filter((item) => item.status)
+      this.templatesListavailable = list.filter(item => item.status)
     },
     getGoodsBranchList(searchVal = '') {
       // this.loading = true
       // console.log(searchVal)
       this.goodsBranchParams.attribute_name = searchVal
-      getGoodsAttr(this.goodsBranchParams).then((response) => {
+      getGoodsAttr(this.goodsBranchParams).then(response => {
         this.goodsBranchList = response.data.data.list
         // console.log(this.goodsBranchList)
       })
@@ -1849,7 +1849,7 @@ export default {
       this.itemCategoryList = itemCategoryList
     },
     getCurrencyInfo() {
-      getDefaultCurrency().then((res) => {
+      getDefaultCurrency().then(res => {
         this.currency = res.data.data
         this.cursymbol = this.currency.symbol
       })
@@ -1890,12 +1890,12 @@ export default {
       this.loading = true
       let params = {}
       params = {
-        'goods_id': items.goods_id,
+        goods_id: items.goods_id,
         // 'status': items.is_market == '0' ? 'onsale' : 'instock',
         // 'is_can_sale': items.is_market == '0' ? true : false,
-        'is_can_sale': !items.is_can_sale,
-        'distributor_id': this.shopId,
-        'operate_source': 'platform'
+        is_can_sale: !items.is_can_sale,
+        distributor_id: this.shopId,
+        operate_source: 'platform'
       }
       const { status } = await this.$api.marketing.updateDistributorItem(params)
       if (status) {
@@ -1915,10 +1915,10 @@ export default {
         ...param,
         page: this.page.pageIndex,
         pageSize: this.page.pageSize
-      }).then((response) => {
+      }).then(response => {
         let list = response.data.data.list
         let data = {}
-        list.forEach((item) => {
+        list.forEach(item => {
           let data = {
             item_id: item.item_id,
             store: item.store,
@@ -1943,21 +1943,21 @@ export default {
       let params = {}
       if (this.storeItemsList.length > 0) {
         params = {
-          'items': JSON.stringify(this.storeItemsList)
+          items: JSON.stringify(this.storeItemsList)
         }
       } else if (this.item_id.length > 0) {
         let data = []
-        this.item_id.forEach((itemid) => {
+        this.item_id.forEach(itemid => {
           data.push({ item_id: itemid, store: this.itemstore, is_default: true })
         })
         params = {
-          'items': JSON.stringify(data)
+          items: JSON.stringify(data)
         }
       }
       this.submitLoading = true
       const _self = this
       updateItemsStore(params)
-        .then((res) => {
+        .then(res => {
           if (res.data.data.status) {
             this.$message({
               message: '修改成功',
@@ -1971,7 +1971,7 @@ export default {
 
           this.getGoodsList()
         })
-        .catch((err) => {
+        .catch(err => {
           this.submitLoading = false
           this.skuLoading = false
         })
@@ -2003,7 +2003,7 @@ export default {
       })
     },
     checkWdtErpBind() {
-      this.$api.third.getWdtErpSetting().then((response) => {
+      this.$api.third.getWdtErpSetting().then(response => {
         this.isBindWdtErp = response.is_open
       })
     },
@@ -2020,7 +2020,7 @@ export default {
       params = {
         item_id: this.item_id
       }
-      this.$api.goods.uploadWdtErpItems(params).then((res) => {
+      this.$api.goods.uploadWdtErpItems(params).then(res => {
         if (res.status == true) {
           this.$message({
             type: 'success',
@@ -2035,7 +2035,7 @@ export default {
       })
     },
     checkJstErpBind() {
-      this.$api.third.getJstErpSetting().then((response) => {
+      this.$api.third.getJstErpSetting().then(response => {
         this.isBindJstErp = response.is_open
       })
     },
@@ -2051,7 +2051,7 @@ export default {
       params = {
         item_id: this.item_id
       }
-      this.$api.goods.uploadJstErpItems(params).then((res) => {
+      this.$api.goods.uploadJstErpItems(params).then(res => {
         if (res.status == true) {
           this.$message({
             type: 'success',

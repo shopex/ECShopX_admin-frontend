@@ -73,8 +73,10 @@ const routes = [
         path: 'product-manage/merchant-products',
         component: () => import('@/view/mall/goods/audit/list'),
         meta: {
+          aliasName: 'goodsaudit',
           icon: 'icon-products',
-          title: '商户商品'
+          title: '商户商品',
+          permissions: ['entity.goods.goodsaudit']
         },
         children: [
           {

@@ -398,7 +398,7 @@
 import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
-import { VERSION_STANDARD, isArray, VERSION_B2C(), VERSION_IN_PURCHASE() } from '@/utils'
+import { VERSION_STANDARD, isArray, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import { exportInvoice, orderExport } from '@/api/trade'
 import moment from 'moment'
 import {
@@ -490,7 +490,7 @@ export default {
           ],
           required: true,
           message: '不能为空',
-          onChange: (e) => {
+          onChange: e => {
             if (e == 12) {
               this.cancelOrderFormList[1].isShow = true
             } else {
@@ -529,7 +529,7 @@ export default {
             { label: 'batch', name: '整单发货' },
             { label: 'sep', name: '拆分发货' }
           ],
-          onChange: (e) => {
+          onChange: e => {
             if (e == 'sep') {
               this.deliverGoodsFormList[1].options[4].isShow = true
             } else {
@@ -556,7 +556,7 @@ export default {
                 } else {
                   return (
                     <el-input-number
-                      size='mini'
+                      size="mini"
                       v-model={row.delivery_num}
                       min={1}
                       max={row.num - row.delivery_item_num}
@@ -669,7 +669,7 @@ export default {
             { label: '0', name: '不同意' },
             { label: '1', name: '同意' }
           ],
-          onChange: (e) => {
+          onChange: e => {
             if (e == '0') {
               this.refundFormList[8].isShow = true
             } else {
@@ -752,7 +752,7 @@ export default {
         params
       )
 
-      this.tableList = list.map((item) => {
+      this.tableList = list.map(item => {
         const actionBtns = []
         const {
           distributor_id,
@@ -838,13 +838,13 @@ export default {
       if (order_class == 'normal') {
         return type == '1' ? '跨境订单' : '普通订单'
       }
-      const fd = ORDER_TYPE.find((item) => item.value == order_class)
+      const fd = ORDER_TYPE.find(item => item.value == order_class)
       if (fd) {
         return fd.title
       }
     },
     getDistributionType({ receipt_type }) {
-      const fd = DISTRIBUTION_TYPE.find((item) => item.value == receipt_type)
+      const fd = DISTRIBUTION_TYPE.find(item => item.value == receipt_type)
       if (fd) {
         return fd.title
       }
@@ -864,7 +864,7 @@ export default {
     },
     async getLogisticsList() {
       const { list } = await this.$api.trade.getLogisticsList()
-      this.deliverGoodsFormList[2].options = list.map((item) => {
+      this.deliverGoodsFormList[2].options = list.map(item => {
         return {
           title: item.name,
           value: item.value
@@ -887,7 +887,7 @@ export default {
       } else if (key == 'deliverGoods') {
         this.$refs['deliverGoodsDialogRef'].resetForm()
         this.deliverGoodsForm.order_id = order_id
-        this.deliverGoodsForm.items = items.map((item) => {
+        this.deliverGoodsForm.items = items.map(item => {
           return {
             ...item,
             price: item.price / 100
@@ -907,7 +907,7 @@ export default {
       } else if (key == 'writeOff') {
         this.$refs['writeOffDialogRef'].resetForm()
         this.writeOffForm.order_id = order_id
-        this.writeOffForm.items = items.map((item) => {
+        this.writeOffForm.items = items.map(item => {
           return {
             ...item,
             price: item.price / 100
@@ -1003,7 +1003,7 @@ export default {
       }
       // 拆单发货
       if (delivery_type == 'sep') {
-        params['sepInfo'] = JSON.stringify(items.filter((item) => item.delivery_num))
+        params['sepInfo'] = JSON.stringify(items.filter(item => item.delivery_num))
       }
       const { delivery_status } = await this.$api.trade.delivery(params)
       this.deliverGoodsDialog = false
@@ -1047,7 +1047,7 @@ export default {
         ...this.params,
         type,
         order_type: 'normal'
-      }).then((response) => {
+      }).then(response => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')
@@ -1088,7 +1088,7 @@ export default {
       delete params.create_time
       delete params.delivery_time
 
-      orderExport(params).then((response) => {
+      orderExport(params).then(response => {
         const { status, url, filename } = response.data.data
         if (status) {
           this.$message.success('已加入执行队列，请在设置-导出列表中下载')

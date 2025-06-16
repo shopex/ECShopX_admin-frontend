@@ -6,6 +6,9 @@
   border-left: 5px solid #ff7800;
   margin: 11px 0;
 }
+.content-bottom-padded {
+  display: flex;
+}
 </style>
 <template>
   <div>
@@ -123,7 +126,7 @@ export default {
     },
     uploadHandleChange(file, fileList) {
       let params = { isUploadFile: true, file_type: this.activeName, file: file.raw }
-      handleUploadFile(params).then((response) => {
+      handleUploadFile(params).then(response => {
         this.$message({
           type: 'success',
           message: '上传成功，等待处理'
@@ -142,7 +145,7 @@ export default {
         var fileName = '上传报名审核结果'
       }
       let params = { file_type: this.activeName, file_name: fileName }
-      exportUploadTemplate(params).then((response) => {
+      exportUploadTemplate(params).then(response => {
         if (response.data.data.file) {
           var a = document.createElement('a')
           a.href = response.data.data.file
@@ -160,7 +163,7 @@ export default {
     },
     exportErrorFile(id, fileType) {
       let params = { file_type: fileType }
-      exportUploadErrorFile(id, params).then((response) => {
+      exportUploadErrorFile(id, params).then(response => {
         if (response.data.data.file) {
           var a = document.createElement('a')
           a.href = response.data.data.file
@@ -183,7 +186,7 @@ export default {
     getUploadList() {
       this.loading = true
       let params = { file_type: this.activeName, page: this.page, pageSize: this.pageSize }
-      getUploadLists(params).then((response) => {
+      getUploadLists(params).then(response => {
         this.uploadList = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false

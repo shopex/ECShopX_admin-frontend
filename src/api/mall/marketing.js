@@ -1,4 +1,4 @@
-import { fetch } from './request'
+import { fetch } from './../request'
 
 /* 商家入驻 */
 

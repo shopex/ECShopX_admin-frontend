@@ -75,25 +75,20 @@ function setupAccessGuard(router) {
     }
 
     // 获取第一个可访问路由的路径
-    const getFirstRoutePath = routes => {
-      if (!routes || !routes.length) return '/dashboard'
+    const getFirstRoutePath = () => {
+      const routes = router.getRoutes()
+      const [firstPermission] = store.state.access.permissions
 
-      const findFirstPath = (route, parentPath = '') => {
-        const currentPath = parentPath + route.path
-
-        if (!route.children || !route.children.length) {
-          return currentPath
-        }
-
-        return findFirstPath(route.children[0], currentPath)
+      const firstRoute = routes.find(route => route?.meta?.permissions?.includes(firstPermission))
+      if (firstRoute) {
+        return firstRoute.path
       }
 
-      return findFirstPath(routes[0])
+      return '/'
     }
-
     // 如果目标路径不可访问，重定向到第一个可访问路由
     if (!isPathAccessible(to.path, router.getRoutes())) {
-      const firstPath = getFirstRoutePath(accessibleRoutes)
+      const firstPath = getFirstRoutePath()
       next(firstPath)
       return
     }

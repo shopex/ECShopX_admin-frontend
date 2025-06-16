@@ -1,189 +1,273 @@
 import { BasicLayout } from '@/layout/basic'
+import SubLayout from '@/view/sublayout'
+import { VERSION_IN_PURCHASE } from '@/utils'
 
 const routes = [
   {
     component: BasicLayout,
     meta: {
       aliasName: 'member',
-      icon: 'user-group',
+      icon: 'shopping-bag',
       keepAlive: true,
       title: '会员'
     },
     name: 'member',
-    path: '/member',
+    path: '/members',
     children: [
       {
         name: 'memberList',
         path: 'member-manage/member-list',
-        component: () => import('@/view/member/members/list'),
         meta: {
+          aliasName: 'memberlist',
+          icon: 'pay-circle',
           title: '会员列表',
-          icon: 'icon-member'
+          permissions: ['member.memberlmana.memberlist']
         },
+        component: () => import('@/view/member/members/list'),
         children: [
           {
             path: 'detail/:user_id?',
-            component: () => import('@/view/member/members/detail'),
-            meta: {
-              title: '会员详情',
-              hidden: true
-            }
+            component: () => import('@/view/member/members/detail')
           },
           {
-            path: 'chief-upload',
-            component: () => import('@/view/member/members/upload_chief'),
-            meta: {
-              title: '上传主管',
-              hidden: true
-            }
+            path: 'chiefupload',
+            component: () => import('@/view/member/members/upload_chief')
           }
         ]
       },
       {
+        name: 'batchUpdate',
+        path: 'member-manage/batch-update',
+        meta: {
+          aliasName: 'managecustomer',
+          icon: 'pay-circle',
+          title: '批量更新',
+          permissions: ['member.memberlmana.managecustomer']
+        },
+        component: () => import('@/view/member/members/uploade')
+      },
+      {
+        name: 'memberTags',
+        path: 'member-manage/member-tags',
+        meta: {
+          aliasName: 'Managetag',
+          icon: 'pay-circle',
+          title: '会员标签',
+          permissions: ['member.memberlmana.Managetag']
+        },
+        component: () => import('@/view/member/members/tags')
+      },
+      // TODO: 补充会员路由
+      {
         name: 'memberLevel',
-        path: 'member-manage/level',
-        component: () => import('@/view/member/level'),
+        path: 'member-benefit/member-level',
         meta: {
-          title: '等级管理',
-          icon: 'icon-level'
-        }
+          aliasName: 'managecard',
+          icon: 'pay-circle',
+          title: '会员等级',
+          permissions: ['member.card.managecard']
+        },
+        component: () => import('@/view/member/level')
       },
       {
-        name: 'memberLevelOrder',
-        path: 'member-manage/level-order',
-        component: () => import('@/view/member/membercard/list'),
+        name: 'paymentRecords',
+        path: 'member-benefit/payment-records',
         meta: {
-          title: '等级购买记录'
-        }
+          aliasName: 'managecardorder',
+          icon: 'pay-circle',
+          title: '付费记录',
+          permissions: ['member.card.managecardorder']
+        },
+        component: () => import('@/view/member/membercard/list')
       },
       {
-        name: 'memberTagCategory',
-        path: 'member-tag/tag-category',
-        component: () => import('@/view/member/members/tagcategory.vue'),
+        name: 'pointRule',
+        path: 'member-benefit/point-rule',
         meta: {
-          title: '会员标签分组'
-        }
+          aliasName: 'pointrule',
+          icon: 'pay-circle',
+          title: '积分规则',
+          permissions: ['member.card.pointrule']
+        },
+        component: () => import('@/view/member/point/index.vue')
       },
       {
-        name: 'memberTag',
-        path: 'member-tag/tag-list',
-        component: () => import('@/view/member/members/tags'),
+        name: 'pointOverview',
+        path: 'member-benefit/point-overview',
         meta: {
-          title: '会员标签'
-        }
+          aliasName: 'pointoverview',
+          icon: 'pay-circle',
+          title: '积分流水',
+          permissions: ['member.card.pointoverview']
+        },
+        component: () => import('@/view/member/point/overview.vue')
       },
       {
-        name: 'whiteList',
-        path: 'white-list/list',
+        name: 'bulkSms',
+        path: 'member-outreach/bulk-sms',
+        meta: {
+          aliasName: 'smssend',
+          icon: 'pay-circle',
+          title: '群发短信',
+          permissions: ['member.membertouch.smssend']
+        },
+        component: () => import('@/view/member/members/list')
+      },
+      {
+        name: 'arrivalNotice',
+        path: 'member-outreach/arrival-notice',
+        meta: {
+          aliasName: 'arrivalnotice',
+          icon: 'pay-circle',
+          title: '到货通知',
+          permissions: ['member.membertouch.arrivalnotice']
+        },
+        component: () => import('@/view/goods/arrivalNotice')
+      },
+      {
+        name: 'configuration',
+        path: 'registration/configuration',
+        meta: {
+          aliasName: 'manageinfomation',
+          icon: 'pay-circle',
+          title: '注册配置',
+          permissions: ['member.membersetting.manageinfomation']
+        },
+        component: () => import('@/view/member/register')
+      },
+      {
+        name: 'configuration',
+        path: 'cancel/configuration',
+        meta: {
+          aliasName: 'closeAccount',
+          icon: 'pay-circle',
+          title: '注销配置',
+          permissions: ['member.membersetting.closeAccount']
+        },
+        component: () => import('@/view/member/logout')
+      },
+      {
+        name: 'login',
+        path: 'trust/login',
+        meta: {
+          aliasName: 'trustlogin',
+          icon: 'pay-circle',
+          title: '信任登录',
+          permissions: ['member.membersetting.trustlogin']
+        },
+        component: () => import('@/view/member/trustlogin/list')
+      },
+      {
+        name: 'whitelist',
+        path: 'member/whitelist',
+        meta: {
+          aliasName: 'whitelistlist',
+          icon: 'pay-circle',
+          title: '会员白名单',
+          permissions: ['member.whitelistlist']
+        },
         component: () => {
           if (VERSION_IN_PURCHASE()) {
             return import('@/view/member/whitelist/list.purchase')
           } else {
             return import('@/view/member/whitelist/list')
           }
-        },
-        meta: {
-          title: '白名单列表'
         }
       },
       {
-        name: 'whiteListUpload',
-        path: 'white-list/upload',
-        component: () => import('@/view/member/whitelist/uploadeindex'),
+        name: 'import',
+        path: 'whitelist/import',
         meta: {
+          aliasName: 'whitelistuploade',
+          icon: 'pay-circle',
           title: '白名单导入',
-          hidden: true
-        }
+          permissions: ['member.whitelistuploade']
+        },
+        component: () => import('@/view/member/whitelist/uploadeindex')
       },
+      // {
+      //   name: 'export',
+      //   path: 'member/export',
+      //   meta: {
+      //     aliasName: 'member-export',
+      //     icon: 'pay-circle',
+      //     title: '会员导出',
+      //     permissions: ['member.memberlmana.member-export']
+      //   },
+      //   component: () => import('@/'),
+      // },
       {
-        name: 'pointManage',
-        path: 'point/point-rule',
-        component: () => import('@/view/member/point/index.vue'),
+        name: 'rights',
+        path: 'add/rights',
         meta: {
-          title: '积分规则'
-        }
+          aliasName: 'member-add-rights',
+          icon: 'pay-circle',
+          title: '添加权益',
+          permissions: ['member.memberlmana.member-add-rights']
+        },
+        component: () => import('@/view/member/members/rightsList')
       },
       {
-        name: 'pointOverview',
-        path: 'point/overview',
-        component: () => import('@/view/member/point/overview.vue'),
+        name: 'information',
+        path: 'member/information',
         meta: {
-          title: '积分总览'
-        }
+          aliasName: 'member-list-view',
+          icon: 'pay-circle',
+          title: '会员信息查看',
+          permissions: ['member.memberlmana.member-list-view']
+        },
+        component: () => import('@/view/member/register')
       },
       {
-        name: 'memberRights',
-        path: 'member-rights',
-        component: () => import('@/view/member/members/rightsList'),
+        name: 'distribution',
+        path: 'coupon/distribution',
         meta: {
-          title: '会员权益'
-        }
-      },
-      {
-        name: 'memberNotice',
-        path: 'notice/sms',
+          aliasName: 'member-send-coupons',
+          icon: 'pay-circle',
+          title: '群发优惠券',
+          permissions: ['member.memberlmana.member-send-coupons']
+        },
         component: () => import('@/view/member/members/list'),
-        meta: {
-          title: '群发短信'
-        }
+        children: [
+          {
+            path: 'detail',
+            component: () => import('@/view/member/members/detail')
+          }
+        ]
       },
       {
-        name: 'arrivalNotice',
-        path: 'notice/arrival',
-        component: () => import('@/view/goods/arrivalNotice'),
+        name: 'texting',
+        path: 'mass/texting',
         meta: {
-          title: '到货通知'
-        }
+          aliasName: 'member-send-sms',
+          icon: 'pay-circle',
+          title: '群发短信',
+          permissions: ['member.memberlmana.member-send-sms']
+        },
+        component: () => import('@/view/member/members/list')
       },
       {
-        name: 'memberSetting',
-        path: 'setting/register-info',
-        component: () => import('@/view/member/register'),
+        name: 'label',
+        path: 'label',
         meta: {
-          title: '会员注册信息'
-        }
-      },
-      {
-        name: 'salemanProtocol',
-        path: 'setting/saleman-protocol',
-        component: () => import('@/view/member/salemanprotocol'),
-        meta: {
-          title: '业务员协议'
-        }
-      },
-      {
-        name: 'memberRecharge',
-        path: 'recharge',
-        component: () => import('@/view/mall/storeddeposit/index'),
-        meta: {
-          title: '会员储值'
-        }
-      },
-      {
-        name: 'memberImport',
-        path: 'member-manage/import',
-        component: () => import('@/view/member/members/uploade'),
-        meta: {
-          title: '会员信息导入',
-          hidden: true
-        }
-      },
-      {
-        name: 'trustLogin',
-        path: 'setting/trust-login',
-        component: () => import('@/view/member/trustlogin/list'),
-        meta: {
-          title: '信任登录'
-        }
-      },
-      {
-        name: 'memberLogout',
-        path: 'setting/logout',
-        component: () => import('@/view/member/logout'),
-        meta: {
-          title: '会员注销'
-        }
+          aliasName: 'member-tag',
+          icon: 'pay-circle',
+          title: '打标签',
+          permissions: ['member.memberlmana.member-tag']
+        },
+        component: () => import('@/view/mall/goods/physical/normalGoodsTagUpload')
       }
+      // {
+      //   name: 'modification',
+      //   path: 'member-phone-number/modification',
+      //   meta: {
+      //     aliasName: 'member-modify-phone-number',
+      //     icon: 'pay-circle',
+      //     title: '会员手机号修改',
+      //     permissions: ['member.memberlmana.member-modify-phone-number']
+      //   },
+      //   component: () => import('@/'),
+      // },
     ]
   }
 ]

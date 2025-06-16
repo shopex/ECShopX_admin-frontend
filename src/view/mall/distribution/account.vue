@@ -125,6 +125,11 @@ export default {
     margin: 0 auto;
     margin-top: 50px;
   }
+  .btn {
+    width: 120px;
+    background: #53a3e8;
+    color: #fff;
+  }
 }
 </style>
 

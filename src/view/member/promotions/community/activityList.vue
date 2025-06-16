@@ -33,7 +33,7 @@
         </SpFilterFormItem>
       </SpFilterForm>
 
-      <div class="action-container"></div>
+      <div class="action-container" />
 
       <el-tabs v-model="params.activity_status" type="card" @tab-click="onSearch">
         <el-tab-pane
@@ -43,9 +43,9 @@
           :name="item.value"
         />
         <el-table v-loading="loading" border :data="tableList">
-          <el-table-column width="100" prop="activity_id" label="ID"> </el-table-column>
+          <el-table-column width="100" prop="activity_id" label="ID" />
 
-          <el-table-column width="220" prop="activity_name" label="活动名称"> </el-table-column>
+          <el-table-column width="220" prop="activity_name" label="活动名称" />
           <el-table-column prop="total_fee" width="120" label="实际收入（¥）">
             <template slot-scope="scope">
               {{ (scope.row.total_fee / 100).toFixed(2) }}
@@ -59,10 +59,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column width="220" prop="activity_process_msg" label="状态"> </el-table-column>
+          <el-table-column width="220" prop="activity_process_msg" label="状态" />
 
-          <el-table-column width="200" prop="activity_delivery_status_msg" label="发货状态">
-          </el-table-column>
+          <el-table-column width="200" prop="activity_delivery_status_msg" label="发货状态" />
 
           <!-- <el-table-column
               label="操作"
@@ -103,19 +102,14 @@
 import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
-import { VERSION_STANDARD, isArray, VERSION_B2C(), VERSION_IN_PURCHASE() } from '@/utils'
+import { VERSION_STANDARD, isArray, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import { getCommunityActivity, communityDeliver } from '@/api/promotions'
 import moment from 'moment'
-import {
-  DISTRIBUTION_TYPE,
-  ORDER_STATUS,
-  PICKER_DATE_OPTIONS
-} from '@/consts'
-
+import { DISTRIBUTION_TYPE, ORDER_STATUS, PICKER_DATE_OPTIONS } from '@/consts'
 
 export default {
   mixins: [mixin, pageMixin],
-  data () {
+  data() {
     return {
       loading: false,
       defaultTime: ['00:00:00', '23:59:59'],
@@ -123,52 +117,50 @@ export default {
         activity_name: '',
         activity_status: '',
         time_start_begin: '', //
-        time_start_end: '',
+        time_start_end: ''
       },
       activity_status: [
         {
-          title:'未开始',
-          value:'waiting'
+          title: '未开始',
+          value: 'waiting'
         },
         {
-          title:'进行中',
-          value:'ongoing'
+          title: '进行中',
+          value: 'ongoing'
         },
         {
-          title:'已结束',
-          value:'end'
-        },
+          title: '已结束',
+          value: 'end'
+        }
       ],
-      processArr:[
+      processArr: [
         {
-          title:'是',
-          value:1
+          title: '是',
+          value: 1
         },
         {
-          title:'否',
-          value:0
-        },
+          title: '否',
+          value: 0
+        }
       ],
-      pickerOptions: PICKER_DATE_OPTIONS,
-
-
+      pickerOptions: PICKER_DATE_OPTIONS
     }
   },
 
   computed: {
     ...mapGetters(['wheight'])
   },
-  mounted () {
+  mounted() {
     this.fetchList()
   },
   methods: {
-    onSearch () {
+    onSearch() {
       this.page.pageIndex = 1
       this.$nextTick(() => {
         this.fetchList()
       })
     },
-    getParams () {
+    getParams() {
       const time = {}
       if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
         time.time_start_begin = moment(this.params.create_time[0]).unix()
@@ -183,18 +175,18 @@ export default {
       }
       return params
     },
-    onReset () {
+    onReset() {
       this.params = { ...this.initialParams }
       this.onSearch()
     },
     // 切换tab
-    handleTabClick (tab, event) {
+    handleTabClick(tab, event) {
       this.onSearch()
     },
-    dateStrToTimeStamp (str) {
+    dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
     },
-    async fetchList () {
+    async fetchList() {
       this.loading = true
       const { pageIndex: page, pageSize } = this.page
       let params = {
@@ -208,7 +200,7 @@ export default {
       this.loading = false
     },
 
-    send (row) {
+    send(row) {
       var msg = '此操作发货, 是否继续?'
       this.$confirm(msg, '提示', {
         cancelButtonText: '取消',
@@ -216,23 +208,20 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            communityDeliver({ activity_id: row.activity_id }).then(
-              (response) => {
-                this.fetchList()
-                this.$message({
-                  message: '发货成功',
-                  type: 'success',
-                  duration: 5 * 1000
-                })
-              }
-            )
+            communityDeliver({ activity_id: row.activity_id }).then(response => {
+              this.fetchList()
+              this.$message({
+                message: '发货成功',
+                type: 'success',
+                duration: 5 * 1000
+              })
+            })
           }
           done()
         }
       })
     }
   }
-
 }
 </script>
 <style lang="scss" scope>

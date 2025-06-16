@@ -1,4 +1,4 @@
-import { fetch } from './request'
+import { fetch } from './../request'
 
 // 经销商开户信息
 export function getDealderInfo() {

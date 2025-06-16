@@ -20,7 +20,12 @@
   color: #777;
   line-height: initial;
 }
-
+.distributor-btn {
+  display: flex;
+}
+.action-container {
+  margin-right: 8px;
+}
 .el-button {
   &--success {
     &.is-plain {
@@ -86,16 +91,6 @@
         </el-alert>
       </div>
 
-      <div v-if="!IS_DISTRIBUTOR()" class="action-container">
-        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="dialogOpen()">
-          添加店铺
-        </el-button>
-
-        <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="uploadHandleChange()">
-          导入店铺
-        </el-button>
-      </div>
-
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="distributor_id" label="店铺:">
           <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
@@ -140,8 +135,19 @@
         </SpFilterFormItem>
       </SpFilterForm>
 
-      <div class="action-container">
-        <!-- <el-button
+      <div class="distributor-btn">
+        <div v-if="!IS_DISTRIBUTOR()" class="action-container">
+          <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="dialogOpen()">
+            添加店铺
+          </el-button>
+
+          <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="uploadHandleChange()">
+            导入店铺
+          </el-button>
+        </div>
+
+        <div>
+          <!-- <el-button
           v-if="VERSION_PLATFORM() && !is_distributor && !IS_MERCHANT()"
           plain
           type="primary"
@@ -149,35 +155,36 @@
         >
           打标签
         </el-button> -->
-        <el-button
-          v-if="VERSION_PLATFORM() && !is_distributor && !IS_MERCHANT()"
-          plain
-          type="primary"
-          @click="addDistributorTag"
-        >
-          打标签
-        </el-button>
-        <el-button
-          v-if="IS_ADMIN() || IS_MERCHANT()"
-          type="primary"
-          plain
-          @click="showSettingDistance('')"
-        >
-          设置店铺默认可见范围
-        </el-button>
-        <el-button
-          v-if="!IS_DISTRIBUTOR() && !distributor_self"
-          type="primary"
-          plain
-          @click="addDistributorSelf()"
-        >
-          新增默认虚拟店信息
-        </el-button>
-        <template v-else>
-          <el-button v-if="!IS_MERCHANT()" type="primary" plain @click="editDistributorSelf()">
-            编辑默认虚拟店信息
+          <el-button
+            v-if="VERSION_PLATFORM() && !is_distributor && !IS_MERCHANT()"
+            plain
+            type="primary"
+            @click="addDistributorTag"
+          >
+            打标签
           </el-button>
-        </template>
+          <el-button
+            v-if="IS_ADMIN() || IS_MERCHANT()"
+            type="primary"
+            plain
+            @click="showSettingDistance('')"
+          >
+            设置店铺默认可见范围
+          </el-button>
+          <el-button
+            v-if="!IS_DISTRIBUTOR() && !distributor_self"
+            type="primary"
+            plain
+            @click="addDistributorSelf()"
+          >
+            新增默认虚拟店信息
+          </el-button>
+          <template v-else>
+            <el-button v-if="!IS_MERCHANT()" type="primary" plain @click="editDistributorSelf()">
+              编辑默认虚拟店信息
+            </el-button>
+          </template>
+        </div>
       </div>
 
       <el-tabs v-model="params.is_valid" type="card" @tab-click="onSearch">

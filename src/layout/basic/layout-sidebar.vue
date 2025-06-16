@@ -19,7 +19,10 @@
       </ul>
     </div>
 
-    <div class="sub-menu-list w-[180px] border-border border-l border-r h-full">
+    <div
+      class="sub-menu-list w-[180px] border-border border-l border-r h-full"
+      v-if="subMenus.length > 0"
+    >
       <!-- activeSubIndex: {{ activeSubIndex }} -->
       <div class="h-[50px] pl-2">
         <div class="light flex h-full items-center text-lg px-3">
@@ -35,6 +38,7 @@
               </template>
               <!-- 三级菜单 -->
               <el-menu-item
+                class="third-menu-item"
                 v-for="child in item.children"
                 :key="child.alias_name"
                 :index="child.alias_name"
@@ -46,6 +50,7 @@
           </template>
           <template v-else>
             <el-menu-item
+              class="second-menu-item"
               :key="item.alias_name"
               :index="item.alias_name"
               @click="handleSubMenuClick(item)"
@@ -96,12 +101,32 @@ export default {
       return route?.meta?.icon || 'layout-dashboard'
     },
     handleMainMenuClick(item) {
-      this.subMenus = item.children || []
+      if (item.alias_name == this.$route.matched?.[0]?.meta?.aliasName) {
+        return
+      }
+      this.subMenus = item?.children || []
+      // 获取第一个子路由
+      const firstChild = _submenu => {
+        if (_submenu.children) {
+          return firstChild(_submenu.children[0])
+        } else {
+          return _submenu?.permission
+        }
+      }
+      // 如果只有一级菜单，就直接那当前一级菜单的权限
+      const permission = firstChild(this.subMenus?.[0] || item)
+      const allRoutes = this.$router.getRoutes()
+      const route = allRoutes.find(route => route.meta?.permissions?.includes(permission))
+      if (route) {
+        this.$router.push({ path: route.path })
+      } else {
+        console.log('没有权限', item)
+      }
     },
     handleSubMenuClick(item) {
       const allRoutes = this.$router.getRoutes()
-      console.log('allRoutes:', allRoutes)
       const route = allRoutes.find(route => route.meta?.permissions?.includes(item.permission))
+      console.log('handleSubMenuClick:', route)
 
       if (route) {
         if (this.$route.path == route?.path) {
@@ -136,13 +161,17 @@ export default {
   }
 }
 
+.third-menu-item {
+  padding-left: 34px !important;
+}
+
 :deep(.el-menu-item) {
   border-radius: 6px;
   height: 42px;
   line-height: 42px;
   margin: 0 8px 2px;
   padding-right: 12px !important;
-  padding-left: 34px !important;
+
   min-width: auto;
   color: #666;
 }

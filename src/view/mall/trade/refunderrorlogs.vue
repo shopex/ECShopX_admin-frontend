@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="6">
         <el-input v-model="params.order_id" placeholder="请输入订单号">
           <el-button slot="append" icon="el-icon-search" @click="dataSearch" />
@@ -16,7 +16,23 @@
           @change="dateChange"
         />
       </el-col>
-    </el-row>
+    </el-row> -->
+
+    <SpFilterForm :model="params" @onSearch="getDataList(params)" @onReset="getDataList(params)">
+      <SpFilterFormItem prop="order_id" label="订单号:">
+        <el-input v-model="params.order_id" placeholder="请输入订单号" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="create_time" label="订单号:">
+        <el-date-picker
+          v-model="params.create_time"
+          type="daterange"
+          value-format="yyyy/MM/dd"
+          placeholder="添加时间筛选"
+          style="width: 100%"
+          @change="dateChange"
+        />
+      </SpFilterFormItem>
+    </SpFilterForm>
 
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <el-tab-pane label="未处理" name="waiting" />
@@ -123,7 +139,7 @@ export default {
         this.params.end_time = ''
       }
       this.params.page = 1
-      this.getDataList(this.params)
+      // this.getDataList(this.params)
     },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000

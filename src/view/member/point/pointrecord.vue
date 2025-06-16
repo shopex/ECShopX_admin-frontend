@@ -1,6 +1,6 @@
 <template>
   <div class="section-white content-padded">
-    <el-row :gutter="20">
+    <!-- <el-row :gutter="20">
       <el-col :span="6">
         <el-date-picker
           v-model="created"
@@ -21,7 +21,26 @@
           <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
         </el-input>
       </el-col>
-    </el-row>
+    </el-row> -->
+    <SpFilterForm :model="params" @onSearch="getList(params)" @onReset="onSearch">
+      <SpFilterFormItem prop="created" label="日期范围:">
+        <el-date-picker
+          v-model="params.created"
+          value-format="yyyy/MM/dd"
+          type="daterange"
+          placeholder="选择日期范围"
+          style="width: 100%"
+          @change="dateChange"
+        />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="mobile" label="手机号:">
+        <el-input v-model="params.mobile" placeholder="手机号" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="username" label="用户名:">
+        <el-input v-model="params.username" placeholder="用户名" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
     <el-button type="primary" plain @click="exportData"> 导出 </el-button>
     <div class="record-list">
       <el-table
@@ -76,14 +95,17 @@ export default {
   data() {
     return {
       loading: false,
-      created: '',
-      mobile: '',
-      username: '',
+      // created: '',
+      // mobile: '',
+      // username: '',
       total_count: 0,
       pageSize: 20,
       recordList: [],
       params: {
-        page: 1
+        page: 1,
+        created: '',
+        mobile: '',
+        username: ''
       },
       date_begin: '',
       date_end: ''
@@ -119,9 +141,8 @@ export default {
         this.date_begin = ''
         this.date_end = ''
       }
-      this.params.page = 1
-      this.getParams()
-      this.getList(this.params)
+      ;(this.params.page = 1), this.getParams()
+      // this.getList(this.params)
     },
     handleCurrentChange(val) {
       this.params.page = val
@@ -164,6 +185,7 @@ export default {
       this.params.date_end = this.date_end
       this.params.mobile = this.mobile
       this.params.username = this.username
+      // this.params.created = [this.date_begin,this.date_end]
     },
     dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000

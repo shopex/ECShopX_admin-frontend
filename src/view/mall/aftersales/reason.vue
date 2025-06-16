@@ -2,7 +2,7 @@
   <div>
     <!--搜索添加-->
     <el-row :gutter="40">
-      <el-col>
+      <el-col class="action-container">
         <el-button type="primary" @click="handleNew"> 新增原因 </el-button>
       </el-col>
     </el-row>

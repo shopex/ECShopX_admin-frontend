@@ -398,7 +398,6 @@ $txt-placeholder: #f5f5f7;
       width: 230px;
       padding: 10px 20px;
       font-size: 14px;
-      color: $dominant_hue;
       background: #fff;
       border-radius: 5px;
       text-align: center;
@@ -1130,12 +1129,12 @@ export default {
   mounted() {
     // this.custom()
     let filter = { template_name: this.template_name, version: 'v1.0.1', page_name: 'category' }
-    getParamByTempName(filter).then((res) => {
+    getParamByTempName(filter).then(res => {
       if (res.data.data.list.length !== 0) {
         let results = res.data.data.list[0].params
         if (!results.hasSeries) {
-          results.data.map((item) => {
-            item.children.map((child) => {
+          results.data.map(item => {
+            item.children.map(child => {
               if (!child.children) {
                 Object.assign(child, { children: [] })
               }
@@ -1144,9 +1143,9 @@ export default {
           this.form = results
           this.editableData = results.data
         } else {
-          results.data.map((item) => {
-            item.content.map((series) => {
-              series.children.map((child) => {
+          results.data.map(item => {
+            item.content.map(series => {
+              series.children.map(child => {
                 if (!child.children) {
                   Object.assign(child, { children: [] })
                 }
@@ -1213,10 +1212,10 @@ export default {
       }
     },
     findCateName(val, data) {
-      const fidx = data.findIndex((n) => val[0] === n.value)
-      const cidx = val[1] ? data[fidx].children.findIndex((n) => val[1] === n.value) : ''
+      const fidx = data.findIndex(n => val[0] === n.value)
+      const cidx = val[1] ? data[fidx].children.findIndex(n => val[1] === n.value) : ''
       const gidx = val[2]
-        ? data[fidx].children[cidx].children.findIndex((n) => val[2] === n.value)
+        ? data[fidx].children[cidx].children.findIndex(n => val[2] === n.value)
         : ''
       let name = ''
       if (gidx !== '') {
@@ -1283,12 +1282,12 @@ export default {
           }
           console.log(activeName)
           this.editableSeries = activeName
-          this.series = tabs.filter((tab) => tab.name !== targetName)
+          this.series = tabs.filter(tab => tab.name !== targetName)
           if (this.series.length === 0) {
             this.form.hasSeries = false
-            this.editableData = this.form.data.find((item) => item.name === targetName).content
+            this.editableData = this.form.data.find(item => item.name === targetName).content
           } else {
-            this.editableData = this.series.find((item) => item.name === activeName).content
+            this.editableData = this.series.find(item => item.name === activeName).content
           }
         })
         .catch(() => {})
@@ -1324,20 +1323,20 @@ export default {
     remove(fidx, sidx, lidx) {
       if (lidx !== undefined) {
         this.$confirm('确认删除？')
-          .then((_) => {
+          .then(_ => {
             this.editableData[fidx].children[sidx].children.splice(lidx, 1)
           })
-          .catch((_) => {})
+          .catch(_ => {})
       } else {
         this.$confirm('删该分类将会删除其所有子级，确认删除吗？')
-          .then((_) => {
+          .then(_ => {
             if (sidx !== undefined) {
               this.editableData[fidx].children.splice(sidx, 1)
             } else {
               this.editableData.splice(fidx, 1)
             }
           })
-          .catch((_) => {})
+          .catch(_ => {})
       }
     },
     // 模版演示父级菜单切换
@@ -1403,8 +1402,8 @@ export default {
       //   }
       //   loop(item)
       // })
-      list.forEach((item) => {
-        const loop = (data) => {
+      list.forEach(item => {
+        const loop = data => {
           if (data.value == id) {
             result = data
             return result
@@ -1499,21 +1498,21 @@ export default {
     },
     initCategory(data) {
       let categorys = []
-      data.map((item) => {
+      data.map(item => {
         let fitem = {
           value: item.category_id,
           label: item.category_name
         }
         if (item.children.length) {
           Object.assign(fitem, { children: [] })
-          item.children.map((child) => {
+          item.children.map(child => {
             let citem = {
               value: child.category_id,
               label: child.category_name
             }
             if (child.children.length) {
               Object.assign(citem, { children: [] })
-              child.children.map((grandson) => {
+              child.children.map(grandson => {
                 let gitem = {
                   value: grandson.category_id,
                   label: grandson.category_name
@@ -1558,15 +1557,15 @@ export default {
         this.series[this.curTabIndex].content = this.editableData
         this.form.data = this.series
       }
-      this.form.addCar= true
-      this.form.classify= false
+      this.form.addCar = true
+      this.form.classify = false
       console.log(this.form, 'kkkkkkkkkkkkkkkkkkkkkkkkkk')
       let param = {
         template_name: this.template_name,
         config: JSON.stringify([this.form]),
         page_name: 'category'
       }
-      savePageParams(param).then((res) => {
+      savePageParams(param).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '保存成功',
@@ -1587,7 +1586,7 @@ export default {
       this.pageDialogVisible = false
       const index = this.currentFidx
       this.editableData[index].id = this.selectedCustomPage
-      const cur = this.customPageList.find((v) => v.id == this.selectedCustomPage)
+      const cur = this.customPageList.find(v => v.id == this.selectedCustomPage)
       cur && (this.editableData[index].page_name = cur.page_name)
     },
     openPageDialog(index) {

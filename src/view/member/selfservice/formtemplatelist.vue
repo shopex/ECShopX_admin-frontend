@@ -7,12 +7,6 @@
 <template>
   <div>
     <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <div class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addTemplate">
-          添加模板
-        </el-button>
-      </div>
-
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="tem_name" label="模板名称:">
           <el-input v-model="params.tem_name" placeholder="模板名称" />
@@ -24,6 +18,12 @@
           </el-select>
         </SpFilterFormItem>
       </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addTemplate">
+          添加模板
+        </el-button>
+      </div>
 
       <el-tabs v-model="params.is_valid" type="card" @tab-click="handleTabClick">
         <el-tab-pane
@@ -236,7 +236,7 @@ export default {
       })
         .then(() => {
           deleteTemplate(row.id)
-            .then((response) => {
+            .then(response => {
               this.tableList.splice(index, 1)
               this.$message({
                 message: '废弃成功',

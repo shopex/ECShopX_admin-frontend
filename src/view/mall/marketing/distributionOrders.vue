@@ -326,7 +326,25 @@ export default {
   data() {
     return {
       finderSetting: createSetting({
-        actions: [],
+        actions: [
+          {
+            name: '详情',
+            key: 'detail',
+            buttonType: 'text',
+            action: {
+              handler: par => console.log(par)
+            }
+          },
+          {
+            name: '发货',
+            key: 'delivery',
+            type: 'button',
+            buttonType: 'text',
+            action: {
+              handler: par => console.log(par)
+            }
+          }
+        ],
         columns: [
           {
             name: '订单号',
@@ -335,7 +353,7 @@ export default {
             render(h, { row }) {
               return (
                 <div>
-                  <div>{row.order_id}</div>
+                  <SpClipboard content={row.order_id} />
                   <div class="flex items-center">
                     <SpIcon class="mr-1" name="store" />
                     {row.distributor_name}
@@ -422,25 +440,10 @@ export default {
       ],
 
       loading: false,
-      create_time: '',
       params: {
         page: 1,
         pageSize: 20
       },
-      order_class_array: this.VERSION_STANDARD() ? ORDER_TYPE_STANDARD : ORDER_TYPE,
-      order_status: '',
-      time_start_begin: '',
-      time_start_end: '',
-      total_count: 0,
-      order_type: 'normal',
-      order_class: '',
-      list: [],
-      identifier: '',
-      source_list: [],
-      source_name: '',
-      source_id: '',
-      is_distribution: 1,
-
       deliveryVisible: false,
       deliveryTitle: '',
       deliveryData: {
@@ -481,12 +484,6 @@ export default {
       this.$refs.finder.refresh(true)
     },
 
-    onCopy() {
-      this.$notify({
-        message: '复制成功',
-        type: 'success'
-      })
-    },
     // 切换tab
     handleClick(tab, event) {
       this.activeName = tab.name

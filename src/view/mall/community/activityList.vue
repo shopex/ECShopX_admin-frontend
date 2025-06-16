@@ -110,14 +110,14 @@
 import { mapGetters } from 'vuex'
 import mixin from '@/mixins'
 import { pageMixin } from '@/mixins'
-import { VERSION_STANDARD, isArray, VERSION_B2C(), VERSION_IN_PURCHASE() } from '@/utils'
+import { VERSION_STANDARD, isArray, VERSION_B2C, VERSION_IN_PURCHASE } from '@/utils'
 import { getCommunityActivity, communityDeliver, communityOrderExport } from '@/api/promotions'
 import moment from 'moment'
 import { DISTRIBUTION_TYPE, ORDER_STATUS, PICKER_DATE_OPTIONS } from '@/consts'
 
 export default {
   mixins: [mixin, pageMixin],
-  data () {
+  data() {
     return {
       loading: false,
       defaultTime: ['00:00:00', '23:59:59'],
@@ -165,17 +165,17 @@ export default {
   computed: {
     ...mapGetters(['wheight'])
   },
-  mounted () {
+  mounted() {
     this.fetchList()
   },
   methods: {
-    onSearch () {
+    onSearch() {
       this.page.pageIndex = 1
       this.$nextTick(() => {
         this.fetchList()
       })
     },
-    getParams () {
+    getParams() {
       const time = {}
       if (isArray(this.params.create_time) && this.params.create_time.length >= 2) {
         time.time_start_begin = moment(this.params.create_time[0]).unix()
@@ -190,21 +190,21 @@ export default {
       }
       return params
     },
-    onReset () {
+    onReset() {
       this.params = { ...this.initialParams }
       this.onSearch()
     },
     // 切换tab
-    handleTabClick (tab, event) {
+    handleTabClick(tab, event) {
       this.onSearch()
     },
-    dateStrToTimeStamp (str) {
+    dateStrToTimeStamp(str) {
       return Date.parse(new Date(str)) / 1000
     },
-    exportCommunityOrder () {
+    exportCommunityOrder() {
       if (this.activity_id.length) {
         let params = { activity_id: this.activity_id }
-        communityOrderExport(params).then((response) => {
+        communityOrderExport(params).then(response => {
           if (response.data.data.status) {
             this.$message({
               type: 'success',
@@ -225,7 +225,7 @@ export default {
           }
         })
       } else {
-        communityOrderExport(this.params).then((response) => {
+        communityOrderExport(this.params).then(response => {
           if (response.data.data.status) {
             this.$message({
               type: 'success',
@@ -247,17 +247,17 @@ export default {
         })
       }
     },
-    handleSelectionChange (rows) {
+    handleSelectionChange(rows) {
       this.activity_id = []
       if (rows) {
-        rows.forEach((row) => {
+        rows.forEach(row => {
           if (row) {
             this.activity_id.push(row.activity_id)
           }
         })
       }
     },
-    async fetchList () {
+    async fetchList() {
       this.loading = true
       const { pageIndex: page, pageSize } = this.page
       let params = {
@@ -271,7 +271,7 @@ export default {
       this.loading = false
     },
 
-    send (row) {
+    send(row) {
       var msg = '此操作发货, 是否继续?'
       this.$confirm(msg, '提示', {
         cancelButtonText: '取消',
@@ -279,7 +279,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            communityDeliver({ activity_id: row.activity_id }).then((response) => {
+            communityDeliver({ activity_id: row.activity_id }).then(response => {
               this.fetchList()
               this.$message({
                 message: '发货成功',

@@ -7,12 +7,6 @@
 <template>
   <div>
     <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <div class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addElement">
-          表单元素添加
-        </el-button>
-      </div>
-
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="form_element" label="表单元素:">
           <el-select v-model="params.form_element" placeholder="请选择表单元素" style="width: 100%">
@@ -29,6 +23,12 @@
           <el-input v-model="params.field_title" placeholder="标题" style="width: 100%" />
         </SpFilterFormItem>
       </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addElement">
+          表单元素添加
+        </el-button>
+      </div>
 
       <el-tabs v-model="params.is_valid" type="card" @tab-click="handleTabClick">
         <el-tab-pane
@@ -285,7 +285,7 @@ export default {
       })
         .then(() => {
           deleteSetting(row.id)
-            .then((response) => {
+            .then(response => {
               this.tableList.splice(index, 1)
               this.$message({
                 message: '废弃成功',

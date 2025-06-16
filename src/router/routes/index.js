@@ -1,4 +1,4 @@
-import { coreRoutes } from './core'
+import { coreRoutes, fallbackNotFoundRoute } from './core'
 
 const dynamicRouteFiles = require.context('./modules', false, /\.js$/)
 

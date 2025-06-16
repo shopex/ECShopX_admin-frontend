@@ -7,10 +7,6 @@
 <template>
   <div>
     <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
-      <div class="action-container">
-        <el-button type="primary" @click="editorLog()"> 上传日志 </el-button>
-      </div>
-
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="activity_id" label="活动:">
           <el-select v-model="params.activity_id" placeholder="请选择活动">
@@ -57,6 +53,13 @@
       </SpFilterForm>
 
       <div class="action-container">
+        <el-button type="primary" @click="editorLog()"> 上传日志 </el-button>
+        <export-tip @exportHandle="exportData">
+          <el-button type="primary"> 导出 </el-button>
+        </export-tip>
+      </div>
+
+      <div class="action-container">
         <!-- <el-button
           plain
           type="primary"
@@ -64,10 +67,6 @@
         >
           下载模版
         </el-button> -->
-
-        <export-tip @exportHandle="exportData">
-          <el-button type="primary" plain> 导出 </el-button>
-        </export-tip>
 
         <!-- <el-upload
           class="fl"

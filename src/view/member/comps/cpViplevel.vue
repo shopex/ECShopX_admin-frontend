@@ -578,5 +578,8 @@ export default {
     font-size: 38px;
   }
 }
+.content-center {
+  font-size: 12px;
+}
 </style>
 <style></style>

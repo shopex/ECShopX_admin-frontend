@@ -8,11 +8,6 @@
   <div>
     <template v-if="$route.path.indexOf('editor') === -1">
       <SpPlatformTip h5 app pc alipay />
-      <div class="action-container">
-        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
-          添加活动
-        </el-button>
-      </div>
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="name" label="活动名称:">
@@ -27,6 +22,12 @@
           />
         </SpFilterFormItem>
       </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
+          添加活动
+        </el-button>
+      </div>
 
       <el-tabs v-model="params.status" type="card" @tab-click="handleTabClick">
         <el-tab-pane
@@ -253,7 +254,7 @@ export default {
       }
 
       this.downloadfilename = row.activity_name + '.jpg'
-      seckillActivityWxcode(params).then((res) => {
+      seckillActivityWxcode(params).then(res => {
         this.downloadUrl = res.data.data.code
         setTimeout(() => {
           this.$refs.download.click()
@@ -279,7 +280,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            seckillActivityUpdateStatus({ seckill_id: row.seckill_id }).then((response) => {
+            seckillActivityUpdateStatus({ seckill_id: row.seckill_id }).then(response => {
               this.fetchList()
               this.$message({
                 message: '修改活动状态成功',
@@ -316,23 +317,23 @@ export default {
       this.goodsVisible = false
     },
     getCurrencyInfo() {
-      getDefaultCurrency().then((res) => {
+      getDefaultCurrency().then(res => {
         this.currency = res.data.data
         this.cursymbol = this.currency.symbol
       })
     },
     updateActivityData(params) {
-      updateActivityItemData(params).then((res) => {})
+      updateActivityItemData(params).then(res => {})
     },
     editItemPrice(row) {
       let form = {
-        'id': row.id,
-        'item_id': row.item_id,
-        'activity_price': row.activity_price,
-        'vip_price': row.vip_price,
-        'svip_price': row.svip_price,
-        'activity_store': row.activity_store,
-        'points': row.points
+        id: row.id,
+        item_id: row.item_id,
+        activity_price: row.activity_price,
+        vip_price: row.vip_price,
+        svip_price: row.svip_price,
+        activity_store: row.activity_store,
+        points: row.points
       }
       this.updateActivityData(form)
     },

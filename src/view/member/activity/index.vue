@@ -14,8 +14,8 @@
         :name="item.activeName"
       >
         <template v-if="activeName === 'valid'">
-          <div class="content-bottom-padded">
-            <el-button size="medium" @click="add"> 添加活动 </el-button>
+          <div class="action-container">
+            <el-button type="primary" size="medium" @click="add"> 添加活动 </el-button>
           </div>
 
           <el-table :data="activity" border style="width: 100%">
@@ -363,7 +363,7 @@ export default {
         pageSize: pageSize,
         activity_status: key
       }
-      getActivity(param).then((res) => {
+      getActivity(param).then(res => {
         if (key === 'valid') {
           this.validLoading = false
           this.activity = res.data.data.list
@@ -388,22 +388,22 @@ export default {
         activity_id: id
       }
       this.$confirm('确认终止该活动？')
-        .then((_) => {
-          invalidActivity(param).then((res) => {
+        .then(_ => {
+          invalidActivity(param).then(res => {
             this.getList('valid')
           })
         })
-        .catch((_) => {})
+        .catch(_ => {})
     },
     refresh() {
-      getGradeList().then((response) => {
-        response.data.data.forEach((item) => {
+      getGradeList().then(response => {
+        response.data.data.forEach(item => {
           this.gradeList[item.grade_id] = item.grade_name
         })
       })
-      listVipGrade().then((res) => {
+      listVipGrade().then(res => {
         let vipData = res.data.data
-        vipData.forEach((item) => {
+        vipData.forEach(item => {
           this.gradeList[item.lv_type] = item.grade_name
         })
       })

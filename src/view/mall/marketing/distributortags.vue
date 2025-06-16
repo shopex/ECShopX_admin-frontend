@@ -6,48 +6,21 @@
 
 <template>
   <div class="page-body">
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
+      <SpFilterFormItem prop="tag_name" label="标签名:">
+        <el-input v-model="params.tag_name" placeholder="标签名" />
+      </SpFilterFormItem>
+    </SpFilterForm>
+
     <div class="action-container">
-      <el-button
-        type="primary"
-        icon="iconfont icon-xinzengcaozuo-01"
-        @click="addTemplate"
-      >
+      <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addTemplate">
         添加标签
       </el-button>
     </div>
 
-    <SpFilterForm
-      :model="params"
-      @onSearch="onSearch"
-      @onReset="onReset"
-    >
-      <SpFilterFormItem
-        prop="tag_name"
-        label="标签名:"
-      >
-        <el-input
-          v-model="params.tag_name"
-          placeholder="标签名"
-        />
-      </SpFilterFormItem>
-    </SpFilterForm>
-
-    <el-table
-      v-loading="loading"
-      border
-      :data="tableList"
-      :height="wheight - 130"
-    >
-      <el-table-column
-        prop="tag_id"
-        label="ID"
-        width="100"
-      />
-      <el-table-column
-        prop="tag_name"
-        label="标签名称"
-        width="250"
-      >
+    <el-table v-loading="loading" border :data="tableList" :height="wheight - 130">
+      <el-table-column prop="tag_id" label="ID" width="100" />
+      <el-table-column prop="tag_name" label="标签名称" width="250">
         <template slot-scope="scope">
           <el-tag
             :style="{ color: scope.row.font_color, backgroundColor: scope.row.tag_color }"
@@ -57,18 +30,11 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="description"
-        label="标签描述"
-        width="250"
-      />
+      <el-table-column prop="description" label="标签描述" width="250" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <div class="operating-icons">
-            <i
-              class="iconfont icon-edit1"
-              @click="editAction(scope.$index, scope.row)"
-            />
+            <i class="iconfont icon-edit1" @click="editAction(scope.$index, scope.row)" />
             <i
               class="mark iconfont icon-trash-alt1"
               @click="deleteAction(scope.$index, scope.row)"
@@ -77,10 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div
-      v-if="params.total_count > params.page_size"
-      class="content-center content-top-padded"
-    >
+    <div v-if="params.total_count > params.page_size" class="content-center content-top-padded">
       <el-pagination
         layout="prev, pager, next"
         :current-page.sync="page.pageIndex"
@@ -97,18 +60,9 @@
       :before-close="handleCancelLabelsDialog"
     >
       <template>
-        <el-form
-          ref="form"
-          :model="form"
-          class="demo-ruleForm"
-          label-width="100px"
-        >
+        <el-form ref="form" :model="form" class="demo-ruleForm" label-width="100px">
           <el-form-item label="预览最终结果">
-            <el-tag
-              :color="form.tag_color"
-              size="mini"
-              :style="'color:' + form.font_color"
-            >
+            <el-tag :color="form.tag_color" size="mini" :style="'color:' + form.font_color">
               {{ form.tag_name }}
             </el-tag>
           </el-form-item>
@@ -118,15 +72,9 @@
             prop="tag_name"
             :rules="[{ required: true, message: '请输入标签名称', trigger: 'blur' }]"
           >
-            <el-input
-              v-model="form.tag_name"
-              placeholder="请输入标签名称"
-            />
+            <el-input v-model="form.tag_name" placeholder="请输入标签名称" />
           </el-form-item>
-          <el-form-item
-            class="content-left"
-            label="标签说明"
-          >
+          <el-form-item class="content-left" label="标签说明">
             <el-input
               v-model="form.description"
               type="textarea"
@@ -134,55 +82,20 @@
               placeholder="请输入标签说明"
             />
           </el-form-item>
-          <el-form-item
-            class="content-left"
-            label="标签颜色"
-          >
-            <el-color-picker
-              v-model="form.tag_color"
-              show-alpha
-              :predefine="predefineColors"
-            />
+          <el-form-item class="content-left" label="标签颜色">
+            <el-color-picker v-model="form.tag_color" show-alpha :predefine="predefineColors" />
           </el-form-item>
-          <el-form-item
-            class="content-left"
-            label="字体颜色"
-          >
-            <el-color-picker
-              v-model="form.font_color"
-              show-alpha
-              :predefine="predefineColors"
-            />
+          <el-form-item class="content-left" label="字体颜色">
+            <el-color-picker v-model="form.font_color" show-alpha :predefine="predefineColors" />
           </el-form-item>
-          <el-form-item
-            class="content-left"
-            label="前台显示"
-          >
-            <el-radio-group
-              v-model="form.front_show"
-              size="small"
-            >
-              <el-radio
-                label="1"
-                border
-              >
-                显示
-              </el-radio>
-              <el-radio
-                label="0"
-                border
-              >
-                不显示
-              </el-radio>
+          <el-form-item class="content-left" label="前台显示">
+            <el-radio-group v-model="form.front_show" size="small">
+              <el-radio label="1" border> 显示 </el-radio>
+              <el-radio label="0" border> 不显示 </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item class="content-center">
-            <el-button
-              type="primary"
-              @click="saveTagData"
-            >
-              确定保存
-            </el-button>
+            <el-button type="primary" @click="saveTagData"> 确定保存 </el-button>
           </el-form-item>
         </el-form>
       </template>
@@ -195,7 +108,7 @@ import { saveTag, getTagList, updateTag, deleteTag } from '@/api/marketing'
 import mixin, { pageMixin } from '@/mixins'
 export default {
   mixins: [mixin, pageMixin],
-  data () {
+  data() {
     return {
       isEdit: false,
       loading: false,
@@ -217,11 +130,11 @@ export default {
   computed: {
     ...mapGetters(['wheight'])
   },
-  mounted () {
+  mounted() {
     this.fetchList()
   },
   methods: {
-    addTemplate () {
+    addTemplate() {
       // 添加商品
       this.memberTagDialog = true
       this.form = {
@@ -233,22 +146,22 @@ export default {
         front_show: '0'
       }
     },
-    onSearch () {
+    onSearch() {
       this.page.pageIndex = 1
       this.$nextTick(() => {
         this.fetchList()
       })
     },
-    onReset () {
+    onReset() {
       this.params = { ...this.initialParams }
       this.onSearch()
     },
-    editAction (index, row) {
+    editAction(index, row) {
       // 编辑商品弹框
       this.form = row
       this.memberTagDialog = true
     },
-    async fetchList () {
+    async fetchList() {
       this.loading = true
       const { pageIndex: page, pageSize } = this.page
       let params = {
@@ -262,7 +175,7 @@ export default {
       this.loading = false
     },
 
-    deleteAction (index, row) {
+    deleteAction(index, row) {
       this.$confirm('此操作将删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -270,7 +183,7 @@ export default {
       })
         .then(() => {
           deleteTag(row.tag_id)
-            .then((response) => {
+            .then(response => {
               // this.tagsList.splice(index, 1)
               this.$message({
                 message: '删除成功',
@@ -293,7 +206,7 @@ export default {
           })
         })
     },
-    getTaskTime (strDate) {
+    getTaskTime(strDate) {
       let date = new Date(strDate)
       let y = date.getFullYear()
       let m = date.getMonth() + 1
@@ -303,15 +216,15 @@ export default {
       let str = y + '-' + m + '-' + d
       return str
     },
-    getTimeStr (date) {
+    getTimeStr(date) {
       return this.getTaskTime(new Date(parseInt(date) * 1000))
     },
-    handleCancelLabelsDialog () {
+    handleCancelLabelsDialog() {
       this.memberTagDialog = false
     },
-    saveTagData () {
+    saveTagData() {
       if (this.form.tag_id) {
-        updateTag(this.form.tag_id, this.form).then((res) => {
+        updateTag(this.form.tag_id, this.form).then(res => {
           if (res.data.data) {
             this.$message({
               type: 'success',
@@ -322,7 +235,7 @@ export default {
           }
         })
       } else {
-        saveTag(this.form).then((res) => {
+        saveTag(this.form).then(res => {
           if (res.data.data) {
             this.$message({
               type: 'success',

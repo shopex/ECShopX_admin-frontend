@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="action-container">
-      <el-button type="primary" @click="addDeliveryman">添加配送员</el-button>
-    </div>
-
     <SpFilterForm :model="params" size="small" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="username" label="配送员姓名:">
         <el-input v-model="params.username" placeholder="请输入配送员姓名" />
@@ -22,6 +18,10 @@
         </el-select>
       </SpFilterFormItem>
     </SpFilterForm>
+
+    <div class="action-container">
+      <el-button type="primary" @click="addDeliveryman">添加配送员</el-button>
+    </div>
 
     <SpFinder
       ref="finder"
@@ -135,9 +135,9 @@ export default {
             render: (h, { row }) => {
               return (
                 <div>
-                  {row?.distributor_ids?.map((item) => {
+                  {row?.distributor_ids?.map(item => {
                     return (
-                      <el-tag key={item.distributor_ids} size='mini'>
+                      <el-tag key={item.distributor_ids} size="mini">
                         {item.name}
                       </el-tag>
                     )
@@ -154,8 +154,8 @@ export default {
                 <el-switch
                   onChange={this.acitonDisabled.bind(this, row)}
                   v-model={row.is_disable}
-                  active-color='#ff4949'
-                  inactive-color='#ccc'
+                  active-color="#ff4949"
+                  inactive-color="#ccc"
                 />
               )
             }
@@ -287,12 +287,12 @@ export default {
           },
           component: ({ key }, value) => {
             return (
-              <div class='flex-box'>
+              <div class="flex-box">
                 <el-input-number
                   v-model={value[key]}
-                  controls-position='right'
-                  precision='3'
-                  step='0.001'
+                  controls-position="right"
+                  precision="3"
+                  step="0.001"
                 />{' '}
                 <span>元，每单（费用包含运费）</span>
               </div>
@@ -322,12 +322,12 @@ export default {
           },
           component: ({ key }, value) => {
             return (
-              <div class='flex-box'>
+              <div class="flex-box">
                 <el-input-number
                   v-model={value[key]}
-                  controls-position='right'
-                  precision='3'
-                  step='0.001'
+                  controls-position="right"
+                  precision="3"
+                  step="0.001"
                 />{' '}
                 <span>%，每单（费用包含运费）</span>
               </div>
@@ -407,7 +407,7 @@ export default {
                   return (
                     <el-tag
                       key={item.distributor_id}
-                      class='new-tag'
+                      class="new-tag"
                       closable
                       disable-transitions={false}
                       onClose={this.DistributoreHandleClose.bind(this, index)}
@@ -417,8 +417,8 @@ export default {
                   )
                 })}
                 <el-button
-                  size='medium'
-                  class='button-new-tag'
+                  size="medium"
+                  class="button-new-tag"
                   onClick={this.addDistributoreAction.bind(this)}
                 >
                   + 点击搜索店铺
@@ -507,7 +507,7 @@ export default {
 
       if (this.relDistributors.length > 0) {
         this.addForm.distributor_ids = []
-        this.relDistributors.forEach((distributor) => {
+        this.relDistributors.forEach(distributor => {
           this.addForm.distributor_ids.push({
             name: distributor.name,
             distributor_id: distributor.distributor_id

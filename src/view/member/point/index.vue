@@ -8,7 +8,7 @@
         <el-form-item v-if="!VERSION_SHUYUN" label="积分：">
           <el-switch
             v-model="form.isOpenMemberPoint"
-            :width="60"
+            :width="40"
             active-value="true"
             inactive-value="false"
             inactive-color="#ccc"

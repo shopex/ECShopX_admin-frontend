@@ -1,31 +1,15 @@
 <template>
-  <section
-    v-if="name === 'marquees'"
-    class="section"
-  >
-    <div class="section-header with-border">
-      设置
-    </div>
+  <section v-if="name === 'marquees'" class="section">
+    <div class="section-header with-border">设置</div>
     <div class="section-body">
       <el-form label-width="100px">
         <el-form-item label="组件间距">
-          <el-switch
-            v-model="base.padded"
-            active-color="#27cc6a"
-            inactive-color="#efefef"
-          />
+          <el-switch v-model="base.padded" active-color="#27cc6a" inactive-color="#efefef" />
         </el-form-item>
         <el-form-item label="内容">
-          <el-radio-group
-            v-model="config.direction"
-            @change="handleChange"
-          >
-            <el-radio label="vertical">
-              软文
-            </el-radio>
-            <el-radio label="horizontal">
-              文本
-            </el-radio>
+          <el-radio-group v-model="config.direction" @change="handleChange">
+            <el-radio label="vertical"> 软文 </el-radio>
+            <el-radio label="horizontal"> 文本 </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="背景色">
@@ -42,91 +26,35 @@
               style="width: 300px; vertical-align: middle"
               placeholder="标签文本"
             />
-            <el-color-picker
-              v-model="config.labelcolor"
-              style="vertical-align: middle"
-            />
+            <el-color-picker v-model="config.labelcolor" style="vertical-align: middle" />
           </div>
-          <div class="frm-tips">
-            标签文字最多4个字符
-          </div>
+          <div class="frm-tips">标签文字最多4个字符</div>
         </el-form-item>
-        <el-form-item
-          v-if="config.direction === 'vertical'"
-          label="软文"
-        >
-          <draggable
-            v-model="list"
-            class="article"
-            :options="dragItemsOptions"
-            @end="onEnd"
-          >
-            <div
-              v-for="(item, index) in data"
-              :key="index"
-              class="article-item"
-            >
+        <el-form-item v-if="config.direction === 'vertical'" label="软文">
+          <draggable v-model="list" class="article" :options="dragItemsOptions" @end="onEnd">
+            <div v-for="(item, index) in data" :key="index" class="article-item">
               <i class="iconfont icon-stream drag-handler" />
               <span>
                 {{ item.title }}
-                <div
-                  class="iconfont icon-trash-alt btn-remove"
-                  @click="handleRemove(index)"
-                />
+                <div class="iconfont icon-trash-alt btn-remove" @click="handleRemove(index)" />
               </span>
             </div>
           </draggable>
-          <el-button
-            type="primary"
-            plain
-            round
-            @click="showArticle"
-          >
-            选择软文
-          </el-button>
-          <div class="frm-tips">
-            模板中的展示效果为模拟效果，实际展示效果以客户端为准。
-          </div>
+          <el-button type="primary" plain round @click="showArticle"> 选择软文 </el-button>
+          <div class="frm-tips">模板中的展示效果为模拟效果，实际展示效果以客户端为准。</div>
         </el-form-item>
-        <el-form-item
-          v-if="config.direction === 'horizontal'"
-          label="文本"
-        >
-          <draggable
-            v-model="list"
-            class="article"
-            :options="dragItemsOptions"
-            @end="onEnd"
-          >
-            <div
-              v-for="(item, index) in data"
-              :key="index"
-              class="article-item"
-            >
+        <el-form-item v-if="config.direction === 'horizontal'" label="文本">
+          <draggable v-model="list" class="article" :options="dragItemsOptions" @end="onEnd">
+            <div v-for="(item, index) in data" :key="index" class="article-item">
               <i class="iconfont icon-stream drag-handler" />
               <span>
-                <el-input
-                  v-model="item.title"
-                  size="small"
-                />
-                <div
-                  class="iconfont icon-trash-alt btn-remove"
-                  @click="handleRemove(index)"
-                />
+                <el-input v-model="item.title" size="small" />
+                <div class="iconfont icon-trash-alt btn-remove" @click="handleRemove(index)" />
               </span>
             </div>
           </draggable>
-          <el-button
-            type="primary"
-            plain
-            round
-            @click="handleTextAdd"
-          >
-            添加文本
-          </el-button>
-          <div class="frm-tips">
-            模板中的展示效果为模拟效果，实际展示效果以客户端为准。
-          </div>
+          <el-button type="primary" plain round @click="handleTextAdd"> 添加文本 </el-button>
+          <div class="frm-tips">模板中的展示效果为模拟效果，实际展示效果以客户端为准。</div>
         </el-form-item>
       </el-form>
     </div>
@@ -155,7 +83,7 @@ export default {
       default: {}
     }
   },
-  data () {
+  data() {
     return {
       name: '',
       base: {},
@@ -179,25 +107,25 @@ export default {
   watch: {
     res: {
       deep: true,
-      handler (value) {
+      handler(value) {
         if (value) {
           this.setData(value)
         }
       }
     }
   },
-  mounted () {
+  mounted() {
     this.setData(this.res)
   },
   methods: {
-    setData (val) {
+    setData(val) {
       this.name = val.name
       this.base = val.base
       this.config = val.config
       this.data = val.data
       this.list = val.data
     },
-    handleChange (val) {
+    handleChange(val) {
       this.$confirm('切换内容会清空当前已编辑的数据！确定切换吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -215,7 +143,7 @@ export default {
           }
         })
     },
-    handleRemove (index) {
+    handleRemove(index) {
       this.$confirm('确认移除当前软文?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -229,26 +157,26 @@ export default {
           return
         })
     },
-    handleTextAdd () {
+    handleTextAdd() {
       this.data.push({
         title: ''
       })
     },
-    onEnd (evt) {
+    onEnd(evt) {
       this.temp = this.data[evt.oldIndex]
       this.data.splice(evt.oldIndex, 1)
       this.data.splice(evt.newIndex, 0, this.temp)
     },
     // 种草选择器绑定事件
-    showArticle () {
+    showArticle() {
       this.setArticleStatus = true
       this.articleVisible = true
     },
-    pickArticle (data) {
+    pickArticle(data) {
       this.relArticles = data
       if (data.length > 0) {
         this.data.splice(0)
-        data.forEach((item) => {
+        data.forEach(item => {
           let obj = {
             title: item.title,
             id: item.article_id
@@ -275,7 +203,7 @@ export default {
     }
     .drag-handler {
       padding-right: 5px;
-      color: $dominant_hue;
+      color: var(--primary);
       cursor: move;
     }
     span {

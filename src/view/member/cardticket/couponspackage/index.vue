@@ -1,7 +1,7 @@
 <template>
   <div class="zyk_coupon">
     <SpRouterView>
-      <div class="top">
+      <!-- <div class="top">
         <div class="btn">
           <el-button type="primary" size="small" icon="el-icon-circle-plus" @click="createCoupon">
             创建劵包
@@ -12,7 +12,18 @@
             <el-button slot="append" icon="el-icon-search" @click="queryCoupon" />
           </el-input>
         </div>
+      </div> -->
+
+      <SpFilterForm :model="params" @onSearch="queryCoupon" @onReset="queryCoupon">
+        <SpFilterFormItem prop="title" label="劵包标题:">
+          <el-input v-model="params.title" placeholder="请入劵包标题" />
+        </SpFilterFormItem>
+      </SpFilterForm>
+
+      <div class="action-container">
+        <el-button type="primary" @click="createCoupon"> 创建劵包 </el-button>
       </div>
+
       <SpFinder
         ref="finder"
         :split-count="4"
@@ -31,7 +42,9 @@ import setting_ from './setting/pageage'
 export default {
   data() {
     return {
-      title: ''
+      params: {
+        title: ''
+      }
     }
   },
   computed: {
@@ -50,7 +63,7 @@ export default {
       })
     },
     beforeSearch(params) {
-      params.title = this.title
+      params.title = this.params.title
       return { ...params }
     },
     queryCoupon() {

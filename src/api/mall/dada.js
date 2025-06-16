@@ -1,4 +1,4 @@
-import { fetch } from './request'
+import { fetch } from './../request'
 
 // 获取dada基本信息
 export function getDadaInfo(params = {}) {
