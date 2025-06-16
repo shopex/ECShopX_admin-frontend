@@ -5,7 +5,7 @@ const routes = [
     component: BasicLayout,
     meta: {
       aliasName: 'financial',
-      icon: 'shopping-bag',
+      icon: 'funds',
       keepAlive: true,
       title: '财务'
     },

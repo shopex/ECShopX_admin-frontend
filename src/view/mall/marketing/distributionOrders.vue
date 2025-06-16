@@ -10,7 +10,9 @@
       no-selection
       ref="finder"
       url="/orders"
+      row-actions-align="left"
       row-actions-fixed-align="left"
+      row-actions-width="120px"
       :fixed-row-action="true"
       :setting="finderSetting"
       :hooks="{
@@ -330,6 +332,7 @@ export default {
           {
             name: '详情',
             key: 'detail',
+            type: 'button',
             buttonType: 'text',
             action: {
               handler: par => console.log(par)
@@ -349,7 +352,6 @@ export default {
           {
             name: '订单号',
             key: 'order_id',
-            // showType: 'copiable', // 可复制
             render(h, { row }) {
               return (
                 <div>

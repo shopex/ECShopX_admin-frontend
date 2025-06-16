@@ -6,7 +6,7 @@ const routes = [
     component: BasicLayout,
     meta: {
       aliasName: 'wxapp-template',
-      icon: 'shopping-bag',
+      icon: 'page-template',
       keepAlive: true,
       title: '装修'
     },

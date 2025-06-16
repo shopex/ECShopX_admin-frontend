@@ -28,7 +28,7 @@ const routes = [
   {
     component: BasicLayout,
     meta: {
-      icon: 'icon-products',
+      icon: 'aiming',
       title: '概览'
     },
     path: '/',

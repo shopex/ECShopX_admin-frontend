@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import * as icons from 'lucide-vue'
+// import * as icons from 'lucide-vue'
+import * as icons from '@icon-park/vue'
 export default {
   name: 'SpIcon',
   props: {
@@ -26,6 +27,7 @@ export default {
   computed: {
     icon() {
       return icons[this.name.replace(/(?:^|-)([a-z])/g, (_, letter) => letter.toUpperCase())]
+      // return icons[this.name]
     }
   },
   mounted() {}

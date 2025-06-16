@@ -5,7 +5,7 @@ const routes = [
     component: BasicLayout,
     meta: {
       aliasName: 'applications',
-      icon: 'shopping-bag',
+      icon: 'app-store',
       keepAlive: true,
       title: '应用'
     },

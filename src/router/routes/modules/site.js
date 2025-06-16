@@ -6,7 +6,7 @@ const routes = [
     component: BasicLayout,
     meta: {
       aliasName: 'site',
-      icon: 'shopping-bag',
+      icon: 'oceanengine',
       keepAlive: true,
       title: '内容'
     },

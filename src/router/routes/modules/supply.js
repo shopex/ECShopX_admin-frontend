@@ -1,12 +1,11 @@
 import { BasicLayout } from '@/layout/basic'
-import SubLayout from '@/view/sublayout'
 
 const routes = [
   {
     component: BasicLayout,
     meta: {
       aliasName: 'supply',
-      icon: 'shopping-bag',
+      icon: 'cooperative-handshake',
       keepAlive: true,
       title: '供应'
     },
