@@ -1,3 +1,4 @@
+import '../lang/index.js'
 import '@/styles/index.scss'
 
 async function initApplication() {
