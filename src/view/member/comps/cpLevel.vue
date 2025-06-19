@@ -371,11 +371,6 @@ export default {
           this.$message({ message: '请输入等级名称', type: 'error' })
           break
         }
-        if (this.levelData[i].grade_background == '') {
-          isflag = true
-          this.$message({ message: '请输入等级背景', type: 'error' })
-          break
-        }
         if (i > 0) {
           if (this.levelData[i].promotion_condition.total_consumption == '') {
             isflag = true
