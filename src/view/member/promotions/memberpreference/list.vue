@@ -50,6 +50,7 @@
                   取消
                 </el-button>
                 <el-button type="text" @click="viewDetail(scope.row)"> 查看 </el-button>
+                <el-button type="text" @click="copyActivity(scope.row)"> 复制活动 </el-button>
                 <el-button
                   v-if="scope.row.status == 'waiting'"
                   type="text"
@@ -169,6 +170,12 @@ export default {
           }
           done()
         }
+      })
+    },
+    copyActivity(row) {
+      this.$router.push({
+        path: this.matchRoutePath('editor/') + row.marketing_id,
+        query: { is_copy: 1 }
       })
     },
     updateDetail(row) {

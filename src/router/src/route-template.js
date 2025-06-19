@@ -60,7 +60,7 @@ export default {
     //   component: () => import('@/view/decorate/index')
     // },
     // PC商城
-    {
+  {
       path: 'pcmall/templatelist',
       name: `模板列表`,
       component: () => import('@/view/pc/pctemplate')
