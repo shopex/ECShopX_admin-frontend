@@ -43,7 +43,7 @@
             <p class="content-center">卡封面（建议尺寸：600px * 375px）</p>
           </div>
           <div class="item-content f_l">
-            <div>
+            <div style="display: flex; align-items: center">
               <span class="txt">等级名称</span
               ><el-input
                 v-model="item.grade_name"
@@ -54,7 +54,7 @@
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
             </div>
-            <div class="clearfix">
+            <div v-if="!VERSION_SHUYUN" class="clearfix">
               <span class="txt f_l">升级条件</span>
               <span v-if="item.default_grade" class="txt-none">无</span>
               <template v-else>
@@ -102,6 +102,7 @@
                     />
                   </div>
                 </template>
+                &nbsp;<span class="frm-tips">（注：等级说明在c端展示！）</span>
               </div>
             </div>
             <!-- ----------------------------------------------卷包功能-------------------------------------------- -->

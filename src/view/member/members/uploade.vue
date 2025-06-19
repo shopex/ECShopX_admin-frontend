@@ -114,6 +114,12 @@ export default {
   computed: {
     ...mapGetters(['wheight'])
   },
+  created(){
+    if(this.VERSION_SHUYUN){
+      this.pane_list = [{name: 'selform_registration_record', label: '上传报名审核结果'}]
+      this.activeName = 'selform_registration_record'
+    }
+  },
   mounted() {
     this.getUploadList()
   },

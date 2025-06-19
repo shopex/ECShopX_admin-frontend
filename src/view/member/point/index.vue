@@ -117,13 +117,13 @@
               />
               积分 抵扣1元人民币
             </el-form-item>
-            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE" label="积分抵扣运费：">
+            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE && !VERSION_SHUYUN" label="积分抵扣运费：">
               <el-radio-group v-model="form.can_deduct_freight">
                 <el-radio label="1"> 包含 </el-radio>
                 <el-radio label="0"> 不包含 </el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE" label="优先积分抵扣">
+            <el-form-item v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE && !VERSION_SHUYUN" label="优先积分抵扣">
               <el-switch
                 v-model="form.point_pay_first"
                 :width="60"
@@ -138,7 +138,7 @@
             </el-form-item>
             <el-form-item v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)" label="积分规则：">
               <SpRichText v-model="form.rule_desc" />
-              <div>(注：积分规则会在c端展示！)</div>
+              <div v-if="VERSION_SHUYUN">(注：积分规则会在c端展示！)</div>
             </el-form-item>
           </template>
           <!-- <el-form-item label="购物赠送积分">
