@@ -108,8 +108,8 @@ const routes = [
         component: () => import('@/view/base/screen/openScreenAD')
       },
       {
-        name: 'list',
-        path: 'template/list',
+        name: 'webTemplateList',
+        path: 'web/template-list',
         meta: {
           aliasName: 'templatelist',
           icon: 'pay-circle',
@@ -118,20 +118,21 @@ const routes = [
         },
         component: () => import('@/view/pc/pctemplate')
       },
+      // TODO: PC模板编辑
+      // {
+      //   name: 'editing',
+      //   path: 'template/editing',
+      //   meta: {
+      //     aliasName: 'design',
+      //     icon: 'pay-circle',
+      //     title: '模板编辑',
+      //     permissions: ['wxapp-template.pcmall.design']
+      //   },
+      //   component: () => import('@/view/pc/pctemplate')
+      // },
       {
-        name: 'editing',
-        path: 'template/editing',
-        meta: {
-          aliasName: 'design',
-          icon: 'pay-circle',
-          title: '模板编辑',
-          permissions: ['wxapp-template.pcmall.design']
-        },
-        component: () => import('@/view/pc/pctemplate')
-      },
-      {
-        name: 'page',
-        path: 'login/page',
+        name: 'loginPage',
+        path: 'web/login-page',
         meta: {
           aliasName: 'loginPageSetting',
           icon: 'pay-circle',
@@ -141,8 +142,8 @@ const routes = [
         component: () => import('@/view/pc/pctemplate/login')
       },
       {
-        name: 'configuration',
-        path: 'seo/configuration',
+        name: 'seoConfiguration',
+        path: 'web/seo-configuration',
         meta: {
           aliasName: 'seo',
           icon: 'pay-circle',
@@ -152,8 +153,8 @@ const routes = [
         component: () => import('@/view/pc/tdk/globalset')
       },
       {
-        name: 'seo',
-        path: 'page/seo',
+        name: 'page-seo',
+        path: 'web/page-seo',
         meta: {
           aliasName: 'pageseo',
           icon: 'pay-circle',

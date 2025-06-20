@@ -22,6 +22,7 @@
         :label="`${item.label}${colon ? ':' : ''}`"
         :rules="item?.rules"
         :size="formType === 'searchForm' ? 'small' : ''"
+        :tip="item.tip"
         :value="formData[item.fieldName]"
         @input="val => handleFieldChange(item.fieldName, val)"
       />
@@ -72,7 +73,7 @@ export default {
     },
     formType: {
       type: String,
-      default: ['searchForm']
+      default: 'searchForm'
     },
     formItems: {
       type: Array,

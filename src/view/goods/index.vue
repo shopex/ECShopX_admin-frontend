@@ -36,7 +36,7 @@
 }
 </style>
 <template>
-  <div class="goods-index">
+  <SpPage class="goods-index">
     <el-alert
       v-if="form.audit_status == 'rejected' && IS_SUPPLIER()"
       :title="`审核失败：${form.audit_reason || ''}`"
@@ -92,7 +92,7 @@
       :form-list="applyFormList"
       @onSubmit="onApplySubmit"
     />
-  </div>
+  </SpPage>
 </template>
 
 <script>

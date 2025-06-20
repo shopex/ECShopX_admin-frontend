@@ -325,6 +325,20 @@ module.exports = {
     },
     // 代理配置示例
     proxy: {
+      '/website/decorate':{
+        target:process.env.VUE_APP_TEMPLATE_URL,
+        changeOrigin:true,
+        // pathRewrite:{
+        //   '^/website/decorate': '/template'
+        // }
+      },
+      '/_nuxt':{
+        target:process.env.VUE_APP_TEMPLATE_URL,
+        changeOrigin:true,
+        // pathRewrite:{
+        //   '^/post_template': ''
+        // }
+      }
       // '/api': {
       //   target: 'http://localhost:3000',
       //   changeOrigin: true,

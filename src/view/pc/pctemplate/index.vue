@@ -197,7 +197,7 @@ export default {
     handleRenovation({ theme_pc_template_id }) {
       // this.$router.push({ path: `/pc/design?id=${theme_pc_template_id}` });
       this.$router.push({
-        path: '/wxapp/pcmall/design?id=' + theme_pc_template_id
+        path: '/wxapp/manage/decorate_pc?id=' + theme_pc_template_id
       })
     },
     async handleDisable({ status, created, updated, deleted_at, ...rest }) {
@@ -231,7 +231,7 @@ export default {
       }
     },
     submitForm(formName) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           const { status, theme_pc_template_id, ...rest } = this.formData
           this.loading = true

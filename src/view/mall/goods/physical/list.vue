@@ -28,8 +28,8 @@
 }
 </style>
 <template>
-  <div class="page-body">
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
           <el-input v-model="searchParams.keywords" placeholder="商品标题或副标题关键词" />
@@ -482,8 +482,8 @@
           <el-table-column label="库存" prop="store" min-width="120" />
         </el-table>
       </SpDrawer>
-    </SpRouterView>
-  </div>
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import moment from 'moment'

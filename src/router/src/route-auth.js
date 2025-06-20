@@ -84,6 +84,11 @@ export default [
     component: () => import('@/view/decorate/index')
   },
   {
+    path: '/wxapp/manage/decorate_pc',
+    name: `Pc模板编辑`,
+    component: () => import('@/view/decorate/pc/index')
+  },
+  {
     path: '/supplier/login',
     component: () => import('@/view/auth/login'),
     meta: {

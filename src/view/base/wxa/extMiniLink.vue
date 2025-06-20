@@ -1,27 +1,21 @@
 <template>
-  <div v-if="$route.path.indexOf('editor') === -1" class="extMiniLink">
-    <el-card class="elCard">
-      <div slot="header">
-        <h3>外部小程序设置</h3>
-        <h5>外部小程序配置的页面可供店铺小程序直接调用，在模版中进行配置。</h5>
-      </div>
-      <div>
-        <div class="action-container">
-          <el-button type="primary" icon="plus" @click="showEditModal('')"> 新增 </el-button>
-        </div>
+  <SpPage>
+    <SpRouterView>
+      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+        <SpFilterFormItem prop="app_name" label="小程序名称:">
+          <el-input v-model="params.app_name" placeholder="请输入小程序名称" />
+        </SpFilterFormItem>
+      </SpFilterForm>
 
-        <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
-          <SpFilterFormItem prop="app_name" label="小程序名称:">
-            <el-input v-model="params.app_name" placeholder="请输入小程序名称" />
-          </SpFilterFormItem>
-        </SpFilterForm>
+      <div class="action-container">
+        <el-button type="primary" icon="plus" @click="showEditModal('')"> 新增 </el-button>
       </div>
-      <el-table v-loading="tableLoading" class="table" stripe border :data="tableList">
-        <el-table-column prop="created_at" label="创建日期" />
+      <el-table v-loading="tableLoading" border :data="tableList">
+        <el-table-column prop="created_at" label="创建日期" width="180" />
         <el-table-column prop="app_id" label="小程序APPID" />
         <el-table-column prop="app_name" label="小程序名称" />
         <el-table-column prop="app_desc" label="描述" />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button class="actBtn" type="text" @click="showEditModal(scope.row)">
               编辑
@@ -47,49 +41,48 @@
           @size-change="onSizeChange"
         />
       </div>
-    </el-card>
-    <el-dialog
-      class="modal"
-      width="30%"
-      :title="modalTitle"
-      :visible="showModal"
-      @close="closeModal"
-    >
-      <el-form
-        ref="editForm"
-        label-suffix=":"
-        label-width="120px"
-        class="form"
-        :rules="rules"
-        :model="editInfo"
+      <el-dialog
+        class="modal"
+        width="30%"
+        :title="modalTitle"
+        :visible="showModal"
+        @close="closeModal"
       >
-        <el-form-item label="小程序名称" prop="app_name">
-          <el-input v-model="editInfo.app_name" />
-        </el-form-item>
-        <el-form-item label="小程序APPID" prop="app_id">
-          <el-input v-model="editInfo.app_id" />
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input
-            v-model="editInfo.app_desc"
-            type="textarea"
-            placeholder="请输入内容（非必填）"
-            resize="none"
-            maxlength="30"
-            show-word-limit
-            :rows="3"
-          />
-        </el-form-item>
-      </el-form>
-      <div class="btns">
-        <el-button class="btn" @click="closeModal"> 取 消 </el-button>
-        <el-button class="btn" type="primary" :loading="isHttping" @click.stop="editWxConfig">
-          确 定
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
-  <router-view v-else />
+        <el-form
+          ref="editForm"
+          label-suffix=":"
+          label-width="120px"
+          class="form"
+          :rules="rules"
+          :model="editInfo"
+        >
+          <el-form-item label="小程序名称" prop="app_name">
+            <el-input v-model="editInfo.app_name" />
+          </el-form-item>
+          <el-form-item label="小程序APPID" prop="app_id">
+            <el-input v-model="editInfo.app_id" />
+          </el-form-item>
+          <el-form-item label="描述">
+            <el-input
+              v-model="editInfo.app_desc"
+              type="textarea"
+              placeholder="请输入内容（非必填）"
+              resize="none"
+              maxlength="30"
+              show-word-limit
+              :rows="3"
+            />
+          </el-form-item>
+        </el-form>
+        <div class="btns">
+          <el-button class="btn" @click="closeModal"> 取 消 </el-button>
+          <el-button class="btn" type="primary" :loading="isHttping" @click.stop="editWxConfig">
+            确 定
+          </el-button>
+        </div>
+      </el-dialog>
+    </SpRouterView>
+  </SpPage>
 </template>
 
 <script>
@@ -246,47 +239,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.extMiniLink {
-  width: 100%;
-  .elCard {
-    width: 100%;
-    .search {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .left {
-        display: flex;
-        .appName {
-          min-width: 200px;
-        }
-        .button {
-          margin-left: 15px !important;
-        }
-      }
-    }
-    .table {
-      width: 100%;
-      margin-top: 20px;
-      .actBtn {
-        margin-right: 15px;
-      }
-    }
-    .pagination {
-      margin-top: 20px;
-      text-align: center;
-    }
-  }
-  .modal {
-    .form {
-      box-sizing: border-box;
-      padding: 0 30px 0 0;
-    }
-    .btns {
-      text-align: center;
-      .btn {
-        margin: 0 15px;
-      }
-    }
-  }
-}
+// .extMiniLink {
+//   width: 100%;
+//   .elCard {
+//     width: 100%;
+//     .search {
+//       display: flex;
+//       justify-content: space-between;
+//       align-items: center;
+//       .left {
+//         display: flex;
+//         .appName {
+//           min-width: 200px;
+//         }
+//         .button {
+//           margin-left: 15px !important;
+//         }
+//       }
+//     }
+//     .table {
+//       width: 100%;
+//       margin-top: 20px;
+//       .actBtn {
+//         margin-right: 15px;
+//       }
+//     }
+//     .pagination {
+//       margin-top: 20px;
+//       text-align: center;
+//     }
+//   }
+//   .modal {
+//     .form {
+//       box-sizing: border-box;
+//       padding: 0 30px 0 0;
+//     }
+//     .btns {
+//       text-align: center;
+//       .btn {
+//         margin: 0 15px;
+//       }
+//     }
+//   }
+// }
 </style>

@@ -58,16 +58,16 @@ export function useForm(options = {}) {
       },
       // 重置表单
       resetFields() {
-        this.$refs.form.resetFields()
+        this.$refs.formData.resetFields()
       },
       // 清除验证
       clearValidate(props) {
-        this.$refs.form.clearValidate(props)
+        this.$refs.formData.clearValidate(props)
       },
       // 设置表单字段值
       setFieldsValue(values) {
         Object.keys(values).forEach(key => {
-          this.$set(this.form, key, values[key])
+          this.$set(this.formData, key, values[key])
         })
       },
       // 获取表单字段值

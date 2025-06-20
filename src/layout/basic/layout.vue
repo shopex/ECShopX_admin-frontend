@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex min-h-full w-full">
     <el-container>
-      <el-aside width="250px">
+      <el-aside width="230px">
         <LayoutSidebar />
       </el-aside>
 
@@ -18,7 +18,7 @@
           < /> -->
         </el-header>
 
-        <el-main class="!px-0 !py-0">
+        <el-main class="!px-0 !py-0" style="height: calc(100vh - 100px)">
           <LayoutContent>
             <RouterView />
           </LayoutContent>

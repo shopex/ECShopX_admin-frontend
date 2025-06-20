@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import { getDistributorList } from '../../../api/marketing'
-
 import { createSetting } from '@shopex/finder'
 import _map from 'lodash/map'
 import moment from 'moment'

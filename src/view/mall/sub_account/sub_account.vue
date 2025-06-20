@@ -1,12 +1,6 @@
 <template>
-  <div class="zyk_adapay_account">
-    <el-form
-      v-if="$route.path.indexOf('detail') === -1"
-      ref="ruleForm"
-      :model="form"
-      class="demo-ruleForm"
-      label-width="100px"
-    >
+  <SpRouterView class="zyk_adapay_account">
+    <el-form ref="ruleForm" :model="form" class="demo-ruleForm" label-width="100px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span>交易单</span>
@@ -246,8 +240,7 @@
         </div>
       </el-card>
     </el-form>
-    <router-view />
-  </div>
+  </SpRouterView>
 </template>
 
 <script>

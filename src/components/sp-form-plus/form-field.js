@@ -39,6 +39,10 @@ export default {
       type: String,
       default: '' // medium, small, mini
     },
+    tip: {
+      type: String,
+      default: ''
+    },
     value: {
       type: [String, Number, Boolean, Array, Object],
       default: ''
@@ -200,32 +204,9 @@ export default {
           />
         </div>
       )
-      // return h('div', { class: 'el-date-picker__wrapper' }, [h('el-date-picker', {
-      //   style: {
-      //     width: '100%'
-      //   },
-      //   attrs: {
-      //     ...this.componentProps
-      //   },
-      //   props: {
-      //     startPlaceholder: '开始日期',
-      //     endPlaceholder: '结束日期',
-      //     rangeSeparator: '/',
-      //     value: this.modelValue,
-      //     pickerOptions: PICKER_DATE_OPTIONS
-      //   },
-      //   on: {
-      //     change: () => {
-      //       debugger
-      //     },
-      //     focus: () => {
-      //       debugger
-      //     },
-      //     input: () => {
-      //       debugger
-      //     }
-      //   }
-      // })])
+    },
+    renderImagePicker(props = {}) {
+      return <SpImagePicker value={this.modelValue} {...props} on-onChange={this.handleInput} />
     },
     // 获取组件渲染函数
     getComponentRender() {
@@ -237,7 +218,8 @@ export default {
           radio: this.renderRadio,
           checkbox: this.renderCheckbox,
           button: this.renderButton,
-          datetimepicker: this.renderDateTimePicker
+          datetimepicker: this.renderDateTimePicker,
+          imagepicker: this.renderImagePicker
         }
         return renderMap[type] || this.renderInput
       }
@@ -285,7 +267,10 @@ export default {
             }
           ]
         },
-        [renderComponent(this.componentProps)]
+        [
+          renderComponent(this.componentProps),
+          this.tip ? h('div', { class: 'text-sm text-gray-500 mt-0.5' }, this.tip) : null
+        ]
       )
     ])
   }

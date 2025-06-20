@@ -25,7 +25,7 @@
     </div>
 
     <div
-      class="sub-menu-list w-[180px] border-border border-l border-r h-full"
+      class="sub-menu-list w-[160px] border-border border-l border-r h-full"
       v-if="subMenus.length > 0"
     >
       <!-- activeSubIndex: {{ activeSubIndex }} -->

@@ -1,8 +1,10 @@
 <template>
   <el-container class="h-full">
-    <el-container class="h-full p-4 bg-background-deep">
-      <div class="w-full h-full p-4 bg-white">
+    <el-container class="h-full">
+      <div class="w-full h-full bg-background-deep">
+        <!-- <div class=" min-h-full"> -->
         <slot />
+        <!-- </div> -->
       </div>
     </el-container>
     <el-aside class="bg-white h-full" width="50px">

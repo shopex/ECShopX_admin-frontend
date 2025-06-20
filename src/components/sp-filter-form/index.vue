@@ -62,7 +62,7 @@
         </el-button>
         <el-button type="primary" plain @click="onReset">
           <div class="flex items-center">
-            <SpIcon name="rotate-ccw" :size="14" />
+            <SpIcon name="refresh" :size="14" />
             <span class="ml-1">重置</span>
           </div>
         </el-button>
