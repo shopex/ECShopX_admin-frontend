@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <SpPage title="会员详情">
+    <div slot="page-header" class="content-center text-right">
+      <el-button type="primary" @click="goBack"> 返回 </el-button>
+    </div>
     <div class="section section-white content-padded">
-      <div class="clearfix">
+      <div class="clearfix heade-box">
         <div class="f_l member-card-box">
           <div
             class="member-card"
@@ -120,10 +123,9 @@
           </div>
         </div>
       </div>
-      <div class="content-center">
-        <el-button type="primary" @click="goBack"> 返回 </el-button>
-      </div>
+
     </div>
+
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="会员详情" name="info">
         <member-info :user-info="member" :register-setting="registerSetting" :is-load="infoLoad" />
@@ -197,7 +199,7 @@
         />
       </el-tab-pane> -->
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -542,5 +544,9 @@ export default {
       background: #7600ff;
     }
   }
+}
+.heade-box{
+  display: flex;
+  justify-content: space-around;
 }
 </style>

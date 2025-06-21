@@ -41,7 +41,7 @@
       </SpFilterFormItem>
     </SpFilterForm>
 
-    <el-button type="primary" plain @click="exportData"> 导出 </el-button>
+    <el-button type="primary" @click="exportData"> 导出 </el-button>
     <div class="record-list">
       <el-table
         v-loading="loading"
@@ -78,6 +78,7 @@
     <div v-if="total_count > pageSize" class="tc" style="margin-top: 20px">
       <el-pagination
         layout="prev, pager, next"
+        class="text-right"
         :current-page.sync="params.page"
         :total="total_count"
         :page-size="pageSize"

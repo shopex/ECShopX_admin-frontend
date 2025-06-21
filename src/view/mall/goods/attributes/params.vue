@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="attribute_name" label="参数名称:">
         <el-input v-model="params.attribute_name" placeholder="请输入参数名称" />
@@ -68,26 +68,26 @@
             <el-radio :label="false"> 仅用于商品详情展示 </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="参数值">
-          <div class="clearfix" />
-          <div
+        <el-form-item label="参数值"></el-form-item>
+        <div
             v-for="(item, index) in form.attribute_values"
             :key="index"
-            class="view-flex view-flex-middle key-item"
+            class="key-item"
           >
-            <div class="view-flex-item content-padded-right">
+            <div class="key-item-input">
               <el-input v-model="item.attribute_value" placeholder="参数值名称" />
             </div>
-            <div class="iconfont icon-trash-alt1" @click="removeItem(index)" />
+            <div @click="removeItem(index)">
+              <SpIcon name="delete" :size="22" />
+            </div>
           </div>
           <el-button type="default" size="small" @click="addItem"> 添加参数值 </el-button>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button type="primary" @click="save"> 提交 </el-button>
       </div>
     </sideBar>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -239,6 +239,13 @@ export default {
 }
 .key-item {
   padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+
+  &-input{
+    flex: 1;
+    margin-right: 10px;
+  }
   .iconfont {
     color: #999;
   }

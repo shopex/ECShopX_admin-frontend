@@ -147,10 +147,10 @@
         </div>
       </div>
     </template>
-    <div class="section-footer content-center">
+    <!-- <div class="section-footer content-center">
       <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
       <el-button type="primary" @click="saveGrade"> 保存 </el-button>
-    </div>
+    </div> -->
     <template v-if="visible">
       <coupon-select
         :package-id="packageId"
@@ -509,6 +509,23 @@ export default {
 }
 .item-box {
   padding-top: 10px;
+  /* display: flex; */
+}
+.clearfix {
+    *zoom:1}
+
+.clearfix:after,.clearfix:before {
+    content: "";
+    display: table;
+    line-height: 0
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.f_l {
+    float: left
 }
 .level-item {
   margin-bottom: 20px;

@@ -1,30 +1,24 @@
 <template>
-  <div class="closeAccount">
+  <SpPage class="closeAccount">
+    <!-- <div slot="page-header" class="text-right">
+      <el-button v-if="activeName == 'first'" type="primary" @click="issuehandle('form', 'member_logout_config', '')">
+        提交
+      </el-button>
+      <el-button v-if="activeName == 'second'" type="primary" @click="issuehandle('privacyForm', 'member_logout')">
+        提交
+      </el-button>
+    </div> -->
+
     <SpPlatformTip h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="注销配置" name="first">
         <el-form ref="form" class="form" :model="form" :rules="rules" label-width="320px">
-          <el-form-item
-            prop="title"
-            label-width="350px"
-            label="请配置有未完成的订单用户点击注销会员的弹窗内容"
-          >
+          <el-form-item prop="title" label-width="350px" label="请配置有未完成的订单用户点击注销会员的弹窗内容">
             <div class="title" />
-            <el-input
-              v-model="form.title"
-              style="width: 500px"
-              type="textarea"
-              placeholder="请输入内容"
-              maxlength="50"
-              :autosize="{ minRows: 3 }"
-              show-word-limit
-            />
+            <el-input v-model="form.title" style="width: 500px" type="textarea" placeholder="请输入内容" maxlength="50"
+              :autosize="{ minRows: 3 }" show-word-limit />
           </el-form-item>
-          <el-form-item
-            v-if="!VERSION_IN_PURCHASE()"
-            label="用户注销会员后重新注册是否享受新人权益："
-            prop="new_rights"
-          >
+          <el-form-item v-if="!VERSION_IN_PURCHASE()" label="用户注销会员后重新注册是否享受新人权益：" prop="new_rights">
             <div class="title" />
             <el-select v-model="form.new_rights" placeholder="请选择">
               <el-option label="是" value="1"> 是 </el-option>
@@ -39,6 +33,7 @@
               提交
             </el-button>
           </el-form-item>
+
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="注销协议" name="second">
@@ -51,22 +46,12 @@
                 </p>
                 <div class="text item" style="margin-top: 30px">
                   <el-form-item label="更新日期" prop="update_date">
-                    <el-date-picker
-                      v-model="privacyForm.update_date"
-                      type="date"
-                      format="yyyy-MM-dd"
-                      value-format="yyyy-MM-dd"
-                      placeholder="选择日期"
-                    />
+                    <el-date-picker v-model="privacyForm.update_date" type="date" format="yyyy-MM-dd"
+                      value-format="yyyy-MM-dd" placeholder="选择日期" />
                   </el-form-item>
                   <el-form-item label="生效日期" prop="take_effect_date">
-                    <el-date-picker
-                      v-model="privacyForm.take_effect_date"
-                      value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"
-                      type="date"
-                      placeholder="选择日期"
-                    />
+                    <el-date-picker v-model="privacyForm.take_effect_date" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+                      type="date" placeholder="选择日期" />
                   </el-form-item>
 
                   <el-form-item label="内容" prop="content">
@@ -79,12 +64,13 @@
                   提交
                 </el-button>
               </el-form-item>
+
             </div>
           </el-form>
         </div>
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -190,6 +176,7 @@ export default {
 .form {
   padding: 20px;
 }
+
 .tips {
   background: #999;
   font-size: 10px;
@@ -201,6 +188,7 @@ export default {
   .el-card__body {
     padding: 0;
   }
+
   .tips {
     background: #f5f5f5;
     font-size: 10px;

@@ -1,6 +1,5 @@
 <template>
-  <div class="section-white" style="padding-bottom: 70px">
-    <h3 class="title">售后详情</h3>
+  <SpPage title="售后详情">
     <div class="section-header with-border flex">
       <h3>售后信息</h3>
       <el-button
@@ -707,7 +706,7 @@
       </span>
     </el-dialog>
     <RemarkModal ref="modalRef" @onDone="onRemarksDone" />
-  </div>
+  </SpPage>
 </template>
 <style scoped lang="scss" type="text/css">
 .flex {

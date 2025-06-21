@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="attribute_name" label="规格名称:">
         <el-input v-model="params.attribute_name" placeholder="请输入规格名称" />
@@ -84,33 +84,33 @@
             <el-radio :label="true"> 图片 </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="规格值">
-          <div class="clearfix" />
-          <div
+        <el-form-item label="规格值"></el-form-item>
+        <div
             v-for="(item, index) in form.attribute_values"
             :key="index"
-            class="view-flex view-flex-middle key-item"
+            class="key-item"
           >
             <div v-if="form.is_image" class="upload-box" @click="handleImgPicker(index)">
               <img v-if="item.image_url" :src="item.image_url" class="avatar">
-              <i v-else class="iconfont icon-camera avatar-uploader-icon" />
+              <SpIcon v-else size="22" name="camera" />
             </div>
             <div
-              class="view-flex-item"
+              class="key-item-input"
               :class="form.is_image ? 'content-h-padded' : 'content-padded-right'"
             >
               <el-input v-model="item.attribute_value" placeholder="规格值名称" />
             </div>
-            <div class="iconfont icon-trash-alt1" @click="removeItem(index)" />
+            <div @click="removeItem(index)">
+              <SpIcon size="22" name="delete" />
+            </div>
           </div>
           <el-button type="default" size="small" @click="addItem"> 添加规格值 </el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="save"> 提交 </el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="save"> 提交 </el-button>
+      </div>
     </sideBar>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -305,6 +305,13 @@ export default {
 }
 .key-item {
   padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  &-input{
+    flex: 1;
+    margin:0 10px;
+  }
+
   .iconfont {
     color: #999;
   }
@@ -312,6 +319,9 @@ export default {
 .upload-box {
   width: 50px;
   height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .avatar {
     width: 50px;
     height: 50px;
