@@ -2,19 +2,20 @@
   <div>
     <div class="recharge-overview view-flex content-center content-padded">
       <div class="view-flex-item">
-        <i class="iconfont icon-coins" />
+        <!-- <i class="iconfont icon-coins" /> -->
+        <SpIcon name="layers" :size="50" fill="#ff5000" />
         <div>
           <span>可用积分总额</span> <span class="money mark">{{ count.can_use }}</span>
         </div>
       </div>
       <div class="view-flex-item">
-        <i class="iconfont icon-database" />
+        <SpIcon name="funds" :size="50" fill="#ff5000" />
         <div>
           累计积分总额 <span class="money mark">{{ count.total }}</span>
         </div>
       </div>
       <div class="view-flex-item">
-        <i class="iconfont icon-history" />
+        <SpIcon name="timer" :size="50" fill="#ff5000" />
         <div>
           <span>已使用积分总额</span> <span class="money mark">{{ count.used }}</span>
         </div>
@@ -90,10 +91,21 @@ export default {
 
 <style scoped lang="scss">
 .recharge-overview {
-  .iconfont {
-    font-size: 50px;
-    color: #ff5000;
+  display: flex;
+  justify-content: space-around;
+  .i-icon {
     margin-bottom: 10px;
+  }
+  .view-flex-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  font-size: 20px;
+  .money {
+    margin-top: 18px;
+    color: #ff5000;
   }
 }
 .deposit-des {
@@ -119,10 +131,7 @@ export default {
       display: block;
     }
   }
-  .money {
-    font-size: 20px;
-    color: #ff5000;
-  }
+
   img {
     width: 55px;
     height: 55px;

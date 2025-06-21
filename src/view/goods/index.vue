@@ -36,7 +36,7 @@
 }
 </style>
 <template>
-  <SpPage class="goods-index">
+  <SpPage title="商品详情" class="goods-index">
     <el-alert
       v-if="form.audit_status == 'rejected' && IS_SUPPLIER()"
       :title="`审核失败：${form.audit_reason || ''}`"
@@ -53,7 +53,7 @@
       :submit="false"
     />
 
-    <div class="footer-container">
+    <div slot="page-header" class="footer-container text-right">
       <el-button @click.native="handleCancel"> 取消</el-button>
       <el-button
         v-if="

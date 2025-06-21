@@ -76,13 +76,13 @@
           <div class="frm-tips">只能上传jpg/png文件，且不超过2M （建议尺寸：200px * 200px）</div>
           <div class="upload-box" @click="handleImgPicker">
             <img v-if="form.image_url" :src="form.image_url" class="avatar" width="100%">
-            <i v-else class="iconfont icon-camera avatar-uploader-icon" />
+            <SpIcon v-else name="camera" :size="28" class="avatar-uploader-icon" />
           </div>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="save"> 提交 </el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="save"> 提交 </el-button>
+      </div>
     </sideBar>
   </SpPage>
 </template>

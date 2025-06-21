@@ -6,7 +6,7 @@
 }
 </style>
 <template>
-  <SpPage class="page-order-order-setting">
+  <SpPage title="订单设置" class="page-order-order-setting">
     <SpForm
       ref="form"
       v-model="form"
@@ -14,7 +14,7 @@
       :submit="false"
       @onSubmit="onSaveConfig"
     />
-    <div class="footer-container">
+    <div slot="page-header" class="footer-container text-right">
       <el-button
         type="primary"
         @click="

@@ -150,10 +150,10 @@
         </div>
       </div>
     </template>
-    <div class="section-footer content-center">
+    <!-- <div class="section-footer content-center">
       <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
       <el-button type="primary" @click="saveGrade"> 保存 </el-button>
-    </div>
+    </div> -->
     <template v-if="visible">
       <coupon-select
         :package-id="packageId"
@@ -567,19 +567,38 @@ export default {
   overflow: hidden;
   width: 200px;
   height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .avatar {
     width: 100%;
     max-height: 100%;
   }
   .avatar-uploader-icon {
-    width: 100%;
-    height: 100%;
-    line-height: 125px;
+    /* width: 100%;
+    height: 100%; */
+    /* line-height: 125px; */
     font-size: 38px;
   }
 }
 .content-center {
   font-size: 12px;
+}
+.clearfix {
+    *zoom:1}
+
+.clearfix:after,.clearfix:before {
+    content: "";
+    display: table;
+    line-height: 0
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.f_l {
+    float: left
 }
 </style>
 <style></style>

@@ -509,6 +509,23 @@ export default {
 }
 .item-box {
   padding-top: 10px;
+  /* display: flex; */
+}
+.clearfix {
+    *zoom:1}
+
+.clearfix:after,.clearfix:before {
+    content: "";
+    display: table;
+    line-height: 0
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.f_l {
+    float: left
 }
 .level-item {
   margin-bottom: 20px;

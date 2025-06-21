@@ -1,5 +1,18 @@
 <template>
-  <SpPage>
+  <SpPage :title="activeName == 'second' ? '会员等级' : '付费会员等级'">
+    <template slot="page-header">
+      <div class="text-right">
+        <template v-if="activeName == 'second'">
+          <el-button v-if="!VERSION_SHUYUN" @click="addGrade('cardLevel')"> 添加等级卡 </el-button>
+        <el-button type="primary" @click="saveGrade('cardLevel')"> 保存 </el-button>
+        </template>
+       <template v-if="activeName == 'thrid'">
+        <el-button v-if="!VERSION_SHUYUN" @click="addGrade('cardViplevel')"> 添加等级卡 </el-button>
+        <el-button type="primary" @click="saveGrade('cardViplevel')"> 保存 </el-button>
+       </template>
+      </div>
+    </template>
+
     <div class="section-white">
       <el-tabs v-model="activeName" type="card">
         <!-- <el-tab-pane
@@ -9,10 +22,10 @@
           <card-setting />
         </el-tab-pane> -->
         <el-tab-pane label="等级设置" name="second">
-          <card-level />
+          <card-level ref="cardLevel" />
         </el-tab-pane>
         <el-tab-pane label="付费等级设置" name="thrid">
-          <card-viplevel />
+          <card-viplevel ref="cardViplevel" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -29,6 +42,14 @@ export default {
   data() {
     return {
       activeName: 'second'
+    }
+  },
+  methods: {
+    addGrade(val){
+      this.$refs[val].addGrade()
+    },
+    saveGrade(val){
+      this.$refs[val].saveGrade()
     }
   }
 }

@@ -78,6 +78,7 @@
     <div v-if="total_count > pageSize" class="tc" style="margin-top: 20px">
       <el-pagination
         layout="prev, pager, next"
+        class="text-right"
         :current-page.sync="params.page"
         :total="total_count"
         :page-size="pageSize"

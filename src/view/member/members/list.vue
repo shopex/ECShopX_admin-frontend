@@ -438,6 +438,7 @@
             <el-pagination
               background
               layout="prev, pager, next"
+              style="white-space: initial;"
               :current-page="staffCoupons.page.currentPage"
               :page-size="staffCoupons.page.pageSize"
               :total="staffCoupons.page.total"
@@ -1371,7 +1372,7 @@ export default {
         isShopadmin = /\/shopadmin/.test(document.location.pathname)
       } catch (e) {}
       this.$router.push({
-        path: isShopadmin ? '/shopadmin/member/member/detail' : '/member/member/memberlist/detail',
+        path: `${isShopadmin ? '/shopadmin' : ''}/members/member-manage/member-list/detail`,
         query: {
           user_id: userid,
           mobile: this.params.mobile,

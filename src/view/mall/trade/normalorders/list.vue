@@ -1907,13 +1907,14 @@ export default {
         })
         console.log('this.changePriceForm:', this.changePriceForm)
       } else if (key == 'salesAfter') {
-        if (IS_DISTRIBUTOR()) {
+        this.$router.push({ path: `${this.$route.path}/after-sale/${order_id}` })
+        {/* if (IS_DISTRIBUTOR()) {
           this.$router.push({ path: `/shopadmin/order/tradenormalorders/after-sale/${order_id}` })
         } else if (this.$store.getters.login_type == 'supplier') {
           this.$router.push({ path: `/supplier/order/tradenormalorders/after-sale/${order_id}` })
         } else {
-          this.$router.push({ path: `/order/entitytrade/tradenormalorders/after-sale/${order_id}` })
-        }
+          this.$router.push({ path: `${this.$route.path}/after-sale/${order_id}` })
+        } */}
       } else if (key == 'updatedelivery') {
         //更新发货
         this.$refs['updateDeliverGoodsDialogRef'].resetForm()
