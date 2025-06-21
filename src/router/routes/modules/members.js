@@ -111,7 +111,14 @@ const routes = [
           title: '群发短信',
           permissions: ['member.membertouch.smssend']
         },
-        component: () => import('@/view/member/members/list')
+        component: () => import('@/view/member/members/list'),
+        children: [
+          {
+            path: 'detail/:user_id?',
+            component: () => import('@/view/member/members/detail')
+          }
+        ]
+
       },
       {
         name: 'arrivalNotice',

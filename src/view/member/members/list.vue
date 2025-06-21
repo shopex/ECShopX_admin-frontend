@@ -1372,7 +1372,7 @@ export default {
         isShopadmin = /\/shopadmin/.test(document.location.pathname)
       } catch (e) {}
       this.$router.push({
-        path: `${isShopadmin ? '/shopadmin' : ''}/members/member-manage/member-list/detail`,
+        path: `${this.$route.path}/detail`,
         query: {
           user_id: userid,
           mobile: this.params.mobile,
