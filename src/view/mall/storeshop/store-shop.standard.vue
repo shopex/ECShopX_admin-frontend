@@ -384,7 +384,10 @@ export default {
           distributor_id: 0
         })
         this.formData.distributor_id = distributor_id
-        this.$refs.selectShop.selectValue = name
+        if(this.$refs.selectShop){
+          this.$refs.selectShop.selectValue = name
+        }
+
       }
       this.finderUrl = '/distributor/items'
       this.finderData = undefined
