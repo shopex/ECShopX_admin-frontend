@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <template v-if="$route.path.indexOf('editor') === -1">
       <SpPlatformTip h5 app pc alipay />
       <div class="action-container">
@@ -84,7 +84,7 @@
       </el-tabs>
     </template>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 <script>
 import { cancelPackagePromotions } from '@/api/promotions'
