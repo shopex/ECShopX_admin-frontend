@@ -109,7 +109,6 @@
             v-if="refundDetail.refund_status == 'READY'"
             size="mini"
             type="info"
-            effect="plain"
           >
             未审核
           </el-tag>
@@ -117,7 +116,6 @@
             v-else-if="refundDetail.refund_status == 'AUDIT_SUCCESS'"
             size="mini"
             type="success"
-            effect="plain"
           >
             审核成功待退款
           </el-tag>
@@ -125,7 +123,6 @@
             v-else-if="refundDetail.refund_status == 'SUCCESS'"
             size="mini"
             type="success"
-            effect="dark"
           >
             退款成功
           </el-tag>
@@ -133,7 +130,6 @@
             v-else-if="refundDetail.refund_status == 'REFUSE'"
             size="mini"
             type="danger"
-            effect="dark"
           >
             退款驳回
           </el-tag>
@@ -141,7 +137,6 @@
             v-else-if="refundDetail.refund_status == 'CANCEL'"
             size="mini"
             type="info"
-            effect="dark"
           >
             撤销退款
           </el-tag>
@@ -149,7 +144,6 @@
             v-else-if="refundDetail.refund_status == 'PROCESSING'"
             size="mini"
             type="success"
-            effect="light"
           >
             已发起退款等待到账
           </el-tag>
@@ -157,7 +151,6 @@
             v-else-if="refundDetail.refund_status == 'CHANGE'"
             size="mini"
             type="danger"
-            effect="light"
           >
             退款异常
           </el-tag>
