@@ -59,17 +59,19 @@
             <template slot-scope="scope">
               <i
                 v-if="!scope.row.is_expired"
-                class="iconfont icon-edit1"
+                class="el-icon-edit"
                 @click="editBargains(scope.$index, scope.row)"
               />
               <i
                 v-if="!scope.row.is_expired"
-                class="iconfont icon-user-slash"
+                class="el-icon-delete"
+                style="margin-left: 10px;"
                 @click="terminateBargainsAction(scope.$index, scope.row)"
                 >废除</i
               >
               <i
-                class="mark iconfont icon-trash-alt1"
+                class="mark el-icon-delete"
+                style="margin-left: 10px;color: #ff5000;"
                 @click="deleteBargainsAction(scope.$index, scope.row)"
               />
             </template>

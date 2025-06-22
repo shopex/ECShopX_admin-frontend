@@ -38,16 +38,17 @@
           :name="item.activeName"
         >
           <el-table v-loading="loading" border :data="tableList" :height="wheight - 280">
-            <el-table-column label="操作" width="100">
+            <el-table-column label="操作" width="130">
               <template slot-scope="scope">
                 <router-link
-                  class="iconfont icon-edit1"
+                  class="el-icon-edit"
                   :to="{ path: matchRoutePath('editor'), query: { id: scope.row.id } }"
                 />
-                <i class="iconfont icon-search-plus" @click="preview(scope.$index, scope.row)" />
+                <i class="el-icon-zoom-in" style="margin: 0px 10px;" @click="preview(scope.$index, scope.row)" />
                 <i
                   v-if="scope.row.status == 1"
-                  class="mark iconfont icon-trash-alt1"
+                  class="mark el-icon-delete"
+                  style="color: #ff5000;"
                   @click="deleteAction(scope.$index, scope.row)"
                 />
               </template>
