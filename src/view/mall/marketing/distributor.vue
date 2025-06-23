@@ -75,8 +75,8 @@
 </style>
 
 <template>
-  <SpRouterView>
-    <SpPage>
+  <SpPage>
+    <SpRouterView>
       <SpPlatformTip h5 app alipay />
       <!-- <div v-if="VERSION_STANDARD()" class="content-bottom-padded">
         <el-alert type="info" title="操作说明" show-icon>
@@ -157,7 +157,6 @@
         </el-button> -->
           <el-button
             v-if="VERSION_PLATFORM() && !is_distributor && !IS_MERCHANT()"
-            plain
             type="primary"
             @click="addDistributorTag"
           >
@@ -166,7 +165,6 @@
           <el-button
             v-if="IS_ADMIN() || IS_MERCHANT()"
             type="primary"
-            plain
             @click="showSettingDistance('')"
           >
             设置店铺默认可见范围
@@ -174,13 +172,12 @@
           <el-button
             v-if="!IS_DISTRIBUTOR() && !distributor_self"
             type="primary"
-            plain
             @click="addDistributorSelf()"
           >
             新增默认虚拟店信息
           </el-button>
           <template v-else>
-            <el-button v-if="!IS_MERCHANT()" type="primary" plain @click="editDistributorSelf()">
+            <el-button v-if="!IS_MERCHANT()" type="primary" @click="editDistributorSelf()">
               编辑默认虚拟店信息
             </el-button>
           </template>
@@ -673,8 +670,8 @@
         :form-list="keFuFormList"
         @onSubmit="onKeFuFormSubmit"
       />
-    </SpPage>
-  </SpRouterView>
+    </SpRouterView>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

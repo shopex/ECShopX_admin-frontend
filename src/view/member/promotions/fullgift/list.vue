@@ -347,7 +347,8 @@ export default {
         query: { isnodata: true }
       })
     },
-    viewItemList(id, itemType) { // TODO:路由跳转
+    // TODO:路由跳转
+    viewItemList(id, itemType) {
       if (id == 'all') {
         if (itemType == 'normal') {
           this.$router.push({

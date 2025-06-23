@@ -8,7 +8,6 @@ import {
   IS_DISTRIBUTOR,
   IS_SUPPLIER,
   IS_MERCHANT,
-  VERSION_SHUYUN,
   getUrlPathByLoginType
 } from '@/utils'
 import { SYSTEM_CONFIG } from '@/consts'

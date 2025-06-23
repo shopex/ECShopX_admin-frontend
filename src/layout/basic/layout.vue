@@ -32,7 +32,7 @@
         </el-main>
 
         <el-footer class="flex justify-center items-center" height="50px">
-          <SpImage :src="footerBackground" height="28" fit="contain" />
+          <SpImage :src="footerBackground" height="22" fit="contain" />
         </el-footer>
       </el-container>
     </el-container>

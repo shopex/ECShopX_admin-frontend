@@ -46,7 +46,7 @@ function setupAccessGuard(router) {
 
     const basePath = window.location.href.match(/\/(shopadmin|supplier|merchant)(\/.*)?$/)?.[1]
     console.log('xxxxxxxxxxxx', store.state.user.login_type)
-    debugger
+
     if ((basePath == null && !IS_ADMIN()) || (basePath == 'shopadmin' && !IS_DISTRIBUTOR())) {
       store.commit('user/logout')
       next(basePath ? `/${basePath}/login` : '/login')
@@ -91,12 +91,9 @@ function setupAccessGuard(router) {
       return '/'
     }
     // 如果目标路径不可访问，重定向到第一个可访问路由
-    if (!isPathAccessible(to.path, router.getRoutes())) {
+    if (!isPathAccessible(to.path, router.getRoutes()) || to.path === '/shopadmin') {
       const firstPath = getFirstRoutePath()
       next(firstPath)
-      return
-    } else if (to.path === '/shopadmin') {
-      next('/shopadmin/shoplist')
       return
     }
     next(to)

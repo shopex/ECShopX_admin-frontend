@@ -2,7 +2,7 @@
   <SpPage>
     <SpRouterView>
       <SpPlatformTip h5 app alipay />
-  
+
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="field_title" label="活动名称:">
           <el-input v-model="params.field_title" placeholder="活动名称" />
@@ -29,13 +29,13 @@
           <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
         </SpFilterFormItem>
       </SpFilterForm>
-  
+
       <div class="action-container">
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addElement">
           活动添加
         </el-button>
       </div>
-  
+
       <el-table v-loading="loading" border :data="tableList" style="width: 100%">
         <el-table-column label="操作" fixed="left" :width="IS_DISTRIBUTOR() ? 150 : 250">
           <template slot-scope="scope">
@@ -107,7 +107,11 @@
           @size-change="onSizeChange"
         />
       </div>
-      <EnterpriseDialog :visible.sync="dialogVisible" :data="dialogData" @closeDialog="closeDialog" />
+      <EnterpriseDialog
+        :visible.sync="dialogVisible"
+        :data="dialogData"
+        @closeDialog="closeDialog"
+      />
     </SpRouterView>
   </SpPage>
 </template>
@@ -209,7 +213,8 @@ export default {
         })
       }
     },
-    onOperationChange(row, type) { // TODO:路由跳转
+    // TODO:路由跳转
+    onOperationChange(row, type) {
       if (type == 'edit') {
         this.$router.push({
           path: this.matchRoutePath('editor'),

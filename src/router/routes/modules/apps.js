@@ -194,12 +194,8 @@ const routes = [
           title: '活动管理',
           permissions: ['applications.ec.purchase-admin']
         },
-        component: () => import('@/view/sublayout'),
+        component: () => import('@/view/marketing/employee/list'),
         children: [
-          {
-            path: '/',
-            component: () => import('@/view/marketing/employee/list')
-          },
           {
             path: 'create/:id?',
             component: () => import('@/view/marketing/employee/purchase')

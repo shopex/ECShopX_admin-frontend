@@ -118,6 +118,8 @@ const routes = [
           permissions: ['order.ordersetting.aftersalesreason']
         }
       },
+
+      // TODO: 路由优化
       {
         name: `cartReminder`,
         path: 'order-manage/cart-reminder',
@@ -170,7 +172,7 @@ const routes = [
         ]
       },
       {
-        path: 'entitytrade/marketingdistribution_orders',
+        path: 'entitytrade/marketingdistribution-orders',
         name: `店铺订单`,
         meta: {
           aliasName: 'marketingdistribution_orders',
@@ -188,12 +190,12 @@ const routes = [
       },
 
       {
-        path: 'servicepayment',
+        path: 'trade-order',
         name: `交易单`,
         component: () => import('@/view/mall/trade/list')
       },
       {
-        path: 'aftersalesrefundlist',
+        path: 'aftersales-refund-list',
         name: `退款单`,
         component: () => import('@/view/mall/aftersales/refundList'),
         children: [
@@ -209,7 +211,7 @@ const routes = [
         component: () => import('@/view/mall/trade/refunderrorlogs')
       },
       {
-        path: 'chinaumsdivisionlist',
+        path: 'chinaums-division-list',
         name: `分账单`,
         component: () => import('@/view/mall/chinaums/divisionList')
       },

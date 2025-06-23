@@ -36,7 +36,7 @@
       </div>
       <el-menu class="!border-none w-full" :default-active="activeSubIndex" unique-opened>
         <template v-for="item in subMenus">
-          <template v-if="item.children">
+          <template v-if="resolveChildren(item.children)">
             <el-submenu :key="item.alias_name" :index="item.alias_name">
               <template slot="title">
                 <span>{{ item.name }}</span>
@@ -115,6 +115,9 @@ export default {
       const allRoutes = this.$router.getRoutes()
       const route = allRoutes.find(route => route.meta?.aliasName === item.alias_name)
       return route?.meta?.icon
+    },
+    resolveChildren(children) {
+      return children && children.length > 0 && children.some(child => child.is_menu)
     },
     handleMainMenuClick(item) {
       if (item.alias_name == this.$route.matched?.[0]?.meta?.aliasName) {

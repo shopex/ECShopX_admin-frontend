@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <div v-if="processed == '未填'" class="zyk_page_register_Info_edit">
       <el-tabs v-model="activeName" type="border-card">
         <el-tab-pane v-if="member_type == 'corp' || allShow" name="corp" label="企业">
@@ -316,7 +316,7 @@
       :current-status="currentStatus"
       @processedHandle="processedHandle"
     />
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -516,7 +516,7 @@ export default {
       this.form.submit_review = isSubmit
       this.form.isUploadFile = true
       console.log(this.form)
-      this.$refs['ruleForm'].validate(async (valid) => {
+      this.$refs['ruleForm'].validate(async valid => {
         if (valid) {
           if (this.form.member_id) {
             // 更新
@@ -562,7 +562,7 @@ export default {
     },
     submitFormPerson(isSubmit, ref) {
       this.personForm.submit_review = isSubmit
-      this.$refs['personForm'].validate(async (valid) => {
+      this.$refs['personForm'].validate(async valid => {
         if (valid) {
           console.log(this.personForm)
           if (this.personForm.member_id) {
@@ -691,7 +691,7 @@ export default {
         bank_name: this.form.bank_name
       })
 
-      var restaurants = this.AllBank.map((item) => {
+      var restaurants = this.AllBank.map(item => {
         return {
           value: item.bank_name,
           bank_code: item.bank_code,
@@ -703,7 +703,7 @@ export default {
       cb(results)
     },
     createFilter(queryString) {
-      return (restaurant) => {
+      return restaurant => {
         return restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
       }
     },

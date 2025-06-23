@@ -6,51 +6,50 @@
 </style>
 <template>
   <SpRouterView>
-  <SpPage>
-    <div
-    >
-      <SpFilterForm :model="formQuery" @onSearch="onSearch" @onReset="onSearch">
-        <SpFilterFormItem prop="name" label="团长姓名:">
-          <el-input v-model="formQuery.name" placeholder="请输入团长姓名" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="mobile" label="手机号:">
-          <el-input v-model="formQuery.mobile" placeholder="请输入团长手机号" />
-        </SpFilterFormItem>
-      </SpFilterForm>
-      <div class="action-container">
-        <el-button type="primary" plain icon="el-plus-circle" @click="chiefupload">
-          团长导入
-        </el-button>
-        <el-button type="primary" plain icon="el-plus-circle" @click="handleApprove">
-          团长审批
-        </el-button>
-      </div>
-      <!-- <el-tabs v-model="formQuery.approve_status" type="card" @tab-click="onSearch">
+    <SpPage>
+      <div>
+        <SpFilterForm :model="formQuery" @onSearch="onSearch" @onReset="onSearch">
+          <SpFilterFormItem prop="name" label="团长姓名:">
+            <el-input v-model="formQuery.name" placeholder="请输入团长姓名" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="mobile" label="手机号:">
+            <el-input v-model="formQuery.mobile" placeholder="请输入团长手机号" />
+          </SpFilterFormItem>
+        </SpFilterForm>
+        <div class="action-container">
+          <el-button type="primary" icon="el-plus-circle" @click="chiefupload">
+            团长导入
+          </el-button>
+          <el-button type="primary" icon="el-plus-circle" @click="handleApprove">
+            团长审批
+          </el-button>
+        </div>
+        <!-- <el-tabs v-model="formQuery.approve_status" type="card" @tab-click="onSearch">
         <el-tab-pane v-for="item in stateList" :key="item.value" :label="item.title" :name="item.value" /> -->
 
-      <SpFinder
-        ref="finder"
-        no-selection
-        :setting="setting"
-        :hooks="{
-          beforeSearch: beforeSearch,
-          afterSearch: afterSearch
-        }"
-        url="/community/chief/list"
-      />
-      <!-- </el-tabs> -->
+        <SpFinder
+          ref="finder"
+          no-selection
+          :setting="setting"
+          :hooks="{
+            beforeSearch: beforeSearch,
+            afterSearch: afterSearch
+          }"
+          url="/community/chief/list"
+        />
+        <!-- </el-tabs> -->
 
-      <SpDialog
-        ref="resloveDialogRef"
-        v-model="resloveDialog"
-        :title="`审批`"
-        :form="resloveForm"
-        :form-list="resloveFormList"
-        @onSubmit="onResloveSubmit"
-      />
-    </div>
-  </SpPage>
-  </SpRouterView> 
+        <SpDialog
+          ref="resloveDialogRef"
+          v-model="resloveDialog"
+          :title="`审批`"
+          :form="resloveForm"
+          :form-list="resloveFormList"
+          @onSubmit="onResloveSubmit"
+        />
+      </div>
+    </SpPage>
+  </SpRouterView>
 </template>
 
 <script>
@@ -113,7 +112,7 @@ export default {
             { label: 1, name: '同意' },
             { label: 2, name: '不同意' }
           ],
-          onChange: (e) => {
+          onChange: e => {
             if (e == 2) {
               this.resloveFormList[1].isShow = true
             } else {
