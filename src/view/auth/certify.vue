@@ -43,7 +43,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="手机号">
+          <el-form-item label="手机号" required>
             <el-input id="keyword" v-model="form.mobile"/>
           </el-form-item>
         </el-col>
