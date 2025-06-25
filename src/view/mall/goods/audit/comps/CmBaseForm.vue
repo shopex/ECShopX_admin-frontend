@@ -263,8 +263,13 @@
                         <el-image style="width: 100%; height: 100%" :src="item" fit="contain" />
                         <div class="goodspic-mask">
                           <div class="iconfont icon-trash-alt" @click="removePicsImg(index)" />
-                          <div class="iconfont icon-arrows-alt" />
+                          <div class="iconfont icon-arrows-alt" @click="previewSrcList" />
                         </div>
+                        <el-image-viewer
+                          v-if="showViewer"
+                          :on-close="closeViewer"
+                          :url-list="[item]"
+                        />
                       </div>
                       <el-checkbox v-model="value.pics_create_qrcode[index]" class="checkBox" />
                     </li>
@@ -314,6 +319,7 @@ import draggable from 'vuedraggable'
 import imgPicker from '@/components/imageselect'
 import videoPicker from '@/components/videoselect'
 import { getShippingTemplatesList } from '@/api/shipping'
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import {
   getItemsDetail,
   createItems,
@@ -329,7 +335,8 @@ export default {
     imgPicker,
     videoPicker,
     Treeselect,
-    draggable
+    draggable,
+    ElImageViewer
   },
   props: ['value', 'isCross'],
   data() {
@@ -349,7 +356,8 @@ export default {
         scroll: true,
         handle: '.icon-arrows-alt',
         draggable: '.goodspic'
-      }
+      },
+      showViewer: false
     }
   },
   computed: {
@@ -402,6 +410,12 @@ export default {
     removePicsImg(index) {
       this.value.pics.splice(index, 1)
       this.value.pics_create_qrcode.splice(index, 1)
+    },
+    previewSrcList(index) {
+      this.showViewer = true
+    },
+    closeViewer() {
+      this.showViewer = false
     },
     pickVideo({ media_id, url }) {
       this.value.itemVideo = {
