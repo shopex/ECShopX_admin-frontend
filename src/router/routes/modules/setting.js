@@ -1,4 +1,5 @@
 import { BasicLayout } from '@/layout/basic' // 主框架
+import { VERSION_SHUYUN } from '@/utils'
 
 const routes = [
   {
@@ -88,7 +89,13 @@ const routes = [
           title: '短信服务',
         permissions: ['setting.systemsetting.datamessage']
         },
-        component: () => import('@/view/base/shortmessage/index'),
+        component: () => {
+          if(VERSION_SHUYUN()){
+            return import('@/view/base/shortmessage/shopex_sms')
+          }else{
+            return import('@/view/base/shortmessage/index')
+          }
+        },
         children: [
           {
             path: 'ali_sms',
