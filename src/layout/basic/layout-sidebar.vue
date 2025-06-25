@@ -76,6 +76,7 @@
 // import { MENU_ICON_MAP } from '@/constants'
 // import { preferences } from '../../preferences'
 import DEFAULT_CONFIG from '@/config'
+import { getBasePath } from '@/utils'
 
 export default {
   name: 'LayoutSidebar',
@@ -126,20 +127,31 @@ export default {
       this.subMenus = item?.children || []
       // 获取第一个子路由
       const firstChild = _submenu => {
-        if (_submenu.children) {
-          return firstChild(_submenu.children[0])
-        } else {
-          return _submenu?.permission
+        for (const item of _submenu) {
+          if (item.children) {
+            const result = firstChild(item.children)
+            if (result) return result
+          } else if (item.is_menu) {
+            return item?.permission
+          }
         }
+        return null
       }
       // 如果只有一级菜单，就直接那当前一级菜单的权限
-      const permission = firstChild(this.subMenus?.[0] || item)
+      let permission = ''
+      if (this.subMenus.length === 0) {
+        permission = item.permission
+      } else {
+        permission = firstChild(this.subMenus)
+      }
+
       const allRoutes = this.$router.getRoutes()
       const route = allRoutes.find(route => route.meta?.permissions?.includes(permission))
       if (route) {
         this.$router.push({ path: route.path })
       } else {
-        console.log('没有权限', item)
+        const basePath = getBasePath()
+        this.$router.push({ path: basePath ? `/${basePath}/not-found` : '/not-found' })
       }
     },
     handleSubMenuClick(item) {
@@ -153,7 +165,8 @@ export default {
         }
         this.$router.push({ path: route.path })
       } else {
-        console.log('没有权限', item)
+        const basePath = getBasePath()
+        this.$router.push({ path: basePath ? `/${basePath}/not-found` : '/not-found' })
       }
     }
   }

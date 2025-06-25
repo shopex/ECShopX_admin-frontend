@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { getBasePath } from '@/utils'
 export default {
   name: 'LayoutHeader',
   computed: {
@@ -69,7 +70,8 @@ export default {
         await this.$api.login.invalidateToken()
         this.$store.commit('user/logout')
         this.$store.commit('system/logout')
-        this.$router.push('/login')
+        const basePath = getBasePath()
+        this.$router.push(basePath ? `/${basePath}/login` : '/login')
       }
     }
   }

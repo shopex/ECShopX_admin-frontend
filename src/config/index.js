@@ -1,9 +1,15 @@
 import bbc from './products/bbc'
 import yd from './products/yd'
+import b2c from './products/b2c'
+import ng from './products/ng'
+import shuyun from './products/shuyun'
 
 const PRODUCTS_CONFIG = {
   yd: yd,
-  bbc: bbc
+  bbc: bbc,
+  b2c: b2c,
+  ng: ng,
+  shuyun: shuyun
 }
 
 const DEFAULT_CONFIG = {

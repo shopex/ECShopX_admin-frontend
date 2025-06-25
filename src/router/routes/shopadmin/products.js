@@ -50,6 +50,28 @@ const routes = [
         ]
       },
       {
+        name: `storeProductManage`,
+        path: 'store-product-manage',
+        component: () => import('@/view/mall/goods/physical/list.standard'),
+        meta: {
+          aliasName: 'storeshopproductanagement',
+          icon: 'icon-products',
+          title: '店铺商品',
+          permissions: ['entity.storeshopproductanagement']
+        },
+        children: [
+          {
+            path: 'editor/:itemId?',
+            component: () => import('@/view/mall/goods/physical/add')
+          },
+          {
+            path: 'physicalupload',
+            name: `商品导入`,
+            component: () => import('@/view/mall/goods/physical/normalGoodsUpload')
+          }
+        ]
+      },
+      {
         name: 'productImport',
         path: 'product-import',
         component: () => import('@/view/mall/goods/physical/normalGoodsUpload'),

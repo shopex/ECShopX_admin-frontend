@@ -1,4 +1,5 @@
 import store from '@/store'
+import { fallbackNotFoundRoute } from './routes/core'
 
 /**
  * 获取树形结构中所有叶子节点的路径
@@ -93,7 +94,9 @@ async function generateAccess(options) {
     router.addRoute(route)
   })
 
-  // router.addRoute(fallbackNotFoundRoute)
+  fallbackNotFoundRoute.path = '/shopadmin'
+  console.log('fallbackNotFoundRoute', fallbackNotFoundRoute)
+  router.addRoute(fallbackNotFoundRoute)
 
   const accessibleMenus = () => {}
 

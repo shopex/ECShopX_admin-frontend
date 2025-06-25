@@ -1,4 +1,4 @@
-import { coreRoutes, fallbackNotFoundRoute } from './core'
+import { coreRoutes } from './core'
 
 const dynamicRouteFiles = (() => {
   const basePath = window.location.href.match(/\/(shopadmin|supplier|merchant)(\/.*)?$/)?.[1]

@@ -42,3 +42,8 @@ export function traverseTreeValues(tree, callback) {
   })
   return paths
 }
+
+// 判断当前在哪个端，返回shopadmin、supplier、merchant
+export function getBasePath() {
+  return window.location.href.match(/\/(shopadmin|supplier|merchant)(\/.*)?$/)?.[1]
+}

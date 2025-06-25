@@ -27,7 +27,7 @@
 
     <div>
       <el-form label-width="100px">
-        <el-form-item label="选择日期范围">
+        <el-form-item label="日期范围">
           <el-row :gutter="20">
             <el-col :span="9">
               <el-date-picker

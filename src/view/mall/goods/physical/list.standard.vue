@@ -55,7 +55,7 @@
 }
 </style>
 <template>
-  <div class="page-body">
+  <SpPage class="page-body">
     <template
       v-if="
         $route.path.indexOf('editor') === -1 &&
@@ -830,7 +830,7 @@
       </SpDrawer>
     </template>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

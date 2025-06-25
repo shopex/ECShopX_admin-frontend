@@ -5,7 +5,7 @@
         <slot />
       </div>
     </el-container>
-    <el-aside class="bg-white h-full" width="50px">
+    <el-aside v-if="!VUE_APP_FREE" class="bg-white h-full" width="50px">
       <div class="flex flex-col items-center justify-center gap-4">
         <el-popover placement="left" width="200" trigger="click">
           <div slot="reference">

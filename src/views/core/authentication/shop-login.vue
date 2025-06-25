@@ -17,13 +17,14 @@
     </div>
 
     <div class="absolute -bottom-0.5 left-0 w-full text-center text-sm text-muted-foreground">
-      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">沪ICP备05002918号</a>
+      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ recoderNumber }}</a>
     </div>
   </div>
 </template>
 
 <script>
 import { useForm } from '@/composables'
+import Config from '@/config'
 
 const [Form, FormApi] = useForm({
   formItems: [
@@ -56,7 +57,8 @@ export default {
   data() {
     return {
       formApi: FormApi,
-      loading: false
+      loading: false,
+      recoderNumber: Config.recoder_number
     }
   },
   async mounted() {

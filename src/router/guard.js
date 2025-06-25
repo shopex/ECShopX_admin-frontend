@@ -21,14 +21,12 @@ function setupCommonGuard(router) {
 
 function setupAccessGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    console.log('traverseTreeValues', coreRoutesNames)
-
-    if (coreRoutesNames.includes(to.path)) {
+    // 如果路径在核心路由中，直接放行
+    if (coreRoutesNames.includes(to.path) || to.name === 'FallbackNotFound') {
       next()
       return
     }
 
-    console.log('setupAccessGuard beforeEach', to, from)
     const hasToken = store.state.user.token
     if (!hasToken) {
       if (/\/login$/.test(to.path)) {
@@ -44,18 +42,16 @@ function setupAccessGuard(router) {
       return
     }
 
+    // 如果当前访问的端不是当前登录的端，则退出登录，并重定向到登录页
     const basePath = window.location.href.match(/\/(shopadmin|supplier|merchant)(\/.*)?$/)?.[1]
-    console.log('xxxxxxxxxxxx', store.state.user.login_type)
-
     if ((basePath == null && !IS_ADMIN()) || (basePath == 'shopadmin' && !IS_DISTRIBUTOR())) {
       store.commit('user/logout')
       next(basePath ? `/${basePath}/login` : '/login')
       return
     }
+
     // 菜单已加载标志
     if (store.state.access.isAccessChecked) {
-      // to.path如果访问的不在路由中，重定向到路由默认菜单的第一个
-
       next()
       return
     }
@@ -67,11 +63,6 @@ function setupAccessGuard(router) {
     })
 
     store.commit('access/setIsAccessChecked', true)
-
-    // return {
-    //   path: '/dashboard',
-    //   replace: true
-    // }
 
     // 检查目标路径是否在可访问路由中
     const isPathAccessible = (path, routes, parentPath = '') => {

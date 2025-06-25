@@ -65,7 +65,6 @@ function createRequestClient() {
       const {
         data: { status_code, message }
       } = responseData
-      console.log('responseData',responseData)
       if (status >= 200 && status < 400 && typeof status_code === 'undefined') {
         // return responseData.data
         return response

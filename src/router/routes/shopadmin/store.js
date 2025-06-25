@@ -68,13 +68,13 @@ const routes = [
       },
       {
         name: 'storeWhitelist',
-        path: 'storewhitelist',
+        path: 'store-whitelist',
         component: () => import('@/view/mall/marketing/storewhitelist'),
         meta: {
           aliasName: 'storewhitelist',
           icon: 'icon-whitelist',
           title: '店铺白名单',
-          permissions: ['shopadmin.store.storewhitelist']
+          permissions: ['store.storewhitelist']
         },
         children: [
           {
