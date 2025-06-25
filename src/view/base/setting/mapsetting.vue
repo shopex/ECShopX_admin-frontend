@@ -1,6 +1,6 @@
 <template>
   <div class="map-setting">
-    <SpPlatformTip h5 app alipay />
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane
         v-for="(item, index) in tabList"
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     onGetConfig() {
-      getMapSetting().then((response) => {
+      getMapSetting().then(response => {
         this.form = response.data.data.list[0]
       })
     },
@@ -89,7 +89,7 @@ export default {
         is_default: 1
       }
       setMapSetting(query)
-        .then((response) => {
+        .then(response => {
           this.$message({
             type: 'success',
             message: '保存成功'
@@ -98,7 +98,7 @@ export default {
           this.onGetConfig()
           this.loading = false
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false
         })
     },

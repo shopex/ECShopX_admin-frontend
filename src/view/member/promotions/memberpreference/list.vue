@@ -1,14 +1,15 @@
 <template>
   <SpPage>
-    <div v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip h5 app alipay />
-      <!-- <el-row :gutter="20">
+    <SpRouterView>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
+      <el-row :gutter="20">
         <el-col :md="4" :lg="8">
           <el-button size="mini" type="primary" icon="plus" @click="addActivityData">
             添加会员优先购活动
           </el-button>
         </el-col>
-      </el-row> -->
+      </el-row>
+      -->
 
       <div class="action-container">
         <el-button type="primary" @click="addActivityData"> 添加会员优先购活动 </el-button>
@@ -77,8 +78,7 @@
           />
         </div>
       </el-tabs>
-    </div>
-    <router-view />
+    </SpRouterView>
   </SpPage>
 </template>
 <script>

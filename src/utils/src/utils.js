@@ -1,4 +1,5 @@
 import store from '@/store'
+import Config from '@/config'
 
 export function formatPrice(price, thousandth = true, prefix = '¥', suffix = '') {
   let formattedPrice = (price / 100).toFixed(2)
@@ -46,4 +47,23 @@ export function traverseTreeValues(tree, callback) {
 // 判断当前在哪个端，返回shopadmin、supplier、merchant
 export function getBasePath() {
   return window.location.href.match(/\/(shopadmin|supplier|merchant)(\/.*)?$/)?.[1]
+}
+
+// 获取系统标题
+export function getSystemTitle() {
+  const basePath = getBasePath()
+  if (basePath == 'shopadmin') {
+    return Config.systemTitleShopadmin
+  } else if (basePath == 'merchant') {
+    return Config.systemTitleMerchant
+  } else if (basePath == 'supplier') {
+    return Config.systemTitleSupplier
+  } else {
+    return Config.systemTitle
+  }
+}
+
+export function parsehslTohsla(hsl, alpha = 0.5) {
+  const [h, s, l] = hsl.match(/\(([^)]+)\)/)?.[1].split(' ')
+  return `hsla(${h}, ${s}, ${l}, ${alpha})`
 }

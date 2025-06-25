@@ -73,10 +73,7 @@
 </template>
 
 <script>
-// import { MENU_ICON_MAP } from '@/constants'
-// import { preferences } from '../../preferences'
-import DEFAULT_CONFIG from '@/config'
-import { getBasePath } from '@/utils'
+import { getBasePath, getSystemTitle } from '@/utils'
 
 export default {
   name: 'LayoutSidebar',
@@ -88,7 +85,7 @@ export default {
   },
   computed: {
     systemTitle: () => {
-      return DEFAULT_CONFIG.systemTitle
+      return getSystemTitle()
     },
     activeMainMenu() {
       return this.$route.matched[0]?.meta?.aliasName

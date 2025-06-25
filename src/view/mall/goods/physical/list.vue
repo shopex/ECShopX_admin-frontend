@@ -197,8 +197,11 @@
             <el-dropdown-item v-if="!IS_SUPPLIER()" command="wxapp-qrcode">
               小程序码
             </el-dropdown-item>
-            <el-dropdown-item v-if="!IS_SUPPLIER()" command="h5-qrcode">
-              H5二维码
+            <el-dropdown-item v-if="!IS_SUPPLIER()">
+              <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
+            </el-dropdown-item>
+            <el-dropdown-item v-if="!VERSION_SHUYUN() && !IS_SUPPLIER()">
+              <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

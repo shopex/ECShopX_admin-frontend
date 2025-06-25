@@ -32,7 +32,7 @@
 
 <script>
 import { Column } from '@antv/g2plot'
-import { formatPrice } from '@/utils'
+import { formatPrice, parsehslTohsla } from '@/utils'
 import Config from '@/config'
 export default {
   data() {
@@ -130,18 +130,14 @@ export default {
       this.drawChart('new_user')
     },
     drawChart(tab) {
-      console.log(Config.themeConfig.primaryColor.match(/\(([^)]+)\)/)?.[1])
-      debugger
       this.columnPlot = new Column(document.getElementById('member-chart'), {
         data: this.chartData[tab],
         xField: 'type',
         yField: 'sales',
-        // color: Config.themeConfig.primaryColor,
-        color: `l(90) 0:hsla(${
-          Config.themeConfig.primaryColor.match(/\(([^)]+)\)/)?.[1]
-        }, 1) 1:hsla(${Config.themeConfig.primaryColor.match(/\(([^)]+)\)/)?.[1]}, 0.5)`
-        // color: `l(90) 0:${Config.themeConfig.primaryColor} 1:hsla(37 100% 50%, 0.5)`
-        // color: 'l(90) 0:hsla(209, 100%, 55%, 0.3) 1:hsla(100, 100%, 44%, 0.7)'
+        color: `l(90) 0:${parsehslTohsla(Config.themeConfig.primaryColor, 1)} 1:${parsehslTohsla(
+          Config.themeConfig.primaryColor,
+          0.5
+        )}`
       })
       this.columnPlot.render()
     },

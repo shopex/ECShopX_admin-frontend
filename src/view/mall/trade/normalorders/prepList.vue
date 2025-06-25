@@ -154,7 +154,6 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
-      <!-- v-if="!VERSION_STANDARD() && !VERSION_IN_PURCHASE()" -->
       <SpFilterFormItem prop="order_holder" label="订单分类:">
         <el-select v-model="params.order_holder" clearable placeholder="请选择">
           <el-option

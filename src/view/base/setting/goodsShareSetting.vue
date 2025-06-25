@@ -1,6 +1,6 @@
 <template>
   <div class="goodsShareSetting">
-    <SpPlatformTip />
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" />
     <el-form ref="form" label-width="180px" :rules="rules" :model="form">
       <el-form-item label="商品分享是否限制">
         <el-switch v-model="form.is_open" />
@@ -128,7 +128,7 @@ export default {
     },
     // 保存表单
     save() {
-      this.$refs['form'].validate(async (vaild) => {
+      this.$refs['form'].validate(async vaild => {
         if (vaild) {
           const { form } = this
           const data = await saveShareSetting(form)

@@ -58,9 +58,11 @@
     top: 0;
   }
 }
-.c-pagination{
-  text-align: right;
-  margin-top: 20px;
+</style>
+
+<style>
+.form-item__label {
+  white-space: nowrap;
 }
 </style>
 
@@ -71,10 +73,14 @@
         <SpFilterFormItem prop="mobile" label="手机号:">
           <el-input v-model="params.mobile" placeholder="请输入手机号" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="username" label="昵称:">
+        <SpFilterFormItem v-if="!VERSION_SHUYUN()" prop="username" label="昵称:">
           <el-input v-model="params.username" placeholder="请输入昵称" />
         </SpFilterFormItem>
-        <SpFilterFormItem v-if="!VERSION_IN_PURCHASE()" prop="vip_grade" label="会员身份:">
+        <SpFilterFormItem
+          v-if="!VERSION_IN_PURCHASE()"
+          prop="vip_grade"
+          :label="!VERSION_SHUYUN() ? '会员身份:' : '付费会员等级:'"
+        >
           <el-select v-model="params.vip_grade" clearable placeholder="请选择">
             <el-option
               v-for="item in vipGrade"
@@ -179,7 +185,11 @@
           付费会员延期
         </el-button>
         <el-button
-          v-if="$store.getters.login_type != 'distributor' && !VERSION_IN_PURCHASE()"
+          v-if="
+            $store.getters.login_type != 'distributor' &&
+            !VERSION_IN_PURCHASE() &&
+            !VERSION_SHUYUN()
+          "
           type="primary"
           @click="batchActionDialog('set_grade')"
         >
@@ -225,12 +235,16 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" align="center" label="全选" />
-        <el-table-column v-if="VERSION_SHUYUN" prop="userid" label="平台账号" width="100" />
+        <el-table-column v-if="VERSION_SHUYUN()" prop="userid" label="平台账号" width="100" />
         <el-table-column prop="mobile" label="手机号" width="160">
           <template slot-scope="scope">
             {{ scope.row.mobile }}
             <el-tooltip
-              v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                datapass_block == 0 &&
+                !VERSION_SHUYUN()
+              "
               class="item"
               effect="dark"
               content="修改手机号"
@@ -370,14 +384,22 @@
           <template slot-scope="scope">
             <el-button type="text" @click="getDetail(scope.row.user_id)"> 详情 </el-button>
             <el-button
-              v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                datapass_block == 0 &&
+                !VERSION_SHUYUN()
+              "
               type="text"
               @click="infoUpdate(scope.row)"
             >
               基础信息
             </el-button>
             <el-button
-              v-if="$store.getters.login_type != 'distributor' && !VERSION_IN_PURCHASE()"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                !VERSION_IN_PURCHASE() &&
+                !VERSION_SHUYUN()
+              "
               type="text"
               @click="gradeUpdate(scope.row)"
             >
@@ -438,7 +460,7 @@
             <el-pagination
               background
               layout="prev, pager, next"
-              style="white-space: initial;"
+              style="white-space: initial"
               :current-page="staffCoupons.page.currentPage"
               :page-size="staffCoupons.page.pageSize"
               :total="staffCoupons.page.total"
@@ -1326,13 +1348,16 @@ export default {
           grade_name
         })
       })
-      vipGradeList.forEach(({ vip_grade_id, grade_name, lv_type }) => {
-        _levelData.push({
-          grade_id: lv_type,
-          grade_name
-          // lv_type
+      if (!this.VERSION_SHUYUN()) {
+        vipGradeList.forEach(({ vip_grade_id, grade_name, lv_type }) => {
+          _levelData.push({
+            grade_id: lv_type,
+            grade_name
+            // lv_type
+          })
         })
-      })
+      }
+
       this.gradeList = gradeList
       this.vipGrade = vipGradeList
       this.levelData = _levelData

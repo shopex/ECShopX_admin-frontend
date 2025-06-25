@@ -7,7 +7,7 @@
             v-loading="loading"
             :data="tableList"
             style="width: 100%"
-            :height=" - 200"
+            :height="-200"
             @expand-change="handleExpandChange"
           >
             <el-table-column label="绑定详情" width="80" type="expand" fixed="left">
@@ -308,13 +308,8 @@
             />
           </div>
         </el-tab-pane>
-        <el-tab-pane label="微信服务号" name="offiaccount">
-          <el-table
-            v-loading="loading"
-            :data="authorizerData"
-            style="width: 100%"
-            :height=" - 200"
-          >
+        <el-tab-pane v-if="false" label="微信服务号" name="offiaccount">
+          <el-table v-loading="loading" :data="authorizerData" style="width: 100%" :height="-200">
             <el-table-column prop="nick_name" label="公众号昵称" width="180" />
             <el-table-column prop="authorizer_appid" label="公众号APPID" width="180" />
             <el-table-column label="二维码" width="100">
@@ -736,8 +731,8 @@ export default {
       },
       submitWeappForm: {},
       tabList: [
-        { name: '微信小程序', activeName: 'miniprogram' },
-        { name: '微信服务号', activeName: 'offiaccount' }
+        { name: '微信小程序', activeName: 'miniprogram' }
+        // { name: '微信服务号', activeName: 'offiaccount' }
       ],
       authorizerData: [
         {
@@ -864,19 +859,18 @@ export default {
       }
     },
     showBindDetail(data) {
-      if(data.authorizer.authorizer_appid){
+      if (data.authorizer.authorizer_appid) {
         this.applet_detail = true
-      getWxa(data.authorizer.authorizer_appid).then(response => {
-        this.detail = response.data.data
-        this.weappTemplate = this.detail.weappTemplate
-        this.configForm.auto_publish = response.data.data.auto_publish
-        this.configForm.authorizer_appsecret = response.data.data.authorizer_appsecret
-        console.log(this.detail)
-      })
-      }else{
-        this.$message({message:'当前未绑定'})
+        getWxa(data.authorizer.authorizer_appid).then(response => {
+          this.detail = response.data.data
+          this.weappTemplate = this.detail.weappTemplate
+          this.configForm.auto_publish = response.data.data.auto_publish
+          this.configForm.authorizer_appsecret = response.data.data.authorizer_appsecret
+          console.log(this.detail)
+        })
+      } else {
+        this.$message({ message: '当前未绑定' })
       }
-     
     },
     downloadWxaCode(rowdata) {
       this.getwxcodeloading = true

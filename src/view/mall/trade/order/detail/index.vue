@@ -2,218 +2,216 @@
   <SpPage title="订单基本信息">
     <template slot="page-header">
       <div v-if="btnActions.length > 0" class="text-right">
-      <el-button
-        v-for="(btn, index) in btnActions"
-        :key="`btn-item__${index}`"
-        type="primary"
-        plain
-        @click="handleAction(btn)"
-      >
-        {{ btn.name }}
-      </el-button>
-    </div>
+        <el-button
+          v-for="(btn, index) in btnActions"
+          :key="`btn-item__${index}`"
+          type="primary"
+          plain
+          @click="handleAction(btn)"
+        >
+          {{ btn.name }}
+        </el-button>
+      </div>
     </template>
-  <div v-loading="loading" class="page-order-index">
-    <el-card class="el-card--normal">
-
-      <el-row class="card-panel">
-        <el-col
-          v-for="(item, index) in infoList"
-          v-if="item.is_show"
-          :key="`item__${index}`"
-          class="card-panel-item"
-          :span="6"
-        >
-          <span class="card-panel__label">{{ item.label }}</span>
-          <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card v-if="is_community" class="el-card--normal">
-      <div slot="header">跟团信息</div>
-      <el-row class="card-panel">
-        <el-col
-          v-for="(item, index) in communityInfoList"
-          v-if="item.is_show"
-          :key="`item__${index}`"
-          class="card-panel-item"
-          :span="6"
-        >
-          <span class="card-panel__label">{{ item.label }}</span>
-          <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-        </el-col>
-        <el-col
-          v-for="(item, index) in communityExtra"
-          :key="`item__${index}`"
-          class="card-panel-item"
-          :span="6"
-        >
-          <span class="card-panel__label">{{ index }}：</span>
-          <span class="card-panel__value">{{ item }}</span>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card class="el-card--normal">
-      <div slot="header">客户留言</div>
-      <div class="card-panel">
-        <span class="card-panel__value">{{ memberRemark }}</span>
-      </div>
-    </el-card>
-
-    <el-card class="el-card--normal">
-      <div slot="header">商家备注</div>
-      <div class="card-panel">
-        <span class="card-panel__value">{{ merchantRemark }}</span>
-      </div>
-    </el-card>
-
-    <el-card class="el-card--normal">
-      <div slot="header">商品清单</div>
-      <div class="card-panel">
-        <el-table v-if="orderInfo" border :data="orderInfo.items">
-          <el-table-column prop="item_id" label="商品ID" width="80" />
-          <el-table-column prop="pic" label="商品图片" width="120">
-            <template slot-scope="scope">
-              <el-image class="item-image" fit="fill" :src="`${wximageurl}${scope.row.pic}`" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="item_name" label="商品名称" width="180">
-            <template slot-scope="scope">
-              <div class="ell3">
-                <el-tag
-                  v-if="scope.row.is_prescription == 1"
-                  type="primary"
-                  size="mini"
-                  style="background-color: #fff"
-                  >
-处方药
-</el-tag
-                >
-                {{ scope.row.item_name }}
-              </div>
-              <el-tag v-if="scope.row.order_item_type == 'gift'" size="mini" type="success">
-                赠品
-              </el-tag>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="处方用量" width="160" /> -->
-          <el-table-column prop="item_holder" label="商品类型" width="100">
-            <template slot-scope="scope">
-              <div class="ell3">
-                {{ goodCategoryMap[scope.row.item_holder] }}
-              </div>
-            </template>
-          </el-table-column>
-
-          <!--          <el-table-column prop="item_spec_desc" label="SPU编码">-->
-          <!--            <template slot-scope="scope">-->
-          <!--              {{ scope.row.goods_bn }}-->
-          <!--            </template>-->
-          <!--          </el-table-column>-->
-          <el-table-column prop="item_spec_desc" label="SKU编码">
-            <template slot-scope="scope">
-              {{ scope.row.item_bn }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="item_spec_desc" label="规格">
-            <template slot-scope="scope">
-              {{ scope.row.item_spec_desc ? scope.row.item_spec_desc : '单规格' }}
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            v-if="orderInfo.prescription_status"
-            prop="medicine_symptom_set"
-            label="症状"
-            width="160"
+    <div v-loading="loading" class="page-order-index">
+      <el-card class="el-card--normal">
+        <el-row class="card-panel">
+          <el-col
+            v-for="(item, index) in infoList"
+            v-if="item.is_show"
+            :key="`item__${index}`"
+            class="card-panel-item"
+            :span="6"
           >
-            <template slot-scope="scope">
-              <div v-for="item in scope.row.medicine_symptom_set" :key="item.id">
-                {{ item }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="supplier_name" label="来源供应商" width="120">
-            <template slot-scope="scope">
-              {{ scope.row.supplier_name ? scope.row.supplier_name : '自营' }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="单价（¥）" width="100">
-            <template slot-scope="scope">
-              {{ (scope.row.price / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="cost_price" label="结算价（¥）" width="100">
-            <template slot-scope="scope">
-              {{ (scope.row.cost_price / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="cost_price" label="成本价（¥）" width="100">
-            <template slot-scope="scope">
-              {{ (scope.row.cost_price / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="num" label="数量" width="80" />
-          <el-table-column
-            v-if="orderInfo.type == '1'"
-            prop="price"
-            label="计税单价（¥）"
-            width="120"
-          >
-            <template slot-scope="scope">
-              <span>{{ (scope.row.taxable_fee / 100).toFixed(2) }}</span>
-            </template>
-          </el-table-column>
+            <span class="card-panel__label">{{ item.label }}</span>
+            <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+          </el-col>
+        </el-row>
+      </el-card>
 
-          <el-table-column label="小计（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.item_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="结算小计（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.cost_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="成本小计（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.cost_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column v-if="!VERSION_IN_PURCHASE()" label="会员优惠（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.member_discount / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="积分抵扣（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.point_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="总支付价（¥）" width="120">
-            <template slot-scope="scope">
-              {{ (scope.row.total_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="总优惠（¥）" width="100">
-            <template slot-scope="scope">
-              {{ (scope.row.discount_fee / 100).toFixed(2) }}
-            </template>
-          </el-table-column>
-          <el-table-column v-if="!VERSION_IN_PURCHASE() && !VERSION_STANDARD()" label="货币汇率">
-            <template slot-scope="scope">
-              <span>{{ scope.row.fee_rate }}</span>
-            </template>
-          </el-table-column>
-          <template v-if="orderInfo.delivery_status == 'DONE' && orderInfo.delivery_corp">
-            <el-table-column label="发货状态">
+      <el-card v-if="is_community" class="el-card--normal">
+        <div slot="header">跟团信息</div>
+        <el-row class="card-panel">
+          <el-col
+            v-for="(item, index) in communityInfoList"
+            v-if="item.is_show"
+            :key="`item__${index}`"
+            class="card-panel-item"
+            :span="6"
+          >
+            <span class="card-panel__label">{{ item.label }}</span>
+            <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+          </el-col>
+          <el-col
+            v-for="(item, index) in communityExtra"
+            :key="`item__${index}`"
+            class="card-panel-item"
+            :span="6"
+          >
+            <span class="card-panel__label">{{ index }}：</span>
+            <span class="card-panel__value">{{ item }}</span>
+          </el-col>
+        </el-row>
+      </el-card>
+
+      <el-card class="el-card--normal">
+        <div slot="header">客户留言</div>
+        <div class="card-panel">
+          <span class="card-panel__value">{{ memberRemark }}</span>
+        </div>
+      </el-card>
+
+      <el-card class="el-card--normal">
+        <div slot="header">商家备注</div>
+        <div class="card-panel">
+          <span class="card-panel__value">{{ merchantRemark }}</span>
+        </div>
+      </el-card>
+
+      <el-card class="el-card--normal">
+        <div slot="header">商品清单</div>
+        <div class="card-panel">
+          <el-table v-if="orderInfo" border :data="orderInfo.items">
+            <el-table-column prop="item_id" label="商品ID" width="80" />
+            <el-table-column prop="pic" label="商品图片" width="120">
               <template slot-scope="scope">
-                <span>已发货</span>
+                <el-image class="item-image" fit="fill" :src="`${wximageurl}${scope.row.pic}`" />
               </template>
             </el-table-column>
-            <!-- <el-table-column label="快递公司" width="150px">
+            <el-table-column prop="item_name" label="商品名称" width="180">
+              <template slot-scope="scope">
+                <div class="ell3">
+                  <el-tag
+                    v-if="scope.row.is_prescription == 1"
+                    type="primary"
+                    size="mini"
+                    style="background-color: #fff"
+                  >
+                    处方药
+                  </el-tag>
+                  {{ scope.row.item_name }}
+                </div>
+                <el-tag v-if="scope.row.order_item_type == 'gift'" size="mini" type="success">
+                  赠品
+                </el-tag>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column v-if="orderInfo.prescription_status" prop="instructions" label="处方用量" width="160" /> -->
+            <el-table-column prop="item_holder" label="商品类型" width="100">
+              <template slot-scope="scope">
+                <div class="ell3">
+                  {{ goodCategoryMap[scope.row.item_holder] }}
+                </div>
+              </template>
+            </el-table-column>
+
+            <!--          <el-table-column prop="item_spec_desc" label="SPU编码">-->
+            <!--            <template slot-scope="scope">-->
+            <!--              {{ scope.row.goods_bn }}-->
+            <!--            </template>-->
+            <!--          </el-table-column>-->
+            <el-table-column prop="item_spec_desc" label="SKU编码">
+              <template slot-scope="scope">
+                {{ scope.row.item_bn }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="item_spec_desc" label="规格">
+              <template slot-scope="scope">
+                {{ scope.row.item_spec_desc ? scope.row.item_spec_desc : '单规格' }}
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              v-if="orderInfo.prescription_status"
+              prop="medicine_symptom_set"
+              label="症状"
+              width="160"
+            >
+              <template slot-scope="scope">
+                <div v-for="item in scope.row.medicine_symptom_set" :key="item.id">
+                  {{ item }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="supplier_name" label="来源供应商" width="120">
+              <template slot-scope="scope">
+                {{ scope.row.supplier_name ? scope.row.supplier_name : '自营' }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="price" label="单价（¥）" width="100">
+              <template slot-scope="scope">
+                {{ (scope.row.price / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="cost_price" label="结算价（¥）" width="100">
+              <template slot-scope="scope">
+                {{ (scope.row.cost_price / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="cost_price" label="成本价（¥）" width="100">
+              <template slot-scope="scope">
+                {{ (scope.row.cost_price / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="num" label="数量" width="80" />
+            <el-table-column
+              v-if="orderInfo.type == '1'"
+              prop="price"
+              label="计税单价（¥）"
+              width="120"
+            >
+              <template slot-scope="scope">
+                <span>{{ (scope.row.taxable_fee / 100).toFixed(2) }}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column label="小计（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.item_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="结算小计（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.cost_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="成本小计（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.cost_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column v-if="!VERSION_IN_PURCHASE()" label="会员优惠（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.member_discount / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="积分抵扣（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.point_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="总支付价（¥）" width="120">
+              <template slot-scope="scope">
+                {{ (scope.row.total_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="总优惠（¥）" width="100">
+              <template slot-scope="scope">
+                {{ (scope.row.discount_fee / 100).toFixed(2) }}
+              </template>
+            </el-table-column>
+            <el-table-column v-if="!VERSION_IN_PURCHASE() && !VERSION_STANDARD()" label="货币汇率">
+              <template slot-scope="scope">
+                <span>{{ scope.row.fee_rate }}</span>
+              </template>
+            </el-table-column>
+            <template v-if="orderInfo.delivery_status == 'DONE' && orderInfo.delivery_corp">
+              <el-table-column label="发货状态">
+                <template slot-scope="scope">
+                  <span>已发货</span>
+                </template>
+              </el-table-column>
+              <!-- <el-table-column label="快递公司" width="150px">
               <template slot-scope="scope">
                 <span v-if="orderInfo.order_status == 'WAIT_BUYER_CONFIRM'">
                   <el-select v-model="scope.row.delivery_corp" placeholder="请选择快递公司">
@@ -228,7 +226,7 @@
                 <span v-else>{{ scope.row.delivery_corp_name }}</span>
               </template>
             </el-table-column> -->
-            <!-- <el-table-column label="快递单号" width="200px">
+              <!-- <el-table-column label="快递单号" width="200px">
               <template slot-scope="scope">
                 <span v-if="orderInfo.order_status == 'WAIT_BUYER_CONFIRM'">
                   <el-input
@@ -240,7 +238,7 @@
                 <span v-else>{{ scope.row.delivery_code }}</span>
               </template>
             </el-table-column> -->
-            <!-- <el-table-column v-if="orderInfo.order_status == 'WAIT_BUYER_CONFIRM'" label="操作">
+              <!-- <el-table-column v-if="orderInfo.order_status == 'WAIT_BUYER_CONFIRM'" label="操作">
               <template slot-scope="scope">
                 <el-button
                   type="text"
@@ -253,279 +251,273 @@
                 </el-button>
               </template>
             </el-table-column> -->
-          </template>
-        </el-table>
-      </div>
-    </el-card>
-    <el-card
-      v-if="orderInfo && orderInfo._order_class != 'excard' && !IS_SUPPLIER()"
-      class="el-card--normal"
-    >
-      <div slot="header">支付清单</div>
-      <el-row class="card-panel">
-        <el-col
-          v-for="(item, index) in payList"
-          v-if="item.is_show"
-          :key="`item__${index}`"
-          class="card-panel-item"
-          :span="6"
-        >
-          <span class="card-panel__label">{{ item.label }}</span>
-          <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card v-if="!VERSION_IN_PURCHASE()" class="el-card--normal">
-      <el-card v-if="invoice" class="el-card--normal">
-        <div slot="header">发票信息</div>
-        <div v-if="invoice.title == 'individual'">
-          <el-row class="card-panel">
-            <el-col
-              v-for="(item, index) in invoiceList"
-              v-if="item.is_show"
-              :key="`item__${index}`"
-              class="card-panel-item"
-              :span="6"
-            >
-              <span class="card-panel__label">{{ item.label }}</span>
-              <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-            </el-col>
-          </el-row>
-        </div>
-        <div v-if="invoice.title == 'unit'">
-          <el-row class="card-panel">
-            <el-col
-              v-for="(item, index) in invoiceListUnit"
-              v-if="item.is_show"
-              :key="`item__${index}`"
-              class="card-panel-item"
-              :span="6"
-            >
-              <span class="card-panel__label">{{ item.label }}</span>
-              <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
-      <div v-if="!IS_SUPPLIER()" slot="header">优惠明细</div>
-      <div v-if="!IS_SUPPLIER()" class="card-panel">
-        <el-table
-          v-if="orderInfo"
-          border
-          show-summary
-          sum-text="总计优惠"
-          :data="orderInfo.discount_info"
-          style="max-width: 1000px"
-        >
-          <el-table-column prop="info" label="优惠名称" />
-          <el-table-column prop="discount_fee" label="优惠金额（¥）" />
-          <el-table-column prop="rule" label="优惠说明" />
-        </el-table>
-      </div>
-    </el-card>
-
-    <!-- 处方药 -->
-    <template v-if="orderInfo.prescription_status">
-      <el-card
-        v-if="orderInfo.diagnosis_data && Object.keys(orderInfo.diagnosis_data).length"
-        class="el-card--normal"
-      >
-        <div slot="header">问诊信息</div>
-        <div class="card-panel">
-          <el-row>
-            <el-col
-              v-for="(item, index) in interrogationInfoList"
-              v-if="item.is_show"
-              :key="`item__${index}`"
-              class="card-panel-item"
-              :span="6"
-            >
-              <span class="card-panel__label">{{ item.label }}</span>
-              <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
-
-      <el-card
-        class="el-card--normal"
-        v-if="orderInfo.prescription_data && Object.keys(orderInfo.prescription_data).length"
-      >
-        <div slot="header">处方信息</div>
-        <div class="card-panel">
-          <el-row>
-            <el-col
-              v-for="(item, index) in prescriptionInfoList"
-              v-if="item.is_show"
-              :key="`item__${index}`"
-              class="card-panel-item"
-              :span="6"
-            >
-              <span class="card-panel__label">{{ item.label }}</span>
-              <div v-if="item.type == 'cycle'">
-                <div
-                  class="card-panel__value"
-                  v-for="(item1, index1) in orderInfo.prescription_data[item.field]"
-                  :key="index1"
-                >
-                  <div>{{ item1.drugCommonName }}</div>
-                  <div>用法：{{ item1.instructions }}</div>
-                </div>
-              </div>
-              <span v-if="!item.special" class="card-panel__value">{{
-                getFiledValue(item.field)
-              }}</span>
-              <span v-if="item.special" class="card-panel__value">
-                <span v-if="item.field == 'dst_file_path'">
-                  <el-image
-                    :src="getFiledValue(item.field)"
-                    class="img-item"
-                    :preview-src-list="[getFiledValue(item.field)]"
-                  />
-                </span>
-              </span>
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
-    </template>
-
-    <el-card class="el-card--normal">
-      <div slot="header">物流信息</div>
-      <div v-if="orderInfo" class="card-panel">
-        <div class="card-panel-item">
-          <span class="card-panel__label">{{
-            `${orderInfo.receipt_type == 'ziti' ? '自提地址' : '收货人信息'}:`
-          }}</span>
-          <span class="card-panel__value">{{ addressInfo }}</span>
-        </div>
-
-        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
-          <span class="card-panel__label">提货人:</span>
-          <span class="card-panel__value">{{ orderInfo.receiver_name }}</span>
-        </div>
-        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
-          <span class="card-panel__label">提货时间:</span>
-          <span class="card-panel__value">{{
-            `${orderInfo.ziti_info.pickup_date} ${orderInfo.ziti_info.pickup_time.join('~')}`
-          }}</span>
-        </div>
-        <div v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info" class="card-panel-item">
-          <span class="card-panel__label">联系电话:</span>
-          <span class="card-panel__value">{{ orderInfo.receiver_mobile }}</span>
-        </div>
-
-        <div v-if="orderInfo.subdistrict_parent" class="card-panel-item">
-          <span class="card-panel__label">街道:</span>
-          <span class="card-panel__value">{{ orderInfo.subdistrict_parent }}</span>
-        </div>
-
-        <div v-if="orderInfo.subdistrict" class="card-panel-item">
-          <span class="card-panel__label">社区:</span>
-          <span class="card-panel__value">{{ orderInfo.subdistrict }}</span>
-        </div>
-
-        <el-table border :data="deliveryData">
-          <el-table-column prop="delivery_time" label="发货时间" />
-          <el-table-column prop="delivery_code" label="物流单号" />
-          <el-table-column prop="delivery_corp_name" label="快递公司" />
-          <el-table-column prop="supplier_name" label="来源供应商" />
-          <el-table-column prop="delivery_corp" label="物流编码" />
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <template v-if="(IS_ADMIN() && scope.row.supplier_id == '0') || !IS_ADMIN()">
-                <el-button
-                  v-if="orderInfo.receipt_type === 'logistics' && orderInfo.order_status !== 'DONE'"
-                  type="text"
-                  @click="modifyExpress(scope.row)"
-                >
-                  编辑
-                </el-button>
-              </template>
             </template>
-          </el-table-column>
-        </el-table>
-      </div>
-    </el-card>
-
-    <el-card class="el-card--normal">
-      <div slot="header">订单追踪</div>
-      <div v-if="orderInfo?.self_delivery_operator_name" class="card-panel">
-        <div class="card-panel-item">
-          <span>配送员姓名：{{ orderInfo.self_delivery_operator_name || '-' }}</span>
-          <span class="ml-16"
-            >配送员手机号：{{ orderInfo.self_delivery_operator_mobile || '-' }}</span
-          >
-          <span class="ml-16">配送费：{{ orderInfo.self_delivery_fee / 100 }}元</span>
+          </el-table>
         </div>
-      </div>
-      <div class="delivery-log">
-        <el-timeline v-if="deliveryLog" :reverse="false">
-          <el-timeline-item
-            v-for="(key, index) in deliveryLog"
-            :key="index"
-            :timestamp="key.time | datetime('YYYY-MM-DD HH:mm:ss')"
-            placement="top"
+      </el-card>
+      <el-card
+        v-if="orderInfo && orderInfo._order_class != 'excard' && !IS_SUPPLIER()"
+        class="el-card--normal"
+      >
+        <div slot="header">支付清单</div>
+        <el-row class="card-panel">
+          <el-col
+            v-for="(item, index) in payList"
+            v-if="item.is_show"
+            :key="`item__${index}`"
+            class="card-panel-item"
+            :span="6"
           >
-            <el-card>
-              <p>操作详情：{{ key.msg }}</p>
-              <p v-if="key.delivery_remark">配送备注：{{ key.delivery_remark }}</p>
-              <div v-if="key.pics?.length">
-                配送照片：
-                <div class="img-box">
-                  <el-image
-                    v-for="(item, idx) in key.pics"
-                    :key="idx"
-                    :src="item"
-                    class="img-item"
-                    :preview-src-list="key.pics"
-                  />
-                </div>
-              </div>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </div>
-    </el-card>
+            <span class="card-panel__label">{{ item.label }}</span>
+            <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+          </el-col>
+        </el-row>
+      </el-card>
 
-    <!-- <el-card v-if="!VERSION_IN_PURCHASE() && !VERSION_PLATFORM()" class="el-card--normal">
-      <div slot="header">分润信息</div>
-      <el-row class="card-panel">
-        <el-col
-          v-for="(item, index) in profitList"
-          :key="`item__${index}`"
-          class="card-panel-item"
-          :span="6"
+      <el-card v-if="!VERSION_IN_PURCHASE()" class="el-card--normal">
+        <el-card v-if="invoice" class="el-card--normal">
+          <div slot="header">发票信息</div>
+          <div v-if="invoice.title == 'individual'">
+            <el-row class="card-panel">
+              <el-col
+                v-for="(item, index) in invoiceList"
+                v-if="item.is_show"
+                :key="`item__${index}`"
+                class="card-panel-item"
+                :span="6"
+              >
+                <span class="card-panel__label">{{ item.label }}</span>
+                <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+              </el-col>
+            </el-row>
+          </div>
+          <div v-if="invoice.title == 'unit'">
+            <el-row class="card-panel">
+              <el-col
+                v-for="(item, index) in invoiceListUnit"
+                v-if="item.is_show"
+                :key="`item__${index}`"
+                class="card-panel-item"
+                :span="6"
+              >
+                <span class="card-panel__label">{{ item.label }}</span>
+                <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+        <div v-if="!IS_SUPPLIER()" slot="header">优惠明细</div>
+        <div v-if="!IS_SUPPLIER()" class="card-panel">
+          <el-table
+            v-if="orderInfo"
+            border
+            show-summary
+            sum-text="总计优惠"
+            :data="orderInfo.discount_info"
+            style="max-width: 1000px"
+          >
+            <el-table-column prop="info" label="优惠名称" />
+            <el-table-column prop="discount_fee" label="优惠金额（¥）" />
+            <el-table-column prop="rule" label="优惠说明" />
+          </el-table>
+        </div>
+      </el-card>
+
+      <!-- 处方药 -->
+      <template v-if="orderInfo.prescription_status">
+        <el-card
+          v-if="orderInfo.diagnosis_data && Object.keys(orderInfo.diagnosis_data).length"
+          class="el-card--normal"
         >
-          <span class="card-panel__label">{{ item.label }}</span>
-          <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
-        </el-col>
-      </el-row>
-    </el-card> -->
+          <div slot="header">问诊信息</div>
+          <div class="card-panel">
+            <el-row>
+              <el-col
+                v-for="(item, index) in interrogationInfoList"
+                v-if="item.is_show"
+                :key="`item__${index}`"
+                class="card-panel-item"
+                :span="6"
+              >
+                <span class="card-panel__label">{{ item.label }}</span>
+                <span class="card-panel__value">{{ getFiledValue(item.field) }}</span>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
 
+        <el-card
+          class="el-card--normal"
+          v-if="orderInfo.prescription_data && Object.keys(orderInfo.prescription_data).length"
+        >
+          <div slot="header">处方信息</div>
+          <div class="card-panel">
+            <el-row>
+              <el-col
+                v-for="(item, index) in prescriptionInfoList"
+                v-if="item.is_show"
+                :key="`item__${index}`"
+                class="card-panel-item"
+                :span="6"
+              >
+                <span class="card-panel__label">{{ item.label }}</span>
+                <div v-if="item.type == 'cycle'">
+                  <div
+                    class="card-panel__value"
+                    v-for="(item1, index1) in orderInfo.prescription_data[item.field]"
+                    :key="index1"
+                  >
+                    <div>{{ item1.drugCommonName }}</div>
+                    <div>用法：{{ item1.instructions }}</div>
+                  </div>
+                </div>
+                <span v-if="!item.special" class="card-panel__value">{{
+                  getFiledValue(item.field)
+                }}</span>
+                <span v-if="item.special" class="card-panel__value">
+                  <span v-if="item.field == 'dst_file_path'">
+                    <el-image
+                      :src="getFiledValue(item.field)"
+                      class="img-item"
+                      :preview-src-list="[getFiledValue(item.field)]"
+                    />
+                  </span>
+                </span>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+      </template>
 
+      <el-card class="el-card--normal">
+        <div slot="header">物流信息</div>
+        <div v-if="orderInfo" class="card-panel">
+          <div class="card-panel-item">
+            <span class="card-panel__label">{{
+              `${orderInfo.receipt_type == 'ziti' ? '自提地址' : '收货人信息'}:`
+            }}</span>
+            <span class="card-panel__value">{{ addressInfo }}</span>
+          </div>
 
-    <!-- 修改物流 -->
-    <SpDialog
-      ref="expressRef"
-      v-model="expressDialog"
-      title="修改物流信息"
-      :form="expressForm"
-      :form-list="expressFormList"
-      @onSubmit="expressSubmit"
-    />
+          <div
+            v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info"
+            class="card-panel-item"
+          >
+            <span class="card-panel__label">提货人:</span>
+            <span class="card-panel__value">{{ orderInfo.receiver_name }}</span>
+          </div>
+          <div
+            v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info"
+            class="card-panel-item"
+          >
+            <span class="card-panel__label">提货时间:</span>
+            <span class="card-panel__value">{{
+              `${orderInfo.ziti_info.pickup_date} ${orderInfo.ziti_info.pickup_time.join('~')}`
+            }}</span>
+          </div>
+          <div
+            v-if="orderInfo.receipt_type == 'ziti' && orderInfo.ziti_info"
+            class="card-panel-item"
+          >
+            <span class="card-panel__label">联系电话:</span>
+            <span class="card-panel__value">{{ orderInfo.receiver_mobile }}</span>
+          </div>
 
-    <!-- 发货 -->
-    <SpDialog
-      ref="deliverGoodsDialogRef"
-      v-model="deliverGoodsDialog"
-      width="1000px"
-      :title="`发货【订单:${deliverGoodsForm.order_id}】`"
-      :form="deliverGoodsForm"
-      :form-list="deliverGoodsFormList"
-      @onSubmit="deliverGoodsSubmit"
-    />
+          <div v-if="orderInfo.subdistrict_parent" class="card-panel-item">
+            <span class="card-panel__label">街道:</span>
+            <span class="card-panel__value">{{ orderInfo.subdistrict_parent }}</span>
+          </div>
+
+          <div v-if="orderInfo.subdistrict" class="card-panel-item">
+            <span class="card-panel__label">社区:</span>
+            <span class="card-panel__value">{{ orderInfo.subdistrict }}</span>
+          </div>
+
+          <el-table border :data="deliveryData">
+            <el-table-column prop="delivery_time" label="发货时间" />
+            <el-table-column prop="delivery_code" label="物流单号" />
+            <el-table-column prop="delivery_corp_name" label="快递公司" />
+            <el-table-column prop="supplier_name" label="来源供应商" />
+            <el-table-column prop="delivery_corp" label="物流编码" />
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <template v-if="(IS_ADMIN() && scope.row.supplier_id == '0') || !IS_ADMIN()">
+                  <el-button
+                    v-if="
+                      orderInfo.receipt_type === 'logistics' && orderInfo.order_status !== 'DONE'
+                    "
+                    type="text"
+                    @click="modifyExpress(scope.row)"
+                  >
+                    编辑
+                  </el-button>
+                </template>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-card>
+
+      <el-card class="el-card--normal">
+        <div slot="header">订单追踪</div>
+        <div v-if="orderInfo?.self_delivery_operator_name" class="card-panel">
+          <div class="card-panel-item">
+            <span>配送员姓名：{{ orderInfo.self_delivery_operator_name || '-' }}</span>
+            <span class="ml-16"
+              >配送员手机号：{{ orderInfo.self_delivery_operator_mobile || '-' }}</span
+            >
+            <span class="ml-16">配送费：{{ orderInfo.self_delivery_fee / 100 }}元</span>
+          </div>
+        </div>
+        <div class="delivery-log">
+          <el-timeline v-if="deliveryLog" :reverse="false">
+            <el-timeline-item
+              v-for="(key, index) in deliveryLog"
+              :key="index"
+              :timestamp="key.time | datetime('YYYY-MM-DD HH:mm:ss')"
+              placement="top"
+            >
+              <el-card>
+                <p>操作详情：{{ key.msg }}</p>
+                <p v-if="key.delivery_remark">配送备注：{{ key.delivery_remark }}</p>
+                <div v-if="key.pics?.length">
+                  配送照片：
+                  <div class="img-box">
+                    <el-image
+                      v-for="(item, idx) in key.pics"
+                      :key="idx"
+                      :src="item"
+                      class="img-item"
+                      :preview-src-list="key.pics"
+                    />
+                  </div>
+                </div>
+              </el-card>
+            </el-timeline-item>
+          </el-timeline>
+        </div>
+      </el-card>
+
+      <!-- 修改物流 -->
+      <SpDialog
+        ref="expressRef"
+        v-model="expressDialog"
+        title="修改物流信息"
+        :form="expressForm"
+        :form-list="expressFormList"
+        @onSubmit="expressSubmit"
+      />
+
+      <!-- 发货 -->
+      <SpDialog
+        ref="deliverGoodsDialogRef"
+        v-model="deliverGoodsDialog"
+        width="1000px"
+        :title="`发货【订单:${deliverGoodsForm.order_id}】`"
+        :form="deliverGoodsForm"
+        :form-list="deliverGoodsFormList"
+        @onSubmit="deliverGoodsSubmit"
+      />
     </div>
   </SpPage>
 </template>

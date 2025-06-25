@@ -94,7 +94,7 @@
                   </el-table-column>
                 </el-table>
                 <GoodsSelect
-                  :unwanted-gift="!VERSION_SHUYUN"
+                  :unwanted-gift="!VERSION_SHUYUN()"
                   :items-visible="giftVisible"
                   :get-status="setGiftStatus"
                   :rel-items-ids="relGifts"
@@ -1141,13 +1141,13 @@ export default {
 
 <style lang="scss" scoped>
 .page-fullgift ::v-deep .el-card {
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 .page-fullgift {
   .add-gift {
     display: flex;
     flex-direction: column;
-  
+
     .el-icon-plus {
       margin-top: 10px;
       width: 72px;

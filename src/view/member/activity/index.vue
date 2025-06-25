@@ -1,9 +1,6 @@
 <template lang="html">
   <SpPage>
-    <SpPlatformTip h5 app pc alipay />
-    <div class="action-container" v-if="activeName === 'valid'">
-      <el-button type="primary" size="medium" @click="add"> 添加活动 </el-button>
-    </div>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app pc alipay />
     <el-tabs
       v-if="$route.path.indexOf('templ') === -1 && $route.path.indexOf('editor') === -1"
       v-model="activeName"

@@ -8,13 +8,6 @@
         <SpFilterFormItem prop="order_id" label="订单号:">
           <el-input v-model="params.order_id" placeholder="请输入订单号" />
         </SpFilterFormItem>
-        <!-- <SpFilterFormItem
-          v-if="login_type != 'merchant' && !VERSION_B2C() && !VERSION_IN_PURCHASE()"
-          prop="salesman_mobile"
-          label="导购手机号:"
-        >
-          <el-input v-model="params.salesman_mobile" placeholder="请输入导购手机号码" />
-        </SpFilterFormItem> -->
         <SpFilterFormItem v-if="!isMicorMall" prop="receipt_type" label="配送方式:">
           <el-select v-model="params.receipt_type" clearable placeholder="请选择">
             <el-option
@@ -56,7 +49,11 @@
           </el-select>
         </SpFilterFormItem>
         <!-- 是否处方药 -->
-        <SpFilterFormItem v-if="is_pharma_industry" prop="is_prescription_order" label="是否处方药:">
+        <SpFilterFormItem
+          v-if="is_pharma_industry"
+          prop="is_prescription_order"
+          label="是否处方药:"
+        >
           <el-select v-model="params.is_prescription_order" clearable placeholder="请选择">
             <el-option label="全部" value="" />
             <el-option label="是" value="1" />
@@ -138,8 +135,11 @@
             :picker-options="pickerOptions"
           />
         </SpFilterFormItem>
-        <!-- v-if="!VERSION_STANDARD() && !VERSION_IN_PURCHASE()" -->
-        <SpFilterFormItem prop="order_holder" label="订单分类:">
+        <SpFilterFormItem
+          v-if="!(VERSION_SHUYUN() || VERSION_B2C())"
+          prop="order_holder"
+          label="订单分类:"
+        >
           <el-select v-model="params.order_holder" clearable placeholder="请选择">
             <el-option
               v-for="item in orderCategory"
@@ -152,14 +152,20 @@
         </SpFilterFormItem>
         <SpFilterFormItem
           v-if="
-            (!isMicorMall || login_type != 'distributor') && !VERSION_B2C() && !VERSION_IN_PURCHASE()
+            (!isMicorMall || login_type != 'distributor') &&
+            !VERSION_B2C() &&
+            !VERSION_IN_PURCHASE()
           "
           prop="distributor_id"
           label="来源店铺:"
         >
           <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
         </SpFilterFormItem>
-        <SpFilterFormItem v-if="!VERSION_IN_PURCHASE()" prop="subDistrict" label="选择街道:">
+        <SpFilterFormItem
+          v-if="!VERSION_SHUYUN() && !VERSION_B2C() && !VERSION_IN_PURCHASE()"
+          prop="subDistrict"
+          label="选择街道:"
+        >
           <el-cascader
             v-model="params.subDistrict"
             clearable
@@ -184,6 +190,22 @@
       </SpFilterForm>
 
       <div class="action-container">
+        <el-dropdown>
+          <el-button type="primary" plain>
+            导出<i class="el-icon-arrow-down el-icon--right" />
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <export-tip @exportHandle="exportInvoice"> 未开票订单 </export-tip>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <export-tip @exportHandle="exportDataMaster"> 主订单 </export-tip>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <export-tip @exportHandle="exportDataNormal"> 子订单 </export-tip>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-tooltip
           v-if="IS_SUPPLIER()"
           effect="light"
@@ -197,10 +219,9 @@
             :auto-upload="false"
             :show-file-list="false"
           >
-            <el-button type="primary"> 批量发货 </el-button>
+            <el-button type="primary" plain> 批量发货 </el-button>
           </el-upload>
         </el-tooltip>
-
         <el-upload
           action=""
           class="btn-upload"
@@ -208,21 +229,20 @@
           :auto-upload="false"
           :show-file-list="false"
         >
-          <el-button type="primary"> 批量取消 </el-button>
+          <el-button type="primary" plain> 批量取消 </el-button>
         </el-upload>
-
-        <el-button type="primary" @click="assignPersonnel(true)"> 分配配送员 </el-button>
-
-        <el-button type="primary" @click="assignPersonnel(false)"> 取消配送 </el-button>
-
-        <el-dropdown @command="handleExport">
-          <el-button type="primary"> 导出<i class="el-icon-arrow-down el-icon--right" /> </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="invoice_order">未开票订单 </el-dropdown-item>
-            <el-dropdown-item command="master_order"> 主订单 </el-dropdown-item>
-            <el-dropdown-item command="normal_order">子订单 </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <!-- v-if="IS_DISTRIBUTOR() || IS_MERCHANT()" -->
+        <el-button type="primary" plain @click="assignPersonnel(true)"> 分配配送员 </el-button>
+        <!-- <el-upload
+        action=""
+        class="btn-upload"
+        :on-change="uploadHandlePatchCancel"
+        :auto-upload="false"
+        :show-file-list="false"
+      > -->
+        <!-- v-if="IS_DISTRIBUTOR || IS_ADMIN" -->
+        <el-button type="primary" plain @click="assignPersonnel(false)"> 取消配送 </el-button>
+        <!-- </el-upload> -->
       </div>
 
       <el-tabs v-model="params.order_status" type="card" @tab-click="onSearch">
@@ -236,10 +256,9 @@
           v-loading="loading"
           border
           :data="tableList"
-          max-height="600"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column width="200" prop="order_id" label="订单号">
+          <el-table-column width="180" prop="order_id" label="订单号">
             <template slot-scope="scope">
               <div class="order-num">
                 {{ scope.row.order_id }}
@@ -251,12 +270,12 @@
                   />
                 </el-tooltip>
               </div>
-              <!-- <div class="order-store">
+              <div class="order-store">
                 <el-tooltip effect="dark" content="来源店铺" placement="top-start">
                   <i class="el-icon-office-building" />
                 </el-tooltip>
                 {{ scope.row.distributor_name }}
-              </div> -->
+              </div>
               <div class="order-time">
                 <el-tooltip effect="dark" content="下单时间" placement="top-start">
                   <i class="el-icon-time" />
@@ -265,7 +284,6 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="distributor_name" label="来源店铺" width="200" />
           <!--        <el-table-column prop="original_order_id" width="160" label="原单号" align="right" header-align="center">-->
           <!--          <template slot-scope="scope">-->
           <!--            {{ scope.row.original_order_id ? scope.row.original_order_id : scope.row.order_id }}-->
@@ -319,13 +337,13 @@
               {{ (scope.row.cost_fee / 100).toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column width="120" label="运费（¥）" align="right" header-align="center">
+          <el-table-column width="100" label="运费（¥）" align="right" header-align="center">
             <template slot-scope="scope">
               {{ (scope.row.freight_fee || 0) / 100 }}
             </template>
           </el-table-column>
 
-          <el-table-column prop="mobile" label="业务员" width="160">
+          <el-table-column prop="mobile" label="业务员">
             <template slot-scope="scope">
               <div class="order-num">
                 {{ scope.row.salesman_mobile }}
@@ -359,7 +377,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="mobile" label="客户手机号" width="160">
+          <el-table-column prop="mobile" label="客户手机号">
             <template slot-scope="scope">
               <template v-if="!scope.row.user_delete && login_type !== 'merchant'">
                 <router-link
@@ -409,9 +427,9 @@
               </template>
             </template>
           </el-table-column>
-
-          <!-- <el-table-column prop="supplier_name" v-if="VERSION_STANDARD() || IS_ADMIN()" label="来源供应商" >
-        </el-table-column> -->
+          <el-table-column prop="distributor_name" label="来源店铺" />
+          <!-- <el-table-column prop="supplier_name" v-if="VERSION_STANDARD || IS_ADMIN()" label="来源供应商" >
+      </el-table-column> -->
           <!-- <el-table-column prop="receiver_name" label="收货人" /> -->
           <template v-if="login_type != 'merchant'">
             <el-table-column v-if="!isMicorMall" label="订单类型">
@@ -426,7 +444,7 @@
             </template>
           </el-table-column>
           <!-- <el-table-column prop="salespersonname " label="业务员"></el-table-column> -->
-          <el-table-column label="配送方式" width="100">
+          <el-table-column label="配送方式">
             <template slot-scope="scope">
               {{ getDistributionType(scope.row) }}
             </template>
@@ -444,20 +462,22 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="配送费（¥）" width="110">
+          <el-table-column label="配送费">
             <template slot-scope="scope">
-              {{ scope.row.self_delivery_operator_name && scope.row.self_delivery_fee / 100 }}
+              {{
+                scope.row.self_delivery_operator_name && scope.row.self_delivery_fee / 100 + '元'
+              }}
             </template>
           </el-table-column>
 
-          <el-table-column label="配送员电话" width="160">
+          <el-table-column label="配送员电话">
             <template slot-scope="scope">
               {{ scope.row.self_delivery_operator_mobile }}
             </template>
           </el-table-column>
           <el-table-column type="selection" width="55" fixed="left" />
           <!-- <el-table-column prop="source_name" label="来源"></el-table-column> -->
-          <el-table-column label="操作" fixed="left" width="120">
+          <el-table-column label="操作" fixed="left">
             <template slot-scope="scope">
               <el-button type="text" style="margin-right: 8px">
                 <router-link
@@ -492,7 +512,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="mt-4 text-right">
+        <div class="content-padded content-center">
           <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
@@ -606,6 +626,7 @@ import {
   VERSION_PLATFORM,
   isArray,
   VERSION_B2C,
+  VERSION_SHUYUN,
   VERSION_IN_PURCHASE,
   IS_ADMIN,
   IS_DISTRIBUTOR
@@ -675,14 +696,15 @@ export default {
       roleList: ROLE_LIST,
       distributionType: DISTRIBUTION_TYPE,
       distributionStatus: DISTRIBUTION_STATUS,
-      orderStatus: VERSION_B2C()
-        ? ORDER_B2C_STATUS
-        : VERSION_IN_PURCHASE()
-        ? IN_PURCHASE_STATUS
-        : ORDER_STATUS,
-      orderType: this.VERSION_STANDARD() ? ORDER_TYPE_STANDARD : ORDER_TYPE,
+      orderStatus:
+        VERSION_B2C || VERSION_SHUYUN
+          ? ORDER_B2C_STATUS
+          : VERSION_IN_PURCHASE
+          ? IN_PURCHASE_STATUS
+          : ORDER_STATUS,
+      orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
       invoiceStatus: INVOICE_STATUS,
-      orderCategory: this.VERSION_STANDARD()
+      orderCategory: this.VERSION_STANDARD
         ? ORDER_CATEGORY.filter(item => item.value != 'distributor')
         : ORDER_CATEGORY,
       pickerOptions: PICKER_DATE_OPTIONS,
@@ -844,7 +866,7 @@ export default {
               key: 'supplier_name',
               width: 100,
               isShow: ({ key }, value) => {
-                return this.VERSION_STANDARD() || this.IS_ADMIN()
+                return this.VERSION_STANDARD || this.IS_ADMIN()
               }
             },
             { title: '数量', key: 'num', width: 60 },
@@ -1493,7 +1515,7 @@ export default {
 
         if (
           receipt_type == 'ziti' ||
-          ((VERSION_STANDARD() || distributor_id == 0) && order_holder != 'supplier') ||
+          ((VERSION_STANDARD || distributor_id == 0) && order_holder != 'supplier') ||
           this.login_type == 'distributor'
         ) {
           if (
@@ -1594,20 +1616,20 @@ export default {
         }
 
         if (order_status == 'NOTPAY') {
-          if (VERSION_PLATFORM()) {
+          if (VERSION_PLATFORM) {
             if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '改价', key: 'changePrice' })
             }
-          } else if (!VERSION_IN_PURCHASE()) {
+          } else if (!VERSION_IN_PURCHASE) {
             actionBtns.push({ name: '改价', key: 'changePrice' })
           }
         }
         if (can_apply_aftersales == 1) {
-          if (VERSION_PLATFORM()) {
+          if (VERSION_PLATFORM) {
             if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '申请售后', key: 'salesAfter' })
             }
-          } else if (!VERSION_IN_PURCHASE()) {
+          } else if (!VERSION_IN_PURCHASE) {
             actionBtns.push({ name: '申请售后', key: 'salesAfter' })
           }
         }
@@ -1618,7 +1640,6 @@ export default {
           actionBtns
         }
       })
-
       this.page.total = pager ? pager.count : 0
       this.datapass_block = datapass_block
       this.loading = false
@@ -1635,7 +1656,7 @@ export default {
       if (order_class == 'normal') {
         return type == '1' ? '跨境订单' : '普通订单'
       }
-      const _orderType = this.VERSION_STANDARD() ? ORDER_TYPE_STANDARD : ORDER_TYPE
+      const _orderType = this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE
       const fd = _orderType.find(item => item.value == order_class)
       if (fd) {
         return fd.title
@@ -1907,14 +1928,13 @@ export default {
         })
         console.log('this.changePriceForm:', this.changePriceForm)
       } else if (key == 'salesAfter') {
-        this.$router.push({ path: `${this.$route.path}/after-sale/${order_id}` })
-        {/* if (IS_DISTRIBUTOR()) {
+        if (IS_DISTRIBUTOR()) {
           this.$router.push({ path: `/shopadmin/order/tradenormalorders/after-sale/${order_id}` })
         } else if (this.$store.getters.login_type == 'supplier') {
           this.$router.push({ path: `/supplier/order/tradenormalorders/after-sale/${order_id}` })
         } else {
-          this.$router.push({ path: `${this.$route.path}/after-sale/${order_id}` })
-        } */}
+          this.$router.push({ path: `/order/entitytrade/tradenormalorders/after-sale/${order_id}` })
+        }
       } else if (key == 'updatedelivery') {
         //更新发货
         this.$refs['updateDeliverGoodsDialogRef'].resetForm()
@@ -2108,15 +2128,7 @@ export default {
       console.log(val)
       this.selectList = val
     },
-    handleExport(commond) {
-      if (commond == 'invoice_order') {
-        this.exportInvoice()
-      } else if (commond == 'master_order') {
-        this.exportDataMaster()
-      } else if (commond == 'normal_order') {
-        this.exportDataNormal()
-      }
-    },
+    async salesAfterSubmit() {},
     exportInvoice() {
       let type = 'normal'
       this.$emit('onChangeData', 'params', { type })

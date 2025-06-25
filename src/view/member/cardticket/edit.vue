@@ -1,12 +1,12 @@
 <template>
   <div class="page-cardticket">
     <el-form ref="form" :rules="rules" :model="form" label-width="110px">
-      <div v-if="!form.card_id && showTab" style="margin-bottom: 20px;">
+      <div v-if="!form.card_id && showTab" style="margin-bottom: 20px">
         <el-radio-group v-model="form.card_type" @change="handleTypeChange">
           <el-radio-button label="discount"> 折扣券 </el-radio-button>
           <el-radio-button label="cash"> 满减券 </el-radio-button>
           <!-- <el-radio-button label="gift">兑换券</el-radio-button> -->
-          <el-radio-button label="new_gift"> 兑换券 </el-radio-button>
+          <el-radio-button v-if="!VERSION_SHUYUN()" label="new_gift"> 兑换券 </el-radio-button>
         </el-radio-group>
       </div>
       <GiftCoupon v-if="form.card_type === 'new_gift'" @haddleShowTab="haddleShowTab" />

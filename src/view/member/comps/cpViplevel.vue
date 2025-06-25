@@ -37,7 +37,7 @@
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
-                :disabled="VERSION_SHUYUN"
+                :disabled="VERSION_SHUYUN()"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
               <el-input v-model="item.lv_type" type="hidden" :name="index + ''" />
@@ -150,10 +150,6 @@
         </div>
       </div>
     </template>
-    <!-- <div class="section-footer content-center">
-      <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
-      <el-button type="primary" @click="saveGrade"> 保存 </el-button>
-    </div> -->
     <template v-if="visible">
       <coupon-select
         :package-id="packageId"
@@ -336,7 +332,7 @@ export default {
           return
         }
         if (
-          !this.VERSION_SHUYUN &&
+          !this.VERSION_SHUYUN() &&
           index > 0 &&
           Number(value) >= Number(this.levelData[index - 1].privileges.discount)
         ) {
@@ -403,7 +399,7 @@ export default {
           })
           break
         } else if (
-          !this.VERSION_SHUYUN &&
+          !this.VERSION_SHUYUN() &&
           i > 0 &&
           Number(this.levelData[i].privileges.discount) >
             Number(this.levelData[i - 1].privileges.discount)
@@ -585,20 +581,22 @@ export default {
   font-size: 12px;
 }
 .clearfix {
-    *zoom:1}
+  *zoom: 1;
+}
 
-.clearfix:after,.clearfix:before {
-    content: "";
-    display: table;
-    line-height: 0
+.clearfix:after,
+.clearfix:before {
+  content: '';
+  display: table;
+  line-height: 0;
 }
 
 .clearfix:after {
-    clear: both
+  clear: both;
 }
 
 .f_l {
-    float: left
+  float: left;
 }
 </style>
 <style></style>

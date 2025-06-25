@@ -1,13 +1,13 @@
 <template>
   <SpPage>
     <div v-if="$route.path.indexOf('detail') === -1">
-      <SpPlatformTip h5 app alipay />
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
       <el-row :gutter="20">
         <el-col :span="4">
           <el-button type="primary" icon="plus" @click="openDialog()"> 添加分类模版页面 </el-button>
         </el-col>
       </el-row>
-      <el-table v-loading="loading" :data="list" :height="- 140">
+      <el-table v-loading="loading" :data="list" :height="-140">
         <el-table-column prop="id" label="页面id" />
         <el-table-column prop="page_name" label="页面名称" />
         <el-table-column label="是否启用">
@@ -179,7 +179,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([ 'template_name'])
+    ...mapGetters(['template_name'])
   },
   mounted() {
     this.fetchPageList()

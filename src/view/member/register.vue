@@ -1,20 +1,11 @@
 <template>
-  <SpPage :title="pageTitle" class="memberReg">
-    <div slot="page-header" class="text-right">
-      <el-button v-if="activeName == 'first' && !VERSION_SHUYUN" type="primary" @click="showAddDialog()">
-                新增配置
-              </el-button>
-              <el-button v-if="activeName == 'second'" type="primary" @click="saveContent"> 保存 </el-button>
-            <el-button v-if="activeName == 'third'" type="primary" @click="saveMedicineContent"> 保存 </el-button>
-          </div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage class="memberReg">
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="注册项配置" name="first">
         <el-card class="box-card">
-              <!-- <label>初次授权时强制填写</label>
+          <!-- <label>初次授权时强制填写</label>
               <el-switch v-model="isMustAuth" @change="onChangeMustAuth" /> -->
-            </div>
-          </div>
           <el-table v-loading="isLoading" :data="tableData">
             <el-table-column label="信息" prop="label" />
             <el-table-column label="是否启用">
@@ -77,7 +68,7 @@
               <template slot-scope="scope">
                 <el-button type="text" @click="showAddDialog(scope.row)"> 编辑 </el-button>
                 <el-button
-                  v-if="!VERSION_SHUYUN && !scope.row.is_default"
+                  v-if="!VERSION_SHUYUN() && !scope.row.is_default"
                   type="text"
                   class="delete"
                   @click="deleteField(scope.row)"
@@ -302,7 +293,7 @@ export default {
     }
     return {
       activeName: 'first',
-      pageTitle:'会员中心个人信息录入项配置',
+      pageTitle: '会员中心个人信息录入项配置',
       settingStatus: false,
       showAdd: false,
       isLoading: false,
@@ -551,11 +542,11 @@ export default {
       this.getFormItems()
     },
     handleClick(tab, event) {
-      console.log(tab, event,this.activeName)
+      console.log(tab, event, this.activeName)
       const titleMap = {
-        'first':'会员中心个人信息录入项配置',
-        'second':'注册协议与隐私政策配置',
-        'third':'互联网诊疗风险告知及知情同意书配置'
+        first: '会员中心个人信息录入项配置',
+        second: '注册协议与隐私政策配置',
+        third: '互联网诊疗风险告知及知情同意书配置'
       }
       this.pageTitle = titleMap[this.activeName]
     },

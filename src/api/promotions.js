@@ -1020,3 +1020,11 @@ export function communityOrderExport(query) {
     params: query
   })
 }
+
+export function testMessage(query) {
+  return fetch({
+    url: '/sms/send/test',
+    method: 'post',
+    params: query
+  })
+}

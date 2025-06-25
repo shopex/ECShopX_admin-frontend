@@ -3,13 +3,17 @@
     <template slot="page-header">
       <div class="text-right">
         <template v-if="activeName == 'second'">
-          <el-button v-if="!VERSION_SHUYUN" @click="addGrade('cardLevel')"> 添加等级卡 </el-button>
-        <el-button type="primary" @click="saveGrade('cardLevel')"> 保存 </el-button>
+          <el-button v-if="!VERSION_SHUYUN()" @click="addGrade('cardLevel')">
+            添加等级卡
+          </el-button>
+          <el-button type="primary" @click="saveGrade('cardLevel')"> 保存 </el-button>
         </template>
-       <template v-if="activeName == 'thrid'">
-        <el-button v-if="!VERSION_SHUYUN" @click="addGrade('cardViplevel')"> 添加等级卡 </el-button>
-        <el-button type="primary" @click="saveGrade('cardViplevel')"> 保存 </el-button>
-       </template>
+        <template v-if="activeName == 'thrid'">
+          <el-button v-if="!VERSION_SHUYUN()" @click="addGrade('cardViplevel')">
+            添加等级卡
+          </el-button>
+          <el-button type="primary" @click="saveGrade('cardViplevel')"> 保存 </el-button>
+        </template>
       </div>
     </template>
 
@@ -45,10 +49,10 @@ export default {
     }
   },
   methods: {
-    addGrade(val){
+    addGrade(val) {
       this.$refs[val].addGrade()
     },
-    saveGrade(val){
+    saveGrade(val) {
       this.$refs[val].saveGrade()
     }
   }

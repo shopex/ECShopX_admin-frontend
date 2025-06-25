@@ -6,8 +6,13 @@
 
 <template>
   <SpPage>
-    <template v-if="$route.path.indexOf('detail') === -1">
-      <SpPlatformTip h5 app pc alipay />
+    <SpRouterView>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app pc alipay />
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
+          添加标签折扣
+        </el-button>
+      </div>
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="specific" label="针对人群:">
@@ -50,11 +55,7 @@
                   >
                     编辑
                   </el-button>
-                  <el-button
-                    style="margin-right: 20px"
-                    type="text"
-                    @click="viewDetail(scope.row)"
-                  >
+                  <el-button style="margin-right: 20px" type="text" @click="viewDetail(scope.row)">
                     查看优惠日志
                   </el-button>
                   <!--<i class="iconfont icon-trash-alt" @click="deleteActivityAction(scope.row)"></i> -->
@@ -181,8 +182,7 @@
           </el-form>
         </template>
       </el-dialog>
-    </template>
-    <router-view />
+    </SpRouterView>
   </SpPage>
 </template>
 <script>
@@ -259,7 +259,7 @@ export default {
     this.fetchList()
   },
   methods: {
-    viewDetail (row) {
+    viewDetail(row) {
       this.$router.push({
         path: this.matchRoutePath('detail/') + row.id
       })

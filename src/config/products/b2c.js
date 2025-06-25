@@ -3,7 +3,10 @@
  */
 export default {
   productName: 'B2C',
-  systemTitle: '官方商城管理后台',
+  systemTitle: '官方商城管理中心',
+  systemTitleShopadmin: '店铺管理中心',
+  systemTitleMerchant: '商户管理中心',
+  systemTitleSupplier: '供应商管理中心',
   logo: 'logo-b2c.png',
   loginBackground: 'login-b2c.jpg',
   footerBackground: 'footer-b2c.png',

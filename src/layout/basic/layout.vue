@@ -52,6 +52,7 @@
 
 <script>
 import DEFAULT_CONFIG from '@/config'
+import { getSystemTitle } from '@/utils'
 import LayoutSidebar from './layout-sidebar.vue'
 import LayoutContent from './layout-content.vue'
 import LayoutHeader from './layout-header.vue'
@@ -76,7 +77,7 @@ export default {
       return require(`@/assets/images/${DEFAULT_CONFIG.footerBackground}`)
     },
     systemTitle: () => {
-      return DEFAULT_CONFIG.systemTitle
+      return getSystemTitle()
     }
   },
   mounted() {

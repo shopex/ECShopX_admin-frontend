@@ -120,7 +120,7 @@
                   <small class="muted">账号信息</small>
                 </div>
               </div>
-              <div v-if="!VERSION_SHUYUN" class="popover-row exit-system" @click="logout">
+              <div v-if="!VERSION_SHUYUN()" class="popover-row exit-system" @click="logout">
                 退出登录
               </div>
 
@@ -289,7 +289,7 @@ export default {
           this.brandIco = require(`@/assets/logo/logo_ecshopx.png`)
         } else if (this.VERSION_PLATFORM() && !this.VUE_APP_FREE) {
           this.brandIco = require(`@/assets/logo/logo_ecshopx.png`)
-        } else if (this.VERSION_SHUYUN) {
+        } else if (this.VERSION_SHUYUN()) {
           this.brandIco = require(`@/assets/logo/logo_shuyun.png`)
         }
       }

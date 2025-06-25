@@ -6,8 +6,13 @@
 
 <template>
   <SpPage>
-    <template v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip h5 app alipay />
+    <SpRouterView>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
+      <div class="action-container">
+        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
+          添加加价购促销
+        </el-button>
+      </div>
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="create_time" label="时间:">
@@ -222,8 +227,7 @@
           </el-table>
         </template>
       </el-dialog>
-    </template>
-    <router-view />
+    </SpRouterView>
   </SpPage>
 </template>
 <script>
