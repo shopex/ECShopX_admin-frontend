@@ -1,6 +1,7 @@
 <template>
-  <SpPage>
+
     <SpRouterView>
+      <SpPage>
       <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
       <div v-if="!isDistributorTemplate" class="shop-header">
         <div v-if="!VERSION_B2C() && !VERSION_IN_PURCHASE()" class="shop-left">
@@ -286,8 +287,9 @@
           @onSubmit="onSubmitTabList"
         />
       </SpDrawer>
+    </SpPage>
     </SpRouterView>
-  </SpPage>
+
 </template>
 
 <script>
