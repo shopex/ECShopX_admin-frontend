@@ -56,7 +56,23 @@ const coreRoutes = [
     name: 'shopAdminShopList',
     path: '/shopadmin/shoplist',
     component: () => import('@/views/store/shop-list.vue')
-  }
+  },
+  {
+    component: AuthPageLayout,
+    meta: {
+      title: 'Authentication'
+    },
+    name: 'shuyunLogin',
+    path: '/',
+    children: [
+      {
+        name: 'shuyunLogin',
+        path: 'shuyunLogin',
+        component: () => import('@/views/core/authentication/shuyun-login.vue')
+      }
+    ]
+  },
+  
 ]
 
 export { coreRoutes, fallbackNotFoundRoute }
