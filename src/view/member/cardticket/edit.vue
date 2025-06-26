@@ -337,7 +337,7 @@
                 placeholder="请选择"
                 clearable
                 :options="categoryList"
-                :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+                :props="{ value: 'category_id', label: 'category_name', checkStrictly: false, multiple: true }"
               />
             </div>
           </el-col>
