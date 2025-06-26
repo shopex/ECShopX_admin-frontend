@@ -67,7 +67,6 @@ export default {
   name: 'LayoutHeader',
   computed: {
     accountAvatar() {
-      return DEFAULT_USER
       return this.$store.state.user?.accountInfo?.head_portrait || DEFAULT_USER
     }
   },
