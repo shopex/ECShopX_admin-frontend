@@ -147,18 +147,12 @@ export default {
   },
   computed: {
     weappBodyStyle() {
-      const { pageBackgroundStyle, pageBackgroundColor, pageBackgroundImage } =
-        this.headerData || {}
-      if (pageBackgroundStyle == '1') {
-        return {
-          'background-color': pageBackgroundColor
-        }
-      } else {
-        return {
-          'background-image': `url(${pageBackgroundImage})`,
-          'background-size': 'cover',
-          'background-position': 'center'
-        }
+      const { newPageBackgroundStyle } = this.headerData || {}
+      return {
+        'background-color': newPageBackgroundStyle?.color,
+        'background-image': `url(${ newPageBackgroundStyle?.image})`,
+        'background-size': 'cover',
+        'background-position': 'center'
       }
     },
     headerVisible() {
