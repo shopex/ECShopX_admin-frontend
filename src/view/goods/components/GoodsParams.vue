@@ -12,7 +12,7 @@
         filterable
         allow-create
         default-first-option
-        placeholder="请选择444"
+        placeholder="请选择"
         @change="handleChange(item)"
       >
         <el-option
@@ -45,12 +45,13 @@ export default {
       item.children.forEach(item1 => {
         paprms.push(item1.value)
       })
-      if (paprms.indexOf(item.attr_id) == -1) {
+      if (item.attr_id && paprms.indexOf(item.attr_id) == -1) {
         await this.$api.goods.getItemParams({
-          attribute_id: item.id,
-          attribute_value: item.attr_id
-        })
-        this.$emit('change', item)
+            attribute_id: item.id,
+            attribute_value: item.attr_id
+          })
+          this.$emit('change', item)
+       
       }
     }
   }
