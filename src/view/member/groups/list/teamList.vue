@@ -71,13 +71,13 @@ export default {
     getGroupsTeamList() {
       this.loading = true
       getGroupsTeamList(this.groups_id, this.params)
-        .then((response) => {
+        .then(response => {
           this.groupsTeamList = response.data.data.list
           this.groupsActivity = response.data.data.groupsActivity
           this.total_count = response.data.data.total_count
           this.loading = false
         })
-        .catch((error) => {
+        .catch(error => {
           this.loading = false
           this.$message({
             type: 'error',
@@ -86,7 +86,7 @@ export default {
         })
     },
     showTeamAction(index, row) {
-      this.$router.push({ path: '/marketing/fissionmarketing/groupsindex/detail/' + row.team_id })
+      this.$router.push({ path: '/marketing/fission-marketing/group-buying/detail/' + row.team_id })
     }
   }
 }

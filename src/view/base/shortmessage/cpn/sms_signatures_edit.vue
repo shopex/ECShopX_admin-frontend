@@ -254,7 +254,7 @@ export default {
     },
     submitForm(formName) {
       const { type, id } = this.$route.query
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           try {
             if (type == 'edit') {
@@ -282,7 +282,7 @@ export default {
     },
     fnBack() {
       this.$router.push({
-        path: `/setting/systemsetting/datamessage/ali_sms/sms_signatures`
+        path: `/setting/system-config/sms-service/ali_sms/sms_signatures`
       })
     },
     fnAgain() {

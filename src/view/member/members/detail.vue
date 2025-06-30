@@ -1,8 +1,5 @@
 <template>
-  <SpPage title="会员详情">
-    <div slot="page-header" class="content-center text-right">
-      <el-button type="primary" @click="goBack"> 返回 </el-button>
-    </div>
+  <div>
     <div class="section section-white content-padded">
       <div class="clearfix heade-box">
         <div class="f_l member-card-box">
@@ -198,7 +195,11 @@
         />
       </el-tab-pane> -->
     </el-tabs>
-  </SpPage>
+
+    <div class="text-center mt-4">
+      <el-button type="primary" @click="goBack"> 返回 </el-button>
+    </div>
+  </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
