@@ -308,13 +308,13 @@
         :key="index"
         title="选择商品"
         :visible.sync="item.dialog"
-        width="30%"
+        width="50%"
         @open="onshowModal('goods')"
         @close="oncloseModal('goods')"
       >
         <ul
           v-loading="item.loading"
-          class="dialog-list clearfix"
+          class="dialog-list flex flex-wrap"
         >
           <template v-for="child in item.list">
             <li
@@ -331,6 +331,7 @@
         <div class="content-padded">
           <el-pagination
             background
+            class="mt-4 text-center"
             layout="prev, pager, next"
             :current-page="item.page.currentPage"
             :page-size="item.page.pageSize"
@@ -362,13 +363,13 @@
         :key="index"
         title="选择优惠券"
         :visible.sync="item.dialog"
-        width="30%"
+        width="50%"
         @open="onshowModal('coupons')"
         @close="oncloseModal('coupons')"
       >
         <ul
           v-loading="item.loading"
-          class="dialog-list clearfix"
+          class="dialog-list flex flex-wrap"
         >
           <template v-for="child in item.list">
             <li
@@ -385,6 +386,7 @@
         <div class="content-padded">
           <el-pagination
             background
+            class="mt-4 text-center"
             layout="prev, pager, next"
             :current-page="item.page.currentPage"
             :page-size="item.page.pageSize"
@@ -990,8 +992,8 @@ export default {
   }
 }
 .dialog-list li {
-  width: 50%;
-  float: left;
+  width: 45%;
+  // float: left;
   padding-left: 30px;
   padding-right: 20px;
   line-height: 30px;

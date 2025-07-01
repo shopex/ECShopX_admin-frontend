@@ -144,9 +144,11 @@
                 <transition name="el-fade-in-linear">
                   <div
                     v-if="editorIndex === index"
-                    class="iconfont icon-trash-alt"
                     @click="removeCurrent"
-                  />
+                    class="component-item-delete"
+                  >
+                    <SpIcon name="delete" />
+                  </div>
                 </transition>
                 <nearbyShop
                   v-if="item.name === 'nearbyShop'"
@@ -1530,7 +1532,7 @@ export default {
   }
   .component-item {
     position: relative;
-    .icon-trash-alt {
+    &-delete{
       position: absolute;
       right: 20px;
       color: #ff5000;

@@ -821,9 +821,9 @@
           </el-form-item>
           <template v-if="mode === 'richText'">
             <SpRichText v-model="form.intro" />
-            <span class="tpl_item img" style="" @click="addImgPreview">
+            <!-- <span class="tpl_item img" style="" @click="addImgPreview">
               <i class="iconfont icon-image" />图片
-            </span>
+            </span> -->
           </template>
           <template v-else>
             <richTextEditor

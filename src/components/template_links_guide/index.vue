@@ -6,7 +6,7 @@
     append-to-body
     @close="closeDialog"
   >
-    <div class="view-flex">
+    <div class="view-flex flex">
       <Tabs
         :showlinks="links"
         :type="type"

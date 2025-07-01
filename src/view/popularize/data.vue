@@ -35,7 +35,7 @@
           >
             导出业绩订单统计
           </el-button>
-  
+
           <el-button type="primary" plain @click="exportPopularizeOrder"> 导出业绩订单详细 </el-button
           >* 下载订单详细日期
         </div>
@@ -329,6 +329,7 @@ export default {
             type: 'success',
             message: '已加入执行队列，请在设置-导出列表中下载'
           })
+          this.$export_open('popularizeStatic')
         } else {
           this.$message({
             type: 'error',
@@ -358,6 +359,7 @@ export default {
             type: 'success',
             message: '已加入执行队列，请在设置-导出列表中下载'
           })
+          this.$export_open('popularizeOrder')
         } else {
           this.$message({
             type: 'error',
