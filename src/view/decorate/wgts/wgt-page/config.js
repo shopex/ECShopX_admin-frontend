@@ -114,6 +114,7 @@ export default {
       pageBackgroundColor,
       pageBackgroundImage,
       pTitleHotSetting = { imgUrl: '', data: [] },
+      isImmersive
     } = base || {}
     if (isObject(navigateBackgroundImage)) {
       const { url } = newNavigateStyle?.image
@@ -151,7 +152,8 @@ export default {
       pageBackgroundImage,
       newNavigateStyle,
       newPageBackgroundStyle,
-      pTitleHotSetting
+      pTitleHotSetting,
+      isImmersive
     }
   },
   transformOut: (v) => {

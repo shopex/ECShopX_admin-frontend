@@ -3,7 +3,7 @@
   .title-function {
     position: absolute;
     left: 15px;
-    width: 110px;
+    width: 90px;
     height: 32px;
   }
   &-content {
@@ -21,6 +21,8 @@
     padding: 0 30px;
     line-height: 32px;
     position: relative;
+    display: flex;
+    justify-content: center;
     .title-image {
       height: 100%;
       display: inline-block;
@@ -59,9 +61,9 @@ export default {
   computed: {
     headerStyle() {
       console.log('headerStyle:', this.value)
-      const { newNavigateStyle } = this.value || {}
+      const { newNavigateStyle, isImmersive } = this.value || {}
       return {
-        'background-color': newNavigateStyle?.color,
+        'background-color': isImmersive ? 'none' : newNavigateStyle?.color,
         'background-image': `url(${newNavigateStyle?.image})`,
         'background-size': 'cover',
         'background-position': 'center'
