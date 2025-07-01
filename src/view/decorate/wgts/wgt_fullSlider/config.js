@@ -54,7 +54,7 @@ export default {
       component: 'number',
       value: 0,
       min: 0,
-      max: 100,
+      max: 1000,
       step: 1,
       tip: '单位为 px',
     },
