@@ -1,6 +1,6 @@
 <template>
-  <SpPage>
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
       <div class="action-container">
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addLimitPromotion">
@@ -78,8 +78,8 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-    </SpRouterView>
-  </SpPage>
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import { cancelLimitPromotions, getLimitPromotions } from '@/api/promotions'

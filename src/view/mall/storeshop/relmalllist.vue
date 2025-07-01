@@ -36,9 +36,7 @@
               关闭总部发货
             </el-button>
             <el-button type="primary" @click="handleBatchDownload"> 商品码下载 </el-button>
-            <export-tip @exportHandle="exportList">
-              <el-button type="primary"> 导出 </el-button>
-            </export-tip>
+            <el-button type="primary" @click="exportList"> 导出 </el-button>
           </el-button-group>
         </el-col>
       </el-row>

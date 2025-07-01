@@ -1,6 +1,6 @@
 <template>
-  <SpPage>
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
 
       <SearchForm class="mb-4" @submit="handleSearch" />
@@ -21,8 +21,8 @@
           afterSearch: afterSearch
         }"
       />
-    </SpRouterView>
-  </SpPage>
+    </SpPage>
+  </SpRouterView>
 </template>
 
 <script>
@@ -85,24 +85,24 @@ const [SearchForm, SearchFormApi] = useForm({
       fieldName: 'order_class',
       label: '订单类型',
       value: ''
-    },
-    {
-      component: ({ h, value, onInput }) => {
-        return (
-          <SpSelectShop
-            value={value}
-            size="small"
-            placeholder="请选择店铺"
-            onChange={val => {
-              onInput(val)
-            }}
-          />
-        )
-      },
-      fieldName: 'distributor_id',
-      label: '店铺',
-      value: 'test'
     }
+    // {
+    //   component: ({ h, value, onInput }) => {
+    //     return (
+    //       <SpSelectShop
+    //         value={value}
+    //         size="small"
+    //         placeholder="请选择店铺"
+    //         onChange={val => {
+    //           onInput(val)
+    //         }}
+    //       />
+    //     )
+    //   },
+    //   fieldName: 'distributor_id',
+    //   label: '店铺',
+    //   value: ''
+    // }
   ],
   inline: true
 })

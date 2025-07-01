@@ -5,8 +5,8 @@
 </style>
 
 <template>
-  <SpPage>
-    <template v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('editor') === -1">
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="activity_id" label="活动:">
           <el-select v-model="params.activity_id" placeholder="请选择活动">
@@ -54,13 +54,11 @@
 
       <div class="action-container">
         <el-button type="primary" @click="editorLog()"> 上传日志 </el-button>
-        <export-tip @exportHandle="exportData">
-          <el-button type="primary"> 导出 </el-button>
-        </export-tip>
+        <el-button type="primary" @click="exportData"> 导出 </el-button>
       </div>
 
       <!-- <div class="action-container"> -->
-        <!-- <el-button
+      <!-- <el-button
           plain
           type="primary"
           @click="uploadHandleTemplate()"
@@ -68,7 +66,7 @@
           下载模版
         </el-button> -->
 
-        <!-- <el-upload
+      <!-- <el-upload
           class="fl"
           action=""
           :on-change="uploadHandleChange"
@@ -94,9 +92,23 @@
           <el-table v-loading="loading" border :data="tableList" element-loading-text="数据加载中">
             <el-table-column prop="status" label="操作" width="150">
               <template slot-scope="scope">
-                <el-button type="text" v-if="scope.row.status == 'pending' && !IS_DISTRIBUTOR()" @click="onLinkChange(scope.row)">审核</el-button>
+                <el-button
+                  type="text"
+                  v-if="scope.row.status == 'pending' && !IS_DISTRIBUTOR()"
+                  @click="onLinkChange(scope.row)"
+                  >
+审核
+</el-button
+                >
                 <el-button type="text" @click="onLinkChange(scope.row)">详情</el-button>
-                <el-button type="text" v-if="scope.row.status == 'passed'" @click="onShowChange(scope.row)">核销</el-button>
+                <el-button
+                  type="text"
+                  v-if="scope.row.status == 'passed'"
+                  @click="onShowChange(scope.row)"
+                  >
+核销
+</el-button
+                >
               </template>
             </el-table-column>
             <el-table-column prop="record_no" label="报名编号" />
@@ -170,19 +182,18 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-    </template>
-    <SpDialog
-      ref="dialogRef"
-      v-model="dialogVisible"
-      title="报名核销"
-      :modal="false"
-      width="500px"
-      :form="dialogForm"
-      :form-list="dialogFormList"
-      @onSubmit="onDialogFormSubmit"
-    />
-    <router-view />
-  </SpPage>
+      <SpDialog
+        ref="dialogRef"
+        v-model="dialogVisible"
+        title="报名核销"
+        :modal="false"
+        width="500px"
+        :form="dialogForm"
+        :form-list="dialogFormList"
+        @onSubmit="onDialogFormSubmit"
+      />
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -426,12 +437,11 @@ export default {
       this.dialogForm.record_id = row.record_id
       this.dialogVisible = true
     },
-    onLinkChange (row) {
+    onLinkChange(row) {
       this.$router.push({
         path: this.matchRoutePath('detail'),
         query: { id: row.record_id, activity_id: row.activity_id }
       })
-      
     }
   },
   computed: {

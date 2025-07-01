@@ -86,6 +86,7 @@ export default {
           }
         })
       )
+
       return h(
         'el-select',
         {
@@ -256,7 +257,7 @@ export default {
         {
           props: {
             label: this.label || '',
-            labelWidth: this.label ? '100px' : 'auto',
+            labelWidth: this.labelWidth,
             prop: this.fieldName,
             rules: this.rules
           },

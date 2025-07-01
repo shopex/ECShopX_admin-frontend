@@ -12,7 +12,7 @@
         <el-input v-model="form.config.packDes" type="textarea" style="width: 300px" />
       </el-form-item>
     </el-form>
-    <div slot="page-header" class="section-footer with-border content-center text-right">
+    <div slot="page-footer" class="section-footer with-border text-center">
       <el-button v-loading="loading" type="primary" @click="onSubmit"> 保存 </el-button>
     </div>
     <!-- <SpPlatformTip h5 app alipay />

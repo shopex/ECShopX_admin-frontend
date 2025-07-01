@@ -25,6 +25,7 @@ export function useForm(options = {}) {
     },
     data() {
       return {
+        localFormItems: formItems,
         formData: {},
         formRules: rules // 表单校验规则
       }
@@ -37,7 +38,8 @@ export function useForm(options = {}) {
         clearValidate: this.clearValidate.bind(this),
         setFieldsValue: this.setFieldsValue.bind(this),
         getFieldsValue: this.getFieldsValue.bind(this),
-        setFields: this.setFields.bind(this)
+        setFields: this.setFields.bind(this),
+        setFieldComponentProps: this.setFieldComponentProps.bind(this)
       })
     },
     methods: {
@@ -97,6 +99,17 @@ export function useForm(options = {}) {
             })
           }
         })
+      },
+      setFieldComponentProps(fieldName, props) {
+        this.localFormItems.forEach(item => {
+          if (item.fieldName === fieldName) {
+            item.componentProps = {
+              ...item.componentProps,
+              ...props
+            }
+          }
+        })
+        console.log('formItems', this.localFormItems)
       }
     },
     render(h) {
@@ -104,7 +117,7 @@ export function useForm(options = {}) {
         ref: 'form',
         props: {
           colon,
-          formItems: formItems,
+          formItems: this.localFormItems,
           formType: formType,
           formApi: FormApi,
           inline,

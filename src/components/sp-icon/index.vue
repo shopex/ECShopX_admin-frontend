@@ -8,7 +8,7 @@
     <component :is="icon" :size="size" :fill="fill" />
   </div>
 
-  <component v-else :is="icon" :size="size" :fill="fill" @click.stop="onButtonClick" />
+  <component v-else :is="icon" :size="size" :fill="fill" v-on="$listeners" />
 </template>
 
 <script>

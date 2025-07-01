@@ -1,6 +1,6 @@
 <template>
-  <SpPage>
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="mobile" label="手机号:">
           <el-input v-model="params.mobile" placeholder="请输入客户手机号码" />
@@ -198,16 +198,6 @@
             <el-dropdown-item command="exportInvoice">未开票订单 </el-dropdown-item>
             <el-dropdown-item command="exportDataMaster">主订单 </el-dropdown-item>
             <el-dropdown-item command="exportDataNormal">子订单 </el-dropdown-item>
-
-            <!-- <el-dropdown-item>
-              <export-tip @exportHandle="exportInvoice"> 未开票订单 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportDataMaster"> 主订单 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportDataNormal"> 子订单 </export-tip>
-            </el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
         <el-tooltip
@@ -262,7 +252,7 @@
           :data="tableList"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column width="180" prop="order_id" label="订单号">
+          <el-table-column width="220" prop="order_id" label="订单号">
             <template slot-scope="scope">
               <div class="order-num">
                 {{ scope.row.order_id }}
@@ -481,7 +471,7 @@
           </el-table-column>
           <el-table-column type="selection" width="55" fixed="left" />
           <!-- <el-table-column prop="source_name" label="来源"></el-table-column> -->
-          <el-table-column label="操作" fixed="left">
+          <el-table-column label="操作" fixed="left" width="100">
             <template slot-scope="scope">
               <el-button type="text" style="margin-right: 8px">
                 <router-link
@@ -618,8 +608,8 @@
         :form-list="personnelFormList"
         @onSubmit="onPersonnelSubmit"
       />
-    </SpRouterView>
-  </SpPage>
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -633,7 +623,8 @@ import {
   VERSION_SHUYUN,
   VERSION_IN_PURCHASE,
   IS_ADMIN,
-  IS_DISTRIBUTOR
+  IS_DISTRIBUTOR,
+  getBasePath
 } from '@/utils'
 import { exportInvoice, orderExport } from '@/api/trade'
 import CompTableView from './components/comp-tableview'
@@ -1932,13 +1923,21 @@ export default {
         })
         console.log('this.changePriceForm:', this.changePriceForm)
       } else if (key == 'salesAfter') {
-        if (IS_DISTRIBUTOR()) {
+        {
+          /* if (IS_DISTRIBUTOR()) {
           this.$router.push({ path: `/shopadmin/order/tradenormalorders/after-sale/${order_id}` })
         } else if (this.$store.getters.login_type == 'supplier') {
           this.$router.push({ path: `/supplier/order/tradenormalorders/after-sale/${order_id}` })
         } else {
           this.$router.push({ path: `/order/entitytrade/tradenormalorders/after-sale/${order_id}` })
+        } */
         }
+        const basePath = getBasePath()
+        this.$router.push({
+          path: `${
+            basePath ? `/${basePath}` : ''
+          }/order/order-manage/order-list/after-sale/${order_id}`
+        })
       } else if (key == 'updatedelivery') {
         //更新发货
         this.$refs['updateDeliverGoodsDialogRef'].resetForm()
@@ -2162,7 +2161,13 @@ export default {
     },
 
     async handleExport(command) {
-      debugger
+      if (command === 'exportInvoice') {
+        this.exportInvoice()
+      } else if (command === 'exportDataMaster') {
+        this.exportDataMaster()
+      } else if (command === 'exportDataNormal') {
+        this.exportDataNormal()
+      }
     },
 
     exportData(type) {

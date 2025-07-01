@@ -65,6 +65,7 @@ const [Form, FormApi] = useForm({
       rules: [{ required: true, message: '请输入密码' }]
     }
   ],
+  labelWidth: '0',
   showDefaultActions: false
 })
 

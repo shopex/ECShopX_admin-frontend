@@ -1,7 +1,7 @@
 <template>
   <SpPage title="评论设置">
-    <template slot="page-header">
-      <div class="text-right">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button type="primary" @click="confirmHandle"> 确认 </el-button>
       </div>
     </template>
@@ -297,12 +297,12 @@ export default {
     getFetch() {
       this.$data.formLoad = true
       getUGCSetting({ type: 'point' }).then(
-        (res) => {
+        res => {
           // console.log('res',res.data.data)
           this.transForm(res.data.data)
           this.$data.formLoad = false
         },
-        (err) => {
+        err => {
           this.$data.formLoad = false
         }
       )
@@ -330,18 +330,18 @@ export default {
       const { ruleForm } = this.$data
       var params = { type: 'point', setting: null }
       var formtext = {
-        'point_enable': ruleForm.enable ? '1' : '0',
-        'point_max_day': ruleForm.max_day,
-        'point_post_like_get_once': ruleForm.like_get_once,
-        'point_post_like_get_max_times_day': ruleForm.like_get_max_times_day,
-        'point_post_share_get_once': ruleForm.share_get_once,
-        'point_post_share_get_max_times_day': ruleForm.share_get_max_times_day,
-        'point_post_comment_get_once': ruleForm.comment_get_once,
-        'point_post_comment_get_max_times_day': ruleForm.comment_get_max_times_day,
-        'point_post_favorite_get_once': ruleForm.favorite_get_once,
-        'point_post_favorite_get_max_times_day': ruleForm.favorite_get_max_times_day,
-        'point_post_create_get_once': ruleForm.create_get_once,
-        'point_post_create_get_max_times_day': ruleForm.create_get_max_times_day
+        point_enable: ruleForm.enable ? '1' : '0',
+        point_max_day: ruleForm.max_day,
+        point_post_like_get_once: ruleForm.like_get_once,
+        point_post_like_get_max_times_day: ruleForm.like_get_max_times_day,
+        point_post_share_get_once: ruleForm.share_get_once,
+        point_post_share_get_max_times_day: ruleForm.share_get_max_times_day,
+        point_post_comment_get_once: ruleForm.comment_get_once,
+        point_post_comment_get_max_times_day: ruleForm.comment_get_max_times_day,
+        point_post_favorite_get_once: ruleForm.favorite_get_once,
+        point_post_favorite_get_max_times_day: ruleForm.favorite_get_max_times_day,
+        point_post_create_get_once: ruleForm.create_get_once,
+        point_post_create_get_max_times_day: ruleForm.create_get_max_times_day
       }
       params.setting = JSON.stringify(formtext)
       //console.log('formTrans',params);
@@ -351,13 +351,13 @@ export default {
       const that = this
       const { ruleForm } = this.$data
       //console.log('ruleForm',ruleForm)
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           //console.log('confirmHandle submit!!',ruleForm);
           var params = that.formTrans()
           //console.log('confirmHandle params',params);
           // return false;
-          setUGCSetting(params).then((res) => {
+          setUGCSetting(params).then(res => {
             var { message } = res.data.data
             this.$message({
               type: 'success',

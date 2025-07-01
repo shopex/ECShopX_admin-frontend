@@ -1,7 +1,7 @@
 <template>
   <SpPage title="SEO配置">
-    <template slot="page-header">
-      <div class="text-right">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button type="primary" :loading="loading" @click="onSubmit"> 保存 </el-button>
       </div>
     </template>

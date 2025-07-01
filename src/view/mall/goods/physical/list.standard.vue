@@ -206,19 +206,17 @@
 
       <div class="action-container">
         <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
-        <el-dropdown>
+        <el-dropdown @command="handleExport">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导出<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsData"> 商品信息 </export-tip>
+            <el-dropdown-item command="product-info">商品信息 </el-dropdown-item>
+            <el-dropdown-item v-if="!IS_SUPPLIER()" command="product-tag">
+              商品标签
             </el-dropdown-item>
-            <el-dropdown-item v-if="$store.getters.login_type != 'supplier'">
-              <export-tip @exportHandle="exportItemsTagData"> 商品标签 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
+            <el-dropdown-item v-if="!VERSION_SHUYUN() && !IS_SUPPLIER()" command="h5-qrcode">
+              H5二维码
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -1331,6 +1329,15 @@ export default {
         this.$export_open('itemcode')
       } else {
         this.$message.error('导出失败')
+      }
+    },
+    handleExport(command) {
+      if (command === 'product-info') {
+        this.exportItemsData()
+      } else if (command === 'product-tag') {
+        this.exportItemsTagData()
+      } else if (command === 'h5-qrcode') {
+        this.exportItemsWxappCode('h5')
       }
     },
     syncItems() {

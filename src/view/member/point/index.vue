@@ -1,6 +1,6 @@
 <template>
   <SpPage title="积分配置" class="section section-white point-rule">
-    <div slot="page-header" class="text-right">
+    <div slot="page-footer" class="text-center">
       <el-button type="primary" @click="save"> 保 存 </el-button>
     </div>
     <el-form ref="form" :model="form" label-position="left" label-width="180px">

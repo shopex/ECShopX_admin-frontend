@@ -1,7 +1,7 @@
 <template>
   <SpPage title="社区拼团商城客服设置">
-    <template slot="page-header">
-      <div class="section-footer with-border content-center text-right">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button type="primary" @click="save"> 保 存 </el-button>
       </div>
     </template>
@@ -9,24 +9,58 @@
       <el-form ref="form" :model="form" label-position="left" label-width="120px">
         <div class="section-body">
           <el-form-item label="社区拼团商城客服">
-            <el-switch v-model="form.customer_switch" :width="50" active-value="true" inactive-value="false"
-              active-text="开启" inactive-text="关闭" active-color="#13ce66" />
+            <el-switch
+              v-model="form.customer_switch"
+              :width="50"
+              active-value="true"
+              inactive-value="false"
+              active-text="开启"
+              inactive-text="关闭"
+              active-color="#13ce66"
+            />
           </el-form-item>
           <el-form-item label="支持支付宝提现">
-            <el-switch v-model="form.withdraw_bank.alipay" :width="50" active-value="true" inactive-value="false"
-              active-text="开启" inactive-text="关闭" active-color="#13ce66" />
+            <el-switch
+              v-model="form.withdraw_bank.alipay"
+              :width="50"
+              active-value="true"
+              inactive-value="false"
+              active-text="开启"
+              inactive-text="关闭"
+              active-color="#13ce66"
+            />
           </el-form-item>
           <el-form-item label="支持微信提现">
-            <el-switch v-model="form.withdraw_bank.wechatpay" :width="50" active-value="true" inactive-value="false"
-              active-text="开启" inactive-text="关闭" active-color="#13ce66" />
+            <el-switch
+              v-model="form.withdraw_bank.wechatpay"
+              :width="50"
+              active-value="true"
+              inactive-value="false"
+              active-text="开启"
+              inactive-text="关闭"
+              active-color="#13ce66"
+            />
           </el-form-item>
           <el-form-item label="支持银行卡提现">
-            <el-switch v-model="form.withdraw_bank.bankpay" :width="50" active-value="true" inactive-value="false"
-              active-text="开启" inactive-text="关闭" active-color="#13ce66" />
+            <el-switch
+              v-model="form.withdraw_bank.bankpay"
+              :width="50"
+              active-value="true"
+              inactive-value="false"
+              active-text="开启"
+              inactive-text="关闭"
+              active-color="#13ce66"
+            />
           </el-form-item>
           <el-form-item label="积分兑换比例">
-            <el-input v-model="form.community_config.point_ratio" type="number" required min="1" placeholder=""
-              style="width: 100px" />
+            <el-input
+              v-model="form.community_config.point_ratio"
+              type="number"
+              required
+              min="1"
+              placeholder=""
+              style="width: 100px"
+            />
             积分兑换1元人民币
           </el-form-item>
           <el-form-item label="积分说明">
@@ -36,11 +70,16 @@
             <SpRichText v-model="form.community_config.withdraw_desc" />
           </el-form-item>
           <el-form-item label="客服电话">
-            <el-input v-model="form.consumer_hotline" type="number" required min="1" placeholder=""
-              style="width: 240px" />
+            <el-input
+              v-model="form.consumer_hotline"
+              type="number"
+              required
+              min="1"
+              placeholder=""
+              style="width: 240px"
+            />
           </el-form-item>
         </div>
-
       </el-form>
     </div>
   </SpPage>
@@ -86,13 +125,13 @@ export default {
       } else {
         this.form.customer_switch = 0
       }
-      setCompanySetting(this.form).then((res) => {
+      setCompanySetting(this.form).then(res => {
         this.$message({ message: '操作成功', type: 'success' })
         this.getConfig()
       })
     },
     getConfig() {
-      getCompanySetting().then((res) => {
+      getCompanySetting().then(res => {
         if (res.data.data.company_id) {
           this.form = res.data.data
           if (this.form.customer_switch) {

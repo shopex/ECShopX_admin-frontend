@@ -10,10 +10,10 @@ const routes = [
       title: '订单'
     },
     name: 'orders',
-    path: '/orders',
+    path: '/order',
     children: [
       {
-        name: `orderList`,
+        name: `orderManageOrderList`,
         path: 'order-manage/order-list',
         meta: {
           aliasName: 'tradenormalorders',

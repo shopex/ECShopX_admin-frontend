@@ -194,23 +194,20 @@
         <el-button type="primary" plain @click="batchChangeStore"> 更改状态 </el-button>
         <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
 
-        <el-dropdown>
+        <el-dropdown @command="handleExport">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导出<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsData"> 商品信息 </export-tip>
+            <el-dropdown-item command="exportItemsData">商品信息 </el-dropdown-item>
+            <el-dropdown-item
+              command="exportItemsTagData"
+              v-if="$store.getters.login_type != 'supplier'"
+            >
+              商品标签
             </el-dropdown-item>
-            <el-dropdown-item v-if="$store.getters.login_type != 'supplier'">
-              <export-tip @exportHandle="exportItemsTagData"> 商品标签 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item v-if="!IS_SUPPLIER()">
-              <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
-            </el-dropdown-item>
+            <el-dropdown-item command="wxa" v-if="!IS_SUPPLIER()"> 小程序码 </el-dropdown-item>
+            <el-dropdown-item command="h5"> H5二维码 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -1649,6 +1646,18 @@ export default {
         this.$export_open('itemcode')
       } else {
         this.$message.error('导出失败')
+      }
+    },
+
+    handleExport(command) {
+      if (command === 'exportItemsData') {
+        this.exportItemsData()
+      } else if (command === 'exportItemsTagData') {
+        this.exportItemsTagData()
+      } else if (command === 'wxa') {
+        this.exportItemsWxappCode('wxa')
+      } else if (command === 'h5') {
+        this.exportItemsWxappCode('h5')
       }
     },
     async updateGoodsSkuPrice({ item_id, price, cost_price, market_price }, priceType) {

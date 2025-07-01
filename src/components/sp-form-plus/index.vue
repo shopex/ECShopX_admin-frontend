@@ -28,14 +28,21 @@
       />
 
       <template v-if="showDefaultActions">
-        <div class="sp-form-plus__actions w-full text-right">
-          <el-button type="primary" @click="handleSubmit">
+        <div class="sp-form-plus__actions" :style="actionsStyle">
+          <el-button v-if="formType !== 'searchForm'" type="primary" @click="handleSubmit">
+            <div class="flex items-center">
+              <span class="ml-1">保存</span>
+            </div>
+          </el-button>
+
+          <el-button v-if="formType === 'searchForm'" type="primary" @click="handleSubmit">
             <div class="flex items-center">
               <SpIcon name="search" :size="14" />
               <span class="ml-1">查询</span>
             </div>
           </el-button>
-          <el-button @click="handleReset">
+
+          <el-button v-if="formType === 'searchForm'" @click="handleReset">
             <div class="flex items-center">
               <SpIcon name="refresh" :size="14" />
               <span class="ml-1">重置</span>
@@ -108,6 +115,20 @@ export default {
     return {
       formData: this.initFormData(),
       extend: false
+    }
+  },
+  computed: {
+    actionsStyle() {
+      return this.formType === 'searchForm'
+        ? {
+            width: '100%',
+            'text-align': 'right'
+          }
+        : {
+            'padding-left': `${this.labelWidth}`,
+            'justify-content': 'flex-start',
+            'margin-bottom': '22px'
+          }
     }
   },
   created() {},

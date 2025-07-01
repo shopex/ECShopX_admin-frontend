@@ -26,10 +26,10 @@
         <el-button type="primary" icon="el-icon-circle-plus" @click="uploadHandleChange()">
           导入白名单
         </el-button>
-        <export-tip params="distributor_white_list" @exportHandle="handleWhitelistExport">
-          <el-button type="primary" plain> 导出 </el-button>
-        </export-tip>
-        <el-button type="primary" icon="el-icon-delete" plain @click="clickDelAllWhiteList()"> 清空白名单 </el-button>
+        <el-button type="primary" @click="handleWhitelistExport"> 导出 </el-button>
+        <el-button type="primary" icon="el-icon-delete" plain @click="clickDelAllWhiteList()">
+          清空白名单
+        </el-button>
       </div>
 
       <el-table

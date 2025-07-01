@@ -21,9 +21,7 @@
           placeholder="选择日期范围"
           @change="dateChange"
         />
-        <export-tip @exportHandle="exportData">
-          <el-button type="primary"> 导出 </el-button>
-        </export-tip>
+        <el-button type="primary" @click="exportData"> 导出 </el-button>
         <el-popover
           placement="top-start"
           width="200"

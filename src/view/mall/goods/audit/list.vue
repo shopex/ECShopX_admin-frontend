@@ -2,157 +2,155 @@
   <div>
     <SpPage>
       <div v-if="$route.path.indexOf('editor') === -1">
-      <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
-        <SpFilterFormItem prop="keywords" label="商品名称:">
-          <el-input v-model="params.keywords" placeholder="请输入商品名称" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
-          <el-input v-model="params.goods_bn" placeholder="请输入SPU编码" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="item_bn" label="SKU编码:">
-          <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="regions_id" label="商品产地:">
-          <el-cascader
-            v-model="params.regions_id"
-            clearable
-            placeholder="请选择"
-            :options="regions"
-          />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="approve_status" label="商品状态:">
-          <el-select v-model="params.approve_status" clearable placeholder="请选择">
-            <el-option
-              v-for="item in salesStatus"
-              :key="item.value"
-              :label="item.title"
-              size="mini"
-              :value="item.value"
+        <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+          <SpFilterFormItem prop="keywords" label="商品名称:">
+            <el-input v-model="params.keywords" placeholder="请输入商品名称" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+            <el-input v-model="params.goods_bn" placeholder="请输入SPU编码" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="item_bn" label="SKU编码:">
+            <el-input v-model="params.item_bn" placeholder="请输入SKU编码" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="regions_id" label="商品产地:">
+            <el-cascader
+              v-model="params.regions_id"
+              clearable
+              placeholder="请选择"
+              :options="regions"
             />
-          </el-select>
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="distributor_id" label="店铺:">
-          <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="main_cat_id" label="管理分类:">
-          <el-cascader
-            v-model="params.main_cat_id"
-            placeholder="请选择"
-            clearable
-            :options="itemCategoryList"
-            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
-          />
-        </SpFilterFormItem>
-      </SpFilterForm>
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="approve_status" label="商品状态:">
+            <el-select v-model="params.approve_status" clearable placeholder="请选择">
+              <el-option
+                v-for="item in salesStatus"
+                :key="item.value"
+                :label="item.title"
+                size="mini"
+                :value="item.value"
+              />
+            </el-select>
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="distributor_id" label="店铺:">
+            <SpSelectShop v-model="params.distributor_id" clearable placeholder="请选择" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="main_cat_id" label="管理分类:">
+            <el-cascader
+              v-model="params.main_cat_id"
+              placeholder="请选择"
+              clearable
+              :options="itemCategoryList"
+              :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+            />
+          </SpFilterFormItem>
+        </SpFilterForm>
 
-      <div class="action-container">
-        <el-button type="primary" plain @click="Examine"> 批量审核 </el-button>
-        <el-button type="primary" plain @click="batchItemsStatus('onsale')"> 批量上架 </el-button>
-        <el-button type="primary" plain @click="batchItemsStatus('instock')"> 强制下架 </el-button>
-        <el-dropdown>
-          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
-            导出<i class="el-icon-arrow-down el-icon--right" />
+        <div class="action-container">
+          <el-button type="primary" plain @click="Examine"> 批量审核 </el-button>
+          <el-button type="primary" plain @click="batchItemsStatus('onsale')"> 批量上架 </el-button>
+          <el-button type="primary" plain @click="batchItemsStatus('instock')">
+            强制下架
           </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('wxa')"> 小程序码 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportItemsWxappCode('h5')"> H5二维码 </export-tip>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
+          <el-dropdown @command="exportItemsWxappCode">
+            <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
+              导出<i class="el-icon-arrow-down el-icon--right" />
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="wxa"> 小程序码 </el-dropdown-item>
+              <el-dropdown-item command="h5">H5二维码 </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
 
-      <el-tabs v-model="params.audit_status" type="card" @tab-click="onSearch">
-        <el-tab-pane
-          v-for="(item, index) in tabList"
-          :key="index"
-          :label="item.label"
-          :name="item.name"
-        >
-          <el-table
-            v-loading="loading"
-            border
-            :data="tableList"
-            @selection-change="handleSelectionChange"
+        <el-tabs v-model="params.audit_status" type="card" @tab-click="onSearch">
+          <el-tab-pane
+            v-for="(item, index) in tabList"
+            :key="index"
+            :label="item.label"
+            :name="item.name"
           >
-            <el-table-column type="selection" align="center" label="全选" />
-            <el-table-column prop="goods_id" label="商品ID" />
-            <el-table-column prop="itemName" label="商品名称" width="200">
-              <template slot-scope="scope">
-                {{ scope.row.item_name }}
-                <el-tag v-if="scope.row.special_type == 'drug'" type="danger"> 处方药 </el-tag>
+            <el-table
+              v-loading="loading"
+              border
+              :data="tableList"
+              @selection-change="handleSelectionChange"
+            >
+              <el-table-column type="selection" align="center" label="全选" />
+              <el-table-column prop="goods_id" label="商品ID" />
+              <el-table-column prop="itemName" label="商品名称" width="200">
+                <template slot-scope="scope">
+                  {{ scope.row.item_name }}
+                  <el-tag v-if="scope.row.special_type == 'drug'" type="danger"> 处方药 </el-tag>
 
-                <div style="color: #888; font-size: 12px">SPU编码：{{ scope.row.goods_bn }}</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="排序编号">
-              <template slot-scope="scope">
-                <el-input
-                  v-model="scope.row.sort"
-                  size="mini"
-                  style="width: 60px"
-                  @change="editItemsSort(scope.$index, scope.row)"
-                />
-              </template>
-            </el-table-column>
-            <el-table-column prop="distributor_name" label="来源店铺">
-              <template slot-scope="scope">
-                {{ scope.row.distributor_name.name }}
-              </template>
-            </el-table-column>
-            <el-table-column label="规格">
-              <template slot-scope="scope">
-                <el-tag v-if="!scope.row.nospec" effect="plain" size="mini" type="success">
-                  多规格
-                </el-tag>
-                <el-tag v-else effect="plain" size="mini"> 单规格 </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="market_price" label="市场价（¥）">
-              <template slot-scope="scope">
-                <span>{{ scope.row.market_price / 100 }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="price" label="销售价（¥）" />
-            <el-table-column prop="store" label="库存" />
-            <el-table-column label="状态">
-              <template slot-scope="scope">
-                <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
-                <el-popover
-                  v-else-if="scope.row.audit_status == 'rejected'"
-                  placement="top-start"
-                  width="200"
-                  trigger="hover"
-                  :content="scope.row.audit_reason"
-                >
-                  <el-button slot="reference" type="text"> 审核驳回 </el-button>
-                </el-popover>
-                <span v-else-if="scope.row.approve_status == 'onsale'">前台可销</span>
-                <span v-else-if="scope.row.approve_status == 'offline_sale'">前台不展示 </span>
-                <span v-else-if="scope.row.approve_status == 'only_show'">前台仅展示</span>
-                <span v-else>不可销售</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="200" fixed="left">
-              <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  class="btn-gap"
-                  @click="editItemsAction(scope.$index, scope.row)"
-                >
-                  查看
-                </el-button>
-                <el-button
-                  v-if="scope.row.audit_status == 'processing'"
-                  type="text"
-                  class="btn-gap"
-                  @click="batchItemsAudit(scope.row, scope.$index)"
-                >
-                  审核
-                </el-button>
-                <!-- <el-button
+                  <div style="color: #888; font-size: 12px">SPU编码：{{ scope.row.goods_bn }}</div>
+                </template>
+              </el-table-column>
+              <el-table-column label="排序编号">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.sort"
+                    size="mini"
+                    style="width: 60px"
+                    @change="editItemsSort(scope.$index, scope.row)"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column prop="distributor_name" label="来源店铺">
+                <template slot-scope="scope">
+                  {{ scope.row.distributor_name.name }}
+                </template>
+              </el-table-column>
+              <el-table-column label="规格">
+                <template slot-scope="scope">
+                  <el-tag v-if="!scope.row.nospec" effect="plain" size="mini" type="success">
+                    多规格
+                  </el-tag>
+                  <el-tag v-else effect="plain" size="mini"> 单规格 </el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="market_price" label="市场价（¥）">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.market_price / 100 }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="price" label="销售价（¥）" />
+              <el-table-column prop="store" label="库存" />
+              <el-table-column label="状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.audit_status == 'processing'">等待审核</span>
+                  <el-popover
+                    v-else-if="scope.row.audit_status == 'rejected'"
+                    placement="top-start"
+                    width="200"
+                    trigger="hover"
+                    :content="scope.row.audit_reason"
+                  >
+                    <el-button slot="reference" type="text"> 审核驳回 </el-button>
+                  </el-popover>
+                  <span v-else-if="scope.row.approve_status == 'onsale'">前台可销</span>
+                  <span v-else-if="scope.row.approve_status == 'offline_sale'">前台不展示 </span>
+                  <span v-else-if="scope.row.approve_status == 'only_show'">前台仅展示</span>
+                  <span v-else>不可销售</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="200" fixed="left">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    class="btn-gap"
+                    @click="editItemsAction(scope.$index, scope.row)"
+                  >
+                    查看
+                  </el-button>
+                  <el-button
+                    v-if="scope.row.audit_status == 'processing'"
+                    type="text"
+                    class="btn-gap"
+                    @click="batchItemsAudit(scope.row, scope.$index)"
+                  >
+                    审核
+                  </el-button>
+                  <!-- <el-button
                   v-if="VERSION_PLATFORM()"
                   type="text"
                   @click="handleCommissionConf(scope.row)"
@@ -160,129 +158,129 @@
 佣金配置
 </el-button
                 > -->
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="content-center content-top-padded">
-            <el-pagination
-              background
-              layout="total, sizes, prev, pager, next, jumper"
-              :current-page.sync="page.pageIndex"
-              :page-sizes="[10, 20, 50]"
-              :total="page.total"
-              :page-size="page.pageSize"
-              @current-change="onCurrentChange"
-              @size-change="onSizeChange"
-            />
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-
-      <el-dialog title="批量审核店铺商品" :visible.sync="dialogVisible" width="30%">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="审核状态">
-            <el-radio-group v-model="form.audit_status">
-              <el-radio label="approved"> 通过 </el-radio>
-              <el-radio label="rejected"> 拒绝 </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item v-if="form.audit_status == 'rejected'" label="拒绝原因">
-            <el-input v-model="form.audit_reason" type="textarea" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit"> 确定 </el-button>
-            <el-button @click="dialogVisible = false"> 取消 </el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
-
-      <SideBar :visible.sync="show_commission_sideBar" title="总部结算佣金配置" width="60">
-        <slot>
-          <el-card class="box-card">
-            <div slot="header" class="clearfix">
-              <span>
-                <el-alert
-                  title="佣金结算类型: 【百分比】"
-                  description="计算方式：商品最终金额 ×  百分比，其中计算方式：商品最终金额为【支付金额-运费】"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-              <span>
-                <el-alert
-                  title="佣金结算类型: 【固定金额】"
-                  description="计算方式： 固定金额结算佣金"
-                  type="info"
-                  close-text=" "
-                  class="alert-text"
-                  show-icon
-                />
-              </span>
-            </div>
-            <el-form ref="form" label-width="120px">
-              <el-form-item label="商品名称">
-                {{ current.item_name }}
-              </el-form-item>
-              <el-form-item label="佣金结算类型">
-                <el-radio-group v-model="commissionSpecItems.commission_type">
-                  <el-radio label="1"> 百分比 </el-radio>
-                  <el-radio label="2"> 固定金额 </el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="SPU结算佣金" :rules="[{ required: true }]">
-                <el-input
-                  v-model="commissionSpecItems.commission"
-                  size="mini"
-                  type="number"
-                  style="width: 200px"
-                >
-                  <template v-if="1 == commissionSpecItems.commission_type" slot="append">
-                    %
-                  </template>
-                </el-input>
-                <div class="form-item-tip">SKU未设置佣金时，按SPU设置的佣金结算</div>
-              </el-form-item>
-            </el-form>
-            <el-table v-loading="skuLoading" :data="commissionSpecItems.sku_commission">
-              <el-table-column label="规格" prop="item_spec_desc" min-width="120">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span
-                  ><span v-else>单规格</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="销售价" min-width="80">
-                <template slot-scope="scope"> ¥{{ scope.row.price / 100 }} </template>
-              </el-table-column>
-              <el-table-column label="成本价" min-width="80">
-                <template slot-scope="scope"> ¥{{ scope.row.cost_price / 100 }} </template>
-              </el-table-column>
-              <el-table-column label="SKU结算佣金">
-                <template slot-scope="scope">
-                  <div v-if="0 == commissionSpecItems.commission_type">
-                    <el-input :disabled="true" size="mini" type="number" value="0" />
-                  </div>
-                  <div v-else>
-                    <el-input v-model="scope.row.commission" size="mini" type="number">
-                      <template v-if="1 == commissionSpecItems.commission_type" slot="append">
-                        %
-                      </template>
-                    </el-input>
-                  </div>
                 </template>
               </el-table-column>
             </el-table>
-          </el-card>
-        </slot>
-        <div slot="footer">
-          <el-button type="primary" :loading="submitLoading" @click="saveCommissionConf">
-            保存
-          </el-button>
-        </div>
-      </SideBar>
-    </div>
-    <router-view />
+            <div class="content-center content-top-padded">
+              <el-pagination
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :current-page.sync="page.pageIndex"
+                :page-sizes="[10, 20, 50]"
+                :total="page.total"
+                :page-size="page.pageSize"
+                @current-change="onCurrentChange"
+                @size-change="onSizeChange"
+              />
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+
+        <el-dialog title="批量审核店铺商品" :visible.sync="dialogVisible" width="30%">
+          <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="审核状态">
+              <el-radio-group v-model="form.audit_status">
+                <el-radio label="approved"> 通过 </el-radio>
+                <el-radio label="rejected"> 拒绝 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="form.audit_status == 'rejected'" label="拒绝原因">
+              <el-input v-model="form.audit_reason" type="textarea" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit"> 确定 </el-button>
+              <el-button @click="dialogVisible = false"> 取消 </el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+        <SideBar :visible.sync="show_commission_sideBar" title="总部结算佣金配置" width="60">
+          <slot>
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>
+                  <el-alert
+                    title="佣金结算类型: 【百分比】"
+                    description="计算方式：商品最终金额 ×  百分比，其中计算方式：商品最终金额为【支付金额-运费】"
+                    type="info"
+                    close-text=" "
+                    class="alert-text"
+                    show-icon
+                  />
+                </span>
+                <span>
+                  <el-alert
+                    title="佣金结算类型: 【固定金额】"
+                    description="计算方式： 固定金额结算佣金"
+                    type="info"
+                    close-text=" "
+                    class="alert-text"
+                    show-icon
+                  />
+                </span>
+              </div>
+              <el-form ref="form" label-width="120px">
+                <el-form-item label="商品名称">
+                  {{ current.item_name }}
+                </el-form-item>
+                <el-form-item label="佣金结算类型">
+                  <el-radio-group v-model="commissionSpecItems.commission_type">
+                    <el-radio label="1"> 百分比 </el-radio>
+                    <el-radio label="2"> 固定金额 </el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="SPU结算佣金" :rules="[{ required: true }]">
+                  <el-input
+                    v-model="commissionSpecItems.commission"
+                    size="mini"
+                    type="number"
+                    style="width: 200px"
+                  >
+                    <template v-if="1 == commissionSpecItems.commission_type" slot="append">
+                      %
+                    </template>
+                  </el-input>
+                  <div class="form-item-tip">SKU未设置佣金时，按SPU设置的佣金结算</div>
+                </el-form-item>
+              </el-form>
+              <el-table v-loading="skuLoading" :data="commissionSpecItems.sku_commission">
+                <el-table-column label="规格" prop="item_spec_desc" min-width="120">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.item_spec_desc">{{ scope.row.item_spec_desc }}</span
+                    ><span v-else>单规格</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="销售价" min-width="80">
+                  <template slot-scope="scope"> ¥{{ scope.row.price / 100 }} </template>
+                </el-table-column>
+                <el-table-column label="成本价" min-width="80">
+                  <template slot-scope="scope"> ¥{{ scope.row.cost_price / 100 }} </template>
+                </el-table-column>
+                <el-table-column label="SKU结算佣金">
+                  <template slot-scope="scope">
+                    <div v-if="0 == commissionSpecItems.commission_type">
+                      <el-input :disabled="true" size="mini" type="number" value="0" />
+                    </div>
+                    <div v-else>
+                      <el-input v-model="scope.row.commission" size="mini" type="number">
+                        <template v-if="1 == commissionSpecItems.commission_type" slot="append">
+                          %
+                        </template>
+                      </el-input>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-card>
+          </slot>
+          <div slot="footer">
+            <el-button type="primary" :loading="submitLoading" @click="saveCommissionConf">
+              保存
+            </el-button>
+          </div>
+        </SideBar>
+      </div>
+      <router-view />
     </SpPage>
   </div>
 </template>

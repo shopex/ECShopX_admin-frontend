@@ -15,7 +15,7 @@ const routes = [
     path: '/supplier/order',
     children: [
       {
-        name: 'orderManageOrderList',
+        name: `orderManageOrderList`,
         path: 'order-manage/order-list',
         component: () => import('@/view/mall/supplier/supplier_orders'),
         meta: {

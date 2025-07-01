@@ -1,7 +1,7 @@
 <template>
   <SpPage class="section section-white">
-    <template slot="page-common" slot-scope="{ isSticky }">
-      <div :class="isSticky ? 'text-center' : 'text-right'">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button @click.native="handleCancel"> 取消 </el-button>
         <el-button type="primary" :loading="submitLoading" @click="submitItemsActionConfirm">
           {{ submitLoading ? '提交中' : '保存' }}

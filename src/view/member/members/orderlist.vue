@@ -132,8 +132,8 @@ export default {
       this.$router.push({
         path: `${
           this.$store.getters.login_type != 'distributor'
-            ? '/orders/order-manage/order-list/detail'
-            : '/shopadmin/orders/order-manage/order-list/detail'
+            ? '/order/order-manage/order-list/detail'
+            : '/shopadmin/order/order-manage/order-list/detail'
         }`,
         query: {
           orderId: orderId,

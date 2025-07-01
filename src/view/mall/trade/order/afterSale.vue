@@ -22,8 +22,8 @@
 </style>
 <template>
   <SpPage title="售后申请">
-    <template slot="page-header">
-      <div class="text-right">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button
           @click="
             () => {

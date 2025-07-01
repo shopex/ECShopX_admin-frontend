@@ -450,8 +450,8 @@ const routes = [
         ]
       },
       {
-        name: 'registrationRecord',
-        path: 'apply/Registrationrecord',
+        name: 'activityApplyActivityRecord',
+        path: 'activity-apply/activity-record',
         component: () => import('@/view/member/selfservice/registrationrecord'),
         meta: {
           aliasName: 'registrationrecord',

@@ -4,23 +4,25 @@
     :class="{
       'sp-page--no-header': !hasHeader,
       'sp-page--no-footer': !hasFooter,
-      'sp-page--sticky': isSticky
+      'sp-page--sticky': !noSticky
     }"
     ref="pageContainer"
   >
-    <div class="sp-page__header py-4 pl-5 pr-4 flex items-center bg-white" ref="header">
-      <div class="sp-page__header-title">{{ title }}</div>
-      <div class="sp-page__header-toolbar flex-1">
-        <slot name="page-header" />
-        <slot name="page-common" :is-sticky="isSticky" />
+    <div class="bg-white rounded-[6px]">
+      <div class="sp-page__header py-4 pl-5 pr-4 flex items-center" ref="header">
+        <div class="sp-page__header-title">{{ title }}</div>
+        <div class="sp-page__header-toolbar flex-1">
+          <slot name="page-header" />
+        </div>
       </div>
-    </div>
-    <div class="sp-page__content p-4 bg-white flex-1">
-      <slot />
-    </div>
-    <div class="sp-page__footer py-4 bg-white">
-      <slot name="page-footer" />
-      <slot name="page-common" :is-sticky="isSticky" />
+      <div class="sp-page__content p-4 flex-1">
+        <slot />
+      </div>
+      <div class="sp-page__footer">
+        <div class="footer-content py-4">
+          <slot name="page-footer" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -32,57 +34,53 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    noSticky: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    return {
-      isSticky: false
-    }
+    return {}
   },
   computed: {
     hasHeader() {
-      console.log(
-        'xxxxxxxxxxxxxxxxxxx',
-        !!this.title || this.$scopedSlots['page-header'] || this.$scopedSlots['page-common']
-      )
-      return !!this.title || this.$scopedSlots['page-header'] || this.$scopedSlots['page-common']
+      return !!this.title || this.$scopedSlots['page-header']
     },
     hasFooter() {
-      return this.$scopedSlots['page-footer'] || this.$scopedSlots['page-common']
+      return this.$scopedSlots['page-footer']
     }
   },
   created() {},
   mounted() {
-    this.initStickyHeader()
+    // !this.noSticky && this.initStickyHeader()
   },
   beforeDestroy() {
-    this.removeScrollListener()
+    // this.removeScrollListener()
   },
   methods: {
-    initStickyHeader() {
-      document.getElementById('page-container').addEventListener('scroll', this.handleScroll)
-    },
-    handleScroll() {
-      if (!this.$refs.header) return
-
-      if (document.getElementById('page-container').scrollTop > 60) {
-        this.isSticky = true
-      } else {
-        this.isSticky = false
-      }
-    },
-    removeScrollListener() {
-      if (document.getElementById('page-container')) {
-        document.getElementById('page-container').removeEventListener('scroll', this.handleScroll)
-      }
-    }
+    // initStickyHeader() {
+    //   document.getElementById('page-container').addEventListener('scroll', this.handleScroll)
+    // },
+    // handleScroll() {
+    //   if (!this.$refs.header) return
+    //   if (document.getElementById('page-container').scrollTop > 60) {
+    //     this.isSticky = true
+    //   } else {
+    //     this.isSticky = false
+    //   }
+    // },
+    // removeScrollListener() {
+    //   if (document.getElementById('page-container')) {
+    //     document.getElementById('page-container').removeEventListener('scroll', this.handleScroll)
+    //   }
+    // }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .sp-page {
-  // border-radius: 6px;
   &--sticky {
     .sp-page__footer {
       position: sticky;
@@ -94,23 +92,14 @@ export default {
     .sp-page__header {
       display: none;
     }
-    .sp-page__content {
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-    }
   }
   &--no-footer {
     .sp-page__footer {
       display: none;
     }
-    .sp-page__content {
-      border-bottom-right-radius: 6px;
-      border-bottom-left-radius: 6px;
-    }
   }
 
   &__header {
-    border-radius: 6px 6px 0 0;
     &-title {
       font-size: 22px;
       color: #333;
@@ -118,8 +107,11 @@ export default {
   }
 
   &__footer {
-    border-radius: 0 0 6px 6px;
+    overflow: hidden;
     transition: all 0.3s ease;
+    .footer-content {
+      background: color-mix(in srgb, var(--primary) 8%, transparent);
+    }
   }
 }
 </style>

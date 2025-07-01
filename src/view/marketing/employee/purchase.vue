@@ -106,16 +106,9 @@
 </style>
 <template>
   <SpPage title="员工购买活动">
-    <template slot="page-header">
-      <ActionsButton
-        class="text-right"
-        :disabled="activityStatus == 'cancel' || activityStatus == 'over'"
-        @save="onSubmitForm"
-      />
-    </template>
     <template slot="page-footer">
       <ActionsButton
-        class="text-center"
+        class="text-right"
         :disabled="activityStatus == 'cancel' || activityStatus == 'over'"
         @save="onSubmitForm"
       />

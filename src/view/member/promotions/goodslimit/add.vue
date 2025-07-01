@@ -2,7 +2,11 @@
   <SpPage title="设置规则名称">
     <el-form ref="form" :model="form" class="box-set" label-width="120px">
       <el-card shadow="naver">
-        <el-form-item label="名称" prop="limit_name" :rules="{ required: true, message: '请填写规则名称', trigger: 'blur' }">
+        <el-form-item
+          label="名称"
+          prop="limit_name"
+          :rules="{ required: true, message: '请填写规则名称', trigger: 'blur' }"
+        >
           <el-col :span="20">
             <el-input v-model="form.limit_name" :maxlength="30" placeholder="最多30个字" />
           </el-col>
@@ -10,7 +14,12 @@
         <el-form-item label="购买规则">
           <el-input v-model="rule.day" :maxlength="30" class="inline-input" style="width: 100px" />
           天，购买
-          <el-input v-model="rule.limit" :maxlength="30" class="inline-input" style="width: 100px" />
+          <el-input
+            v-model="rule.limit"
+            :maxlength="30"
+            class="inline-input"
+            style="width: 100px"
+          />
           件
           <p class="frm-tips">
             天数设置0视为此次活动有效期内，例如：0天，购买1件是指活动有效期内只能购买一件商品
@@ -21,15 +30,26 @@
             <el-checkbox v-for="grade in memberGrade" :key="grade.grade_id" :label="grade.grade_id">
               {{ grade.grade_name }}
             </el-checkbox>
-            <el-checkbox v-for="vipdata in vipGrade" :key="vipdata.lv_type" :label="vipdata.lv_type">
+            <el-checkbox
+              v-for="vipdata in vipGrade"
+              :key="vipdata.lv_type"
+              :label="vipdata.lv_type"
+            >
               付费{{ vipdata.grade_name }}
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="有效期">
           <el-col :span="20">
-            <el-date-picker v-model="activity_date" type="datetimerange" range-separator="至" start-placeholder="生效时间"
-              end-placeholder="过期时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" />
+            <el-date-picker
+              v-model="activity_date"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="生效时间"
+              end-placeholder="过期时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :default-time="['00:00:00', '23:59:59']"
+            />
           </el-col>
         </el-form-item>
       </el-card>
@@ -45,8 +65,13 @@
         <div v-if="!zdItemHidden" style="position: relative">
           <SkuSelector :data="relItems" @change="getItems" />
           <div style="position: absolute; bottom: 0px; left: 112px">
-            <el-upload style="display: inline-block; height: 0" action="" :on-change="uploadHandleChange"
-              :auto-upload="false" :show-file-list="false">
+            <el-upload
+              style="display: inline-block; height: 0"
+              action=""
+              :on-change="uploadHandleChange"
+              :auto-upload="false"
+              :show-file-list="false"
+            >
               <el-button type="primary"> 批量上传 </el-button>
             </el-upload>
             <el-button style="margin-left: 10px" type="primary" @click="uploadHandleTemplate()">
@@ -56,24 +81,45 @@
         </div>
         <el-col :xs="12" :sm="12" :md="12">
           <div v-if="!categoryHidden" style="height: 350px">
-            <treeselect v-model="form.item_category" no-results-text="暂无结果" :options="categoryList" :show-count="true"
-              :multiple="true" :disable-branch-nodes="true" :clearable="false" @select="categorySelect"
-              @deselect="categoryDeselect" />
+            <treeselect
+              v-model="form.item_category"
+              no-results-text="暂无结果"
+              :options="categoryList"
+              :show-count="true"
+              :multiple="true"
+              :disable-branch-nodes="true"
+              :clearable="false"
+              @select="categorySelect"
+              @deselect="categoryDeselect"
+            />
           </div>
         </el-col>
         <template v-if="!tagHidden">
           <div class="selected-tags view-flex">
             <div class="label">已选中标签：</div>
             <div class="view-flex-item">
-              <el-tag v-for="(tag, index) in tag.currentTags" :key="index" closable size="small"
-                :disable-transitions="false" @close="tagRemove(index)">
+              <el-tag
+                v-for="(tag, index) in tag.currentTags"
+                :key="index"
+                closable
+                size="small"
+                :disable-transitions="false"
+                @close="tagRemove(index)"
+              >
                 {{ tag.tag_name }}
               </el-tag>
             </div>
           </div>
           <div>
-            <el-tag v-for="(tag, index) in tag.tags" :key="index" class="tag-item" size="medium" color="#ffffff"
-              :disable-transitions="false" @click.native="tagAdd(tag, index)">
+            <el-tag
+              v-for="(tag, index) in tag.tags"
+              :key="index"
+              class="tag-item"
+              size="medium"
+              color="#ffffff"
+              :disable-transitions="false"
+              @click.native="tagAdd(tag, index)"
+            >
               {{ tag.tag_name }}
             </el-tag>
           </div>
@@ -82,15 +128,28 @@
           <div class="selected-tags view-flex">
             <div class="label">已选中品牌：</div>
             <div class="view-flex-item">
-              <el-tag v-for="(brand, index) in brand.currentBrands" :key="index" closable size="small"
-                :disable-transitions="false" @close="brandRemove(index)">
+              <el-tag
+                v-for="(brand, index) in brand.currentBrands"
+                :key="index"
+                closable
+                size="small"
+                :disable-transitions="false"
+                @close="brandRemove(index)"
+              >
                 {{ brand.attribute_name }}
               </el-tag>
             </div>
           </div>
           <div>
-            <el-tag v-for="(brand, index) in brand.brands" :key="index" class="tag-item" size="medium" color="#ffffff"
-              :disable-transitions="false" @click.native="brandAdd(brand, index)">
+            <el-tag
+              v-for="(brand, index) in brand.brands"
+              :key="index"
+              class="tag-item"
+              size="medium"
+              color="#ffffff"
+              :disable-transitions="false"
+              @click.native="brandAdd(brand, index)"
+            >
               {{ brand.attribute_name }}
             </el-tag>
           </div>
@@ -125,15 +184,13 @@
                 </el-table-column>
       </el-table>
     </el-card> -->
-
     </el-form>
-    <div slot="page-header" class="content-center text-right">
+    <div slot="page-footer" class="text-center">
       <el-button v-if="hasSaveButton" type="primary" @click="submitActivityAction()">
         保存
       </el-button>
       <el-button @click.native="handleCancel"> 返回 </el-button>
     </div>
-
   </SpPage>
 </template>
 

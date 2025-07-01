@@ -14,8 +14,8 @@ const routes = [
     path: '/shopadmin/order',
     children: [
       {
-        name: 'orderList',
-        path: 'order-list',
+        name: `orderManageOrderList`,
+        path: 'order-manage/order-list',
         component: () => import('@/view/mall/trade/normalorders/list'),
         meta: {
           aliasName: 'shoptradenormalorders',
@@ -70,8 +70,8 @@ const routes = [
         }
       },
       {
-        name: 'aftersalesList',
-        path: 'aftersales-list',
+        name: 'orderManageAftersalesList',
+        path: 'order-manage/aftersales-list',
         component: () => import('@/view/mall/aftersales/list'),
         meta: {
           aliasName: 'aftersaleslist',

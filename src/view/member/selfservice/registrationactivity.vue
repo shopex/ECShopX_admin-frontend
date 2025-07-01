@@ -227,9 +227,8 @@ export default {
         })
       } else if (type == 'record') {
         this.$router.push({
-          path: `${
-            this.IS_DISTRIBUTOR() ? '/shopadmin' : ''
-          }/marketing/marketing/apply/Registrationrecord`,
+          path:
+            (IS_DISTRIBUTOR() ? `/shopadmin` : '') + `/marketing/activity-apply/activity-record`,
           query: { id: row.activity_id }
         })
       }

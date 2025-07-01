@@ -195,9 +195,7 @@
         >
           会员等级设置
         </el-button>
-        <export-tip @exportHandle="exportData">
-          <el-button type="primary" icon="el-plus-circle"> 导出 </el-button>
-        </export-tip>
+        <el-button type="primary" @click="exportData"> 导出 </el-button>
       </div>
 
       <el-table

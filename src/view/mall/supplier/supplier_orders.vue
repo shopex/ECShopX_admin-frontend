@@ -55,20 +55,14 @@
       </SpFilterForm>
 
       <div class="action-container">
-        <el-dropdown>
+        <el-dropdown @command="handleExport">
           <el-button type="primary" plain>
             导出<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportInvoice"> 未开票订单 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportSupplierOrders"> 主订单 </export-tip>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <export-tip @exportHandle="exportOrderItems"> 子订单 </export-tip>
-            </el-dropdown-item>
+            <el-dropdown-item command="exportInvoice">未开票订单 </el-dropdown-item>
+            <el-dropdown-item command="exportSupplierOrders">主订单 </el-dropdown-item>
+            <el-dropdown-item command="exportOrderItems">子订单 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -1204,6 +1198,15 @@ export default {
     },
     exportSupplierOrders() {
       this.exportData('supplier_order')
+    },
+    handleExport(command) {
+      if (command === 'exportInvoice') {
+        this.exportInvoice()
+      } else if (command === 'exportSupplierOrders') {
+        this.exportSupplierOrders()
+      } else if (command === 'exportOrderItems') {
+        this.exportOrderItems()
+      }
     },
     exportData(type) {
       console.log('====exportData', type)

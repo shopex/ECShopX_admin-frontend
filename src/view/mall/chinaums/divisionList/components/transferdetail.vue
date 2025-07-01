@@ -23,9 +23,7 @@
       </SpFilterFormItem>
     </SpFilterForm>
     <div class="action-container">
-      <exportTip @exportHandle="exportData">
-        <el-button type="primary" plain> 导出 </el-button>
-      </exportTip>
+      <el-button type="primary" @click="exportData"> 导出 </el-button>
     </div>
     <el-table v-loading="loading" border :data="tableList" :height="wheight - 150">
       <el-table-column prop="division_id" label="指令ID" width="100" />

@@ -1,7 +1,7 @@
 <template>
-  <SpPage title='运费模版编辑'>
-    <template slot='page-header'>
-      <div class="section-footer with-border content-center clearfix text-right">
+  <SpPage title="运费模版编辑">
+    <template slot="page-footer">
+      <div class="text-center">
         <el-button type="primary" @click="submitSaveAction"> 保存 </el-button>
       </div>
     </template>
@@ -700,7 +700,7 @@
           </section>
         </el-col>
       </el-row>
-     
+
       <el-dialog title="选择区域1" :visible.sync="dialogAreaFormVisible" width="960px">
         <el-row>
           <el-col :span="6">
@@ -897,44 +897,44 @@ export default {
       ],
       options: [
         {
-          'label': '重量',
-          'value': '1'
+          label: '重量',
+          value: '1'
         },
         {
-          'label': '金额',
-          'value': '2'
+          label: '金额',
+          value: '2'
         },
         {
-          'label': '重量+金额',
-          'value': '3'
+          label: '重量+金额',
+          value: '3'
         }
       ],
       options_number: [
         {
-          'label': '件数',
-          'value': '1'
+          label: '件数',
+          value: '1'
         },
         {
-          'label': '金额',
-          'value': '2'
+          label: '金额',
+          value: '2'
         },
         {
-          'label': '件数+金额',
-          'value': '3'
+          label: '件数+金额',
+          value: '3'
         }
       ],
       options_volume: [
         {
-          'label': '体积',
-          'value': '1'
+          label: '体积',
+          value: '1'
         },
         {
-          'label': '金额',
-          'value': '2'
+          label: '金额',
+          value: '2'
         },
         {
-          'label': '体积+金额',
-          'value': '3'
+          label: '体积+金额',
+          value: '3'
         }
       ],
       rule: {
@@ -949,7 +949,7 @@ export default {
       : this.$route.params.templatesId
     if (id) {
       this.templatesId = id
-      getShippingTemplatesInfo(this.templatesId).then((res) => {
+      getShippingTemplatesInfo(this.templatesId).then(res => {
         if (res.data.data) {
           this.form.name = res.data.data.name
           this.form.is_free = res.data.data.is_free
@@ -1052,7 +1052,7 @@ export default {
         this.form.nopost_conf = this.nopost_self_conf
       }
       if (this.templatesId) {
-        updateShippingTemplates(this.templatesId, this.form).then((res) => {
+        updateShippingTemplates(this.templatesId, this.form).then(res => {
           if (res.data.data) {
             this.$message({
               message: '更新成功',
@@ -1066,7 +1066,7 @@ export default {
           }
         })
       } else {
-        createShippingTemplates(this.form).then((res) => {
+        createShippingTemplates(this.form).then(res => {
           if (res.data.data) {
             this.$message({
               message: '添加成功',
@@ -1378,7 +1378,7 @@ export default {
         provinceInfo = this.areaInfo,
         cityInfo = this.areaInfo[index].children
       // 样式开始
-      Object.assign(provinceInfo[index], { 'checked': checked })
+      Object.assign(provinceInfo[index], { checked: checked })
       this.$set(provinceInfo, index, provinceInfo[index])
       searchIndex = this.conf_area.indexOf(provinceInfo[index].value)
       if (searchIndex > -1) this.conf_area.splice(searchIndex, 1)
@@ -1387,13 +1387,13 @@ export default {
           checkedRegionAllArrNum[cityItem.value] = 0
         searchIndex = that.conf_area.indexOf(cityItem.value)
         if (searchIndex > -1) that.conf_area.splice(searchIndex, 1)
-        Object.assign(cityItem, { 'checked': checked })
+        Object.assign(cityItem, { checked: checked })
         if (true == cityItem.checked) checkedCityAllNum++
         regionAllNum += that.areaInfoCount[cityItem.value]
         cityItem.children.forEach(function (regionItem) {
           searchIndex = that.conf_area.indexOf(regionItem.value)
           if (searchIndex > -1) that.conf_area.splice(searchIndex, 1)
-          Object.assign(regionItem, { 'checked': checked })
+          Object.assign(regionItem, { checked: checked })
           if (true == regionItem.checked) {
             checkedRegionAllArrNum[cityItem.value]++
             checkedRegionAllNum++
@@ -1440,9 +1440,9 @@ export default {
         cityInfo = this.areaInfo[this.provinceIndex].children,
         regionInfo = this.areaInfo[this.provinceIndex].children[index].children
       // 选择样式开始
-      Object.assign(provinceInfo[this.provinceIndex], { 'checked': false })
+      Object.assign(provinceInfo[this.provinceIndex], { checked: false })
       this.$set(provinceInfo, this.provinceIndex, provinceInfo[this.provinceIndex])
-      Object.assign(cityInfo[index], { 'checked': checked })
+      Object.assign(cityInfo[index], { checked: checked })
       searchIndex = this.conf_area.indexOf(provinceInfo[this.provinceIndex].value)
       if (searchIndex > -1) this.conf_area.splice(searchIndex, 1)
       cityInfo.forEach(function (cityItem) {
@@ -1452,7 +1452,7 @@ export default {
         if (searchIndex > -1) that.conf_area.splice(searchIndex, 1)
         if (true == cityItem.checked) {
           checkedCityAllNum++
-          Object.assign(provinceInfo[that.provinceIndex], { 'checked': true })
+          Object.assign(provinceInfo[that.provinceIndex], { checked: true })
         }
         cityItem.children.forEach(function (regionItem) {
           if (true == regionItem.checked) {
@@ -1469,7 +1469,7 @@ export default {
           checkedRegionAllArrNum[cityInfo[index].value]++
           checkedRegionAllNum++
         }
-        Object.assign(regionItem, { 'checked': checked })
+        Object.assign(regionItem, { checked: checked })
       })
       // 选择样式结束
       if (
@@ -1508,10 +1508,10 @@ export default {
         cityInfo = this.areaInfo[this.provinceIndex].children,
         regionInfo = this.areaInfo[this.provinceIndex].children[this.cityIndex].children
       // 样式选择开始
-      Object.assign(provinceInfo[this.provinceIndex], { 'checked': false })
+      Object.assign(provinceInfo[this.provinceIndex], { checked: false })
       this.$set(provinceInfo, this.provinceIndex, provinceInfo[this.provinceIndex])
-      Object.assign(cityInfo[this.cityIndex], { 'checked': false })
-      Object.assign(regionInfo[index], { 'checked': checked })
+      Object.assign(cityInfo[this.cityIndex], { checked: false })
+      Object.assign(regionInfo[index], { checked: checked })
       searchIndex = this.conf_area.indexOf(provinceInfo[this.provinceIndex].value)
       if (searchIndex > -1) this.conf_area.splice(searchIndex, 1)
       regionInfo.forEach(function (regionItem) {
@@ -1519,7 +1519,7 @@ export default {
         if (searchIndex > -1) that.conf_area.splice(searchIndex, 1)
         if (true == regionItem.checked) {
           checkedRegionAllNum++
-          Object.assign(cityInfo[that.cityIndex], { 'checked': true })
+          Object.assign(cityInfo[that.cityIndex], { checked: true })
         }
       })
       cityInfo.forEach(function (cityItem) {
@@ -1527,7 +1527,7 @@ export default {
         if (searchIndex > -1) that.conf_area.splice(searchIndex, 1)
         if (true == cityItem.checked) {
           checkedCityAllNum++
-          Object.assign(provinceInfo[that.provinceIndex], { 'checked': true })
+          Object.assign(provinceInfo[that.provinceIndex], { checked: true })
         }
       })
       // 样式选择结束
@@ -1569,7 +1569,7 @@ export default {
 
       for (var provinceKey = this.areaInfo.length - 1; provinceKey >= 0; provinceKey--) {
         searchIndex = cityChooseList.indexOf(this.areaInfo[provinceKey].value)
-        Object.assign(this.areaInfo[provinceKey], { 'checked': false })
+        Object.assign(this.areaInfo[provinceKey], { checked: false })
         this.$set(this.areaInfo, provinceKey, this.areaInfo[provinceKey])
         if (searchIndex > -1) {
           this.areaInfo.splice(provinceKey, 1)
@@ -1581,7 +1581,7 @@ export default {
           cityKey--
         ) {
           searchIndex = cityChooseList.indexOf(this.areaInfo[provinceKey].children[cityKey].value)
-          Object.assign(this.areaInfo[provinceKey].children[cityKey], { 'checked': false })
+          Object.assign(this.areaInfo[provinceKey].children[cityKey], { checked: false })
           this.$set(
             this.areaInfo[provinceKey].children,
             cityKey,
@@ -1600,7 +1600,7 @@ export default {
               this.areaInfo[provinceKey].children[cityKey].children[regionKey].value
             )
             Object.assign(this.areaInfo[provinceKey].children[cityKey].children[regionKey], {
-              'checked': false
+              checked: false
             })
             this.$set(
               this.areaInfo[provinceKey].children[cityKey].children,
@@ -1653,9 +1653,9 @@ export default {
       }
 
       for (var provinceKey = this.areaInfo.length - 1; provinceKey >= 0; provinceKey--) {
-        Object.assign(this.areaInfo[provinceKey], { 'checked': false })
+        Object.assign(this.areaInfo[provinceKey], { checked: false })
         if (cityChooseNowList.indexOf(this.areaInfo[provinceKey].value) > -1) {
-          Object.assign(this.areaInfo[provinceKey], { 'checked': true })
+          Object.assign(this.areaInfo[provinceKey], { checked: true })
         } else {
           searchIndex = cityChooseList.indexOf(this.areaInfo[provinceKey].value)
           if (searchIndex > -1) {
@@ -1668,7 +1668,7 @@ export default {
           cityKey >= 0;
           cityKey--
         ) {
-          Object.assign(this.areaInfo[provinceKey].children[cityKey], { 'checked': false })
+          Object.assign(this.areaInfo[provinceKey].children[cityKey], { checked: false })
           this.$set(
             this.areaInfo[provinceKey].children,
             cityKey,
@@ -1678,8 +1678,8 @@ export default {
             cityChooseNowList.indexOf(this.areaInfo[provinceKey].value) > -1 ||
             cityChooseNowList.indexOf(this.areaInfo[provinceKey].children[cityKey].value) > -1
           ) {
-            Object.assign(this.areaInfo[provinceKey], { 'checked': true })
-            Object.assign(this.areaInfo[provinceKey].children[cityKey], { 'checked': true })
+            Object.assign(this.areaInfo[provinceKey], { checked: true })
+            Object.assign(this.areaInfo[provinceKey].children[cityKey], { checked: true })
           } else {
             searchIndex = cityChooseList.indexOf(this.areaInfo[provinceKey].children[cityKey].value)
             if (searchIndex > -1) {
@@ -1693,7 +1693,7 @@ export default {
             regionKey--
           ) {
             Object.assign(this.areaInfo[provinceKey].children[cityKey].children[regionKey], {
-              'checked': false
+              checked: false
             })
             this.$set(
               this.areaInfo[provinceKey].children[cityKey].children,
@@ -1707,10 +1707,10 @@ export default {
                 this.areaInfo[provinceKey].children[cityKey].children[regionKey].value
               ) > -1
             ) {
-              Object.assign(this.areaInfo[provinceKey], { 'checked': true })
-              Object.assign(this.areaInfo[provinceKey].children[cityKey], { 'checked': true })
+              Object.assign(this.areaInfo[provinceKey], { checked: true })
+              Object.assign(this.areaInfo[provinceKey].children[cityKey], { checked: true })
               Object.assign(this.areaInfo[provinceKey].children[cityKey].children[regionKey], {
-                'checked': true
+                checked: true
               })
             } else {
               searchIndex = cityChooseList.indexOf(
@@ -1735,7 +1735,7 @@ export default {
       }
     },
     getAddress() {
-      getAddress().then((res) => {
+      getAddress().then(res => {
         let that = this
         this.district = res.data.data
         this.district.forEach(function (provinceItem) {

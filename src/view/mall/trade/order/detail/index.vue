@@ -1,7 +1,7 @@
 <template>
   <SpPage title="订单基本信息">
-    <template slot="page-header">
-      <div v-if="btnActions.length > 0" class="text-right">
+    <template slot="page-footer">
+      <div v-if="btnActions.length > 0" class="text-center">
         <el-button
           v-for="(btn, index) in btnActions"
           :key="`btn-item__${index}`"

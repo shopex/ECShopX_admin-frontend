@@ -5,8 +5,8 @@
 </style>
 
 <template>
-  <SpPage>
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
 
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
@@ -97,8 +97,8 @@
           />
         </div>
       </section>
-    </SpRouterView>
-  </SpPage>
+    </SpPage>
+  </SpRouterView>
 </template>
 
 <script>
@@ -127,6 +127,9 @@ export default {
   },
   mounted() {
     this.fetchList()
+    this.$activated = () => {
+      this.fetchList()
+    }
   },
   methods: {
     articleAdd(id) {

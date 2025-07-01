@@ -38,7 +38,7 @@
             v-if="scope.row.order_id"
             class="text-blue-400"
             :to="{
-              path: `/orders/order-manage/order-list/detail`,
+              path: `/order/order-manage/order-list/detail`,
               query: { orderId: scope.row.order_id, resource: '/mall/trade/service' }
             }"
           >
