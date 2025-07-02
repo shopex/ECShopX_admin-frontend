@@ -104,12 +104,15 @@
 
     .sp-finder-search-actions {
       margin-bottom: 16px;
+      position: absolute;
+      top: 35px;
+      right: 10px;
     }
 
     .search-more {
       position: absolute;
       right: 10px;
-      top: 22px;
+      top: 75px;
 
       span {
         display: flex;

@@ -157,7 +157,7 @@ export default {
         }
       })
 
-      var version = this.$store.getters.menus[0].version
+      var version = this.$store.getters.menus && this.$store.getters.menus[0]?.version
       this.form.permission = { shopmenu_alias_name: checkedKeys, version: version }
       if (this.form.role_id) {
         updateRolesInfo(this.form.role_id, this.form).then(response => {

@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full">
-    <div class="w-[70px] h-full bg-[#353439]">
+    <div class="w-[70px] bg-[#353439] h-screen overflow-auto">
       <div class="flex items-center mt-2">
         <SpImage
           class="w-[56px] bg-white mx-auto rounded-full"
@@ -25,7 +25,7 @@
     </div>
 
     <div
-      class="sub-menu-list w-[160px] border-border border-l border-r h-full"
+      class="sub-menu-list w-[160px] border-border border-l border-r h-screen overflow-auto"
       v-if="subMenus.length > 0"
     >
       <!-- activeSubIndex: {{ activeSubIndex }} -->

@@ -281,9 +281,9 @@
           </el-select>
         </el-col>
       </el-form-item>
-      <el-form-item label="提交报名次数" prop="join_limit">
+      <el-form-item label="提交报名人数" prop="join_limit">
         <el-col :span="10">
-          <el-input v-model.trim="form.join_limit" type="number" placeholder="次数" />
+          <el-input v-model.trim="form.join_limit" type="number" placeholder="人数" />
         </el-col>
       </el-form-item>
       <el-form-item label="报名结束语" prop="join_tips">

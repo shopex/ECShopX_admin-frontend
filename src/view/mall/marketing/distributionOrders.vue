@@ -53,7 +53,6 @@ const [SearchForm, SearchFormApi] = useForm({
         type: 'datetimerange'
       },
       fieldName: 'create_time',
-      formItemClass: 'col-span-2',
       label: '订单时间',
       value: []
     },
@@ -63,7 +62,6 @@ const [SearchForm, SearchFormApi] = useForm({
         placeholder: '请输入手机号'
       },
       fieldName: 'mobile',
-      formItemClass: 'col-start-3',
       label: '手机号',
       value: ''
     },

@@ -7,7 +7,6 @@
             v-loading="loading"
             :data="tableList"
             style="width: 100%"
-            :height="-200"
             @expand-change="handleExpandChange"
           >
             <el-table-column label="绑定详情" width="80" type="expand" fixed="left">
