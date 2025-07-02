@@ -264,7 +264,7 @@
         </template>
       </div>
     </section>
-    <section slot="footer" class="content-center">
+    <section slot="footer" class="text-center mt-2">
       <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
     </section>
     <imgPicker

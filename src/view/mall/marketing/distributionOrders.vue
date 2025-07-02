@@ -48,20 +48,12 @@ const [SearchForm, SearchFormApi] = useForm({
   formType: 'searchForm',
   formItems: [
     {
-      component: 'DateTimePicker',
-      componentProps: {
-        type: 'datetimerange'
-      },
-      fieldName: 'create_time',
-      label: '订单时间',
-      value: []
-    },
-    {
       component: 'Input',
       componentProps: {
         placeholder: '请输入手机号'
       },
       fieldName: 'mobile',
+      // formItemClass: 'col-start-3',
       label: '手机号',
       value: ''
     },
@@ -83,7 +75,17 @@ const [SearchForm, SearchFormApi] = useForm({
       fieldName: 'order_class',
       label: '订单类型',
       value: ''
-    }
+    },
+    {
+      component: 'DateTimePicker',
+      componentProps: {
+        type: 'datetimerange'
+      },
+      fieldName: 'create_time',
+      formItemClass: 'col-span-2',
+      label: '订单时间',
+      value: []
+    },
     // {
     //   component: ({ h, value, onInput }) => {
     //     return (
