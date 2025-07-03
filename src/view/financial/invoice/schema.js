@@ -332,7 +332,7 @@ export const formSchema = (vm) =>
         component({ key }, value) {
           return (
             <div>
-              <el-input v-model={value['mobile']} type='number' />
+              <el-input v-model={value['mobile']} placeholder='请输入内容' />
             </div>
           )
         }

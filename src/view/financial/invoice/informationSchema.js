@@ -46,6 +46,11 @@ export const tableSchema = (vm) =>
         width: '120'
       },
       {
+        name: '管理分类',
+        key: 'invoice_apply_bn',
+        width: '120'
+      },
+      {
         name: '税率',
         key: 'invoice_apply_bn',
         width: '80'
@@ -114,6 +119,40 @@ export const formSchema = (vm) =>
         required: true
       },
       {
+        label: '管理分类',
+        required: true,
+        key: 'main_cat_id',
+        component({ key }, value) {
+          return (
+            <div>
+              <el-radio-group v-model={value['category_type']}>
+                <el-radio label='1'>全部分类</el-radio>
+                <el-radio label='2'>指定分类</el-radio>
+              </el-radio-group>
+              <div>
+                {value['category_type'] == 2 && (
+                  <el-cascader
+                    v-model={value['main_cat_id']}
+                    placeholder='请选择'
+                    clearable
+                    options={vm.itemCategoryList}
+                    props={{
+                      props: {
+                        value: 'category_id',
+                        label: 'category_name',
+                        multiple: true,
+                        // checkStrictly: true,
+                        children: 'children'
+                      }
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          )
+        }
+      },
+      {
         label: '税率',
         key: 'alipay_fee_type',
         type: 'input',
@@ -151,119 +190,11 @@ export const formSchema = (vm) =>
         required: true
       },
       {
-        key: 'invoice_type',
-        label: '抬头类型',
-        defaultValue: 'individual',
-        component({ key }, value) {
-          return (
-            <div>
-              <el-radio-group v-model={value['invoice_type']}>
-                <el-radio label='individual'>个人</el-radio>
-                <el-radio label='enterprise'>公司</el-radio>
-              </el-radio-group>
-            </div>
-          )
-        }
-      },
-      {
-        key: 'invoice_type',
-        label: '发票类型',
-        defaultValue: 'individual',
-        component({ key }, value) {
-          return (
-            <div>
-              <el-radio-group v-model={value['invoice_type']}>
-                <el-radio label='individual'>普通发票-电子</el-radio>
-                <el-radio label='enterprise'>专业发票</el-radio>
-              </el-radio-group>
-            </div>
-          )
-        },
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'company_title',
-        label: '个人抬头',
+        label: '开票方联系地址',
+        key: 'alipay_fee_type',
         type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'individual'
-        }
-      },
-      {
-        key: 'company_title',
-        label: '公司抬头',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'company_tax_number',
-        label: '纳税人识别号',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'email',
-        label: '收票人邮箱',
-        type: 'input',
-        defaultValue: ''
-      },
-      {
-        key: 'mobile',
-        label: '收票人手机',
-        type: 'input',
-        defaultValue: '',
-        component({ key }, value) {
-          return (
-            <div>
-              <el-input v-model={value['mobile']} type='number' />
-            </div>
-          )
-        }
-      },
-      {
-        key: 'company_address',
-        label: '公司地址',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'company_telephone',
-        label: '公司电话',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'bank_name',
-        label: '开户银行',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
-      },
-      {
-        key: 'bank_account',
-        label: '开户行账户',
-        type: 'input',
-        defaultValue: '',
-        isShow() {
-          return vm.dialogForm.invoice_type === 'enterprise'
-        }
+        required: true,
+        tip: '联系地址文字长度，请不要超过255'
       }
     ],
     vm

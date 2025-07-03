@@ -57,6 +57,7 @@ export default {
       dialogShow: false,
       dialogTitle:'',
       confirmStatus:false,
+      itemCategoryList:[]
     }
   },
   computed: {
@@ -68,9 +69,14 @@ export default {
     }
   },
   mounted() {
-
+    this.getMainCategory()
   },
   methods: {
+    async getMainCategory() {
+      //管理分类
+      const res = await this.$api.goods.getCategory({ is_main_category: true })
+      this.itemCategoryList = res
+    },
     refresh() {
       this.$refs.finder.refresh(true)
     },

@@ -22,6 +22,20 @@
       <SpFilterFormItem prop="supplier_name" label="开票来源:">
         <el-input v-model="formData.supplier_name" placeholder="请输入开票来源" />
       </SpFilterFormItem>
+      <SpFilterFormItem prop="mobile" label="手机号:">
+        <el-input v-model="formData.mobile" placeholder="请输入手机号" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="approve_status" label="发票类型:">
+        <el-select v-model="formData.approve_status" clearable placeholder="请选择">
+          <el-option
+            v-for="item in typeList"
+            :key="item.value"
+            :label="item.title"
+            size="mini"
+            :value="item.value"
+          />
+        </el-select>
+      </SpFilterFormItem>
       <SpFilterFormItem prop="queryTime" label="创建时间:" size="max">
         <el-date-picker
           v-model="formData.cycleTime"
@@ -35,17 +49,6 @@
           :default-time="defaultTime"
         />
         </SpFilterFormItem>
-      <SpFilterFormItem prop="approve_status" label="发票类型:">
-        <el-select v-model="formData.approve_status" clearable placeholder="请选择">
-          <el-option
-            v-for="item in typeList"
-            :key="item.value"
-            :label="item.title"
-            size="mini"
-            :value="item.value"
-          />
-        </el-select>
-      </SpFilterFormItem>
     </SpFilterForm>
       <SpFinder
         ref="finder"
@@ -244,23 +247,24 @@ export default {
     },
     // 日志
     showLogHandle(row) {
-      this.editRow = row
-      this.showLogInfoDrawer = true
-      api.order.getInvoiceLog({ invoice_id: row.id }).then((res) => {
-        this.logListData = res.list?.map((el) => {
-          const _params = {
-            ...el,
-            operator_content: null
-          }
-          try {
-            _params.operator_content = JSON.parse(el.operator_content)
-          } catch (error) {
-            console.log(error)
-          }
-          return _params
-        })
-        console.log(this.logListData)
-      })
+      this.$router.push({path:`${this.$route.path}/process?id=${row.id}`})
+      // this.editRow = row
+      // this.showLogInfoDrawer = true
+      // api.order.getInvoiceLog({ invoice_id: row.id }).then((res) => {
+      //   this.logListData = res.list?.map((el) => {
+      //     const _params = {
+      //       ...el,
+      //       operator_content: null
+      //     }
+      //     try {
+      //       _params.operator_content = JSON.parse(el.operator_content)
+      //     } catch (error) {
+      //       console.log(error)
+      //     }
+      //     return _params
+      //   })
+      //   console.log(this.logListData)
+      // })
     },
     handleSelectionChange(selection) {
       this.selectedRows = selection
