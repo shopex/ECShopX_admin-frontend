@@ -291,20 +291,21 @@ export default {
             name: '订单状态',
             key: 'order_status',
             render(h, { row }) {
-              return h(
-                'el-tag',
-                {
-                  props: {
-                    type:
-                      ORDER_STATUS_MAP[row.order_status]?.type ||
-                      ORDER_DELIVERY_STATUS_MAP[row.delivery_status]?.type ||
-                      ORDER_ZITI_STATUS_MAP[row.ziti_status]?.type,
-                    size: 'mini'
-                  }
-                },
-                ORDER_STATUS_MAP[row.order_status]?.lable ||
-                  ORDER_DELIVERY_STATUS_MAP[row.delivery_status]?.lable ||
-                  ORDER_ZITI_STATUS_MAP[row.ziti_status]?.lable
+              return (
+                <div>
+                  <el-tag size="mini" type={
+                    ORDER_STATUS_MAP[row.order_status]?.type ||
+                    ORDER_DELIVERY_STATUS_MAP[row.delivery_status]?.type ||
+                    ORDER_ZITI_STATUS_MAP[row.ziti_status]?.type
+                  }>
+                    {
+                      ORDER_STATUS_MAP[row.order_status]?.lable ||
+                      ORDER_DELIVERY_STATUS_MAP[row.delivery_status]?.lable ||
+                      ORDER_ZITI_STATUS_MAP[row.ziti_status]?.lable
+                    }
+                  </el-tag>
+                  {row.order_status == 'PAYED' && <el-tag size="mini" class="ml-1">待发货</el-tag>}
+                </div>
               )
             }
           }
