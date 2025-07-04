@@ -100,6 +100,7 @@ export default {
   data() {
     return {
       pane_list: [
+      { name: 'taobao_goods', label: '上传淘宝链接' },
         { name: 'supplier_goods', label: '上传实体类商品' },
         { name: 'employee_purchase_activity_items', label: '上传内购活动商品' }
       ],
