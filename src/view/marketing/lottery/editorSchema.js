@@ -222,31 +222,31 @@ export const formList = (vm) =>
           )
         }
       },
-      {
-        label: '抽奖规则按钮',
-        key: 'ruleBtnStyle',
-        defaultValue: '',
-        component({ key }, value) {
-          return (
-            <div class='inputWrap'>
-              <div>{vm['ruleFormConfig']?.img ? '已设置' : '未设置'}</div>
-              <div style={{ display: 'flex', fontSize: '14px' }}>
-                <div onClick={() => (vm.ruleDialogShow = true)}>设置&nbsp;</div>
-                <div
-                  onClick={() => {
-                    vm.ruleForm = {
-                      rule: ['#000000', '#000000'],
-                      img: ''
-                    }
-                  }}
-                >
-                  恢复默认
-                </div>
-              </div>
-            </div>
-          )
-        }
-      },
+      // {
+      //   label: '抽奖规则按钮',
+      //   key: 'ruleBtnStyle',
+      //   defaultValue: '',
+      //   component({ key }, value) {
+      //     return (
+      //       <div class='inputWrap'>
+      //         <div>{vm['ruleFormConfig']?.img ? '已设置' : '未设置'}</div>
+      //         <div style={{ display: 'flex', fontSize: '14px' }}>
+      //           <div onClick={() => (vm.ruleDialogShow = true)}>设置&nbsp;</div>
+      //           <div
+      //             onClick={() => {
+      //               vm.ruleForm = {
+      //                 rule: ['#000000', '#000000'],
+      //                 img: ''
+      //               }
+      //             }}
+      //           >
+      //             恢复默认
+      //           </div>
+      //         </div>
+      //       </div>
+      //     )
+      //   }
+      // },
       {
         label: '抽奖记录按钮',
         key: 'recordBtnStyle',
@@ -298,12 +298,13 @@ export const innerSchema = (vm) =>
       {
         name: '奖项名称',
         key: 'text',
-        width: '280px',
+        width: '300px',
         render(_, { row, $index }) {
           return (
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
               <el-input
                 value={row['text']}
+                style={{ width: '200px' }}
                 on-input={(val) => vm.handleInput(val, row, $index, 'text')}
               />
             </div>

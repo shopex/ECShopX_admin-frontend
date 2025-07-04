@@ -51,7 +51,8 @@ export default {
       shopTag: (args) => fn({ value: { ...args }, type: 'pickerShopTag' }),
       editBoard: (args) => fn({ value: { ...args }, type: 'pickerEditBoard', width: '892px' }),
       planting: (args) => fn({ value: { ...args }, type: 'pickerPlanting' }),
-      pages: (args) => fn({ value: { ...args }, type: 'pickerPages' })
+      pages: (args) => fn({ value: { ...args }, type: 'pickerPages' }),
+      lottery: (args) => fn({ value: { ...args }, type: 'pickerLottery' })
     }
 
     Vue.prototype.$picker = $picker

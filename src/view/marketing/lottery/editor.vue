@@ -134,7 +134,7 @@ export default {
         background: this.form['background'],// 页面背景
         backgroundColor: this.form['backgroundColor'],// 背景颜色
         hotArea: this['hotAreaConfig'],// 抽奖区域
-        ruleBtnStyle: this['ruleFormConfig'],// 抽奖规则按钮
+        // ruleBtnStyle: this['ruleFormConfig'],// 抽奖规则按钮
         recordBtnStyle: this['recordFormConfig'],// 抽奖记录按钮
       }
     }
@@ -314,7 +314,7 @@ export default {
 
 .lottery-editor-content {
   position: relative;
-  bottom: 340px;
+  bottom: 260px;
   left: 730px;
   height: 740px;
   width: 350px;

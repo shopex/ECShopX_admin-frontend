@@ -7,7 +7,7 @@ import { status_map, prize_types } from './constants'
 
 export const tableSchema = (vm) => createSetting({
     search: [
-        { name: '', placeholder: '请选择选择区域', key: 'area_id', type: 'select', options: vm?.areas },
+        { name: '', placeholder: '请选择选择区域', key: 'regionauth_id', type: 'select', options: vm?.areas },
         { name: '', placeholder: '请输入活动id', key: 'activity_id' },
         { name: '', placeholder: '请输入活动名称', key: 'activity_name' },
     ],
@@ -91,6 +91,7 @@ export const tableSchema = (vm) => createSetting({
             width: '80'
         },
         { name: '活动名称', key: 'activity_name', width: '300' },
+        { name: '活动区域', key: 'regionauth_name', width: '100' },
         {
             name: '抽奖形式',
             key: 'activity_type',
@@ -112,6 +113,20 @@ export const tableSchema = (vm) => createSetting({
                 return `${moment(row.begin_time * 1000).format('YYYY-MM-DD HH:mm:ss')} - ${moment(row.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}`
             }
         },
+        {
+            name: '创建时间',
+            key: 'created',
+            render(_, { row }) {
+                return `${moment(row.created * 1000).format('YYYY-MM-DD HH:mm:ss')}`
+            }
+        },
+        {
+            name: '更新时间',
+            key: 'updated',
+            render(_, { row }) {
+                return `${moment(row.updated * 1000).format('YYYY-MM-DD HH:mm:ss')}`
+            }
+        }   
     ]
 })
 
