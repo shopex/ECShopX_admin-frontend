@@ -323,6 +323,11 @@ export default {
       component: () => import('@/view/base/setting/certificate/index')
     },
     {
+      path: 'systemsetting/damoCrm',
+      name: `达摩CRM`,
+      component: () => import('@/view/base/setting/damoCrm/index')
+    },
+    {
       path: 'systemsetting/domain_setting',
       name: `域名设置`,
       component: () => import('@/view/base/setting/companys/domain')
