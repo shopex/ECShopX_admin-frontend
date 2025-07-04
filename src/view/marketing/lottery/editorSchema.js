@@ -110,8 +110,8 @@ export const formList = (vm) =>
           return (
             <el-radio-group v-model={vm.form['activity_type']}>
               <el-radio-button label='wheel'>大转盘</el-radio-button>
-              <el-radio-button label='slotMachine'>老虎机</el-radio-button>
-              <el-radio-button label='grid'>九宫格</el-radio-button>
+              {/* <el-radio-button label='slotMachine'>老虎机</el-radio-button>
+              <el-radio-button label='grid'>九宫格</el-radio-button> */}
             </el-radio-group>
           )
         }
@@ -346,8 +346,9 @@ export const innerSchema = (vm) =>
                 })}
               </el-select>
               {row['prize_type'] == 'coupon' && (
-                <div>
+                <div style={{paddingLeft:"10px"}}>
                   {row['prize_value']?.title}
+                  {row['prize_detail']?.title}
                   <span
                     style={{ color: '#ff0000', marginLeft: '4px' }}
                     onClick={() => vm.onCouponSubmit(row, $index, 'prize_value')}
@@ -357,8 +358,9 @@ export const innerSchema = (vm) =>
                 </div>
               )}
               {row['prize_type'] == 'coupons' && (
-                <div>
+                <div style={{paddingLeft:"10px"}}>
                   {row['prize_value']?.title}
+                  {row['prize_detail']?.title}
                   <span
                     style={{ color: '#ff0000', marginLeft: '4px' }}
                     onClick={() => vm.onCouponPackSubmit(row, $index, 'prize_value')}

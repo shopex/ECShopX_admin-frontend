@@ -288,13 +288,13 @@ export default {
       const { data } = await this.$picker.couponV2({
         multiple: false
       })
-      this.handleInput(data[0], row, index, key)
+      this.handleInput(data[0]?.card_id, row, index, key)
     },
     async onCouponPackSubmit(row, index, key) {
       const { data } = await this.$picker.couponPackage({
         multiple: false
       })
-      this.handleInput(data[0], row, index, key)
+      this.handleInput(data[0]?.package_id, row, index, key)
     }
   }
 }
