@@ -91,7 +91,7 @@ export const tableSchema = (vm) => createSetting({
             width: '80'
         },
         { name: '活动名称', key: 'activity_name', width: '300' },
-        { name: '活动区域', key: 'regionauth_name', width: '100' },
+        // { name: '活动区域', key: 'regionauth_name', width: '100' },
         {
             name: '抽奖形式',
             key: 'activity_type',

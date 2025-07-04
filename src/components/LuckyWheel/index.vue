@@ -39,7 +39,8 @@
 export default {
   props: {
     config: {
-      type: Object
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -74,7 +75,7 @@ export default {
         this.prizes = prizeData.map((item) => {
           const _data = {
             fonts: [{ text: item.text || '', top: '30%' }],
-            background: item.background,
+            background: item?.background,
             range: item.prize_probability
           }
           if (item?.img) {

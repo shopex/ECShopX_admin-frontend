@@ -54,7 +54,7 @@ import LuckyWheel from '@/components/LuckyWheel/index.vue'
 import moment from 'moment'
 import api from '@/api'
 
-import { defaultItem, prize_types,defaultGameConfig } from './constants'
+import { defaultItem, prize_types, defaultGameConfig } from './constants'
 
 let index = 0
 
@@ -94,12 +94,13 @@ export default {
     return {
       form: {
         ...generatorParams(formList(this)),
-        cost_value: "",
+        cost_value: 0,
         limit_day: '',
         quantity: "",
         prize_data: defaultValues.prize_data,
-        background:"",
-        backgroundColor:""
+        background: "",
+        backgroundColor: "",
+        area_id: 0
       },
       areas: [],
       options: defaultValues.options,
@@ -163,6 +164,7 @@ export default {
             cost_value: res.cost_value,
             backgroundColor: activity_template_config?.backgroundColor,
             background: activity_template_config?.backgroundImage,
+            area_id: res.area_id || 0
           }
           const { gameConfig: { blocks, buttons } } = activity_template_config
 
@@ -172,7 +174,7 @@ export default {
             background: buttons[0]?.background,
             img: buttons[0]?.imgs[0]?.src,
           } : generatorParams(lotteryAreaSchema(this))
-          this.hotAreaConfig =!!blocks[0]?.imgs[0]?.src
+          this.hotAreaConfig = !!blocks[0]?.imgs[0]?.src
         }).catch((err) => {
           console.log(err)
         })
@@ -182,17 +184,36 @@ export default {
       this.$router.go(-1)
     },
     // 保存
-    async onGroupFormSubmit() {
+    onGroupFormSubmit() {
+      this.$refs.formBase.handleSubmit().then(res => {
+        console.log(res);
+        this.submitAfter()
+      }).catch(er => {
+        console.log(er);
+      })
+    },
+    async submitAfter() {
       const params = {
         ...this.form,
-        prize_data: JSON.stringify(this.form['prize_data'].map((el,index) => ({
-          ...el,
-          fonts: {
-            "text": el.text,
-            "top": "30%"
-          },
-          imgs: el?.img ? [{ src: el?.img, width: '50px', height: '50px',top:"60%" }] : []
-        }))),
+        prize_data: JSON.stringify(this.form['prize_data'].map(el => {
+          let _prize_value = el.prize_value
+          if (el.prize_type == 'coupon') {
+            _prize_value = el.prize_value.card_id
+          } else if (el.prize_type == 'coupons') {
+            _prize_value = el.prize_value.package_id
+          } else {
+            _prize_value = el.prize_value
+          }
+          return {
+            ...el,
+            prize_value: _prize_value,
+            fonts: {
+              "text": el.text,
+              "top": "30%"
+            },
+            imgs: el?.img ? [{ src: el?.img, width: '50px', height: '50px', top: "60%" }] : [],
+          }
+        })),
         activity_template_config: JSON.stringify({
           ...defaultGameConfig,
           gameType: this.form.activity_type,
@@ -288,13 +309,13 @@ export default {
       const { data } = await this.$picker.couponV2({
         multiple: false
       })
-      this.handleInput(data[0]?.card_id, row, index, key)
+      this.handleInput(data[0], row, index, key)
     },
     async onCouponPackSubmit(row, index, key) {
       const { data } = await this.$picker.couponPackage({
         multiple: false
       })
-      this.handleInput(data[0]?.package_id, row, index, key)
+      this.handleInput(data[0], row, index, key)
     }
   }
 }

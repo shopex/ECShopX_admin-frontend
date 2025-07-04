@@ -8,15 +8,15 @@ export const formList = (vm) =>
         type: 'group',
         label: '活动基础配置'
       },
-      {
-        label: '区域',
-        key: 'area_id',
-        placeholder: '请选择',
-        defaultValue: '',
-        required: true,
-        type: 'select',
-        options: vm?.areas || []
-      },
+      // {
+      //   label: '区域',
+      //   key: 'area_id',
+      //   placeholder: '请选择',
+      //   defaultValue: '',
+      //   required: true,
+      //   type: 'select',
+      //   options: vm?.areas || []
+      // },
       {
         label: '活动标题',
         key: 'activity_name',
@@ -52,12 +52,12 @@ export const formList = (vm) =>
         type: 'input',
         required: true,
         placeholder: '请输入抽奖消耗',
-        defaultValue: '1',
+        defaultValue: '2',
         component(_) {
           return (
             <div>
               <el-radio-group v-model={vm.form['cost_type']}>
-                <el-radio-button label='1'>互动分</el-radio-button>
+                {/* <el-radio-button label='1'>互动分</el-radio-button> */}
                 <el-radio-button label='2'>积分</el-radio-button>
               </el-radio-group>
               <el-input
@@ -75,7 +75,8 @@ export const formList = (vm) =>
         type: 'input',
         placeholder: '请输入抽奖限额',
         defaultValue: '',
-        component(_) {
+        required: true,
+        component() {
           return (
             <div>
               <el-input v-model={vm.form['limit_total']} style={{ width: '120px' }} />
@@ -143,7 +144,12 @@ export const formList = (vm) =>
           )
         },
         validator(rule, value, callback) {
-          if (value?.filter((item) => item.prize_type).length <= 0) {
+          // 统计概率 必须 ==100
+          const total = value?.reduce((acc, item) => acc + (item.prize_probability * 1 || 0), 0)
+          console.log("🚀 ~ validator ~ total:", total)
+          if (total != 100) {
+            callback(new Error('概率总和必须等于100'))
+          }else if (value?.filter((item) => item.prize_type).length <= 0) {
             callback(new Error('请设置奖品'))
           } else {
             callback()
