@@ -135,6 +135,11 @@ export default {
       component: () => import('@/view/base/setting/publicsetting')
     },
     {
+      path: 'systemsetting/invoinceConfiguration',
+      name: `开票配置`,
+      component: () => import('@/view/financial/invoice/baiSetting')
+    },
+    {
       path: 'GoodsShareSetting',
       name: `商品分享设置`,
       component: () => import('@/view/base/setting/goodsShareSetting')

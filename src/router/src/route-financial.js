@@ -105,19 +105,28 @@ export default {
       component: () => import('@/view/financial/settlement/configure')
     },
     {
-      path: 'invoiceManagement',
-      name: `结算汇总`,
+      path: 'invoice/invoiceManagement',
+      name: `发票列表`,
       component: () => import('@/view/financial/invoice/list'),
-      // children: [
-      //   {
-      //     path: 'detail/:id?',
-      //     component: () => import('@/view/financial/invoice/detail')
-      //   }
-      // ]
+      children: [
+        {
+          path: 'detail/:id?',
+          component: () => import('@/view/financial/invoice/detail')
+        },
+        {
+          path: 'process/:itemId?',
+          component: () => import('@/view/financial/invoice/process')
+        }
+      ]
     },
     {
-      path: 'invoiceManagement/detail',
+      path: 'invoice/invoiceSetting',
       name: `发票配置`,
+      component: () => import('@/view/financial/invoice/setting')
+    },
+    {
+      path: 'invoice/invoiceInfo',
+      name: `开票信息`,
       component: () => import('@/view/financial/invoice/information')
     },
 
