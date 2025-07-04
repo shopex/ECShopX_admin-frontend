@@ -307,7 +307,10 @@ export default {
     },
     async onCouponSubmit(row, index, key) {
       const { data } = await this.$picker.couponV2({
-        multiple: false
+        multiple: false,
+        params:{
+          status:4
+        }
       })
       this.handleInput(data[0], row, index, key)
     },
