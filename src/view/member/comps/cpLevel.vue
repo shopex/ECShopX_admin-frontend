@@ -56,6 +56,7 @@
             <div style="display: flex;">
               <span class="txt">等级背景</span>
               <SpImagePicker v-model="item.grade_background" />
+            </div>
             <div>
               <span class="txt">等级编码</span
               ><el-input
