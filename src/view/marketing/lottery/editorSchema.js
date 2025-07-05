@@ -182,19 +182,18 @@ export const formList = (vm) =>
               <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '20px' }}>
                 <div>
                   <el-color-picker
-                    value={vm.form['background']}
+                    value={vm.form['backgroundColor']}
                     onChange={(val) => {
-                      vm.form['background'] = val
+                      console.log('🚀 ~ onChange ~ val:', val)
+                      vm.form = {
+                        ...vm.form,
+                        backgroundColor: val
+                      }
                     }}
                   />
                 </div>
                 <div>
-                  <SpImagePicker
-                    value={vm.form['background']}
-                    onChange={(val) => {
-                      vm.form['background'] = val
-                    }}
-                  />
+                  <SpImagePicker v-model={vm.form['background']} />
                 </div>
               </div>
             </div>
@@ -208,7 +207,7 @@ export const formList = (vm) =>
         component({ key }, value) {
           return (
             <div class='inputWrap'>
-              <div>{vm['hotAreaConfig']?.img ? '已设置' : '未设置'}</div>
+              <div>{vm['hotAreaConfig'] ? '已设置' : '未设置'}</div>
               <div style={{ display: 'flex', fontSize: '14px' }}>
                 <div onClick={() => (vm.hotAreasDialogShow = true)}>设置&nbsp;</div>
                 <div
@@ -487,8 +486,9 @@ export const lotteryAreaSchema = (vm) =>
         label: '抽奖按钮图片',
         key: 'img',
         required: true,
-        defaultValue: [],
+        defaultValue: '',
         component(_) {
+          console.log(vm.hotArea)
           return (
             <div>
               <SpImagePicker v-model={vm.hotArea['img']} key='img' />
