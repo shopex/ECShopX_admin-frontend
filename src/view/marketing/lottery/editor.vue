@@ -164,7 +164,20 @@ export default {
             cost_value: res.cost_value,
             backgroundColor: activity_template_config?.backgroundColor,
             background: activity_template_config?.backgroundImage,
-            area_id: res.area_id || 0
+            area_id: res.area_id || 0,
+            prizeData :res.prize_data?.map(el =>{
+              if(el.prize_type == 'coupon'){
+                el.prize_value  = {
+                  card_id:el.prize_detail?.card_id,
+                }
+              }
+              if(el.prize_type == 'coupons'){
+                el.prize_value  = {
+                  package_id:el.prize_detail?.package_id,
+                }
+              }
+              return el
+            })
           }
           const { gameConfig: { blocks, buttons } } = activity_template_config
 
@@ -309,7 +322,8 @@ export default {
       const { data } = await this.$picker.couponV2({
         multiple: false,
         params:{
-          status:4
+         date_status:2,
+         store_self:false
         }
       })
       this.handleInput(data[0], row, index, key)
