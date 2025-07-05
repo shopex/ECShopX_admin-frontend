@@ -179,7 +179,7 @@ export default {
               return el
             })
           }
-          const { gameConfig: { blocks, buttons } } = activity_template_config
+          const { gameConfig: { blocks, buttons,recordFormConfig } } = activity_template_config
 
           this.hotArea = blocks[0]?.imgs[0]?.src ? {
             backImg: blocks[0]?.imgs[0]?.src,
@@ -188,6 +188,8 @@ export default {
             img: buttons[0]?.imgs[0]?.src,
           } : generatorParams(lotteryAreaSchema(this))
           this.hotAreaConfig = !!blocks[0]?.imgs[0]?.src
+
+          this.recordFormConfig = recordFormConfig?.img ? recordFormConfig : generatorParams(recordFormSchema(this))
         }).catch((err) => {
           console.log(err)
         })
@@ -208,7 +210,7 @@ export default {
     async submitAfter() {
       const params = {
         ...this.form,
-        prize_data: JSON.stringify(this.form['prize_data'].map(el => {
+        prize_data: JSON.stringify(this.form['prize_data']?.filter(el =>el.text?.trim() && el.prize_type).map(el => {
           let _prize_value = el.prize_value
           if (el.prize_type == 'coupon') {
             _prize_value = el.prize_value.card_id
@@ -245,6 +247,7 @@ export default {
               pointer: true,
               fonts: [{ text: '开始', top: '-10px' }]
             }] : [],
+            recordFormConfig:this.recordFormConfig
           }
         })
       }
@@ -344,8 +347,8 @@ export default {
 }
 
 .lottery-editor-footer {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .lottery-editor-content {
