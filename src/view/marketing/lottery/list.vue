@@ -74,6 +74,11 @@ export default {
       return statisticsFormSchema(this)
     }
   },
+  watch:{
+      '$route'(to,from){
+          this.refresh()
+      }
+  },
   mounted() {
     this.getAreas()
   },
