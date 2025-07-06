@@ -125,6 +125,8 @@ export const formList = (vm) =>
                     let _num = 1
                     if (_val <= 0) {
                       _num = 1
+                    } else if (_val > vm.form['limit_total']) {
+                      _num = vm.form['limit_total']
                     } else {
                       _num = Number(_val)
                     }
@@ -195,11 +197,11 @@ export const formList = (vm) =>
           )
         },
         validator(rule, value, callback) {
-          // 统计概率 必须 ==100
+          // 统计概率 必须 <= 100
           const total = value?.reduce((acc, item) => acc + (item.prize_probability * 1 || 0), 0)
           console.log('🚀 ~ validator ~ total:', total)
-          if (total != 100) {
-            callback(new Error('概率总和必须等于100'))
+          if (total > 100 || total <= 0) {
+            callback(new Error('中奖概率必须在100%到1%之间'))
           } else if (value?.filter((item) => item.prize_type).length <= 0) {
             callback(new Error('请设置奖品'))
           } else {
@@ -362,6 +364,7 @@ export const innerSchema = (vm) =>
               <el-input
                 value={row['text']}
                 style={{ width: '200px' }}
+                maxLength={5}
                 on-input={(val) => vm.handleInput(val, row, $index, 'text')}
               />
             </div>
@@ -377,7 +380,16 @@ export const innerSchema = (vm) =>
             <div>
               <el-input
                 value={row['prize_probability']}
-                on-input={(val) => vm.handleInput(val, row, $index, 'prize_probability')}
+                type='number'
+                on-input={(val) => {
+                  if (val > 100) {
+                    vm.handleInput(99, row, $index, 'prize_probability')
+                  } else if (val <= 0) {
+                    vm.handleInput(0, row, $index, 'prize_probability')
+                  } else {
+                    vm.handleInput(val, row, $index, 'prize_probability')
+                  }
+                }}
               />
             </div>
           )
@@ -442,18 +454,29 @@ export const innerSchema = (vm) =>
         key: 'stock',
         width: '140px',
         render(_, { row, $index }) {
-          if (row['prize_type'] == 'thanks' || !row['prize_type']) {
-            return null
+          if (row['prize_type'] == 'coupon' || row['prize_type'] == 'coupons') {
+            return (
+              <div>
+                <el-input
+                  value={row['stock']}
+                  on-input={(val) => {
+                    // 必须是正整数
+                    if (val <= 0) {
+                      vm.handleInput(0, row, $index, 'stock')
+                    } else if (
+                      row.prize_detail?.['quantity'] &&
+                      val > row.prize_detail?.['quantity']
+                    ) {
+                      vm.handleInput(row.prize_detail?.['quantity'], row, $index, 'stock')
+                    } else {
+                      vm.handleInput(Number(val)?.toFixed(0), row, $index, 'stock')
+                    }
+                  }}
+                  type='number'
+                />
+              </div>
+            )
           }
-          return (
-            <div>
-              <el-input
-                value={row['stock']}
-                on-input={(val) => vm.handleInput(val, row, $index, 'stock')}
-                type='number'
-              />
-            </div>
-          )
         }
       },
       {

@@ -165,23 +165,23 @@ export default {
             backgroundColor: activity_template_config?.backgroundColor,
             background: activity_template_config?.backgroundImage,
             area_id: res.area_id || 0,
-            prizeData :res.prize_data?.map(el =>{
-              if(el.prize_type == 'coupon'){
-                el.prize_value  = {
-                  card_id:el.prize_detail?.card_id,
-                  title:el.prize_detail?.title,
+            prizeData: res.prize_data?.map((el) => {
+              if (el.prize_type == 'coupon') {
+                el.prize_value = {
+                  card_id: el.prize_detail?.card_id,
+                  title: el.prize_detail?.title,
                 }
               }
-              if(el.prize_type == 'coupons'){
-                el.prize_value  = {
-                  package_id:el.prize_detail?.package_id,
-                  title:el.prize_detail?.title,
+              if (el.prize_type == 'coupons') {
+                el.prize_value = {
+                  package_id: el.prize_detail?.package_id,
+                  title: el.prize_detail?.title,
                 }
               }
               return el
             })
           }
-          const { gameConfig: { blocks, buttons,recordFormConfig } } = activity_template_config
+          const { gameConfig: { blocks, buttons, recordFormConfig } } = activity_template_config
 
           this.hotArea = blocks[0]?.imgs[0]?.src ? {
             backImg: blocks[0]?.imgs[0]?.src,
@@ -213,7 +213,7 @@ export default {
     async submitAfter() {
       const params = {
         ...this.form,
-        prize_data: JSON.stringify(this.form['prize_data']?.filter(el =>el.text?.trim() && el.prize_type).map(el => {
+        prize_data: JSON.stringify(this.form['prize_data']?.filter(el => el.text?.trim() && el.prize_type).map((el, index) => {
           let _prize_value = el.prize_value
           if (el.prize_type == 'coupon') {
             _prize_value = el.prize_value.card_id
@@ -229,9 +229,12 @@ export default {
               "text": el.text,
               "top": "30%"
             },
+            index,
             imgs: el?.img ? [{ src: el?.img, width: '50px', height: '50px', top: "60%" }] : [],
           }
         })),
+        begin_time: moment(this.form.start_time[0]).unix(),
+        end_time: moment(this.form.start_time[1]).unix(),
         activity_template_config: JSON.stringify({
           ...defaultGameConfig,
           gameType: this.form.activity_type,
@@ -250,7 +253,7 @@ export default {
               pointer: true,
               fonts: [{ text: '开始', top: '-10px' }]
             }] : [],
-            recordFormConfig:this.recordForm
+            recordFormConfig: this.recordForm
           }
         })
       }
@@ -279,7 +282,7 @@ export default {
           return el
         })
       }
-console.log(this.form)
+      console.log(this.form)
     },
     handleDateInput(val) {
       if (val?.length) {
@@ -303,13 +306,16 @@ console.log(this.form)
       }
       this.form = {
         ...this.form,
-        prize_data: [...this.form['prize_data'], { ...defaultItem, index: index++ }]
+        prize_data: [...this.form['prize_data'], { ...defaultItem, index: this.form.prize_data.length }]
       }
     },
-    deleteHandle(row) {
+    deleteHandle(row,$index) {
       this.form = {
         ...this.form,
-        prize_data: this.form['prize_data'].filter((el, i) => i != row?.index)
+        prize_data: this.form['prize_data'].filter((el, i) => i != row?.index)?.map((el,index) => ({
+          ...el,
+          index,
+        }))
       }
     },
     onHotAreaSubmit() {
@@ -328,10 +334,10 @@ console.log(this.form)
       console.log(row)
       const { data } = await this.$picker.couponV2({
         multiple: false,
-        data:[row.prize_value?.card_id],
-        params:{
-         date_status:2,
-         store_self:false
+        data: [row.prize_value?.card_id],
+        params: {
+          date_status: 2,
+          store_self: false
         }
       })
       this.handleInput(data[0], row, index, key)
@@ -339,7 +345,7 @@ console.log(this.form)
     async onCouponPackSubmit(row, index, key) {
       const { data } = await this.$picker.couponPackage({
         multiple: false,
-        data:[row.prize_value?.package_id],
+        data: [row.prize_value?.package_id],
       })
       this.handleInput(data[0], row, index, key)
     }
