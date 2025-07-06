@@ -152,6 +152,7 @@ export const statisticsFormSchema = (vm) =>
               row-actions-width='200px'
               no-selection
               setting={outputSchema}
+              front-paging
             >
               <div slot='tableTop'>
                 <div
@@ -184,7 +185,19 @@ const outputSchema = {
   columns: [
     { name: 'ID', key: 'user_id', width: '60' },
     { name: '会员手机号', key: 'mobile' },
-    { name: '获得奖品', key: 'prize_value' },
+    {
+      name: '获得奖品',
+      key: 'prize_value',
+      render(_, { row }) {
+        return (
+          <div>
+            {row.prize_type == 'points' && <span>{row.prize_value}积分</span>}
+            {row.prize_type == 'coupon' && <span>{row.prize_detail?.['title']}</span>}
+            {row.prize_type == 'goods' && <span>{row.prize_detail?.['title']}</span>}
+          </div>
+        )
+      }
+    },
     {
       name: '奖品类型',
       key: 'prize_type',
@@ -193,7 +206,7 @@ const outputSchema = {
       }
     },
     {
-      name: '中间时间',
+      name: '中奖时间',
       key: 'created',
       render(_, { row }) {
         return `${moment(row.created * 1000).format('YYYY-MM-DD HH:mm:ss')}`
