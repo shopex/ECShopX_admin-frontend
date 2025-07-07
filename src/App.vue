@@ -16,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import { useTheme } from '@/composables'
 import Config from '@/config'
+import { getSystemTitle } from '@/utils'
 export default {
   data() {
     return {
@@ -29,7 +30,7 @@ export default {
     const { updateThemeColor } = useTheme()
     updateThemeColor()
 
-    document.title = Config.systemTitle
+    document.title = getSystemTitle()
   },
   methods: {}
 }
