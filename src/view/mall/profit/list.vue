@@ -40,12 +40,12 @@
     <el-row :gutter="20">
       <el-col :span="24">
         <el-button-group>
-          <export-tip params="profit_salesperson" @exportHandle="exportData">
-            <el-button type="primary"> 导出导购分润 </el-button>
-          </export-tip>
-          <export-tip params="profit_distributor" @exportHandle="exportData">
-            <el-button type="primary"> 导出门店分润 </el-button>
-          </export-tip>
+          <el-button type="primary" @click="exportData('profit_salesperson')">
+            导出导购分润
+          </el-button>
+          <el-button type="primary" @click="exportData('profit_distributor')">
+            导出门店分润
+          </el-button>
           <!-- <el-button  type="primary" @click="exportData('profit_agent')">导出经销商分润</el-button> -->
         </el-button-group>
       </el-col>

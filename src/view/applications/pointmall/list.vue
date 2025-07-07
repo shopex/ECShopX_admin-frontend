@@ -11,8 +11,8 @@
 }
 </style>
 <template>
-  <div class="page-body">
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品名称:">
           <el-input v-model="params.keywords" placeholder="请输入商品名称" />
@@ -72,7 +72,7 @@
             placeholder="请选择"
             clearable
             :options="categoryList"
-            :props="{ value: 'category_id', checkStrictly: true }"
+            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
           />
         </SpFilterFormItem>
       </SpFilterForm>
@@ -239,7 +239,7 @@
             <!-- <el-table-column prop="itemMainCatName" label="管理分类" width="150"></el-table-column> -->
             <el-table-column prop="itemCatName" label="商品分类" width="150" />
           </el-table>
-          <div class="content-center content-top-padded">
+          <div class="text-right content-top-padded mt-4">
             <el-pagination
               background
               layout="total, sizes, prev, pager, next, jumper"
@@ -270,13 +270,14 @@
       </el-dialog>
       <!-- 选择运费模板-结束 -->
       <!-- 选择商品分类-开始 -->
-      <el-dialog title="更改销售分类" :visible.sync="addCategorydialogVisible" width="30%">
-        <treeselect
+      <el-dialog title="更改销售分类" :visible.sync="addCategorydialogVisible">
+        <el-cascader
           v-model="category_id"
+          style="width: 500px"
+          placeholder="请选择"
+          clearable
           :options="categoryList"
-          :multiple="true"
-          :show-count="true"
-          :disable-branch-nodes="true"
+          :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
         />
         <span slot="footer" class="dialog-footer">
           <el-button @click="addCategorydialogVisible = false">取 消</el-button>
@@ -313,8 +314,8 @@
           <el-button type="primary" @click="saveItemsStore">确 定</el-button>
         </span>
       </el-dialog>
-    </SpRouterView>
-  </div>
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import { mapGetters } from 'vuex'

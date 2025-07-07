@@ -1,11 +1,11 @@
 <template>
-  <div class="section section-white point-rule">
-    <div class="section-header with-border">
-      <div class="section-title">积分配置</div>
+  <SpPage title="积分配置" class="section section-white point-rule">
+    <div slot="page-footer" class="text-center">
+      <el-button type="primary" @click="save"> 保 存 </el-button>
     </div>
     <el-form ref="form" :model="form" label-position="left" label-width="180px">
       <div class="section-body">
-        <el-form-item v-if="!VERSION_SHUYUN" label="积分：">
+        <el-form-item v-if="!VERSION_SHUYUN()" label="积分：">
           <el-switch
             v-model="form.isOpenMemberPoint"
             :width="40"
@@ -18,7 +18,7 @@
             @change="isOpenMemberPointHandle"
           />
         </el-form-item>
-        <el-form-item v-if="!VERSION_SHUYUN" label="展示名称：">
+        <el-form-item v-if="!VERSION_SHUYUN()" label="展示名称：">
           <el-input v-model="form.name" placeholder="" style="width: 120px" :max="8" />
           <el-tooltip
             class="item"
@@ -31,7 +31,7 @@
         </el-form-item>
         <div>
           <el-form-item
-            v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'"
+            v-if="!VERSION_SHUYUN() && form.isOpenMemberPoint == 'true'"
             label="获取方式："
           >
             <el-radio-group v-model="form.access" @change="changeAccess">
@@ -42,7 +42,7 @@
             <p v-if="access == 'items'" class="frm-tips">说明：可按单商品设置的积分值获取</p>
           </el-form-item>
           <el-form-item
-            v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true' && access == 'order'"
+            v-if="!VERSION_SHUYUN() && form.isOpenMemberPoint == 'true' && access == 'order'"
             label="获取比例："
           >
             订单金额1元人民币 获得<el-input
@@ -56,7 +56,7 @@
           </el-form-item>
 
           <el-form-item
-            v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true' && access == 'order'"
+            v-if="!VERSION_SHUYUN() && form.isOpenMemberPoint == 'true' && access == 'order'"
             label="运费配置："
           >
             <el-radio-group v-model="form.include_freight">
@@ -71,7 +71,7 @@
             </p>
           </el-form-item>
           <el-form-item
-            v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'"
+            v-if="!VERSION_SHUYUN() && form.isOpenMemberPoint == 'true'"
             label="积分获取限制："
           >
             每月最多获取<el-input
@@ -85,7 +85,7 @@
             <div class="frm-tips">不限制请填写999999</div>
           </el-form-item>
           <el-form-item
-            v-if="!VERSION_SHUYUN && form.isOpenMemberPoint == 'true'"
+            v-if="!VERSION_SHUYUN() && form.isOpenMemberPoint == 'true'"
             label="获取时间："
           >
             订单完成<el-input
@@ -99,7 +99,9 @@
           </el-form-item>
           <template>
             <el-form-item
-              v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)"
+              v-if="
+                VERSION_SHUYUN() || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE())
+              "
               label="积分抵扣："
             >
               <el-switch
@@ -115,7 +117,9 @@
               />
             </el-form-item>
             <el-form-item
-              v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)"
+              v-if="
+                VERSION_SHUYUN() || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE())
+              "
               label="每单抵扣上限："
             >
               <el-input
@@ -128,7 +132,9 @@
               />% 上限范围：1<=x<=100
             </el-form-item>
             <el-form-item
-              v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)"
+              v-if="
+                VERSION_SHUYUN() || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE())
+              "
               label="抵扣比例："
             >
               <el-input
@@ -142,7 +148,7 @@
               积分 抵扣1元人民币
             </el-form-item>
             <el-form-item
-              v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE"
+              v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE() && !VERSION_SHUYUN()"
               label="积分抵扣运费："
             >
               <el-radio-group v-model="form.can_deduct_freight">
@@ -151,7 +157,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item
-              v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE"
+              v-if="form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE() && !VERSION_SHUYUN()"
               label="优先积分抵扣"
             >
               <el-switch
@@ -167,11 +173,13 @@
               <span class="frm-tips"> 开启优先积分抵扣功能，消费者下单时优先使用积分抵扣</span>
             </el-form-item>
             <el-form-item
-              v-if="VERSION_SHUYUN || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE)"
+              v-if="
+                VERSION_SHUYUN() || (form.isOpenMemberPoint == 'true' && !VERSION_IN_PURCHASE())
+              "
               label="积分规则："
             >
               <SpRichText v-model="form.rule_desc" />
-              <div>(注：积分规则会在c端展示！)</div>
+              <div v-if="VERSION_SHUYUN()">(注：积分规则会在c端展示！)</div>
             </el-form-item>
           </template>
           <!-- <el-form-item label="购物赠送积分">
@@ -179,11 +187,8 @@
                    </el-form-item> -->
         </div>
       </div>
-      <div class="section-footer with-border content-center">
-        <el-button type="primary" @click="save"> 保 存 </el-button>
-      </div>
     </el-form>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { savePointRule, getPointRule } from '../../../api/promotions'
@@ -245,7 +250,7 @@ export default {
     },
     save() {
       if (this.form.isOpenMemberPoint) {
-        if (this.form.gain_point <= 0 || this.form.gain_time < 0) {
+        if (this.form.gain_point < 0 || this.form.gain_time < 0) {
           this.$message({ message: '请配置获取积分参数', type: 'error' })
           return
         }

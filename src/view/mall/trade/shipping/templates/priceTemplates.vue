@@ -1,12 +1,6 @@
 <template>
   <div>
-    <el-table
-      v-loading="loading"
-      :data="priceTemplatesList"
-      :span-method="objectSpanMethod"
-      border
-      :height="wheight - 170"
-    >
+    <el-table v-loading="loading" :data="priceTemplatesList" :span-method="objectSpanMethod" border>
       <el-table-column width="50" prop="template_id" label="ID" />
       <el-table-column width="150" prop="name" label="运费模板名称" />
       <el-table-column width="200" label="配送地区">
@@ -73,9 +67,6 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters(['wheight'])
-  },
   watch: {
     getStatus(val) {
       if (val) {
@@ -93,7 +84,7 @@ export default {
     },
     getShippingTemplatesList() {
       this.loading = true
-      getShippingTemplatesList(this.params).then((response) => {
+      getShippingTemplatesList(this.params).then(response => {
         this.priceTemplatesList = []
         var temp = []
         for (var item in response.data.data.list) {
@@ -140,7 +131,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteShippingTemplates(row.template_id).then((response) => {
+          deleteShippingTemplates(row.template_id).then(response => {
             this.priceTemplatesList.splice(index, 1)
             this.$message({
               message: '删除运费模板成功',
@@ -173,7 +164,7 @@ export default {
       }
     },
     getAddress() {
-      getAddress().then((res) => {
+      getAddress().then(res => {
         this.district = res.data.data
       })
     }

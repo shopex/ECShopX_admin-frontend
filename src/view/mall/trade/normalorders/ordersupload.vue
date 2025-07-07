@@ -1,14 +1,5 @@
-<style type="text/css" lang="scss">
-.tip-info {
-  padding: 8px 16px;
-  background-color: #fff6f7;
-  border-radius: 4px;
-  border-left: 5px solid #ff7800;
-  margin: 11px 0;
-}
-</style>
 <template>
-  <div>
+  <SpPage>
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <div style="display: flex">
         <el-button type="primary" style="margin-right: 20px" @click="downloadtemplate">
@@ -97,7 +88,7 @@
         </el-tab-pane>
       </div>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

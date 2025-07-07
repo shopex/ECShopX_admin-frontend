@@ -234,60 +234,29 @@
         <el-table-column prop="refund_status" width="100" label="退款状态">
           <template slot-scope="scope">
             <!-- 订单状态 -->
-            <el-tag
-              v-if="scope.row.refund_status == 'READY'"
-              size="mini"
-              type="info"
-              effect="plain"
-            >
+            <el-tag v-if="scope.row.refund_status == 'READY'" size="mini" type="info">
               未审核
             </el-tag>
             <el-tag
               v-else-if="scope.row.refund_status == 'AUDIT_SUCCESS'"
               size="mini"
               type="success"
-              effect="plain"
             >
               审核成功待退款
             </el-tag>
-            <el-tag
-              v-else-if="scope.row.refund_status == 'SUCCESS'"
-              size="mini"
-              type="success"
-              effect="dark"
-            >
+            <el-tag v-else-if="scope.row.refund_status == 'SUCCESS'" size="mini" type="success">
               退款成功
             </el-tag>
-            <el-tag
-              v-else-if="scope.row.refund_status == 'REFUSE'"
-              size="mini"
-              type="danger"
-              effect="dark"
-            >
+            <el-tag v-else-if="scope.row.refund_status == 'REFUSE'" size="mini" type="danger">
               退款驳回
             </el-tag>
-            <el-tag
-              v-else-if="scope.row.refund_status == 'CANCEL'"
-              size="mini"
-              type="info"
-              effect="dark"
-            >
+            <el-tag v-else-if="scope.row.refund_status == 'CANCEL'" size="mini" type="info">
               撤销退款
             </el-tag>
-            <el-tag
-              v-else-if="scope.row.refund_status == 'PROCESSING'"
-              size="mini"
-              type="success"
-              effect="light"
-            >
+            <el-tag v-else-if="scope.row.refund_status == 'PROCESSING'" size="mini" type="success">
               已发起退款等待到账
             </el-tag>
-            <el-tag
-              v-else-if="scope.row.refund_status == 'CHANGE'"
-              size="mini"
-              type="danger"
-              effect="light"
-            >
+            <el-tag v-else-if="scope.row.refund_status == 'CHANGE'" size="mini" type="danger">
               退款异常
             </el-tag>
             <el-tag v-if="scope.row.refund_status == 'REFUNDCLOSE'" type="info" size="mini">

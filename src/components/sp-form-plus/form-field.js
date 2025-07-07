@@ -23,6 +23,10 @@ export default {
       type: String,
       default: ''
     },
+    formData: Object,
+    isShow: {
+      type: Function
+    },
     label: {
       type: String,
       default: ''
@@ -30,6 +34,14 @@ export default {
     rules: {
       type: Array,
       default: () => []
+    },
+    size: {
+      type: String,
+      default: '' // medium, small, mini
+    },
+    tip: {
+      type: String,
+      default: ''
     },
     value: {
       type: [String, Number, Boolean, Array, Object],
@@ -51,7 +63,8 @@ export default {
     renderInput() {
       return h('el-input', {
         attrs: {
-          ...this.componentProps
+          ...this.componentProps,
+          size: this.size
         },
         props: {
           value: this.modelValue
@@ -77,6 +90,9 @@ export default {
       return h(
         'el-select',
         {
+          attrs: {
+            size: this.size
+          },
           props: {
             value: this.modelValue,
             placeholder: `请选择${this.label}`,
@@ -180,6 +196,7 @@ export default {
             style="width: 100%"
             type={this.componentProps.type}
             startPlaceholder="开始日期/结束时间"
+            default-time={['00:00:00', '23:59:59']}
             // endPlaceholder="结束日期"
             rangeSeparator={`${this.modelValue.length > 1 ? '至' : ''}`}
             value={this.modelValue}
@@ -188,32 +205,9 @@ export default {
           />
         </div>
       )
-      // return h('div', { class: 'el-date-picker__wrapper' }, [h('el-date-picker', {
-      //   style: {
-      //     width: '100%'
-      //   },
-      //   attrs: {
-      //     ...this.componentProps
-      //   },
-      //   props: {
-      //     startPlaceholder: '开始日期',
-      //     endPlaceholder: '结束日期',
-      //     rangeSeparator: '/',
-      //     value: this.modelValue,
-      //     pickerOptions: PICKER_DATE_OPTIONS
-      //   },
-      //   on: {
-      //     change: () => {
-      //       debugger
-      //     },
-      //     focus: () => {
-      //       debugger
-      //     },
-      //     input: () => {
-      //       debugger
-      //     }
-      //   }
-      // })])
+    },
+    renderImagePicker(props = {}) {
+      return <SpImagePicker value={this.modelValue} {...props} on-onChange={this.handleInput} />
     },
     // 获取组件渲染函数
     getComponentRender() {
@@ -225,7 +219,8 @@ export default {
           radio: this.renderRadio,
           checkbox: this.renderCheckbox,
           button: this.renderButton,
-          datetimepicker: this.renderDateTimePicker
+          datetimepicker: this.renderDateTimePicker,
+          imagepicker: this.renderImagePicker
         }
         return renderMap[type] || this.renderInput
       }
@@ -236,7 +231,8 @@ export default {
             value: this.modelValue,
             props: this.componentProps,
             onInput: this.handleInput,
-            h
+            h,
+            formData: this.formData
           })
       }
 
@@ -260,13 +256,22 @@ export default {
         'el-form-item',
         {
           props: {
-            label: this.label,
-            labelWidth: this.label ? '100px' : 'auto',
+            label: this.label || '',
+            labelWidth: this.labelWidth,
             prop: this.fieldName,
             rules: this.rules
-          }
+          },
+          directives: [
+            {
+              name: 'show',
+              value: this.isShow ? this.isShow(this.modelValue) : true
+            }
+          ]
         },
-        [renderComponent(this.componentProps)]
+        [
+          renderComponent(this.componentProps),
+          this.tip ? h('div', { class: 'text-sm text-gray-500 mt-0.5' }, this.tip) : null
+        ]
       )
     ])
   }

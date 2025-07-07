@@ -28,9 +28,7 @@
     </SpFilterForm>
 
     <div class="action-container">
-      <exportTip @exportHandle="exportData">
-        <el-button type="primary" plain> 导出 </el-button>
-      </exportTip>
+      <el-button type="primary" plain @click="exportData"> 导出 </el-button>
     </div>
 
     <el-table v-loading="loading" border :data="tableList" :height="wheight - 150">

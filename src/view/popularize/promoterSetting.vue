@@ -14,7 +14,7 @@
 }
 </style>
 <template>
-  <div class="section section-white">
+  <SpPage class="section section-white">
     <el-form ref="form" :model="form" label-position="right" label-width="82px">
       <div class="section-body">
         <el-form-item label="推广员等级">
@@ -155,7 +155,7 @@
         <el-button type="primary" @click="save"> 保 存 </el-button>
       </div>
     </el-form>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { getPromoterGradeConfig, setPromoterGradeConfig } from '../../api/promotions'
@@ -184,13 +184,13 @@ export default {
     }
   },
   mounted() {
-    getPromoterGradeConfig().then((res) => {
+    getPromoterGradeConfig().then(res => {
       console.log(res.data.data)
       if (res.data.data.upgrade) {
         this.form = res.data.data
       }
     }),
-      listVipGrade().then((response) => {
+      listVipGrade().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           this.vipGradeList = response.data.data
         }
@@ -205,7 +205,7 @@ export default {
         return
       }
 
-      setPromoterGradeConfig(this.form).then((res) => {
+      setPromoterGradeConfig(this.form).then(res => {
         this.$message({ message: '保存成功', type: 'success' })
       })
     },

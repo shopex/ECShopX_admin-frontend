@@ -1,8 +1,13 @@
 <template>
-  <div>
+  <SpPage>
     <template v-if="$route.path.indexOf('detail') === -1">
       <el-table v-loading="loading" border :data="giveLogList" :height="wheight - 90">
-        <el-table-column width="180" label="发放时间">
+        <el-table-column width="140" label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" @click="onDetail(scope.row)">发送失败详情</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column width="220" label="发放时间">
           <template slot-scope="scope">
             <i class="el-icon-time" /> {{ scope.row.created | datetime('YYYY-MM-DD HH:mm:ss') }}
           </template>
@@ -14,13 +19,6 @@
         </el-table-column>
         <el-table-column prop="number" width="80" label="赠送数量" />
         <el-table-column prop="error" width="80" label="失败数量" />
-        <el-table-column width="140" label="操作">
-          <template slot-scope="scope">
-            <router-link :to="{ path: matchRoutePath('detail/') + scope.row.give_id }">
-              发送失败详情
-            </router-link>
-          </template>
-        </el-table-column>
       </el-table>
       <div class="mt-4 text-right">
         <el-pagination
@@ -33,7 +31,7 @@
       </div>
     </template>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -77,6 +75,11 @@ export default {
             message: '获取优惠券发放列表信息出错'
           })
         })
+    },
+    onDetail(row) {
+      this.$router.push({
+        path: `${this.$route.path}/detail/${row.give_id}`
+      })
     }
   }
 }

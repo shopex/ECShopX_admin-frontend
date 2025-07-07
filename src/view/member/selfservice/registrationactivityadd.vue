@@ -1,5 +1,5 @@
 <template>
-  <div class="section section-white">
+  <div class="section section-white page-registrationactivityadd">
     <el-form
       ref="form"
       :model="form"
@@ -8,8 +8,7 @@
       class="demo-ruleForm"
       :rules="rules"
     >
-      <div class="section-header with-border">基础信息</div>
-      <div class="section-body">
+      <el-card header="基础信息" shadow="naver">
         <el-form-item label="活动名称" prop="activity_name">
           <el-col :span="15">
             <el-input
@@ -139,9 +138,8 @@
             />
           </el-col>
         </el-form-item>
-      </div>
-      <div class="section-header with-border">活动规则</div>
-      <div class="section-body">
+      </el-card>
+      <el-card header="活动规则" shadow="naver">
         <el-form-item label="获取积分" prop="gift_points_switch">
           <el-switch
             v-model="form.gift_points_switch"
@@ -280,9 +278,9 @@
             </el-select>
           </el-col>
         </el-form-item>
-        <el-form-item label="提交报名次数" prop="join_limit">
+        <el-form-item label="提交报名人数" prop="join_limit">
           <el-col :span="10">
-            <el-input v-model.trim="form.join_limit" type="number" placeholder="次数" />
+            <el-input v-model.trim="form.join_limit" type="number" placeholder="人数" />
           </el-col>
         </el-form-item>
         <el-form-item label="报名结束语" prop="join_tips">
@@ -339,9 +337,8 @@
             </div>
           </el-col>
         </el-form-item>
-      </div>
-      <div class="section-header with-border">活动详情</div>
-      <div class="section-body" style="margin-left: 50px">
+      </el-card>
+      <el-card header="活动详情" shadow="naver">
         <el-radio-group v-model="mode">
           <el-radio :label="'richText'"> 富文本 </el-radio>
           <!-- <el-radio :label="'component'"> 组件式 </el-radio> -->
@@ -351,28 +348,28 @@
             <SpRichText v-model="introInfo" />
           </div>
           <!-- <span class="tpl-btn" @click="addImgPreview" style="">
-            <i class="iconfont icon-image"></i>图片
-          </span> -->
+          <i class="iconfont icon-image"></i>图片
+        </span> -->
         </div>
         <div v-else style="margin-top: 20px">
           <SpIphone>
             <SpDecorate ref="decorateRef" v-model="content" scene="1002" />
           </SpIphone>
           <!-- <richTextEditor
-            :data="content"
-            :control="['film', 'slider', 'heading', 'writing']"
-            @change="handleContent"
-          /> -->
+          :data="content"
+          :control="['film', 'slider', 'heading', 'writing']"
+          @change="handleContent"
+        /> -->
           <!-- <imgPicker
-            :dialog-visible="thumbDialog"
-            :sc-status="isGetThumb"
-            :is-most="true"
-            @chooseImg="pickThumb"
-            @closeImgDialog="closeThumbDialog"
-          /> -->
+          :dialog-visible="thumbDialog"
+          :sc-status="isGetThumb"
+          :is-most="true"
+          @chooseImg="pickThumb"
+          @closeImgDialog="closeThumbDialog"
+        /> -->
         </div>
-      </div>
-      <div style="margin-top: 30px; margin-left: 50%">
+      </el-card>
+      <div>
         <el-button @click.native="handleCancel">
           {{ pageType === 'edit' ? '取消' : '返回' }}
         </el-button>
@@ -525,7 +522,7 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                const inChecked = this.distributor_list.findIndex((v) => v.id == row.id)
+                const inChecked = this.distributor_list.findIndex(v => v.id == row.id)
                 if (inChecked > -1) {
                   this.distributor_list.splice(inChecked, 1)
                 }
@@ -551,7 +548,7 @@ export default {
                 { name: '邮箱', value: 'email' },
                 { name: '二维码', value: 'qr_code' }
               ]
-              const authType = VALIDATE_TYPES.find((item) => item.value == auth_type)?.name
+              const authType = VALIDATE_TYPES.find(item => item.value == auth_type)?.name
               return authType
             }
           },
@@ -565,7 +562,7 @@ export default {
             buttonType: 'text',
             action: {
               handler: async ([row]) => {
-                const inChecked = this.enterprise_list.findIndex((v) => v.id == row.id)
+                const inChecked = this.enterprise_list.findIndex(v => v.id == row.id)
                 if (inChecked > -1) {
                   this.enterprise_list.splice(inChecked, 1)
                 }
@@ -581,7 +578,7 @@ export default {
     if (this.$route.query.id) {
       this.pageType = this.$route.query.type
       let filter = { activity_id: this.$route.query.id }
-      regActivityGet(filter).then((res) => {
+      regActivityGet(filter).then(res => {
         this.form = res.data.data
         this.activity_date = [this.form.start_time * 1000, this.form.end_time * 1000]
         this.enterprise_list = this.form.enterprise_list
@@ -616,12 +613,12 @@ export default {
   },
   methods: {
     getGradeLevelList() {
-      listVipGrade().then((response) => {
+      listVipGrade().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           this.vipGrade = response.data.data
         }
       })
-      getGradeList().then((response) => {
+      getGradeList().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           this.memberGrade = response.data.data
         }
@@ -646,8 +643,8 @@ export default {
       }
       params['show_fields'] = JSON.stringify(obj)
       params['distributor_ids'] =
-        this.distributor_list?.map((item) => item.distributor_id).join(',') || ''
-      params['enterprise_ids'] = this.enterprise_list?.map((item) => item.id).join(',') || ''
+        this.distributor_list?.map(item => item.distributor_id).join(',') || ''
+      params['enterprise_ids'] = this.enterprise_list?.map(item => item.id).join(',') || ''
       params['member_level'] = this.memberLevelList ? this.memberLevelList.join(',') : ''
       // params['use_all_distributor'] = this.useAllDistributor
       params['pics'] = this.picsList.join(',')
@@ -665,7 +662,7 @@ export default {
       delete params.updated
       delete params.created
       delete params.member_level_list
-      this.$refs['form'].validate((valid) => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
           if (!this.useAllDistributor && this.distributor_list.length == 0) {
             return this.$message.error('请选择店铺')
@@ -674,7 +671,7 @@ export default {
             return this.$message.error('请选择企业')
           }
           if (this.form.activity_id) {
-            regActivityUpdate(params).then((res) => {
+            regActivityUpdate(params).then(res => {
               if (res.data.data) {
                 this.$message({
                   message: '更新成功',
@@ -688,7 +685,7 @@ export default {
               }
             })
           } else {
-            regActivityAdd(params).then((res) => {
+            regActivityAdd(params).then(res => {
               if (res.data.data) {
                 this.$message({
                   message: '添加成功',
@@ -716,8 +713,8 @@ export default {
     },
     getTemplateList() {
       this.loading = true
-      getTemplateList(this.templateParams).then((response) => {
-        response.data.data.list.map((item) => {
+      getTemplateList(this.templateParams).then(response => {
+        response.data.data.list.map(item => {
           this.temp_options.push({
             label: item.tem_name,
             value: item.id
@@ -732,7 +729,7 @@ export default {
     },
     chooseActivityImg(data) {
       if (data.length > 0) {
-        data.forEach((data) => {
+        data.forEach(data => {
           if (data && data.url !== '') {
             this.picsList.push(data.url)
           }
@@ -749,7 +746,7 @@ export default {
     },
     pickThumb: function (arr) {
       if (arr.length != 0) {
-        arr.forEach((data) => {
+        arr.forEach(data => {
           if (data && data.url !== '') {
             this.thumbDialog = false
             var index = this.$refs.editor.$el.id
@@ -832,6 +829,9 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.page-registrationactivityadd ::v-deep .el-card {
+  margin-bottom: 20px;
+}
 .text {
   font-size: 14px;
 }

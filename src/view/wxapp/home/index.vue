@@ -1,234 +1,232 @@
 <template>
-  <div class="wxapp-home">
-    <SpPlatformTip h5 app alipay />
-    <div v-if="!isDistributorTemplate" class="shop-header">
-      <div v-if="!VERSION_B2C() && !VERSION_IN_PURCHASE()" class="shop-left">
-        <span class="text">小程序模版呈现：</span>
-        <div class="option-item">
-          <span class="option-item_text">总部首页</span>
-          <el-switch
-            v-model="index_type"
-            :active-value="1"
-            :inactive-value="2"
-            @change="changeHomeTemplate"
-          />
-        </div>
-        <div v-if="VERSION_STANDARD()" class="option-item">
-          <span class="option-item_text">店铺首页</span>
-          <el-switch
-            v-model="index_type"
-            :active-value="2"
-            :inactive-value="1"
-            @change="changeHomeTemplate"
-          />
-        </div>
-        <span v-if="!VERSION_PLATFORM()" class="text">模版同步设置：</span>
-        <div v-if="!VERSION_PLATFORM()" class="option-item">
-          <span class="option-item_text">同步并启用</span>
-          <el-switch
-            v-model="is_enforce_sync"
-            :active-value="1"
-            :inactive-value="2"
-            @change="toggleSynchronizeShop"
-          />
-        </div>
-      </div>
-      <div class="section-white mini-setting">
-        <el-button
-          type="text"
-          style="margin-right: 10px"
-          @click="
-            () => {
-              configDrawerShow = true
-            }
-          "
-        >
-          <i class="iconfont icon-cog" /> 小程序配置
-        </el-button>
-        <el-button type="text" @click="handleShowTabConfig">
-          <i class="iconfont icon-cog" /> 小程序导航配置
-        </el-button>
-      </div>
-    </div>
-
-    <el-row :gutter="20" class="template-list">
-      <el-col
-        v-for="(item, index) in templateList"
-        :key="index"
-        class="template-col"
-        :xs="12"
-        :sm="12"
-        :md="8"
-        :lg="6"
-        :xl="4"
-      >
-        <div class="template-item">
-          <div class="img-wrap">
-            <div class="preview-cover" @click="previewTemplate(item.pages_template_id)">
-              <img class="preview-cover_img" src="@/assets/img/preview.png" alt="预览">
-              <span class="preview-cover_text">预览</span>
-            </div>
-            <el-image class="template-pic" :src="item.template_pic" fit="cover" />
-            <div v-if="item.template_type == 1" class="tag">同步模板</div>
-          </div>
-          <div class="template-name">
-            <span>{{ item.template_title }}</span>
-            <span class="el-icon-edit edit-css" @click="modifyTemplate(item)" />
-          </div>
-          <div v-if="!VERSION_B2C()" class="template-common">
-            <span class="temp-label">店铺可编辑挂件</span>
+  <SpRouterView>
+    <SpPage>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
+      <div v-if="!isDistributorTemplate" class="shop-header">
+        <div v-if="!VERSION_B2C() && !VERSION_IN_PURCHASE()" class="shop-left">
+          <span class="text">小程序模版呈现：</span>
+          <div class="option-item">
+            <span class="option-item_text">总部首页</span>
             <el-switch
-              v-model="item.element_edit_status"
+              v-model="index_type"
               :active-value="1"
               :inactive-value="2"
-              @change="changeShopEdit(index)"
+              @change="changeHomeTemplate"
             />
           </div>
-          <div class="template-common">
-            <span class="temp-label">立即启用</span>
-            <el-tooltip class="item" effect="dark" content="至少开启一套模版" placement="top-start">
+          <div v-if="VERSION_STANDARD()" class="option-item">
+            <span class="option-item_text">店铺首页</span>
+            <el-switch
+              v-model="index_type"
+              :active-value="2"
+              :inactive-value="1"
+              @change="changeHomeTemplate"
+            />
+          </div>
+          <span v-if="!VERSION_PLATFORM()" class="text">模版同步设置：</span>
+          <div v-if="!VERSION_PLATFORM()" class="option-item">
+            <span class="option-item_text">同步并启用</span>
+            <el-switch
+              v-model="is_enforce_sync"
+              :active-value="1"
+              :inactive-value="2"
+              @change="toggleSynchronizeShop"
+            />
+          </div>
+        </div>
+        <div class="section-white mini-setting">
+          <el-button
+            type="text"
+            style="margin-right: 10px"
+            @click="
+              () => {
+                configDrawerShow = true
+              }
+            "
+          >
+            <i class="iconfont icon-cog" /> 小程序配置
+          </el-button>
+          <el-button type="text" @click="handleShowTabConfig">
+            <i class="iconfont icon-cog" /> 小程序导航配置
+          </el-button>
+        </div>
+      </div>
+
+      <div class="template-list grid gap-4">
+        <div class="template-col">
+          <div
+            :class="{
+              'template-item': true,
+              'add-btn': true
+            }"
+            @click="addTemplate"
+          >
+            <div class="template-wrap">
+              <img class="add-img" src="@/assets/img/add-template.png" alt="添加">
+              <div class="add-text">添加模板</div>
+            </div>
+          </div>
+        </div>
+        <div v-for="(item, index) in templateList" :key="index" class="template-col">
+          <div class="template-item">
+            <div class="img-wrap">
+              <div class="preview-cover" @click="previewTemplate(item.pages_template_id)">
+                <img class="preview-cover_img" src="@/assets/img/preview.png" alt="预览">
+                <span class="preview-cover_text">预览</span>
+              </div>
+              <el-image class="template-pic" :src="item.template_pic" fit="cover" />
+              <div v-if="item.template_type == 1" class="tag">同步模板</div>
+            </div>
+            <div class="template-name">
+              <span>{{ item.template_title }}</span>
+              <span class="el-icon-edit edit-css" @click="modifyTemplate(item)" />
+            </div>
+            <div v-if="!VERSION_B2C()" class="template-common">
+              <span class="temp-label">店铺可编辑挂件</span>
               <el-switch
-                v-model="item.status"
+                v-model="item.element_edit_status"
                 :active-value="1"
                 :inactive-value="2"
-                @change="useTemplate(item, index)"
+                @change="changeShopEdit(index)"
               />
-            </el-tooltip>
-          </div>
-          <div class="time-wrap">
-            <div v-if="item.timer_status == 2" class="no-time">
-              <div>定时启用</div>
-              <div class="picker-wrap">
-                <img class="time-img" src="@/assets/img/time-img.png">
-                <span>设置模板切换时间</span>
-                <el-date-picker
-                  v-model="item.timer_time"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  type="datetime"
-                  @change="changeDate(item)"
+            </div>
+            <div class="template-common">
+              <span class="temp-label">立即启用</span>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="至少开启一套模版"
+                placement="top-start"
+              >
+                <el-switch
+                  v-model="item.status"
+                  :active-value="1"
+                  :inactive-value="2"
+                  @change="useTemplate(item, index)"
                 />
+              </el-tooltip>
+            </div>
+            <div class="time-wrap">
+              <div v-if="item.timer_status == 2" class="no-time">
+                <div>定时启用</div>
+                <div class="picker-wrap">
+                  <img class="time-img" src="@/assets/img/time-img.png">
+                  <span>设置模板切换时间</span>
+                  <el-date-picker
+                    v-model="item.timer_time"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    type="datetime"
+                    @change="changeDate(item)"
+                  />
+                </div>
+              </div>
+              <div v-if="item.timer_status == 1" class="has-time">
+                <span class="time">{{ item.timer_time }}启用</span>
+                <span class="cancel-btn" @click="cancelTime(item)">取消</span>
               </div>
             </div>
-            <div v-if="item.timer_status == 1" class="has-time">
-              <span class="time">{{ item.timer_time }}启用</span>
-              <span class="cancel-btn" @click="cancelTime(item)">取消</span>
+            <div class="option-btns">
+              <span class="btn" @click="editTemplate(item.pages_template_id)">编辑</span>
+              <span class="btn" @click="copyTemplate(item.pages_template_id)">复制</span>
+              <span
+                v-if="!isDistributorTemplate"
+                class="btn"
+                @click="handleClickNav(item.pages_template_id)"
+                >导航</span
+              >
+              <span class="btn" @click="abandonTemplate(item.pages_template_id)">废弃</span>
+            </div>
+            <div
+              v-if="!isDistributorTemplate"
+              class="synchronize-btn"
+              @click="synchronizeTemplateToShop(index)"
+            >
+              同步模板至店铺
             </div>
           </div>
-          <div class="option-btns">
-            <span class="btn" @click="editTemplate(item.pages_template_id)">编辑</span>
-            <span class="btn" @click="copyTemplate(item.pages_template_id)">复制</span>
-            <span
-              v-if="!isDistributorTemplate"
-              class="btn"
-              @click="handleClickNav(item.pages_template_id)"
-              >导航</span
-            >
-            <span class="btn" @click="abandonTemplate(item.pages_template_id)">废弃</span>
-          </div>
-          <div
-            v-if="!isDistributorTemplate"
-            class="synchronize-btn"
-            @click="synchronizeTemplateToShop(index)"
-          >
-            同步模板至店铺
-          </div>
         </div>
-      </el-col>
-      <el-col class="template-col" :xs="12" :sm="12" :md="8" :lg="6" :xl="4">
-        <div
-          :class="{
-            'template-item': true,
-            'add-btn': true
-          }"
-          @click="addTemplate"
-        >
-          <div class="template-wrap">
-            <img class="add-img" src="@/assets/img/add-template.png" alt="添加">
-            <div class="add-text">添加模板</div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+      </div>
 
-    <DistributorSelect
-      :store-visible="distributorVisible"
-      :is-synchronize="isSynchronize"
-      :is-valid="isValid"
-      :rel-data-ids="relDistributors"
-      :get-status="distributorStatus"
-      @chooseStore="distributorChooseAction"
-      @chooseAllStore="allDistributorChooseAction"
-      @closeStoreDialog="closeDialogAction"
-    />
-
-    <MallDecoration
-      :dialog-visible="templateVisible"
-      :template-name="template_name"
-      :rel-store="relStore"
-      :show-like="configForm.is_open_recommend ? 1 : 2"
-      :template-id="currTemplateId"
-      @saved="closeDialog"
-      @closeDialog="closeDialog"
-    />
-
-    <TemplatePreview
-      :dialog-visible="previewVisible"
-      :rel-store="relStore"
-      :show-like="configForm.is_open_recommend ? 1 : 2"
-      :template-id="currTemplateId"
-      :tabs="tabs"
-      usage="page"
-      @saved="closePreviewDialog"
-      @closeDialog="closePreviewDialog"
-    />
-
-    <SpDialog
-      ref="templateDialogRef"
-      v-model="templateDialog"
-      :title="templateForm.pages_template_id ? '编辑模板' : '添加模板'"
-      :form="templateForm"
-      :form-list="templateFormList"
-      @onSubmit="onTemplateFormSubmit"
-    />
-
-    <SpDrawer
-      v-model="configDrawerShow"
-      class="config-drawer"
-      :title="'小程序配置'"
-      :footer="false"
-    >
-      <SpForm
-        ref="configForm"
-        v-model="configForm"
-        class="config-form"
-        :label-width="'100px'"
-        :form-list="configFormList"
-        :submit="false"
+      <DistributorSelect
+        :store-visible="distributorVisible"
+        :is-synchronize="isSynchronize"
+        :is-valid="isValid"
+        :rel-data-ids="relDistributors"
+        :get-status="distributorStatus"
+        @chooseStore="distributorChooseAction"
+        @chooseAllStore="allDistributorChooseAction"
+        @closeStoreDialog="closeDialogAction"
       />
-    </SpDrawer>
 
-    <SpDrawer
-      v-model="navDrawerShow"
-      class="nav-drawer"
-      :title="'导航设置'"
-      :width="650"
-      @confirm="
-        () => {
-          this.$refs['navForm'].handleSubmit()
-        }
-      "
-    >
-      <SpForm
-        ref="navForm"
-        v-model="navForm"
-        class="nav-form"
-        :label-width="'0'"
-        :form-list="navFormList"
-        :submit="false"
-        @onSubmit="onSubmitTabList"
+      <MallDecoration
+        :dialog-visible="templateVisible"
+        :template-name="template_name"
+        :rel-store="relStore"
+        :show-like="configForm.is_open_recommend ? 1 : 2"
+        :template-id="currTemplateId"
+        @saved="closeDialog"
+        @closeDialog="closeDialog"
       />
-    </SpDrawer>
-  </div>
+
+      <TemplatePreview
+        :dialog-visible="previewVisible"
+        :rel-store="relStore"
+        :show-like="configForm.is_open_recommend ? 1 : 2"
+        :template-id="currTemplateId"
+        :tabs="tabs"
+        usage="page"
+        @saved="closePreviewDialog"
+        @closeDialog="closePreviewDialog"
+      />
+
+      <SpDialog
+        ref="templateDialogRef"
+        v-model="templateDialog"
+        :title="templateForm.pages_template_id ? '编辑模板' : '添加模板'"
+        :form="templateForm"
+        :form-list="templateFormList"
+        @onSubmit="onTemplateFormSubmit"
+      />
+
+      <SpDrawer
+        v-model="configDrawerShow"
+        class="config-drawer"
+        :title="'小程序配置'"
+        :footer="false"
+      >
+        <SpForm
+          ref="configForm"
+          v-model="configForm"
+          class="config-form"
+          :label-width="'100px'"
+          :form-list="configFormList"
+          :submit="false"
+        />
+      </SpDrawer>
+
+      <SpDrawer
+        v-model="navDrawerShow"
+        class="nav-drawer"
+        :title="'导航设置'"
+        :width="650"
+        @confirm="
+          () => {
+            this.$refs['navForm'].handleSubmit()
+          }
+        "
+      >
+        <SpForm
+          ref="navForm"
+          v-model="navForm"
+          class="nav-form"
+          :label-width="'0'"
+          :form-list="navFormList"
+          :submit="false"
+          @onSubmit="onSubmitTabList"
+        />
+      </SpDrawer>
+    </SpPage>
+  </SpRouterView>
 </template>
 
 <script>
@@ -586,7 +584,7 @@ export default {
     templateNavList() {
       let res = this.isTemplateNavList ? NAVS.filter(item => item.name != 'purchase') : NAVS
       //数云隐藏社区
-      res = this.VERSION_SHUYUN ? res.filter(item => item.name != 'ugc') : res
+      res = this.VERSION_SHUYUN() ? res.filter(item => item.name != 'ugc') : res
       return res
     }
   },
@@ -806,10 +804,16 @@ export default {
       // this.templateVisible = true
       // this.currTemplateId = pages_template_id
       const { distributor_id } = this.$route.query
+      const routeParams = {
+        path: `${this.$route.path}/edit`,
+        query: {
+          id: pages_template_id
+        }
+      }
       if (distributor_id > 0) {
-        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}&scene=1003`)
+        routeParams.query.scene = 1003
       } else {
-        this.$router.push(`/wxapp/manage/decorate?id=${pages_template_id}`)
+        this.$router.push(routeParams)
       }
     },
     async copyTemplate(pages_template_id) {
@@ -1003,12 +1007,7 @@ export default {
   }
 }
 .template-list {
-  display: flex;
-  flex-wrap: wrap;
-  .template-col {
-    margin-bottom: 20px;
-    // width: 300px;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   .template-item {
     border-radius: 10px;
     border: 1px solid #eee;
@@ -1122,7 +1121,8 @@ export default {
         align-items: center;
       }
       .picker-wrap {
-        display: inline-block;
+        display: flex;
+        align-items: center;
         font-size: 13px;
         color: #8080ff;
         position: relative;

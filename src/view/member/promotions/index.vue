@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="基础注册促销" name="first">
         <general :active-name="activeName" />
@@ -12,7 +12,7 @@
         <point :active-name="activeName" />
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 
 <script>

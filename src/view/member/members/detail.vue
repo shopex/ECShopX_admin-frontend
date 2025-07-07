@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="section section-white content-padded">
-      <div class="clearfix">
+      <div class="clearfix heade-box">
         <div class="f_l member-card-box">
           <div
             class="member-card"
@@ -46,7 +46,7 @@
             <span class="txt">手机号</span>
             <span>{{ member.mobile }}</span>
           </div>
-          <div class="info-item">
+          <div v-if="!VERSION_SHUYUN()" class="info-item">
             <span class="txt">会员卡号</span>
             <span v-if="member.user_card_code">{{ member.user_card_code }}</span>
             <span v-else>--</span>
@@ -56,7 +56,7 @@
             <span v-if="member.birthday">{{ member.birthday }}</span>
             <span v-else>--</span>
           </div>
-          <div class="info-item">
+          <div v-if="!VERSION_SHUYUN()" class="info-item">
             <span class="txt">所在城市</span>
             <span v-if="member.wechatUserInfo.country || member.wechatUserInfo.province"
               >{{ member.wechatUserInfo.country }}&nbsp;{{ member.wechatUserInfo.province }}</span
@@ -64,7 +64,7 @@
             <span v-else>--</span>
           </div>
           <div class="info-item">
-            <span class="txt">真实姓名</span>
+            <span v-if="!VERSION_SHUYUN()" class="txt">真实姓名</span>
             <span v-if="member.username">{{ member.username }}</span>
             <span v-else>--</span>
           </div>
@@ -73,7 +73,7 @@
             <span v-if="member.wechatUserInfo.nickname">{{ member.wechatUserInfo.nickname }}</span>
             <span v-else>--</span>
           </div>
-          <div class="info-item">
+          <div v-if="!VERSION_SHUYUN()" class="info-item">
             <span class="txt">常用地址</span>
             <span v-if="member.address">{{ member.address }}</span>
             <span v-else>--</span>
@@ -120,12 +120,10 @@
           </div>
         </div>
       </div>
-      <div class="content-center">
-        <el-button type="primary" @click="goBack"> 返回 </el-button>
-      </div>
     </div>
+
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="会员详情" name="info">
+      <el-tab-pane v-if="!VERSION_SHUYUN()" label="会员详情" name="info">
         <member-info :user-info="member" :register-setting="registerSetting" :is-load="infoLoad" />
       </el-tab-pane>
       <!-- <el-tab-pane
@@ -179,12 +177,12 @@
         /> -->
         <membercardList :info="member" />
       </el-tab-pane>
-      <el-tab-pane v-if="!VERSION_IN_PURCHASE()" label="积分记录" name="point">
+      <el-tab-pane v-if="!VERSION_IN_PURCHASE() && !VERSION_SHUYUN()" label="积分记录" name="point">
         <pointList />
       </el-tab-pane>
-      <el-tab-pane v-if="VUE_APP_CHUZHI" label="充值记录" name="chuzhi">
+      <!-- <el-tab-pane v-if="VUE_APP_CHUZHI" label="充值记录" name="chuzhi">
         <chuZhiList />
-      </el-tab-pane>
+      </el-tab-pane> -->
       <!-- <el-tab-pane
         v-if="!isMicorMall"
         label="导购员关系变更"
@@ -197,6 +195,10 @@
         />
       </el-tab-pane> -->
     </el-tabs>
+
+    <div class="text-center mt-4">
+      <el-button type="primary" @click="goBack"> 返回 </el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -215,6 +217,7 @@ import membercardList from './comps/memberCardList'
 import pointList from './comps/pointList'
 import chuZhiList from './comps/chuZhiList'
 import memberInfo from './memberinfo.vue'
+import { VERSION_SHUYUN } from '@/utils'
 export default {
   components: {
     quanyiList,
@@ -285,7 +288,7 @@ export default {
         },
         deposit: 0
       },
-      activeName: 'info',
+      activeName: '',
       infoLoad: true,
       quanyiLoad: false,
       orderLoad: false,
@@ -307,9 +310,10 @@ export default {
       this.orderLoad = true
       this.quanyiLoad = this.depositLoad = false
     } else {
-      this.activeName = 'info'
+      this.activeName = VERSION_SHUYUN() ? 'order' : 'info'
       this.infoLoad = true
-      this.quanyiLoad = this.orderLoad = this.depositLoad = false
+      this.quanyiLoad = this.depositLoad = false
+      this.orderLoad = VERSION_SHUYUN()
     }
     if (this.$route.query.user_id) {
       this.user_id = this.$route.query.user_id
@@ -331,12 +335,12 @@ export default {
   },
   methods: {
     getMember(filter) {
-      getMember(filter).then((response) => {
+      getMember(filter).then(response => {
         this.member = response.data.data
       })
     },
     getRegisterSetting() {
-      getMemberRegisterSetting().then((response) => {
+      getMemberRegisterSetting().then(response => {
         delete response.data.data.content_agreement
         this.registerSetting = response.data.data.setting
       })
@@ -542,5 +546,9 @@ export default {
       background: #7600ff;
     }
   }
+}
+.heade-box {
+  display: flex;
+  justify-content: space-around;
 }
 </style>

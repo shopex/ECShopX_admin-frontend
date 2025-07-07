@@ -17,7 +17,7 @@
         </el-input>
       </el-col>
       <el-col :span="6">
-        <el-input v-model="username" placeholder="用户名">
+        <el-input v-model="username" placeholder="昵称">
           <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
         </el-input>
       </el-col>
@@ -36,12 +36,12 @@
       <SpFilterFormItem prop="mobile" label="手机号:">
         <el-input v-model="params.mobile" placeholder="手机号" />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="username" label="用户名:">
-        <el-input v-model="params.username" placeholder="用户名" />
+      <SpFilterFormItem prop="username" label="昵称:">
+        <el-input v-model="params.username" placeholder="昵称" />
       </SpFilterFormItem>
     </SpFilterForm>
 
-    <el-button type="primary" plain @click="exportData"> 导出 </el-button>
+    <el-button type="primary" @click="exportData"> 导出 </el-button>
     <div class="record-list">
       <el-table
         v-loading="loading"
@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="username" label="用户名" />
+        <el-table-column prop="username" label="昵称" />
         <el-table-column prop="mobile" label="手机号" />
         <el-table-column prop="point" label="积分变动">
           <template slot-scope="scope">
@@ -78,6 +78,7 @@
     <div v-if="total_count > pageSize" class="tc" style="margin-top: 20px">
       <el-pagination
         layout="prev, pager, next"
+        class="text-right"
         :current-page.sync="params.page"
         :total="total_count"
         :page-size="pageSize"

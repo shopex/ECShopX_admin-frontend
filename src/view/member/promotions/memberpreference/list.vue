@@ -1,14 +1,7 @@
 <template>
-  <div>
-    <div v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip h5 app alipay />
-      <!-- <el-row :gutter="20">
-        <el-col :md="4" :lg="8">
-          <el-button size="mini" type="primary" icon="plus" @click="addActivityData">
-            添加会员优先购活动
-          </el-button>
-        </el-col>
-      </el-row> -->
+  <SpPage>
+    <SpRouterView>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
 
       <div class="action-container">
         <el-button type="primary" @click="addActivityData"> 添加会员优先购活动 </el-button>
@@ -25,6 +18,28 @@
           style="width: 100%"
           element-loading-text="数据加载中"
         >
+          <el-table-column label="操作" width="180">
+            <template slot-scope="scope">
+              <div class="operating-icons">
+                <el-button
+                  v-if="scope.row.status == 'ongoing'"
+                  type="text"
+                  @click="updateStatusCommunityAction(scope.row)"
+                >
+                  取消
+                </el-button>
+                <el-button type="text" @click="viewDetail(scope.row)"> 查看 </el-button>
+                <el-button type="text" @click="copyActivity(scope.row)"> 复制活动 </el-button>
+                <el-button
+                  v-if="scope.row.status == 'waiting'"
+                  type="text"
+                  @click="updateDetail(scope.row)"
+                >
+                  编辑
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="marketing_id" width="60" label="编号" />
           <el-table-column prop="marketing_name" label="活动名称" />
           <el-table-column label="开始时间" width="200">
@@ -44,27 +59,6 @@
               <span v-if="scope.row.status == 'end'">已结束</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150">
-            <template slot-scope="scope">
-              <div class="operating-icons">
-                <el-button
-                  v-if="scope.row.status == 'ongoing'"
-                  type="text"
-                  @click="updateStatusCommunityAction(scope.row)"
-                >
-                  取消
-                </el-button>
-                <el-button type="text" @click="viewDetail(scope.row)"> 查看 </el-button>
-                <el-button
-                  v-if="scope.row.status == 'waiting'"
-                  type="text"
-                  @click="updateDetail(scope.row)"
-                >
-                  编辑
-                </el-button>
-              </div>
-            </template>
-          </el-table-column>
         </el-table>
         <div v-if="total_count > params.pageSize" class="mt-4 text-right">
           <el-pagination
@@ -76,9 +70,8 @@
           />
         </div>
       </el-tabs>
-    </div>
-    <router-view />
-  </div>
+    </SpRouterView>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -174,6 +167,12 @@ export default {
           }
           done()
         }
+      })
+    },
+    copyActivity(row) {
+      this.$router.push({
+        path: this.matchRoutePath('editor/') + row.marketing_id,
+        query: { is_copy: 1 }
       })
     },
     updateDetail(row) {

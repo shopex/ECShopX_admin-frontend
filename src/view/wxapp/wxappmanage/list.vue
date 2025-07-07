@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <div v-if="$route.path.indexOf('policy') === -1">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="微信小程序" name="miniprogram">
@@ -7,7 +7,6 @@
             v-loading="loading"
             :data="tableList"
             style="width: 100%"
-            :height="wheight - 200"
             @expand-change="handleExpandChange"
           >
             <el-table-column label="绑定详情" width="80" type="expand" fixed="left">
@@ -251,7 +250,7 @@
                 <span v-if="scope.row.authorizer && scope.row.authorizer.authorizer_appid">
                   <router-link
                     :to="{
-                      path: '/setting/systemsetting/editdashboard',
+                      path: '/setting/system-config/data-analysis',
                       query: { app_id: scope.row.authorizer.authorizer_appid }
                     }"
                     style="margin-left: 5px"
@@ -261,7 +260,7 @@
 
                   <router-link
                     :to="{
-                      path: '/setting/systemsetting/editsourcemanagement',
+                      path: '/setting/system-config/different-codes',
                       query: { app_id: scope.row.authorizer.authorizer_appid }
                     }"
                     style="margin-left: 5px"
@@ -271,7 +270,7 @@
 
                   <router-link
                     :to="{
-                      path: '/setting/systemsetting/noticemessage',
+                      path: '/setting/system-config/message-template',
                       query: {
                         app_id: scope.row.authorizer.authorizer_appid,
                         tmp_name: scope.row.key_name
@@ -308,13 +307,8 @@
             />
           </div>
         </el-tab-pane>
-        <el-tab-pane label="微信服务号" name="offiaccount">
-          <el-table
-            v-loading="loading"
-            :data="authorizerData"
-            style="width: 100%"
-            :height="wheight - 200"
-          >
+        <el-tab-pane v-if="false" label="微信服务号" name="offiaccount">
+          <el-table v-loading="loading" :data="authorizerData" style="width: 100%" :height="-200">
             <el-table-column prop="nick_name" label="公众号昵称" width="180" />
             <el-table-column prop="authorizer_appid" label="公众号APPID" width="180" />
             <el-table-column label="二维码" width="100">
@@ -626,10 +620,9 @@
         <el-button type="primary" @click="setdomain">确 定</el-button>
       </span>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import sideBar from '@/components/element/sideBar'
 import {
   getWxa,
@@ -736,8 +729,8 @@ export default {
       },
       submitWeappForm: {},
       tabList: [
-        { name: '微信小程序', activeName: 'miniprogram' },
-        { name: '微信服务号', activeName: 'offiaccount' }
+        { name: '微信小程序', activeName: 'miniprogram' }
+        // { name: '微信服务号', activeName: 'offiaccount' }
       ],
       authorizerData: [
         {
@@ -758,9 +751,6 @@ export default {
         }
       ]
     }
-  },
-  computed: {
-    ...mapGetters(['wheight'])
   },
   mounted() {
     this.params = { page: 1, pageSize: this.pageLimit }
@@ -867,14 +857,18 @@ export default {
       }
     },
     showBindDetail(data) {
-      this.applet_detail = true
-      getWxa(data.authorizer.authorizer_appid).then(response => {
-        this.detail = response.data.data
-        this.weappTemplate = this.detail.weappTemplate
-        this.configForm.auto_publish = response.data.data.auto_publish
-        this.configForm.authorizer_appsecret = response.data.data.authorizer_appsecret
-        console.log(this.detail)
-      })
+      if (data.authorizer.authorizer_appid) {
+        this.applet_detail = true
+        getWxa(data.authorizer.authorizer_appid).then(response => {
+          this.detail = response.data.data
+          this.weappTemplate = this.detail.weappTemplate
+          this.configForm.auto_publish = response.data.data.auto_publish
+          this.configForm.authorizer_appsecret = response.data.data.authorizer_appsecret
+          console.log(this.detail)
+        })
+      } else {
+        this.$message({ message: '当前未绑定' })
+      }
     },
     downloadWxaCode(rowdata) {
       this.getwxcodeloading = true

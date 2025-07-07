@@ -144,9 +144,11 @@
                 <transition name="el-fade-in-linear">
                   <div
                     v-if="editorIndex === index"
-                    class="iconfont icon-trash-alt"
                     @click="removeCurrent"
-                  />
+                    class="component-item-delete"
+                  >
+                    <SpIcon name="delete" />
+                  </div>
                 </transition>
                 <nearbyShop
                   v-if="item.name === 'nearbyShop'"
@@ -262,7 +264,7 @@
         </template>
       </div>
     </section>
-    <section slot="footer" class="content-center">
+    <section slot="footer" class="text-center mt-2">
       <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
     </section>
     <imgPicker
@@ -1530,7 +1532,7 @@ export default {
   }
   .component-item {
     position: relative;
-    .icon-trash-alt {
+    &-delete {
       position: absolute;
       right: 20px;
       color: #ff5000;

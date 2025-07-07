@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form label-width="100px">
-      <el-form-item label="选择日期范围">
+      <el-form-item label="日期范围">
         <el-col :span="12">
           <el-date-picker
             v-model="vdate"
@@ -185,7 +185,7 @@ export default {
       this.list.gmvData = []
       let params = { start: this.params.start, end: this.params.end }
       getCompanyData(params)
-        .then((res) => {
+        .then(res => {
           this.allListData = res.data.data.list
           let companyDataList = res.data.data.list
           for (var key in companyDataList) {
@@ -211,7 +211,7 @@ export default {
             })
           }
         })
-        .catch((error) => {
+        .catch(error => {
           this.$message({
             type: 'error',
             message: '获取统计信息出错'

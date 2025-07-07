@@ -28,8 +28,8 @@
 }
 </style>
 <template>
-  <div class="page-body">
-    <SpRouterView>
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="keywords" label="商品标题:">
           <el-input v-model="searchParams.keywords" placeholder="商品标题或副标题关键词" />
@@ -178,11 +178,11 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-if="$store.getters.login_type != 'merchant'"
-              command="physicalupload"
+              command="product-import"
             >
               商品导入
             </el-dropdown-item>
-            <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
+            <el-dropdown-item command="stock-import"> 库存导入 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-dropdown @command="handleExport">
@@ -197,7 +197,7 @@
             <el-dropdown-item v-if="!IS_SUPPLIER()" command="wxapp-qrcode">
               小程序码
             </el-dropdown-item>
-            <el-dropdown-item v-if="!IS_SUPPLIER()" command="h5-qrcode">
+            <el-dropdown-item v-if="!VERSION_SHUYUN() && !IS_SUPPLIER()" command="h5-qrcode">
               H5二维码
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -250,7 +250,8 @@
         :other-config="{}"
         :setting="tableList"
         :hooks="{
-          beforeSearch: beforeSearch
+          beforeSearch: beforeSearch,
+          afterSearch: afterSearch
         }"
         row-actions-fixed-align="left"
         @selection-change="onSelectionChange"
@@ -482,8 +483,8 @@
           <el-table-column label="库存" prop="store" min-width="120" />
         </el-table>
       </SpDrawer>
-    </SpRouterView>
-  </div>
+    </SpPage>
+  </SpRouterView>
 </template>
 <script>
 import moment from 'moment'
@@ -1144,6 +1145,12 @@ export default {
             )
           },
           {
+            name: '是否处方',
+            key: 'item_bn',
+            width: 150,
+            render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否')
+          },
+          {
             name: '审核结果',
             key: 'audit_status',
             width: 150,
@@ -1155,12 +1162,9 @@ export default {
             key: 'audit_reason',
             width: 150,
             render: (h, { row }) => (
-              <div>
+              <div class="truncate">
                 {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-                  <div onClick={() => this.handleErrDetail(row.medicine_data)}>
-                    {this.handleAuditReason(row.medicine_data)}
-                    <i class="el-icon-info"></i>
-                  </div>
+                  <span>{row.medicine_data.audit_reason}</span>
                 )}
               </div>
             )
@@ -1187,11 +1191,10 @@ export default {
           //   align: "right",
           //   headerAlign: 'center'
           // },
-
           {
             name: '市场价（¥）',
             key: 'market_price',
-            width: 100,
+            width: 120,
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
@@ -1201,7 +1204,7 @@ export default {
           {
             name: '销售价（¥）',
             key: 'price',
-            width: 100,
+            width: 120,
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
@@ -1211,7 +1214,7 @@ export default {
           {
             name: '成本价（¥）',
             key: 'cost_price',
-            width: 100,
+            width: 120,
             formatter: (value, row, col) => {
               return (value / 100).toFixed(2)
             },
@@ -1264,40 +1267,14 @@ export default {
           },
           { name: '销售分类', key: 'itemCatName', minWidth: 120 },
           { name: '起订量', key: 'start_num', minWidth: 120 },
-          {
-            name: '是否处方',
-            key: 'item_bn',
-            width: 150,
-            render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否')
-          },
-          {
-            name: '审核结果',
-            key: 'audit_status',
-            width: 150,
-            render: (h, { row }) =>
-              row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
-          },
-          {
-            name: '错误信息',
-            key: 'audit_reason',
-            width: 150,
-            render: (h, { row }) => (
-              <div>
-                {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-                  <div onClick={() => this.handleErrDetail(row.medicine_data)}>
-                    {this.handleAuditReason(row.medicine_data)}
-                    <i class="el-icon-info"></i>
-                  </div>
-                )}
-              </div>
-            )
-          },
+
           {
             name: '排序编号',
             key: 'sort',
             width: 120,
             showType: 'editable',
             componentProps: {
+              class: 'flex items-center',
               icon: 'el-icon-plus',
               change: async (v, row) => {
                 await this.$api.goods.setItemsSort({
@@ -1423,11 +1400,6 @@ export default {
       const itemCategoryList = await this.$api.goods.getCategory({ is_main_category: true })
       this.itemCategoryList = itemCategoryList
     },
-    handleErrDetail(val) {
-      if (!val || !val.audit_reason) return
-      this.errMessage = val.audit_reason
-      this.errMessageVis = true
-    },
     async getMemberPriceByGoods(item_id) {
       this.currentId = item_id
       this.skuLoading = true
@@ -1498,6 +1470,9 @@ export default {
           selected: false
         }
       })
+    },
+    afterSearch(val) {
+      this.warning_store = val.data.data.warning_store
     },
     async onSaveMemberPrice() {
       const param = {
@@ -2013,3 +1988,35 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.sp-filter-form {
+  margin-bottom: 16px;
+}
+.tab-tools {
+  text-align: right;
+  @include clearfix();
+  margin-bottom: 8px;
+  .warn-input {
+    display: flex;
+    align-items: center;
+    float: right;
+    .el-input {
+      width: 120px;
+      margin: 0 8px;
+    }
+  }
+}
+.page-code {
+  text-align: center;
+}
+.page-code-img {
+  width: 200px;
+  height: 200px;
+}
+</style>
+<style lang="scss">
+.physical-cell-reason {
+  @include text-overflow();
+  width: 180px;
+}
+</style>

@@ -7,8 +7,8 @@
 </style>
 
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <SpForm
       ref="form"
       v-model="form"
@@ -29,7 +29,7 @@
         保存
       </el-button>
     </div>
-  </div>
+  </SpPage>
 </template>
 
 <script>

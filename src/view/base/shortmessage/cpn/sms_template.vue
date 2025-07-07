@@ -15,7 +15,7 @@
         url="/aliyunsms/template/list"
       >
         <template #tableTop>
-          <div style="text-align: right; margin-bottom: 20px">
+          <div class="mb-2">
             <el-button size="small" type="primary" @click="addTemplate"> 添加模板 </el-button>
           </div>
         </template>

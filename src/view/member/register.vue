@@ -1,20 +1,11 @@
 <template>
-  <div class="memberReg">
-    <SpPlatformTip h5 app alipay />
+  <SpPage class="memberReg">
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="注册项配置" name="first">
         <el-card class="box-card">
-          <div slot="header" class="between">
-            <span>会员中心个人信息录入项配置</span>
-
-            <div>
-              <el-button v-if="!VERSION_SHUYUN" type="primary" @click="showAddDialog()">
-                新增配置
-              </el-button>
-              <!-- <label>初次授权时强制填写</label>
+          <!-- <label>初次授权时强制填写</label>
               <el-switch v-model="isMustAuth" @change="onChangeMustAuth" /> -->
-            </div>
-          </div>
           <el-table v-loading="isLoading" :data="tableData">
             <el-table-column label="信息" prop="label" />
             <el-table-column label="是否启用">
@@ -77,7 +68,7 @@
               <template slot-scope="scope">
                 <el-button type="text" @click="showAddDialog(scope.row)"> 编辑 </el-button>
                 <el-button
-                  v-if="!VERSION_SHUYUN && !scope.row.is_default"
+                  v-if="!VERSION_SHUYUN() && !scope.row.is_default"
                   type="text"
                   class="delete"
                   @click="deleteField(scope.row)"
@@ -139,9 +130,6 @@
               </el-card>
             </div>
           </el-form>
-          <div class="section-footer with-border content-center">
-            <el-button type="primary" @click="saveContent"> 保存 </el-button>
-          </div>
         </div>
       </el-tab-pane>
       <el-tab-pane label="互联网诊疗风险告知及知情同意书配置" class="paneSecond" name="third">
@@ -164,9 +152,6 @@
               </el-card>
             </div>
           </el-form>
-          <div class="section-footer with-border content-center">
-            <el-button type="primary" @click="saveMedicineContent"> 保存 </el-button>
-          </div>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -248,7 +233,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
 import {
@@ -308,6 +293,7 @@ export default {
     }
     return {
       activeName: 'first',
+      pageTitle: '会员中心个人信息录入项配置',
       settingStatus: false,
       showAdd: false,
       isLoading: false,
@@ -556,7 +542,13 @@ export default {
       this.getFormItems()
     },
     handleClick(tab, event) {
-      console.log(tab, event)
+      console.log(tab, event, this.activeName)
+      const titleMap = {
+        first: '会员中心个人信息录入项配置',
+        second: '注册协议与隐私政策配置',
+        third: '互联网诊疗风险告知及知情同意书配置'
+      }
+      this.pageTitle = titleMap[this.activeName]
     },
     updateContent: function (data) {
       this.privacyForm.member_register.content = data

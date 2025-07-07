@@ -1,15 +1,8 @@
 <template>
   <transition>
-    <div
-      v-show="visible"
-      class="side-bar"
-      :class="{ 'show': show }"
-      :style="'width:' + width + 'vw'"
-    >
-      <div
-        class="side-bar-close iconfont icon-times"
-        @click="hideSideBar"
-      />
+    <div v-show="visible" class="side-bar" :class="{ show: show }" :style="'width:' + width + 'vw'">
+      <SpIcon name="close" :size="18" class="side-bar-close" @click="hideSideBar" />
+
       <div class="side-bar-title">
         {{ title }}
       </div>
@@ -40,13 +33,13 @@ export default {
       default: ''
     }
   },
-  data () {
+  data() {
     return {
       show: false
     }
   },
   watch: {
-    visible (val) {
+    visible(val) {
       if (val) {
         this.$nextTick(() => {
           setTimeout(() => {
@@ -57,7 +50,7 @@ export default {
     }
   },
   methods: {
-    hideSideBar () {
+    hideSideBar() {
       this.$emit('update:visible', false)
       this.show = false
     }
@@ -93,9 +86,7 @@ export default {
   .side-bar-close {
     position: absolute;
     left: 20px;
-    top: 10px;
-    color: #999;
-    font-size: 24px;
+    top: 16px;
   }
   .side-bar-body {
     padding: 20px;

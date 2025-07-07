@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <SpFilterForm class="sp-filter-form" :model="params" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="time" label="时间筛选:" size="max">
         <el-date-picker
@@ -41,7 +41,7 @@
         beforeSearch: beforeSearch
       }"
     />
-  </div>
+  </SpPage>
 </template>
 <script>
 export default {
@@ -69,9 +69,9 @@ export default {
             render: (h, { row }) => {
               return (
                 <div>
-                  {row.distributor_ids.map((item) => {
+                  {row.distributor_ids.map(item => {
                     return (
-                      <el-tag key={item.distributor_ids} size='mini'>
+                      <el-tag key={item.distributor_ids} size="mini">
                         {item.name}
                       </el-tag>
                     )
@@ -148,9 +148,9 @@ export default {
             key: 'add',
             type: 'button',
             slot: 'header',
-            buttonType: 'primary is-plain',
+            buttonType: 'primary',
             action: {
-              handler: async (val) => {
+              handler: async val => {
                 let params = {
                   page: 1,
                   pageSize: 20,

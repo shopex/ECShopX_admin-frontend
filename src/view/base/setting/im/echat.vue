@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane
         v-for="(item, index) in tabList"
@@ -32,7 +32,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -55,13 +55,13 @@ export default {
   },
   methods: {
     getInfo() {
-      getECahtSetting().then((response) => {
+      getECahtSetting().then(response => {
         this.form = response.data.data
       })
     },
     onSubmit() {
       saveEChatSetting(this.form)
-        .then((response) => {
+        .then(response => {
           this.$message({ message: '保存成功', type: 'success' })
           this.getInfo()
         })

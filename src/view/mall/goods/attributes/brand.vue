@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="attribute_name" label="品牌名称:">
         <el-input v-model="params.attribute_name" placeholder="请输入品牌名称" />
@@ -76,15 +76,15 @@
           <div class="frm-tips">只能上传jpg/png文件，且不超过2M （建议尺寸：200px * 200px）</div>
           <div class="upload-box" @click="handleImgPicker">
             <img v-if="form.image_url" :src="form.image_url" class="avatar" width="100%">
-            <i v-else class="iconfont icon-camera avatar-uploader-icon" />
+            <SpIcon v-else name="camera" :size="28" class="avatar-uploader-icon" />
           </div>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="save"> 提交 </el-button>
-        </el-form-item>
       </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="save"> 提交 </el-button>
+      </div>
     </sideBar>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

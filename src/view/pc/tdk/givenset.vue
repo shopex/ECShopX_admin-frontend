@@ -1,40 +1,25 @@
 <template>
-  <div>
+  <SpPage>
     <!--搜索添加-->
 
-    <el-card>
-      <el-table
-        v-loading="loading"
-        :data="list"
-        :height="wheight - 300"
-        element-loading-text="数据加载中"
-      >
-        <el-table-column
-          label="操作"
-          width="150"
-        >
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              @click="handleEdit(scope.row)"
-            >
-              编辑
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="page"
-          label="页面"
-        />
-      </el-table>
-    </el-card>
+    <el-table
+      border
+      v-loading="loading"
+      :data="list"
+      :height="wheight - 300"
+      element-loading-text="数据加载中"
+    >
+      <el-table-column label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleEdit(scope.row)"> 编辑 </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column prop="page" label="页面" />
+    </el-table>
 
     <!--新增修改-->
 
-    <sideBar
-      :visible.sync="show_sideBar"
-      :title="title"
-    >
+    <sideBar :visible.sync="show_sideBar" :title="title">
       <el-form>
         <el-form-item
           label="
@@ -104,16 +89,11 @@ MATE_KEYWORDS (关键词）"
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            @click="save"
-          >
-            提交
-          </el-button>
+          <el-button type="primary" @click="save"> 提交 </el-button>
         </el-form-item>
       </el-form>
     </sideBar>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -130,7 +110,7 @@ export default {
     sideBar
   },
 
-  data () {
+  data() {
     return {
       loading: false,
       title: '配置',
@@ -196,11 +176,11 @@ export default {
       }
     }
   },
-  mounted () {},
+  mounted() {},
 
   methods: {
-    tagType (type, value) {
-      let bool = this.tageArr[type].findIndex((item) => item == value)
+    tagType(type, value) {
+      let bool = this.tageArr[type].findIndex(item => item == value)
       if (bool == -1) {
         return ''
       } else {
@@ -208,7 +188,7 @@ export default {
       }
     },
     // 编辑
-    handleEdit (data) {
+    handleEdit(data) {
       this.show_sideBar = true
       this.resetData()
       this.type = data.id
@@ -216,22 +196,22 @@ export default {
       this.title = data.page
       this.getList()
     },
-    handelClick (type, tag) {
-      let index = this.tageArr[type].findIndex((item) => tag.value == item)
+    handelClick(type, tag) {
+      let index = this.tageArr[type].findIndex(item => tag.value == item)
       if (index == -1) {
         this.tageArr[type].push(tag.value)
         for (let key in this.tageArr) {
           this.form[key] = this.tageArr[key].join(',')
         }
       } else {
-        this.tageArr[type] = this.tageArr[type].filter((item) => tag.value !== item)
+        this.tageArr[type] = this.tageArr[type].filter(item => tag.value !== item)
         for (let key in this.tageArr) {
           this.form[key] = this.tageArr[key].join(',')
         }
       }
     },
     // 初始化
-    resetData () {
+    resetData() {
       this.form = {
         title: '',
         mate_description: '',
@@ -244,14 +224,14 @@ export default {
       }
     },
     // 保存数据
-    save () {
+    save() {
       if (this.type == 'detailTags') {
-        saveTdkgivensetDetail(this.form).then((res) => {
+        saveTdkgivensetDetail(this.form).then(res => {
           this.$message({ type: 'success', message: '操作成功' })
           this.show_sideBar = false
         })
       } else {
-        saveTdkgivensetList(this.form).then((res) => {
+        saveTdkgivensetList(this.form).then(res => {
           this.$message({ type: 'success', message: '操作成功' })
           this.show_sideBar = false
         })
@@ -260,9 +240,9 @@ export default {
     },
 
     // 获取列表
-    getList () {
+    getList() {
       if (this.type == 'detailTags') {
-        getTdkgivensetDetail().then((res) => {
+        getTdkgivensetDetail().then(res => {
           let data = res.data.data
           this.form = data
           for (let key in data) {
@@ -274,7 +254,7 @@ export default {
           }
         })
       } else {
-        getTdkgivensetList().then((res) => {
+        getTdkgivensetList().then(res => {
           let data = res.data.data
           this.form = data
           for (let key in data) {

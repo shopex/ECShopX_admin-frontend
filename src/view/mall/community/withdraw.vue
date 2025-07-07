@@ -11,7 +11,7 @@
 }
 </style>
 <template>
-  <div>
+  <SpPage>
     <div v-if="$route.path.indexOf('detail') === -1">
       <SpFilterForm :model="formQuery" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="status" label="提现状态:">
@@ -79,7 +79,7 @@
       />
     </div>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -108,7 +108,7 @@ export default {
             key: 'detail',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => {
+            visible: row => {
               return row.status == 'apply'
             },
             action: {
@@ -133,7 +133,7 @@ export default {
             key: 'apply',
             type: 'button',
             buttonType: 'text',
-            visible: (row) => {
+            visible: row => {
               return row.status == 'apply'
             },
             action: {
@@ -257,7 +257,7 @@ export default {
       return payType[type]
     },
     renderWithdrawStatu(state) {
-      return withDrawStatusList.find((item) => item.value == state).title
+      return withDrawStatusList.find(item => item.value == state).title
     },
     async onResloveSubmit() {
       const { id } = this.resloveForm

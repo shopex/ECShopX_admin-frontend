@@ -7,7 +7,7 @@
 }
 </style>
 <template>
-  <div>
+  <SpPage>
     <SpFilterForm :model="queryForm" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="datetime" label="查询日期:">
         <el-date-picker
@@ -22,7 +22,7 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="enterprise_id" label="内购活动:" size="max">
+      <SpFilterFormItem prop="activity_id" label="内购活动:">
         <el-select
           v-model="queryForm.activity_id"
           v-scroll="() => pagesQuery.nextPage()"
@@ -46,11 +46,15 @@
           <el-statistic :value="total.order_payed_count" title="付款订单数" />
         </el-col>
         <el-col :span="4"><el-statistic :value="total.aftersales_count" title="售后单数" /></el-col>
-        <el-col :span="4"><el-statistic :value="total.gmv_count/100" title="GMV(元)" /></el-col>
+        <el-col :span="4"><el-statistic :value="total.gmv_count / 100" title="GMV(元)" /></el-col>
         <el-col :span="4">
-          <el-statistic :value="total.amount_payed_count/100" title="交易额(元)" />
+          <el-statistic :value="total.amount_payed_count / 100" title="交易额(元)" />
         </el-col>
-        <el-col :span="4"><el-statistic :value="total.refunded_count/100" title="退款额(元)" /></el-col>
+        <el-col :span="4"
+          >
+<el-statistic :value="total.refunded_count / 100" title="退款额(元)"
+        />
+</el-col>
       </el-row>
 
       <div v-if="tableData.length > 0" id="container" style="height: 400px; margin: 40px 0" />
@@ -64,7 +68,7 @@
         :data="tableData"
       />
     </div>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { PICKER_DATE_OPTIONS } from '@/consts'
@@ -103,21 +107,21 @@ export default {
             name: '交易额',
             key: 'amount_payed_count',
             formatter: (value, row, col) => {
-              return value /100
+              return value / 100
             }
           },
           {
             name: 'GMV',
             key: 'gmv_count',
             formatter: (value, row, col) => {
-              return value /100
+              return value / 100
             }
           },
           {
             name: '退款额',
             key: 'refunded_count',
             formatter: (value, row, col) => {
-              return value /100
+              return value / 100
             }
           }
         ]
@@ -158,11 +162,11 @@ export default {
       const params = {
         start: moment(start).format('YYYY-MM-DD'),
         end: moment(end).format('YYYY-MM-DD'),
-        act_id: activity_id.toString()
+        act_id: activity_id.length > 0 ? activity_id.toString() : ''
       }
-     if(params.act_id){
-      params.order_class= 'employee_purchase'
-     }
+      if (params.act_id) {
+        params.order_class = 'employee_purchase'
+      }
       this.loading = true
       const { list } = await this.$api.datacube.getCompanyData(params)
       this.loading = false
@@ -179,7 +183,9 @@ export default {
         refunded_count: list.reduce((prev, next) => prev + parseInt(next.refunded_count), 0)
       }
       if (list.length > 0) {
-        this.renderChart(list)
+        this.$nextTick(() => {
+          this.renderChart(list)
+        })
       }
       this.$nextTick(() => {
         this.$refs.finder.refresh()
@@ -188,7 +194,7 @@ export default {
     renderChart(list) {
       let orderData = []
       let amountData = []
-      list.forEach((item) => {
+      list.forEach(item => {
         orderData.push({ time: item.count_date, name: '订单', value: parseInt(item.order_count) })
         orderData.push({
           time: item.count_date,

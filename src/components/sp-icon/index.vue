@@ -1,5 +1,14 @@
 <template>
-  <component :is="icon" :size="size" />
+  <div
+    v-if="button"
+    :class="buttonClass"
+    class="flex items-center justify-center hover:bg-gray-100 transition-all duration-300 cursor-pointer"
+    @click.stop="onButtonClick"
+  >
+    <component :is="icon" :size="size" :fill="fill" />
+  </div>
+
+  <component v-else :is="icon" :size="size" :fill="fill" v-on="$listeners" />
 </template>
 
 <script>
@@ -8,6 +17,10 @@ import * as icons from '@icon-park/vue'
 export default {
   name: 'SpIcon',
   props: {
+    button: {
+      type: Boolean,
+      default: false
+    },
     name: {
       type: String,
       required: true
@@ -16,7 +29,11 @@ export default {
       type: [Number, String],
       default: 16
     },
-    color: {
+    radius: {
+      type: Boolean,
+      default: false
+    },
+    fill: {
       type: String,
       default: 'currentColor'
     }
@@ -28,9 +45,21 @@ export default {
     icon() {
       return icons[this.name.replace(/(?:^|-)([a-z])/g, (_, letter) => letter.toUpperCase())]
       // return icons[this.name]
+    },
+    buttonClass() {
+      return this.button
+        ? `w-[${this.size * 2}px] h-[${this.size * 2}px] rounded ${
+            this.radius ? 'rounded-full' : ''
+          }`
+        : ''
     }
   },
-  mounted() {}
+  mounted() {},
+  methods: {
+    onButtonClick() {
+      this.$emit('click')
+    }
+  }
 }
 </script>
 

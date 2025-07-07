@@ -10,8 +10,8 @@
 </style>
 
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <div class="categorize">
       分类样式：
       <el-radio-group v-model="classify">
@@ -26,10 +26,7 @@
 
     <addCartas v-if="classify" />
     <index v-if="!classify && addCar" ref="indexTile" />
-    <section class="content-padded-s section-white content-center">
-      <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
-    </section>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -45,12 +42,11 @@ export default {
   data() {
     return {
       addCar: true,
-      classify: true,
-
+      classify: true
     }
   },
   computed: {
-    ...mapGetters(['wheight', 'template_name'])
+    ...mapGetters(['template_name'])
   },
   mounted() {
     this.feath()
@@ -65,20 +61,23 @@ export default {
       }
     },
     async saveConfig() {
-      if (!this.classify && this.addCar) { //平铺开启自定义分类
+      if (!this.classify && this.addCar) {
+        //平铺开启自定义分类
         this.$refs.indexTile.saveConfig()
       } else {
         let param = {
           template_name: this.template_name,
-          config: JSON.stringify([{
-            name: 'base',
-            hasSeries: false,
-            data: [],
-            is_open: true,
-            addCar: this.addCar,
-            classify: this.classify
-          }]),
-          page_name: 'category',
+          config: JSON.stringify([
+            {
+              name: 'base',
+              hasSeries: false,
+              data: [],
+              is_open: true,
+              addCar: this.addCar,
+              classify: this.classify
+            }
+          ]),
+          page_name: 'category'
         }
         await this.$api.wxa.savePageParams(param)
         this.$message({

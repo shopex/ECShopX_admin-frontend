@@ -10,10 +10,10 @@ const routes = [
       title: '订单'
     },
     name: 'orders',
-    path: '/orders',
+    path: '/order',
     children: [
       {
-        name: `orderList`,
+        name: `orderManageOrderList`,
         path: 'order-manage/order-list',
         meta: {
           aliasName: 'tradenormalorders',
@@ -45,10 +45,10 @@ const routes = [
         path: 'order-manage/self-order-list',
         component: () => import('@/view/mall/marketing/distributionOrders'),
         meta: {
-          aliasName: 'marketingdistribution_orders',
+          aliasName: 'tradenormalshoporders',
           icon: 'icon-products',
           title: '自营订单',
-          permissions: ['order.entitytrade.marketingdistribution_orders']
+          permissions: ['order.entitytrade.tradenormalshoporders']
         },
         children: [
           {
@@ -118,6 +118,8 @@ const routes = [
           permissions: ['order.ordersetting.aftersalesreason']
         }
       },
+
+      // TODO: 路由优化
       {
         name: `cartReminder`,
         path: 'order-manage/cart-reminder',
@@ -170,8 +172,14 @@ const routes = [
         ]
       },
       {
-        path: 'entitytrade/marketingdistribution_orders',
+        path: 'entitytrade/marketingdistribution-orders',
         name: `店铺订单`,
+        meta: {
+          aliasName: 'marketingdistribution_orders',
+          icon: 'icon-products',
+          title: '店铺订单',
+          permissions: ['order.entitytrade.marketingdistribution_orders']
+        },
         component: () => import('@/view/mall/marketing/distributionOrders'),
         children: [
           {
@@ -182,13 +190,13 @@ const routes = [
       },
 
       {
-        path: 'servicepayment',
-        name: `交易单`,
+        name: `tradeOrder`,
+        path: 'trade-order',
         component: () => import('@/view/mall/trade/list')
       },
       {
-        path: 'aftersalesrefundlist',
-        name: `退款单`,
+        name: `afterSalesRefundList`,
+        path: 'aftersales-refund-list',
         component: () => import('@/view/mall/aftersales/refundList'),
         children: [
           {
@@ -198,12 +206,12 @@ const routes = [
         ]
       },
       {
-        path: 'Refunderrorlogs',
-        name: `退款失败日志`,
+        name: `refundErrorLogs`,
+        path: 'refunderrorlogs',
         component: () => import('@/view/mall/trade/refunderrorlogs')
       },
       {
-        path: 'chinaumsdivisionlist',
+        path: 'chinaums-division-list',
         name: `分账单`,
         component: () => import('@/view/mall/chinaums/divisionList')
       },

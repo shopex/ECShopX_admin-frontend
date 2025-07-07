@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" />
     <el-card>
       <div style="width: 70%">
         <el-form v-loading="loading" label-width="180px" :model="form">
@@ -133,7 +133,7 @@
         @closeDialog="closeDialog"
       />
     </el-card>
-  </div>
+  </SpPage>
 </template>
 <script>
 import linkSetter from '@/components/template_links' // 添加导航连接
@@ -191,7 +191,7 @@ export default {
       this.linksVisible = true
     },
     setLink(data, type) {
-      let obj = Object.assign(data, { 'linkPage': type })
+      let obj = Object.assign(data, { linkPage: type })
       this.form.ad_url = obj
     },
     closeDialog() {
@@ -221,7 +221,7 @@ export default {
     // 获取信息
     getInfo() {
       this.loading = true
-      getOpenScreenADSet(this.params).then((res) => {
+      getOpenScreenADSet(this.params).then(res => {
         if (res.data.data.length !== 0) {
           this.form.ad_material = res.data.data.ad_material
           this.form.is_enable = res.data.data.is_enable
@@ -283,7 +283,7 @@ export default {
       } else {
         this.form.app = this.is_app.join(',')
       }
-      saveOpenScreenADSet(this.form).then((res) => {
+      saveOpenScreenADSet(this.form).then(res => {
         this.$message({ type: 'success', message: '操作成功' })
         this.getInfo()
       })

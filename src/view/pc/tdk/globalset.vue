@@ -1,93 +1,80 @@
 <template>
-  <div>
-    <el-card>
-      <div style="width: 70%">
-        <el-form
-          v-loading="loading"
-          label-width="180px"
-          :model="form"
-        >
-          <el-form-item label="TITLE(页面标题）">
-            <el-input
-              v-model="form.title"
-              type="text"
-            />
-          </el-form-item>
-          <el-form-item label="MATE_DESCRIPTION(页面描述）">
-            <el-input
-              v-model="form.mate_description"
-              type="textarea"
-            />
-          </el-form-item>
-          <el-form-item label="MATE_KEYWORDS(关键词）">
-            <el-input
-              v-model="form.mate_keywords"
-              type="textarea"
-            />
-            <span class="tip">关键词之间请用半角”,”分隔</span>
-          </el-form-item>
-
-          <el-form-item size="large">
-            <el-button>取消</el-button>
-            <el-button
-              type="primary"
-              @click="save"
-            >
-              保存
-            </el-button>
-          </el-form-item>
-        </el-form>
+  <SpPage title="SEO配置">
+    <template slot="page-footer">
+      <div class="text-center">
+        <el-button type="primary" :loading="loading" @click="onSubmit"> 保存 </el-button>
       </div>
-    </el-card>
-  </div>
+    </template>
+    <Form />
+  </SpPage>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import { getTdkglobalset, saveTdkglobalset } from '../../../api/tdkset'
+import { useForm } from '@/composables'
+
+const [Form, FormApi] = useForm({
+  formItems: [
+    {
+      component: 'Input',
+      fieldName: 'title',
+      formItemClass: 'w-2/5',
+      label: '页面标题'
+    },
+    {
+      component: 'Input',
+      fieldName: 'mate_description',
+      formItemClass: 'w-2/5',
+      label: '页面描述'
+    },
+    {
+      component: 'Input',
+      componentProps: {
+        type: 'textarea',
+        rows: 3
+      },
+      fieldName: 'mate_keywords',
+      formItemClass: 'w-2/5',
+      label: '关键词',
+      tip: '关键词之间请用半角”,”分隔'
+    }
+  ],
+  showDefaultActions: false
+})
 
 export default {
-  components: {},
+  components: {
+    Form
+  },
 
-  data () {
+  data() {
     return {
-      loading: false,
-      form: {
-        title: '',
-        mate_description: '',
-        mate_keywords: ''
-      }
+      loading: false
     }
   },
-  mounted () {
-    this.getInfo()
+  mounted() {
+    this.getTdkglobalset()
   },
   methods: {
-    // 获取信息
-    getInfo () {
-      this.loading = true
-      getTdkglobalset(this.params).then((res) => {
-        this.form.title = res.data.data.title
-        this.form.mate_description = res.data.data.mate_description
-        this.form.mate_keywords = res.data.data.mate_keywords
-        this.loading = false
+    async getTdkglobalset() {
+      const res = await this.$api.tdkset.getTdkglobalset()
+      FormApi.setFieldsValue({
+        title: res.title,
+        mate_description: res.mate_description,
+        mate_keywords: res.mate_keywords
       })
     },
     // 保存数据
-    save () {
-      saveTdkglobalset(this.form).then((res) => {
-        this.$message({ type: 'success', message: '操作成功' })
-        this.getInfo()
-      })
+    async onSubmit() {
+      this.loading = true
+      const res = await FormApi.getFieldsValue()
+      const params = {
+        title: res.title,
+        mate_description: res.mate_description,
+        mate_keywords: res.mate_keywords
+      }
+      this.$api.tdkset.saveTdkglobalset(params)
+      this.loading = false
+      this.$message.success('保存成功')
     }
-  },
-  computed: {
-    ...mapGetters(['wheight'])
   }
 }
 </script>
-<style scoped lang="scss">
-.tip {
-  font-size: 12px;
-  color: #909399;
-}
-</style>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app pc alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app pc alipay />
 
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
       <SpFilterFormItem prop="create_time" label="日期范围:">
@@ -289,7 +289,7 @@
         </div>
       </div>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 
 <script>

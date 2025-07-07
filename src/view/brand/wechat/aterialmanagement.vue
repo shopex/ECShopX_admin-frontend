@@ -1,32 +1,9 @@
-<style type="text/css" lang="scss">
-.tip-info {
-  padding: 8px 16px;
-  background-color: #fff6f7;
-  border-radius: 4px;
-  border-left: 5px solid #ff7800;
-  margin: 11px 0;
-}
-</style>
 <template>
-  <div>
+  <SpPage>
     <div v-if="$route.path.indexOf('editor') === -1">
-      <el-tabs
-        v-model="activeName"
-        type="border-card"
-        @tab-click="handleClick"
-      >
-        <el-tab-pane
-          label="本地图片"
-          name="local"
-        >
-          <!-- <div class="tip-info">
-              <p>当前本地图片已存储数量为<span style="font-size:20px;padding-left: 5px;">555张</span></p>
-              <p>当前本地图片剩余储<span style="font-size:20px;padding-left: 5px;">22张</span></p>
-          </div>-->
-          <localimages-list
-            :active-name="activeName"
-            :get-status="localpicStatus"
-          />
+      <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+        <el-tab-pane label="本地图片" name="local">
+          <localimages-list :active-name="activeName" :get-status="localpicStatus" />
         </el-tab-pane>
 
         <!-- <el-tab-pane
@@ -50,17 +27,11 @@
           />
         </el-tab-pane> -->
 
-        <el-tab-pane
-          label="本地视频"
-          name="localvideo"
-        >
-          <localvideos-list
-            :active-name="activeName"
-            :get-status="localvideoStatus"
-          />
+        <el-tab-pane label="本地视频" name="localvideo">
+          <localvideos-list :active-name="activeName" :get-status="localvideoStatus" />
         </el-tab-pane>
 
-        <el-tab-pane
+        <!-- <el-tab-pane
           v-if="$store.getters.login_type != 'distributor' && $store.getters.login_type != 'supplier'"
           label="图文消息"
           name="imagetext"
@@ -79,7 +50,7 @@
             :active-name="activeName"
             :get-status="newsStatus"
           />
-        </el-tab-pane>
+        </el-tab-pane> -->
 
         <!-- <el-tab-pane
           v-if="$store.getters.login_type != 'distributor'"
@@ -104,7 +75,7 @@
       </el-tabs>
     </div>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -122,7 +93,7 @@ export default {
     localimagesList,
     localvideosList
   },
-  data () {
+  data() {
     return {
       activeName: 'local',
       stats: [],
@@ -134,7 +105,7 @@ export default {
       Status: false
     }
   },
-  mounted () {
+  mounted() {
     if (this.$store.getters.login_type == 'distributor') {
       this.activeName = 'local'
       this.handleClick()
@@ -144,7 +115,7 @@ export default {
     }
   },
   methods: {
-    handleClick () {
+    handleClick() {
       if (this.activeName == 'picture') {
         this.picStatus = true
         this.newsStatus = false
@@ -157,7 +128,7 @@ export default {
         this.newsStatus = true
         this.localpicStatus = false
         this.localvideoStatus = false
-        getMaterialStats().then((res) => {
+        getMaterialStats().then(res => {
           this.stats = res.data.data
         })
       } else if (this.activeName == 'video') {

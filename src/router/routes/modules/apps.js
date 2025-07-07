@@ -13,10 +13,10 @@ const routes = [
     path: '/applications',
     children: [
       {
-        name: 'approval',
-        path: 'user/approval',
+        name: 'userApproval',
+        path: 'dougong/user-approval',
         meta: {
-          aliasName: 'userAudit',
+          aliasName: 'user_audit',
           title: '用户进件审批',
           icon: 'pay-circle',
           permissions: ['applications.bspay.user_audit']
@@ -30,41 +30,172 @@ const routes = [
         ]
       },
       {
-        name: 'trades',
-        path: 'trades',
-        component: () => import('@/view/mall/bspay_sub_account/sub_account'),
+        name: 'dougongSeparateAccountDetail',
+        path: 'dougong/separate-account-detail',
         meta: {
           aliasName: 'bspay_trades',
           icon: 'pay-circle',
           title: '分账明细',
           permissions: ['applications.bspay.bspay_trades']
         },
+        component: () => import('@/view/mall/bspay_sub_account/sub_account'),
         children: [
           {
             path: 'detail/:order_id',
             component: () => import('@/view/mall/bspay_sub_account/detail')
-            // meta: {
-            //     title: '分账明细详情',
-            //     hidden: true
-            // }
           }
         ]
       },
       {
-        name: 'management',
-        path: 'event/management',
+        name: 'pointMallProductManagement',
+        path: 'point-mall/product-management',
         meta: {
-          aliasName: 'purchaseAdmin',
+          aliasName: 'jfgoods',
+          icon: 'pay-circle',
+          title: '商品管理',
+          permissions: ['applications.jfmall.jfgoods']
+        },
+        component: () => import('@/view/applications/pointmall/list'),
+        children: [
+          {
+            path: 'editor/:itemId?',
+            component: () => import('@/view/applications/pointmall/add')
+          },
+          {
+            path: 'physicalupload',
+            name: `实体商品导入`,
+            component: () => import('@/view/applications/pointmall/goodsImport')
+          },
+          {
+            path: 'physicalstoreupload',
+            name: `商品库存导入`,
+            component: () => import('@/view/applications/pointmall/storeImport')
+          }
+        ]
+      },
+      {
+        name: 'pointMallOrderManagement',
+        path: 'point-mall/order-management',
+        meta: {
+          aliasName: 'jforders',
+          icon: 'pay-circle',
+          title: '订单管理',
+          permissions: ['applications.jfmall.jforders']
+        },
+        component: () => import('@/view/applications/pointmall/orderList'),
+        children: [
+          {
+            path: 'detail/:itemId?',
+            component: () => import('@/view/applications/pointmall/orderDetail')
+          }
+        ]
+      },
+      {
+        name: 'basicSettings',
+        path: 'point-mall/basic-settings',
+        meta: {
+          aliasName: 'jfsetting',
+          icon: 'pay-circle',
+          title: '基础设置',
+          permissions: ['applications.jfmall.jfsetting']
+        },
+        component: () => import('@/view/applications/pointmall/setting')
+      },
+      {
+        name: 'adapaySeparateAccountDetail',
+        path: 'adapay/separate-account-detail',
+        meta: {
+          aliasName: 'adapay_trades',
+          icon: 'pay-circle',
+          title: '分账明细',
+          permissions: ['applications.adapay.adapay_trades']
+        },
+        component: () => import('@/view/mall/sub_account/sub_account'),
+        children: [
+          {
+            path: 'detail/:order_id',
+            component: () => import('@/view/mall/sub_account/detail')
+          }
+        ]
+      },
+      {
+        name: 'adapayWithdrawal',
+        path: 'adapay/withdrawal',
+        meta: {
+          aliasName: 'adapay_cash',
+          icon: 'pay-circle',
+          title: '提现',
+          permissions: ['applications.adapay.adapay_cash']
+        },
+        component: () => import('@/view/mall/withdraw/withdraw')
+      },
+      {
+        name: 'adapayWithdrawalSettings',
+        path: 'adapay/withdrawal-settings',
+        meta: {
+          aliasName: 'adapay_cash_setting',
+          icon: 'pay-circle',
+          title: '提现设置',
+          permissions: ['applications.adapay.adapay_cash_setting']
+        },
+        component: () => import('@/view/mall/withdraw/withdraw_setting.vue')
+      },
+      {
+        name: 'adapayAccountApproval',
+        path: 'adapay/account-approval',
+        meta: {
+          aliasName: 'adapay_member_audit',
+          icon: 'pay-circle',
+          title: '开户审批',
+          permissions: ['applications.adapay.adapay_member_audit']
+        },
+        component: () => import('@/view/mall/marketing/openingapproval'),
+        children: [
+          {
+            path: 'approve/:id?',
+            component: () => import('@/view/mall/marketing/openingapproval/approve')
+          }
+        ]
+      },
+      {
+        name: 'enterprisePurchaseManagement',
+        path: 'enterprise-purchase/enterprise-management',
+        meta: {
+          aliasName: 'company-admin',
+          icon: 'pay-circle',
+          title: '企业管理',
+          permissions: ['applications.ec.company-admin']
+        },
+        component: () => import('@/view/member/purchase/company')
+      },
+      {
+        name: 'enterprisePurchaseStaffManagement',
+        path: 'enterprise-purchase/staff-management',
+        meta: {
+          aliasName: 'employee-admin',
+          icon: 'pay-circle',
+          title: '员工管理',
+          permissions: ['applications.ec.employee-admin']
+        },
+        component: () => import('@/view/member/purchase/employee'),
+        children: [
+          {
+            path: 'import',
+            component: () => import('@/view/member/purchase/employeeImport')
+          }
+        ]
+      },
+      {
+        name: 'enterprisePurchaseActivityManagement',
+        path: 'enterprise-purchase/activity-management',
+        meta: {
+          aliasName: 'purchase-admin',
           icon: 'pay-circle',
           title: '活动管理',
           permissions: ['applications.ec.purchase-admin']
         },
-        component: () => import('@/view/sublayout'),
+        component: () => import('@/view/marketing/employee/list'),
         children: [
-          {
-            path: '/',
-            component: () => import('@/view/marketing/employee/list')
-          },
           {
             path: 'create/:id?',
             component: () => import('@/view/marketing/employee/purchase')
@@ -84,40 +215,12 @@ const routes = [
         ]
       },
       {
-        name: 'management',
-        path: 'staff/management',
-        meta: {
-          aliasName: 'employeeAdmin',
-          icon: 'pay-circle',
-          title: '员工管理',
-          permissions: ['applications.ec.employee-admin']
-        },
-        component: () => import('@/view/member/purchase/employee'),
-        children: [
-          {
-            path: 'import',
-            component: () => import('@/view/member/purchase/employeeImport')
-          }
-        ]
-      },
-      {
-        name: 'management',
-        path: 'enterprise/management',
-        meta: {
-          aliasName: 'company-admin',
-          icon: 'pay-circle',
-          title: '企业管理',
-          permissions: ['applications.ec.company-admin']
-        },
-        component: () => import('@/view/member/purchase/company')
-      },
-      {
-        name: 'order',
-        path: 'internal-purchase/order',
+        name: 'enterprisePurchaseActivityOrder',
+        path: 'enterprise-purchase/activity-order',
         meta: {
           aliasName: 'purchase-list',
           icon: 'pay-circle',
-          title: '内购订单',
+          title: '订单管理',
           permissions: ['applications.ec.purchase-list']
         },
         component: () => import('@/view/order/entitytrade/purchase'),
@@ -143,9 +246,10 @@ const routes = [
           }
         ]
       },
+
       {
-        name: 'settings',
-        path: 'enterprise-weChat/settings',
+        name: 'guideAssistantWeChatSettings',
+        path: 'guide-assistant/wechat-settings',
         meta: {
           aliasName: 'workwechat',
           icon: 'pay-circle',
@@ -155,8 +259,8 @@ const routes = [
         component: () => import('@/view/base/setting/workwechat/workwechat')
       },
       {
-        name: 'homepages',
-        path: 'shopping-guide/homepages',
+        name: 'guideAssistantHomeTemplate',
+        path: 'guide-assistant/home-template',
         meta: {
           aliasName: 'salespersonshelfindex',
           icon: 'pay-circle',
@@ -166,8 +270,8 @@ const routes = [
         component: () => import('@/view/wxapp/salespersonshelfindex')
       },
       {
-        name: 'management1',
-        path: 'event/management1',
+        name: 'groupPurchaseActivityManagement',
+        path: 'group-purchase/activity-management',
         meta: {
           aliasName: 'activity',
           icon: 'pay-circle',
@@ -177,8 +281,8 @@ const routes = [
         component: () => import('@/view/mall/community/activityList')
       },
       {
-        name: 'products',
-        path: 'activity/products',
+        name: 'groupPurchaseActivityProducts',
+        path: 'group-purchase/activity-products',
         meta: {
           aliasName: 'communitygoods',
           icon: 'pay-circle',
@@ -188,8 +292,8 @@ const routes = [
         component: () => import('@/view/mall/community/communitygoods')
       },
       {
-        name: 'orders',
-        path: 'activity/orders',
+        name: 'groupPurchaseActivityOrders',
+        path: 'group-purchase/activity-orders',
         meta: {
           aliasName: 'communityorder',
           icon: 'pay-circle',
@@ -209,19 +313,19 @@ const routes = [
         ]
       },
       {
-        name: 'configuration',
-        path: 'active/configuration',
+        name: 'groupPurchaseActivityConfiguration',
+        path: 'group-purchase/active-configuration',
         meta: {
           aliasName: 'communitysetting',
           icon: 'pay-circle',
           title: '活动配置',
           permissions: ['applications.community.communitysetting']
         },
-        component: () => import('@/view/member/promotions/community/setting')
+        component: () => import('@/view/mall/community/setting')
       },
       {
-        name: 'management',
-        path: 'community/management',
+        name: 'groupPurchaseCommunityManagement',
+        path: 'group-purchase/community-management',
         meta: {
           aliasName: 'subdistrict',
           icon: 'pay-circle',
@@ -231,8 +335,8 @@ const routes = [
         component: () => import('@/view/mall/subdistrict/list')
       },
       {
-        name: 'management',
-        path: 'team-leader/management',
+        name: 'groupPurchaseTeamLeaderManagement',
+        path: 'group-purchase/team-leader-management',
         meta: {
           aliasName: 'communitychief',
           icon: 'pay-circle',
@@ -256,8 +360,8 @@ const routes = [
         ]
       },
       {
-        name: 'performance',
-        path: 'team-leader/performance',
+        name: 'groupPurchaseTeamLeaderPerformance',
+        path: 'group-purchase/team-leader-performance',
         meta: {
           aliasName: 'achievement',
           icon: 'pay-circle',
@@ -267,8 +371,8 @@ const routes = [
         component: () => import('@/view/mall/community/achievement')
       },
       {
-        name: 'application',
-        path: 'withdrawal/application',
+        name: 'groupPurchaseWithdrawalApply',
+        path: 'group-purchase/withdrawal-apply',
         meta: {
           aliasName: 'withdraw',
           icon: 'pay-circle',
@@ -277,6 +381,7 @@ const routes = [
         },
         component: () => import('@/view/mall/community/withdraw')
       },
+
       {
         name: 'import',
         path: 'leader/import',
@@ -323,8 +428,8 @@ const routes = [
 
       // },
       {
-        name: 'extensions',
-        path: 'extensions',
+        name: 'applicationCenterExtensionsApplication',
+        path: 'application-center/extensions-application',
         meta: {
           aliasName: 'extapp',
           icon: 'pay-circle',
@@ -336,117 +441,6 @@ const routes = [
           {
             path: 'detail/:id?',
             component: () => import('@/view/applications/plugin/appDetail.vue')
-          }
-        ]
-      },
-      {
-        name: 'management',
-        path: 'commodity/management',
-        meta: {
-          aliasName: 'jfgoods',
-          icon: 'pay-circle',
-          title: '商品管理',
-          permissions: ['applications.jfmall.jfgoods']
-        },
-        component: () => import('@/view/applications/pointmall/list'),
-        children: [
-          {
-            path: 'editor/:itemId?',
-            component: () => import('@/view/applications/pointmall/add')
-          },
-          {
-            path: 'physicalupload',
-            name: `实体商品导入`,
-            component: () => import('@/view/applications/pointmall/goodsImport')
-          },
-          {
-            path: 'physicalstoreupload',
-            name: `商品库存导入`,
-            component: () => import('@/view/applications/pointmall/storeImport')
-          }
-        ]
-      },
-      {
-        name: 'management',
-        path: 'order/management',
-        meta: {
-          aliasName: 'jforders',
-          icon: 'pay-circle',
-          title: '订单管理',
-          permissions: ['applications.jfmall.jforders']
-        },
-        component: () => import('@/view/applications/pointmall/orderList'),
-        children: [
-          {
-            path: 'detail/:itemId?',
-            component: () => import('@/view/applications/pointmall/orderDetail')
-          }
-        ]
-      },
-      {
-        name: 'settings',
-        path: 'basic/settings',
-        meta: {
-          aliasName: 'jfsettin',
-          icon: 'pay-circle',
-          title: '基础设置',
-          permissions: ['applications.jfmall.jfsetting']
-        },
-        component: () => import('@/view/applications/pointmall/setting')
-      },
-      {
-        name: 'details',
-        path: 'separate-account/details',
-        meta: {
-          aliasName: 'adapay_trades',
-          icon: 'pay-circle',
-          title: '分账明细',
-          permissions: ['applications.adapay.adapay_trades']
-        },
-        component: () => import('@/view/mall/sub_account/sub_account'),
-        children: [
-          {
-            path: 'detail/:order_id',
-            component: () => import('@/view/mall/sub_account/detail')
-          }
-        ]
-      },
-      {
-        name: 'withdrawal',
-        path: 'withdrawal',
-        meta: {
-          aliasName: 'adapay_cash',
-          icon: 'pay-circle',
-          title: '提现',
-          permissions: ['applications.adapay.adapay_cash']
-        },
-        component: () => import('@/view/mall/withdraw/withdraw')
-      },
-      {
-        name: 'settings',
-        path: 'withdrawal/settings',
-        meta: {
-          aliasName: 'adapay_cash_setting',
-          icon: 'pay-circle',
-          title: '提现设置',
-          permissions: ['applications.adapay.adapay_cash_setting']
-        },
-        component: () => import('@/view/mall/withdraw/withdraw_setting.vue')
-      },
-      {
-        name: 'approval',
-        path: 'account-opening/approval',
-        meta: {
-          aliasName: 'adapay_member_audit',
-          icon: 'pay-circle',
-          title: '开户审批',
-          permissions: ['applications.adapay.adapay_member_audit']
-        },
-        component: () => import('@/view/mall/marketing/openingapproval'),
-        children: [
-          {
-            path: 'approve/:id?',
-            component: () => import('@/view/mall/marketing/openingapproval/approve')
           }
         ]
       }

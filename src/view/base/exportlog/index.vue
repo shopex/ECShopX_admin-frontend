@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <div class="content-bottom-padded">
       <el-alert type="info" title="下载提示" show-icon>
         <div>已经生成的文件只保留一天，请及时下载</div>
@@ -7,7 +7,7 @@
     </div>
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <template v-if="$store.getters.login_type == 'dealer'">
-        <el-tab-pane label="分账导出" name="adapay_tradedata" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="分账导出" name="adapay_tradedata" />
       </template>
       <template v-else-if="$store.getters.login_type == 'merchant'">
         <el-tab-pane label="主订单导出" name="normal_master_order" />
@@ -20,11 +20,11 @@
         <el-tab-pane label="商品导出" name="items" />
         <el-tab-pane label="商品标签导出" name="normal_items_tag" />
         <el-tab-pane label="商品码导出" name="itemcode" />
-        <el-tab-pane label="结算单" name="statements" />
-        <el-tab-pane label="结算单明细" name="statement_details" />
-        <el-tab-pane label="推广员业绩导出" name="popularize" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="结算单" name="statements" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="结算单明细" name="statement_details" />
+        <!-- <el-tab-pane label="推广员业绩导出" name="popularize" />
         <el-tab-pane label="业绩统计" name="popularizeStatic" />
-        <el-tab-pane label="业绩订单" name="popularizeOrder" />
+        <el-tab-pane label="业绩订单" name="popularizeOrder" /> -->
         <el-tab-pane label="配送员业绩导出" name="delivery_staffdata" />
       </template>
       <template v-else>
@@ -76,22 +76,26 @@
         />
         <el-tab-pane label="售后列表" name="aftersale_record_count" />
         <el-tab-pane label="退款单列表" name="refund_record_count" />
-        <el-tab-pane label="银联分账单" name="chinaums_division" />
-        <el-tab-pane label="推广员业绩" name="popularize" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="银联分账单" name="chinaums_division" />
+        <!-- <el-tab-pane label="推广员业绩" name="popularize" />
         <el-tab-pane label="业绩统计" name="popularizeStatic" />
-        <el-tab-pane label="业绩订单" name="popularizeOrder" />
+        <el-tab-pane label="业绩订单" name="popularizeOrder" /> -->
         <!-- <el-tab-pane label="财务售后单导出" name="aftersale_financial" /> -->
-        <el-tab-pane label="财务销售报表导出" name="salesreport_financial" />
+        <el-tab-pane
+          v-if="!VERSION_SHUYUN()"
+          label="财务销售报表导出"
+          name="salesreport_financial"
+        />
         <el-tab-pane label="交易统计导出" name="hfpay_trade_record" />
         <!-- <el-tab-pane
           label="分账统计导出"
           name="hfpay_order_record"
         /> -->
         <el-tab-pane label="提现记录导出" name="hfpay_withdraw_record" />
-        <el-tab-pane label="分账导出" name="adapay_tradedata" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="分账导出" name="adapay_tradedata" />
         <el-tab-pane label="商品码导出" name="itemcode" />
-        <el-tab-pane label="结算单" name="statements" />
-        <el-tab-pane label="结算单明细" name="statement_details" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="结算单" name="statements" />
+        <el-tab-pane v-if="!VERSION_SHUYUN()" label="结算单明细" name="statement_details" />
         <el-tab-pane label="斗拱分账" name="bspay_tradedata" />
         <el-tab-pane label="配送员业绩导出" name="delivery_staffdata" />
         <el-tab-pane v-if="IS_SUPPLIER()" label="主订单导出" name="supplier_order" />
@@ -99,6 +103,10 @@
         <el-tab-pane label="员工列表" name="employee_purchase_employees" />
         <el-tab-pane label="店铺白名单导出" name="distributor_white_list" />
       </template>
+
+      <el-tab-pane label="推广员业绩导出" name="popularize" />
+      <el-tab-pane label="业绩统计" name="popularizeStatic" />
+      <el-tab-pane label="业绩订单" name="popularizeOrder" />
 
       <el-table v-loading="loading" :data="exportLogLists" :height="wheight - 220">
         <el-table-column prop="log_id" label="ID" width="80" />
@@ -129,7 +137,7 @@
         />
       </div>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -158,7 +166,6 @@ export default {
     this.activeTabHandler()
     this.getExportLogLists(this.params)
   },
-
   computed: {
     ...mapGetters(['wheight'])
   },
@@ -166,17 +173,19 @@ export default {
     activeTabHandler() {
       const active = this.$store.getters.login_type
       const { tab } = this.$route.query
-      if (tab) {
-        this.activeName = tab
-      } else {
-        if (active == 'dealer') {
-          this.activeName = 'adapay_tradedata'
-        } else if (active == 'merchant') {
-          this.activeName = 'normal_master_order'
+      this.$nextTick(() => {
+        if (tab) {
+          this.activeName = tab
         } else {
-          this.activeName = 'member'
+          if (active == 'dealer') {
+            this.activeName = 'adapay_tradedata'
+          } else if (active == 'merchant') {
+            this.activeName = 'normal_master_order'
+          } else {
+            this.activeName = 'member'
+          }
         }
-      }
+      })
     },
     // 切换tab
     handleClick(tab, event) {

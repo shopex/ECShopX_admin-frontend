@@ -60,17 +60,27 @@
 }
 </style>
 
+<style>
+.form-item__label {
+  white-space: nowrap;
+}
+</style>
+
 <template>
-  <div>
-    <div v-if="$route.path.indexOf('detail') === -1 && $route.path.indexOf('chiefupload') === -1">
+  <SpPage>
+    <SpRouterView>
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="mobile" label="手机号:">
           <el-input v-model="params.mobile" placeholder="请输入手机号" />
         </SpFilterFormItem>
-        <SpFilterFormItem prop="username" label="昵称:">
+        <SpFilterFormItem v-if="!VERSION_SHUYUN()" prop="username" label="昵称:">
           <el-input v-model="params.username" placeholder="请输入昵称" />
         </SpFilterFormItem>
-        <SpFilterFormItem v-if="!VERSION_IN_PURCHASE()" prop="vip_grade" label="会员身份:">
+        <SpFilterFormItem
+          v-if="!VERSION_IN_PURCHASE()"
+          prop="vip_grade"
+          :label="!VERSION_SHUYUN() ? '会员身份:' : '付费会员等级:'"
+        >
           <el-select v-model="params.vip_grade" clearable placeholder="请选择">
             <el-option
               v-for="item in vipGrade"
@@ -152,11 +162,10 @@
       </SpFilterForm>
 
       <div class="action-container">
-        <el-button type="primary" plain @click="batchActionDialog('rel_tag')"> 打标签 </el-button>
+        <el-button type="primary" @click="batchActionDialog('rel_tag')"> 打标签 </el-button>
         <el-button
           v-if="!VERSION_IN_PURCHASE()"
           type="primary"
-          plain
           @click="batchActionDialog('give_coupon')"
         >
           赠送优惠券
@@ -164,7 +173,6 @@
         <el-button
           v-if="$store.getters.login_type != 'distributor'"
           type="primary"
-          plain
           @click="batchActionDialog('send_sms')"
         >
           群发短信
@@ -172,50 +180,23 @@
         <el-button
           v-if="$store.getters.login_type != 'distributor' && !VERSION_IN_PURCHASE()"
           type="primary"
-          plain
           @click="handleVipGradeDelay(false)"
         >
           付费会员延期
         </el-button>
         <el-button
-          v-if="$store.getters.login_type != 'distributor' && !VERSION_IN_PURCHASE()"
+          v-if="
+            $store.getters.login_type != 'distributor' &&
+            !VERSION_IN_PURCHASE() &&
+            !VERSION_SHUYUN()
+          "
           type="primary"
-          plain
           @click="batchActionDialog('set_grade')"
         >
           会员等级设置
         </el-button>
-        <export-tip @exportHandle="exportData">
-          <el-button type="primary" plain icon="el-plus-circle"> 导出 </el-button>
-        </export-tip>
-        <!-- X：平台和店铺，会员里都有“团长导入”
-        云店：平台有，店铺没有 -->
-        <!-- <el-button
-          v-if="
-            (VERSION_PLATFORM() && IS_ADMIN()) ||
-            (VERSION_PLATFORM() && IS_DISTRIBUTOR()) ||
-            (VERSION_STANDARD() && IS_ADMIN())
-          "
-          type="primary"
-          plain
-          @click="chiefupload"
-        >
-          团长导入
-        </el-button> -->
+        <el-button type="primary" @click="exportData"> 导出 </el-button>
       </div>
-
-      <!-- <el-row>
-        <el-col>
-          <el-popover
-            placement="top-start"
-            width="200"
-            trigger="hover"
-            content="导出任务会以队列执行，点击导出后，请至‘设置-导出列表’页面中查看及下载数据"
-          >
-            <i class="el-icon-question" slot="reference"></i>
-          </el-popover>
-        </el-col>
-      </el-row> -->
 
       <el-table
         v-loading="loading"
@@ -225,12 +206,16 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" align="center" label="全选" />
-        <el-table-column v-if="VERSION_SHUYUN" prop="userid" label="平台账号" width="100" />
+        <el-table-column v-if="VERSION_SHUYUN()" prop="userid" label="平台账号" width="100" />
         <el-table-column prop="mobile" label="手机号" width="160">
           <template slot-scope="scope">
             {{ scope.row.mobile }}
             <el-tooltip
-              v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                datapass_block == 0 &&
+                !VERSION_SHUYUN()
+              "
               class="item"
               effect="dark"
               content="修改手机号"
@@ -246,11 +231,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="username" label="昵称" width="140" />
-        <el-table-column prop="role" label="角色" width="70">
-          <template slot-scope="scope">
-            {{ roleList.find(item => item.value == scope.row.role)?.label }}
-          </template>
-        </el-table-column>
+
         <el-table-column v-if="!VERSION_IN_PURCHASE()" prop="sex" label="性别" width="70">
           <template slot-scope="scope">
             <span v-if="scope.row.sex == '2'">女</span>
@@ -291,7 +272,6 @@
             <span>{{ showGrade(scope.row.grade_id, scope.row.vip_grade) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="company" label="所属公司" width="80" />
         <el-table-column v-if="!VERSION_IN_PURCHASE()" prop="inviter" label="推荐人" width="130" />
         <el-table-column prop="disabled" label="禁用" width="80">
           <template slot-scope="scope">
@@ -370,14 +350,22 @@
           <template slot-scope="scope">
             <el-button type="text" @click="getDetail(scope.row.user_id)"> 详情 </el-button>
             <el-button
-              v-if="$store.getters.login_type != 'distributor' && datapass_block == 0"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                datapass_block == 0 &&
+                !VERSION_SHUYUN()
+              "
               type="text"
               @click="infoUpdate(scope.row)"
             >
               基础信息
             </el-button>
             <el-button
-              v-if="$store.getters.login_type != 'distributor' && !VERSION_IN_PURCHASE()"
+              v-if="
+                $store.getters.login_type != 'distributor' &&
+                !VERSION_IN_PURCHASE() &&
+                !VERSION_SHUYUN()
+              "
               type="text"
               @click="gradeUpdate(scope.row)"
             >
@@ -389,7 +377,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="content-center content-top-padded">
+      <div class="content-center content-top-padded c-pagination">
         <el-pagination
           background
           layout="total, sizes, prev, pager, next, jumper"
@@ -438,6 +426,7 @@
             <el-pagination
               background
               layout="prev, pager, next"
+              style="white-space: initial"
               :current-page="staffCoupons.page.currentPage"
               :page-size="staffCoupons.page.pageSize"
               :total="staffCoupons.page.total"
@@ -843,13 +832,11 @@
           @smsMassLogEditHandler="switchAliyunsmsDialog"
         />
       </template>
-    </div>
-    <router-view />
-  </div>
+    </SpRouterView>
+  </SpPage>
 </template>
 
 <script>
-import store from '@/store'
 import exportTip from '@/components/export_tips'
 import aliyunsmsDialog from '@/view/base/shortmessage/cpn/sms_MassLog_edit.vue'
 import { mapGetters } from 'vuex'
@@ -1076,7 +1063,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['wheight', 'isMicorMall', 'login_type'])
+    ...mapGetters(['isMicorMall', 'login_type'])
   },
   mounted() {
     const { salesman_mobile, wechat_nickname, mobile, orderRecords, grade_id, currentPage } =
@@ -1112,13 +1099,6 @@ export default {
     this.getAliSMS()
   },
   methods: {
-    chiefupload() {
-      if (this.login_type == 'distributor') {
-        this.$router.push({ path: `/shopadmin/member/member/chiefupload` })
-      } else {
-        this.$router.push({ path: `/member/member/chiefupload` })
-      }
-    },
     async getAliSMS() {
       const { aliyunsms_status } = await this.$api.sms.getaliSmsStatus()
       this.aliyunsms_status = aliyunsms_status
@@ -1325,13 +1305,16 @@ export default {
           grade_name
         })
       })
-      vipGradeList.forEach(({ vip_grade_id, grade_name, lv_type }) => {
-        _levelData.push({
-          grade_id: lv_type,
-          grade_name
-          // lv_type
+      if (!this.VERSION_SHUYUN()) {
+        vipGradeList.forEach(({ vip_grade_id, grade_name, lv_type }) => {
+          _levelData.push({
+            grade_id: lv_type,
+            grade_name
+            // lv_type
+          })
         })
-      })
+      }
+
       this.gradeList = gradeList
       this.vipGrade = vipGradeList
       this.levelData = _levelData
@@ -1371,7 +1354,7 @@ export default {
         isShopadmin = /\/shopadmin/.test(document.location.pathname)
       } catch (e) {}
       this.$router.push({
-        path: isShopadmin ? '/shopadmin/member/member/detail' : '/member/member/memberlist/detail',
+        path: `${this.$route.path}/detail`,
         query: {
           user_id: userid,
           mobile: this.params.mobile,

@@ -1,6 +1,6 @@
 <template>
-  <div class="closeAccount">
-    <SpPlatformTip h5 app alipay />
+  <SpPage class="closeAccount">
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="注销配置" name="first">
         <el-form ref="form" class="form" :model="form" :rules="rules" label-width="320px">
@@ -31,14 +31,14 @@
               <el-option label="否" value="0"> 否 </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item style="margin-top: 100px; text-align: center" label-width="0px">
-            <!-- <el-button type="primary" @click="issuehandle('form', 'member_logout_config', 'draft')"
+          <!-- <el-form-item style="margin-top: 100px; text-align: center" label-width="0px">
+            <el-button type="primary" @click="issuehandle('form', 'member_logout_config', 'draft')"
               >保存</el-button
-            > -->
+            >
             <el-button type="primary" @click="issuehandle('form', 'member_logout_config', '')">
               提交
             </el-button>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="注销协议" name="second">
@@ -74,17 +74,17 @@
                   </el-form-item>
                 </div>
               </el-card>
-              <el-form-item style="margin-top: 40px; text-align: center; margin-right: 200px">
+              <!-- <el-form-item style="margin-top: 40px; text-align: center; margin-right: 200px">
                 <el-button type="primary" @click="issuehandle('privacyForm', 'member_logout')">
                   提交
                 </el-button>
-              </el-form-item>
+              </el-form-item> -->
             </div>
           </el-form>
         </div>
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -141,7 +141,7 @@ export default {
       }
     },
     issuehandle(formName, type) {
-      this.$refs[formName].validate(async (valid) => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           let obj
           if (type == 'member_logout_config') {
@@ -190,6 +190,7 @@ export default {
 .form {
   padding: 20px;
 }
+
 .tips {
   background: #999;
   font-size: 10px;
@@ -201,6 +202,7 @@ export default {
   .el-card__body {
     padding: 0;
   }
+
   .tips {
     background: #f5f5f5;
     font-size: 10px;

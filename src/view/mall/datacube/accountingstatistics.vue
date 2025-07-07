@@ -100,7 +100,7 @@
         <el-form :model="formData" label-width="100px">
           <el-row style="marginbottom: 0px">
             <el-col :span="12">
-              <el-form-item label="选择日期范围">
+              <el-form-item label="日期范围">
                 <el-date-picker
                   v-model="rangeData"
                   type="daterange"

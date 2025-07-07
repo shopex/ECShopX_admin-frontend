@@ -5,9 +5,9 @@
 </style>
 
 <template>
-  <div class="zyk_video">
+  <SpPage class="zyk_video">
     <template v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip />
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" />
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="wxapp_id" label="针对人群:">
           <el-select v-model="params.wxapp_id" placeholder="请选择小程序">
@@ -74,7 +74,7 @@
       </div>
     </template>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 
 <script>

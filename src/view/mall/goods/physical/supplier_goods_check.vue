@@ -18,260 +18,261 @@
 }
 </style>
 <template>
-  <div class="page-body">
+  <div class="supplier-goods-check">
     <SpRouterView>
-      <!--      <div v-if="IS_SUPPLIER()" class="action-container">-->
-      <!--        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">-->
-      <!--          添加商品-->
-      <!--        </el-button>-->
-      <!--        <el-dropdown @command="handleImport">-->
-      <!--          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">-->
-      <!--            导入<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
-      <!--          </el-button>-->
-      <!--          <el-dropdown-menu slot="dropdown">-->
-      <!--            <el-dropdown-item command="physicalupload"> 商品导入 </el-dropdown-item>-->
-      <!--            <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>-->
-      <!--          </el-dropdown-menu>-->
-      <!--        </el-dropdown>-->
-      <!--      </div>-->
+      <SpPage>
+        <!--      <div v-if="IS_SUPPLIER()" class="action-container">-->
+        <!--        <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addItems">-->
+        <!--          添加商品-->
+        <!--        </el-button>-->
+        <!--        <el-dropdown @command="handleImport">-->
+        <!--          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">-->
+        <!--            导入<i class="el-icon-arrow-down el-icon&#45;&#45;right" />-->
+        <!--          </el-button>-->
+        <!--          <el-dropdown-menu slot="dropdown">-->
+        <!--            <el-dropdown-item command="physicalupload"> 商品导入 </el-dropdown-item>-->
+        <!--            <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>-->
+        <!--          </el-dropdown-menu>-->
+        <!--        </el-dropdown>-->
+        <!--      </div>-->
 
-      <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
-        <SpFilterFormItem prop="keywords" label="商品标题:">
-          <el-input v-model="searchParams.keywords" placeholder="商品标题" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="goods_bn" label="SPU编码:">
-          <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="supplier_name" label="来源供应商:">
-          <el-input v-model="searchParams.supplier_name" placeholder="请输入来源供应商" />
-        </SpFilterFormItem>
-        <!--        <SpFilterFormItem prop="approve_status" label="商品状态:">-->
-        <!--          <el-select v-model="searchParams.approve_status" clearable placeholder="请选择">-->
-        <!--            <el-option-->
-        <!--              v-for="item in statusOption"-->
-        <!--              :key="item.value"-->
-        <!--              :label="item.title"-->
-        <!--              size="mini"-->
-        <!--              :value="item.value"-->
-        <!--            />-->
-        <!--          </el-select>-->
-        <!--        </SpFilterFormItem>-->
-        <SpFilterFormItem prop="main_cat_id" label="管理分类:">
-          <el-cascader
-            v-model="searchParams.main_cat_id"
-            placeholder="请选择"
-            clearable
-            :options="itemCategoryList"
-            :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
-          />
-        </SpFilterFormItem>
-        <!-- <SpFilterFormItem prop="audit_status" label="审核状态:">
+        <SpFilterForm :model="searchParams" @onSearch="onSearch" @onReset="onSearch">
+          <SpFilterFormItem prop="keywords" label="商品标题:">
+            <el-input v-model="searchParams.keywords" placeholder="商品标题" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="goods_bn" label="SPU编码:">
+            <el-input v-model="searchParams.goods_bn" placeholder="请输入SPU编码" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="supplier_name" label="来源供应商:">
+            <el-input v-model="searchParams.supplier_name" placeholder="请输入来源供应商" />
+          </SpFilterFormItem>
+          <!--        <SpFilterFormItem prop="approve_status" label="商品状态:">-->
+          <!--          <el-select v-model="searchParams.approve_status" clearable placeholder="请选择">-->
+          <!--            <el-option-->
+          <!--              v-for="item in statusOption"-->
+          <!--              :key="item.value"-->
+          <!--              :label="item.title"-->
+          <!--              size="mini"-->
+          <!--              :value="item.value"-->
+          <!--            />-->
+          <!--          </el-select>-->
+          <!--        </SpFilterFormItem>-->
+          <SpFilterFormItem prop="main_cat_id" label="管理分类:">
+            <el-cascader
+              v-model="searchParams.main_cat_id"
+              placeholder="请选择"
+              clearable
+              :options="itemCategoryList"
+              :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+            />
+          </SpFilterFormItem>
+          <!-- <SpFilterFormItem prop="audit_status" label="审核状态:">
           <el-select v-model="searchParams.audit_status">
             <el-option value="processing" label="待审核" />
             <el-option value="approved" label="审核通过" />
             <el-option value="rejected" label="审核拒绝" />
           </el-select>
         </SpFilterFormItem> -->
-        <SpFilterFormItem prop="templates_id" label="运费模板:">
-          <el-select v-model="searchParams.templates_id" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in templatesList"
-              :key="item.template_id"
-              :label="item.name"
-              :value="item.template_id"
+          <SpFilterFormItem prop="templates_id" label="运费模板:">
+            <el-select v-model="searchParams.templates_id" placeholder="请选择" clearable>
+              <el-option
+                v-for="item in templatesList"
+                :key="item.template_id"
+                :label="item.name"
+                :value="item.template_id"
+              />
+            </el-select>
+          </SpFilterFormItem>
+          <!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
+          <!--          <el-input v-model="searchParams.tax_rate_code" placeholder="商品编号或条形码" />-->
+          <!--        </SpFilterFormItem>-->
+          <SpFilterFormItem prop="brand_id" label="品牌:">
+            <el-select
+              v-model="searchParams.brand_id"
+              placeholder="商品/商标关键词"
+              remote
+              filterable
+              clearable
+              :remote-method="getGoodsBranchList"
+            >
+              <el-option
+                v-for="item in goodsBranchList"
+                :key="item.attribute_id"
+                :label="item.attribute_name"
+                :value="item.attribute_id"
+              />
+            </el-select>
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="regions_id" label="商品产地:">
+            <el-cascader
+              v-model="searchParams.regions_id"
+              placeholder="请选择"
+              clearable
+              :options="regions"
             />
-          </el-select>
-        </SpFilterFormItem>
-        <!--        <SpFilterFormItem prop="tax_rate_code" label="税率编码:">-->
-        <!--          <el-input v-model="searchParams.tax_rate_code" placeholder="商品编号或条形码" />-->
-        <!--        </SpFilterFormItem>-->
-        <SpFilterFormItem prop="brand_id" label="品牌:">
-          <el-select
-            v-model="searchParams.brand_id"
-            placeholder="商品/商标关键词"
-            remote
-            filterable
-            clearable
-            :remote-method="getGoodsBranchList"
+          </SpFilterFormItem>
+          <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
+          <!--          <el-select v-model="searchParams.delivery_data_type">-->
+          <!--            <el-option value="fixed_date" label="指定发货日期" />-->
+          <!--            <el-option value="relative_date" label="相对发货日期" />-->
+          <!--          </el-select>-->
+          <!--        </SpFilterFormItem>-->
+          <SpFilterFormItem prop="item_bn" label="SKU编码:">
+            <el-input v-model="searchParams.item_bn" />
+          </SpFilterFormItem>
+        </SpFilterForm>
+
+        <div class="action-container">
+          <el-button type="primary" plain @click="Examine"> 批量审核 </el-button>
+        </div>
+
+        <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+          <el-tab-pane
+            v-for="(item, index) in tabList"
+            :key="index"
+            :label="item.name"
+            :name="item.activeName"
           >
-            <el-option
-              v-for="item in goodsBranchList"
-              :key="item.attribute_id"
-              :label="item.attribute_name"
-              :value="item.attribute_id"
-            />
-          </el-select>
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="regions_id" label="商品产地:">
-          <el-cascader
-            v-model="searchParams.regions_id"
-            placeholder="请选择"
-            clearable
-            :options="regions"
-          />
-        </SpFilterFormItem>
-        <!--        <SpFilterFormItem prop="delivery_data_type" label="发货方式:">-->
-        <!--          <el-select v-model="searchParams.delivery_data_type">-->
-        <!--            <el-option value="fixed_date" label="指定发货日期" />-->
-        <!--            <el-option value="relative_date" label="相对发货日期" />-->
-        <!--          </el-select>-->
-        <!--        </SpFilterFormItem>-->
-        <SpFilterFormItem prop="item_bn" label="SKU编码:">
-          <el-input v-model="searchParams.item_bn" />
-        </SpFilterFormItem>
-      </SpFilterForm>
-
-      <div class="action-container">
-        <el-button type="primary" plain @click="Examine"> 批量审核 </el-button>
-      </div>
-
-      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-        <el-tab-pane
-          v-for="(item, index) in tabList"
-          :key="index"
-          :label="item.name"
-          :name="item.activeName"
-        >
-          <!-- <div v-if="activeName == 'second'" class="tab-tools">
+            <!-- <div v-if="activeName == 'second'" class="tab-tools">
             <div class="warn-input">
               <label class="label">预警数量:</label>
               <el-input v-model="warning_store" size="small" value="warning_store" />
               <el-button type="text" @click="setWarningStore"> 保存 </el-button>
             </div>
           </div> -->
-        </el-tab-pane>
-      </el-tabs>
+          </el-tab-pane>
+        </el-tabs>
 
-      <SpFinder
-        ref="finder"
-        :url="IS_DISTRIBUTOR() ? '/distributor/items' : '/goods/items'"
-        fixed-row-action
-        row-actions-width="200px"
-        :other-config="{}"
-        :setting="tableList"
-        :hooks="{
-          beforeSearch: beforeSearch
-        }"
-        row-actions-fixed-align="left"
-        @selection-change="onSelectionChange"
-      />
+        <SpFinder
+          ref="finder"
+          :url="IS_DISTRIBUTOR() ? '/distributor/items' : '/goods/items'"
+          fixed-row-action
+          row-actions-width="200px"
+          :other-config="{}"
+          :setting="tableList"
+          :hooks="{
+            beforeSearch: beforeSearch
+          }"
+          row-actions-fixed-align="left"
+          @selection-change="onSelectionChange"
+        />
 
-      <!-- 设置会员价 -->
-      <SpDrawer
-        v-model="showMemberPriceDrawer"
-        title="改价"
-        :width="800"
-        confirm-text="保存"
-        @confirm="onSaveMemberPrice"
-      >
-        <el-table v-loading="skuLoading" border :data="specItems" height="100%">
-          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-          <el-table-column label="原价" prop="market_price" width="100">
-            <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
-          </el-table-column>
-          <el-table-column label="门店采购价" width="160">
-            <template slot-scope="scope">
-              <el-input-number
-                v-model="scope.row.price"
-                controls-position="right"
-                size="small"
-                :min="0"
-                :precision="2"
-                style="width: 120px"
-                @change="updateGoodsSkuPrice(scope.row)"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column label="会员">
-            <el-table-column v-for="(item, index) in grade" :key="index" :label="item.grade_name">
+        <!-- 设置会员价 -->
+        <SpDrawer
+          v-model="showMemberPriceDrawer"
+          title="改价"
+          :width="800"
+          confirm-text="保存"
+          @confirm="onSaveMemberPrice"
+        >
+          <el-table v-loading="skuLoading" border :data="specItems" height="100%">
+            <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+            <el-table-column label="原价" prop="market_price" width="100">
+              <template slot-scope="scope"> ¥{{ scope.row.market_price }} </template>
+            </el-table-column>
+            <el-table-column label="门店采购价" width="160">
               <template slot-scope="scope">
                 <el-input-number
-                  v-model="scope.row.grade[index].mprice"
+                  v-model="scope.row.price"
                   controls-position="right"
                   size="small"
                   :min="0"
                   :precision="2"
                   style="width: 120px"
+                  @change="updateGoodsSkuPrice(scope.row)"
                 />
               </template>
             </el-table-column>
-          </el-table-column>
-          <el-table-column label="付费会员">
-            <el-table-column
-              v-for="(item, index) in vipGrade"
-              :key="index"
-              :label="item.grade_name"
-            >
+            <el-table-column label="会员">
+              <el-table-column v-for="(item, index) in grade" :key="index" :label="item.grade_name">
+                <template slot-scope="scope">
+                  <el-input-number
+                    v-model="scope.row.grade[index].mprice"
+                    controls-position="right"
+                    size="small"
+                    :min="0"
+                    :precision="2"
+                    style="width: 120px"
+                  />
+                </template>
+              </el-table-column>
+            </el-table-column>
+            <el-table-column label="付费会员">
+              <el-table-column
+                v-for="(item, index) in vipGrade"
+                :key="index"
+                :label="item.grade_name"
+              >
+                <template slot-scope="scope">
+                  <el-input-number
+                    v-model="scope.row.vipGrade[index].mprice"
+                    controls-position="right"
+                    size="small"
+                    :min="0"
+                    :precision="2"
+                    style="width: 120px"
+                  />
+                </template>
+              </el-table-column>
+            </el-table-column>
+          </el-table>
+        </SpDrawer>
+
+        <!-- 设置商品库存 -->
+        <SpDrawer
+          v-model="showItemStoreDrawer"
+          title="设置商品库存"
+          :width="800"
+          @confirm="onSaveItemStore"
+        >
+          <el-table v-loading="skuLoading" border :data="storeItemsList" height="100%">
+            <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+            <el-table-column label="库存">
               <template slot-scope="scope">
                 <el-input-number
-                  v-model="scope.row.vipGrade[index].mprice"
+                  v-model="scope.row.store"
                   controls-position="right"
                   size="small"
                   :min="0"
-                  :precision="2"
                   style="width: 120px"
                 />
               </template>
             </el-table-column>
-          </el-table-column>
-        </el-table>
-      </SpDrawer>
+          </el-table>
+        </SpDrawer>
 
-      <!-- 设置商品库存 -->
-      <SpDrawer
-        v-model="showItemStoreDrawer"
-        title="设置商品库存"
-        :width="800"
-        @confirm="onSaveItemStore"
-      >
-        <el-table v-loading="skuLoading" border :data="storeItemsList" height="100%">
-          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-          <el-table-column label="库存">
-            <template slot-scope="scope">
-              <el-input-number
-                v-model="scope.row.store"
-                controls-position="right"
-                size="small"
-                :min="0"
-                style="width: 120px"
-              />
-            </template>
-          </el-table-column>
-        </el-table>
-      </SpDrawer>
+        <!-- 更改销售分类 -->
+        <SpDialog
+          ref="saleCategoryDialogRef"
+          v-model="saleCategoryDialog"
+          title="更改销售分类"
+          :form="saleCategoryForm"
+          :form-list="saleCategoryFormList"
+          @onSubmit="onSaleCategorySubmit"
+        />
 
-      <!-- 更改销售分类 -->
-      <SpDialog
-        ref="saleCategoryDialogRef"
-        v-model="saleCategoryDialog"
-        title="更改销售分类"
-        :form="saleCategoryForm"
-        :form-list="saleCategoryFormList"
-        @onSubmit="onSaleCategorySubmit"
-      />
+        <!-- 运费模板 -->
+        <SpDialog
+          ref="freightTemplateDialogRef"
+          v-model="freightTemplateDialog"
+          title="更改运费模板"
+          :form="freightTemplateForm"
+          :form-list="freightTemplateFormList"
+          @onSubmit="onFreightTemplateSubmit"
+        />
 
-      <!-- 运费模板 -->
-      <SpDialog
-        ref="freightTemplateDialogRef"
-        v-model="freightTemplateDialog"
-        title="更改运费模板"
-        :form="freightTemplateForm"
-        :form-list="freightTemplateFormList"
-        @onSubmit="onFreightTemplateSubmit"
-      />
+        <!-- 批量修改库存 -->
+        <SpDialog
+          ref="storeItemDialogRef"
+          v-model="storeItemDialog"
+          title="批量修改库存"
+          :form="storeItemForm"
+          :form-list="storeItemFormList"
+          @onSubmit="onStoreItemSubmit"
+        />
 
-      <!-- 批量修改库存 -->
-      <SpDialog
-        ref="storeItemDialogRef"
-        v-model="storeItemDialog"
-        title="批量修改库存"
-        :form="storeItemForm"
-        :form-list="storeItemFormList"
-        @onSubmit="onStoreItemSubmit"
-      />
-
-      <!-- 批量改价 -->
-      <!-- <SpDialog
+        <!-- 批量改价 -->
+        <!-- <SpDialog
         ref="changePriceDialogRef"
         v-model="changePriceDialog"
         title="批量改价"
@@ -280,59 +281,60 @@
         @onSubmit="onChangePriceSubmit"
       /> -->
 
-      <!-- 打标签 -->
-      <SpDialog
-        ref="labelDialogRef"
-        v-model="labelDialog"
-        title="标签"
-        :modal="false"
-        :form="labelForm"
-        :form-list="labelFormList"
-        @onSubmit="onLabelFormSubmit"
-      />
+        <!-- 打标签 -->
+        <SpDialog
+          ref="labelDialogRef"
+          v-model="labelDialog"
+          title="标签"
+          :modal="false"
+          :form="labelForm"
+          :form-list="labelFormList"
+          @onSubmit="onLabelFormSubmit"
+        />
 
-      <!-- 查看多规格信息 -->
-      <SpDrawer
-        v-model="showItemSkuDrawer"
-        :title="itemSkuDrawerTitle"
-        :width="800"
-        @confirm="
-          () => {
-            showItemSkuDrawer = false
-          }
-        "
-      >
-        <el-table v-loading="skuLoading" border :data="itemSkuList" height="100%">
-          <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
-          <el-table-column label="商品货号" prop="supplier_goods_bn" min-width="120" />
-          <el-table-column label="税率编码" prop="tax_rate_code" min-width="120" />
-          <el-table-column label="税率" prop="tax_rate" min-width="120">
-            <template slot-scope="scope">
-              <span>{{ `${scope.row.tax_rate}%` }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </SpDrawer>
+        <!-- 查看多规格信息 -->
+        <SpDrawer
+          v-model="showItemSkuDrawer"
+          :title="itemSkuDrawerTitle"
+          :width="800"
+          @confirm="
+            () => {
+              showItemSkuDrawer = false
+            }
+          "
+        >
+          <el-table v-loading="skuLoading" border :data="itemSkuList" height="100%">
+            <el-table-column label="规格" prop="item_spec_desc" min-width="120" />
+            <el-table-column label="商品货号" prop="supplier_goods_bn" min-width="120" />
+            <el-table-column label="税率编码" prop="tax_rate_code" min-width="120" />
+            <el-table-column label="税率" prop="tax_rate" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ `${scope.row.tax_rate}%` }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </SpDrawer>
 
-      <el-dialog title="批量审核供应商商品" :visible.sync="dialogVisibleExamine" width="30%">
-        <el-form ref="form" :model="examineForm" label-width="80px">
-          <el-form-item label="审核状态">
-            <el-radio-group v-model="examineForm.audit_status">
-              <el-radio label="approved"> 通过 </el-radio>
-              <el-radio label="rejected"> 拒绝 </el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item v-if="examineForm.audit_status == 'rejected'" label="拒绝原因">
-            <el-input v-model="examineForm.audit_reason" type="textarea" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" :loading="examineLoading" @click="onSubmitExamine">
-              确定
-            </el-button>
-            <el-button @click="dialogVisibleExamine = false"> 取消 </el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
+        <el-dialog title="批量审核供应商商品" :visible.sync="dialogVisibleExamine" width="30%">
+          <el-form ref="form" :model="examineForm" label-width="80px">
+            <el-form-item label="审核状态">
+              <el-radio-group v-model="examineForm.audit_status">
+                <el-radio label="approved"> 通过 </el-radio>
+                <el-radio label="rejected"> 拒绝 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="examineForm.audit_status == 'rejected'" label="拒绝原因">
+              <el-input v-model="examineForm.audit_reason" type="textarea" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" :loading="examineLoading" @click="onSubmitExamine">
+                确定
+              </el-button>
+              <el-button @click="dialogVisibleExamine = false"> 取消 </el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </SpPage>
     </SpRouterView>
   </div>
 </template>

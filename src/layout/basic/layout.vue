@@ -1,13 +1,20 @@
 <template>
   <div class="relative flex min-h-full w-full">
     <el-container>
-      <el-aside width="250px">
-        <LayoutSidebar />
+      <el-aside class="!w-auto">
+        <LayoutSidebar @change="handleSidebarChange" />
       </el-aside>
 
       <el-container>
         <el-header height="50px">
-          <LayoutHeader />
+          <LayoutHeader>
+            <div
+              class="light flex h-full items-center text-xl px-3 text-[#333]"
+              v-if="!showSubMenu"
+            >
+              {{ systemTitle }}
+            </div>
+          </LayoutHeader>
           <!-- <div class="flex justify-between items-center">
             <div></div>
             <div>
@@ -18,57 +25,64 @@
           < /> -->
         </el-header>
 
-        <el-main class="!px-0 !py-0">
-          <LayoutContent>
+        <el-main class="!px-0 !py-0" style="height: calc(100vh - 100px)">
+          <LayoutContent v-if="!$route.path.includes('/decoration/web/template/edit')">
             <RouterView />
           </LayoutContent>
+
+          <div id="design-view" v-else class="relative h-full" />
         </el-main>
 
         <el-footer class="flex justify-center items-center" height="50px">
-          <SpImage :src="footerBackground" height="28" fit="contain" />
+          <SpImage :src="footerBackground" height="18" fit="contain" />
         </el-footer>
       </el-container>
     </el-container>
-
-    <!--
-    <div class="flex flex-1 flex-col overflow-hidden">
-      <div>
-
-
-
-
-
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import DEFAULT_CONFIG from '@/config'
+import { getSystemTitle } from '@/utils'
+import { micrApp } from '@/utils/micr-app'
 import LayoutSidebar from './layout-sidebar.vue'
 import LayoutContent from './layout-content.vue'
 import LayoutHeader from './layout-header.vue'
 import BasicToolbar from './layout-toolbar.vue'
+import EmptyLayout from './layout-empty.vue'
 
 export default {
   components: {
     LayoutSidebar,
     LayoutContent,
     LayoutHeader,
-    BasicToolbar
+    BasicToolbar,
+    EmptyLayout
+  },
+  data() {
+    return {
+      showSubMenu: false
+    }
   },
   computed: {
     footerBackground: () => {
       return require(`@/assets/images/${DEFAULT_CONFIG.footerBackground}`)
+    },
+    systemTitle: () => {
+      return getSystemTitle()
     }
   },
   mounted() {
     this.getSystemSetting()
+    micrApp.init()
   },
   methods: {
     async getSystemSetting() {
       const { logo } = await this.$api.system.getBrandLogo()
       this.$store.commit('system/setSystemLogo', { logo })
+    },
+    handleSidebarChange(val) {
+      this.showSubMenu = val
     }
   }
 }

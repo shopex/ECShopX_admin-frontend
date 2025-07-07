@@ -1,6 +1,5 @@
 <template>
-  <div class="section-white" style="padding-bottom: 70px">
-    <h3 class="title">售后详情</h3>
+  <SpPage title="售后详情">
     <div class="section-header with-border flex">
       <h3>售后信息</h3>
       <el-button
@@ -30,10 +29,8 @@
         <el-col :span="3" class="col-3 content-right"> 订单号: </el-col>
         <el-col :span="20">
           <el-button type="text" @click="() => handleOrderClick(aftersalesInfo.order_id)">
-{{
-            aftersalesInfo.order_id
-          }}
-</el-button>
+            {{ aftersalesInfo.order_id }}
+          </el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -147,10 +144,9 @@
                     type="primary"
                     size="mini"
                     style="background-color: #fff"
-                    >
-处方药
-</el-tag
                   >
+                    处方药
+                  </el-tag>
                   {{ scope.row.item_name }}
                 </div>
               </template>
@@ -522,8 +518,7 @@
     <template
       v-if="
         aftersalesInfo.aftersales_type == 'REFUND_GOODS' &&
-        ((aftersalesInfo.progress == '0' && is_approved == '1') ||
-          !isArray(aftersales_address)) &&
+        ((aftersalesInfo.progress == '0' && is_approved == '1') || !isArray(aftersales_address)) &&
         aftersalesInfo.return_type == 'logistics'
       "
     >
@@ -707,7 +702,7 @@
       </span>
     </el-dialog>
     <RemarkModal ref="modalRef" @onDone="onRemarksDone" />
-  </div>
+  </SpPage>
 </template>
 <style scoped lang="scss" type="text/css">
 .flex {
@@ -877,12 +872,12 @@ export default {
     isArray,
     isObject,
     getLogisticsListData() {
-      getLogisticsLists({ status: 1 }).then((response) => {
+      getLogisticsLists({ status: 1 }).then(response => {
         this.logisticsList = response.data.data.list
       })
     },
     aftersaleInfo() {
-      getAftersalesDetail(this.aftersales_bn).then((response) => {
+      getAftersalesDetail(this.aftersales_bn).then(response => {
         let data = response.data.data
         this.aftersalesInfo = data
         this.orderInfo = data.order_info
@@ -918,7 +913,7 @@ export default {
     },
     submitAftersalesInfo() {
       this.sendbackInfo['aftersales_bn'] = this.aftersales_bn
-      updateAftersalesSendBack(this.sendbackInfo).then((response) => {
+      updateAftersalesSendBack(this.sendbackInfo).then(response => {
         this.$message.success('修改用户回寄信息成功!')
         let data = response.data.data
         this.aftersalesInfo = data
@@ -981,7 +976,7 @@ export default {
       setTimeout(() => {
         this.submitDisabled = false
       }, 1000)
-      reviewAftersales(this.reviewData).then((response) => {
+      reviewAftersales(this.reviewData).then(response => {
         if (response.data.data) {
           this.$message({
             message: '提交审核成功！',
@@ -998,7 +993,7 @@ export default {
       this.exchangeSendBack.aftersales_bn = this.aftersales_bn
       this.exchangeSendBack.corp_code = this.corp_code
       this.exchangeSendBack.logi_no = this.logi_no
-      sendConfirm(this.reviewData).then((response) => {
+      sendConfirm(this.reviewData).then(response => {
         if (response.data.data) {
           this.$message({
             message: '重新发货成功！',
@@ -1026,7 +1021,7 @@ export default {
         this.$message.error('退款金额必填！')
         return false
       }
-      refundCheck(this.refundData).then((response) => {
+      refundCheck(this.refundData).then(response => {
         if (response.data.data) {
           this.$message({
             message: '操作成功！',
@@ -1041,7 +1036,7 @@ export default {
     },
 
     getStatus() {
-      isBind().then((response) => {
+      isBind().then(response => {
         this.IsBind = response.data.data.result
       })
     },
@@ -1062,7 +1057,7 @@ export default {
       this.getAftersalesaddressList(queryData)
     },
     getAftersalesaddressList(queryData) {
-      getAftersalesAddressList(queryData).then((response) => {
+      getAftersalesAddressList(queryData).then(response => {
         if (response.data.data.list) {
           this.relShop.list = response.data.data.list
           this.relShop.total_count = response.data.data.total_count
@@ -1073,7 +1068,7 @@ export default {
       this.relShop.relShopVisible = false
     },
     handleSelectAftersalesAddress() {
-      const fd = this.relShop.list.find((item) => item.address_id == this.aftersales_select)
+      const fd = this.relShop.list.find(item => item.address_id == this.aftersales_select)
       if (fd) {
         this.aftersales_address_id = fd.address_id
         this.aftersales_contact = fd.contact
@@ -1123,7 +1118,7 @@ export default {
       queryData['address'] = this.aftersales_address
       queryData['contact'] = this.aftersales_contact
       queryData['mobile'] = this.aftersales_mobile
-      createAftersalesAddress(queryData).then((response) => {
+      createAftersalesAddress(queryData).then(response => {
         if (response.data.data.status) {
           this.$message({
             message: '添加成功',

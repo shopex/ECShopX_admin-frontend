@@ -1,62 +1,65 @@
 <template>
-  <div>
-    <el-form ref="form" :model="form" label-position="left" label-width="100px">
-      <div class="section-body">
-        <el-form-item label="商城Logo">
-          <SpImagePicker v-model="form.logo" size="small" />
-        </el-form-item>
-        <el-form-item label="背景图">
-          <SpImagePicker v-model="form.background" />
-        </el-form-item>
+  <SpPage title="登录页配置">
+    <template slot="page-footer">
+      <div class="text-center">
+        <el-button type="primary" :loading="loading" @click="onSubmit"> 保存 </el-button>
       </div>
-      <div class="section-footer content-center">
-        <el-button v-loading="loading" type="primary" @click="onSubmit"> 保存 </el-button>
-      </div>
-    </el-form>
-  </div>
+    </template>
+    <Form />
+  </SpPage>
 </template>
 
 <script>
-import { saveLoginPageSetting, getLoginPageSetting } from '@/api/webtemplate'
+import { useForm } from '@/composables'
+
+const [Form, FormApi] = useForm({
+  formItems: [
+    {
+      component: 'ImagePicker',
+      componentProps: {
+        size: 'small'
+      },
+      fieldName: 'logo',
+      label: '商城Logo'
+    },
+    {
+      component: 'ImagePicker',
+      componentProps: {
+        size: 'small'
+      },
+      fieldName: 'background',
+      label: '背景图'
+    }
+  ],
+  showDefaultActions: false
+})
+
 export default {
+  components: {
+    Form
+  },
   data() {
     return {
-      loading: false,
-      form: {
-        logo: '',
-        background: ''
-      }
+      loading: false
     }
   },
   mounted() {
-    getLoginPageSetting().then((res) => {
-      this.form.logo = res.data.data.logo
-      this.form.background = res.data.data.background
-    })
+    this.getLoginPageSetting()
   },
   methods: {
-    onSubmit() {
-      let params = {}
-      this.loading = true
-
-      params = {
-        logo: this.form.logo,
-        background: this.form.background
-      }
-      console.log(params)
-      saveLoginPageSetting(params).then((response) => {
-        if (response.data.data) {
-          this.$message({
-            message: '保存配置信息成功！',
-            type: 'success'
-          })
-          this.loading = false
-        } else {
-          this.$message.error('配置信息失败，请确认是否正确填写内容！')
-          this.loading = false
-          return false
-        }
+    async getLoginPageSetting() {
+      const res = await this.$api.webtemplate.getLoginPageSetting()
+      FormApi.setFieldsValue({
+        logo: res.logo,
+        background: res.background
       })
+    },
+    async onSubmit() {
+      this.loading = true
+      const params = FormApi.getFieldsValue()
+      await this.$api.webtemplate.saveLoginPageSetting(params)
+      this.$message.success('保存成功！')
+      this.loading = false
     }
   }
 }

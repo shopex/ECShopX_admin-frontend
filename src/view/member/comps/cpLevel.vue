@@ -43,18 +43,18 @@
             <p class="content-center">卡封面（建议尺寸：600px * 375px）</p>
           </div>
           <div class="item-content f_l">
-            <div>
+            <div style="display: flex; align-items: center">
               <span class="txt">等级名称</span
               ><el-input
                 v-model="item.grade_name"
                 :maxlength="9"
                 placeholder="最多填写9个汉字"
                 :name="index + ''"
-                :disabled="VERSION_SHUYUN"
+                :disabled="VERSION_SHUYUN()"
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
             </div>
-            <div class="clearfix">
+            <div v-if="!VERSION_SHUYUN()" class="clearfix">
               <span class="txt f_l">升级条件</span>
               <span v-if="item.default_grade" class="txt-none">无</span>
               <template v-else>
@@ -85,7 +85,7 @@
                     />&nbsp;折
                   </div>
                 </template>
-                <SpPlatformTip h5 app alipay />
+                <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
               </div>
             </div>
             <div class="clearfix">
@@ -102,6 +102,7 @@
                     />
                   </div>
                 </template>
+                &nbsp;<span class="frm-tips">（注：等级说明在c端展示！）</span>
               </div>
             </div>
             <!-- ----------------------------------------------卷包功能-------------------------------------------- -->
@@ -147,10 +148,6 @@
         </div>
       </div>
     </template>
-    <div class="section-footer content-center">
-      <el-button v-if="!VERSION_SHUYUN" @click="addGrade"> 添加等级卡 </el-button>
-      <el-button type="primary" @click="saveGrade"> 保存 </el-button>
-    </div>
     <template v-if="visible">
       <coupon-select
         :package-id="packageId"
@@ -321,7 +318,7 @@ export default {
           return
         }
         if (
-          !this.VERSION_SHUYUN &&
+          !this.VERSION_SHUYUN() &&
           index > 0 &&
           Number(value) >= Number(this.levelData[index - 1].privileges.discount)
         ) {
@@ -401,7 +398,7 @@ export default {
             })
             break
           } else if (
-            !this.VERSION_SHUYUN &&
+            !this.VERSION_SHUYUN() &&
             i > 0 &&
             Number(this.levelData[i].privileges.discount) >=
               Number(this.levelData[i - 1].privileges.discount)
@@ -509,6 +506,25 @@ export default {
 }
 .item-box {
   padding-top: 10px;
+  /* display: flex; */
+}
+.clearfix {
+  *zoom: 1;
+}
+
+.clearfix:after,
+.clearfix:before {
+  content: '';
+  display: table;
+  line-height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.f_l {
+  float: left;
 }
 .level-item {
   margin-bottom: 20px;

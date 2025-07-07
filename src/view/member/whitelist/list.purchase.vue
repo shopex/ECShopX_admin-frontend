@@ -1,5 +1,13 @@
 <template>
-  <div>
+  <SpPage>
+    <SpFilterForm :model="formData" @onSearch="dataSearch" @onReset="dataSearch">
+      <SpFilterFormItem prop="mobile" label="手机号:">
+        <el-input v-model="formData.mobile" placeholder="请输入手机号" />
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="account" label="账号:">
+        <el-input v-model="formData.account" placeholder="请输入账号" />
+      </SpFilterFormItem>
+    </SpFilterForm>
     <el-row :gutter="20">
       <el-col :span="12">
         <el-button type="primary" icon="plus" @click="addData"> 添加白名单 </el-button>
@@ -7,14 +15,14 @@
           白名单提示
         </el-button>
       </el-col>
-      <el-col :span="6">
+      <!-- <el-col :span="6">
         <el-input v-model="account" placeholder="账号" clearable />
       </el-col>
       <el-col :span="6">
         <el-input v-model="mobile" placeholder="手机号" clearable>
           <el-button slot="append" icon="el-icon-search" @click="dataSearch" />
         </el-input>
-      </el-col>
+      </el-col> -->
     </el-row>
     <el-table v-loading="loading" :data="whitelistList" :height="wheight - 160">
       <el-table-column prop="mobile" label="手机号" />
@@ -123,7 +131,7 @@
         <el-button type="primary" @click="submitTipsAction"> 保存 </el-button>
       </div>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -175,7 +183,11 @@ export default {
       datapass_block: 1,
       enterpriseList: [],
       login_type: '',
-      enterprise_sn_data: ''
+      enterprise_sn_data: '',
+      formData: {
+        mobile: '',
+        account: ''
+      }
     }
   },
   computed: {
@@ -225,14 +237,14 @@ export default {
       this.isEdit = false
     },
     fetchList() {
-      getEnterpriseList({ page: 1, pageSize: 200 }).then((response) => {
+      getEnterpriseList({ page: 1, pageSize: 200 }).then(response => {
         this.enterpriseList = response.data.data.list
       })
     },
     editAction(index, row) {
       // 编辑物料弹框
       this.handleCancel()
-      const fliterArr = this.enterpriseList.filter((el) => el.enterprise_sn == row.enterprise_sn)
+      const fliterArr = this.enterpriseList.filter(el => el.enterprise_sn == row.enterprise_sn)
       const login_type =
         fliterArr.length > 0 ? fliterArr[0].login_type : this.enterpriseList[0].login_type
       const enterprise_sn =
@@ -262,13 +274,13 @@ export default {
         delete params.account
       }
       if (this.whitelist_id) {
-        updateMembersWhitelist(this.whitelist_id, params).then((response) => {
+        updateMembersWhitelist(this.whitelist_id, params).then(response => {
           this.detailData = response.data.data
           this.editVisible = false
           this.getListData()
         })
       } else {
-        createMembersWhitelist(params).then((response) => {
+        createMembersWhitelist(params).then(response => {
           this.detailData = response.data.data
           this.editVisible = false
           this.getListData()
@@ -277,14 +289,14 @@ export default {
       }
     },
     dataSearch() {
-      this.params.account = this.account
-      this.params.mobile = this.mobile
+      this.params.account = this.formData.account
+      this.params.mobile = this.formData.mobile
       this.params.page = 1
       this.getListData()
     },
     getListData() {
       this.loading = true
-      getMembersWhitelistList(this.params).then((response) => {
+      getMembersWhitelistList(this.params).then(response => {
         this.whitelistList = response.data.data.list
         this.total_count = response.data.data.total_count
         this.datapass_block = response.data.data.datapass_block
@@ -299,7 +311,7 @@ export default {
       })
         .then(() => {
           deleteMembersWhitelist(row.whitelist_id)
-            .then((response) => {
+            .then(response => {
               this.whitelistList.splice(index, 1)
               this.$message({
                 message: '删除成功',
@@ -326,7 +338,7 @@ export default {
       this.handleCancelTips()
       this.editTitle = '白名单提示'
       this.editTipsVisible = true
-      getWhitelistSetting().then((response) => {
+      getWhitelistSetting().then(response => {
         this.form.tips = response.data.data.whitelist_tips
       })
     },
@@ -337,7 +349,7 @@ export default {
     submitTipsAction() {
       // 提交物料
       const params = { whitelist_tips: this.form.tips }
-      setWhitelistSetting(params).then((response) => {
+      setWhitelistSetting(params).then(response => {
         this.editTipsVisible = false
         this.handleTipsCancel()
       })

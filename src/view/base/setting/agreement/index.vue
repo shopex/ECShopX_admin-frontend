@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-if="!VERSION_SHUYUN" class="agreement">
+  <SpPage>
+    <div v-if="!VERSION_SHUYUN()" class="agreement">
       <p>商派产品许可协议</p>
 
       <p>============================</p>
@@ -249,7 +249,7 @@
 
       <p>7.4 商派保留对此协议的最终解释权，任何站点使用本软件则表示默认接受此协议。</p>
     </div>
-    <div v-if="VERSION_SHUYUN" class="agreement">
+    <div v-if="VERSION_SHUYUN()" class="agreement">
       <p>数云产品许可协议</p>
 
       <p>============================</p>
@@ -498,7 +498,7 @@
 
       <p>7.4 数云保留对此协议的最终解释权，任何站点使用本软件则表示默认接受此协议。</p>
     </div>
-  </div>
+  </SpPage>
 </template>
 
 <script>

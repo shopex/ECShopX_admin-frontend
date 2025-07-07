@@ -1,6 +1,17 @@
 <template>
-  <div>
-    <div class="form-title">编辑品牌笔记</div>
+  <SpPage title="编辑品牌笔记">
+    <template slot="page-footer">
+      <div class="text-center">
+        <el-button v-if="!ruleForm.post_id" type="primary" @click="confirmHandle('ruleForm')">
+          创建并发布
+        </el-button>
+
+        <el-button v-if="ruleForm.post_id" type="primary" @click="confirmHandle('ruleForm')">
+          确定
+        </el-button>
+        <el-button @click="handleBack"> 返回 </el-button>
+      </div>
+    </template>
     <el-form
       ref="dataForm"
       v-loading="formLoad"
@@ -82,7 +93,7 @@
         </el-row>
         <el-row v-if="relTopics && relTopics.length" class="bgbar">
           <el-col v-for="(item, index) in relTopics" :key="index" class="baritem">
-            <div :class="{ 'gray': item.status == '4' }" @click="removeTopic(index)">
+            <div :class="{ gray: item.status == '4' }" @click="removeTopic(index)">
               <span>{{ item.topic_name }}</span>
               <span class="el-icon el-icon-close" />
             </div>
@@ -127,17 +138,6 @@
           {{ post_info.status_text }}
         </span>
       </el-form-item>
-
-      <el-form-item>
-        <el-button v-if="!ruleForm.post_id" type="primary" @click="confirmHandle('ruleForm')">
-          创建并发布
-        </el-button>
-
-        <el-button v-if="ruleForm.post_id" type="primary" @click="confirmHandle('ruleForm')">
-          确定
-        </el-button>
-        <el-button @click="handleBack"> 返回 </el-button>
-      </el-form-item>
     </el-form>
 
     <flagModal
@@ -155,7 +155,7 @@
       @cancelLabelsDialog="topicModalHide"
       @modalHandle="topicModalHandle"
     />
-  </div>
+  </SpPage>
 </template>
 <script>
 import { Message } from 'element-ui'
@@ -286,11 +286,11 @@ export default {
         content: info.content.replace(/<br\/>/g, '\n'),
         video: info.video,
         video_ratio: info.video_ratio,
-        images: JSON.parse(info.images).map((item) => item.url)
+        images: JSON.parse(info.images).map(item => item.url)
       }
 
       if (info.goods && info.goods.length) {
-        info.goods.forEach((item) => {
+        info.goods.forEach(item => {
           item.spec_items = []
           relItems.push(item)
         })
@@ -359,7 +359,7 @@ export default {
     },
 
     confirmHandle() {
-      this.$refs['dataForm'].validate(async (valid) => {
+      this.$refs['dataForm'].validate(async valid => {
         if (valid) {
           console.log(this.ruleForm)
           let params = JSON.parse(JSON.stringify(this.ruleForm))
@@ -367,9 +367,9 @@ export default {
           params.cover = params.images[0]
           params.image_path = params.images
           params.content = params.content.replace(/\n/g, `<br/>`)
-          params.topics = this.relTopics.map((item) => item.topic_id)
+          params.topics = this.relTopics.map(item => item.topic_id)
           params.images = JSON.stringify(
-            params.images.map((item) => {
+            params.images.map(item => {
               return {
                 url: item,
                 topics: []

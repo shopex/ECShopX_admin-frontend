@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" />
 
     <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
       <SpFilterFormItem prop="create_time" label="日期范围:">
@@ -238,7 +238,7 @@
         </div>
       </div>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

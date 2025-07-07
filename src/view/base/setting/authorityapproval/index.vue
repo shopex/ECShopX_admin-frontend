@@ -1,44 +1,46 @@
 <template>
-  <div class="authory-box">
-    <SpRouterView>
-      <SpFilterForm :model="queryParams" @onSearch="onSearch" @onReset="onSearch">
-        <SpFilterFormItem prop="status" label="审批状态:">
-          <el-select v-model="queryParams.status" placeholder="请选择审批状态">
-            <el-option
-              v-for="(item, index) in approveStatusList"
-              :key="index"
-              :label="item.name"
-              :value="item.value"
+  <SpPage>
+    <div class="authory-box">
+      <SpRouterView>
+        <SpFilterForm :model="queryParams" @onSearch="onSearch" @onReset="onSearch">
+          <SpFilterFormItem prop="status" label="审批状态:">
+            <el-select v-model="queryParams.status" placeholder="请选择审批状态">
+              <el-option
+                v-for="(item, index) in approveStatusList"
+                :key="index"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="login_name" label="账户名称:">
+            <el-input v-model="queryParams.login_name" placeholder="请输入账户名称" />
+          </SpFilterFormItem>
+          <SpFilterFormItem prop="queryTime" label="申请日期:">
+            <el-date-picker
+              v-model="queryParams.queryTime"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
             />
-          </el-select>
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="login_name" label="账户名称:">
-          <el-input v-model="queryParams.login_name" placeholder="请输入账户名称" />
-        </SpFilterFormItem>
-        <SpFilterFormItem prop="queryTime" label="申请日期:">
-          <el-date-picker
-            v-model="queryParams.queryTime"
-            type="daterange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          />
-        </SpFilterFormItem>
-      </SpFilterForm>
-      <SpFinder
-        ref="finder"
-        url="/datapass"
-        no-selection
-        :fixed-row-action="true"
-        row-actions-align="left"
-        :setting="setting"
-        :hooks="{
-          beforeSearch: beforeSearch
-        }"
-      />
-    </SpRouterView>
-  </div>
+          </SpFilterFormItem>
+        </SpFilterForm>
+        <SpFinder
+          ref="finder"
+          url="/datapass"
+          no-selection
+          :fixed-row-action="true"
+          row-actions-align="left"
+          :setting="setting"
+          :hooks="{
+            beforeSearch: beforeSearch
+          }"
+        />
+      </SpRouterView>
+    </div>
+  </SpPage>
 </template>
 <script>
 import moment from 'moment'
@@ -111,7 +113,6 @@ export default {
                   {
                     props: {
                       type: scope.row.status == '1' ? 'success' : 'danger',
-                      effect: 'dark',
                       size: 'small'
                     }
                   },

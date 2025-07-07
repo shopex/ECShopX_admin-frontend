@@ -1,27 +1,31 @@
 <template>
-  <div class="smsAccountPage">
-    <div
-      v-if="$route.path.indexOf('shopex_sms') === -1 && $route.path.indexOf('ali_sms') === -1"
-      class="smsBox"
-    >
-      <section
-        v-for="(item, index) in sms"
-        :key="item.title"
-        class="box-card"
-        @click="tabClick(index)"
+  <!-- <SpRouterView> -->
+  <SpPage>
+    <div class="smsAccountPage">
+      <div
+        v-if="$route.path.indexOf('ali_sms') === -1 && $route.path.indexOf('shopex_sms') === -1"
+        class="smsBox"
       >
-        <img :src="item.img" alt="">
-        <span>{{ item.title }}</span>
-        <div v-if="index == 0" class="title">
-          {{ aliyunsms_status ? '已启用' : '未启用' }}
-        </div>
-        <div v-else class="title">
-          {{ aliyunsms_status ? '未启用' : '已启用' }}
-        </div>
-      </section>
+        <section
+          v-for="(item, index) in sms"
+          :key="item.title"
+          class="box-card"
+          @click="tabClick(index)"
+        >
+          <img :src="item.img" alt="">
+          <span>{{ item.title }}</span>
+          <div v-if="index == 0" class="title">
+            {{ aliyunsms_status ? '已启用' : '未启用' }}
+          </div>
+          <div v-else class="title">
+            {{ aliyunsms_status ? '未启用' : '已启用' }}
+          </div>
+        </section>
+      </div>
+      <router-view />
     </div>
-    <router-view />
-  </div>
+  </SpPage>
+  <!-- </SpRouterView> -->
 </template>
 
 <script>
@@ -45,13 +49,7 @@ export default {
       aliyunsms_status: false
     }
   },
-  created() {
-    if (this.VERSION_SHUYUN) {
-      this.$router.push({
-        path: this.matchRoutePath('shopex_sms')
-      })
-    }
-  },
+  created() {},
   async mounted() {
     const result = await getaliSmsStatus()
     this.aliyunsms_status = result.data.data.aliyunsms_status

@@ -1,36 +1,73 @@
 <template>
-  <section class="section-white">
-    <div class="appmsg_preview_area">
-      <div class="appmsg_preview_container">
-        <div id="submitContent" />
-        <div class="appmsg_container_hd">
-          <h4 class="appmsg_container_title">图文列表</h4>
-        </div>
-        <div class="appmsg_container_bd">
-          <div class="appmsg multi has_first_cover editing">
-            <div id="js_appmsg_preview" class="appmsg_content">
-              <template v-for="(item, index) in articals">
-                <div
-                  v-if="index === 0"
-                  :key="index"
-                  class="js_appmsg_item appmsg_item_wrp"
-                  :class="id === index ? 'current' : ''"
-                  @click="handleClick(index)"
-                >
-                  <div class="first_appmsg_item" title="第一篇图文">
-                    <div class="cover_appmsg_item">
-                      <h4 class="appmsg_title">
-                        <a
-                          class="js_appmsg_title"
-                          href="javascript:void(0);"
-                          onclick="return false;"
+  <SpPage title="新增图文消息">
+    <template slot="page-footer">
+      <div class="text-right">
+        <el-button type="primary" @click="onSubmit"> 保存 </el-button>
+        <el-button @click="onSubmit"> 预览 </el-button>
+      </div>
+    </template>
+    <section class="section-white">
+      <div class="appmsg_preview_area">
+        <div class="appmsg_preview_container">
+          <div id="submitContent" />
+          <div class="appmsg_container_hd">
+            <h4 class="appmsg_container_title">图文列表</h4>
+          </div>
+          <div class="appmsg_container_bd">
+            <div class="appmsg multi has_first_cover editing">
+              <div id="js_appmsg_preview" class="appmsg_content">
+                <template v-for="(item, index) in articals">
+                  <div
+                    v-if="index === 0"
+                    :key="index"
+                    class="js_appmsg_item appmsg_item_wrp"
+                    :class="id === index ? 'current' : ''"
+                    @click="handleClick(index)"
+                  >
+                    <div class="first_appmsg_item" title="第一篇图文">
+                      <div class="cover_appmsg_item">
+                        <h4 class="appmsg_title">
+                          <a
+                            class="js_appmsg_title"
+                            href="javascript:void(0);"
+                            onclick="return false;"
+                          >
+                            <template v-if="articals[0].title != ''">
+                              {{ articals[0].title }}
+                            </template>
+                            <template v-else> 标题 </template>
+                          </a>
+                        </h4>
+                        <div
+                          class="appmsg_thumb_wrp"
+                          :style="{
+                            backgroundImage:
+                              'url(' + (item.thumb_url ? wximageurl + item.thumb_url : '') + ')'
+                          }"
                         >
-                          <template v-if="articals[0].title != ''">
-                            {{ articals[0].title }}
-                          </template>
-                          <template v-else> 标题 </template>
-                        </a>
-                      </h4>
+                          <div v-if="!item.thumb_url" class="appmsg_thumb default">
+                            <i class="icon_appmsg_thumb el-icon-picture" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="appmsg_edit_mask">
+                        <a
+                          onclick="return false;"
+                          class="icon20_common iconfont icon-arrow-down sort_down_white"
+                          title="下移"
+                          @click.prevent="sortdown(index)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    v-else
+                    :key="index"
+                    class="js_appmsg_item appmsg_item_wrp"
+                    :class="id === index ? 'current' : ''"
+                    @click="handleClick(index)"
+                  >
+                    <div class="appmsg_item has_cover">
                       <div
                         class="appmsg_thumb_wrp"
                         :style="{
@@ -39,160 +76,130 @@
                         }"
                       >
                         <div v-if="!item.thumb_url" class="appmsg_thumb default">
-                          <i class="icon_appmsg_thumb el-icon-picture" />
+                          <i class="icon_appmsg_thumb_small el-icon-picture" />
                         </div>
                       </div>
-                    </div>
-                    <div class="appmsg_edit_mask">
-                      <a
-                        onclick="return false;"
-                        class="icon20_common iconfont icon-arrow-down sort_down_white"
-                        title="下移"
-                        @click.prevent="sortdown(index)"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  v-else
-                  :key="index"
-                  class="js_appmsg_item appmsg_item_wrp"
-                  :class="id === index ? 'current' : ''"
-                  @click="handleClick(index)"
-                >
-                  <div class="appmsg_item has_cover">
-                    <div
-                      class="appmsg_thumb_wrp"
-                      :style="{
-                        backgroundImage:
-                          'url(' + (item.thumb_url ? wximageurl + item.thumb_url : '') + ')'
-                      }"
-                    >
-                      <div v-if="!item.thumb_url" class="appmsg_thumb default">
-                        <i class="icon_appmsg_thumb_small el-icon-picture" />
-                      </div>
-                    </div>
-                    <h4 class="appmsg_title js_appmsg_title">
-                      <template v-if="item.title != ''">
-                        {{ item.title }}
-                      </template>
-                      <template v-else> 标题 </template>
-                    </h4>
-                    <div class="appmsg_edit_mask">
-                      <a
-                        class="icon20_common sort_up_white iconfont icon-arrow-up"
-                        title="上移"
-                        @click.prevent="sortup(index)"
-                      />
-                      <a
-                        v-if="index !== articals.length - 1"
-                        class="icon20_common sort_down_white icon icon-arrow-down"
-                        title="下移"
-                        @click.prevent="sortdown(index)"
-                      />
-                      <el-popover
-                        v-model="item.popVisible"
-                        placement="bottom"
-                        width="220"
-                        trigger="click"
-                      >
-                        <p class="content-padded content-center" style="font-size: 14px">
-                          确定删除这篇图文？
-                        </p>
-                        <div class="content-center">
-                          <el-button @click="item.popVisible = false"> 取消 </el-button>
-                          <el-button type="primary" @click="remove(index)"> 确定 </el-button>
-                        </div>
+                      <h4 class="appmsg_title js_appmsg_title">
+                        <template v-if="item.title != ''">
+                          {{ item.title }}
+                        </template>
+                        <template v-else> 标题 </template>
+                      </h4>
+                      <div class="appmsg_edit_mask">
                         <a
-                          v-if="!isEditting"
-                          slot="reference"
-                          class="icon20_common del_media_white el-icon-delete2"
-                          title="删除"
+                          class="icon20_common sort_up_white iconfont icon-arrow-up"
+                          title="上移"
+                          @click.prevent="sortup(index)"
                         />
-                      </el-popover>
+                        <a
+                          v-if="index !== articals.length - 1"
+                          class="icon20_common sort_down_white icon icon-arrow-down"
+                          title="下移"
+                          @click.prevent="sortdown(index)"
+                        />
+                        <el-popover
+                          v-model="item.popVisible"
+                          placement="bottom"
+                          width="220"
+                          trigger="click"
+                        >
+                          <p class="content-padded content-center" style="font-size: 14px">
+                            确定删除这篇图文？
+                          </p>
+                          <div class="content-center">
+                            <el-button @click="item.popVisible = false"> 取消 </el-button>
+                            <el-button type="primary" @click="remove(index)"> 确定 </el-button>
+                          </div>
+                          <a
+                            v-if="!isEditting"
+                            slot="reference"
+                            class="icon20_common del_media_white el-icon-delete2"
+                            title="删除"
+                          />
+                        </el-popover>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </template>
+                </template>
+              </div>
             </div>
-          </div>
-          <div
-            v-if="!isEditting"
-            title="添加一篇图文"
-            class="create_access_primary appmsg_add"
-            @click="addmsg"
-          >
-            <i class="icon35_common el-icon-plus" />
+            <div
+              v-if="!isEditting"
+              title="添加一篇图文"
+              class="create_access_primary appmsg_add"
+              @click="addmsg"
+            >
+              <i class="icon35_common el-icon-plus" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="appmsg_input_area">
-      <template v-for="(item, index) in articals" v-if="id === index">
-        <el-form ref="item" :key="index" :model="item" label-position="top" label-width="80px">
-          <div class="content-padded">
-            <el-form-item label="标题">
-              <el-input v-model="item.title" placeholder="请输入标题" />
-            </el-form-item>
-            <el-form-item label="作者">
-              <el-input v-model="item.author" />
-            </el-form-item>
-            <el-form-item>
-              <SpRichText v-model="item.viewcontent" />
-            </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="item.hasLink"> 原文链接 </el-checkbox>
-              <el-input v-if="item.hasLink" v-model="item.content_source_url" placeholder="">
-                <template slot="prepend"> Http:// </template>
-              </el-input>
-            </el-form-item>
-          </div>
-          <div class="content-padded appmsg_edit_highlight_area">
-            <h3 class="header-title">发布样式编辑</h3>
-            <div class="header_tips">
-              封面小图片 <span class="form-text-tip">建议尺寸：200像素 * 200像素</span>
+      <div class="appmsg_input_area">
+        <template v-for="(item, index) in articals" v-if="id === index">
+          <el-form ref="item" :key="index" :model="item" label-position="top" label-width="80px">
+            <div class="content-padded">
+              <el-form-item label="标题">
+                <el-input v-model="item.title" placeholder="请输入标题" />
+              </el-form-item>
+              <el-form-item label="作者">
+                <el-input v-model="item.author" />
+              </el-form-item>
+              <el-form-item>
+                <SpRichText v-model="item.viewcontent" />
+              </el-form-item>
+              <el-form-item>
+                <el-checkbox v-model="item.hasLink"> 原文链接 </el-checkbox>
+                <el-input v-if="item.hasLink" v-model="item.content_source_url" placeholder="">
+                  <template slot="prepend"> Http:// </template>
+                </el-input>
+              </el-form-item>
             </div>
-            <el-form-item>
-              <div>
-                <el-button @click="addThumbPreview"> 从图片库选择 </el-button>
+            <div class="content-padded appmsg_edit_highlight_area">
+              <h3 class="header-title">发布样式编辑</h3>
+              <div class="header_tips">
+                封面小图片 <span class="form-text-tip">建议尺寸：200像素 * 200像素</span>
               </div>
-              <div
-                v-if="item.thumb_url"
-                class="cover_preview"
-                :style="{
-                  backgroundImage:
-                    'url(' + (item.thumb_url ? wximageurl + item.thumb_url : '') + ')'
-                }"
-              />
-            </el-form-item>
-            <div class="header_tips">
-              摘要 <span class="form-text-tip">选填，如果不填写会默认抓取正文前54个字</span>
+              <el-form-item>
+                <div>
+                  <el-button @click="addThumbPreview"> 从图片库选择 </el-button>
+                </div>
+                <div
+                  v-if="item.thumb_url"
+                  class="cover_preview"
+                  :style="{
+                    backgroundImage:
+                      'url(' + (item.thumb_url ? wximageurl + item.thumb_url : '') + ')'
+                  }"
+                />
+              </el-form-item>
+              <div class="header_tips">
+                摘要 <span class="form-text-tip">选填，如果不填写会默认抓取正文前54个字</span>
+              </div>
+              <el-form-item>
+                <el-input
+                  v-model="item.digest"
+                  type="textarea"
+                  :autosize="{ minRows: 5, maxRows: 8 }"
+                  resize="none"
+                  :maxlength="120"
+                />
+                <div class="content-num">{{ item.digest.length }}/120</div>
+              </el-form-item>
             </div>
-            <el-form-item>
-              <el-input
-                v-model="item.digest"
-                type="textarea"
-                :autosize="{ minRows: 5, maxRows: 8 }"
-                resize="none"
-                :maxlength="120"
-              />
-              <div class="content-num">{{ item.digest.length }}/120</div>
-            </el-form-item>
+          </el-form>
+        </template>
+      </div>
+      <div class="appmsg_tpl_area">
+        <div class="appmsg_tpl_container">
+          <div class="appmsg_container_hd">
+            <h4 class="appmsg_container_title">多媒体</h4>
           </div>
-        </el-form>
-      </template>
-    </div>
-    <div class="appmsg_tpl_area">
-      <div class="appmsg_tpl_container">
-        <div class="appmsg_container_hd">
-          <h4 class="appmsg_container_title">多媒体</h4>
-        </div>
-        <div class="appmsg_container_bd">
-          <ul id="js_media_list" class="tpl_list">
-            <li class="tpl_item img" style="" @click="addImgPreview">
-              <i class="iconfont icon-image" />图片
-            </li>
-            <!-- <li class="tpl_item video">
+          <div class="appmsg_container_bd">
+            <ul id="js_media_list" class="tpl_list">
+              <li class="tpl_item img" style="" @click="addImgPreview">
+                <i class="iconfont icon-image" />图片
+              </li>
+              <!-- <li class="tpl_item video">
               <i class="fa fa-video-camera"></i>视频
             </li>
             <li id="audio_music_plugin_btn" class="tpl_item audio" style="">
@@ -201,34 +208,27 @@
             <li class="tpl_item vote" id="js_editor_insertvote" style="">
               <i class="fa fa-bar-chart-o"></i>投票
             </li> -->
-            <!-- <li class="tpl_item weapp" id="js_editor_insertweapp" style="">
+              <!-- <li class="tpl_item weapp" id="js_editor_insertweapp" style="">
               <i class="icon_media_choose"></i>小程序
             </li> -->
-          </ul>
-          <imgPicker
-            :dialog-visible="thumbDialog"
-            :sc-status="isGetThumb"
-            @chooseImg="pickThumb"
-            @closeImgDialog="closeThumbDialog"
-          />
-          <imgPicker
-            :dialog-visible="imgDialog"
-            :sc-status="isGetImage"
-            @chooseImg="pickImg"
-            @closeImgDialog="closeImgDialog"
-          />
+            </ul>
+            <imgPicker
+              :dialog-visible="thumbDialog"
+              :sc-status="isGetThumb"
+              @chooseImg="pickThumb"
+              @closeImgDialog="closeThumbDialog"
+            />
+            <imgPicker
+              :dialog-visible="imgDialog"
+              :sc-status="isGetImage"
+              @chooseImg="pickImg"
+              @closeImgDialog="closeImgDialog"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="tool_area_wrp">
-      <div class="tool_area">
-        <div class="tool_bar content-center">
-          <el-button type="primary" @click="onSubmit"> 保存 </el-button>
-          <el-button @click="onSubmit"> 预览 </el-button>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+  </SpPage>
 </template>
 
 <script>
@@ -486,6 +486,7 @@ export default {
 }
 .appmsg_input_area {
   margin: 0 211px 0 251px;
+  padding: 0 24px;
   position: relative;
 }
 

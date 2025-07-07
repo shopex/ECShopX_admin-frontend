@@ -1,34 +1,36 @@
 <template>
-  <div class="container">
-    <SpPlatformTip />
+  <SpPage>
+    <div class="container">
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" />
 
-    <div class="info">
-      <div class="text">
-        <img :src="normal" class="img">
-        <div>
-          为丰富小程序的服务能力，提高服务质量，微信为小程序提供客服消息能力，以便小程序用户可以方便快捷地与小程序服务提供方进行沟通。
+      <div class="info">
+        <div class="text">
+          <img :src="normal" class="img">
+          <div>
+            为丰富小程序的服务能力，提高服务质量，微信为小程序提供客服消息能力，以便小程序用户可以方便快捷地与小程序服务提供方进行沟通。
+          </div>
+        </div>
+        <div class="button">
+          <el-button type="primary" @click="handleConfig"> 去配置 </el-button>
         </div>
       </div>
-      <div class="button">
-        <el-button type="primary" @click="handleConfig"> 去配置 </el-button>
+
+      <div class="card">
+        <div class="card-title">
+          <i class="el-icon-question" />
+          <span class="text">如何配置</span>
+        </div>
+
+        <div class="card-info">
+          进入微信小程序管理端，进入“<span class="weight">功能</span>“<span class="weight"
+            >-客服菜单</span
+          >，进行客服添加绑定操作
+
+          <img :src="wechat" class="img">
+        </div>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-title">
-        <i class="el-icon-question" />
-        <span class="text">如何配置</span>
-      </div>
-
-      <div class="card-info">
-        进入微信小程序管理端，进入“<span class="weight">功能</span>“<span class="weight"
-          >-客服菜单</span
-        >，进行客服添加绑定操作
-
-        <img :src="wechat" class="img">
-      </div>
-    </div>
-  </div>
+  </SpPage>
 </template>
 
 <script>

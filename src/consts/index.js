@@ -55,13 +55,58 @@ export const ORDER_STATUS = [
   { title: '未妥投', value: 'dada_9' }
 ]
 
+export const ORDER_ZITI_STATUS_MAP = {
+  PENDING: { lable: '待自提', type: 'danger' },
+  DONE: { lable: '已自提', type: 'success' }
+}
+
+export const ORDER_DELIVERY_STATUS_MAP = {
+  DONE: { lable: '已发货', type: 'success' },
+  PARTAIL: { lable: '部分发货', type: 'success' }
+}
+
+export const ORDER_STATUS_MAP = {
+  PAYED: { lable: '已支付', type: 'success' },
+  NOTPAY: { lable: '未支付', type: 'info' },
+  CANCEL: { lable: '已取消', type: 'info' },
+  WAIT_BUYER_CONFIRM: { lable: '待收货', type: 'danger' }
+  // DONE: '已发货',
+  // PARTAIL: '部分发货',
+  // PENDING: '待自提',
+}
+
+export const GLOBAL_ORDER_STATUS_MAP = {
+  WAIT_GROUPS_SUCCESS: { label: '等待成团', type: 'warning' },
+  NOTPAY: { label: '待支付', type: 'info' },
+  SUPPLY_PRESCRIPTION_INFO: { label: '待补充处方信息', type: 'info' },
+  WAIT_PRESCRIPTION: { label: '待医生开方', type: 'info' },
+  WAIT_PAID_CONFIRM: { label: '支付待确认', type: 'warning' },
+  PAYED_WAIT_PROCESS: { label: '退款处理中', type: 'warning' },
+  PAYED_PENDING: { label: '待自提', type: 'warning' },
+  PAYED_PARTAIL: { label: '部分发货', type: 'warning' },
+  WAIT_BUYER_CONFIRM: { label: '待收货', type: 'warning' },
+  PAYED: { label: '待发货', type: 'warning' },
+  REVIEW_PASS_PARTAIL: { label: '部分出库', type: 'warning' },
+  REVIEW_PASS: { label: '审核完成,待出库', type: 'warning' },
+  CLOSED: { label: '已关闭', type: 'info' },
+  CANCEL: { label: '已取消', type: 'info' },
+  CANCEL_WAIT_PROCESS: { label: '退款处理中', type: 'warning' },
+  CANCEL_REFUND_PROCESS: { label: '退款处理中', type: 'warning' },
+  CANCEL_REFUND_FAIL: { label: '等待退款', type: 'warning' },
+  DONE: { label: '已完成', type: 'success' },
+  REFUND_PROCESS: { label: '退款处理中', type: 'warning' },
+  REFUND_SUCCESS: { label: '已退款', type: 'info' },
+  PART_PAYMENT: { label: '部分付款', type: 'warning' },
+  ORDER_ABERRANT: { label: '订单异常', type: 'danger' }
+}
+
 export const ORDER_B2C_STATUS = [
   { title: '全部', value: '' },
   { title: '待支付', value: 'notpay' },
   { title: '待发货', value: 'notship' },
   { title: '待收货', value: 'shipping' },
   { title: '待退款', value: 'cancelapply' },
-  { title: '待自提', value: 'ziti' },
+  // { title: '待自提', value: 'ziti' },
   { title: '已取消', value: 'cancel' },
   { title: '已完成', value: 'finish' }
 ]

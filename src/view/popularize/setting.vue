@@ -1,6 +1,6 @@
 <template>
-  <div class="section section-white">
-    <SpPlatformTip />
+  <SpPage class="section section-white">
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" />
     <el-form ref="form" :model="form" label-position="left" label-width="120px">
       <div class="section-body">
         <el-form-item label="推广员计划">
@@ -331,7 +331,7 @@
         <el-button type="primary" @click="save"> 保 存 </el-button>
       </div>
     </el-form>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { getPopularizeSetting, setPopularizeSetting } from '../../api/promotions'
@@ -439,7 +439,7 @@ export default {
   },
   mounted() {
     // this.getFormworkList()
-    getPopularizeSetting().then((res) => {
+    getPopularizeSetting().then(res => {
       this.form = { ...this.form, ...res.data.data }
       this.form.goods = this.form.goods ? this.form.goods : 'all'
       this.form.share_title = this.form.share_title ? this.form.share_title : '这家小店不一般！'
@@ -460,7 +460,7 @@ export default {
         }
       }
     }),
-      listVipGrade().then((response) => {
+      listVipGrade().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           this.vipGradeList = response.data.data
         }
@@ -582,7 +582,7 @@ export default {
     },
     linkTo() {
       let link = ''
-      getWeappId().then((res) => {
+      getWeappId().then(res => {
         var data = res.data.data.weappid
         var tempName = res.data.data.tempName
         if (data) {
@@ -669,14 +669,14 @@ export default {
         // }
       }
 
-      setPopularizeSetting(this.form).then((res) => {
+      setPopularizeSetting(this.form).then(res => {
         this.$message({ message: '保存成功', type: 'success' })
       })
     },
     // 自定义页面模板列表
     getFormworkList() {
       this.loading = true
-      getCustomPageList(this.params).then((response) => {
+      getCustomPageList(this.params).then(response => {
         this.FormworkList = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false

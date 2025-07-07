@@ -1,5 +1,14 @@
 <template>
-  <div class="section section-white">
+  <SpPage class="section section-white">
+    <template slot="page-footer">
+      <div class="text-center">
+        <el-button @click.native="handleCancel"> 取消 </el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitItemsActionConfirm">
+          {{ submitLoading ? '提交中' : '保存' }}
+        </el-button>
+      </div>
+    </template>
+
     <el-form
       ref="form"
       :model="form"
@@ -17,7 +26,7 @@
           />
         </el-card>
       </template>
-      <div v-else v-loading="loader" class="content-padded view-flex view-flex-middle">
+      <div v-else v-loading="loader" class="content-padded flex items-center">
         <div>管理分类：</div>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="inline">
           <el-breadcrumb-item v-for="(item, index) in categoryNames" :key="index">
@@ -119,6 +128,9 @@
                   <el-form-item label="*商品销售分类" label-width="110px">
                     <treeselect
                       v-model="form.item_category"
+                      no-children-text="没有子选项"
+                      no-options-text="等待加载..."
+                      no-results-text="没有匹配的结果"
                       :options="categoryList"
                       :show-count="true"
                       :multiple="true"
@@ -153,21 +165,19 @@
                             >
                               <img :src="wximageurl + item">
                               <div class="goodspic-mask" :class="picsCurrent == index ? 'on' : ''">
-                                <div
-                                  class="iconfont icon-trash-alt"
-                                  @click="removePicsImg(index)"
-                                />
-                                <div class="iconfont icon-arrows-alt" />
+                                <!-- <div class="iconfont icon-trash-alt" /> -->
+                                <SpIcon name="delete" @click="removePicsImg(index)" />
+                                <!-- <div class="iconfont icon-arrows-alt" /> -->
                               </div>
                             </li>
                           </draggable>
                         </ul>
                         <div
                           v-if="form.pics.length < 9"
-                          class="upload-box"
+                          class="upload-box border border-dashed border-gray-300 flex items-center justify-center"
                           @click="handlePicsChange"
                         >
-                          <i class="iconfont icon-camera" />
+                          <SpIcon name="camera" size="24" />
                         </div>
                       </div>
                       <div class="frm-tips">
@@ -814,9 +824,9 @@
           </el-form-item>
           <template v-if="mode === 'richText'">
             <SpRichText v-model="form.intro" />
-            <span class="tpl_item img" style="" @click="addImgPreview">
+            <!-- <span class="tpl_item img" style="" @click="addImgPreview">
               <i class="iconfont icon-image" />图片
-            </span>
+            </span> -->
           </template>
           <template v-else>
             <richTextEditor
@@ -833,15 +843,9 @@
             @closeImgDialog="closeThumbDialog"
           />
         </el-card>
-        <div class="section-footer with-border content-center">
-          <el-button @click.native="handleCancel"> 取消 </el-button>
-          <el-button type="primary" :loading="submitLoading" @click="submitItemsActionConfirm">
-            {{ submitLoading ? '提交中' : '保存' }}
-          </el-button>
-        </div>
       </template>
     </el-form>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -1058,7 +1062,7 @@ export default {
           item_source: itemsDetailData.item_source,
           item_type: itemsDetailData.item_type,
           special_type: itemsDetailData.special_type,
-          item_category:
+          item_category_temp:
             itemsDetailData.item_category.length > 0 ? itemsDetailData.item_category : [],
           item_name: itemsDetailData.item_name,
           sort: itemsDetailData.sort,
@@ -1735,6 +1739,10 @@ export default {
           label: 'category_name',
           children: 'children'
         })
+        if (this.$route.params.itemId) {
+          this.form.item_category = this.form.item_category_temp
+          delete this.form.item_category_temp
+        }
       })
     },
     // profitStatusChange(val) {
@@ -1902,7 +1910,6 @@ export default {
   }
 
   .upload-box {
-    display: inline-block;
     width: 120px;
     height: 120px;
     line-height: 120px;

@@ -6,7 +6,7 @@
       <slot name="head-slot" />
 
       <div class="relative w-full cursor-pointer" style="padding-bottom: 100%">
-        <SpImage :src="data.image_url" class="absolute top-0 left-0 w-full h-full" />
+        <SpImage :src="data.image_url" class="!absolute top-0 left-0 w-full h-full" />
       </div>
     </div>
     <div class="sp-content-card__body pt-1 pb-1">

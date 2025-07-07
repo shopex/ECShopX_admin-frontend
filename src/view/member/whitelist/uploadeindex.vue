@@ -1,17 +1,10 @@
 <style type="text/css" lang="scss">
-.tip-info {
-  padding: 8px 16px;
-  background-color: #fff6f7;
-  border-radius: 4px;
-  border-left: 5px solid #ff7800;
-  margin: 11px 0;
-}
 .content-bottom-padded {
   display: flex;
 }
 </style>
 <template>
-  <div>
+  <SpPage>
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <el-tab-pane v-for="item in pane_list" :key="item.name" :label="item.label" :name="item.name">
         <div class="tip-info">
@@ -85,7 +78,7 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

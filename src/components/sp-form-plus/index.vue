@@ -17,23 +17,34 @@
         :component-props="item.componentProps"
         :field-name="item.fieldName"
         :form-item-class="item.formItemClass"
-        :label="`${item.label}${colon ? ':' : ''}`"
-        :rules="item.rules"
+        :form-data="formData"
+        :is-show="item.isShow"
+        :label="`${item.label ? item.label + (colon ? ':' : '') : ''}`"
+        :rules="item?.rules"
+        :size="formType === 'searchForm' ? 'small' : ''"
+        :tip="item.tip"
         :value="formData[item.fieldName]"
         @input="val => handleFieldChange(item.fieldName, val)"
       />
 
       <template v-if="showDefaultActions">
-        <div class="sp-form-plus__actions w-full text-right">
-          <el-button type="primary" @click="handleSubmit">
+        <div class="sp-form-plus__actions" :style="actionsStyle">
+          <el-button v-if="formType !== 'searchForm'" type="primary" @click="handleSubmit">
+            <div class="flex items-center">
+              <span class="ml-1">保存</span>
+            </div>
+          </el-button>
+
+          <el-button v-if="formType === 'searchForm'" type="primary" @click="handleSubmit">
             <div class="flex items-center">
               <SpIcon name="search" :size="14" />
               <span class="ml-1">查询</span>
             </div>
           </el-button>
-          <el-button @click="handleReset">
+
+          <el-button v-if="formType === 'searchForm'" @click="handleReset">
             <div class="flex items-center">
-              <SpIcon name="rotate-ccw" :size="14" />
+              <SpIcon name="refresh" :size="14" />
               <span class="ml-1">重置</span>
             </div>
           </el-button>
@@ -69,7 +80,7 @@ export default {
     },
     formType: {
       type: String,
-      default: ['searchForm']
+      default: 'searchForm'
     },
     formItems: {
       type: Array,
@@ -94,6 +105,10 @@ export default {
     showDefaultActions: {
       type: Boolean,
       default: true
+    },
+    value: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -102,24 +117,29 @@ export default {
       extend: false
     }
   },
-  watch: {
-    formItems: {
-      handler() {
-        this.formData = this.initFormData()
-      },
-      deep: true
+  computed: {
+    actionsStyle() {
+      return this.formType === 'searchForm'
+        ? {
+            width: '100%',
+            'text-align': 'right'
+          }
+        : {
+            'padding-left': `${this.labelWidth}`,
+            'justify-content': 'flex-start',
+            'margin-bottom': '22px'
+          }
     }
   },
-  created() {
-    console.log('initial formItems:', this.formItems)
-  },
+  created() {},
   methods: {
     // 初始化表单数据
     initFormData() {
       const formData = {}
       this.formItems.forEach(item => {
-        formData[item.fieldName] = item.value || ''
+        formData[item.fieldName] = this.value?.[item.fieldName] || item.value || ''
       })
+      this.$emit('input', formData)
       return formData
     },
     // 处理字段值变化
@@ -129,12 +149,15 @@ export default {
       this.$emit('field-change', { fieldName, value })
     },
     // 提交表单
-    handleSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.$emit('submit', this.formData)
-        }
-      })
+    async handleSubmit() {
+      await this.validate()
+      this.$emit('submit', this.formData)
+      // this.$refs.form.validate(valid => {
+      //   debugger
+      //   if (valid) {
+      //     this.$emit('submit', this.formData)
+      //   }
+      // })
     },
     // 重置表单
     handleReset() {
@@ -143,10 +166,13 @@ export default {
     },
     // 验证表单
     validate() {
-      debugger
       return new Promise((resolve, reject) => {
-        this.$refs.form.validate(valid => {
-          valid ? resolve(this.formData) : reject(new Error('表单验证失败'))
+        this.$refs.form.validate((valid, object) => {
+          if (valid) {
+            resolve(this.formData)
+          } else {
+            reject(object)
+          }
         })
       })
     },
@@ -171,8 +197,8 @@ export default {
   &--inline {
     .sp-form-plus__wapper {
       display: grid;
-      gap: 16px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 8px;
       .form-field {
         margin-bottom: 0;
       }

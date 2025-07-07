@@ -3,10 +3,13 @@ import api from '@/api'
 const userStore = {
   namespaced: true,
   state: {
-    accessMenus: [],
-    token: '',
     accountInfo: null,
+    accessMenus: [],
+    login_type: '',
+    shopid: '',
+    token: '',
 
+    //TODO: 以下删除?
     exp: '',
     name: '',
     is_authorizer: false,
@@ -18,7 +21,6 @@ const userStore = {
     login_from: '',
     nick_name: '',
     avatar: '',
-    shopid: '',
     isInFrame: false,
     product_code: '',
     ali_appid: '',
@@ -31,14 +33,7 @@ const userStore = {
 
   mutations: {
     setToken(state, { token }) {
-      // const tokenArray = token.split('.')
-      // const user = JSON.parse(atob(tokenArray[1]))
-      // console.log('userInfo: ', user)
       state.token = token
-      // state.exp = user.exp
-      // state.mobile = user.mobile
-      // state.is_authorizer = user.is_authorizer
-      // state.license_authorize = user.license_authorize
     },
     // 设置菜单
     setAccessMenus(state, { accessMenus }) {
@@ -47,6 +42,19 @@ const userStore = {
     // 设置帐户信息
     setAccountInfo(state, { accountInfo }) {
       state.accountInfo = accountInfo
+    },
+    logout(state) {
+      state.accountInfo = null
+      state.accessMenus = []
+      state.login_type = ''
+      state.shopid = ''
+      state.token = ''
+    },
+    setShopId(state, { shopId }) {
+      state.shopid = shopId
+    },
+    setLoginType: (state, { login_type }) => {
+      state.login_type = login_type
     },
 
     CLEAR_TOKEN(state) {
@@ -105,9 +113,6 @@ const userStore = {
         avatar: head_portrait
       }
     },
-    setShopId: (state, id) => {
-      state.shopid = id
-    },
     setUserName: (state, name) => {
       state.name = name
     },
@@ -126,9 +131,7 @@ const userStore = {
     setWxappId: (state, wxappId) => {
       state.wxapp_id = wxappId
     },
-    setLoginType: (state, loginType) => {
-      state.login_type = loginType
-    },
+
     setLoginFrom: (state, login_from) => {
       state.login_from = login_from
     },
@@ -158,7 +161,6 @@ const userStore = {
   actions: {
     async fetchAccessMenus({ commit }) {
       const accessMenus = await api.auth.getPermission()
-      debugger
       commit('setAccessMenus', { accessMenus })
     },
     async fetchAccountInfo({ commit }) {
@@ -208,9 +210,6 @@ const userStore = {
     setTemplateName({ commit }, template_name) {
       commit('setTemplateName', template_name)
       commit('setALiTemplateName', '')
-    },
-    setLoginType({ commit }, login_type) {
-      commit('setLoginType', login_type)
     },
     setLoginFrom({ commit }, login_from) {
       commit('setLoginFrom', login_from)

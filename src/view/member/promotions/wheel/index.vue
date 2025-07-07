@@ -1,5 +1,5 @@
 <template>
-  <div class="wheel">
+  <SpPage class="wheel">
     <el-form ref="dataForm" :model="dataForm" label-width="125px">
       <el-row :gutter="20">
         <el-col :span="6">
@@ -63,6 +63,17 @@
         <el-tab-pane label="奖项配置" name="1">
           <div class="wheel-con__table">
             <el-table :data="tableData" style="width: 100%">
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    size="small"
+                    @click="handleClickDel(scope.row, scope.$index)"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
               <el-table-column label="奖项类型" width="140">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.prize_type" @change="handleChangeType(scope)">
@@ -135,11 +146,13 @@
               </el-table-column>
               <el-table-column prop="address" label="图片">
                 <template slot-scope="scope">
-                  <el-image
-                    style="width: 30px; height: 30px"
-                    :src="scope.row.prize_image"
-                    fit="fill"
-                  />
+                  <div>
+                    <el-image
+                      style="width: 30px; height: 30px"
+                      :src="scope.row.prize_image"
+                      fit="fill"
+                    />
+                  </div>
                   <el-button type="primary" size="mini" @click="handleClickUpload(scope.$index)">
                     图片上传
                   </el-button>
@@ -159,17 +172,6 @@
                       :value="item.value"
                     />
                   </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="100">
-                <template slot-scope="scope">
-                  <el-button
-                    type="text"
-                    size="small"
-                    @click="handleClickDel(scope.row, scope.$index)"
-                  >
-                    删除
-                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -297,7 +299,7 @@
       @chooseImg="pickPics"
       @closeImgDialog="closePicsDialog"
     />
-  </div>
+  </SpPage>
 </template>
 <script>
 import { getEffectiveCardList } from '@/api/cardticket'
@@ -382,7 +384,7 @@ export default {
      * */
     _getEffectiveCardList() {
       const requestData = { page_size: 1000 }
-      getEffectiveCardList(requestData).then((response) => {
+      getEffectiveCardList(requestData).then(response => {
         this.coupon_options = response.data.data.list
       })
     },
@@ -421,12 +423,12 @@ export default {
      * 获取大转盘详情
      * */
     _getSurntableconfig() {
-      getSurntableconfig({}).then((res) => {
+      getSurntableconfig({}).then(res => {
         if (Array.isArray(res)) return
 
         let data = res.data.data
 
-        let list = data.prizes.map((item) => {
+        let list = data.prizes.map(item => {
           item.prize_probability = item.prize_probability / 100
           return item
         })
@@ -521,7 +523,7 @@ export default {
       let { data } = await getGoodsbycoupon(item.prize_value)
       let { list } = data.data
 
-      let nList = list.map((item) => {
+      let nList = list.map(item => {
         return {
           value: item.item_id,
           label: item.item_name
@@ -552,7 +554,7 @@ export default {
         return
       }
 
-      let list = nTableData.map((item) => {
+      let list = nTableData.map(item => {
         return {
           ...item,
           prize_probability: item.prize_probability * 100,
@@ -575,7 +577,7 @@ export default {
 
       console.log('this.tableData', list)
 
-      setSurntableconfig(params).then((res) => {
+      setSurntableconfig(params).then(res => {
         this.$message({
           message: '保存成功',
           type: 'success'

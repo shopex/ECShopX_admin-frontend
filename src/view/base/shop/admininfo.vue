@@ -47,13 +47,13 @@ export default {
           label: '修改密码',
           key: 'pwd',
           type: 'input',
-          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN
+          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN()
         },
         {
           label: '确认密码',
           key: 'repwd',
           type: 'input',
-          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN
+          isShow: () => this.changePwdEnabled && !this.VERSION_SHUYUN()
         },
         {
           label: '修改密码',
@@ -71,7 +71,7 @@ export default {
             )
           },
           tip: '超级管理员需通过商派账号中心进行修改密码',
-          isShow: () => !this.changePwdEnabled && !this.VERSION_SHUYUN
+          isShow: () => !this.changePwdEnabled && !this.VERSION_SHUYUN()
         }
       ]
     }

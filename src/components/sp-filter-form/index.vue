@@ -9,7 +9,7 @@
   // max-height: 1000px; // 设置一个足够大的初始高度
   overflow: hidden;
   &.shouqi {
-    max-height: 96px;
+    max-height: 110px;
     overflow: hidden;
   }
   &.small {
@@ -62,7 +62,7 @@
         </el-button>
         <el-button type="primary" plain @click="onReset">
           <div class="flex items-center">
-            <SpIcon name="rotate-ccw" :size="14" />
+            <SpIcon name="refresh" :size="14" />
             <span class="ml-1">重置</span>
           </div>
         </el-button>

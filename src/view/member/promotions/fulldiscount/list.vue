@@ -5,9 +5,9 @@
 </style>
 
 <template>
-  <div>
-    <template v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip h5 app pc alipay />
+  <SpPage>
+    <SpRouterView>
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app pc alipay />
       <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onReset">
         <SpFilterFormItem prop="create_time" label="时间:">
           <el-date-picker
@@ -210,9 +210,8 @@
           />
         </template>
       </el-dialog>
-    </template>
-    <router-view />
-  </div>
+    </SpRouterView>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -345,6 +344,7 @@ export default {
         query: { isnodata: true }
       })
     },
+    // TODO:路由跳转
     viewItemList(id, itemType) {
       if (id == 'all') {
         if (itemType == 'normal') {

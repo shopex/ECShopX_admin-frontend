@@ -230,7 +230,7 @@ export default {
           })
         },
         other_wxapp: () => {
-          if (this.VERSION_SHUYUN) {
+          if (this.VERSION_SHUYUN()) {
             return pickBy(data, {
               id: 'app_id', //数云修改
               title: ({ app_name, route_name }) => `${app_name} - ${route_name}`,

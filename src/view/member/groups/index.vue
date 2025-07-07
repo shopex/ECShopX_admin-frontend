@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <template
       v-if="
         $route.path.indexOf('detail') === -1 &&
@@ -7,7 +7,7 @@
         $route.path.indexOf('team') === -1
       "
     >
-      <SpPlatformTip />
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" />
       <div class="action-container">
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addGroups">
           新增拼团活动
@@ -29,7 +29,7 @@
       </el-tabs>
     </template>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 
 <script>

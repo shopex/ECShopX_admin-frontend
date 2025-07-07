@@ -1,7 +1,7 @@
 // 阿里云
 // import Oss from 'ali-oss'
 // 亚马逊
-import AWS from 'aws-sdk'
+// import AWS from 'aws-sdk'
 // 七牛
 import * as QiNiu from 'qiniu-js'
 
@@ -25,9 +25,9 @@ class UploadUtil {
       case 'local':
         this.local(tokenRes)
         break
-      case 'aws':
-        this.aws(tokenRes)
-        break
+      // case 'aws':
+      //   this.aws(tokenRes)
+      //   break
       case 'cosv5':
         this.cos(tokenRes)
         break

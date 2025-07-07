@@ -39,39 +39,41 @@
 </style>
 
 <template>
-  <div class="color-style-warp">
-    <SpPlatformTip h5 app alipay />
-    <div class="form-color">
-      <el-form class="view-flex-item" :inline="true" label-width="80px">
-        <el-form-item label="主色调">
-          <el-color-picker v-model="form.data[0].primary" />
-        </el-form-item>
-        <el-form-item label="辅色调">
-          <el-color-picker v-model="form.data[0].accent" />
-        </el-form-item>
-        <!-- <el-form-item label="会员色">
+  <SpPage>
+    <div class="color-style-warp">
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
+      <div class="form-color">
+        <el-form class="view-flex-item" :inline="true" label-width="80px">
+          <el-form-item label="主色调">
+            <el-color-picker v-model="form.data[0].primary" />
+          </el-form-item>
+          <el-form-item label="辅色调">
+            <el-color-picker v-model="form.data[0].accent" />
+          </el-form-item>
+          <!-- <el-form-item label="会员色">
               <el-color-picker v-model="form.data[0].marketing" />
             </el-form-item> -->
-      </el-form>
-      <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
-    </div>
-    <div class="pages-view-warp">
-      <div class="pages-view" :style="'width: ' + Math.floor((wwidth - 250) / 268) * 268 + 'px'">
-        <div
-          v-for="(item, index) in pages"
-          :key="`page-view-item__${index}`"
-          class="page-view-item"
-          :style="
-            item.type === 'primary'
-              ? 'background:' + form.data[0].primary
-              : 'background:' + form.data[0].marketing
-          "
-        >
-          <img :src="item.img">
+        </el-form>
+        <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
+      </div>
+      <div class="pages-view-warp">
+        <div class="pages-view" :style="'width: ' + Math.floor((wwidth - 250) / 268) * 268 + 'px'">
+          <div
+            v-for="(item, index) in pages"
+            :key="`page-view-item__${index}`"
+            class="page-view-item"
+            :style="
+              item.type === 'primary'
+                ? 'background:' + form.data[0].primary
+                : 'background:' + form.data[0].marketing
+            "
+          >
+            <img :src="item.img">
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -115,11 +117,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['wheight', 'wwidth', 'template_name'])
+    ...mapGetters(['wwidth', 'template_name'])
   },
   mounted() {
     let filter = { template_name: this.template_name, version: 'v1.0.1', page_name: 'color_style' }
-    getParamByTempName(filter).then((res) => {
+    getParamByTempName(filter).then(res => {
       if (res.data.data.list.length !== 0) {
         if (typeof res.data.data.list[0].params.data != 'undefined') {
           this.form.data = res.data.data.list[0].params.data
@@ -135,7 +137,7 @@ export default {
         config: JSON.stringify([this.form]),
         page_name: 'color_style'
       }
-      savePageParams(param).then((res) => {
+      savePageParams(param).then(res => {
         if (res.data.data.status) {
           this.$message({
             message: '保存成功',

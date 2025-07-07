@@ -7,24 +7,31 @@
 }
 </style>
 <template>
-  <el-tabs type="card">
-    <el-tab-pane label="社区团配置">
-      <SpForm v-model="form" :form-list="formList" @onSubmit="onSaveConfig" />
-    </el-tab-pane>
-    <el-tab-pane label="团长注册项配置">
-      <SpFinder ref="finder" no-selection :setting="setting" url="/community/chief/apply_fields" />
+  <SpPage>
+    <el-tabs type="card">
+      <el-tab-pane label="社区团配置">
+        <SpForm v-model="form" :form-list="formList" @onSubmit="onSaveConfig" />
+      </el-tab-pane>
+      <el-tab-pane label="团长注册项配置">
+        <SpFinder
+          ref="finder"
+          no-selection
+          :setting="setting"
+          url="/community/chief/apply_fields"
+        />
 
-      <!-- 团长注册配置 -->
-      <SpDialog
-        ref="registerDialogRef"
-        v-model="registerDialog"
-        :title="`${registerForm.id ? '编辑配置' : '添加配置'}`"
-        :form="registerForm"
-        :form-list="registerFormList"
-        @onSubmit="onResisterSubmit"
-      />
-    </el-tab-pane>
-  </el-tabs>
+        <!-- 团长注册配置 -->
+        <SpDialog
+          ref="registerDialogRef"
+          v-model="registerDialog"
+          :title="`${registerForm.id ? '编辑配置' : '添加配置'}`"
+          :form="registerForm"
+          :form-list="registerFormList"
+          @onSubmit="onResisterSubmit"
+        />
+      </el-tab-pane>
+    </el-tabs>
+  </SpPage>
 </template>
 
 <script>
@@ -55,7 +62,7 @@ export default {
             { label: 'money', name: '按成团金额' }
           ],
           tip: '说明：按活动商品设置的起订量成团，0为不限制',
-          onChange: (e) => {
+          onChange: e => {
             if (e == 'num') {
               this.formList[0].tip = '说明：按活动商品设置的起订量成团，0为不限制'
               this.formList[1].isShow = false
@@ -118,7 +125,7 @@ export default {
             slot: 'header',
             buttonType: 'primary is-plain',
             action: {
-              handler: async (val) => {
+              handler: async val => {
                 this.registerForm.id = ''
                 this.$refs.registerDialogRef.resetForm()
                 this.registerDialog = true
@@ -162,12 +169,12 @@ export default {
             render: (h, { row }) =>
               h('el-switch', {
                 props: {
-                  'value': row.is_open,
+                  value: row.is_open,
                   'active-value': 1,
                   'inactive-value': 0
                 },
                 on: {
-                  change: async (e) => {
+                  change: async e => {
                     await this.$api.community.modifyFieldSwitch(row.id, {
                       type: 1,
                       switch: e
@@ -183,12 +190,12 @@ export default {
             render: (h, { row }) =>
               h('el-switch', {
                 props: {
-                  'value': row.is_required,
+                  value: row.is_required,
                   'active-value': 1,
                   'inactive-value': 0
                 },
                 on: {
-                  change: async (e) => {
+                  change: async e => {
                     await this.$api.community.modifyFieldSwitch(row.id, {
                       type: 2,
                       switch: e
@@ -204,12 +211,12 @@ export default {
             render: (h, { row }) =>
               h('el-switch', {
                 props: {
-                  'value': row.is_edit,
+                  value: row.is_edit,
                   'active-value': 1,
                   'inactive-value': 0
                 },
                 on: {
-                  change: async (e) => {
+                  change: async e => {
                     await this.$api.community.modifyFieldSwitch(row.id, {
                       type: 3,
                       switch: e
@@ -255,7 +262,7 @@ export default {
           ],
           required: true,
           message: '不能为空',
-          onChange: (e) => {
+          onChange: e => {
             if (e == 12) {
               this.cancelOrderFormList[1].isShow = true
             } else {

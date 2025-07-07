@@ -166,7 +166,7 @@ export default {
       children: [
         {
           path: 'ali_sms',
-          name: '阿里短信',
+          name: 'aliSms',
           component: () => import('@/view/base/shortmessage/ali_sms'),
           children: [
             {

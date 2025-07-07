@@ -1,12 +1,3 @@
-<style type="text/css" lang="scss">
-.tip-info {
-  padding: 8px 16px;
-  background-color: #fff6f7;
-  border-radius: 4px;
-  border-left: 5px solid #ff7800;
-  margin: 11px 0;
-}
-</style>
 <template>
   <div>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -18,10 +9,8 @@
           <p>超过<strong>15天</strong>的错误描述文件将会删除，不再提供下载查看</p>
         </div>
         <el-form ref="form" label-width="100px">
-          <div class="content-bottom-padded">
+          <div class="action-container">
             <el-upload
-              class="fl"
-              style="margin-right: 10px"
               action=""
               :on-change="uploadHandleChange"
               :auto-upload="false"
@@ -34,6 +23,7 @@
             </el-button>
           </div>
           <el-table
+            border
             v-loading="loading"
             :data="uploadList"
             :height="wheight - 240"
@@ -117,7 +107,7 @@ export default {
     },
     uploadHandleChange(file, fileList) {
       let params = { isUploadFile: true, file_type: this.activeName, file: file.raw }
-      handleUploadFile(params).then((response) => {
+      handleUploadFile(params).then(response => {
         this.$message({
           type: 'success',
           message: '上传成功，等待处理'
@@ -130,7 +120,7 @@ export default {
         var fileName = '新增员工'
       }
       let params = { file_type: this.activeName, file_name: fileName }
-      exportUploadTemplate(params).then((response) => {
+      exportUploadTemplate(params).then(response => {
         if (response.data.data.file) {
           var a = document.createElement('a')
           a.href = response.data.data.file
@@ -148,7 +138,7 @@ export default {
     },
     exportErrorFile(id, fileType) {
       let params = { file_type: fileType }
-      exportUploadErrorFile(id, params).then((response) => {
+      exportUploadErrorFile(id, params).then(response => {
         if (response.data.data.file) {
           var a = document.createElement('a')
           a.href = response.data.data.file
@@ -171,7 +161,7 @@ export default {
     getUploadList() {
       this.loading = true
       let params = { file_type: this.activeName, page: this.page, pageSize: this.pageSize }
-      getUploadLists(params).then((response) => {
+      getUploadLists(params).then(response => {
         this.uploadList = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false

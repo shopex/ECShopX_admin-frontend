@@ -1,13 +1,8 @@
 <template>
-  <div>
-    <el-row :gutter="20">
-      <el-col>
-        <el-select
-          clearable
-          v-model="params.status"
-          @change="statusSelectHandle"
-          placeholder="提现状态 "
-        >
+  <SpPage class="page-withdraw">
+    <SpFilterForm :model="params" @onSearch="onSearch" @onReset="onSearch">
+      <SpFilterFormItem prop="status" label="">
+        <el-select clearable v-model="params.status" placeholder="提现状态 ">
           <el-option
             v-for="(item, index) in statusList"
             :key="index"
@@ -15,38 +10,30 @@
             :value="item.value"
           />
         </el-select>
-        <el-input class="input-m" placeholder="手机号" v-model="params.mobile">
-          <el-button slot="append" icon="el-icon-search" @click="numberSearch" />
-        </el-input>
-      </el-col>
-    </el-row>
+      </SpFilterFormItem>
+      <SpFilterFormItem prop="mobile" label="">
+        <el-input placeholder="手机号" v-model="params.mobile" />
+      </SpFilterFormItem>
+    </SpFilterForm>
     <el-card>
       <div class="time-box basic">
         <el-row>
-          <el-col :span="6"
-            >
-<div>佣金总额</div>
+          <el-col :span="6">
+            <div>佣金总额</div>
             &nbsp;<span>¥{{ count.all / 100 }}</span>
-</el-col
-          >
-          <el-col :span="6"
-            >
-<div>已提现总额</div>
+          </el-col>
+          <el-col :span="6">
+            <div>已提现总额</div>
             &nbsp;<span>¥{{ count.success / 100 }}</span>
-</el-col
-          >
-          <el-col :span="6"
-            >
-<div>待处理金额</div>
+          </el-col>
+          <el-col :span="6">
+            <div>待处理金额</div>
             &nbsp;<span>¥{{ count.apply / 100 }}</span>
-</el-col
-          >
-          <el-col :span="6"
-            >
-<div>申请提现人数</div>
+          </el-col>
+          <el-col :span="6">
+            <div>申请提现人数</div>
             &nbsp;<span>{{ count.userCount }}</span>
-</el-col
-          >
+          </el-col>
         </el-row>
       </div>
       <el-table :data="list" :height="wheight - 150" v-loading="loading">
@@ -60,11 +47,9 @@
             <el-tag size="mini" v-if="scope.row.pay_type === 'wechat'" type="success">微信</el-tag>
             <el-tag size="mini" v-if="scope.row.pay_type === 'alipay'">支付宝</el-tag>
             <el-tag size="mini" v-if="scope.row.pay_type === 'hfpay'" type="warning">汇付</el-tag>
-            <el-tag size="mini" v-if="scope.row.pay_type === 'bankcard'" type="warning"
-              >
-银行卡
-</el-tag
-            >
+            <el-tag size="mini" v-if="scope.row.pay_type === 'bankcard'" type="warning">
+              银行卡
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="mobile" label="推广员手机号">
@@ -79,20 +64,15 @@
         </el-table-column>
         <el-table-column prop="status" label="提现状态">
           <template slot-scope="scope">
-            <el-tag type="primary" v-if="scope.row.status == 'apply'" size="mini"
-              >
-提现待处理
+            <el-tag type="primary" v-if="scope.row.status == 'apply'" size="mini">
+              提现待处理
             </el-tag>
-            <el-tag type="warning" v-if="scope.row.status == 'process'" size="mini"
-              >
-提现处理中
-</el-tag
-            >
-            <el-tag type="success" v-if="scope.row.status == 'success'" size="mini"
-              >
-提现完成
-</el-tag
-            >
+            <el-tag type="warning" v-if="scope.row.status == 'process'" size="mini">
+              提现处理中
+            </el-tag>
+            <el-tag type="success" v-if="scope.row.status == 'success'" size="mini">
+              提现完成
+            </el-tag>
             <el-tag type="info" v-if="scope.row.status == 'reject'" size="mini">提现拒绝</el-tag>
             <el-tag type="danger" v-if="scope.row.status == 'failed'" size="mini">提现失败</el-tag>
           </template>
@@ -104,10 +84,9 @@
               icon="el-icon-document"
               type="text"
               @click="dialogPayInfo(scope.row)"
-              >
-打款记录
-</el-button
             >
+              打款记录
+            </el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="160">
@@ -139,19 +118,17 @@
               type="primary"
               v-if="scope.row.status == 'apply'"
               @click="dialogOpen(scope.row)"
-              >
-打款
-</el-button
             >
+              打款
+            </el-button>
             <el-button
               size="mini"
               type="warning"
               v-if="scope.row.status == 'apply'"
               @click="dialogCancel(scope.row)"
-              >
-拒绝
-</el-button
             >
+              拒绝
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -207,11 +184,9 @@
       <el-input type="textarea" :rows="6" placeholder="请输入拒绝原因" v-model="textarea" />
       <div slot="footer" class="dialog-footer content-center">
         <el-button @click.native="canceldialog = false">取消操作</el-button>
-        <el-button type="primary" @click="actionProcessCashWithdrawal('reject')"
-          >
-确认拒绝
-</el-button
-        >
+        <el-button type="primary" @click="actionProcessCashWithdrawal('reject')">
+          确认拒绝
+        </el-button>
       </div>
     </el-dialog>
     <el-dialog title="提现确认" :visible.sync="dialog" :close-on-click-modal="false" width="50%">
@@ -265,13 +240,12 @@
           v-if="detail.money <= cashWithdrawalRebate"
           type="primary"
           @click="actionProcessCashWithdrawal('argee')"
-          >
-打款到推广员
-</el-button
         >
+          打款到推广员
+        </el-button>
       </div>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -326,6 +300,19 @@ export default {
     this.getList()
   },
   methods: {
+    onSearch() {
+      this.params.page = 1
+      this.getList()
+    },
+    onReset() {
+      this.params = {
+        page: 1,
+        pageSize: 20,
+        mobile: '',
+        status: ''
+      }
+      this.getList()
+    },
     handleCurrentChange(page_num) {
       this.params.page = page_num
       this.getList()
@@ -396,15 +383,17 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.time-box {
-  margin: 10px 0;
-}
-.basic {
-  padding: 30px 0;
-  text-align: center;
-  span {
-    font-size: 30px;
-    font-weight: bold;
+.page-withdraw {
+  .time-box {
+    margin: 10px 0;
+  }
+  .basic {
+    padding: 30px 0;
+    text-align: center;
+    span {
+      font-size: 30px;
+      font-weight: bold;
+    }
   }
 }
 </style>

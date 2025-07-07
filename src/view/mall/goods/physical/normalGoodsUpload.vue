@@ -1,15 +1,6 @@
-<style type="text/css" lang="scss">
-.tip-info {
-  padding: 8px 16px;
-  background-color: #fff6f7;
-  border-radius: 4px;
-  border-left: 5px solid #ff7800;
-  margin: 11px 0;
-}
-</style>
 <template>
-  <div>
-    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+  <SpPage>
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <div class="tip-info">
         <p>
           上传文件如果有处理失败的行数后将会生成错误文件，请及时查看错误信息修改后重新下载，错误描述文件只保留<strong>15天</strong>。
@@ -19,10 +10,8 @@
       <template v-for="item in pane_list">
         <el-tab-pane :key="item.name" :label="item.label" :name="item.name">
           <el-form ref="form" label-width="100px">
-            <div class="content-bottom-padded">
+            <div class="action-container">
               <el-upload
-                class="fl"
-                style="margin-right: 10px"
                 action=""
                 :on-change="uploadHandleChange"
                 :auto-upload="false"
@@ -35,6 +24,7 @@
               </el-button>
             </div>
             <el-table
+              border
               v-loading="loading"
               :data="uploadList"
               :height="wheight - 220"
@@ -84,7 +74,7 @@
         </el-tab-pane>
       </template>
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

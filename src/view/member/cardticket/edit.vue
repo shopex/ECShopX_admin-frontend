@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="page-cardticket">
     <el-form ref="form" :rules="rules" :model="form" label-width="110px">
-      <div v-if="!form.card_id && showTab" class="content-center content-bottom-padded">
+      <div v-if="!form.card_id && showTab" style="margin-bottom: 20px">
         <el-radio-group v-model="form.card_type" @change="handleTypeChange">
           <el-radio-button label="discount"> 折扣券 </el-radio-button>
           <el-radio-button label="cash"> 满减券 </el-radio-button>
           <!-- <el-radio-button label="gift">兑换券</el-radio-button> -->
-          <el-radio-button label="new_gift"> 兑换券 </el-radio-button>
+          <el-radio-button v-if="!VERSION_SHUYUN()" label="new_gift"> 兑换券 </el-radio-button>
         </el-radio-group>
       </div>
       <GiftCoupon v-if="form.card_type === 'new_gift'" @haddleShowTab="haddleShowTab" />
@@ -225,7 +225,7 @@
         </el-form-item> -->
         </el-card>
         <el-card shadow="never" header="适用规则">
-          <el-form-item label="前台直接领取1">
+          <el-form-item label="前台直接领取">
             <el-switch v-model="form.receive" active-color="#13ce66" inactive-color="#d2d4db" />
           </el-form-item>
           <el-form-item label="领券限制">
@@ -324,20 +324,18 @@
 
           <el-col :xs="12" :sm="12" :md="12">
             <div v-if="!categoryHidden" style="height: 350px" class="custom_tree">
-              <!-- <treeselect
-                v-model="form.item_category"
-                :options="categoryList"
-                :show-count="true"
-                :multiple="true"
-                :disable-branch-nodes="true"
-              /> -->
               <el-cascader
                 v-model="form.item_category"
                 style="width: 500px"
                 placeholder="请选择"
                 clearable
                 :options="categoryList"
-                :props="{ value: 'category_id', label: 'category_name', checkStrictly: true }"
+                :props="{
+                  value: 'category_id',
+                  label: 'category_name',
+                  checkStrictly: false,
+                  multiple: true
+                }"
               />
             </div>
           </el-col>
@@ -997,7 +995,9 @@ export default {
       params.tag_ids = JSON.stringify(this.form.tag_ids)
       params.rel_item_ids = JSON.stringify(this.form.rel_item_ids)
       params.brand_ids = JSON.stringify(this.form.brand_ids)
-      params.item_category = JSON.stringify(this.form.item_category)
+      params.item_category = JSON.stringify(
+        this.form.item_category.map(item => item[item.length - 1])
+      )
       params.itemTreeLists = []
       params.rel_distributor_ids = JSON.stringify(this.form.rel_distributor_ids)
       params.rel_shops_ids = JSON.stringify(this.form.rel_shops_ids)
@@ -1175,10 +1175,42 @@ export default {
       if (this.is_distributor) {
         const res = await this.$api.goods.getCategory({ is_show: false })
         this.categoryList = res
+        this.getCategoryVal()
         return
       }
       const res = await this.$api.goods.getCategory({ is_main_category: true, ignore_none: true })
       this.categoryList = res
+      this.getCategoryVal()
+    },
+    getCategoryPaths(categories, targetIds) {
+      // 存储每个目标ID的路径
+      const paths = {}
+
+      // 递归查找路径
+      function findPath(node, currentPath) {
+        const newPath = [...currentPath, node.category_id]
+
+        // 如果当前节点是目标ID，记录路径
+        if (targetIds.includes(node.category_id)) {
+          paths[node.category_id] = newPath
+        }
+
+        // 继续遍历子节点
+        if (node.children && node.children.length > 0) {
+          node.children.forEach(child => findPath(child, newPath))
+        }
+      }
+
+      // 从根节点开始遍历
+      categories.forEach(root => findPath(root, []))
+
+      // 构建结果数组，按目标ID的顺序排列
+      return targetIds.map(id => paths[id] || [])
+    },
+    getCategoryVal() {
+      if (this.form.card_id) {
+        this.form.item_category = this.getCategoryPaths(this.categoryList, this.form.item_category)
+      }
     },
     addItemTag() {
       this.tag.currentTags = []
@@ -1344,123 +1376,126 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.card-content {
-  &-head {
-    text-align: center;
-    color: #fff;
-    padding: 20px 15px;
-    font-size: 14px;
-    .price {
-      font-size: 32px;
-    }
-    .validity-date {
-      color: #efefef;
-      font-size: 12px;
-    }
-  }
-  &-body {
-    padding: 20px 15px;
-    min-height: 400px;
-    background: #fff;
-    .barcode-img {
-      width: 160px;
-      height: 80px;
-      margin: 0 auto 15px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .code-img {
-      width: 120px;
-      height: 118px;
-      margin: 0 auto 15px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
+.page-cardticket ::v-deep .el-card {
+  margin-bottom: 20px;
+}
+// .card-content {
+//   &-head {
+//     text-align: center;
+//     color: #fff;
+//     padding: 20px 15px;
+//     font-size: 14px;
+//     .price {
+//       font-size: 32px;
+//     }
+//     .validity-date {
+//       color: #efefef;
+//       font-size: 12px;
+//     }
+//   }
+//   &-body {
+//     padding: 20px 15px;
+//     min-height: 400px;
+//     background: #fff;
+//     .barcode-img {
+//       width: 160px;
+//       height: 80px;
+//       margin: 0 auto 15px;
+//       img {
+//         width: 100%;
+//         height: 100%;
+//       }
+//     }
+//     .code-img {
+//       width: 120px;
+//       height: 118px;
+//       margin: 0 auto 15px;
+//       img {
+//         width: 100%;
+//         height: 100%;
+//       }
+//     }
 
-    .txt-title {
-      color: #333;
-      font-weight: bold;
-    }
-    .txt-content {
-      padding-left: 15px;
-      span {
-        margin: 0 5px;
-      }
-    }
-  }
-}
-.bd {
-  border-bottom: 1px dashed #ddd;
-}
-.mb {
-  margin-bottom: 10px;
-}
-.card-edit-detail {
-  background: #fff;
-  input {
-    width: 30%;
-  }
-}
-.affix {
-  position: fixed;
-  width: 320px;
-  overflow: hidden;
-}
-.section-footer {
-  padding: 15px 10px;
-  text-align: center;
-  .with-border {
-    border-top: 1px solid #f8f8f8;
-  }
-}
-.card_article_box .card_article_img {
-  background-color: #fff;
-}
-.media_edit {
-  display: block;
-  position: relative;
-  z-index: 2;
-  float: none;
-  min-width: 800px;
-  margin-left: 340px;
-}
-.tips {
-  margin-left: 2px;
-}
-.el-select {
-  width: 110px;
-}
+//     .txt-title {
+//       color: #333;
+//       font-weight: bold;
+//     }
+//     .txt-content {
+//       padding-left: 15px;
+//       span {
+//         margin: 0 5px;
+//       }
+//     }
+//   }
+// }
+// .bd {
+//   border-bottom: 1px dashed #ddd;
+// }
+// .mb {
+//   margin-bottom: 10px;
+// }
+// .card-edit-detail {
+//   background: #fff;
+//   input {
+//     width: 30%;
+//   }
+// }
+// .affix {
+//   position: fixed;
+//   width: 320px;
+//   overflow: hidden;
+// }
+// .section-footer {
+//   padding: 15px 10px;
+//   text-align: center;
+//   .with-border {
+//     border-top: 1px solid #f8f8f8;
+//   }
+// }
+// .card_article_box .card_article_img {
+//   background-color: #fff;
+// }
+// .media_edit {
+//   display: block;
+//   position: relative;
+//   z-index: 2;
+//   float: none;
+//   min-width: 800px;
+//   margin-left: 340px;
+// }
+// .tips {
+//   margin-left: 2px;
+// }
+// .el-select {
+//   width: 110px;
+// }
 </style>
 <style type="text/css" lang="scss">
-.color-group {
-  li {
-    width: 30px;
-    height: 30px;
-    float: left;
-    cursor: pointer;
-    &:hover {
-      border: 2px solid #fff;
-    }
-    &.active {
-      border: 2px solid #fff;
-    }
-  }
-}
-.el-radio-group {
-  .el-radio__input.is-checked + .el-radio__label,
-  .el-radio__input.is-checked .el-radio__inner {
-    color: #606272;
-  }
-}
-.el-checkbox-group {
-  .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: #606272;
-  }
-}
-.custom_tree {
-}
+// .color-group {
+//   li {
+//     width: 30px;
+//     height: 30px;
+//     float: left;
+//     cursor: pointer;
+//     &:hover {
+//       border: 2px solid #fff;
+//     }
+//     &.active {
+//       border: 2px solid #fff;
+//     }
+//   }
+// }
+// .el-radio-group {
+//   .el-radio__input.is-checked + .el-radio__label,
+//   .el-radio__input.is-checked .el-radio__inner {
+//     color: #606272;
+//   }
+// }
+// .el-checkbox-group {
+//   .el-checkbox__input.is-checked + .el-checkbox__label {
+//     color: #606272;
+//   }
+// }
+// .custom_tree {
+// }
 </style>

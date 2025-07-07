@@ -75,10 +75,10 @@
 </style>
 
 <template>
-  <div class="page-body">
+  <SpPage>
     <SpRouterView>
-      <SpPlatformTip h5 app alipay />
-      <!-- <div v-if="VERSION_STANDARD()" class="content-bottom-padded">
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
+      <!-- <div v-if="VERSION_STANDARD" class="content-bottom-padded">
         <el-alert type="info" title="操作说明" show-icon>
           <div>
             自动同步：开启自动同步后，总部添加编辑商品会自动同步上架到到店铺，保留开启前的商品状态。关闭同步后将保留已同步的商品数据
@@ -137,11 +137,11 @@
 
       <div class="distributor-btn">
         <div v-if="!IS_DISTRIBUTOR()" class="action-container">
-          <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="dialogOpen()">
+          <el-button type="primary" icon="el-icon-circle-plus" @click="dialogOpen()">
             添加店铺
           </el-button>
 
-          <el-button type="primary" icon="ecx-icon icon-xinzeng" @click="uploadHandleChange()">
+          <el-button type="primary" icon="el-icon-circle-plus" @click="uploadHandleChange()">
             导入店铺
           </el-button>
         </div>
@@ -157,7 +157,6 @@
         </el-button> -->
           <el-button
             v-if="VERSION_PLATFORM() && !is_distributor && !IS_MERCHANT()"
-            plain
             type="primary"
             @click="addDistributorTag"
           >
@@ -166,7 +165,6 @@
           <el-button
             v-if="IS_ADMIN() || IS_MERCHANT()"
             type="primary"
-            plain
             @click="showSettingDistance('')"
           >
             设置店铺默认可见范围
@@ -174,13 +172,12 @@
           <el-button
             v-if="!IS_DISTRIBUTOR() && !distributor_self"
             type="primary"
-            plain
             @click="addDistributorSelf()"
           >
             新增默认虚拟店信息
           </el-button>
           <template v-else>
-            <el-button v-if="!IS_MERCHANT()" type="primary" plain @click="editDistributorSelf()">
+            <el-button v-if="!IS_MERCHANT()" type="primary" @click="editDistributorSelf()">
               编辑默认虚拟店信息
             </el-button>
           </template>
@@ -417,7 +414,6 @@
                   下载店铺码
                 </el-button>
                 <router-link
-                  v-if="scope.row.is_openAccount"
                   :to="{
                     path: matchRoutePath('details'),
                     query: { distributor_id: scope.row.distributor_id }
@@ -431,7 +427,8 @@
                   class="copy-btn"
                   type="text"
                 >
-                  <input v-model="scope.row.link" class="copy-link" type="text">复制店铺链接
+                  <!-- <input v-model="scope.row.link" class="copy-link" type="text"> -->
+                  复制店铺链接
                 </el-button>
                 <el-button type="text" @click="linkWxpaysettting(scope.row)">
                   微信支付配置
@@ -674,7 +671,7 @@
         @onSubmit="onKeFuFormSubmit"
       />
     </SpRouterView>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'

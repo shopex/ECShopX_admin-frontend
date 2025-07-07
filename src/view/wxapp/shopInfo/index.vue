@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-form ref="form" :model="form" label-position="left" label-width="100px">
       <div class="section-body">
         <el-form-item label="商城名称">
           <el-input v-model="form.brand_name" type="text" style="width: 300px" />
-          {{ VERSION_SHUYUN ? '（注：商城名称展示到小程序端）' : '' }}
+          {{ VERSION_SHUYUN() ? '（注：商城名称展示到小程序端）' : '' }}
         </el-form-item>
         <el-form-item label="商城简介">
           <el-row>
@@ -47,7 +47,7 @@
         <el-button v-loading="loading" type="primary" @click="onSubmit"> 保存 </el-button>
       </div>
     </el-form>
-  </div>
+  </SpPage>
 </template>
 
 <script>

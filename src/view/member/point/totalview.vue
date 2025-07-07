@@ -2,59 +2,44 @@
   <div>
     <div class="recharge-overview view-flex content-center content-padded">
       <div class="view-flex-item">
-        <i class="iconfont icon-coins" />
+        <!-- <i class="iconfont icon-coins" /> -->
+        <SpIcon name="layers" :size="50" fill="#ff5000" />
         <div>
           <span>可用积分总额</span> <span class="money mark">{{ count.can_use }}</span>
         </div>
       </div>
       <div class="view-flex-item">
-        <i class="iconfont icon-database" />
+        <SpIcon name="funds" :size="50" fill="#ff5000" />
         <div>
           累计积分总额 <span class="money mark">{{ count.total }}</span>
         </div>
       </div>
       <div class="view-flex-item">
-        <i class="iconfont icon-history" />
+        <SpIcon name="timer" :size="50" fill="#ff5000" />
         <div>
           <span>已使用积分总额</span> <span class="money mark">{{ count.used }}</span>
         </div>
       </div>
     </div>
-    <el-table
-      v-loading="loading"
-      :data="dataList"
-      :height="wheight - 240"
-    >
-      <el-table-column
-        prop="timeStart"
-        label="创建时间"
-      >
+    <el-table v-loading="loading" :data="dataList" :height="wheight - 240">
+      <el-table-column prop="timeStart" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.created | datetime('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="point"
-        label="积分变动"
-      >
+      <el-table-column prop="point" label="积分变动">
         <template slot-scope="scope">
           <span v-if="scope.row.point == 0">{{ scope.row.point }}</span>
-          <span
-            v-else-if="scope.row.point > 0 && scope.row.outin_type == 'in'"
-          >+{{ scope.row.point }}</span>
-          <span
-            v-else-if="scope.row.point > 0 && scope.row.outin_type == 'out'"
-          >-{{ scope.row.point }}</span>
+          <span v-else-if="scope.row.point > 0 && scope.row.outin_type == 'in'"
+            >+{{ scope.row.point }}</span
+          >
+          <span v-else-if="scope.row.point > 0 && scope.row.outin_type == 'out'"
+            >-{{ scope.row.point }}</span
+          >
         </template>
       </el-table-column>
-      <el-table-column
-        prop="point_desc"
-        label="记录"
-      />
-      <el-table-column
-        prop="order_id"
-        label="订单号"
-      />
+      <el-table-column prop="point_desc" label="记录" />
+      <el-table-column prop="order_id" label="订单号" />
     </el-table>
   </div>
 </template>
@@ -64,7 +49,7 @@ import { mapGetters } from 'vuex'
 import { getMemberPoint, getPointCountIndex } from '../../../api/point'
 
 export default {
-  data () {
+  data() {
     return {
       loading: false,
       pageSize: 20,
@@ -75,12 +60,12 @@ export default {
   computed: {
     ...mapGetters(['wheight'])
   },
-  mounted () {
+  mounted() {
     let query = { pageSize: this.pageSize, page: 1 }
-    getMemberPoint(query).then((res) => {
+    getMemberPoint(query).then(res => {
       this.dataList = res.data.data.list
     })
-    getPointCountIndex().then((res) => {
+    getPointCountIndex().then(res => {
       this.count = res.data.data
     })
   },
@@ -90,10 +75,21 @@ export default {
 
 <style scoped lang="scss">
 .recharge-overview {
-  .iconfont {
-    font-size: 50px;
-    color: #ff5000;
+  display: flex;
+  justify-content: space-around;
+  .i-icon {
     margin-bottom: 10px;
+  }
+  .view-flex-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  font-size: 20px;
+  .money {
+    margin-top: 18px;
+    color: #ff5000;
   }
 }
 .deposit-des {
@@ -119,10 +115,7 @@ export default {
       display: block;
     }
   }
-  .money {
-    font-size: 20px;
-    color: #ff5000;
-  }
+
   img {
     width: 55px;
     height: 55px;

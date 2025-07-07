@@ -64,12 +64,10 @@
       <el-row :gutter="20">
         <el-col>
           <el-button-group>
-            <export-tip params="normal_master_order" @exportHandle="exportData">
-              <el-button type="primary"> 导出主订单 </el-button>
-            </export-tip>
-            <export-tip params="normal_order" @exportHandle="exportData">
-              <el-button type="primary"> 导出子订单 </el-button>
-            </export-tip>
+            <el-button type="primary" @click="exportData('normal_master_order')">
+              导出主订单
+            </el-button>
+            <el-button type="primary" @click="exportData('normal_order')"> 导出子订单 </el-button>
           </el-button-group>
           <el-popover
             placement="top-start"

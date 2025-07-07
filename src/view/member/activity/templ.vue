@@ -1,15 +1,11 @@
 <template lang="html">
-  <section class="section section-white">
+  <section class="section section-white page-activity-templ">
     <div v-for="item in list">
-      <div class="section-header with-border">
+      <div class="templ-title">
         {{ item.name }} &nbsp; <small>{{ item.desc }}</small>
       </div>
       <div class="content-padded">
-        <el-row
-          v-for="(row, index) in item.itemList"
-          :key="index"
-          :gutter="20"
-        >
+        <el-row v-for="(row, index) in item.itemList" :key="index" :gutter="20">
           <el-col>
             <div class="tip">
               <div class="view-flex">
@@ -17,9 +13,7 @@
                   <p>{{ row.name }}</p>
                   <p>{{ row.desc }}</p>
                 </div>
-                <el-button @click="toForm(row.form)">
-                  选择
-                </el-button>
+                <el-button @click="toForm(row.form)"> 选择 </el-button>
               </div>
             </div>
           </el-col>
@@ -32,7 +26,7 @@
 <script>
 import { isValidActivity } from '../../../api/promotions'
 export default {
-  data () {
+  data() {
     return {
       list: [
         {
@@ -60,11 +54,11 @@ export default {
     }
   },
   methods: {
-    toForm (type) {
+    toForm(type) {
       var param = {
         activity_type: type
       }
-      isValidActivity(param).then((res) => {
+      isValidActivity(param).then(res => {
         this.$router.push({
           path: this.$route.path.replace('templ', 'editor/') + type
         })
@@ -75,10 +69,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.tip {
-  padding: 16px;
-  background-color: #ecf8ff;
-  border-radius: 4px;
-  border-left: 5px solid #50bfff;
+.page-activity-templ {
+  .tip {
+    padding: 16px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+  }
+  .view-flex {
+    display: flex;
+  }
+  .view-flex-item {
+    flex: 1;
+  }
+  .templ-title {
+    padding: 10px 15px;
+  }
+  .content-padded {
+    padding: 10px;
+  }
+}
+.page-activity-templ ::v-deep .el-row {
+  margin-bottom: 10px;
 }
 </style>

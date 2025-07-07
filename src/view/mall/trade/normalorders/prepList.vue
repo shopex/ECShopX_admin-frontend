@@ -154,7 +154,6 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
-      <!-- v-if="!VERSION_STANDARD() && !VERSION_IN_PURCHASE()" -->
       <SpFilterFormItem prop="order_holder" label="订单分类:">
         <el-select v-model="params.order_holder" clearable placeholder="请选择">
           <el-option
@@ -200,20 +199,14 @@
     </SpFilterForm>
 
     <div class="action-container">
-      <el-dropdown>
+      <el-dropdown @command="handleExport">
         <el-button type="primary" plain>
           导出<i class="el-icon-arrow-down el-icon--right" />
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <export-tip @exportHandle="exportInvoice"> 未开票订单 </export-tip>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <export-tip @exportHandle="exportDataMaster"> 主订单 </export-tip>
-          </el-dropdown-item>
-          <el-dropdown-item>
-            <export-tip @exportHandle="exportDataNormal"> 子订单 </export-tip>
-          </el-dropdown-item>
+          <el-dropdown-item command="exportInvoice">未开票订单 </el-dropdown-item>
+          <el-dropdown-item command="exportDataMaster">主订单 </el-dropdown-item>
+          <el-dropdown-item command="exportDataNormal">子订单 </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-tooltip
@@ -2146,6 +2139,17 @@ export default {
     exportDataMaster() {
       this.exportData('normal_master_order')
     },
+
+    async handleExport(command) {
+      if (command === 'exportInvoice') {
+        this.exportInvoice()
+      } else if (command === 'exportDataMaster') {
+        this.exportDataMaster()
+      } else if (command === 'exportDataNormal') {
+        this.exportDataNormal()
+      }
+    },
+
     exportData(type) {
       console.log('====exportData', type)
       let params = {

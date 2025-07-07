@@ -7,7 +7,7 @@
 <template>
   <div>
     <template v-if="$route.path.indexOf('editor') === -1">
-      <SpPlatformTip h5 app pc alipay />
+      <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app pc alipay />
       <div class="action-container">
         <el-button type="primary" icon="iconfont icon-xinzengcaozuo-01" @click="addActivityData">
           添加活动
@@ -276,7 +276,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            seckillActivityUpdateStatus({ seckill_id: row.seckill_id }).then((response) => {
+            seckillActivityUpdateStatus({ seckill_id: row.seckill_id }).then(response => {
               this.fetchList()
               this.$message({
                 message: '修改活动状态成功',
@@ -299,7 +299,7 @@ export default {
         seckill_id: activityId,
         page: this.goodsPage,
         pageSize: this.goodsPageSize
-      }).then((res) => {
+      }).then(res => {
         this.goodsList = res.data.data.list
         this.goodsCount = res.data.data.total_count
       })
@@ -313,23 +313,23 @@ export default {
       this.goodsVisible = false
     },
     getCurrencyInfo() {
-      getDefaultCurrency().then((res) => {
+      getDefaultCurrency().then(res => {
         this.currency = res.data.data
         this.cursymbol = this.currency.symbol
       })
     },
     updateActivityData(params) {
-      updateActivityItemData(params).then((res) => {})
+      updateActivityItemData(params).then(res => {})
     },
     editItemPrice(row) {
       let form = {
-        'id': row.id,
-        'item_id': row.item_id,
-        'activity_price': row.activity_price,
-        'vip_price': row.vip_price,
-        'svip_price': row.svip_price,
-        'activity_store': row.activity_store,
-        'points': row.points
+        id: row.id,
+        item_id: row.item_id,
+        activity_price: row.activity_price,
+        vip_price: row.vip_price,
+        svip_price: row.svip_price,
+        activity_store: row.activity_store,
+        points: row.points
       }
       this.updateActivityData(form)
     },

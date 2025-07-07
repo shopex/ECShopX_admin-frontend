@@ -1,29 +1,28 @@
 <style scoped lang="scss">
-.upload-box {
-  display: inline-block;
-  border: 1px dashed #c0ccda;
-  border-radius: 6px;
-  height: 107px;
-  width: 308px;
-  cursor: pointer;
-  overflow: hidden;
-}
-.setting_pic {
-  height: 107px;
-  width: 308px;
+.page-bargin {
+  .upload-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #c0ccda;
+    border-radius: 6px;
+    height: 107px;
+    width: 308px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .setting_pic {
+    height: 107px;
+    width: 308px;
+  }
 }
 </style>
 
 <template>
-  <div>
-    <SpPlatformTip />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" />
     <el-tabs v-if="$route.path.indexOf('editor') === -1" v-model="activeName" type="card">
       <el-tab-pane label="助力活动管理" name="list">
-        <div class="content-bottom-padded">
-          <el-button type="primary" icon="el-icon-plus" @click="addBargains">
-            添加助力活动
-          </el-button>
-        </div>
         <el-table v-loading="loading" :data="dataList" :height="wheight - 230">
           <el-table-column prop="title" label="活动名称" />
           <el-table-column label="活动时间" width="180">
@@ -55,17 +54,19 @@
             <template slot-scope="scope">
               <i
                 v-if="!scope.row.is_expired"
-                class="iconfont icon-edit1"
+                class="el-icon-edit"
                 @click="editBargains(scope.$index, scope.row)"
               />
               <i
                 v-if="!scope.row.is_expired"
-                class="iconfont icon-user-slash"
+                class="el-icon-delete"
+                style="margin-left: 10px"
                 @click="terminateBargainsAction(scope.$index, scope.row)"
                 >废除</i
               >
               <i
-                class="mark iconfont icon-trash-alt1"
+                class="mark el-icon-delete"
+                style="margin-left: 10px; color: #ff5000"
                 @click="deleteBargainsAction(scope.$index, scope.row)"
               />
             </template>
@@ -104,7 +105,7 @@
       </el-tab-pane>
     </el-tabs>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -156,7 +157,7 @@ export default {
           page_name: 'pages/kanjia',
           id: this.tempatePageKanJiaParamId
         }
-        updateParamsById(query).then((response) => {
+        updateParamsById(query).then(response => {
           // this.getAdPic()
           this.$message({
             message: '保存成功',
@@ -174,7 +175,7 @@ export default {
             name: 'banner',
             page_name: 'pages/kanjia'
           }
-          setPageParams(query).then((response) => {
+          setPageParams(query).then(response => {
             // this.getAdPic()
             this.submit = false
             this.$message({
@@ -205,7 +206,7 @@ export default {
     },
     getAdPic() {
       let filter = { template_name: 'yykcutdown', name: 'banner', page_name: 'pages/kanjia' }
-      getParamByTempName(filter).then((res) => {
+      getParamByTempName(filter).then(res => {
         if (res.data.data) {
           this.ad_pic = res.data.data[0].params.ad_pic
           this.tempatePageKanJiaParamId = res.data.data[0].id
@@ -219,7 +220,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteBargains(row.bargain_id).then((response) => {
+          deleteBargains(row.bargain_id).then(response => {
             this.$message({
               message: '删除助力活动成功',
               type: 'success',
@@ -242,7 +243,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          terminateBargains(row.bargain_id).then((response) => {
+          terminateBargains(row.bargain_id).then(response => {
             this.$message({
               message: '废除助力活动成功',
               type: 'success',
@@ -262,12 +263,12 @@ export default {
       this.loading = true
       let params = { page: this.params.page, pageSize: this.params.pageSize }
       listBargins(params)
-        .then((response) => {
+        .then(response => {
           this.loading = false
           this.dataList = response.data.data.list
           this.total_count = response.data.data.total_count
         })
-        .catch((error) => {
+        .catch(error => {
           this.$message({
             type: 'error',
             message: '获取活动列表出错'

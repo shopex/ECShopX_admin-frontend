@@ -2,7 +2,7 @@
   <div class="bg-white h-full px-10 py-10 relative flex flex-col justify-center">
     <!-- form: {{ form }} -->
     <div>
-      <div class="text-3xl font-bold mb-3">店铺管理中心</div>
+      <div class="text-3xl font-bold mb-3">{{ systemTitle }}</div>
       <div class="text-sm text-muted-foreground">请输入您的帐户信息以开始管理您的项目</div>
     </div>
 
@@ -11,20 +11,21 @@
     </div>
 
     <div class="mt-16">
-      <el-button type="primary" class="w-full" :loading="loading" @click="handleLogin">
+      <el-button type="primary" class="w-full h-[40px]" :loading="loading" @click="handleLogin">
         登录
       </el-button>
     </div>
 
-    <div class="absolute -bottom-0.5 left-0 w-full text-center text-xs text-muted-foreground">
-      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">沪ICP备05002918号</a>
+    <div class="absolute -bottom-0.5 left-0 w-full text-center text-sm text-muted-foreground">
+      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ recoderNumber }}</a>
     </div>
   </div>
 </template>
 
 <script>
 import { useForm } from '@/composables'
-import Test from './test.vue'
+import Config from '@/config'
+import { getSystemTitle } from '@/utils'
 
 const [Form, FormApi] = useForm({
   formItems: [
@@ -44,23 +45,9 @@ const [Form, FormApi] = useForm({
       },
       fieldName: 'pwd',
       rules: [{ required: true, message: '请输入密码' }]
-    },
-    {
-      component: ({ value, props, onInput, h }) => {
-        return h(Test, {
-          props: {
-            type: 'primary',
-            class: 'w-full'
-          }
-        })
-      },
-      componentProps: {
-        type: 'primary',
-        class: 'w-full'
-      },
-      fieldName: 'login'
     }
   ],
+  labelWidth: '0',
   showDefaultActions: false
 })
 
@@ -72,7 +59,13 @@ export default {
   data() {
     return {
       formApi: FormApi,
-      loading: false
+      loading: false,
+      recoderNumber: Config.recoder_number
+    }
+  },
+  computed: {
+    systemTitle: () => {
+      return getSystemTitle()
     }
   },
   async mounted() {
@@ -89,16 +82,22 @@ export default {
         const { token } = await this.$api.auth.login({
           username: formData.account,
           password: formData.pwd,
-          logintype: formData.loginType
+          logintype: 'distributor'
           // product_model: this.VUE_APP_PRODUCT_MODEL,
           // agreement_id
         })
         if (token) {
+          const tokenArray = token.split('.')
+          const { menu_type } = JSON.parse(atob(tokenArray[1]))
+          this.$store.commit('system/setVersionMode', { versionMode: menu_type })
           this.$store.commit('user/setToken', { token })
+          this.$store.commit('user/setLoginType', { login_type: 'distributor' })
           this.$message.success('登录成功')
-          await this.$store.dispatch('user/fetchPermissions')
-          debugger
-          // this.$router.push('/')
+          await this.$store.dispatch('user/fetchAccessMenus')
+          await this.$store.dispatch('user/fetchAccountInfo')
+          setTimeout(() => {
+            window.location.href = '/shopadmin/shoplist'
+          }, 700)
         }
       } catch (error) {
         // console.error('登录失败:', error)

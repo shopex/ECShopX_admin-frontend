@@ -5,14 +5,8 @@
 }
 </style>
 <template>
-  <div>
-    <div
-      v-if="
-        $route.path.indexOf('detail') === -1 &&
-        $route.path.indexOf('approve') === -1 &&
-        $route.path.indexOf('info') === -1
-      "
-    >
+  <SpRouterView>
+    <SpPage>
       <SpFilterForm :model="formQuery" @onSearch="onSearch" @onReset="onSearch">
         <SpFilterFormItem prop="name" label="团长姓名:">
           <el-input v-model="formQuery.name" placeholder="请输入团长姓名" />
@@ -21,16 +15,13 @@
           <el-input v-model="formQuery.mobile" placeholder="请输入团长手机号" />
         </SpFilterFormItem>
       </SpFilterForm>
+
       <div class="action-container">
-        <el-button type="primary" plain icon="el-plus-circle" @click="chiefupload">
-          团长导入
-        </el-button>
-        <el-button type="primary" plain icon="el-plus-circle" @click="handleApprove">
+        <el-button type="primary" icon="el-plus-circle" @click="chiefupload"> 团长导入 </el-button>
+        <el-button type="primary" icon="el-plus-circle" @click="handleApprove">
           团长审批
         </el-button>
       </div>
-      <!-- <el-tabs v-model="formQuery.approve_status" type="card" @tab-click="onSearch">
-        <el-tab-pane v-for="item in stateList" :key="item.value" :label="item.title" :name="item.value" /> -->
 
       <SpFinder
         ref="finder"
@@ -42,7 +33,6 @@
         }"
         url="/community/chief/list"
       />
-      <!-- </el-tabs> -->
 
       <SpDialog
         ref="resloveDialogRef"
@@ -52,9 +42,8 @@
         :form-list="resloveFormList"
         @onSubmit="onResloveSubmit"
       />
-    </div>
-    <router-view />
-  </div>
+    </SpPage>
+  </SpRouterView>
 </template>
 
 <script>
@@ -117,7 +106,7 @@ export default {
             { label: 1, name: '同意' },
             { label: 2, name: '不同意' }
           ],
-          onChange: (e) => {
+          onChange: e => {
             if (e == 2) {
               this.resloveFormList[1].isShow = true
             } else {
@@ -177,17 +166,22 @@ export default {
         path: `${path}/approve`
       })
     },
-    chiefupload() {
-      if (this.login_type == 'distributor') {
-        this.$router.push({ path: `/shopadmin/member/member/chiefupload` })
-      } else {
-        this.$router.push({ path: `/applications/community/chiefupload` })
-      }
+    async chiefupload() {
+      await this.$dialog.open({
+        title: '团长导入',
+        content: () => import('@/views/core/upload/upload-chief'),
+        buttonCancel: {
+          text: '关闭'
+        },
+        buttonConfirm: {
+          visible: false
+        }
+      })
     }
   },
 
   computed: {
-    ...mapGetters(['wheight', 'isMicorMall', 'login_type'])
+    ...mapGetters(['login_type'])
   }
 }
 </script>

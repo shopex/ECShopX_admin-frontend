@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SpPlatformTip h5 app alipay />
+  <SpPage>
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="会员中心BANNER" name="banner">
         <bannerTemplates />
@@ -19,7 +19,7 @@
         <wechatshareTemplates />
       </el-tab-pane> -->
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 
 <script>

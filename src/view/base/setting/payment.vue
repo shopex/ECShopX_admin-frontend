@@ -1,32 +1,47 @@
 <template>
-  <div>
+  <SpPage>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane v-if="!isHfpay" label="微信支付配置" name="wxpay">
         <wxpayTemplates />
       </el-tab-pane>
-      <el-tab-pane v-if="!isHfpay && !VERSION_IN_PURCHASE()" label="支付宝支付配置" name="alipay">
+      <el-tab-pane
+        v-if="!isHfpay && !VERSION_IN_PURCHASE() && !VERSION_SHUYUN()"
+        label="支付宝支付配置"
+        name="alipay"
+      >
         <alipayTemplates />
       </el-tab-pane>
       <!-- <el-tab-pane label="ebuy支付配置" name="ebuypay" v-if="!isHfpay">
         <ebuypayTemplates></ebuypayTemplates>
       </el-tab-pane> -->
-      <el-tab-pane v-if="isHfpay && !VERSION_IN_PURCHASE()" label="汇付天下支付配置" name="hfpay">
+      <el-tab-pane
+        v-if="isHfpay && !VERSION_IN_PURCHASE() && !VERSION_SHUYUN()"
+        label="汇付天下支付配置"
+        name="hfpay"
+      >
         <hfpayTemplates />
       </el-tab-pane>
-      <el-tab-pane v-if="!isHfpay && !VERSION_IN_PURCHASE()" label="Adapay支付配置" name="adapay">
+      <el-tab-pane
+        v-if="!isHfpay && !VERSION_IN_PURCHASE() && !VERSION_SHUYUN()"
+        label="Adapay支付配置"
+        name="adapay"
+      >
         <adapayTemplates />
       </el-tab-pane>
-      <el-tab-pane label="银联商务支付配置" name="chinaumspay">
+      <el-tab-pane v-if="!VERSION_SHUYUN()" label="银联商务支付配置" name="chinaumspay">
         <chinaumspayTemplates />
       </el-tab-pane>
-      <el-tab-pane label="线下转帐" name="offline">
+      <el-tab-pane v-if="!VERSION_SHUYUN() && !VERSION_B2C()" label="线下转帐" name="offline">
         <offlinePay />
+      </el-tab-pane>
+      <el-tab-pane label="汇付斗拱支付配置" name="bspay">
+        <bspayTemplates />
       </el-tab-pane>
       <!-- <el-tab-pane label="默认积分抵扣配置" name="point">
         <pointpay />
       </el-tab-pane> -->
     </el-tabs>
-  </div>
+  </SpPage>
 </template>
 <script>
 import alipayTemplates from './payment/alipay'
@@ -37,6 +52,7 @@ import adapayTemplates from './payment/adapay'
 import chinaumspayTemplates from './payment/chinaumspay'
 import pointpay from './payment/pointpay'
 import offlinePay from './payment/offlinepay'
+import bspayTemplates from './payment/bspay'
 
 import { hfpayVersionStatus } from '@/api/fenzhang'
 
@@ -45,6 +61,7 @@ export default {
     alipayTemplates,
     wxpayTemplates,
     ebuypayTemplates,
+    bspayTemplates,
     hfpayTemplates,
     adapayTemplates,
     chinaumspayTemplates,
@@ -68,7 +85,7 @@ export default {
     if ('undefined' != typeof this.$route.query.activeName) {
       this.activeName = this.$route.query.activeName
     }
-    hfpayVersionStatus().then((res) => {
+    hfpayVersionStatus().then(res => {
       let data = res.data.data
       if (data.hfpay_version_status) {
         this.activeName = 'hfpay'

@@ -79,9 +79,17 @@ export default [
     }
   },
   {
+    meta: {
+      layout: 'empty'
+    },
     path: '/wxapp/manage/decorate',
     name: `模板编辑`,
     component: () => import('@/view/decorate/index')
+  },
+  {
+    path: '/wxapp/manage/decorate_pc',
+    name: `Pc模板编辑`,
+    component: () => import('@/view/decorate/pc/index')
   },
   {
     path: '/supplier/login',

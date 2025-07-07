@@ -29,8 +29,8 @@
 }
 </style>
 <template>
-  <div class="">
-    <SpPlatformTip h5 app alipay />
+  <SpPage class="">
+    <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
     <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="distributor_id" label="店铺:">
         <SpSelectShop
@@ -129,7 +129,7 @@
       :form-list="itemSkuFormList"
       @onSubmit="onItemSkuFormSubmit"
     />
-  </div>
+  </SpPage>
 </template>
 
 <script>
@@ -374,8 +374,6 @@ export default {
   },
   methods: {
     onSearch() {
-      debugger
-      console.log('this.$refs:', this.$refs)
       this.$refs.finder.refresh(true)
     },
     async getDefaultDistributor() {
@@ -384,7 +382,9 @@ export default {
           distributor_id: 0
         })
         this.formData.distributor_id = distributor_id
-        this.$refs.selectShop.selectValue = name
+        if (this.$refs.selectShop) {
+          this.$refs.selectShop.selectValue = name
+        }
       }
       this.finderUrl = '/distributor/items'
       this.finderData = undefined

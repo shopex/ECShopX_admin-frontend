@@ -1,24 +1,30 @@
 <template>
   <SpRouterView>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="普通快递" name="normal">
-        <Normal />
-      </el-tab-pane>
-      <el-tab-pane
-        v-if="!IS_DISTRIBUTOR() && !VERSION_B2C() && !IS_SUPPLIER()"
-        label="同城配"
-        name="city"
-      >
-        <Shansong v-if="VUE_APP_LOCAL_DELIVERY_DIRVER == 'shansong'" />
-        <City v-else />
-      </el-tab-pane>
-      <el-tab-pane v-if="!IS_SUPPLIER()" label="到店自提" name="ziti">
-        <ZitiList />
-      </el-tab-pane>
-      <el-tab-pane label="商家自配送" name="zipei">
-        <ZiPeiList />
-      </el-tab-pane>
-    </el-tabs>
+    <SpPage>
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane label="普通快递" name="normal">
+          <Normal />
+        </el-tab-pane>
+        <el-tab-pane
+          v-if="!IS_DISTRIBUTOR() && !VERSION_B2C() && !IS_SUPPLIER()"
+          label="同城配"
+          name="city"
+        >
+          <Shansong v-if="VUE_APP_LOCAL_DELIVERY_DIRVER == 'shansong'" />
+          <City v-else />
+        </el-tab-pane>
+        <el-tab-pane
+          v-if="!(VERSION_SHUYUN() || VERSION_B2C()) && !IS_SUPPLIER()"
+          label="到店自提"
+          name="ziti"
+        >
+          <ZitiList />
+        </el-tab-pane>
+        <el-tab-pane label="商家自配送" name="zipei">
+          <ZiPeiList />
+        </el-tab-pane>
+      </el-tabs>
+    </SpPage>
   </SpRouterView>
 </template>
 

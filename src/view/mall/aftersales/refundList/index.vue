@@ -1,11 +1,7 @@
 <template>
-  <div>
+  <SpPage>
     <div v-if="$route.path.indexOf('detail') === -1">
-      <el-tabs
-        v-model="activeName"
-        type="card"
-        @tab-click="handleTabClick"
-      >
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane
           v-for="(item, index) in tabList"
           :key="index"
@@ -18,7 +14,7 @@
       </el-tabs>
     </div>
     <router-view />
-  </div>
+  </SpPage>
 </template>
 <script>
 import order from './components/order'
@@ -28,7 +24,7 @@ export default {
     order,
     orderlog
   },
-  data () {
+  data() {
     return {
       activeName: 'order',
       tabList: [
@@ -37,7 +33,7 @@ export default {
       ]
     }
   },
-  mounted () {},
+  mounted() {},
   methods: {
     handleTabClick: function () {}
   }

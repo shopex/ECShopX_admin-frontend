@@ -3,7 +3,10 @@
  */
 export default {
   productName: '云店',
-  systemTitle: '云店管理后台',
+  systemTitle: '云店管理中心',
+  systemTitleShopadmin: '店铺管理中心',
+  systemTitleMerchant: '商户管理中心',
+  systemTitleSupplier: '供应商管理中心',
   logo: 'logo-yd.png',
   loginBackground: 'login-yd.jpg',
   footerBackground: 'footer-yd.png',
