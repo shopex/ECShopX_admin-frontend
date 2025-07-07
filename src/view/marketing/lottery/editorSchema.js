@@ -636,7 +636,7 @@ export const recordFormSchema = (vm) =>
         label: '按钮配色',
         key: 'rule',
         required: true,
-        defaultValue: ['#000000', '#000000'],
+        defaultValue: ['#ffffff', '#000000'],
         component(_) {
           return (
             <div style={{ display: 'flex', alignItems: 'center' }}>
