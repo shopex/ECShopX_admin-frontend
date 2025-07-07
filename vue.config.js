@@ -7,111 +7,110 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 const webpackPluginsAutoI18n = require('webpack-auto-i18n-plugin')
-const { VolcengineTranslator, EmptyTranslator, Translator } = require('webpack-auto-i18n-plugin')
+const { YoudaoTranslator, EmptyTranslator, Translator } = require('webpack-auto-i18n-plugin')
 const axios = require('axios')
 const { generateId } = require('./build/utils')
 
 const i18nPlugin = new webpackPluginsAutoI18n.default({
-  // translator: new VolcengineTranslator({
-  //   // appId: '20240823002130819',
-  //   // appKey: 'QJ9R65g8iL0kFJuh3SLm'
-  //   apiKey: '88735fb4-c7a2-4beb-9d5a-cdc35dc78695',
-  //   model: 'doubao-pro-32k-241215'
-  // }),
-  translator: new Translator({
-    name: 'DeepseekAI翻译',
-    fetchMethod: async (text, fromKey, toKey, separator) => {
-      let salt = new Date().getTime()
-      const textArr = text.split(separator)
-      const sourceMap = Object.fromEntries(textArr.map(text => [generateId(text), text]))
-      const data = {
-        model: 'deepseek-chat',
-        messages: [
-          {
-            role: 'system',
-            content: `
-              ###
-              假如你是一个专业的翻译助手，你将根据一个web项目中使用的文本组成的JSON对象，来解决将数组每个成员从源语言A翻译成目标语言B并返回翻译后的JSON对象的任务。根据以下规则一步步执行：
-              1. 明确源语言A和目标语言B。
-              2. 对JSON对象中数组的每个成员进行从源语言A到目标语言B的翻译。
-              3. 将翻译后的内容以JSON对象格式返回。
+  targetLangList: ['en', 'zh-tw'],
+  translator: new YoudaoTranslator({
+    appId: '3f97d3d47bc88a7f',
+    appKey: 'nbJLE1OoIj8Lt9E0NUhOgstIrCVIs22m'
+  }),
+  // translator: new Translator({
+  //   name: 'DeepseekAI翻译',
+  //   fetchMethod: async (text, fromKey, toKey, separator) => {
+  //     let salt = new Date().getTime()
+  //     const textArr = text.split(separator)
+  //     const sourceMap = Object.fromEntries(textArr.map(text => [generateId(text), text]))
+  //     const data = {
+  //       model: 'deepseek-chat',
+  //       messages: [
+  //         {
+  //           role: 'system',
+  //           content: `
+  //             ###
+  //             假如你是一个专业的翻译助手，你将根据一个web项目中使用的文本组成的JSON对象，来解决将数组每个成员从源语言A翻译成目标语言B并返回翻译后的JSON对象的任务。根据以下规则一步步执行：
+  //             1. 明确源语言A和目标语言B。
+  //             2. 对JSON对象中数组的每个成员进行从源语言A到目标语言B的翻译。
+  //             3. 将翻译后的内容以JSON对象格式返回。
 
-              参考例子：
-              示例1：
-              输入：zh-cn -> en { "awfgx": "你好", "qwfga": "世界" }
-              输出：{ "awfgx": "Hello", "qwfga": "World" }
+  //             参考例子：
+  //             示例1：
+  //             输入：zh-cn -> en { "awfgx": "你好", "qwfga": "世界" }
+  //             输出：{ "awfgx": "Hello", "qwfga": "World" }
 
-              示例2：
-              输入：de -> fr { "gweaq": "Hallo", "wtrts": "Welt" }
-              输出：{ "gweaq": "Bonjour", "wtrts": "Monde" }
+  //             示例2：
+  //             输入：de -> fr { "gweaq": "Hallo", "wtrts": "Welt" }
+  //             输出：{ "gweaq": "Bonjour", "wtrts": "Monde" }
 
-              请回答问题：
-              输入：源语言A -> 目标语言B { "wghhj": "XXX" }
-              输出：
+  //             请回答问题：
+  //             输入：源语言A -> 目标语言B { "wghhj": "XXX" }
+  //             输出：
 
-              要求：
-              1 以JSON对象格式输出
-              2 JSON对象中每个成员为翻译后的内容
-              ###
-          `
-          },
-          {
-            role: 'user',
-            content: `${fromKey} -> ${toKey} ${JSON.stringify(sourceMap)}`
-          }
-        ]
-      }
+  //             要求：
+  //             1 以JSON对象格式输出
+  //             2 JSON对象中每个成员为翻译后的内容
+  //             ###
+  //         `
+  //         },
+  //         {
+  //           role: 'user',
+  //           content: `${fromKey} -> ${toKey} ${JSON.stringify(sourceMap)}`
+  //         }
+  //       ]
+  //     }
 
-      console.log('🚀 大模型请求数据：', data)
-      const response = await axios.post(
-        `https://api.deepseek.com/chat/completions?t=${salt}`,
-        data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer sk-7157cc3b2135484bb3e67772b456e65a`
-          }
-        }
-      )
+  //     console.log('🚀 大模型请求数据：', data)
+  //     const response = await axios.post(
+  //       `https://api.deepseek.com/chat/completions?t=${salt}`,
+  //       data,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer sk-7157cc3b2135484bb3e67772b456e65a`
+  //         }
+  //       }
+  //     )
 
-      let resultTextArr = Array.from(textArr).fill('')
-      const content = response.data.choices[0].message.content.match(/```json\n([\s\S]*?)\n```/)[1]
-      console.log('🚀 大模型返回文本：', content)
-      try {
-        let resultMap
-        try {
-          resultMap = JSON.parse(content)
-        } catch (error) {
-          throw new Error('大模型返回文本解析失败')
-        }
-        if (typeof resultMap !== 'object' || !resultMap) {
-          throw new Error('大模型返回文本解析后类型不正确')
-        }
-        const isMiss = Object.keys(resultMap).some(key => !(key in sourceMap))
-        if (isMiss) {
-          throw new Error('大模型返回文本内容不完整')
-        }
-        resultTextArr = textArr.map(
-          text => (resultMap)[generateId(text)]
-        ) // 用textArr遍历，保证顺序
-      } catch (error) {
-        const message = error instanceof Error ? error.message : '未知错误'
-        console.warn('⚠', message)
-        console.warn('⚠ 返回的文本内容：', content)
-        console.warn('⚠ 原文本内容：', JSON.stringify(sourceMap))
-      }
+  //     let resultTextArr = Array.from(textArr).fill('')
+  //     const content = response.data.choices[0].message.content.match(/```json\n([\s\S]*?)\n```/)[1]
+  //     console.log('🚀 大模型返回文本：', content)
+  //     try {
+  //       let resultMap
+  //       try {
+  //         resultMap = JSON.parse(content)
+  //       } catch (error) {
+  //         throw new Error('大模型返回文本解析失败')
+  //       }
+  //       if (typeof resultMap !== 'object' || !resultMap) {
+  //         throw new Error('大模型返回文本解析后类型不正确')
+  //       }
+  //       const isMiss = Object.keys(resultMap).some(key => !(key in sourceMap))
+  //       if (isMiss) {
+  //         throw new Error('大模型返回文本内容不完整')
+  //       }
+  //       resultTextArr = textArr.map(
+  //         text => (resultMap)[generateId(text)]
+  //       ) // 用textArr遍历，保证顺序
+  //     } catch (error) {
+  //       const message = error instanceof Error ? error.message : '未知错误'
+  //       console.warn('⚠', message)
+  //       console.warn('⚠ 返回的文本内容：', content)
+  //       console.warn('⚠ 原文本内容：', JSON.stringify(sourceMap))
+  //     }
 
-      return resultTextArr.join(separator)
-    },
-    onError: (error, cb) => {
-      cb(error)
-      console.error(
-        '请确保在Deepseek控制台开通了对应模型，且有足够的token余额。'
-      )
-    },
-    maxChunkSize: 1000, // 太长可能会导致返回文本不完整
-    interval: 1000
-  })
+  //     return resultTextArr.join(separator)
+  //   },
+  //   onError: (error, cb) => {
+  //     cb(error)
+  //     console.error(
+  //       '请确保在Deepseek控制台开通了对应模型，且有足够的token余额。'
+  //     )
+  //   },
+  //   maxChunkSize: 1000, // 太长可能会导致返回文本不完整
+  //   interval: 1000
+  // })
 })
 
 const SRC_PATH = path.resolve(__dirname, 'src')
