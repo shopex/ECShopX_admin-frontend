@@ -26,9 +26,11 @@
         </el-header>
 
         <el-main class="!px-0 !py-0" style="height: calc(100vh - 100px)">
-          <LayoutContent>
+          <LayoutContent v-if="!$route.path.includes('/decoration/web/template/edit')">
             <RouterView />
           </LayoutContent>
+
+          <div id="design-view" v-else class="relative h-full" />
         </el-main>
 
         <el-footer class="flex justify-center items-center" height="50px">
@@ -36,19 +38,6 @@
         </el-footer>
       </el-container>
     </el-container>
-
-    <div id="design-view" />
-
-    <!--
-    <div class="flex flex-1 flex-col overflow-hidden">
-      <div>
-
-
-
-
-
-      </div>
-    </div> -->
   </div>
 </template>
 

@@ -22,7 +22,7 @@ function setupCommonGuard(router) {
 
 function setupAccessGuard(router) {
   router.beforeEach(async (to, from, next) => {
-    if (to.path == '/decoration/web/template-list/edit') {
+    if (to.path == '/decoration/web/template/edit') {
       const { id } = to.query
       console.log(`【shop】pageid is: ${id}`)
       actions.setGlobalState({

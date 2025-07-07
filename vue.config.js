@@ -24,8 +24,7 @@ Object.keys(envVars).forEach((key) => {
 
 // 在构建完成后复制微前端文件
 const getNewpcCopyConfig = () => {
-  const productModel = process.env.VUE_APP_PRODUCT_MODEL
-  const sourceDir = productModel === 'platform' ? './newpc_bbc' : './newpc_b2c'
+  const sourceDir = process.env.PLATFORM === 'bbc' ? './newpc_bbc' : './newpc_b2c'
   return {
     patterns: [
       {
@@ -325,16 +324,16 @@ module.exports = {
     },
     // 代理配置示例
     proxy: {
-      '/website/decorate':{
-        target:process.env.VUE_APP_TEMPLATE_URL,
-        changeOrigin:true,
+      '/website/decorate': {
+        target: process.env.VUE_APP_TEMPLATE_URL,
+        changeOrigin: true,
         // pathRewrite:{
         //   '^/website/decorate': '/template'
         // }
       },
-      '/_nuxt':{
-        target:process.env.VUE_APP_TEMPLATE_URL,
-        changeOrigin:true,
+      '/_nuxt': {
+        target: process.env.VUE_APP_TEMPLATE_URL,
+        changeOrigin: true,
         // pathRewrite:{
         //   '^/post_template': ''
         // }

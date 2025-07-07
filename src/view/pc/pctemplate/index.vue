@@ -208,7 +208,7 @@ export default {
       })
     },
     handleRenovation({ theme_pc_template_id }) {
-      this.$router.push({ path: `/decoration/web/template-list/edit?id=${theme_pc_template_id}` })
+      this.$router.push({ path: `/decoration/web/template/edit?id=${theme_pc_template_id}` })
     },
     async handleDisable({ status, created, updated, deleted_at, ...rest }) {
       try {

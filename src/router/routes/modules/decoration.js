@@ -112,23 +112,19 @@ const routes = [
       },
       {
         name: 'webTemplateList',
-        path: 'web/template-list',
+        path: 'web/template',
         meta: {
           aliasName: 'templatelist',
           icon: 'pay-circle',
           title: '模板列表',
           permissions: ['wxapp-template.pcmall.templatelist']
         },
-        component: () => import('@/view/pc/pctemplate/index')
-        // children: [
-        //   {
-        //     meta: {
-        //       layout: 'empty'
-        //     },
-        //     path: 'edit',
-        //     component: () => import('@/view/decorate/pc/index')
-        //   }
-        // ]
+        component: () => import('@/view/pc/pctemplate/index'),
+        children: [
+          {
+            path: 'edit'
+          }
+        ]
       },
       // TODO: PC模板编辑
       // {
