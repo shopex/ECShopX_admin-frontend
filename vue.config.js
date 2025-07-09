@@ -12,10 +12,17 @@ const axios = require('axios')
 const { generateId } = require('./build/utils')
 
 const i18nPlugin = new webpackPluginsAutoI18n.default({
+  excludedPath: ['/src/i18n/index.js'],
+  globalPath: path.resolve(__dirname, './src/i18n/lang'),
   targetLangList: ['en', 'zh-tw'],
+  includePath: [
+    /src\//,
+    // /node_modules\/@shopex\/finder\//,
+    /node_modules\/element-ui\//,
+  ],
   translator: new YoudaoTranslator({
-    appId: '3f97d3d47bc88a7f',
-    appKey: 'nbJLE1OoIj8Lt9E0NUhOgstIrCVIs22m'
+    appId: '769559dde46e7041',
+    appKey: '2we6CWMpNb2a7TrCRpdE3s5MVYtcvLy9'
   }),
   // translator: new Translator({
   //   name: 'DeepseekAI翻译',
