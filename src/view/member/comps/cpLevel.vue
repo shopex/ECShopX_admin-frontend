@@ -308,21 +308,21 @@ export default {
       let index = Number(e.target.name)
       var reg = /(^[1-9]((\.)[0-9])?$)|(^[0]((\.)[0-9])$)|(^10$)/
       if (this.levelData[index].discount_checked) {
-        if (value == '') {
-          this.$message({ message: '请输入会员折扣', type: 'error' })
-          return
-        }
-        if (!reg.test(value)) {
-          this.$message({
-            message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
-            type: 'error'
-          })
-          return
-        }
-        if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
-          this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
-          return
-        }
+        // if (value == '') {
+        //   this.$message({ message: '请输入会员折扣', type: 'error' })
+        //   return
+        // }
+        // if (!reg.test(value)) {
+        //   this.$message({
+        //     message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
+        //     type: 'error'
+        //   })
+        //   return
+        // }
+        // if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
+        //   this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
+        //   return
+        // }
       }
     },
     addGrade() {
@@ -384,26 +384,28 @@ export default {
           }
         }
         if (this.levelData[i].discount_checked) {
-          if (this.levelData[i].privileges.discount == '') {
-            isflag = true
-            this.$message({ message: '请输入会员折扣', type: 'error' })
-            break
-          } else if (!discountReg.test(this.levelData[i].privileges.discount)) {
-            isflag = true
-            this.$message({
-              message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
-              type: 'error'
-            })
-            break
-          } else if (
-            i > 0 &&
-            Number(this.levelData[i].privileges.discount) >=
-              Number(this.levelData[i - 1].privileges.discount)
-          ) {
-            isflag = true
-            this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
-            break
-          }
+          // if (this.levelData[i].privileges.discount == '') {
+          //   isflag = true
+          //   this.$message({ message: '请输入会员折扣', type: 'error' })
+          //   break
+          // } else 
+          // if (!discountReg.test(this.levelData[i].privileges.discount)) {
+          //   isflag = true
+          //   this.$message({
+          //     message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
+          //     type: 'error'
+          //   })
+          //   break
+          // }
+          //  else if (
+          //   i > 0 &&
+          //   Number(this.levelData[i].privileges.discount) >=
+          //     Number(this.levelData[i - 1].privileges.discount)
+          // ) {
+          //   isflag = true
+          //   this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
+          //   break
+          // }
         }
       }
       return isflag
