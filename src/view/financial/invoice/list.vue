@@ -10,17 +10,17 @@
           placeholder="请选择"
         />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="keywords" label="订单号:">
-        <el-input v-model="formData.keywords" placeholder="请输入订单号" />
+      <SpFilterFormItem prop="order_id" label="订单号:">
+        <el-input v-model="formData.order_id" placeholder="请输入订单号" />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="item_bn" label="开票申请流水:">
-        <el-input v-model="formData.item_bn" placeholder="请输入开票申请流水" />
+      <SpFilterFormItem prop="invoice_apply_bn" label="开票申请流水:">
+        <el-input v-model="formData.invoice_apply_bn" placeholder="请输入开票申请流水" />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="barcode" label="发票抬头:">
-        <el-input v-model="formData.barcode" placeholder="请输入发票抬头" />
+      <SpFilterFormItem prop="company_title" label="发票抬头:">
+        <el-input v-model="formData.company_title" placeholder="请输入发票抬头" />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="supplier_name" label="开票来源:">
-        <el-input v-model="formData.supplier_name" placeholder="请输入开票来源" />
+      <SpFilterFormItem prop="invoice_source" label="开票来源:">
+        <el-input v-model="formData.invoice_source" placeholder="请输入开票来源" />
       </SpFilterFormItem>
       <SpFilterFormItem prop="mobile" label="手机号:">
         <el-input v-model="formData.mobile" placeholder="请输入手机号" />
@@ -36,7 +36,7 @@
           />
         </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem prop="queryTime" label="创建时间:" size="max">
+      <SpFilterFormItem prop="cycleTime" label="创建时间:" size="max">
         <el-date-picker
           v-model="formData.cycleTime"
           clearable
@@ -167,7 +167,13 @@ export default {
       innerTableSchema: innerTableSchema(this),
       defaultTime: ['00:00:00', '23:59:59'],
       formData:{
-
+        distributor_id:'',
+        order_id:'',
+        invoice_apply_bn:'',
+        company_title:'',
+        invoice_source:'',
+        mobile:'',
+        cycleTime:[]
       },
       typeList:[],
       orderCategory: this.VERSION_STANDARD
@@ -211,9 +217,14 @@ export default {
     beforeSearch(params) {
       const _params = {
         ...params,
-        start_time: params?.start_time?.map((el) => moment(el).unix()),
-        end_time: params?.end_time?.map((el) => moment(el).unix())
+        ...this.formData
       }
+      if(_params.cycleTime.length){
+        _params.start_time =  moment(_params.cycleTime[0]).unix()
+        _params.end_time =  moment(_params.cycleTime[1]).unix()
+      }
+      delete _params.cycleTime
+
       if (this.activeName === 'all') {
         delete _params.invoice_status
       } else {
