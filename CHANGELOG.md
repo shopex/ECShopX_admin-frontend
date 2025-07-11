@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.22.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.21.1...v3.22.0) (2025-07-11)
+
+
+### Bug Fixes
+
+* 处理店铺端路由 ([96ec94c](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/96ec94c5febcc8e8d1ffeffea69b9c5c41981bf5))
+* 登录优化 ([e2c0802](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e2c08025db65d65cb367ac8625e18d51d243a4a8))
+* 店铺端路由整理 ([bee95c0](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/bee95c03abe7ea3aa172b6eeef2ab7fe8686fc90))
+* 更改title ([8f99505](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/8f995058f9a1abec3800a65c3b3b718090b286c6))
+* 路由调整 ([692cd32](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/692cd3290d60e09c84ed91ae15168569d2eff25f))
+* 商户端路由更新 ([22d0eb8](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/22d0eb849d7618552a9f5fd0b5672dd654da23e6))
+* 数云合并 ([0b618a5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/0b618a5a0cd7bcc489f792f5862f3dd735e000e2))
+* 修改登录退出 ([1b61077](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/1b610778431625d1064caf77c9da34b2241334ba))
+* 修改微应用入口 ([e6ac1dc](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e6ac1dcfd0baa7e20aa09a54b1a2edb835b7e0e3))
+* 页面优化 ([36aef91](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/36aef91e5e22c9371352edb6579c72d2decda095))
+* 优化 ([96115fb](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/96115fb93bac22812636a665d08b18e64ac8f5df))
+* 优化菜单 ([d61ef5a](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d61ef5ad58669c0246e76c11edbb6ce473621142))
+* 优化菜单 ([74f08e2](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/74f08e2f361b6dc1b92af8349fe51900f01214f2))
+* 优化菜单路由 ([60aba47](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/60aba47bc5ce9e6b6a1eb3208e2eb1c66456490b))
+* 优化路由 ([36be425](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/36be425294e50a0cbb95d27c0bedcf127ca3efe5))
+* 优化路由 ([78db90d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/78db90d12d58ba1bfabcf562779fc4710771d790))
+* bbc优化 ([25c6719](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/25c6719b16151f0a61ed34ffd798bdcd3dd50cdc))
+* bug ([57acad0](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/57acad09cc65f1ce3995f4abd81b7f96b8357e4c))
+* bug ([bbf67d9](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/bbf67d9201252aae72bd8e5f205c0a2d7e6d9e9f))
+* bug修复 ([b482660](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b4826601230e455ca3abae35c6fcaa269b04bcac))
+* bug修复 ([5348ab2](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5348ab20711a56eab0d01d652d6ce1534b9622b6))
+* bug修复 ([3b00148](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3b00148c87ebcc96812c0609021f1f4b91ebe9bf))
+* bug修复 ([adc70e4](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/adc70e47324d200dd275784d5cf21ee1987a4c56))
+* icon ([090e4e5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/090e4e579d92110531524d05d0d15b1275666369))
+* menu优化 ([0abb357](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/0abb35785392b84a2c69739ed012bf61c8b7dbde))
+* menu优化 ([6b122f4](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/6b122f4debfaa3ffad3b5f7f5b838496064e6e8a))
+* merge ([c89d58d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/c89d58d0ded6a040cb959eda9eed6a2a87093d0f))
+* merge ([32906a6](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/32906a62141d42141a8c1c8b458846a4c924a893))
+* router update ([c960f28](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/c960f287505f40b53473149385da2a2a1586de84))
+* sp-form-plus优化升级 ([f66804f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f66804fb353dacc23367872b2ca72fefb93d49e4))
+
 ## [3.21.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.20.7...v3.21.0) (2025-05-29)
 
 
