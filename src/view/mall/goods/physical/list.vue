@@ -1079,12 +1079,6 @@ export default {
             }
           },
           {
-            name: '是否处方',
-            key: 'item_bn',
-            width: 150,
-            render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否')
-          },
-          {
             name: 'sku编码',
             key: 'item_bn',
             width: 160,
