@@ -327,10 +327,10 @@ export default {
           })
           return
         }
-        if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
-          this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
-          return
-        }
+        // if (index > 0 && Number(value) >= Number(this.levelData[index - 1].privileges.discount)) {
+        //   this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
+        //   return
+        // }
       }
     },
     addGrade() {
@@ -404,15 +404,16 @@ export default {
               type: 'error'
             })
             break
-          } else if (
-            i > 0 &&
-            Number(this.levelData[i].privileges.discount) >=
-              Number(this.levelData[i - 1].privileges.discount)
-          ) {
-            isflag = true
-            this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
-            break
-          }
+          } 
+          // else if (
+          //   i > 0 &&
+          //   Number(this.levelData[i].privileges.discount) >=
+          //     Number(this.levelData[i - 1].privileges.discount)
+          // ) {
+          //   isflag = true
+          //   this.$message({ message: '会员折扣不能大于等于上一级折扣', type: 'error' })
+          //   break
+          // }
         }
       }
       return isflag
