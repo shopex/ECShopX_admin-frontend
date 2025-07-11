@@ -18,7 +18,7 @@
           :class="{ 'main-menu-item--active': activeMainMenu === item.alias_name }"
           @click="handleMainMenuClick(item)"
         >
-          {{ computedMenuIcon(item) }}
+          <!-- {{ computedMenuIcon(item) }} -->
           <SpIcon class="menu-icon" :name="computedMenuIcon(item)" :size="16" fill="#fff" />
           <span class="text-sm mt-1 text-white">{{ item.name }}</span>
         </li>
@@ -113,7 +113,6 @@ export default {
     computedMenuIcon(item) {
       const allRoutes = this.$router.getRoutes()
       const route = allRoutes.find(route => route.meta?.aliasName === item.alias_name)
-      debugger
       return route?.meta?.icon
     },
     resolveChildren(children) {
