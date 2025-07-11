@@ -692,14 +692,14 @@ export default {
       distributionType: DISTRIBUTION_TYPE,
       distributionStatus: DISTRIBUTION_STATUS,
       orderStatus:
-        VERSION_B2C || VERSION_SHUYUN
+        VERSION_B2C() || VERSION_SHUYUN()
           ? ORDER_B2C_STATUS
-          : VERSION_IN_PURCHASE
+          : VERSION_IN_PURCHASE()
           ? IN_PURCHASE_STATUS
           : ORDER_STATUS,
-      orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
+      orderType: this.VERSION_STANDARD() ? ORDER_TYPE_STANDARD : ORDER_TYPE,
       invoiceStatus: INVOICE_STATUS,
-      orderCategory: this.VERSION_STANDARD
+      orderCategory: this.VERSION_STANDARD()
         ? ORDER_CATEGORY.filter(item => item.value != 'distributor')
         : ORDER_CATEGORY,
       pickerOptions: PICKER_DATE_OPTIONS,
@@ -1510,7 +1510,7 @@ export default {
 
         if (
           receipt_type == 'ziti' ||
-          ((VERSION_STANDARD || distributor_id == 0) && order_holder != 'supplier') ||
+          ((VERSION_STANDARD() || distributor_id == 0) && order_holder != 'supplier') ||
           this.login_type == 'distributor'
         ) {
           if (

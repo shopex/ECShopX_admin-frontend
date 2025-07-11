@@ -289,6 +289,14 @@ export default {
             render: (h, { row }) => h('span', {}, row.is_can_sale ? '可销售' : '不可销售')
           },
           {
+            name: '商品状态',
+            width: 120,
+            key: 'approve_status',
+            formatter: (value, row, col) => {
+              return this.statusOption.find(item => item.value === value)?.title
+            }
+          },
+          {
             name: '市场价（¥）',
             key: 'market_price',
             width: 120,
@@ -327,14 +335,6 @@ export default {
             name: '来源供应商',
             key: 'supplier_name',
             width: 100
-          },
-          {
-            name: '商品状态',
-            width: 120,
-            key: 'approve_status',
-            formatter: (value, row, col) => {
-              return this.statusOption.find(item => item.value === value)?.title
-            }
           },
           { name: '销售分类', key: 'itemCatName', minWidth: 120 },
           {

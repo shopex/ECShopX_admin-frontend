@@ -5,11 +5,12 @@ const routes = [
     component: BasicLayout,
     meta: {
       aliasName: 'supply',
-      icon: 'cooperative-handshake',
+      icon: 'ad-product',
+      // icon: 'application',
       keepAlive: true,
       title: '供应'
     },
-    name: 'supplier',
+    name: 'supply',
     path: '/supplier',
     children: [
       {

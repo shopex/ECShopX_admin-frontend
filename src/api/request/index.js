@@ -54,6 +54,13 @@ function createRequestClient() {
           ...config.params,
           ...config.data
         }
+        const params = {}
+        Object.keys(config.params).forEach(key => {
+          if (config.params[key] !== '') {
+            params[key] = config.params[key]
+          }
+        })
+        config.params = params
         delete config.data
       }
       return config
