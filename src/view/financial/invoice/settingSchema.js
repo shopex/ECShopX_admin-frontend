@@ -12,7 +12,18 @@ export const formSchema = (vm) => bindThisForFormSchema([
     defaultValue: 'offline',
     options: [
       { name: '线下开票', label: 'offline' },
-      { name: '线上开票（对接第三方开票系统）', label: 'online' }
+      { name: '线上百望开票', label: 'online' }
+    ]
+  },
+  {
+    label: '开票方类型',
+    key: 'invoice_seller_type',
+    type: 'radio',
+    defaultValue: '1',
+    options: [
+      { name: '平台', label: '1' },
+      // { name: '店铺', label: '2' },
+        // { name: '商城', label: '3' },
     ]
   },
   {
@@ -42,6 +53,24 @@ export const formSchema = (vm) => bindThisForFormSchema([
     tip:'为空时默认运费开票名称，如果填写名称按填写名称展示在发票上'
   },
   {
+    label: '运费税率',
+    key: 'freight_tax_rate',
+    type: 'input',
+    component({ key }, value){
+      return(
+        <el-input
+          clearable
+          type='number'
+          placeholder='请输入内容'
+          v-model={value[key]}
+          min="0"
+        >
+          <template slot='append'>%</template>
+        </el-input>
+      )
+    }
+  },
+  { 
     label: '开票维度',
     key: 'invoice_limit',
     type: 'radio',

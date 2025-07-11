@@ -12,6 +12,7 @@
       class="base-form"
       :form="confirmForm"
       :form-list="confirmRuleForm"
+      :confirm-status="confirmStatus"
       @onSubmit="onConfirmFormSubmit"
     />
   </div>
@@ -31,12 +32,14 @@ export default {
       confirmForm: {
         email: ''
       },
+      confirmStatus:false,
       confirmRuleForm: [
         {
           key: 'email',
           label: '邮箱',
           type: 'input',
           defaultValue: '',
+          required: true,
           tip:'电子发票需要一定时间才能发送到您的邮箱,请耐心等待'
         }
       ]
@@ -61,7 +64,8 @@ export default {
     sendEmailHandle() {
       this.confirmDialogShow = true
       this.confirmForm = {
-        email: this.form.email
+        // email: this.form.email
+        email:''
       }
     },
     getInvoice() {
@@ -74,14 +78,17 @@ export default {
     },
     onConfirmFormSubmit() {
       console.log(this.confirmForm)
-      api.order
+      this.confirmStatus = true
+      api.financial
         .resendInvoiceEmail({
-          invoice_id: this.id,
+          id: this.id,
           confirm_email: this.confirmForm.email
         })
         .then((res) => {
           this.$message.success('发送成功')
           this.confirmDialogShow = false
+        }).finally(()=>{
+          this.confirmStatus = false
         })
     }
   }
