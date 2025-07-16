@@ -103,13 +103,7 @@
               <div class="f_l">
                 <template>
                   <div style="margin-bottom: 5px">
-                    <el-input
-                      v-model="item.description"
-                      type="textarea"
-                      style="width: 400px"
-                      :rows="3"
-                      placeholder="请输入等级说明"
-                    />
+                    <SpRichText v-model="item.description" />
                   </div>
                 </template>
               </div>
@@ -409,7 +403,7 @@ export default {
           //   isflag = true
           //   this.$message({ message: '请输入会员折扣', type: 'error' })
           //   break
-          // } else
+          // } else 
           // if (!discountReg.test(this.levelData[i].privileges.discount)) {
           //   isflag = true
           //   this.$message({
@@ -471,6 +465,7 @@ export default {
               if (!result[i].privileges.discount && !result[i].privileges.discount_desc) {
                 result[i]['privileges'].discount = 10
               }
+              result[i].grade_background = result[i].grade_background || ''
               result[i].discount_checked = true
             }
             this.levelData = result
