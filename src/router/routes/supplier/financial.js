@@ -10,7 +10,7 @@ const routes = [
       title: '财务'
     },
     name: 'supplierfinancial',
-    path: '/financial',
+    path: '/supplier/financial',
     children: [
       {
         name: 'supplierSettlementSummary',
