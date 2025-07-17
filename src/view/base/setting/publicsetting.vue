@@ -168,41 +168,41 @@ export default {
             })
           }
         },
-        {
-          label: '店铺隔离',
-          key: 'stores_isolate',
-          type: 'switch',
-          tip: '开启后需添加店铺白名单方能访问店铺页面',
-          isShow: VERSION_STANDARD() && IS_ADMIN,
-          component: () => (
-            <div class="isolate-contanier">
-              <el-switch
-                v-model={this.form.stores_isolate}
-                onChange={() => {
-                  this.saveOpenDividedSetting()
-                }}
-              />
-              <span
-                class="isolate-set"
-                onClick={() => {
-                  this.onClickStoresIsolate()
-                }}
-              >
-                {this.form?.stores_isolate_template ? '已设置引导页模版' : '设置引导页模版'}
-              </span>
-              {this.form?.stores_isolate_template && (
-                <el-button
-                  class="isolate-clear"
-                  onClick={() => {
-                    this.onClickClear()
-                  }}
-                >
-                  清除
-                </el-button>
-              )}
-            </div>
-          )
-        },
+        // {
+        //   label: '店铺隔离',
+        //   key: 'stores_isolate',
+        //   type: 'switch',
+        //   tip: '开启后需添加店铺白名单方能访问店铺页面',
+        //   isShow: VERSION_STANDARD() && IS_ADMIN(),
+        //   component: () => (
+        //     <div class="isolate-contanier">
+        //       <el-switch
+        //         v-model={this.form.stores_isolate}
+        //         onChange={() => {
+        //           this.saveOpenDividedSetting()
+        //         }}
+        //       />
+        //       <span
+        //         class="isolate-set"
+        //         onClick={() => {
+        //           this.onClickStoresIsolate()
+        //         }}
+        //       >
+        //         {this.form?.stores_isolate_template ? '已设置引导页模版' : '设置引导页模版'}
+        //       </span>
+        //       {this.form?.stores_isolate_template && (
+        //         <el-button
+        //           class="isolate-clear"
+        //           onClick={() => {
+        //             this.onClickClear()
+        //           }}
+        //         >
+        //           清除
+        //         </el-button>
+        //       )}
+        //     </div>
+        //   )
+        // },
         {
           label: '取消订单设置',
           key: 'repeat_cancel',
@@ -408,9 +408,9 @@ export default {
         use_third_party_system: !!res.medicine_setting.use_third_party_system,
         clientId: res.medicine_setting.kuaizhen580_config?.client_id,
         clientSecret: res.medicine_setting.kuaizhen580_config?.client_secret,
-        storeId: res.medicine_setting.kuaizhen580_config?.kuaizhen_store_id,
-        stores_isolate: res.open_distributor_divided?.status || false, // 店铺隔离开关
-        stores_isolate_template: res.open_distributor_divided?.template || '' // 店铺隔离模版
+        storeId: res.medicine_setting.kuaizhen580_config?.kuaizhen_store_id
+        // stores_isolate: res.open_distributor_divided?.status || false, // 店铺隔离开关
+        // stores_isolate_template: res.open_distributor_divided?.template || '' // 店铺隔离模版
       }
       const { cart_page, order_page, item_page } = res.item_price_setting
       if (cart_page.market_price) {

@@ -63,7 +63,7 @@ export default {
     //   value: 'LBS定位'
     // }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, seletedTags = [], productLabel = [] } = v
     return {
       name,
@@ -72,10 +72,10 @@ export default {
       productLabel
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
@@ -84,8 +84,8 @@ export default {
           navigation_display: 'navigation_display',
           addCart: 'addCart',
           show_nearby_merchants: 'show_nearby_merchants',
-          merchantsNumber:'merchantsNumber',
-          quantityNumber:'quantityNumber'
+          merchantsNumber: 'merchantsNumber',
+          quantityNumber: 'quantityNumber'
         })
       },
       seletedTags: 'seletedTags',

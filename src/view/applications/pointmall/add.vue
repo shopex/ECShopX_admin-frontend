@@ -128,9 +128,9 @@
                   <el-form-item label="*商品销售分类" label-width="110px">
                     <treeselect
                       v-model="form.item_category"
-                      noChildrenText="没有子选项"
-                      noOptionsText="等待加载..."
-                      noResultsText="没有匹配的结果"
+                      no-children-text="没有子选项"
+                      no-options-text="等待加载..."
+                      no-results-text="没有匹配的结果"
                       :options="categoryList"
                       :show-count="true"
                       :multiple="true"
@@ -1739,11 +1739,10 @@ export default {
           label: 'category_name',
           children: 'children'
         })
-        if(this.$route.params.itemId){
+        if (this.$route.params.itemId) {
           this.form.item_category = this.form.item_category_temp
           delete this.form.item_category_temp
         }
-
       })
     },
     // profitStatusChange(val) {

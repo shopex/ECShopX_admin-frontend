@@ -61,7 +61,7 @@ export default {
       label: '更多链接',
       key: 'moreLink',
       component: function (h, { key }) {
-        return <CompPickerLink v-model={this.value[key]} style='margin-top: 7px;' />
+        return <CompPickerLink v-model={this.value[key]} style="margin-top: 7px;" />
       },
       value: {}
     },
@@ -69,13 +69,13 @@ export default {
       label: '更多图片',
       key: 'backgroundImg',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' style='margin-top: 10px;' />
+        return <SpImagePicker v-model={this.value[key]} size="small" style="margin-top: 10px;" />
       },
       value: '',
       tip: `建议尺寸:（宽度130px，高度200px）`
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, config, data } = v
     const { type, seckillId, lastSeconds, status } = config
     let list = []
@@ -119,10 +119,10 @@ export default {
       }
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
@@ -130,7 +130,7 @@ export default {
           backgroundImg: 'backgroundImg'
         })
       },
-      config: (v) => {
+      config: v => {
         return pickBy(v, {
           leaderboard: 'leaderboard',
           moreLink: 'moreLink',

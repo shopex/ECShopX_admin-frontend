@@ -78,7 +78,7 @@ export default {
       const { titlePosition, titleColor } = this.value || {}
       return {
         'text-align': titlePosition,
-        'color': titleColor
+        color: titleColor
       }
     }
   },

@@ -1532,7 +1532,7 @@ export default {
   }
   .component-item {
     position: relative;
-    &-delete{
+    &-delete {
       position: absolute;
       right: 20px;
       color: #ff5000;

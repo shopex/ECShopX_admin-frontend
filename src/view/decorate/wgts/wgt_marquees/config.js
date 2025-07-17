@@ -43,7 +43,7 @@ export default {
       value: [{ title: '软文标题', id: '' }]
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, config, data } = v
     let res = {
       name,
@@ -66,17 +66,17 @@ export default {
     // dataText: config.direction == 'horizontal' ? data : [{ title: '文本内容' }],
     //   dataContent: config.direction == 'vertical' ? data : [{ title: '软文标题', id: '' }]
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
           padded: 'padded'
         })
       },
-      config: (v) => {
+      config: v => {
         return pickBy(v, {
           bgcolor: 'bgcolor',
           direction: 'direction',

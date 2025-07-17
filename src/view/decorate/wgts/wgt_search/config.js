@@ -6,7 +6,7 @@ export default {
     { label: '组件间距', key: 'padded', component: 'switch', value: true },
     { label: '占位内容', key: 'placeholder', component: 'input', value: '搜索想要的商品' }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, config } = v
     return {
       name,
@@ -14,15 +14,15 @@ export default {
       ...config
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           padded: 'padded'
         })
       },
-      config: (v) => {
+      config: v => {
         return pickBy(v, {
           fixTop: 'fixTop',
           placeholder: 'placeholder'

@@ -92,18 +92,18 @@ export const requiredRules = (name, trigger = 'blur') => {
     return { required: true, message: `请输入${name}`, trigger }
   }
 }
-export const MaxRules = (size) => {
+export const MaxRules = size => {
   return { max: size, message: `长度最多在${size}个字符`, trigger: 'blur' }
 }
 
-export const MinRules = (size) => {
+export const MinRules = size => {
   return { min: size, message: `长度最少在${size}个字符`, trigger: 'blur' }
 }
 
-export const isNumber = (val) => {
+export const isNumber = val => {
   return /^-?\d+$/.test(val)
 }
 
-export const isFloat = (val) => {
+export const isFloat = val => {
   return /^(-?\d+)(\.\d+)?$/.test(val)
 }

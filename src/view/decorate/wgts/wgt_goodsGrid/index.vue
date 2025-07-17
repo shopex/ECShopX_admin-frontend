@@ -3,7 +3,7 @@
   <div
     :class="{
       'wgt-goods-grid': true,
-      'padded': value.padded
+      padded: value.padded
     }"
   >
     <div v-if="value.title || value.subtitle" class="wgt-hd">
@@ -24,7 +24,14 @@
                 <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">
-                <el-tag v-if="item.medicine_data?.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
+                <el-tag
+                  v-if="item.medicine_data?.is_prescription == 1"
+                  type="primary"
+                  size="mini"
+                  style="background-color: #fff"
+                >
+                  处方药
+                </el-tag>
                 {{ item.title }}
               </div>
               <div v-if="value.showPrice" class="price">
@@ -51,7 +58,14 @@
                 <SpImage :src="item.brand" :width="60" :height="60" circle />
               </div>
               <div class="name">
-                <el-tag v-if="item.medicine_data?.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
+                <el-tag
+                  v-if="item.medicine_data?.is_prescription == 1"
+                  type="primary"
+                  size="mini"
+                  style="background-color: #fff"
+                >
+                  处方药
+                </el-tag>
                 {{ item.title }}
               </div>
               <div v-if="value.showPrice" class="price">
@@ -75,7 +89,14 @@
               <SpImage :src="item.brand" :width="60" :height="60" circle />
             </div>
             <div class="name">
-              <el-tag v-if="item.medicine_data?.is_prescription == 1" type="primary" size="mini" style="background-color: #fff;">处方药</el-tag>
+              <el-tag
+                v-if="item.medicine_data?.is_prescription == 1"
+                type="primary"
+                size="mini"
+                style="background-color: #fff"
+              >
+                处方药
+              </el-tag>
               {{ item.title }}
             </div>
             <div v-if="value.showPrice" class="price">

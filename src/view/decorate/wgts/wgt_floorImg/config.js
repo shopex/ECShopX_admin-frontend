@@ -12,7 +12,7 @@ export default {
       label: '背景图片',
       key: 'backgroundImg',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' />
+        return <SpImagePicker v-model={this.value[key]} size="small" />
       },
       value: '',
       isShow: function () {
@@ -42,7 +42,7 @@ export default {
       ]
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, data } = v
     return {
       name,
@@ -50,10 +50,10 @@ export default {
       data
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

@@ -15,17 +15,17 @@ export default {
       value: 'center'
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base } = v
     return {
       name,
       ...base
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           float: 'float'

@@ -96,6 +96,17 @@ const routes = [
         ]
       },
       {
+        name: 'storeManageStoreRules',
+        path: 'store-manage/store-rules',
+        meta: {
+          aliasName: 'storerules',
+          icon: 'icon-address',
+          title: '进店规则',
+          permissions: ['store.storemanager.storerules']
+        },
+        component: () => import('@/views/store/store-rules')
+      },
+      {
         name: 'storeManageRefundAddress',
         path: 'store-manage/refund-address',
         component: () => import('@/view/mall/marketing/distributorAftersalesAddress'),

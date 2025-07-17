@@ -242,7 +242,7 @@ export default {
         ]
       },
       used_scene: {
-        '1': '订单抵扣'
+        1: '订单抵扣'
       },
       level: 0,
       levelData: [],
@@ -348,13 +348,13 @@ export default {
     this.weekOptions = week
     this.dayOptions = day
     console.log(this.dayOptions)
-    listVipGrade().then((response) => {
+    listVipGrade().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         this.vipGrade = response.data.data
       }
     })
 
-    getGradeList().then((response) => {
+    getGradeList().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         var result = response.data.data
         if (result) {
@@ -398,7 +398,7 @@ export default {
       }
       this.form.shop_ids = []
       if (this.form.use_shop == '1' && this.relStores && this.relStores.length > 0) {
-        this.relStores.forEach((item) => {
+        this.relStores.forEach(item => {
           this.form.shop_ids.push(item.distributor_id)
         })
       }
@@ -412,7 +412,7 @@ export default {
       params.items = JSON.stringify(params.items)
       params.item_category = JSON.stringify(params.item_category)
       if (this.form.activity_id) {
-        updateExtrapoint(params).then((res) => {
+        updateExtrapoint(params).then(res => {
           if (res.data.data.activity_id) {
             this.loading = false
             this.$message({
@@ -432,7 +432,7 @@ export default {
           }
         })
       } else {
-        createExtrapoint(params).then((res) => {
+        createExtrapoint(params).then(res => {
           if (res.data.data.activity_id) {
             this.loading = false
             this.$message({
@@ -464,7 +464,7 @@ export default {
       return str
     },
     getActivityDetail(id) {
-      getExtrapointInfo(id).then((res) => {
+      getExtrapointInfo(id).then(res => {
         let response = res.data.data
         let data = {
           activity_id: response.activity_id,

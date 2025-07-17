@@ -1,7 +1,7 @@
 import { createSetting } from '@shopex/finder'
 import { Divider, Message, MessageBox } from 'element-ui'
-export default (vm) => {
-  const formatDate = (timestamp) => {
+export default vm => {
+  const formatDate = timestamp => {
     var date = new Date(timestamp * 1000) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
     var YY = date.getFullYear() + '-'
     var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
@@ -69,7 +69,7 @@ export default (vm) => {
           buttonType: 'text',
           action: {
             type: 'link',
-            handler: async (val) => {
+            handler: async val => {
               vm.fnChangePassword(val[0])
             }
           }
@@ -120,7 +120,7 @@ export default (vm) => {
           buttonType: 'text',
           action: {
             type: 'link',
-            handler: async (val) => {
+            handler: async val => {
               vm.editHandler(val[0])
               console.log(val)
             }

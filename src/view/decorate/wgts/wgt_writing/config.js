@@ -14,7 +14,7 @@ export default {
       value: ''
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base, data } = v
     let _content = ''
     if (isArray(data)) {
@@ -28,10 +28,10 @@ export default {
       data: _content
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

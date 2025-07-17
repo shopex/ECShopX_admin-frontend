@@ -159,7 +159,7 @@ export default {
     },
     getList(params) {
       this.loading = true
-      getPointupvaluationList(params).then((response) => {
+      getPointupvaluationList(params).then(response => {
         this.activityLists = response.data.data.list
         this.total_count = response.data.data.total_count
         this.loading = false
@@ -174,7 +174,7 @@ export default {
         type: 'warning',
         beforeClose: (action, instance, done) => {
           if (action === 'confirm') {
-            pointupvaluationUpdateStatus({ activity_id: row.activity_id }).then((response) => {
+            pointupvaluationUpdateStatus({ activity_id: row.activity_id }).then(response => {
               this.getList()
               this.$message({
                 message: '修改活动状态成功',
@@ -211,17 +211,17 @@ export default {
       this.goodsVisible = false
     },
     updateActivityData(params) {
-      updateActivityItemData(params).then((res) => {})
+      updateActivityItemData(params).then(res => {})
     },
     editItemPrice(row) {
       let form = {
-        'id': row.id,
-        'item_id': row.item_id,
-        'activity_price': row.activity_price,
-        'vip_price': row.vip_price,
-        'svip_price': row.svip_price,
-        'activity_store': row.activity_store,
-        'points': row.points
+        id: row.id,
+        item_id: row.item_id,
+        activity_price: row.activity_price,
+        vip_price: row.vip_price,
+        svip_price: row.svip_price,
+        activity_store: row.activity_store,
+        points: row.points
       }
       this.updateActivityData(form)
     },

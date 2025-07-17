@@ -26,7 +26,7 @@ export default {
       label: '',
       key: 'navigateBackgroundImage',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' />
+        return <SpImagePicker v-model={this.value[key]} size="small" />
       },
       value: '',
       isShow: function () {
@@ -57,7 +57,7 @@ export default {
       label: '',
       key: 'titleBackgroundImage',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' />
+        return <SpImagePicker v-model={this.value[key]} size="small" />
       },
       value: '',
       isShow: function () {
@@ -97,7 +97,7 @@ export default {
       label: '',
       key: 'pageBackgroundImage',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size='small' />
+        return <SpImagePicker v-model={this.value[key]} size="small" />
       },
       value: '',
       isShow: function () {
@@ -105,7 +105,7 @@ export default {
       }
     }
   ],
-  transformIn: (v) => {
+  transformIn: v => {
     const { name, base } = v
     let {
       navigateStyle,
@@ -126,7 +126,7 @@ export default {
     if (isObject(titleBackgroundImage)) {
       const { url } = titleBackgroundImage
       titleBackgroundImage = url
-    }else if(!titleBackgroundImage){
+    } else if (!titleBackgroundImage) {
       titleBackgroundImage = ''
     }
 
@@ -149,10 +149,10 @@ export default {
       pageBackgroundImage
     }
   },
-  transformOut: (v) => {
+  transformOut: v => {
     return pickBy(v, {
       name: 'name',
-      base: (v) => {
+      base: v => {
         return pickBy(v, {
           navigateStyle: 'navigateStyle',
           navigateBackgroundColor: 'navigateBackgroundColor',

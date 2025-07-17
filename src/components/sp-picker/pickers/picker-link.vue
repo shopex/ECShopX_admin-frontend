@@ -83,7 +83,7 @@ export default {
         { id: 'recharge', title: '储值卡' },
         { id: 'purchase', title: '内购' },
         { id: 'pointShop', title: '积分商城' },
-        { id: 'registActivity', title: '报名活动' },
+        { id: 'registActivity', title: '报名活动' }
       ],
       multiple: this.value?.multiple ?? true
     }
@@ -91,7 +91,7 @@ export default {
   created() {},
   mounted() {
     if (this.value.data) {
-      const selectRows = this.list.filter((item) => this.value.data.includes(item.id))
+      const selectRows = this.list.filter(item => this.value.data.includes(item.id))
       const { finderTable } = this.$refs.finder.$refs
       setTimeout(() => {
         finderTable.$refs.finderTable.setSelection(selectRows)

@@ -58,7 +58,7 @@ export default {
   methods: {
     getTipText() {
       const tips = []
-      platformList.forEach((item) => {
+      platformList.forEach(item => {
         if (this[item.value]) {
           tips.push(`${item.title}商城`)
         }

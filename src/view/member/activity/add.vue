@@ -1,16 +1,10 @@
 <template lang="html">
   <section class="section section-white">
     <div class="section-header with-border">
-      <div class="section-title">
-        创建营销活动
-      </div>
+      <div class="section-title">创建营销活动</div>
     </div>
     <div class="content-padded">
-      <el-form
-        ref="form"
-        :model="form"
-        label-width="180px"
-      >
+      <el-form ref="form" :model="form" label-width="180px">
         <el-form-item label="活动名称">
           <el-row>
             <el-col :span="8">
@@ -33,24 +27,13 @@
             :picker-options="pickerOptions2"
           />
           &nbsp;&nbsp;&nbsp;
-          <el-checkbox v-model="form.is_forever">
-            长期有效
-          </el-checkbox>
+          <el-checkbox v-model="form.is_forever"> 长期有效 </el-checkbox>
         </el-form-item>
         <el-form-item label="赠送方式">
-          <el-radio-group
-            v-if="form.activity_type === 'member_birthday'"
-            v-model="condition"
-          >
-            <el-radio label="birthday_month">
-              生日当月1日统一发放
-            </el-radio>
-            <el-radio label="birthday_week">
-              生日当周周日统一发放
-            </el-radio>
-            <el-radio label="birthday_day">
-              生日当日统一发放
-            </el-radio>
+          <el-radio-group v-if="form.activity_type === 'member_birthday'" v-model="condition">
+            <el-radio label="birthday_month"> 生日当月1日统一发放 </el-radio>
+            <el-radio label="birthday_week"> 生日当周周日统一发放 </el-radio>
+            <el-radio label="birthday_day"> 生日当日统一发放 </el-radio>
           </el-radio-group>
           <el-radio
             v-if="form.activity_type === 'member_upgrade'"
@@ -66,40 +49,19 @@
           >
             付费会员升级成功后发放
           </el-radio>
-          <el-radio-group
-            v-if="form.activity_type === 'member_anniversary'"
-            v-model="condition"
-          >
-            <el-radio label="anniversary_month">
-              周年入会当月1日统一发放
-            </el-radio>
-            <el-radio label="anniversary_week">
-              周年入会当周周日统一发放
-            </el-radio>
-            <el-radio label="anniversary_day">
-              周年入会当日统一发放
-            </el-radio>
+          <el-radio-group v-if="form.activity_type === 'member_anniversary'" v-model="condition">
+            <el-radio label="anniversary_month"> 周年入会当月1日统一发放 </el-radio>
+            <el-radio label="anniversary_week"> 周年入会当周周日统一发放 </el-radio>
+            <el-radio label="anniversary_day"> 周年入会当日统一发放 </el-radio>
           </el-radio-group>
-          <el-radio-group
-            v-if="form.activity_type === 'member_day'"
-            v-model="condition"
-          >
-            <el-radio label="every_year">
-              每年
-            </el-radio>
-            <el-radio label="every_month">
-              每月
-            </el-radio>
-            <el-radio label="every_week">
-              每周
-            </el-radio>
+          <el-radio-group v-if="form.activity_type === 'member_day'" v-model="condition">
+            <el-radio label="every_year"> 每年 </el-radio>
+            <el-radio label="every_month"> 每月 </el-radio>
+            <el-radio label="every_week"> 每周 </el-radio>
           </el-radio-group>
           <transition name="el-fade-in-linear">
             <div v-if="condition === 'every_year'">
-              <el-select
-                v-model="memberDay.month"
-                placeholder="请选择月份"
-              >
+              <el-select v-model="memberDay.month" placeholder="请选择月份">
                 <el-option
                   v-for="item in monthOptions"
                   :key="item.value"
@@ -107,10 +69,7 @@
                   :value="item.value"
                 />
               </el-select>
-              <el-select
-                v-model="memberDay.day"
-                placeholder="请选择日期"
-              >
+              <el-select v-model="memberDay.day" placeholder="请选择日期">
                 <el-option
                   v-for="item in dayOptions"
                   :key="item.value"
@@ -120,10 +79,7 @@
               </el-select>
             </div>
             <div v-if="condition === 'every_month'">
-              <el-select
-                v-model="memberDay.day"
-                placeholder="请选择日期"
-              >
+              <el-select v-model="memberDay.day" placeholder="请选择日期">
                 <el-option
                   v-for="item in dayOptions"
                   :key="item.value"
@@ -133,10 +89,7 @@
               </el-select>
             </div>
             <div v-if="condition === 'every_week'">
-              <el-select
-                v-model="memberDay.week"
-                placeholder="请选择星期"
-              >
+              <el-select v-model="memberDay.week" placeholder="请选择星期">
                 <el-option
                   v-for="item in weekOptions"
                   :key="item.value"
@@ -162,18 +115,13 @@
               <div class="promotion-card">
                 <div class="promotion-card-header">
                   优惠券
-                  <a
-                    class="promotion-card-btn"
-                    href="#"
-                    @click="showModal('coupons', item.id)"
-                  >新增</a>
+                  <a class="promotion-card-btn" href="#" @click="showModal('coupons', item.id)"
+                    >新增</a
+                  >
                 </div>
                 <div class="promotion-card-body">
                   <ul class="promotion-card-list">
-                    <li
-                      v-for="(child, index) in item.checked"
-                      :key="index"
-                    >
+                    <li v-for="(child, index) in item.checked" :key="index">
                       <div class="promotion-name">
                         {{ child.title }}
                       </div>
@@ -236,22 +184,13 @@
           <div class="content-bottom-padded">
             <el-switch v-model="form.sms_isopen" />
             请确保短信账户余额充足
-            <router-link
-              :to="{ path: matchInternalRoute('datamessage') }"
-              target="_blank"
-            >
+            <router-link :to="{ path: matchInternalRoute('datamessage') }" target="_blank">
               查看短息账户
             </router-link>
           </div>
           <transition name="el-fade-in-linear">
-            <el-row
-              v-if="form.sms_isopen"
-              :gutter="30"
-            >
-              <el-col
-                v-if="form.activity_type === 'member_birthday'"
-                :span="6"
-              >
+            <el-row v-if="form.sms_isopen" :gutter="30">
+              <el-col v-if="form.activity_type === 'member_birthday'" :span="6">
                 小程序名称
                 <el-input
                   v-model="form.sms_params.app_name"
@@ -261,43 +200,34 @@
               </el-col>
               <el-col :span="6">
                 <el-card class="box-card sms-templ">
-                  <div
-                    slot="header"
-                    class="clearfix"
-                  >
+                  <div slot="header" class="clearfix">
                     <span>短信模板</span>
                   </div>
-                  <span
-                    v-if="form.activity_type === 'member_birthday'"
-                  >尊敬的会员：值此您生日之际，衷心祝您生日快乐！为感谢您对本店的支持，特此赠送您｛赠送内容｝｛数量｝。详情请查看官方小程序</span>
-                  <span
-                    v-if="form.activity_type === 'member_day'"
-                  >｛会员日时间｝是｛品牌｝会员日，特此为您奉上｛奖品｝。到店更有其他惊喜</span>
-                  <span
-                    v-if="form.activity_type === 'member_anniversary'"
-                  >历史上的今天，您成为了｛品牌｝会员。感谢您一路来对｛品牌｝的支持，特此为您奉上｛奖品｝。到店更有其他惊喜。</span>
-                  <span
-                    v-if="form.activity_type === 'member_upgrade'"
-                  >恭喜您成为｛品牌｝｛会员等级名称｝，特此为您奉上｛奖品｝。到店更有其他惊喜。</span>
-                  <span
-                    v-if="form.activity_type === 'member_vip_upgrade'"
-                  >恭喜您成为{{ 品牌 }}的{{ 付费会员等级名称 }}，特此为您奉上{{ 赠送内容 }}</span>
+                  <span v-if="form.activity_type === 'member_birthday'"
+                    >尊敬的会员：值此您生日之际，衷心祝您生日快乐！为感谢您对本店的支持，特此赠送您｛赠送内容｝｛数量｝。详情请查看官方小程序</span
+                  >
+                  <span v-if="form.activity_type === 'member_day'"
+                    >｛会员日时间｝是｛品牌｝会员日，特此为您奉上｛奖品｝。到店更有其他惊喜</span
+                  >
+                  <span v-if="form.activity_type === 'member_anniversary'"
+                    >历史上的今天，您成为了｛品牌｝会员。感谢您一路来对｛品牌｝的支持，特此为您奉上｛奖品｝。到店更有其他惊喜。</span
+                  >
+                  <span v-if="form.activity_type === 'member_upgrade'"
+                    >恭喜您成为｛品牌｝｛会员等级名称｝，特此为您奉上｛奖品｝。到店更有其他惊喜。</span
+                  >
+                  <span v-if="form.activity_type === 'member_vip_upgrade'"
+                    >恭喜您成为{{ 品牌 }}的{{ 付费会员等级名称 }}，特此为您奉上{{ 赠送内容 }}</span
+                  >
                 </el-card>
               </el-col>
             </el-row>
           </transition>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            :loading="submitLoading"
-            @click="onSubmit"
-          >
+          <el-button type="primary" :loading="submitLoading" @click="onSubmit">
             立即创建
           </el-button>
-          <el-button @click="back">
-            取消
-          </el-button>
+          <el-button @click="back"> 取消 </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -312,19 +242,10 @@
         @open="onshowModal('goods')"
         @close="oncloseModal('goods')"
       >
-        <ul
-          v-loading="item.loading"
-          class="dialog-list flex flex-wrap"
-        >
+        <ul v-loading="item.loading" class="dialog-list flex flex-wrap">
           <template v-for="child in item.list">
-            <li
-              :class="child.checked ? 'checked' : ''"
-              @click="selectItems('goods', child)"
-            >
-              <i
-                v-if="child.checked"
-                class="el-icon-check"
-              /> {{ child.itemName }}
+            <li :class="child.checked ? 'checked' : ''" @click="selectItems('goods', child)">
+              <i v-if="child.checked" class="el-icon-check" /> {{ child.itemName }}
             </li>
           </template>
         </ul>
@@ -344,15 +265,9 @@
             <li>{{ child.itemName }}</li>
           </template>
         </div>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+        <span slot="footer" class="dialog-footer">
           <el-button @click="cancelSelected('goods')">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="submitSelected('goods')"
-          >确 定</el-button>
+          <el-button type="primary" @click="submitSelected('goods')">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -367,19 +282,10 @@
         @open="onshowModal('coupons')"
         @close="oncloseModal('coupons')"
       >
-        <ul
-          v-loading="item.loading"
-          class="dialog-list flex flex-wrap"
-        >
+        <ul v-loading="item.loading" class="dialog-list flex flex-wrap">
           <template v-for="child in item.list">
-            <li
-              :class="child.checked ? 'checked' : ''"
-              @click="selectItems('coupons', child)"
-            >
-              <i
-                v-if="child.checked"
-                class="el-icon-check"
-              /> {{ child.title }}
+            <li :class="child.checked ? 'checked' : ''" @click="selectItems('coupons', child)">
+              <i v-if="child.checked" class="el-icon-check" /> {{ child.title }}
             </li>
           </template>
         </ul>
@@ -399,15 +305,9 @@
             <li>{{ child.title }}</li>
           </template>
         </div>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+        <span slot="footer" class="dialog-footer">
           <el-button @click="cancelSelected('coupons')">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="submitSelected('coupons')"
-          >确 定</el-button>
+          <el-button type="primary" @click="submitSelected('coupons')">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -422,13 +322,13 @@ import { getGradeList } from '../../../api/membercard'
 import { listVipGrade } from '../../../api/cardticket'
 export default {
   inject: ['refresh'],
-  data () {
+  data() {
     return {
       pickerOptions2: {
         shortcuts: [
           {
             text: '最近一周',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date()
               end.setHours(23, 59, 59, 0)
               const start = new Date()
@@ -439,7 +339,7 @@ export default {
           },
           {
             text: '最近一个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date()
               end.setHours(23, 59, 59, 0)
               const start = new Date()
@@ -450,7 +350,7 @@ export default {
           },
           {
             text: '最近三个月',
-            onClick (picker) {
+            onClick(picker) {
               const end = new Date()
               end.setHours(23, 59, 59, 0)
               const start = new Date()
@@ -491,7 +391,7 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.getGradeList()
     if (this.$route.params.type) {
       this.form.activity_type = this.$route.params.type
@@ -528,7 +428,7 @@ export default {
         this.dayOptions = day
       }
     }
-    function filter (val) {
+    function filter(val) {
       var x = ''
       switch (val) {
         case 1:
@@ -557,7 +457,7 @@ export default {
     }
   },
   methods: {
-    onSubmit () {
+    onSubmit() {
       if (this.form.activity_type === 'member_day') {
         let obj = {
           type: this.condition,
@@ -605,20 +505,20 @@ export default {
       }
       this.submitLoading = true
       const that = this
-      createActivity(this.form).then((res) => {
+      createActivity(this.form).then(res => {
         this.submitLoading = false
         this.$message({
           message: '添加成功',
           type: 'success',
           duration: 2 * 1000,
-          onClose () {
+          onClose() {
             that.refresh()
             that.$router.go(-3)
           }
         })
       })
     },
-    showModal (type, level) {
+    showModal(type, level) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == level) {
@@ -634,7 +534,7 @@ export default {
       }
       this.level = level
     },
-    onshowModal (type) {
+    onshowModal(type) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == this.level) {
@@ -657,11 +557,11 @@ export default {
         }
       }
     },
-    getGoods (current) {
+    getGoods(current) {
       getItemsList({
         page: current,
         pageSize: 20
-      }).then((res) => {
+      }).then(res => {
         let data = res.data.data.list
         if (data.length <= 0) {
           for (let j = 0; j < this.goods.length; j++) {
@@ -687,11 +587,11 @@ export default {
         }
       })
     },
-    getCoupons (current) {
+    getCoupons(current) {
       getCardList({
         page_no: current,
         page_size: 20
-      }).then((res) => {
+      }).then(res => {
         var data = res.data.data.list
         for (var i = 0; i < data.length; i++) {
           for (var j = 0; j < this.coupons.length; j++) {
@@ -709,7 +609,7 @@ export default {
         }
       })
     },
-    changeGoodsPage (currentPage) {
+    changeGoodsPage(currentPage) {
       for (var i = 0; i < this.goods.length; i++) {
         if (this.goods[i].id == this.level) {
           this.goods[i].page.currentPage = currentPage
@@ -717,7 +617,7 @@ export default {
         }
       }
     },
-    changeCouponsPage (currentPage) {
+    changeCouponsPage(currentPage) {
       for (var i = 0; i < this.coupons.length; i++) {
         if (this.coupons[i].id == this.level) {
           this.coupons[i].page.currentPage = currentPage
@@ -725,7 +625,7 @@ export default {
         }
       }
     },
-    oncloseModal (type) {
+    oncloseModal(type) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == this.level) {
@@ -740,7 +640,7 @@ export default {
         }
       }
     },
-    selectItems (type, item) {
+    selectItems(type, item) {
       if (type === 'goods') {
         if (item.checked) {
           for (var i = 0; i < this.goods.length; i++) {
@@ -799,7 +699,7 @@ export default {
         }
       }
     },
-    submitSelected (type) {
+    submitSelected(type) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == this.level) {
@@ -824,7 +724,7 @@ export default {
         }
       }
     },
-    cancelSelected (type) {
+    cancelSelected(type) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == this.level) {
@@ -841,7 +741,7 @@ export default {
         }
       }
     },
-    removeChecked (type, index, level) {
+    removeChecked(type, index, level) {
       if (type === 'goods') {
         for (var i = 0; i < this.goods.length; i++) {
           if (this.goods[i].id == level) {
@@ -856,16 +756,16 @@ export default {
         }
       }
     },
-    back () {
+    back() {
       this.$router.back(-1)
     },
-    getGradeList () {
-      getGradeList().then((response) => {
+    getGradeList() {
+      getGradeList().then(response => {
         if (response != undefined && response.data.data && response.data.data.length > 0) {
           var params = { is_disabled: 'false' }
-          listVipGrade(params).then((res) => {
+          listVipGrade(params).then(res => {
             let vipData = res.data.data
-            vipData.forEach((item) => {
+            vipData.forEach(item => {
               item.grade_id = item.lv_type
             })
 

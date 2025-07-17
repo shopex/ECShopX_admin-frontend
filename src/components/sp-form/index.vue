@@ -156,7 +156,7 @@ export default {
     },
     resetForm() {
       this.$refs['form'] && this.$refs['form'].resetFields()
-      this.localComps.forEach((comp) => {
+      this.localComps.forEach(comp => {
         comp.resetField && comp.resetField(comp.$parent.initialValue)
       })
     },
@@ -170,9 +170,9 @@ export default {
       }
     },
     setField(data, key, value) {
-      data.forEach((item) => {
+      data.forEach(item => {
         if (item.key === key) {
-          Object.keys(value).forEach((k) => {
+          Object.keys(value).forEach(k => {
             item[k] = value[k]
           })
         }
@@ -184,7 +184,7 @@ export default {
       return (
         <el-input
           clearable
-          type='textarea'
+          type="textarea"
           placeholder={placeholder || '请输入内容'}
           rows={5}
           maxlength={maxlength}
@@ -200,14 +200,14 @@ export default {
         <el-input
           clearable
           class={className}
-          type='text'
+          type="text"
           disabled={isFunction(disabled) ? disabled() : disabled}
           maxlength={maxlength}
           showWordLimit={!!maxlength}
           placeholder={placeholder || '请输入内容'}
           v-model={value[key]}
         >
-          <template slot='append'>{append}</template>
+          <template slot="append">{append}</template>
         </el-input>
       )
     },
@@ -238,7 +238,7 @@ export default {
         // </el-input>
         <el-input-number
           v-model={value[key]}
-          controls-position='right'
+          controls-position="right"
           min={min}
           max={max}
           precision={precision}
@@ -249,7 +249,7 @@ export default {
     _renderText(item) {
       const { value } = this
       const { key } = item
-      return <div class='el-text'>{value[key]}</div>
+      return <div class="el-text">{value[key]}</div>
     },
     _renderSelect(item) {
       const { value } = this
@@ -263,7 +263,7 @@ export default {
           onChange={onChange}
           disabled={isFunction(disabled) ? disabled() : disabled}
         >
-          {options.map((op) => (
+          {options.map(op => (
             <el-option
               key={op.value}
               label={op.title}
@@ -283,7 +283,7 @@ export default {
           onChange={onChange}
           disabled={isFunction(disabled) ? disabled() : disabled}
         >
-          {options.map((op) => (
+          {options.map(op => (
             <el-radio label={op.label}>{op.name}</el-radio>
           ))}
         </el-radio-group>
@@ -294,7 +294,7 @@ export default {
       const { key, disabled = false, options, onChange = () => {} } = item
       return (
         <el-checkbox-group v-model={value[key]} onChange={onChange} disabled={disabled}>
-          {options.map((op) => (
+          {options.map(op => (
             <el-checkbox label={op.label} disabled={op.disabled} key={op.label}>
               {op.name}
             </el-checkbox>
@@ -308,8 +308,8 @@ export default {
       return (
         <el-table border data={value[key]}>
           {options
-            .filter((item) => item.isShow !== false)
-            .map((op) => (
+            .filter(item => item.isShow !== false)
+            .map(op => (
               <el-table-column
                 prop={op.key}
                 label={op.title}
@@ -346,7 +346,7 @@ export default {
     const { title, value, formList, width, labelWidth } = this
     // console.log('sp-form value:', value)
     const localComps = []
-    const getComponentByType = (item) => {
+    const getComponentByType = item => {
       if (typeof item.component != 'undefined') {
         const comp = item.component(item, value)
         const { context, data } = comp
@@ -357,23 +357,23 @@ export default {
       }
 
       const renderItem = {
-        'textarea': this._renderTextArea,
-        'input': this._renderInput,
-        'number': this._renderNumber,
-        'text': this._renderText,
-        'select': this._renderSelect,
-        'radio': this._renderRadio,
-        'checkbox': this._renderCheckbox,
-        'table': this._renderTable,
-        'richText': this._renderRichText,
-        'image': this._renderImage,
-        'switch': this._renderSwitch
+        textarea: this._renderTextArea,
+        input: this._renderInput,
+        number: this._renderNumber,
+        text: this._renderText,
+        select: this._renderSelect,
+        radio: this._renderRadio,
+        checkbox: this._renderCheckbox,
+        table: this._renderTable,
+        richText: this._renderRichText,
+        image: this._renderImage,
+        switch: this._renderSwitch
       }
       return renderItem[item.type](item)
     }
 
     let rules = {}
-    formList.forEach((item) => {
+    formList.forEach(item => {
       if (item.validator) {
         rules[item.key] = [{ validator: item.validator }]
       } else if (item.required) {
@@ -384,7 +384,7 @@ export default {
 
     return (
       <el-form
-        ref='form'
+        ref="form"
         class={{
           'sp-form': true,
           normal: this.size == 'normal',
@@ -401,7 +401,7 @@ export default {
         {formList.map((item, index) => {
           if (item.type == 'group') {
             return (
-              <div class='sp-form-group' v-show={this.getItemShow(item)}>
+              <div class="sp-form-group" v-show={this.getItemShow(item)}>
                 {item.label}
               </div>
             )
@@ -417,7 +417,7 @@ export default {
                     'no-label': typeof item.label == 'undefined',
                     'custom-error': typeof item.component != 'undefined',
                     'is-required': item.required || item.validator,
-                    'inline': typeof item.inline != 'undefined' ? item.inline : false
+                    inline: typeof item.inline != 'undefined' ? item.inline : false
                   }
                 ]}
                 style={{
@@ -427,7 +427,7 @@ export default {
                 v-show={this.getItemShow(item)}
               >
                 {getComponentByType(item)}
-                <div class='form-item-tip' domPropsInnerHTML={item.tip}></div>
+                <div class="form-item-tip" domPropsInnerHTML={item.tip}></div>
               </el-form-item>
             )
           }
@@ -435,12 +435,12 @@ export default {
         {this.submit && (
           <el-form-item>
             {this.resetBtn && (
-              <el-button class='mr-5' type='default' onClick={this.resetForm}>
+              <el-button class="mr-5" type="default" onClick={this.resetForm}>
                 {this.resetBtnText}
               </el-button>
             )}
             {this.submitBtn && (
-              <el-button type='primary' onClick={this.onSubmit}>
+              <el-button type="primary" onClick={this.onSubmit}>
                 {this.submitBtnText}
               </el-button>
             )}

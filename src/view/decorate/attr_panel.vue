@@ -23,8 +23,8 @@ export default {
 
     _renderSelect({ key, options }) {
       return (
-        <el-select v-model={this.value[key]} size='small'>
-          {options.map((op) => (
+        <el-select v-model={this.value[key]} size="small">
+          {options.map(op => (
             <el-option label={op.label} value={op.value} />
           ))}
         </el-select>
@@ -32,21 +32,21 @@ export default {
     },
 
     _renderTextArea({ key, rows }) {
-      return <el-input type='textarea' v-model={this.value[key]} rows={rows} size='small' />
+      return <el-input type="textarea" v-model={this.value[key]} rows={rows} size="small" />
     },
 
     _renderInput({ key }) {
-      return <el-input type='text' v-model={this.value[key]} size='small' />
+      return <el-input type="text" v-model={this.value[key]} size="small" />
     },
 
     _renderColor({ key, value: initValue }) {
       // console.log('_renderColor:', this)
       return (
-        <div class='el-color-picker-wrap'>
-          <el-color-picker v-model={this.value[key]} size='small' />
+        <div class="el-color-picker-wrap">
+          <el-color-picker v-model={this.value[key]} size="small" />
           <el-button
-            class='button-reset'
-            type='text'
+            class="button-reset"
+            type="text"
             on-click={() => {
               this.value[key] = initValue
             }}
@@ -59,7 +59,7 @@ export default {
 
     _renderNumber({ key, min, max, step }) {
       return (
-        <el-input-number v-model={this.value[key]} size='small' min={min} max={max} step={step} />
+        <el-input-number v-model={this.value[key]} size="small" min={min} max={max} step={step} />
       )
     },
     _renderSwitch({ key }) {
@@ -68,7 +68,7 @@ export default {
     _renderRadio({ key, options }) {
       return (
         <el-radio-group v-model={this.value[key]}>
-          {options.map((op) => (
+          {options.map(op => (
             <el-radio label={op.label}>{op.name}</el-radio>
           ))}
         </el-radio-group>
@@ -78,31 +78,31 @@ export default {
   render(h) {
     const { wgtName, setting } = this.info
 
-    const renderComp = (item) => {
+    const renderComp = item => {
       if (isFunction(item.component)) {
         return item.component.call(this, h, item)
         // return <el-input v-model={this.value[item.key]} />
       }
 
       const renderItem = {
-        'textarea': this._renderTextArea,
-        'input': this._renderInput,
-        'color': this._renderColor,
-        'number': this._renderNumber,
+        textarea: this._renderTextArea,
+        input: this._renderInput,
+        color: this._renderColor,
+        number: this._renderNumber,
         // 'text': this._renderText,
-        'select': this._renderSelect,
-        'radio': this._renderRadio,
+        select: this._renderSelect,
+        radio: this._renderRadio,
         // 'checkbox': this._renderCheckbox,
         // 'table': this._renderTable,
         // 'richText': this._renderRichText,
         // 'image': this._renderImage,
-        'switch': this._renderSwitch
+        switch: this._renderSwitch
       }
       return renderItem[item.component](item)
     }
 
     return (
-      <div class='attr-panel'>
+      <div class="attr-panel">
         {setting.map((item, index) => (
           <div
             class={[
@@ -112,10 +112,10 @@ export default {
               }
             ]}
           >
-            <div class='cell-label'>{item.label}</div>
-            <div class='cell-value'>
-              <div class='cell-value-content'>{renderComp(item)}</div>
-              {item.tip && <div class='cell-value-tip' domPropsInnerHTML={item.tip} />}
+            <div class="cell-label">{item.label}</div>
+            <div class="cell-value">
+              <div class="cell-value-content">{renderComp(item)}</div>
+              {item.tip && <div class="cell-value-tip" domPropsInnerHTML={item.tip} />}
             </div>
           </div>
         ))}

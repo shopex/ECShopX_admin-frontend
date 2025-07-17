@@ -1,5 +1,5 @@
 import { createSetting } from '@shopex/finder'
-export default (vm) => {
+export default vm => {
   return createSetting({
     columns: [
       { name: '用户名	', key: 'username' },

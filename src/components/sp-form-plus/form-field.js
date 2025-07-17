@@ -209,18 +209,24 @@ export default {
     renderImagePicker(props = {}) {
       return <SpImagePicker value={this.modelValue} {...props} on-onChange={this.handleInput} />
     },
+
+    renderSwitch(props = {}) {
+      return <el-switch value={this.modelValue} {...props} on-onChange={this.handleInput} />
+    },
+
     // 获取组件渲染函数
     getComponentRender() {
       if (isString(this.component)) {
         const type = this.component.toLowerCase()
         const renderMap = {
-          input: this.renderInput,
-          select: this.renderSelect,
-          radio: this.renderRadio,
-          checkbox: this.renderCheckbox,
           button: this.renderButton,
+          checkbox: this.renderCheckbox,
           datetimepicker: this.renderDateTimePicker,
-          imagepicker: this.renderImagePicker
+          input: this.renderInput,
+          imagepicker: this.renderImagePicker,
+          radio: this.renderRadio,
+          select: this.renderSelect,
+          switch: this.renderSwitch
         }
         return renderMap[type] || this.renderInput
       }
@@ -250,6 +256,7 @@ export default {
   render(h) {
     // 获取对应的渲染函数
     const renderComponent = this.getComponentRender()
+    debugger
     // 渲染表单项
     return h('div', { class: ['form-field', this.formItemClass] }, [
       h(
@@ -270,7 +277,7 @@ export default {
         },
         [
           renderComponent(this.componentProps),
-          this.tip ? h('div', { class: 'text-sm text-gray-500 mt-0.5' }, this.tip) : null
+          this.tip ? h('div', { class: 'text-sm text-gray-500 mt-0.5' }, this.tip()) : null
         ]
       )
     ])

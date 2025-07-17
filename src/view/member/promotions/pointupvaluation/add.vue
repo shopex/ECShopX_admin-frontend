@@ -200,7 +200,7 @@ export default {
         ]
       },
       used_scene: {
-        '1': '订单抵扣'
+        1: '订单抵扣'
       },
       level: 0,
       levelData: [],
@@ -288,13 +288,13 @@ export default {
     this.weekOptions = week
     this.dayOptions = day
     console.log(this.dayOptions)
-    listVipGrade().then((response) => {
+    listVipGrade().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         this.vipGrade = response.data.data
       }
     })
 
-    getGradeList().then((response) => {
+    getGradeList().then(response => {
       if (response != undefined && response.data.data && response.data.data.length > 0) {
         var result = response.data.data
         if (result) {
@@ -338,7 +338,7 @@ export default {
       params.items = JSON.stringify(params.items)
       params.item_category = JSON.stringify(params.item_category)
       if (this.form.activity_id) {
-        updatePointupvaluation(params).then((res) => {
+        updatePointupvaluation(params).then(res => {
           if (res.data.data.activity_id) {
             this.loading = false
             this.$message({
@@ -356,7 +356,7 @@ export default {
           }
         })
       } else {
-        createPointupvaluation(params).then((res) => {
+        createPointupvaluation(params).then(res => {
           if (res.data.data.activity_id) {
             this.loading = false
             this.$message({
@@ -386,7 +386,7 @@ export default {
       return str
     },
     getActivityDetail(id) {
-      getPointupvaluationInfo({ activity_id: id }).then((res) => {
+      getPointupvaluationInfo({ activity_id: id }).then(res => {
         let response = res.data.data
         let data = {
           activity_id: response.activity_id,
