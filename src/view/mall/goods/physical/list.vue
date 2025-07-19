@@ -1078,6 +1078,12 @@ export default {
               )
             }
           },
+          // {
+          //   name: '是否处方',
+          //   key: 'item_bn',
+          //   width: 150,
+          //   render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否')
+          // },
           {
             name: 'sku编码',
             key: 'item_bn',
@@ -1109,31 +1115,28 @@ export default {
               </div>
             )
           },
-          {
-            name: '是否处方',
-            key: 'item_bn',
-            width: 150,
-            render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否')
-          },
-          {
-            name: '审核结果',
-            key: 'audit_status',
-            width: 150,
-            render: (h, { row }) =>
-              row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
-          },
-          {
-            name: '错误信息',
-            key: 'audit_reason',
-            width: 150,
-            render: (h, { row }) => (
-              <div class="truncate">
-                {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-                  <span>{row.medicine_data.audit_reason}</span>
-                )}
-              </div>
-            )
-          },
+          // {
+          //   name: '审核结果',
+          //   key: 'audit_status',
+          //   width: 150,
+          //   render: (h, { row }) =>
+          //     row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
+          // },
+          // {
+          //   name: '错误信息',
+          //   key: 'audit_reason',
+          //   width: 150,
+          //   render: (h, { row }) => (
+          //     <div>
+          //       {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+          //         <div onClick={() => this.handleErrDetail(row.medicine_data)}>
+          //           {this.handleAuditReason(row.medicine_data)}
+          //           <i class='el-icon-info'></i>
+          //         </div>
+          //       )}
+          //     </div>
+          //   )
+          // },
           // {
           //   name: '供应商货号',
           //   key: 'supplier_goods_bn',
