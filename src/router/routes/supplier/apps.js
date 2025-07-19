@@ -5,23 +5,25 @@ const routes = [
   {
     component: BasicLayout,
     meta: {
-      aliasName: 'applications',
+      aliasName: 'supplierapplications',
       icon: 'app-store',
       keepAlive: true,
       title: '应用'
     },
-    name: 'merchantApplications',
-    path: '/merchant/applications',
+    name: 'supplierapplications',
+    path: '/supplier/applications',
     children: [
       {
         name: 'bspayUser',
         path: 'bspay/user',
         component: () => import('@/view/dealer/bspay_create_user'),
         meta: {
-          aliasName: 'user',
+          aliasName: 'supplierapplicationsbspayuser_audit',
           icon: 'icon-user',
           title: '进件管理',
-          permissions: ['applications.bspay.user']
+          permissions: [
+            'supplierapplications.supplierapplicationsbspay.supplierapplicationsbspayuser_audit'
+          ]
         }
       },
       {
@@ -29,10 +31,12 @@ const routes = [
         path: 'bspay/trades',
         component: () => import('@/view/mall/bspay_sub_account/sub_account'),
         meta: {
-          aliasName: 'bspay_trades',
+          aliasName: 'supplierapplicationsbspaytrades',
           icon: 'icon-trades',
           title: '分账明细',
-          permissions: ['applications.bspay.bspay_trades']
+          permissions: [
+            'supplierapplications.supplierapplicationsbspay.supplierapplicationsbspaytrades'
+          ]
         },
         children: [
           {
