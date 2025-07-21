@@ -13,8 +13,7 @@ const axios = require('axios')
 const { generateId } = require('./build/utils')
 
 
-
-const i18nPlugin = new webpackPluginsAutoI18n.default({
+const AutoI18nOptions = {
   excludedPath: ['/src/i18n/index.js'],
   globalPath: path.resolve(__dirname, './src/i18n/lang'),
   targetLangList: ['en', 'zh-tw'],
@@ -22,11 +21,16 @@ const i18nPlugin = new webpackPluginsAutoI18n.default({
     /src\//,
     /node_modules\/element-ui\//,
   ],
-  translator: new YoudaoTranslator({
+}
+
+if (process.env.NODE_ENV === 'development') {
+  AutoI18nOptions['translator'] = new YoudaoTranslator({
     appId: process.env.VUE_YOUDAO_APPID,
     appKey: process.env.VUE_YOUDAO_APPKEY
   })
-})
+}
+
+const i18nPlugin = new webpackPluginsAutoI18n.default(AutoI18nOptions)
 
 const SRC_PATH = path.resolve(__dirname, 'src')
 const envVars = process.env

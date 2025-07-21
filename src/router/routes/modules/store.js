@@ -115,8 +115,7 @@ const routes = [
           title: '退货地址',
           permissions: ['store.storemanager.distributoraftersalesaddress']
         },
-        // component: () => import('@/view/mall/marketing/distributorAftersalesAddress'),
-        component: () => import('@/views/store/store-rules')
+        component: () => import('@/view/mall/marketing/distributorAftersalesAddress')
       }
     ]
   }

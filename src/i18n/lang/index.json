@@ -32503,5 +32503,245 @@
 		"zh-cn": "抽奖统计",
 		"en": "Lottery draw statistics",
 		"zh-tw": "抽獎統計"
+	},
+	"18cyotf": {
+		"zh-cn": "登录认证过期，请重新登录后继续",
+		"en": "Your login authentication has expired. Please log in again and continue",
+		"zh-tw": "登錄認證過期，請重新登錄後繼續"
+	},
+	"s0cm117": {
+		"zh-cn": "供应商结算汇总",
+		"en": "Summary of Supplier Settlements",
+		"zh-tw": "供應商結算彙總"
+	},
+	"gio2qt4": {
+		"zh-cn": "结算配置",
+		"en": "Settlement configuration",
+		"zh-tw": "結算配置"
+	},
+	"s0j2wi7": {
+		"zh-cn": "供应商结算配置",
+		"en": "Supplier settlement configuration",
+		"zh-tw": "供應商結算配置"
+	},
+	"ijplgx4": {
+		"zh-cn": "进店规则",
+		"en": "Store entry rules",
+		"zh-tw": "進店規則"
+	},
+	"7qlpfx5": {
+		"zh-cn": "选择供应商",
+		"en": "Select a supplier",
+		"zh-tw": "選擇供應商"
+	},
+	"vsetgi6": {
+		"zh-cn": "待供应商确认",
+		"en": "Pending confirmation by the supplier",
+		"zh-tw": "待供應商確認"
+	},
+	"gidap24": {
+		"zh-cn": "结算单号",
+		"en": "Settlement number",
+		"zh-tw": "結算單號"
+	},
+	"wriojj8": {
+		"zh-cn": "实付总金额（¥）",
+		"en": "Total actual payment amount (¥",
+		"zh-tw": "實付總金額（¥）"
+	},
+	"d2orsf7": {
+		"zh-cn": "现金实付（¥）",
+		"en": "Cash payment (¥",
+		"zh-tw": "現金實付（¥）"
+	},
+	"cx45rh5": {
+		"zh-cn": "运费（总）",
+		"en": "Freight (Total)",
+		"zh-tw": "運費（總）"
+	},
+	"im23vh4": {
+		"zh-cn": "退款数量",
+		"en": "Refund quantity",
+		"zh-tw": "退款數量"
+	},
+	"im58s54": {
+		"zh-cn": "退款积分",
+		"en": "Refund points",
+		"zh-tw": "退款積分"
+	},
+	"6z0sw08": {
+		"zh-cn": "退货结算价（¥）",
+		"en": "Return settlement price (¥",
+		"zh-tw": "退貨結算價（¥）"
+	},
+	"x32267": {
+		"zh-cn": "结算实付（¥）",
+		"en": "Settlement and actual payment (¥",
+		"zh-tw": "結算實付（¥）"
+	},
+	"frs75g4": {
+		"zh-cn": "确认时间",
+		"en": "Confirm the time",
+		"zh-tw": "確認時間"
+	},
+	"i50kg24": {
+		"zh-cn": "购买数量",
+		"en": "Purchase quantity",
+		"zh-tw": "購買數量"
+	},
+	"ir0wxy4": {
+		"zh-cn": "退货数量",
+		"en": "Quantity of returns",
+		"zh-tw": "退貨數量"
+	},
+	"22jm0l6": {
+		"zh-cn": "订单完成时间",
+		"en": "Order completion time",
+		"zh-tw": "訂單完成時間"
+	},
+	"afppe54": {
+		"zh-cn": "供应商:",
+		"en": "Supplier",
+		"zh-tw": "供應商:"
+	},
+	"qp8b186": {
+		"zh-cn": "结算周期配置",
+		"en": "Settlement cycle configuration",
+		"zh-tw": "結算週期配置"
+	},
+	"s08l7s7": {
+		"zh-cn": "供应商结算周期",
+		"en": "Supplier settlement cycle",
+		"zh-tw": "供應商結算週期"
+	},
+	"vhi6cp7": {
+		"zh-cn": "添加供应商配置",
+		"en": "Add supplier configuration",
+		"zh-tw": "添加供應商配置"
+	},
+	"vlt1iw5": {
+		"zh-cn": "供应商编辑",
+		"en": "Supplier Editor",
+		"zh-tw": "供應商編輯"
+	},
+	"8wc3fv8": {
+		"zh-cn": "结算周期不能为空",
+		"en": "The settlement cycle cannot be empty",
+		"zh-tw": "結算週期不能爲空"
+	},
+	"757dukj": {
+		"zh-cn": "结算说明：结算周期的T+1天生成结算单",
+		"en": "Settlement statement: The settlement statement will be generated on T+1 day of the settlement cycle",
+		"zh-tw": "結算說明：結算週期的T+1天生成結算單"
+	},
+	"5036tf9": {
+		"zh-cn": "非自然流量（带参）",
+		"en": "Non-natural traffic (with parameters",
+		"zh-tw": "非自然流量（帶參）"
+	},
+	"xzjjqy5": {
+		"zh-cn": "店铺码进店",
+		"en": "Enter the store by scanning the store code",
+		"zh-tw": "店鋪碼進店"
+	},
+	"myo0g6i": {
+		"zh-cn": "通过带门店参小程序码扫码进入对应店铺",
+		"en": "Enter the corresponding store by scanning the QR code of the store participation mini-program",
+		"zh-tw": "通過帶門店參小程序碼掃碼進入對應店鋪"
+	},
+	"81c7ldf": {
+		"zh-cn": "通过分享小程序卡片进入对应店铺",
+		"en": "Enter the corresponding store by sharing the mini-program card",
+		"zh-tw": "通過分享小程序卡片進入對應店鋪"
+	},
+	"3vpw0z6": {
+		"zh-cn": "导购物料进店",
+		"en": "Salesperson materials are brought into the store",
+		"zh-tw": "導購物料進店"
+	},
+	"h45zw7r": {
+		"zh-cn": "通过扫企微码添加导购加好友的欢迎语推送的小程序卡片进店",
+		"en": "Enter the store through the mini-program card pushed by the welcome message of adding the salesperson as a friend by scanning the enterprise wechat code",
+		"zh-tw": "通過掃企微碼添加導購加好友的歡迎語推送的小程序卡片進店"
+	},
+	"5csio4m": {
+		"zh-cn": "通过导购商城分享的小程序海报、小程序卡片进店",
+		"en": "Enter the store through the mini-program posters and mini-program cards shared by the shopping guide mall",
+		"zh-tw": "通過導購商城分享的小程序海報、小程序卡片進店"
+	},
+	"gbptde9": {
+		"zh-cn": "自然流量（不带参）",
+		"en": "Natural flow (without parameters",
+		"zh-tw": "自然流量（不帶參）"
+	},
+	"nuf85a8": {
+		"zh-cn": "进入白名单会员店",
+		"en": "Enter the whitelist member store",
+		"zh-tw": "進入白名單會員店"
+	},
+	"lvrwfn9": {
+		"zh-cn": "进入专属导购所属店",
+		"en": "Enter the store where the dedicated salesperson belongs",
+		"zh-tw": "進入專屬導購所屬店"
+	},
+	"bwpybhm": {
+		"zh-cn": "通过扫导购企业微信码加好友、进入导购归属店铺",
+		"en": "Scan the wechat code of the sales assistant enterprise to add a friend and enter the store where the sales assistant belongs",
+		"zh-tw": "通過掃導購企業微信碼加好友、進入導購歸屬店鋪"
+	},
+	"nrbtvd7": {
+		"zh-cn": "LBS就近进店",
+		"en": "LBS: Enter the store nearby",
+		"zh-tw": "LBS就近進店"
+	},
+	"f1j45fk": {
+		"zh-cn": "通过用户的LBS定位，进入用户附近的店铺",
+		"en": "Through the user's LBS positioning, access the nearby stores of the user",
+		"zh-tw": "通過用戶的LBS定位，進入用戶附近的店鋪"
+	},
+	"q9dc9iq": {
+		"zh-cn": "兜底策略（店铺失效、导购离职、关闭LBS时落地场景）",
+		"en": "Bottom-line strategy (scenarios for implementation when the store fails, sales assistants leave, or LBS is closed)",
+		"zh-tw": "兜底策略（店鋪失效、導購離職、關閉LBS時落地場景）"
+	},
+	"nxumj3": {
+		"zh-cn": "默认店",
+		"en": "Default store",
+		"zh-tw": "默認店"
+	},
+	"c5vmb3": {
+		"zh-cn": "介绍页",
+		"en": "Introduction page",
+		"zh-tw": "介紹頁"
+	},
+	"t4d0nr6": {
+		"zh-cn": "引导页名称：",
+		"en": "Guide page name",
+		"zh-tw": "引導頁名稱："
+	},
+	"3jlpl56": {
+		"zh-cn": "请选择引导页",
+		"en": "Please select the guide page",
+		"zh-tw": "請選擇引導頁"
+	},
+	"b2vzaa6": {
+		"zh-cn": "店铺结算周期",
+		"en": "Store settlement cycle",
+		"zh-tw": "店鋪結算週期"
+	},
+	"cjxtq64": {
+		"zh-cn": "店铺编辑",
+		"en": "Shop editor",
+		"zh-tw": "店鋪編輯"
+	},
+	"sc7ow96": {
+		"zh-cn": "添加店铺配置",
+		"en": "Add store configuration",
+		"zh-tw": "添加店鋪配置"
+	},
+	"ue3nx08": {
+		"zh-cn": "请输入结算周期数",
+		"en": "Please enter the number of settlement cycles",
+		"zh-tw": "請輸入結算週期數"
 	}
 }
