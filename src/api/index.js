@@ -4,7 +4,7 @@ import { fetch } from './request'
 
 const api = {}
 
-const callbackWrap = fn => {
+const callbackWrap = (fn) => {
   const _fn = async (...arg) => {
     // console.log(arguments.length, ...arg)
     const res = await fn(...arg)
@@ -17,7 +17,7 @@ importAll(require.context('./', true, /\.js$/), (key, r) => {
   const keyPath = key.match(/\/([^\/]+)\.js$/)?.[1]
   if (!['index'].includes(keyPath)) {
     const fn = {}
-    Object.keys(r(key)).forEach(n => {
+    Object.keys(r(key)).forEach((n) => {
       fn[n] = callbackWrap(r(key)[n])
     })
     api[keyPath] = typeof api[keyPath] === 'undefined' ? fn : { ...api[keyPath], ...fn }

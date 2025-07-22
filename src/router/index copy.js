@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
   const _menus = store.getters.menus
 
   if (_token) {
-    const curPath = constantRouterMap.RouteAuth.find(item => item.path == to.path)
+    const curPath = constantRouterMap.RouteAuth.find((item) => item.path == to.path)
     if (curPath || to.path == '/shopadmin/shoplist' || to.path == '/dealer/index') {
       return next()
     }
@@ -78,13 +78,13 @@ router.beforeEach((to, from, next) => {
           }
         }
 
-        menus.forEach(item => {
+        menus.forEach((item) => {
           if (item.children) {
             const smenus = item.children
-            smenus.forEach(sitem => {
+            smenus.forEach((sitem) => {
               if (sitem.children) {
                 const tmenus = sitem.children
-                tmenus.forEach(titem => {
+                tmenus.forEach((titem) => {
                   customRouterUrls.push(titem.url)
                 })
               } else {
@@ -100,7 +100,7 @@ router.beforeEach((to, from, next) => {
         // console.log(Object.keys(constantRouterMap))
         // console.log('menu:', customRouterUrls)
 
-        Object.keys(constantRouterMap).forEach(key => {
+        Object.keys(constantRouterMap).forEach((key) => {
           if (key != 'RouteAuth') {
             const route = constantRouterMap[key]
             // 二级菜单
@@ -109,7 +109,7 @@ router.beforeEach((to, from, next) => {
                 ...route,
                 children: []
               }
-              _route.children = route.children.filter(item => {
+              _route.children = route.children.filter((item) => {
                 if (item.name == 'dashboard') {
                   return (
                     customRouterUrls.includes(`/`) ||

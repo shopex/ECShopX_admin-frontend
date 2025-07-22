@@ -1,7 +1,7 @@
 // 提取searchSchema中默认值
 export function generatorParams(options, data) {
   const _params = {}
-  options.forEach(_schema => {
+  options.forEach((_schema) => {
     if (_schema.key) {
       if (data) {
         _params[_schema.key] = data[_schema.key]
@@ -15,7 +15,7 @@ export function generatorParams(options, data) {
 
 // 绑定表单schema的this指向
 export function bindThisForFormSchema(formSchema, target) {
-  formSchema?.forEach(item => {
+  formSchema?.forEach((item) => {
     if (item?.component) {
       item.component = item.component.bind(target)
     }

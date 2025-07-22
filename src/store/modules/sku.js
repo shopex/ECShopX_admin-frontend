@@ -8,9 +8,9 @@ const sku = {
   mutations: {
     setSku: (state, sku) => {
       let editingSkus = state.editingSkus.filter(
-        item => item.item_spec.length == sku.item_spec.length
+        (item) => item.item_spec.length == sku.item_spec.length
       )
-      let current = state.editingSkus.findIndex(item => item.sku_id === sku.sku_id)
+      let current = state.editingSkus.findIndex((item) => item.sku_id === sku.sku_id)
       if (current === -1) {
         editingSkus.push(sku)
         state.editingSkus = editingSkus
@@ -21,8 +21,8 @@ const sku = {
     },
     setPage: (state, list) => {
       state.editingPage = list
-      list.forEach(issue => {
-        let isin = state.editingSkus.findIndex(item => item.sku_id === issue.sku_id)
+      list.forEach((issue) => {
+        let isin = state.editingSkus.findIndex((item) => item.sku_id === issue.sku_id)
         if (isin === -1) {
           state.editingSkus.push(issue)
         } else {
@@ -31,8 +31,8 @@ const sku = {
       })
     },
     removeSku: (state, sku) => {
-      let current = state.editingSkus.findIndex(item => item.sku_id === sku.sku_id)
-      let pageCurrent = state.editingPage.findIndex(item => item.sku_id === sku.sku_id)
+      let current = state.editingSkus.findIndex((item) => item.sku_id === sku.sku_id)
+      let pageCurrent = state.editingPage.findIndex((item) => item.sku_id === sku.sku_id)
       if (current !== -1) {
         state.editingSkus.splice(current, 1)
       }
@@ -40,10 +40,10 @@ const sku = {
         state.editingPage.splice(pageCurrent, 1)
       }
     },
-    clearSkus: state => {
+    clearSkus: (state) => {
       state.editingSkus = []
     },
-    clearPage: state => {
+    clearPage: (state) => {
       state.editingPage = []
     }
   },

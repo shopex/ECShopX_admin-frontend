@@ -56,7 +56,7 @@ function createAxios(inst) {
   inst.defaults.baseURL = process.env.VUE_APP_BASE_API || '/'
   inst.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
-  inst.interceptors.request.use(async config => {
+  inst.interceptors.request.use(async (config) => {
     // await refreshToken()
 
     const isGetMethod = config.method === 'get'
@@ -84,7 +84,7 @@ function createAxios(inst) {
   })
 
   inst.interceptors.response.use(
-    res => {
+    (res) => {
       const {
         data,
         status,
@@ -110,7 +110,7 @@ function createAxios(inst) {
       }
       return Promise.reject(reqErr(res))
     },
-    err => {
+    (err) => {
       //
       errorToast(err.response.data.error)
       return Promise.reject(err)

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import jsonp from 'jsonp'
 
-const axiosJsonpAdapter = config => {
+const axiosJsonpAdapter = (config) => {
   return new Promise((resolve, reject) => {
     jsonp(config.url, config.params, (err, data) => {
       if (err) {

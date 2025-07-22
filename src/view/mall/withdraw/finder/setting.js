@@ -1,7 +1,7 @@
 import { createSetting } from '@shopex/finder'
 import { Message, MessageBox } from 'element-ui'
-export default vm => {
-  const formatDate = timestamp => {
+export default (vm) => {
+  const formatDate = (timestamp) => {
     var date = new Date(timestamp * 1000) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
     var YY = date.getFullYear() + '-'
     var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
@@ -11,7 +11,7 @@ export default vm => {
     var ss = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
     return YY + MM + DD + ' ' + hh + mm + ss
   }
-  const formatStatus = val => {
+  const formatStatus = (val) => {
     if (val == 'pending') {
       return '提现处理中'
     } else if (val == 'succeeded') {
@@ -20,7 +20,7 @@ export default vm => {
       return '提现失败'
     }
   }
-  const formatMoney = money => {
+  const formatMoney = (money) => {
     return (money / 100).toFixed(2).toLocaleString()
   }
   return createSetting({

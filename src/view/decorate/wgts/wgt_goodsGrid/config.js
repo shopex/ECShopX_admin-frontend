@@ -70,11 +70,11 @@ export default {
       label: '查看更多',
       key: 'moreLink',
       component: function (h, { key }) {
-        return <CompPickerLink v-model={this.value[key]} style="margin-top: 7px;" />
+        return <CompPickerLink v-model={this.value[key]} style='margin-top: 7px;' />
       }
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, config, data, list, distributor_id } = v
     return {
       name,
@@ -85,17 +85,17 @@ export default {
       distributor_id
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
           padded: 'padded'
         })
       },
-      config: v => {
+      config: (v) => {
         return pickBy(v, {
           brand: 'brand',
           showPrice: 'showPrice',

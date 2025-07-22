@@ -1,5 +1,5 @@
 import { createSetting } from '@shopex/finder'
-export default vm => {
+export default (vm) => {
   return createSetting({
     columns: [
       { name: '券包标题	', key: 'title' },
@@ -14,7 +14,7 @@ export default vm => {
         buttonType: 'text',
         action: {
           type: 'link',
-          handler: val => {
+          handler: (val) => {
             vm.$router.push({
               path: `${vm.$route.path}/detail`,
               query: {
@@ -32,7 +32,7 @@ export default vm => {
         buttonType: 'text',
         action: {
           type: 'link',
-          handler: val => {
+          handler: (val) => {
             vm.$router.push({
               path: `${vm.$route.path}/editor`,
               query: {
@@ -50,7 +50,7 @@ export default vm => {
         buttonType: 'text',
         action: {
           type: 'link',
-          handler: async val => {
+          handler: async (val) => {
             await vm.$confirm(`删除券包？`, '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消'

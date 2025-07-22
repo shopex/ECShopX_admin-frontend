@@ -22,7 +22,7 @@ export function useForm(options = {}) {
       // 表单验证
       validate() {
         return new Promise((resolve, reject) => {
-          this.$refs.form.validate(valid => {
+          this.$refs.form.validate((valid) => {
             if (valid) {
               resolve(this.form)
             } else {
@@ -41,7 +41,7 @@ export function useForm(options = {}) {
       },
       // 设置表单字段值
       setFieldsValue(values) {
-        Object.keys(values).forEach(key => {
+        Object.keys(values).forEach((key) => {
           this.$set(this.form, key, values[key])
         })
       },
@@ -49,7 +49,7 @@ export function useForm(options = {}) {
       getFieldsValue(fields) {
         if (Array.isArray(fields)) {
           const values = {}
-          fields.forEach(field => {
+          fields.forEach((field) => {
             values[field] = this.form[field]
           })
           return values
@@ -58,13 +58,13 @@ export function useForm(options = {}) {
       },
       // 设置表单字段验证状态
       setFields(fields) {
-        Object.keys(fields).forEach(key => {
+        Object.keys(fields).forEach((key) => {
           const field = fields[key]
           if (field.value !== undefined) {
             this.$set(this.form, key, field.value)
           }
           if (field.errors) {
-            this.$refs.form.fields.forEach(item => {
+            this.$refs.form.fields.forEach((item) => {
               if (item.prop === key) {
                 item.validateMessage = field.errors[0]
                 item.validateState = 'error'
@@ -77,7 +77,7 @@ export function useForm(options = {}) {
     render(h) {
       // 渲染表单项
       const renderFormItems = () => {
-        return formItems.map(item => {
+        return formItems.map((item) => {
           const {
             prop, // 表单域字段
             label, // 标签文本
@@ -98,7 +98,7 @@ export function useForm(options = {}) {
                 ...restProps
               },
               on: {
-                input: val => {
+                input: (val) => {
                   this.$set(this.form, prop, val)
                 },
                 ...events
@@ -112,7 +112,7 @@ export function useForm(options = {}) {
                 return h(
                   'el-select',
                   commonProps,
-                  options.map(option => {
+                  options.map((option) => {
                     return h('el-option', {
                       props: {
                         label: option.label,
@@ -126,7 +126,7 @@ export function useForm(options = {}) {
                 return h(
                   'el-radio-group',
                   commonProps,
-                  options.map(option => {
+                  options.map((option) => {
                     return h(
                       'el-radio',
                       {
@@ -143,7 +143,7 @@ export function useForm(options = {}) {
                 return h(
                   'el-checkbox-group',
                   commonProps,
-                  options.map(option => {
+                  options.map((option) => {
                     return h(
                       'el-checkbox',
                       {
@@ -220,10 +220,10 @@ export function useForm(options = {}) {
                   on: {
                     click: () => {
                       this.validate()
-                        .then(formData => {
+                        .then((formData) => {
                           this.$emit('submit', formData)
                         })
-                        .catch(err => {
+                        .catch((err) => {
                           this.$emit('error', err)
                         })
                     }

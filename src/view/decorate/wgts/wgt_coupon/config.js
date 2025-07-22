@@ -48,7 +48,7 @@ export default {
       三张图片或更多（宽度138px，高度90px）`
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, data, voucher_package } = v
     return {
       name,
@@ -57,10 +57,10 @@ export default {
       voucher_package
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

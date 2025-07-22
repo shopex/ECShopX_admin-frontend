@@ -10,7 +10,7 @@ async function initApplication() {
   await bootstrap()
 }
 
-import('@/composables/useTheme.js').then(res => {
+import('@/composables/useTheme.js').then((res) => {
   const { updateThemeColor } = res.useTheme()
   updateThemeColor()
 

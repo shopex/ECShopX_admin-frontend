@@ -19,7 +19,7 @@ export default {
       label: '宣传图',
       key: 'imgUrl',
       component: function (h, { key }) {
-        return <SpImagePicker v-model={this.value[key]} size="small" />
+        return <SpImagePicker v-model={this.value[key]} size='small' />
       },
       value: '',
       tip: `建议尺寸:（宽度640px，高度自适应）`
@@ -88,7 +88,7 @@ export default {
       value: []
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const {
       name,
       base,
@@ -107,10 +107,10 @@ export default {
       items
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

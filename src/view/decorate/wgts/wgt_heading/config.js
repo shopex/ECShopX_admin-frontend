@@ -62,7 +62,7 @@ export default {
       value: '1.5'
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, config } = v
     return {
       name,
@@ -70,17 +70,17 @@ export default {
       ...config
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',
           padded: 'padded'
         })
       },
-      config: v => {
+      config: (v) => {
         return pickBy(v, {
           align: 'align',
           weight: 'weight',

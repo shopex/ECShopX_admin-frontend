@@ -22,7 +22,7 @@ export default {
       tip: `建议尺寸:</br>大图（175px * 310px）小图（175px * 150px）`
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, config, data } = v
     return {
       name,
@@ -31,10 +31,10 @@ export default {
       data
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

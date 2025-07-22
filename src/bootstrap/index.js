@@ -38,7 +38,7 @@ async function bootstrap() {
     router,
     store,
     mounted() {},
-    render: h => h(App)
+    render: (h) => h(App)
   }).$mount('#app')
 
   unmountGlobalLoading()

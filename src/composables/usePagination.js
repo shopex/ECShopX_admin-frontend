@@ -35,7 +35,7 @@ function usePagination(
         extra
       )
     )
-      .then(res => {
+      .then((res) => {
         state.data = res.list || []
         state.total = res.total || 0
         state.hasNext = state.page * state.pageSize < state.total

@@ -116,7 +116,7 @@ export default {
                   <el-radio-button label="2">介绍页</el-radio-button>
                 </el-radio-group>
 
-                {value.type === 2 && (
+                {value.type == 2 && (
                   <div class="mt-2 flex items-center">
                     <el-button onClick={this.onSelectPage}>
                       {value.template_id ? `引导页名称：${value.template_name}` : '选择页面'}
@@ -161,6 +161,9 @@ export default {
   async mounted() {
     // 页面加载时获取现有配置
     const res = await this.$api.store.fetchEntryStoreRules()
+    if(res?.length == 0) {
+      return
+    }
     this.formData.enterStoreByshopCode = res.distributor_code
     this.formData.enterStoreByGuideMaterial = res.shop_assistant
     this.formData.enterWhiteListStore = res.shop_white

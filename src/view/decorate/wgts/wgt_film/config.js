@@ -33,7 +33,7 @@ export default {
       label: '选择视频',
       key: 'data',
       component: function (h, { key }) {
-        return <SpVideoPicker v-model={this.value[key]} size="small" />
+        return <SpVideoPicker v-model={this.value[key]} size='small' />
       },
       value: {}
     },
@@ -45,7 +45,7 @@ export default {
       value: 0
     }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, data } = v
     let _data = data.flat()[0] || {}
     return {
@@ -54,10 +54,10 @@ export default {
       data: _data
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

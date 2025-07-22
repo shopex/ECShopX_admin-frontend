@@ -1,7 +1,7 @@
 import { createSetting } from '@shopex/finder'
 
-export default vm => {
-  const formatDate = timestamp => {
+export default (vm) => {
+  const formatDate = (timestamp) => {
     if (timestamp == '0') {
       return '-'
     }
@@ -14,7 +14,7 @@ export default vm => {
     var ss = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
     return YY + MM + DD + ' ' + hh + mm + ss
   }
-  const formatterStatus = v => {
+  const formatterStatus = (v) => {
     if (v == '1') {
       return '已通过'
     } else if (v == '2') {

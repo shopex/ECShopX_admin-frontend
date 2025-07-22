@@ -13,6 +13,6 @@ export const fetchEntryStoreRules = () => {
  * @param {Object} params - 需要保存的店铺规则参数
  * @returns {Promise} 请求结果
  */
-export const saveEntryStoreRules = params => {
+export const saveEntryStoreRules = (params) => {
   return requestClient.post('/distributor/config/inRule', params)
 }

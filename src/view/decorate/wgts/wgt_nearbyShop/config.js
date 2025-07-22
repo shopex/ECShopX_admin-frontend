@@ -63,7 +63,7 @@ export default {
     //   value: 'LBS定位'
     // }
   ],
-  transformIn: v => {
+  transformIn: (v) => {
     const { name, base, seletedTags = [], productLabel = [] } = v
     return {
       name,
@@ -72,10 +72,10 @@ export default {
       productLabel
     }
   },
-  transformOut: v => {
+  transformOut: (v) => {
     return pickBy(v, {
       name: 'name',
-      base: v => {
+      base: (v) => {
         return pickBy(v, {
           title: 'title',
           subtitle: 'subtitle',

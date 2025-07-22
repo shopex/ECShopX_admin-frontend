@@ -7,7 +7,7 @@ function install(Vue) {
     context: {
       qs: false,
       globalHooks: {
-        beforeQuery: p => {
+        beforeQuery: (p) => {
           let params = {
             ...p,
             pageSize: p.pageSize,
@@ -18,7 +18,7 @@ function install(Vue) {
           delete params.pageNum
           return params
         },
-        afterQuery: response => {
+        afterQuery: (response) => {
           const { status_code, message } = response.data.data
           if (status_code == 500) {
             return Vue.prototype.$message.error(message)

@@ -78,7 +78,7 @@ export default {
     },
     // 渲染 select 组件
     renderSelect(props = {}) {
-      const options = (props.options || []).map(option =>
+      const options = (props.options || []).map((option) =>
         h('el-option', {
           props: {
             key: option.value,
@@ -109,7 +109,7 @@ export default {
     },
     // 渲染 radio 组件
     renderRadio(props = {}) {
-      const radios = (props.options || []).map(option =>
+      const radios = (props.options || []).map((option) =>
         h(
           'el-radio',
           {
@@ -138,7 +138,7 @@ export default {
     },
     // 渲染 checkbox 组件
     renderCheckbox(props = {}) {
-      const checkboxes = (props.options || []).map(option =>
+      const checkboxes = (props.options || []).map((option) =>
         h(
           'el-checkbox',
           {
@@ -179,7 +179,7 @@ export default {
           },
           class: props.class || '',
           on: {
-            click: event => {
+            click: (event) => {
               this.$emit('click', event)
               if (props.onClick) {
                 props.onClick(event)
@@ -193,11 +193,11 @@ export default {
     // 渲染 datetime-range 组件
     renderDateTimePicker(props = {}) {
       return (
-        <div class="el-date-picker__wrapper">
+        <div class='el-date-picker__wrapper'>
           <el-date-picker
-            style="width: 100%"
+            style='width: 100%'
             type={this.componentProps.type}
-            startPlaceholder="开始日期/结束时间"
+            startPlaceholder='开始日期/结束时间'
             default-time={['00:00:00', '23:59:59']}
             // endPlaceholder="结束日期"
             rangeSeparator={`${this.modelValue.length > 1 ? '至' : ''}`}
@@ -263,7 +263,7 @@ export default {
   },
   render(h) {
     if (this.component === 'group') {
-      return <div class="form-field-group">{this.label}</div>
+      return <div class='form-field-group'>{this.label}</div>
     }
 
     // 获取对应的渲染函数
