@@ -403,7 +403,7 @@ export default {
           //   isflag = true
           //   this.$message({ message: '请输入会员折扣', type: 'error' })
           //   break
-          // } else 
+          // } else
           // if (!discountReg.test(this.levelData[i].privileges.discount)) {
           //   isflag = true
           //   this.$message({
