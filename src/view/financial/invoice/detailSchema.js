@@ -47,7 +47,7 @@ export const formSchema = (vm) => bindThisForFormSchema([
     }
   },
   {
-    key: 'user_id',
+    key: 'user_card_code',
     label: '会员编号',
     type: 'text',
     display: 'inline'

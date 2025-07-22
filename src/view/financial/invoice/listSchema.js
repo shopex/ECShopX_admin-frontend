@@ -226,7 +226,7 @@ export const tableSchema = (vm) =>
       },
       {
         name: '会员编号',
-        key: 'user_id',
+        key: 'user_card_code',
         width: '100'
       },
       {
