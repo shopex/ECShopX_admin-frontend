@@ -206,7 +206,7 @@ export const tableSchema = (vm) =>
         key: 'invoice_type_code',
         width: '120',
         render(h, { row }) {
-          return <span> {row.invoice_type == 'enterprise' ? invoice_type_code_map[row.invoice_type_code] : ''} </span>
+          return <span> { invoice_type_code_map[row.invoice_type_code] } </span>
         }
       },
       {
