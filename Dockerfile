@@ -44,8 +44,8 @@ COPY package*.json ./
 RUN npm config set registry https://registry.npmmirror.com && npm config set @shopex:registry http://registry.npm.ishopex.cn && npm config set python /usr/bin/python && npm ci
 
 COPY . .
-COPY .env ./
-COPY .env.* ./
+# COPY .env ./
+# COPY .env.* ./
 RUN ls -la
 RUN ${CMD}
 RUN ls -l /app/dist
