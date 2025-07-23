@@ -26,6 +26,11 @@
       margin-right: 4px;
     }
   }
+  .sku-item-group {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
 }
 </style>
 <template>
@@ -37,6 +42,7 @@
         :label="`${item.skuName}:`"
       >
         <el-checkbox-group v-model="item.checkedSku" @change="onSkuChange">
+          <div class="sku-item-group">
           <span v-for="sku in item.skuValue" :key="sku.attribute_value_id" class="sku-item">
             <el-checkbox :label="sku.attribute_value_id">{{
               sku.custom_attribute_value || sku.attribute_value
@@ -47,7 +53,8 @@
               </div>
               <el-link class="leading-none mx-3" slot="reference" icon="el-icon-edit" />
             </el-popover>
-          </span>
+            </span>
+          </div>
         </el-checkbox-group>
       </el-form-item>
     </el-form>
@@ -117,11 +124,6 @@
       <el-table-column label="货号">
         <template slot-scope="scope">
           <el-input v-model="scope.row.item_bn" :maxlength="60" size="mini" placeholder="货号" />
-        </template>
-      </el-table-column>
-      <el-table-column label="规格备注">  
-        <template slot-scope="scope"> 
-          <el-input v-model="scope.row.spec_remark" :maxlength="60" size="mini" placeholder="规格备注" />
         </template>
       </el-table-column>
       <el-table-column label="重量">
@@ -259,11 +261,6 @@
           <el-input v-model="scope.row.item_bn" size="mini" />
         </template>
       </el-table-column>
-      <el-table-column prop="spec_remark" label="规格备注">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.spec_remark" size="mini" />
-        </template>
-      </el-table-column>
       <el-table-column prop="weight" label="重量（kg）">
         <template slot-scope="scope">
           <el-input v-model="scope.row.weight" size="mini" />
@@ -395,7 +392,6 @@ export default {
           supplier_goods_bn: '',
           tax_rate: '',
           delivery_time:"",
-          spec_remark:""
         }
       ],
       statusOption,
@@ -525,7 +521,6 @@ export default {
             item_spec,
             supplier_goods_bn,
             tax_rate,
-            spec_remark,
             delivery_time
           }) => {
             const vKey = item_spec.map(({ spec_value_id }) => spec_value_id).join('_')
@@ -543,7 +538,6 @@ export default {
               max_num,
               item_bn,
               weight,
-              spec_remark,
               delivery_time,
               volume,
               price: isNaN(price / 100) ? '' : price / 100,
@@ -577,7 +571,6 @@ export default {
             point_num,
             supplier_goods_bn,
             tax_rate,
-             spec_remark,
             delivery_time,
           } = item
           _specItems.push({
@@ -598,7 +591,6 @@ export default {
             point_num,
             supplier_goods_bn,
             tax_rate,
-             spec_remark,
             delivery_time
           })
         }
@@ -645,7 +637,6 @@ export default {
         point_num,
         supplier_goods_bn,
         tax_rate,
-         spec_remark,
             delivery_time
       } = this.bulkFilling[0]
 
@@ -664,8 +655,7 @@ export default {
         item.point_num = point_num
         item.supplier_goods_bn = supplier_goods_bn
         item.tax_rate = tax_rate
-         item.spec_remark = spec_remark
-         item.delivery_time = delivery_time
+        item.delivery_time = delivery_time
       })
     },
     // 清除
@@ -690,7 +680,6 @@ export default {
         point_num: '',
         supplier_goods_bn: '',
         tax_rate: '',
-        spec_remark: '',
         delivery_time: ''
       })
     }
