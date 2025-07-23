@@ -28,7 +28,7 @@ export default {
           component: 'switch',
           value: false,
           tip: () => (
-            <div class="text-sm text-[#999]">
+            <div class='text-sm text-[#999]'>
               <p>通过带门店参小程序码扫码进入对应店铺</p>
               <p>通过分享小程序卡片进入对应店铺</p>
             </div>
@@ -40,7 +40,7 @@ export default {
           component: 'switch',
           value: false,
           tip: () => (
-            <div class="text-sm text-[#999]">
+            <div class='text-sm text-[#999]'>
               <p>通过扫企微码添加导购加好友的欢迎语推送的小程序卡片进店</p>
               <p>通过导购商城分享的小程序海报、小程序卡片进店</p>
             </div>
@@ -55,29 +55,27 @@ export default {
           label: '进入白名单会员店',
           component: 'switch',
           componentProps: {
-            disabled: form => form.enterStoreByGuide
-            // onChange: (val, form) => {
-            //   debugger
-            // },
+            disabled: (form) => form.enterStoreByGuide
           },
-          value: false
-
-          // tip: () => (
-          //   <div class="text-sm text-[#999]">
-          //     <p>通过扫导购企业微信码加好友、进入导购归属店铺</p>
-          //   </div>
-          // )
+          value: false,
+          tip: () => (
+            <div class='text-sm text-[#999]'>
+              <p>需要开启店铺白名单</p>
+              <p>进入用户绑定白名单的店铺</p>
+            </div>
+          )
         },
         {
           fieldName: 'enterStoreByGuide',
           label: '进入专属导购所属店',
           component: 'switch',
           componentProps: {
-            disabled: form => form.enterWhiteListStore
+            disabled: (form) => form.enterWhiteListStore
           },
           value: false,
           tip: () => (
-            <div class="text-sm text-[#999]">
+            <div class='text-sm text-[#999]'>
+              <p>需要开通导购应用</p>
               <p>通过扫导购企业微信码加好友、进入导购归属店铺</p>
             </div>
           )
@@ -88,7 +86,7 @@ export default {
           component: 'switch',
           value: false,
           tip: () => (
-            <div class="text-sm text-[#999]">
+            <div class='text-sm text-[#999]'>
               <p>通过用户的LBS定位，进入用户附近的店铺</p>
             </div>
           )
@@ -105,24 +103,24 @@ export default {
               <div>
                 <el-radio-group
                   v-model={value.type}
-                  onInput={e => {
+                  onInput={(e) => {
                     onInput({
                       ...value,
                       type: e
                     })
                   }}
                 >
-                  <el-radio-button label="1">默认店</el-radio-button>
-                  <el-radio-button label="2">介绍页</el-radio-button>
+                  <el-radio-button label='1'>默认店</el-radio-button>
+                  <el-radio-button label='2'>介绍页</el-radio-button>
                 </el-radio-group>
 
                 {value.type == 2 && (
-                  <div class="mt-2 flex items-center">
+                  <div class='mt-2 flex items-center'>
                     <el-button onClick={this.onSelectPage}>
                       {value.template_id ? `引导页名称：${value.template_name}` : '选择页面'}
                     </el-button>
                     <el-button
-                      type="text"
+                      type='text'
                       onClick={() => {
                         onInput({
                           ...value,
@@ -161,7 +159,7 @@ export default {
   async mounted() {
     // 页面加载时获取现有配置
     const res = await this.$api.store.fetchEntryStoreRules()
-    if(res?.length == 0) {
+    if (res?.length == 0) {
       return
     }
     this.formData.enterStoreByshopCode = res.distributor_code
