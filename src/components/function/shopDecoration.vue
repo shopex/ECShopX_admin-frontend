@@ -882,6 +882,17 @@ export default {
           seletedTags: []
         })
       }
+      if (this.pagetype !== 'guide') {
+        this.initData.push({
+          name: 'coupon',
+          base: {
+            title: '到店优惠',
+            subtitle: '游客专享福利',
+            padded: true
+          },
+          data: []
+        })
+      }
       if (this.VERSION_PLATFORM() && !isHaveNearbyShop) {
         this.initData.unshift({
           name: 'nearbyShop',

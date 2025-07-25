@@ -98,17 +98,17 @@ export default {
   },
   created() {},
   mounted() {
-    if (!this.VERSION_PLATFORM && !this.VERSION_B2C) {
+    if (!this.VERSION_PLATFORM() && !this.VERSION_B2C()) {
       // 平台版&b2c隐藏助力活动和助力订单
       this.list.push(
         { id: 'boost_activity', title: '助力活动' },
         { id: 'boost_order', title: '助力订单' }
       )
     }
-    if (!this.VERSION_STANDARD) {
+    if (!this.VERSION_STANDARD()) {
       this.list.push({ id: 'tenants', title: '商家入驻' })
     }
-    if (!this.VERSION_IN_PURCHASE) {
+    if (!this.VERSION_IN_PURCHASE()) {
       this.list.push({ id: 'community_group_enable', title: '社区团购（H5不支持）' })
     }
     if (this.value.data) {

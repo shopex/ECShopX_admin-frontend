@@ -306,11 +306,11 @@ export default {
       let index = Number(e.target.name)
       var reg = /(^[1-9]((\.)[0-9])?$)|(^[0]((\.)[0-9])$)|(^10$)/
       if (this.levelData[index].discount_checked) {
-        if (value == '') {
+        if (value == '' && this.VERSION_SHUYUN()) {
           this.$message({ message: '请输入会员折扣', type: 'error' })
           return
         }
-        if (!reg.test(value)) {
+        if (!reg.test(value) && this.VERSION_SHUYUN()) {
           this.$message({
             message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
             type: 'error'
@@ -387,11 +387,11 @@ export default {
           }
         }
         if (this.levelData[i].discount_checked) {
-          if (this.levelData[i].privileges.discount == '') {
+          if (this.levelData[i].privileges.discount == '' && this.VERSION_SHUYUN()) {
             isflag = true
             this.$message({ message: '请输入会员折扣', type: 'error' })
             break
-          } else if (!discountReg.test(this.levelData[i].privileges.discount)) {
+          } else if (!discountReg.test(this.levelData[i].privileges.discount && this.VERSION_SHUYUN())) {
             isflag = true
             this.$message({
               message: '会员折扣为大于0小于等于10的数字，精确到小数点后1位',
