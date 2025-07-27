@@ -1,5 +1,6 @@
 <template>
-  <div class="page-body">
+  <SpPage class="page-body">
+    <SpRouterView>
       <SpFinder
         ref="finder"
         url="/order/category-taxrate/list"
@@ -32,7 +33,7 @@
         @onSubmit="onDialogFormSubmit"
       />
     </SpRouterView>
-  </div>
+  </SpPage>
 </template>
 
 <script lang="js">

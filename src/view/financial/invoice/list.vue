@@ -1,5 +1,5 @@
 <template>
-  <div class="page-body">
+  <SpPage>
     <SpRouterView>
       <SpFilterForm :model="formData" @onSearch="onSearch" @onReset="onSearch">
       <SpFilterFormItem prop="distributor_id" label="来源店铺:">
@@ -141,7 +141,7 @@
         />
       </SpDrawer>
     </SpRouterView>
-  </div>
+  </SpPage>
 </template>
 
 <script lang="js">

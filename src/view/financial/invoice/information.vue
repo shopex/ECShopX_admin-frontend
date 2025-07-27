@@ -1,5 +1,6 @@
 <template>
-  <div class="page-body">
+  <SpPage>
+    <SpRouterView>
       <SpFinder
         ref="finder"
         url="/order/invoice-seller/list"
@@ -31,7 +32,7 @@
         @onSubmit="onDialogFormSubmit"
       />
     </SpRouterView>
-  </div>
+  </SpPage>
 </template>
 
 <script lang="js">

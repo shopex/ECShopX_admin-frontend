@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <SpForm v-model="form" size="min" :form-list="formList" :submit="false" />
 
     <!-- 请确认重发邮箱 -->
@@ -15,7 +15,7 @@
       :confirm-status="confirmStatus"
       @onSubmit="onConfirmFormSubmit"
     />
-  </div>
+  </SpPage>
 </template>
 
 <script>

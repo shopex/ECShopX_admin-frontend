@@ -1,35 +1,35 @@
 <template>
-  <div v-loading="loading">
-    <el-form
+  <SpPage v-loading="loading">
+    <SpFilterForm
       ref="form"
       :model="form"
       label-width="100px"
     >
-      <el-form-item label="appKey" prop="app_key">
+      <SpFilterFormItem label="appKey" prop="app_key">
         <el-input
           v-model="form.app_key"
           style="width: 300px"
         />
-      </el-form-item>
-      <el-form-item label="appSecret" prop="app_secret">
+      </SpFilterFormItem>
+      <SpFilterFormItem label="appSecret" prop="app_secret">
         <el-input
           v-model="form.app_secret"
           style="width: 300px"
         />
-      </el-form-item>
-      <el-form-item label="企业标识" prop="ent_sign">
+      </SpFilterFormItem>
+      <SpFilterFormItem label="企业标识" prop="ent_sign">
         <el-input
           v-model="form.ent_sign"
           style="width: 300px"
         />
-      </el-form-item>
-      <el-form-item label="是否启用">
+      </SpFilterFormItem>
+      <SpFilterFormItem label="是否启用">
         <el-switch
           v-model="form.is_open"
           active-color="#13ce66"
           inactive-color="#ff4949"
         />
-      </el-form-item>
+      </SpFilterFormItem>
       <div class="section-footer with-border content-center">
         <el-button
           v-loading="lock"
@@ -39,8 +39,8 @@
           保存
         </el-button>
       </div>
-    </el-form>
-  </div>
+    </SpFilterForm>
+  </SpPage>
 </template>
 
 <script>

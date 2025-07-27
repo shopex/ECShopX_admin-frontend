@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <SpPage>
     <SpForm v-model="form" :reset-btn="false" submit-btn-text="保存配置" :form-list="formList" @onSubmit="onSaveConfig" />
-  </div>
+  </SpPage>
 </template>
 
 <script>
