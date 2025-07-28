@@ -130,10 +130,10 @@ const routes = [
         name: 'invoiceList',
         path: 'invoice/invoice-list',
         meta: {
-          aliasName: 'invoiceManagement',
+          aliasName: 'InvoiceRequest',
           icon: 'pay-circle',
-          title: '发票列表',
-          permissions: ['financial.examine.invoiceManagement']
+          title: '开票申请',
+          permissions: ['financial.invoice.list']
         },
         component: () => import('@/view/financial/invoice/list'),
         children: [
@@ -154,18 +154,18 @@ const routes = [
           aliasName: 'invoiceSetting',
           icon: 'pay-circle',
           title: '发票配置',
-          permissions: ['financial.examine.invoiceSetting']
+          permissions: ['financial.invoice.setting']
         },
         component: () => import('@/view/financial/invoice/setting')
       },
       {
         name: 'sellerInformation',
-        path: 'invoice/seller_information',
+        path: 'invoice/seller-information',
         meta: {
           aliasName: 'invoiceInfo',
           icon: 'pay-circle',
           title: '销方信息',
-          permissions: ['financial.examine.invoiceInfo']
+          permissions: ['financial.invoice.information']
         },
         component: () => import('@/view/financial/invoice/information')
       },
@@ -176,7 +176,7 @@ const routes = [
           aliasName: 'invoiceTax',
           icon: 'pay-circle',
           title: '开票税率',
-          permissions: ['financial.examine.invoiceTax']
+          permissions: ['financial.invoice.invoiceTax']
         },
         component: () => import('@/view/financial/invoice/invoiceTax')
       },
@@ -187,7 +187,7 @@ const routes = [
           aliasName: 'invoiceConfirmation',
           icon: 'pay-circle',
           title: '专票确认书',
-          permissions: ['financial.examine.invoiceConfirmation']
+          permissions: ['financial.invoice.invoiceConfirmation']
         },
         component: () => import('@/view/financial/invoice/invoiceConfirmation')
       }
