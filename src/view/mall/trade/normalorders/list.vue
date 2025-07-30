@@ -471,7 +471,7 @@
           </el-table-column>
           <el-table-column type="selection" width="55" fixed="left" />
           <!-- <el-table-column prop="source_name" label="来源"></el-table-column> -->
-          <el-table-column label="操作" fixed="left" width="100">
+          <el-table-column label="操作" fixed="left" width="120">
             <template slot-scope="scope">
               <el-button type="text" style="margin-right: 8px">
                 <router-link
@@ -500,7 +500,7 @@
                   </template>
                 </div>
                 <el-button slot="reference" type="text">
-                  更多<i class="iconfont icon-angle-double-right" />
+                  更多<i class="el-icon-d-arrow-right" />
                 </el-button>
               </el-popover>
             </template>
@@ -1611,20 +1611,20 @@ export default {
         }
 
         if (order_status == 'NOTPAY') {
-          if (VERSION_PLATFORM) {
+          if (VERSION_PLATFORM()) {
             if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '改价', key: 'changePrice' })
             }
-          } else if (!VERSION_IN_PURCHASE) {
+          } else if (!VERSION_IN_PURCHASE()) {
             actionBtns.push({ name: '改价', key: 'changePrice' })
           }
         }
         if (can_apply_aftersales == 1) {
-          if (VERSION_PLATFORM) {
+          if (VERSION_PLATFORM()) {
             if ((this.IS_ADMIN() && distributor_id == 0) || this.IS_DISTRIBUTOR()) {
               actionBtns.push({ name: '申请售后', key: 'salesAfter' })
             }
-          } else if (!VERSION_IN_PURCHASE) {
+          } else if (!VERSION_IN_PURCHASE()) {
             actionBtns.push({ name: '申请售后', key: 'salesAfter' })
           }
         }
