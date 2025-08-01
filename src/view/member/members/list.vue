@@ -211,7 +211,9 @@
           <template slot-scope="scope">
             {{ scope.row.mobile }}
             <el-tooltip
-              v-if="$store.getters.login_type != 'distributor' && datapass_block == 0 && !dmcrmIsOpen"
+              v-if="$store.getters.login_type != 'distributor' &&
+                datapass_block == 0 &&
+                !VERSION_SHUYUN() && !dmcrmIsOpen"
               class="item"
               effect="dark"
               content="修改手机号"
