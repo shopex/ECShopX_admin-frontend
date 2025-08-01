@@ -23,19 +23,30 @@
   width: 200px;
   height: 200px;
 }
-</style>
-<style lang="scss">
 .physical-cell-reason {
   @include text-overflow();
   width: 180px;
 }
-</style>
-<style >
-.tb-add-dialog >>> .el-form-item__content {
+
+:deep(.tb-add-dialog) {
+  .el-form-item__content {
     margin-left: 0px !important;
   }
-.tb-add-dialog >>>  .el-form {
-  margin-right: 0px !important;
+  .el-dialog__body .el-form {
+    margin-right: 0px !important;
+  }
+}
+</style>
+
+<style lang="scss">
+/* 全局样式 */
+.tb-add-dialog {
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
+  .el-dialog__body .el-form {
+    margin-right: 0 !important;
+  }
 }
 </style>
 <template>
@@ -878,7 +889,7 @@ export default {
       changePriceDialog: false,
       changePriceForm: {},
       changePriceFormList: [],
-
+      selectedSpu: [],
       tableList: {
         actions: [
           {
@@ -2116,9 +2127,24 @@ export default {
     },
     showTbAddDialog() {
       this.tbAddDialog = true
+      this.selectedSpu = []
     },
     onTbAddSubmit() {
-      console.log(this.tbAddForm)
+      this.$api.goods
+        .syncSpuToLocal({
+          spu_ids: this.selectedSpu.map((item) => item.outer_id)
+        })
+        .then((res) => {
+          this.$message.success('操作成功')
+          this.tbAddDialog = false
+          this.$refs['finder'].refresh(true)
+        })
+    },
+    syncSpuToLocal() {
+      this.$api.goods.setSpuToLocal().then((res) => {
+        this.$message.success('操作成功')
+        this.$refs['finderDialog'].refresh()
+      })
     }
   }
 }

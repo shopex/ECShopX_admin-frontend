@@ -23,12 +23,14 @@
             <p>操作详情：{{ key.detail }}</p>
             <SpFinder
               ref="finder"
-              :data="[]"
+              :data="key.params"
               :setting="{
                 columns: [
-                  { name: '商品编码', key: 'item_sn' },
-                  { name: '同步状态', key: 'sync_status' },
-                  { name: '原因', key: 'reason' },
+                  { name: '商品编码', key: 'outer_id' },
+                  { name: '同步状态', key: 'sync_status',render(row) {
+                    return row.sync_status == success ? '成功' : '失败'
+                  } },
+                  { name: '原因', key: 'reason' }
                 ]
               }"
               :no-selection="true"
@@ -41,20 +43,15 @@
 </template>
 
 <script>
-import { getProcessLog } from '@/api/trade'
 export default {
   data() {
     return {
       loading: false,
-      order_id: '',
       list: []
     }
   },
   mounted() {
-    if (this.$route.query.orderId) {
-      this.order_id = this.$route.query.orderId
-      this.getProcessLogInfo()
-    }
+    this.getProcessLogInfo()
   },
   methods: {
     retrunClick() {
@@ -62,10 +59,15 @@ export default {
     },
     getProcessLogInfo() {
       this.loading = true
-      getProcessLog(this.order_id).then((response) => {
-        this.list = response.data.data
-        this.loading = false
-      })
+      this.$api.goods
+        .getSyncTbSpuLogs({
+          page: 1,
+          pageSize: 1000
+        })
+        .then((response) => {
+          this.list = response.list
+          this.loading = false
+        })
     }
   }
 }
