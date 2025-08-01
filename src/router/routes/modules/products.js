@@ -32,6 +32,14 @@ const routes = [
             }
           },
           {
+            path: 'physicalupload/:itemId?',
+            component: () => import('@/view/mall/goods/physical/normalGoodsUpload.vue'),
+            meta: {
+              title: '同步淘宝商品',
+              hidden: true
+            }
+          },
+          {
             path: 'stock-import',
             component: () => import('@/view/mall/goods/physical/normalGoodsStoreUpload'),
             meta: {
