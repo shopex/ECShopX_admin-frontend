@@ -53,16 +53,16 @@
                 @blur="nameblur"
               />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
             </div>
+            <div style="display: flex;">
+              <span class="txt">等级背景</span>
+              <SpImagePicker v-model="item.grade_background" />
+            </div>
             <div>
               <span class="txt">等级编码</span
               ><el-input
                 v-model="item.dm_grade_code"
                 placeholder="请输入内容"
               />
-            </div>
-            <div style="display: flex;">
-              <span class="txt">等级背景</span>
-              <SpImagePicker v-model="item.grade_background" />
             </div>
             <div class="clearfix">
               <span class="txt f_l">升级条件</span>
