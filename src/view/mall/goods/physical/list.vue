@@ -30,6 +30,14 @@
   width: 180px;
 }
 </style>
+<style >
+.tb-add-dialog >>> .el-form-item__content {
+    margin-left: 0px !important;
+  }
+.tb-add-dialog >>>  .el-form {
+  margin-right: 0px !important;
+}
+</style>
 <template>
   <div class="page-body">
     <SpRouterView>
@@ -49,6 +57,9 @@
               商品导入
             </el-dropdown-item>
             <el-dropdown-item command="physicalstoreupload"> 库存导入 </el-dropdown-item>
+            <el-dropdown-item command="physicalupload?file_type=physical_store_upload">
+              上下架导入
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -234,10 +245,32 @@
         >
           开售
         </el-button>
-        <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
-        <el-button type="primary" plain @click="()=>handleImport('physicalupload?file_type=upload_tb_items')">
-          同步淘宝商品
-        </el-button>
+        <el-dropdown>
+          <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
+            同步淘宝商品<i class="el-icon-arrow-down el-icon--right" />
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="physicalupload?file_type=upload_tb_items">
+              <export-tip
+                @exportHandle="
+                  () => {
+                    showTbAddDialog()
+                  }
+                "
+              >
+                淘宝增量同步
+              </export-tip>
+            </el-dropdown-item>
+            <el-dropdown-item command="physicalupload?file_type=upload_tb_items">
+              <export-tip
+                @exportHandle="() => handleImport('physicalupload?file_type=upload_tb_items')"
+              >
+                链接导入同步
+              </export-tip>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
         <el-dropdown>
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导出<i class="el-icon-arrow-down el-icon--right" />
@@ -493,7 +526,7 @@
 
       <el-dialog :title="sunCodeTitle" :visible.sync="sunCode" width="360px">
         <div class="page-code">
-          <img class="page-code-img" :src="appCodeUrl">
+          <img class="page-code-img" :src="appCodeUrl" />
           <div class="page-btns">
             <el-button type="primary" plain @click="handleDownload(sunCodeTitle)">
               下载码
@@ -538,6 +571,16 @@
         </el-table>
       </SpDrawer>
     </SpRouterView>
+
+    <SpDialog
+      v-model="tbAddDialog"
+      title="淘宝增量同步"
+      class="tb-add-dialog"
+      :width="'1200px'"
+      :form="tbAddForm"
+      :form-list="tbAddFormList"
+      @onSubmit="onTbAddSubmit"
+    />
   </div>
 </template>
 <script>
@@ -546,6 +589,7 @@ import { exportItemsData, exportItemsTagData, saveIsGifts, uploadWdtErpItems } f
 import { IS_ADMIN, IS_SUPPLIER, IS_DISTRIBUTOR } from '@/utils'
 import { getPageCode } from '@/api/marketing'
 import { GOODS_APPLY_STATUS } from '@/consts'
+import { createTbAddForm } from './schema'
 
 export default {
   data() {
@@ -591,6 +635,8 @@ export default {
     // }
 
     return {
+      tbAddDialog: false,
+      tbAddForm: {},
       formLoading: false,
       commissionDialog: false,
       commissionForm: { goods_id: 0, commission_ratio: '' },
@@ -1423,6 +1469,9 @@ export default {
       tabList.splice(1, 0, { name: '淘宝商品', value: 'taobao', activeName: 'taobao' })
 
       return tabList
+    },
+    tbAddFormList() {
+      return createTbAddForm(this)
     }
   },
   mounted() {
@@ -1616,7 +1665,7 @@ export default {
       }
 
       //淘宝商品
-      if(this.activeName == 'taobao'){
+      if (this.activeName == 'taobao') {
         this.searchParams.audit_status = ''
       }
       this.searchParams.is_taobao = this.activeName == 'taobao' ? 1 : ''
@@ -2064,6 +2113,12 @@ export default {
           })
         }
       })
+    },
+    showTbAddDialog() {
+      this.tbAddDialog = true
+    },
+    onTbAddSubmit() {
+      console.log(this.tbAddForm)
     }
   }
 }
