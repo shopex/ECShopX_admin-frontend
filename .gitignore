@@ -13,7 +13,7 @@ selenium-debug.log
 \.#*
 .idea/
 release.*
-.env
+.env.local
 .npm-cache/_cacache/
 .npm-cache/_locks/
 .npm-cache/_logs/
