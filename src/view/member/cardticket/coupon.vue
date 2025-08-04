@@ -155,7 +155,7 @@
                       详情
                     </router-link>
                   </el-button>
-                  <el-button
+                  <!-- <el-button
                     v-if="
                       scope.row.edit_btn == 'Y' &&
                       (!isShopadmin
@@ -172,7 +172,7 @@
                     >
                       编辑
                     </router-link>
-                  </el-button>
+                  </el-button> -->
                   <el-popover v-if="appID" placement="top" width="200" trigger="click">
                     <div>
                       <img class="page-code" :src="appCodeUrl">
@@ -199,13 +199,13 @@
                       投放
                     </el-button>
                   </el-popover>
-                  <el-button
+                  <!-- <el-button
                     v-if="scope.row.status != 'CARD_STATUS_DISPATCH'"
                     type="text"
                     @click="deleteCard(scope.row.card_id, scope.$index)"
                   >
                     删除
-                  </el-button>
+                  </el-button> -->
                 </div>
                 <!-- <a v-if="!scope.row.ifpass" href="#" @click="sendoutShowAction(scope.row.card_id, scope.$index)">投放</a> -->
               </template>

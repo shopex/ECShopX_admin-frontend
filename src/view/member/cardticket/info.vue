@@ -419,7 +419,7 @@
             </el-radio-group>
           </el-form-item>
           <div v-if="!zdShopHidden">
-            <el-button type="primary" @click="addStoreAction"> 选择门店 </el-button>
+            <el-button type="primary" @click="addStoreAction" :disabled="onlyShow"> 选择门店 </el-button>
             <el-table v-if="relStores.length > 0" :data="relStores" style="line-height: normal">
               <el-table-column label="ID" prop="wxShopId" width="60" />
               <el-table-column label="名称" prop="storeName" />
@@ -466,10 +466,10 @@
           </div>
         </el-card>
         <div class="content-center">
-          <el-button @click="cancelSubmit"> 取消 </el-button>
-          <el-button type="primary" :disabled="submitDisabled" @click="submitForm('form')">
+          <el-button @click="cancelSubmit"> 返回 </el-button>
+          <!-- <el-button type="primary" :disabled="submitDisabled" @click="submitForm('form')">
             提交
-          </el-button>
+          </el-button> -->
         </div>
       </template>
     </el-form>
@@ -1079,6 +1079,7 @@ export default {
       })
     },
     addStoreAction() {
+      if(this.onlyShow) return
       this.storeVisible = true
       this.setStatus = true
       this.relShopIds = this.form.rel_shops_ids
