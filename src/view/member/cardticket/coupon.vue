@@ -128,7 +128,7 @@
               <!-- <template>0</template> -->
             </el-table-column>
             <el-table-column width="200" prop="source_name" label="店铺" />
-            <el-table-column width="200" label="操作">
+            <el-table-column width="240" label="操作">
               <template slot-scope="scope">
                 <div class="operating-icons">
                   <el-button type="text">
@@ -143,6 +143,16 @@
                       }"
                     >
                       查看
+                    </router-link>
+                  </el-button>
+                  <el-button type="text">
+                    <router-link
+                      :to="{
+                        path: matchRoutePath('info'),
+                        query: { cardId: scope.row.card_id, onlyShow: true }
+                      }"
+                    >
+                      详情
                     </router-link>
                   </el-button>
                   <el-button
