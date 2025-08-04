@@ -157,7 +157,7 @@
                       详情
                     </router-link>
                   </el-button>
-                  <el-button
+                  <!-- <el-button
                     v-if="
                       scope.row.edit_btn == 'Y' &&
                       (!isShopadmin
