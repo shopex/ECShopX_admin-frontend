@@ -144,6 +144,77 @@
                        消费满<el-input  type="number"  v-model="form.deduct_shopping" placeholder="" style="width: 120px;" :min="1" :max="9999999"/>元 赠送1积分
                    </el-form-item> -->
         </div>
+
+        <template>
+            <el-form-item label="积分抵扣：">
+              <el-switch
+                v-model="form.isOpenDeductPoint"
+                :width="60"
+                active-value="true"
+                inactive-value="false"
+                inactive-color="#ccc"
+                active-text="开启"
+                inactive-text="关闭"
+                active-color="#13ce66"
+                @change="isOpenMemberPointHandle"
+              />
+            </el-form-item>
+            <el-form-item label="每单抵扣上限：">
+              <el-input
+                v-model="form.deduct_proportion_limit"
+                type="number"
+                placeholder=""
+                style="width: 120px"
+                :min="1"
+                :max="100"
+              />% 上限范围：1<=x<=100
+            </el-form-item>
+            <el-form-item label="抵扣比例：">
+              <el-input
+                v-model="form.deduct_point"
+                type="number"
+                placeholder=""
+                style="width: 120px"
+                :min="1"
+                :max="9999999"
+              />
+              积分 抵扣1元人民币
+            </el-form-item>
+            <el-form-item label="积分抵扣运费：">
+              <el-radio-group v-model="form.can_deduct_freight">
+                <el-radio label="1"> 包含 </el-radio>
+                <el-radio label="0"> 不包含 </el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="运费配置：">
+            <el-radio-group v-model="form.include_freight">
+              <el-radio label="true"> 包含 </el-radio>
+              <el-radio label="false"> 不包含 </el-radio>
+            </el-radio-group>
+            <p v-if="include_freight == 'true'" class="frm-tips">
+              说明：可设置订单中运费部分金额是否可获取积分
+            </p>
+            <p v-if="include_freight == 'false'" class="frm-tips">
+              说明：可设置订单中运费部分金额是否可获取积分
+            </p>
+          </el-form-item>
+            <el-form-item label="优先积分抵扣">
+              <el-switch
+                v-model="form.point_pay_first"
+                :width="60"
+                active-value="1"
+                inactive-value="0"
+                inactive-color="#ccc"
+                active-text="开启"
+                inactive-text="关闭"
+                active-color="#13ce66"
+              />
+              <span class="frm-tips"> 开启优先积分抵扣功能，消费者下单时优先使用积分抵扣</span>
+            </el-form-item>
+            <el-form-item label="积分规则：">
+              <SpRichText v-model="form.rule_desc" />
+            </el-form-item>
+          </template>
       </div>
       <div class="section-footer with-border content-center">
         <el-button type="primary" @click="save"> 保 存 </el-button>
