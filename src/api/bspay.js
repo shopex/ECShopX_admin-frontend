@@ -147,3 +147,30 @@ export const subAccountDetail = (id) => {
     method: 'get'
   })
 }
+
+// 获取提现余额
+export const getWithdrawBalance = () => {
+  return fetch({
+    url: '/bspay/withdraw/balance',
+    method: 'get'
+  })
+}
+
+// 提现审核
+export const withdrawAudit = (params) => {
+  console.log('withdrawAudit----params',params)
+  return fetch({
+    url: '/bspay/withdraw/audit',
+    method: 'post',
+    params:params
+  })
+}
+
+// 提现申请
+export const withdrawApply = (params) => {
+  return fetch({
+    url: '/bspay/withdraw/apply',
+    method: 'post',
+    params: params
+  })
+}

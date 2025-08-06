@@ -180,6 +180,15 @@ export const withdrawList = (params) => {
   })
 }
 
+// 获取提现审核列表
+export const withdrawAuditList = (params) => {
+  return fetch({
+    url: '/adapay/withdraw/audit/list',
+    method: 'get',
+    params
+  })
+}
+
 // 申请提现
 export const applyForWithdrawal = (params) => {
   return fetch({

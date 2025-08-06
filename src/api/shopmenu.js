@@ -13,10 +13,18 @@ export function getShopMenu(query) {
 export function saveMenu(isEdit, query) {
   let data, msg
   if (isEdit) {
-    data = fetch({ url: '/shopmenu', method: 'put', params: query })
+    data = fetch({ url: '/shopmenu', method: 'put', params: {
+      ...query,
+      is_menu: query.is_menu ? 'true' : 'false',
+      is_show: query.is_show ? 'true' : 'false',
+    } })
     msg = '更新菜单成功'
   } else {
-    data = fetch({ url: '/shopmenu', method: 'post', params: query })
+    data = fetch({ url: '/shopmenu', method: 'post', params: {
+      ...query,
+      is_menu: query.is_menu ? 'true' : 'false',
+      is_show: query.is_show ? 'true' : 'false',
+    } })
     msg = '添加菜单成功'
   }
 

@@ -15,13 +15,14 @@ export default {
         rsa_huifu_public_key: '',
         pay_channel: [],
         wxpay_fee_type: 'online',
-        // wx_pub_online: '',
+        wx_pub_online: '',
         // wx_pub_offline: '',
         wx_lite_online: '',
         wx_lite_offline: '',
+        wx_qr_online: '',
         // wx_scan: '',
         alipay_fee_type: 'online',
-        // alipay_qr_online: '',
+        alipay_qr_online: '',
         // alipay_qr_offline: '',
         // alipay_scan: '',
         // alipay_lite_online: '',
@@ -29,6 +30,7 @@ export default {
         alipay_call: '',
         // ali_pub_off_b2b: '',
         // ali_pub_online_b2b: '',
+        admin_token_no: '',
         is_open: false
       },
       formList: [
@@ -85,11 +87,11 @@ export default {
           key: 'pay_channel',
           type: 'checkbox',
           options: [
-            { name: '微信小程序支付', label: 'wx_lite' },
-            // { name: '微信公众号支付', label: 'wx_pub' },
-            { name: '支付宝H5支付', label: 'alipay_wap' }
-            // { name: '支付宝app支付', label: 'alipay' },
-            // { name: '支付宝扫码', label: 'alipay_qr' }
+              { name: '微信小程序支付', label: 'wx_lite' },
+            { name: '微信公众号支付', label: 'wx_pub' },
+            { name: '支付宝H5支付', label: 'alipay_wap' },
+            { name: '支付宝app支付', label: 'alipay' },
+            { name: '支付宝扫码', label: 'alipay_qr' }
           ]
         },
         {
@@ -105,13 +107,14 @@ export default {
             // { name: '标准费率线下', label: 'offline' }
           ]
         },
-        // {
-        //   label: '微信公众号支付（线上）',
-        //   key: 'wx_pub_online',
-        //   type: 'input',
-        //   inline: true,
-        //   width: '480px'
-        // },
+        {
+          label: '微信公众号线上费率',
+          key: 'wx_pub_online',
+          type: 'input',
+          inline: true,
+          width: '480px',
+          placeholder: '请输入费率，如：0.26'
+        },
         // {
         //   label: '微信公众号支付（线下）',
         //   key: 'wx_pub_offline',
@@ -125,6 +128,14 @@ export default {
           type: 'input',
           inline: true,
           width: '480px'
+        },
+        {
+          label: '微信PC扫码线上费率',
+          key: 'wx_qr_online',
+          type: 'input',
+          inline: true,
+          width: '480px',
+          placeholder: '请输入费率，如：0.26'
         },
         // {
         //   label: '微信小程序支付（线下）',
@@ -149,13 +160,14 @@ export default {
             // { name: '标准费率线下', label: 'offline' }
           ]
         },
-        // {
-        //   label: '支付宝扫码支付（主扫-线上）',
-        //   key: 'alipay_qr_online',
-        //   type: 'input',
-        //   inline: true,
-        //   width: '480px'
-        // },
+        {
+          label: '支付宝PC扫码线上费率',
+          key: 'alipay_qr_online',
+          type: 'input',
+          inline: true,
+          width: '480px',
+          placeholder: '请输入费率，如：0.26'
+        },
         // {
         //   label: '支付宝扫码支付（主扫-线下）',
         //   key: 'alipay_qr_offline',
@@ -190,6 +202,14 @@ export default {
           type: 'input',
           inline: true,
           width: '480px'
+        },
+        {
+          label: '绑卡序列号',
+          key: 'admin_token_no',
+          type: 'input',
+          inline: true,
+          width: '480px',
+          placeholder: '请输入绑卡序列号'
         },
         // {
         //   label: '支付宝生活号（线下）',

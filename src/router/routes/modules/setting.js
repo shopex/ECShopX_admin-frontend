@@ -58,6 +58,52 @@ const routes = [
         },
         component: () => import('@/view/mall/marketing/merchantAccount')
       },
+
+      {
+        name: `menumanageShopmenus`,
+        path: "menumanage/shopmenus",
+        meta: {
+          aliasName: 'shopmenus',
+          icon: 'icon-products',
+          title: '商城菜单',
+          permissions: ['setting.menumanage.shopmenus']
+        },
+        component: () => import('@/view/menus/shopmenu')
+      },
+      {
+        name: `menumanageDistributormenu`,
+        path: "menumanage/distributormenu",
+        meta: {
+          aliasName: 'distributormenu',
+          icon: 'icon-products',
+          title: '店铺菜单',
+          permissions: ['setting.menumanage.distributormenu']
+        },
+        component: () => import('@/view/menus/distributormenu')
+      },
+      {
+        name: `menumanageMerchantmenu`,
+        path: "menumanage/merchantmenu",
+        meta: {
+          aliasName: 'merchantmenu',
+          icon: 'icon-products',
+          title: '商户菜单',
+          permissions: ['setting.menumanage.merchantmenu']
+        },
+        component: () => import('@/view/menus/merchantmenu')
+      },
+      {
+        name: `menumanageSuppliermenus`,
+        path: "menumanage/suppliermenus",
+        meta: {
+          aliasName: 'suppliermenus',
+          icon: 'icon-products',
+          title: '供应商菜单',
+          permissions: ['setting.menumanage.suppliermenus']
+        },
+        component: () => import('@/view/menus/supplier')
+      },
+
       {
         name: `systemConfigBaseSetup`,
         path: 'system-config/base-setup',

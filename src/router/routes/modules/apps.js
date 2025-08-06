@@ -13,6 +13,28 @@ const routes = [
     path: '/applications',
     children: [
       {
+        name: 'adapayWithdrawalAudit',
+        path: 'dougong/withdrawal-audit',
+        meta: {
+          aliasName: 'adapay_cash_audit',
+          icon: 'pay-circle',
+          title: '提现审核',
+          permissions: ['applications.bspay.adapay_cash_audit']
+        },
+        component: () => import('@/view/mall/bspay_sub_account/withdraw_audit')
+      },
+      {
+        name:'dougongWithdraw',
+        path:'dougong/withdraw',
+        meta:{
+          aliasName:'dougong_withdraw',
+          title:'提现',
+          icon:'pay-circle',
+          permissions:['applications.bspay.bspay_withdraw']
+        },
+        component:()=>import('@/view/mall/bspay_sub_account/withdraw')
+      },
+      {
         name: 'userApproval',
         path: 'dougong/user-approval',
         meta: {
@@ -129,6 +151,7 @@ const routes = [
         },
         component: () => import('@/view/mall/withdraw/withdraw')
       },
+
       {
         name: 'adapayWithdrawalSettings',
         path: 'adapay/withdrawal-settings',
