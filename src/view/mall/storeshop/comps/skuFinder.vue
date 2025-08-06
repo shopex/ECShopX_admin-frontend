@@ -19,7 +19,8 @@ export default {
   name: '',
   props: {
     itemId: String,
-    distributorId: String
+    distributorId: String,
+    isTotalStore:Boolean
   },
   data() {
     return {
@@ -38,7 +39,7 @@ export default {
             name: '库存',
             key: 'store',
             width: 100,
-            showType: 'editable',
+            showType: !this.isTotalStore?'editable':"",
             componentProps: {
               change: async (v, row) => {
                 await this.$api.marketing.updateDistributorItem({
@@ -55,7 +56,7 @@ export default {
             key: 'price',
             width: 160,
             // render: (h, { row }) => h('span', {}, row.price / 100),
-            showType: 'editable',
+            showType: !this.isTotalStore?'editable':"",
             componentProps: {
               change: async (v, row) => {
                 await this.$api.marketing.updateDistributorItem({

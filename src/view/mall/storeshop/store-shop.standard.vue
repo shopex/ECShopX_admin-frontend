@@ -184,7 +184,8 @@ export default {
       itemSkuDialog: false,
       itemSkuForm: {
         itemName: '',
-        itemId: ''
+        itemId: '',
+        is_total_store:false
       },
       itemSkuFormList: [
         {
@@ -192,6 +193,7 @@ export default {
           component: () => (
             <skuFinder
               itemId={this.itemSkuForm.itemId}
+              isTotalStore={this.itemSkuForm.is_total_store}
               distributorId={this.formData.distributor_id}
             />
           )
@@ -213,6 +215,7 @@ export default {
               handler: async ([row]) => {
                 this.itemSkuForm.itemName = row.itemName
                 this.itemSkuForm.itemId = row.itemId
+                this.itemSkuForm.is_total_store = row.is_total_store
                 this.itemSkuDialog = true
               }
             }
