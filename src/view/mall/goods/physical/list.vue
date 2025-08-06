@@ -142,7 +142,10 @@
           开售
         </el-button>
         <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
-        <el-button type="primary" @click="()=>handleImport('physicalupload?file_type=upload_tb_items')">
+        <el-button
+          type="primary"
+          @click="() => handleImport('physicalupload?file_type=upload_tb_items')"
+        >
           同步淘宝商品
         </el-button>
         <el-dropdown>
@@ -413,7 +416,7 @@
 
       <el-dialog :title="sunCodeTitle" :visible.sync="sunCode" width="360px">
         <div class="page-code">
-          <img class="page-code-img" :src="appCodeUrl">
+          <img class="page-code-img" :src="appCodeUrl" />
           <div class="page-btns">
             <el-button type="primary" plain @click="handleDownload(sunCodeTitle)">
               下载码
@@ -1118,28 +1121,25 @@ export default {
               </div>
             )
           },
-          // {
-          //   name: '审核结果',
-          //   key: 'audit_status',
-          //   width: 150,
-          //   render: (h, { row }) =>
-          //     row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
-          // },
-          // {
-          //   name: '错误信息',
-          //   key: 'audit_reason',
-          //   width: 150,
-          //   render: (h, { row }) => (
-          //     <div>
-          //       {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-          //         <div onClick={() => this.handleErrDetail(row.medicine_data)}>
-          //           {this.handleAuditReason(row.medicine_data)}
-          //           <i class='el-icon-info'></i>
-          //         </div>
-          //       )}
-          //     </div>
-          //   )
-          // },
+          {
+            name: '审核结果',
+            key: 'audit_status',
+            width: 150,
+            render: (h, { row }) =>
+              row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
+          },
+          {
+            name: '错误信息',
+            key: 'audit_reason',
+            width: 150,
+            render: (h, { row }) => (
+              <div>
+                {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+                  <div>{row.medicine_data.audit_reason}</div>
+                )}
+              </div>
+            )
+          },
           // {
           //   name: '供应商货号',
           //   key: 'supplier_goods_bn',
@@ -1503,7 +1503,7 @@ export default {
       }
 
       //淘宝商品
-      if(this.activeName == 'taobao'){
+      if (this.activeName == 'taobao') {
         this.searchParams.audit_status = ''
       }
       this.searchParams.is_taobao = this.activeName == 'taobao' ? 1 : ''
