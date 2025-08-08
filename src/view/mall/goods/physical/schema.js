@@ -8,7 +8,7 @@ export const createTbAddForm = (vm) =>
         component() {
           return (
             <div>
-              <div style={{ marginBottom: '10px' }}>
+              <div style={{ marginBottom: '10px', display: 'flex', gap: '10px' }}>
                 <el-button
                   type='primary'
                   plain
@@ -18,14 +18,51 @@ export const createTbAddForm = (vm) =>
                 >
                   淘宝增量同步
                 </el-button>
+                <el-button
+                  type='primary'
+                  plain
+                  onClick={() => {
+                    if (vm.selectedSpu.length > 0) {
+                      vm.setCategory()
+                    } else {
+                      vm.$message.warning('请先选择商品')
+                    }
+                  }}
+                >
+                  设置管理分类
+                </el-button>
+                <el-button
+                  type='primary'
+                  plain
+                  onClick={() => {
+                    vm.syncGoodsPool()
+                  }}
+                >
+                  同步商品池
+                </el-button>
               </div>
               <SpFinder
                 ref='finderDialog'
                 url='/spulists'
                 setting={{
                   search: [
-                    { key: 'spu_code', name: '请输入SPU编号' },
+                    { key: 'spu_code', name: 'SPU编号' },
                     { key: 'goods_name', name: '商品名称' },
+                    {
+                      key: 'is_set_cid',
+                      name: '配置管理分类',
+                      type: 'select',
+                      options: [
+                        {
+                          label: '已配置',
+                          value: 1
+                        },
+                        {
+                          label: '未配置',
+                          value: 0
+                        }
+                      ]
+                    },
                     {
                       key: 'list_time',
                       name: '上架时间',
@@ -39,9 +76,10 @@ export const createTbAddForm = (vm) =>
                   columns: [
                     { name: 'SPU编码', key: 'outer_id', width: 100 },
                     { name: '商品名称', key: 'title' },
-                    { name: '销售价', key: 'price' },
-                    { name: '库存', key: 'num', width: 60 },
-                    { name: '淘宝上架时间', key: 'list_time' }
+                    { name: '管理分类', key: 'category_name', width: 180 },
+                    { name: '销售价', key: 'price', width: 100 },
+                    { name: '库存', key: 'num', width: 120 },
+                    { name: '淘宝上架时间', key: 'list_time', width: 180 }
                   ]
                 }}
                 attrs={{
@@ -49,7 +87,7 @@ export const createTbAddForm = (vm) =>
                     beforeSearch: (params) => {
                       console.log(params)
                       if (params.list_time) {
-                        params.list_time_start = params.list_time[0]  
+                        params.list_time_start = params.list_time[0]
                         params.list_time_end = params.list_time[1]
                         delete params.list_time
                       }
@@ -58,7 +96,6 @@ export const createTbAddForm = (vm) =>
                   }
                 }}
                 onSelect={(row) => {
-                  console.log(row)
                   vm.selectedSpu = row
                 }}
               ></SpFinder>

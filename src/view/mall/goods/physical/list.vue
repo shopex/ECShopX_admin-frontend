@@ -27,15 +27,6 @@
   @include text-overflow();
   width: 180px;
 }
-
-:deep(.tb-add-dialog) {
-  .el-form-item__content {
-    margin-left: 0px !important;
-  }
-  .el-dialog__body .el-form {
-    margin-right: 0px !important;
-  }
-}
 </style>
 
 <style lang="scss">
@@ -592,6 +583,16 @@
       :form-list="tbAddFormList"
       @onSubmit="onTbAddSubmit"
     />
+
+    <SpDialog
+      ref="setCategoryDialogRef"
+      v-model="setCategoryDialog"
+      title="设置管理分类"
+      :width="'800px'"
+      :form="setCategoryForm"
+      :form-list="setCategoryFormList"
+      @onSubmit="onSetCategorySubmit"
+    />
   </div>
 </template>
 <script>
@@ -779,6 +780,37 @@ export default {
       labelForm: {
         item_id: []
       },
+      setCategoryDialog: false,
+      setCategoryForm: {
+        category_id: []
+      },
+      setCategoryFormList: [
+        {
+          label: '管理分类',
+          key: 'category_id',
+          component: ({ key }, value) => (
+            <el-cascader
+              v-model={value[key]}
+              props={{
+                props: {
+                  value: 'category_id',
+                  label: 'category_name',
+                  checkStrictly: true,
+                  children: 'children'
+                }
+              }}
+              options={this.itemCategoryList}
+            />
+          ),
+          validator(rule, value, callback) { 
+            if(value.length === 0){
+              callback(new Error('请选择管理分类'))
+            }else{
+              callback()
+            }
+          }
+        }
+      ],
       labelFormList: [
         {
           label: '已选标签',
@@ -889,7 +921,7 @@ export default {
       changePriceDialog: false,
       changePriceForm: {},
       changePriceFormList: [],
-      selectedSpu: [],
+
       tableList: {
         actions: [
           {
@@ -2130,21 +2162,46 @@ export default {
       this.selectedSpu = []
     },
     onTbAddSubmit() {
+      this.tbAddDialog = false
       this.$api.goods
         .syncSpuToLocal({
           spu_ids: this.selectedSpu.map((item) => item.outer_id)
         })
         .then((res) => {
           this.$message.success('操作成功')
-          this.tbAddDialog = false
           this.$refs['finder'].refresh(true)
+          this.tbAddDialog = false
         })
     },
-    syncSpuToLocal() {
-      this.$api.goods.setSpuToLocal().then((res) => {
-        this.$message.success('操作成功')
-        this.$refs['finderDialog'].refresh()
+    setCategory() {
+      this.setCategoryDialog = true
+      this.setCategoryForm = {
+        category_id: []
+      }
+    },
+    onSetCategorySubmit() {
+      if(this.setCategoryForm.category_id.length === 0){
+        this.$message.warning('请选择管理分类')
+        return
+      }
+      const category_id = this.setCategoryForm.category_id?.pop()
+      const _after = this.selectedSpu.map((item) => {
+        return {
+          outer_id: item.outer_id,
+          category_id: category_id
+        }
       })
+      this.$api.goods.updateSpuCategory( {items:_after} ).then((res) => {
+        this.$message.success('操作成功')
+        this.$refs['finderDialog'].refresh(true)
+        this.setCategoryDialog = false
+      })
+    },
+    syncSpuToLocal() {
+       this.$api.goods.setSpuToLocal().then((res) => {
+        this.$message.success('操作成功')
+        this.$refs['finderDialog'].refresh(true)
+      })  
     }
   }
 }
