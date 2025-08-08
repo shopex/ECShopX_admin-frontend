@@ -22,14 +22,14 @@ export const createTbAddForm = (vm) =>
                   type='primary'
                   plain
                   onClick={() => {
-                    if(vm.selectedSpu.length > 0){
+                    if (vm.selectedSpu.length > 0) {
                       vm.setCategory()
-                    }else{
+                    } else {
                       vm.$message.warning('请先选择商品')
                     }
                   }}
                 >
-                  设置管理分类 
+                  设置管理分类
                 </el-button>
                 <el-button
                   type='primary'
@@ -38,7 +38,7 @@ export const createTbAddForm = (vm) =>
                     vm.syncGoodsPool()
                   }}
                 >
-                  同步商品池 
+                  同步商品池
                 </el-button>
               </div>
               <SpFinder
@@ -48,6 +48,21 @@ export const createTbAddForm = (vm) =>
                   search: [
                     { key: 'spu_code', name: 'SPU编号' },
                     { key: 'goods_name', name: '商品名称' },
+                    {
+                      key: 'is_set_cid',
+                      name: '配置管理分类',
+                      type: 'select',
+                      options: [
+                        {
+                          label: '已配置',
+                          value: 1
+                        },
+                        {
+                          label: '未配置',
+                          value: 0
+                        }
+                      ]
+                    },
                     {
                       key: 'list_time',
                       name: '上架时间',
@@ -62,7 +77,7 @@ export const createTbAddForm = (vm) =>
                     { name: 'SPU编码', key: 'outer_id', width: 100 },
                     { name: '商品名称', key: 'title' },
                     { name: '管理分类', key: 'category_name', width: 180 },
-                    { name: '销售价', key: 'price' ,width: 100},
+                    { name: '销售价', key: 'price', width: 100 },
                     { name: '库存', key: 'num', width: 120 },
                     { name: '淘宝上架时间', key: 'list_time', width: 180 }
                   ]
@@ -72,7 +87,7 @@ export const createTbAddForm = (vm) =>
                     beforeSearch: (params) => {
                       console.log(params)
                       if (params.list_time) {
-                        params.list_time_start = params.list_time[0]  
+                        params.list_time_start = params.list_time[0]
                         params.list_time_end = params.list_time[1]
                         delete params.list_time
                       }

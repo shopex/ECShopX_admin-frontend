@@ -690,9 +690,9 @@ export function syncSpuToLocal(query) {
  * @param {string} query.items[0].category_id 商品分类 ID
  * @returns {Promise}
  */
-export function syncGoodsPool(query) {
+export function updateSpuCategory(query) {
   return fetch({
-    url: '/spulists/syncGoodsPool',
+    url: '/spulists/updateSpuCategory',
     method: 'post',
     params: query
   })

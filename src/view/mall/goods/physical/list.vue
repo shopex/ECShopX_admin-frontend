@@ -2163,39 +2163,45 @@ export default {
     },
     onTbAddSubmit() {
       this.tbAddDialog = false
-     
-    },
-    setCategory() {
-      this.setCategoryDialog = true
-    },
-    onSetCategorySubmit() {
-      if(this.setCategoryForm.category_id.length === 0){
-        this.$message.warning('请选择管理分类')
-        return
-      }
-      const _after = this.setCategoryForm.category_id.map((item) => {
-        return {
-          outer_id: this.selectedSpu[0].outer_id,
-          category_id: item
-        }
-      })
-      this.$api.goods.syncGoodsPool( _after ).then((res) => {
-        this.$message.success('操作成功')
-        this.$refs['finder'].refresh(true)
-      })
-      this.setCategoryDialog = false
-    },
-    syncSpuToLocal() {
       this.$api.goods
         .syncSpuToLocal({
           spu_ids: this.selectedSpu.map((item) => item.outer_id)
         })
         .then((res) => {
           this.$message.success('操作成功')
-          this.tbAddDialog = false
           this.$refs['finder'].refresh(true)
+          this.tbAddDialog = false
         })
-       
+    },
+    setCategory() {
+      this.setCategoryDialog = true
+      this.setCategoryForm = {
+        category_id: []
+      }
+    },
+    onSetCategorySubmit() {
+      if(this.setCategoryForm.category_id.length === 0){
+        this.$message.warning('请选择管理分类')
+        return
+      }
+      const category_id = this.setCategoryForm.category_id?.pop()
+      const _after = this.selectedSpu.map((item) => {
+        return {
+          outer_id: item.outer_id,
+          category_id: category_id
+        }
+      })
+      this.$api.goods.updateSpuCategory( {items:_after} ).then((res) => {
+        this.$message.success('操作成功')
+        this.$refs['finderDialog'].refresh(true)
+        this.setCategoryDialog = false
+      })
+    },
+    syncSpuToLocal() {
+       this.$api.goods.setSpuToLocal().then((res) => {
+        this.$message.success('操作成功')
+        this.$refs['finderDialog'].refresh(true)
+      })  
     }
   }
 }
