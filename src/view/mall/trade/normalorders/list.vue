@@ -325,7 +325,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="mobile" label="业务员">
+        <!-- <el-table-column prop="mobile" label="业务员">
           <template slot-scope="scope">
             <div class="order-num">
               {{ scope.row.salesman_mobile }}
@@ -357,6 +357,11 @@
                 />
               </el-tooltip>
             </div>
+          </template>
+        </el-table-column> -->
+        <el-table-column prop="invoice_status" label="发票状态">
+          <template slot-scope="scope">
+            {{ openStatus?.find(item => item.value === scope.row.invoice_status)?.title }}
           </template>
         </el-table-column>
         <el-table-column prop="mobile" label="客户手机号">
@@ -628,7 +633,8 @@ import {
   REFUND_STATUS,
   REFUND_PROCESS,
   PAY_TYPE,
-  GOOD_CATEGORY_MAP
+  GOOD_CATEGORY_MAP,
+  open_status_arr
 } from '@/consts'
 import { IS_MERCHANT, IS_SUPPLIER } from '../../../../utils'
 
@@ -674,6 +680,7 @@ export default {
       roleList:ROLE_LIST,
       distributionType: DISTRIBUTION_TYPE,
       distributionStatus: DISTRIBUTION_STATUS,
+      openStatus: open_status_arr,
       orderStatus: VERSION_B2C
         ? ORDER_B2C_STATUS
         : VERSION_IN_PURCHASE
