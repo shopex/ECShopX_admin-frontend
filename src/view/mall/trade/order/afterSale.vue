@@ -80,7 +80,7 @@ export default {
         refund_fee: '',
         description: '',
         pic: '',
-        freight_fee: ''
+        freight: ''
       },
       formList: [
         {
@@ -146,10 +146,12 @@ export default {
             />
           ),
           validator: (rule, value, callback) => {
-            if (this.form.refund_point >= 0) {
-              callback()
+            if (this.form.refund_point > this.orderInfo?.refund_point_amount /100) {
+              callback('退积分超过可退积分')
+            } else if (this.form.refund_point < 0) {
+              callback('退积分不能为空')
             } else {
-              callback('积分不能为空')
+              callback()
             }
           }
         },
@@ -185,21 +187,21 @@ export default {
         },
         {
           label: '退运费',
-          key: 'freight_fee',
+          key: 'freight',
           component: () => {
             return (
               <CompRefundFreight
                 value={this.orderInfo}
                 on-onChange={(e) => {
-                  this.form.freight_fee = e
+                  this.form.freight = e
                 }}
               />
             )
           },
           validator: (rule, value, callback) => {
-            if (!this.form.freight_fee) {
+            if (!this.form.freight) {
               callback('退运费不能为空')
-            } else if (parseFloat(this.form.freight_fee) > parseFloat(this.orderInfo?.freight_fee)) {
+            } else if (parseFloat(this.form.freight) > parseFloat(this.orderInfo?.refund_freight_amount /100)) {
               callback('退运费超过可退运费')
             } else {
               callback()
@@ -276,7 +278,7 @@ export default {
         detail: JSON.stringify(this.form.items),
         refund_fee: this.form.refund_fee * 100,
         refund_point: this.form.refund_point,
-        freight_fee: this.form.freight_fee * 100,
+        freight: this.form.freight * 100,
         description: this.form.description,
         evidence_pic: [this.form.pic]
       }
