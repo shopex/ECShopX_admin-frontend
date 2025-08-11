@@ -306,7 +306,7 @@
           <template slot-scope="scope">
             {{ (scope.row.total_fee / 100).toFixed(2) }}
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column
           prop="point_fee"
           width="120"
