@@ -44,11 +44,7 @@
       </el-button>
       <el-button
         type="primary"
-        @click="
-          () => {
-            this.$refs['form'].handleSubmit()
-          }
-        "
+        @click="submitRefund"
       >
         保存
       </el-button>
@@ -61,6 +57,7 @@ import CompReceiveInfo from '../normalorders/components/comp-receiveInfo'
 import CompGoodsList from './comps/comp-goodsList'
 import CompRefundAmount from './comps/comp-refundAmount'
 import CompRefundPoint from './comps/comp-refundPoint'
+import CompRefundFreight from './comps/comp-refundFreight.vue'
 
 const REASONS = [
   { title: '收到残次品', value: '1' },
@@ -82,7 +79,8 @@ export default {
         refund_point: '0',
         refund_fee: '',
         description: '',
-        pic: ''
+        pic: '',
+        freight: ''
       },
       formList: [
         {
@@ -148,10 +146,12 @@ export default {
             />
           ),
           validator: (rule, value, callback) => {
-            if (this.form.refund_point >= 0) {
-              callback()
+            if (this.form.refund_point > this.orderInfo?.refund_point_amount /100) {
+              callback('退积分超过可退积分')
+            } else if (this.form.refund_point < 0) {
+              callback('退积分不能为空')
             } else {
-              callback('积分不能为空')
+              callback()
             }
           }
         },
@@ -180,6 +180,29 @@ export default {
               parseFloat(this.form.refund_fee) > parseFloat(this.$refs['compRefundRef'].refundFee)
             ) {
               callback('退款金额超过可退金额')
+            } else {
+              callback()
+            }
+          }
+        },
+        {
+          label: '退运费',
+          key: 'freight',
+          component: () => {
+            return (
+              <CompRefundFreight
+                value={this.orderInfo}
+                on-onChange={(e) => {
+                  this.form.freight = e
+                }}
+              />
+            )
+          },
+          validator: (rule, value, callback) => {
+            if (!this.form.freight) {
+              callback('退运费不能为空')
+            } else if (parseFloat(this.form.freight) > parseFloat(this.orderInfo?.refund_freight_amount /100)) {
+              callback('退运费超过可退运费')
             } else {
               callback()
             }
@@ -231,6 +254,15 @@ export default {
 
       this.orderInfo = orderInfo
     },
+    async  submitRefund() {
+      try {
+        await this.$refs['form'].handleSubmit()
+      } catch (error) {
+        console.log(error)
+        const message = error.items?.[0]?.message 
+        this.$message.error(message)
+      }
+    },
     async onSubmit() {
       await this.$confirm('请确认申请售后', '提示', {
         confirmButtonText: '确定',
@@ -246,10 +278,16 @@ export default {
         detail: JSON.stringify(this.form.items),
         refund_fee: this.form.refund_fee * 100,
         refund_point: this.form.refund_point,
+        freight: this.form.freight * 100,
         description: this.form.description,
         evidence_pic: [this.form.pic]
       }
-      await this.$api.trade.salesAfterApply(params)
+      try {
+        await this.$api.trade.salesAfterApply(params)
+      } catch (error) {
+        this.$message.error(error.message)
+        return
+      }
       this.$message.success('售后申请提交成功')
       this.$EventBus.$emit('event.tradelist.refresh')
       setTimeout(() => {
