@@ -9,24 +9,69 @@
           placement="top"
         >
           <el-card>
-            <h2>{{ key.operator_content?.title }}</h2>
-            <p>操作人员：{{ key.operator_id ?? key.user_id }}</p>
+            <h2>{{ key.remarks }}</h2>
+            <p>操作人员：{{ key.operator_name }}</p>
             <p>
               人员类型：
-              <!-- {{ key.operator_id > 0 ? '管理员' : '-' }} -->
               <span v-if="'user' == key.operator_type"> 用户 </span>
               <span v-else-if="'salesperson' == key.operator_type"> 导购员 </span>
               <span v-else-if="'admin' == key.operator_type"> 管理员 </span>
               <span v-else-if="'system' == key.operator_type"> 系统 </span>
               <span v-else-if="'distributor' == key.operator_type"> 店铺管理员 </span>
+              <span v-else> 未知 </span>
             </p>
-            <p>操作详情：{{ key.operator_content?.remark }}</p>
+            <p>操作详情：{{ key.detail }}</p>
+            <SpFinder
+              ref="finder"
+              :data="key.params"
+              :setting="{
+                columns: [
+                  { name: '商品编码', key: 'outer_id' },
+                  { name: '同步状态', key: 'sync_status',render(row) {
+                    return row.sync_status == success ? '成功' : '失败'
+                  } },
+                  { name: '原因', key: 'reason' }
+                ]
+              }"
+              :no-selection="true"
+            />
           </el-card>
         </el-timeline-item>
       </el-timeline>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      loading: false,
+      list: []
+    }
+  },
+  mounted() {
+    this.getProcessLogInfo()
+  },
+  methods: {
+    retrunClick() {
+      this.$router.go(-1)
+    },
+    getProcessLogInfo() {
+      this.loading = true
+      this.$api.goods
+        .getSyncTbSpuLogs({
+          page: 1,
+          pageSize: 1000
+        })
+        .then((response) => {
+          this.list = response.list
+          this.loading = false
+        })
+    }
+  }
+}
+</script>
 
 <style scoped lang="scss" type="text/css">
 h3.title {
@@ -68,33 +113,3 @@ img {
   margin: 0 20px 20px 0;
 }
 </style>
-<script>
-export default {
-  data() {
-    return {
-      loading: false,
-      invoice_id: '',
-      list: []
-    }
-  },
-  mounted() {
-    if (this.$route.query.id) {
-      this.invoice_id = this.$route.query.id
-    }
-    this.getProcessLogInfo()
-  },
-  methods: {
-    retrunClick() {
-      this.$router.go(-1)
-    },
-    getProcessLogInfo() {
-      this.loading = true
-      this.$api.financial.getInvoiceLog({invoice_id:this.invoice_id}).then((response) => {
-        this.list = response.list.map(item=>({...item,operator_content:JSON.parse(item.operator_content)}))
-        console.log(this.list)
-        this.loading = false
-      })
-    }
-  }
-}
-</script>
