@@ -130,7 +130,7 @@
               {{ scope.row.item_point }}积分
               <span v-if="scope.row.item_fee > 0"
                 >+<span class="cur">{{ scope.row.fee_symbol }}</span
-                >{{ scope.row.total_fee / 100 }}</span
+                >{{ scope.row.item_fee / 100 }}</span
               >
             </template>
           </el-table-column>

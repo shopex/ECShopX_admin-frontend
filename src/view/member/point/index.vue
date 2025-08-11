@@ -187,6 +187,18 @@
                 <el-radio label="0"> 不包含 </el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="运费配置：">
+            <el-radio-group v-model="form.include_freight">
+              <el-radio label="true"> 包含 </el-radio>
+              <el-radio label="false"> 不包含 </el-radio>
+            </el-radio-group>
+            <p v-if="include_freight == 'true'" class="frm-tips">
+              说明：可设置订单中运费部分金额是否可获取积分
+            </p>
+            <p v-if="include_freight == 'false'" class="frm-tips">
+              说明：可设置订单中运费部分金额是否可获取积分
+            </p>
+          </el-form-item>
             <el-form-item label="优先积分抵扣">
               <el-switch
                 v-model="form.point_pay_first"

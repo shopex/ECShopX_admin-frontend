@@ -813,7 +813,7 @@
             </el-radio-group>
           </el-form-item>
           <template v-if="mode === 'richText'">
-            <SpRichText v-model="form.intro" />
+            <SpRichText v-model="form.intro" class="rich-text-editor" />
             <span class="tpl_item img" style="" @click="addImgPreview">
               <i class="iconfont icon-image" />图片
             </span>
@@ -1943,9 +1943,10 @@ export default {
   display: inline-block;
 }
 
-.demo-ruleForm {
+.rich-text-editor {
+  width: 100% !important;
   .vue-html5-editor {
-    width: 80%;
+    width: 100% !important;
   }
 }
 </style>
