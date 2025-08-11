@@ -39323,5 +39323,25 @@
 		"zh-cn": "请选择页面类型",
 		"en": "Please select the page type",
 		"zh-tw": "請選擇頁面類型"
+	},
+	"7h4l0i9": {
+		"zh-cn": "可申请提现余额：￥",
+		"en": "Available balance for withdrawal: ￥",
+		"zh-tw": "可申請提現餘額：￥"
+	},
+	"4erin99": {
+		"zh-cn": "审核中提现余额：￥",
+		"en": "Balance under review for withdrawal: ￥",
+		"zh-tw": "審覈中提現餘額：￥"
+	},
+	"at7pq45": {
+		"zh-cn": "请上传发票",
+		"en": "Please upload the invoice.",
+		"zh-tw": "請上傳發票"
+	},
+	"wyqolhb": {
+		"zh-cn": " 审核中提现余额：¥ ",
+		"en": "Balance under review for withdrawal: ¥",
+		"zh-tw": "審覈中提現餘額：¥"
 	}
 }

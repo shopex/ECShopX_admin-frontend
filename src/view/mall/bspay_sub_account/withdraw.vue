@@ -144,7 +144,7 @@
                   </el-input>
                   <span
                     style="margin-left: 12px; color: #0079fe; cursor: pointer; white-space: nowrap; flex-shrink: 0;"
-                    onClick={() => this.allHandle()}
+                    onClick={() => this.allHandle()}  // 全部提现
                   >
                     全部提现
                   </span>
@@ -252,7 +252,7 @@
       async getWithdrawBalance() {
         try {
           const balanceResult = await this.$api.bspay.getWithdrawBalance()
-          const { available_balance = 0, pending_balance = 0 } = balanceResult.data.data
+          const { available_balance = 0, pending_balance = 0 } = balanceResult
           this.available_balance = available_balance
           this.pending_balance = pending_balance
         } catch (error) {
