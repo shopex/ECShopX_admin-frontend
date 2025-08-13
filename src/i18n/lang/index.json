@@ -40293,5 +40293,10 @@
 		"zh-cn": "查看更多跳转地址",
 		"en": "View more jump addresses",
 		"zh-tw": "查看更多跳轉地址"
+	},
+	"2xhryif": {
+		"zh-cn": "订单商品签收后，且在订单创建 ",
+		"en": "After the order product is signed and created",
+		"zh-tw": "訂單商品簽收後，且在訂單創建"
 	}
 }
