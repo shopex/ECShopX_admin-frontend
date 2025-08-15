@@ -462,6 +462,14 @@ export function exportItemsData(data) {
   })
 }
 
+export function exportApiFileName(data) {
+  return fetch({
+    url: '/goods/exportApiFileName',
+    method: 'post',
+    params: data
+  })
+}
+
 export function exportItemsTagData(data) {
   return fetch({
     url: '/goods/tag/export',
@@ -624,5 +632,13 @@ export function medicineItemsSync(data) {
     url: '/goods/medicineItems/sync',
     method: 'post',
     data
+  })
+}
+
+export function exportCsvData(query) {
+  return fetch({
+    url: '/espier/exportCsvData',
+    method: 'get',
+    params: query
   })
 }
