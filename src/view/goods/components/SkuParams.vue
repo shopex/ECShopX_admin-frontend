@@ -592,7 +592,7 @@ export default {
         }
       })
       // 与前一次编辑的缓存数据合并
-      this.value.specItems = _specItems.map((item) => {
+      this.value.specItems = _specItems?.filter(el => !!el.item_id).map((item) => {
         const fd = this.value.specItems.find(({ sku_id }) => sku_id == item.sku_id)
         if (fd) {
           return {
