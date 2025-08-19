@@ -464,7 +464,7 @@
             {{ scope.row.self_delivery_operator_name && scope.row.self_delivery_fee / 100 + '元' }}
           </template>
         </el-table-column>
-<!-- 
+<!--
         <el-table-column label="配送员电话">
           <template slot-scope="scope">
             {{ scope.row.self_delivery_operator_mobile }}
