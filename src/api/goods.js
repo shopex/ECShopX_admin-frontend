@@ -713,12 +713,3 @@ export function updateSpuCategory(query) {
     params: query
   })
 }
-
-
-export function exportCsvData(query) {
-  return fetch({
-    url: '/espier/exportCsvData',
-    method: 'get',
-    params: query
-  })
-}
