@@ -4,6 +4,8 @@
   </div>
 </template>
 <script>
+import { BSPAY_PAYMENT_CHANNELS } from '@/consts/bspay'
+
 export default {
   data() {
     return {
@@ -94,14 +96,7 @@ export default {
           label: '支付渠道',
           key: 'pay_channel',
           type: 'checkbox',
-          options: [
-            { name: '微信支付', label: 'wx_lite' },
-            { name: '微信公众号支付', label: 'wx_pub' },
-            { name: '微信扫码支付', label: 'wx_qr' },
-
-            { name: '支付宝支付', label: 'alipay_wap' },
-            { name: '支付宝扫码支付', label: 'alipay_qr' }
-          ]
+          options: BSPAY_PAYMENT_CHANNELS
         },
         {
           label: '费率设置',
