@@ -193,6 +193,8 @@ export default {
       await this.$api.promotions.createActivity(params)
       this.submitLoading = false
       this.$message.success('创建成功')
+      this.$parent.onActivated()
+      this.$router.go(-2)
     }
   }
 }

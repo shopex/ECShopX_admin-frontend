@@ -346,6 +346,10 @@ export default {
   },
   mounted() {
     this.refresh()
+
+    this.$activated = () => {
+      this.refresh()
+    }
   },
   methods: {
     handleClick(tab, event) {
