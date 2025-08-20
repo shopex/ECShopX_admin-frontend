@@ -12,9 +12,7 @@
 <template>
   <SpPage>
     <SpPlatformTip v-if="!VERSION_SHUYUN()" h5 app alipay />
-    <div class="section-footer flex-right">
-      <el-button type="primary" @click="saveConfig"> 保存 </el-button>
-    </div>
+
     <div class="categorize">
       分类样式：
       <el-radio-group v-model="classify">
@@ -29,7 +27,9 @@
 
     <addCartas v-if="classify" />
     <index v-if="!classify && addCar" ref="indexTile" />
-
+    <div class="section-footer flex justify-start ml-[100px] mt-[20px]">
+      <el-button type="primary" @click="saveConfig"> 保存 </el-button>
+    </div>
   </SpPage>
 </template>
 
