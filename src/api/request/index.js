@@ -62,15 +62,17 @@ function createRequestClient() {
         })
         config.params = params
         delete config.data
-      }
-      if (config.method === 'post') {
-        const { isUploadFile } = config.data || {}
+      } else if (config.method === 'put' || config.method === 'post') {
         for (var key in config.data) {
           if (typeof config.data[key] === 'boolean') {
             console.log('config.data[key]', key, config.data[key])
             config.data[key] = config.data[key] ? 'true' : 'false'
           }
         }
+      }
+      if (config.method === 'post') {
+        const { isUploadFile } = config.data || {}
+     
         if (isUploadFile) {
           let formParams = new FormData()
           for (var key in config.data) {

@@ -145,9 +145,10 @@
         <!-- <el-button type="primary" @click="()=>handleImport('physicalupload?file_type=upload_tb_items')">
           同步淘宝商品
         </el-button> -->
-        <el-dropdown>
+        <el-dropdown @command="handleImport">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导入<i class="el-icon-arrow-down el-icon--right" />
+
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
