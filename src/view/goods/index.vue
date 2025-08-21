@@ -141,6 +141,7 @@ export default {
         mainCategory: [],
         itemName: '',
         brief: '',
+        isPrescriptionApproved:false,
         templatesId: '',
         brandId: '',
         itemUnit: '',
@@ -708,6 +709,7 @@ export default {
                   is-show-point={this.isShowPoint}
                   isMedicine={this.form.is_medicine == '1'}
                   medicinePrescription={this.medicinePrescription}
+                  isPrescriptionApproved={this.isPrescriptionApproved}
                   disabled={disabled}
                   provinceList={this.provinceList}
                 />
@@ -740,6 +742,7 @@ export default {
                 ref="skuParams"
                 isSupplierGoods={this.routerParams.isSupplierGoods}
                 medicinePrescription={this.medicinePrescription}
+                isPrescriptionApproved={this.isPrescriptionApproved}
                 is-show-point={this.isShowPoint}
                 disabled={disabled}
                 provinceList={this.provinceList}
@@ -1097,6 +1100,10 @@ export default {
       this.form.pics = pics
 
       //处方药
+      if(medicine_data.audit_status == 2){
+        //审核成功
+        this.isPrescriptionApproved = true
+      }
       this.form.is_medicine = is_medicine + ''
       if (Object.keys(medicine_data || {}).length) {
         this.form.medicine_type = medicine_type + ''
