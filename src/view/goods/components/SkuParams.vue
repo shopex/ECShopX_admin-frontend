@@ -360,7 +360,11 @@ export default {
     medicinePrescription: {
       type: Boolean,
       default: false
-    }
+    },
+    isPrescriptionApproved: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     let statusOption = [
@@ -417,9 +421,11 @@ export default {
           //解决第一次渲染改数据时触发组件的验证报错
           this.isFirst = false
         } else {
-          this.bulkFilling.forEach((item) => (item.approve_status = 'instock'))
+          if(!this.isPrescriptionApproved){
+            this.bulkFilling.forEach((item) => (item.approve_status = 'instock'))
+          }
         }
-        if (this.value.specItems.length) {
+        if (this.value.specItems.length && !this.isPrescriptionApproved) {
           this.value.specItems.forEach((item) => (item.approve_status = 'instock'))
         }
       }
@@ -460,6 +466,9 @@ export default {
       return result
     },
     statusDisabled({ value }) {
+      //处方药审核通过
+      if(!this.isPrescriptionApproved)return false
+
       if ((this.medicinePrescription && value == 'instock') || !this.medicinePrescription) {
         return false
       }

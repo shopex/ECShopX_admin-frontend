@@ -35,19 +35,23 @@ export default {
     medicinePrescription: {
       type: Boolean,
       default: false
-    }
+    },
+    isPrescriptionApproved: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     let statusOption = [
       {
         title: '前台可销售',
         value: 'onsale',
-        disabled: () => this.medicinePrescription
+        disabled: () => this.medicinePrescription && !this.isPrescriptionApproved
       },
       {
         title: '前台仅展示',
         value: 'only_show',
-        disabled: () => this.medicinePrescription
+        disabled: () => this.medicinePrescription && !this.isPrescriptionApproved
       },
       {
         title: '不可销售',
@@ -58,7 +62,7 @@ export default {
       statusOption.push({
         title: '前台不展示',
         value: 'offline_sale',
-        disabled: () => this.medicinePrescription
+        disabled: () => this.medicinePrescription && !this.isPrescriptionApproved
       })
     }
     return {
@@ -207,7 +211,7 @@ export default {
       }
     },
     medicinePrescription(nval) {
-      if (nval) {
+      if (nval && !this.isPrescriptionApproved) {
         this.form.approve_status = 'instock'
       }
     }
