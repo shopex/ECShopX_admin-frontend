@@ -96,6 +96,7 @@ export default {
       data
     } = v
     return {
+      id: v?.id,
       name,
       ...base,
       ...otherConfig,
@@ -140,6 +141,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

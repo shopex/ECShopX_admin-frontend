@@ -24,6 +24,7 @@ export default {
       data
     } = v
     return {
+      id: v?.id,
       name,
       ...base,
       data: {
@@ -34,6 +35,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

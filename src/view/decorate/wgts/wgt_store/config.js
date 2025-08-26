@@ -96,6 +96,7 @@ export default {
       data: [{ id, items, logo, name: distributor_name }]
     } = v
     return {
+      id: v?.id,
       name,
       ...base,
       tags: seletedTags,
@@ -109,6 +110,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

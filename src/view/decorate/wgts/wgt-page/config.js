@@ -145,6 +145,7 @@ export default {
       image: pageBackgroundImage
     }
     return {
+      id: v?.id,
       name,
       ...base,
       navigateStyle, // 兼容旧版本
@@ -162,6 +163,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

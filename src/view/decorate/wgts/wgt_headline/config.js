@@ -18,12 +18,14 @@ export default {
   transformIn: (v) => {
     const { name, base } = v
     return {
+      id: v?.id,
       name,
       ...base
     }
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

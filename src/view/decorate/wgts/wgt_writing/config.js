@@ -23,6 +23,7 @@ export default {
       _content = data
     }
     return {
+      id: v?.id,
       name,
       ...base,
       data: _content
@@ -30,6 +31,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

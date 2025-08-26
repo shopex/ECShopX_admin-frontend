@@ -66,6 +66,7 @@ export default {
   transformIn: (v) => {
     const { name, base, seletedTags = [], productLabel = [] } = v
     return {
+      id: v?.id,
       name,
       ...base,
       seletedTags,
@@ -74,6 +75,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

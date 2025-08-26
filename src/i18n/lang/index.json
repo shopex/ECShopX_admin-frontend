@@ -40738,5 +40738,15 @@
 		"zh-cn": "根据用户LBS定位，进入附近店铺",
 		"en": "Based on the user's LBS positioning, enter nearby stores",
 		"zh-tw": "根據用戶LBS定位，進入附近店鋪"
+	},
+	"bf1igk7": {
+		"zh-cn": "总部销售状态:",
+		"en": "Headquarters sales status",
+		"zh-tw": "總部銷售狀態:"
+	},
+	"wg31hi6": {
+		"zh-cn": "总部销售状态",
+		"en": "Sales status at the headquarters",
+		"zh-tw": "總部銷售狀態"
 	}
 }

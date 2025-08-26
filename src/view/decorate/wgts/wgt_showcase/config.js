@@ -25,6 +25,7 @@ export default {
   transformIn: (v) => {
     const { name, base, config, data } = v
     return {
+      id: v?.id,
       name,
       ...base,
       ...config,
@@ -33,6 +34,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

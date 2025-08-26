@@ -49,6 +49,7 @@ export default {
     const { name, base, data } = v
     let _data = data.flat()[0] || {}
     return {
+      id: v?.id,
       name,
       ...base,
       data: _data
@@ -56,6 +57,7 @@ export default {
   },
   transformOut: (v) => {
     return pickBy(v, {
+      id: 'id',
       name: 'name',
       base: (v) => {
         return pickBy(v, {

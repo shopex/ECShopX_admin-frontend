@@ -285,7 +285,7 @@ export default {
       })
       const wgtHeader = list.find((item) => item.name == 'page')
       if (wgtHeader) {
-        const headParams = Header.config.transformIn(wgtHeader.params)
+        const headParams = Header.config.transformIn({ id: wgtHeader?.id, ...wgtHeader.params })
         headerData = {
           // 初始数据
           ...headerData,
@@ -304,7 +304,7 @@ export default {
         if (wgt) {
           // console.log('getTemplateDetial wgt:', wgt)
           const wgtInitParams = this.cloneDefaultField(wgt)
-          const params = wgt.config.transformIn(li.params)
+          const params = wgt.config.transformIn({ id: li?.id, ...li.params })
           this.contentComps.push({
             wgtName: wgt.wgtName,
             ...wgtInitParams,
