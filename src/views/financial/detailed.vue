@@ -188,13 +188,13 @@ export default {
           },
           {
             name: '订单完成时间',
-            key: 'confirm_time',
+            key: 'end_time',
             width: 160,
-            formatter: (row, column) => {
-              if (column.confirm_time) {
-                return <div>{moment(column.confirm_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
-              }
-            }
+            // formatter: (row, column) => {
+            //   if (column.confirm_time) {
+            //     return <div>{moment(column.confirm_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
+            //   }
+            // }
           },
           {
             name: '结算时间',

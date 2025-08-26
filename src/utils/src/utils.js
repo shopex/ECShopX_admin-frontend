@@ -34,7 +34,7 @@ export function export_open(tab) {
     } else if (login_type == 'merchant') {
       url = `/merchant/setting/baseexport?tab=${tab}`
     } else if (login_type == 'supplier') {
-      url = `/supplier/setting/baseexport?tab=${tab}`
+      url = `/supplier/setting/export/list?tab=${tab}`
     } else {
       url = `/data/report/export-record?tab=${tab}`
     }

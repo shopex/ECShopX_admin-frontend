@@ -153,7 +153,7 @@ export default {
               if (this.IS_ADMIN() && row.statement_status == 'confirmed') {
                 return true
               }
-              if (this.IS_DISTRIBUTOR() && row.statement_status == 'ready') {
+              if (this.IS_SUPPLIER() && row.statement_status == 'ready') {
                 return true
               }
               return false
@@ -230,9 +230,9 @@ export default {
           },
           {
             name: '结算实付（¥）',
-            key: 'cost_fee',
+            key: 'statement_fee',
             width: 120,
-            render: (h, { row }) => h('span', {}, row.cost_fee / 100),
+            render: (h, { row }) => h('span', {}, row.statement_fee / 100),
             visible: IS_SUPPLIER()
           },
           {
@@ -260,12 +260,12 @@ export default {
           },
           {
             name: '结算时间',
-            key: 'statement_time',
+            key: 'end_time',
             width: 160,
             formatter: (row, column) => {
-              if (column.statement_time) {
+              if (column.end_time) {
                 return (
-                  <div>{moment(column.statement_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
+                  <div>{moment(column.end_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</div>
                 )
               }
             }
@@ -302,7 +302,7 @@ export default {
     },
     getStateMentStatus(status) {
       if (status == 'ready') {
-        return '待店铺确认'
+        return '待供应商确认'
       } else if (status == 'confirmed') {
         return '待平台结算'
       } else if (status == 'done') {
