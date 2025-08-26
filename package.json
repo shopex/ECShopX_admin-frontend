@@ -136,5 +136,8 @@
       "npm run eslint",
       "npm run prettier"
     ]
+  },
+  "overrides": {
+    "xmlhttprequest": "1.8.0"
   }
 }
