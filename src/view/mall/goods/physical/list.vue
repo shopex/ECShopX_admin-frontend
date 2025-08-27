@@ -1267,6 +1267,17 @@ export default {
             }
           },
           { name: '商品ID', key: 'goods_id', width: 80 },
+          { name: '是否处方药', key: 'is_prescription', width: 100,
+            formatter: (value, row, col) => {
+              return value == '1' ? '是' : '否'
+            }
+           },
+          { name: '审核结果', key: 'audit_status' ,
+            formatter: (value, row, col) => {
+                return GOODS_APPLY_STATUS[value]
+              }
+          },
+          { name: '错误信息', key: 'audit_reason' },
           {
             name: '创建时间',
             key: 'created',
