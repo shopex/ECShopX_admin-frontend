@@ -771,6 +771,16 @@ export default {
     if (user_id) {
       this.user_id = user_id
     }
+    this.$api.third.getDmcrmSetting().then((response) => {
+      if(response?.is_open){
+        this.infoList = this.infoList.map(el =>{
+          if(el.label == '订单获取积分'){ 
+            el.is_show = false
+          }
+          return el
+        })
+      }
+    })
     this.getDetail()
     this.getLogisticsList()
   },
@@ -907,7 +917,7 @@ export default {
             ? `¥${(orderInfo.item_price / 100).toFixed(2)}`
             : '￥0.00',
         freightFee: orderInfo.freight_fee || orderInfo.freight_point_fee
-          ? `¥${((orderInfo.freight_fee || 0) + (orderInfo.freight_point_fee || 0) / 100).toFixed(2)}`
+          ? `¥${(((orderInfo.freight_fee || 0) + (orderInfo.freight_point_fee || 0))/ 100).toFixed(2)}`
           : '￥0.00',
         memberDiscountPrice: orderInfo.member_discount
           ? `-¥${(orderInfo.member_discount / 100).toFixed(2)}`
