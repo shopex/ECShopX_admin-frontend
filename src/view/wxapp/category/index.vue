@@ -42,6 +42,10 @@ $txt-placeholder: #f5f5f7;
   width: 200px;
   border-radius: 60px;
 }
+.content-center{
+  display: flex;
+  justify-content: center;
+}
 /* 模板微缩样式 */
 .layout-miniature {
   display: flex;
@@ -511,7 +515,7 @@ $txt-placeholder: #f5f5f7;
         @change="switchChange"
         inactive-text="是否开启自定义分类">
       </el-switch> -->
-      <section class="section section-white category-view-warp" :style="'height: ' + 160 + 'px;'">
+      <section class="section section-white category-view-warp" :style="'height: ' + 580 + 'px;'">
         <!-- 模板分类微缩展示 -->
         <div class="category-type-view">
           <div class="category-type-scroll">
@@ -947,9 +951,9 @@ $txt-placeholder: #f5f5f7;
           </div>
         </div>
       </section>
-      <!-- <section class="content-padded-s section-white content-center">
+      <section class="content-padded-s section-white content-center">
         <el-button class="btn-save" type="primary" @click="saveConfig"> 保存 </el-button>
-      </section> -->
+      </section>
       <!-- 分类选择器弹窗 -->
       <el-dialog title="绑定分类" :visible.sync="categoryDialog" :before-close="hideCategory">
         <el-form>
