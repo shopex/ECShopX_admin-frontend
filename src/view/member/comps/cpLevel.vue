@@ -47,12 +47,12 @@
               <span class="txt">等级名称</span
               ><el-input
                 v-model="item.grade_name"
-                :maxlength="9"
-                placeholder="最多填写9个汉字"
+                :maxlength="32"
+                placeholder="最多填写32个字符"
                 :name="index + ''"
                 :disabled="VERSION_SHUYUN()"
                 @blur="nameblur"
-              />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/9</span>
+              />&nbsp;<span class="frm-tips">{{ item.grade_name.length }}/32</span>
             </div>
             <!-- TODO:数云是否需要等级背景 -->
             <div style="display: flex">

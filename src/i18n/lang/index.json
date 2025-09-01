@@ -13726,7 +13726,7 @@
 	},
 	"hlm1": {
 		"zh-cn": "多",
-		"en": "more",
+		"en": "variations",
 		"zh-tw": "多"
 	},
 	"rxc1": {
@@ -34086,7 +34086,7 @@
 	},
 	"ftd23": {
 		"zh-cn": " 多 ",
-		"en": "more",
+		"en": "variations",
 		"zh-tw": "多"
 	},
 	"dkd2zb7": {
@@ -40963,5 +40963,10 @@
 		"zh-cn": "更新店铺商品",
 		"en": "Update store products",
 		"zh-tw": "更新店鋪商品"
+	},
+	"8r8n0u9": {
+		"zh-cn": "最多填写32个字符",
+		"en": "",
+		"zh-tw": ""
 	}
 }
