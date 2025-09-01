@@ -26,8 +26,12 @@
               <el-col :span="8">
                 <el-form-item label="支付方式" prop="pay_channel">
                   <el-select v-model="form.pay_channel" style="width: 100%">
-                    <el-option label="微信小程序支付" value="wx_lite" />
-                    <el-option label="支付宝H5支付" value="alipay_wap" />
+                    <el-option 
+                      v-for="option in bspayPaymentOptions" 
+                      :key="option.value"
+                      :label="option.label" 
+                      :value="option.value" 
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -131,26 +135,11 @@
                   <el-table-column label="交易流水号" prop="tradeId" />
                   <el-table-column label="支付方式">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.payType == 'wxpay'">微信支付</span>
-                      <span v-if="scope.row.payType == 'wxpayapp'">微信APP支付</span>
-                      <span v-if="scope.row.payType == 'wxpayh5'">微信H5支付</span>
-                      <span v-if="scope.row.payType == 'wxpaypc'">微信PC支付</span>
-                      <span v-if="scope.row.payType == 'wxpaypos'">微信POS支付</span>
-                      <span v-if="scope.row.payType == 'alipayapp'">支付宝APP支付</span>
-                      <span v-if="scope.row.payType == 'alipay'">支付宝支付</span>
-                      <span v-if="scope.row.payType == 'alipayh5'">支付宝H5支付</span>
-                      <span v-if="scope.row.payType == 'alipaypos'">支付宝POS支付</span>
-                      <span v-if="scope.row.payType == 'deposit'">余额支付</span>
-                      <span v-if="scope.row.payType == 'point'">积分支付</span>
                       <span v-if="scope.row.payType == 'pos'">POS银行卡支付</span>
-                      <span
-                        v-if="scope.row.payType == 'adapay' && scope.row.payChannel == 'wx_lite'"
-                        v-if="scope.row.payType == 'bspay' && scope.row.payChannel == 'wx_lite'"
-                        v-if="scope.row.payType == 'bspay' && scope.row.payChannel == 'alipay_wap'"
-                        <span
-                        <span
-                        >支付宝支付</span
-                      >
+                      <span v-else-if="scope.row.payType == 'bspay' && scope.row.payChannel">
+                        {{ paymentDisplayNames[scope.row.payChannel] || scope.row.payChannel }}
+                      </span>
+                      <span v-else>{{ scope.row.payType || '-' }}</span>
                     </template>
                   </el-table-column>
                 </template>
@@ -252,6 +241,8 @@
 </template>
 
 <script>
+import { BSPAY_PAYMENT_OPTIONS, BSPAY_PAYMENT_DISPLAY_NAMES } from '@/consts/bspay'
+
 export default {
   data() {
     return {
@@ -283,7 +274,7 @@ export default {
       //   orderId:'',//订单号，
       //   distributor_name:'',//商铺名称
       //   totalFee:'',//订单金额
-      //   tradeState:'',// 交易状态
+      //   tradeState:'', // 交易状态
       //   refundedFee:'',//退款金额
       //   bspay_div_status:'',//是否分账
       //   bspayFeeMode:'', //手续费扣费方式
@@ -297,6 +288,16 @@ export default {
         time_start_begin: '',
         time_start_end: ''
       }
+    }
+  },
+  computed: {
+    // 使用自动生成的下拉选择选项
+    bspayPaymentOptions() {
+      return BSPAY_PAYMENT_OPTIONS
+    },
+    // 支付方式显示名称映射
+    paymentDisplayNames() {
+      return BSPAY_PAYMENT_DISPLAY_NAMES
     }
   },
   mounted() {

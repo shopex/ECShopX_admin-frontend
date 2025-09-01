@@ -1,9 +1,9 @@
 import { AuthPageLayout } from '@/layout'
-import { BasicLayout, FullLayout } from '@/layout/basic'
+import { BasicLayout } from '@/layout/basic'
 
 /** 全局404页面 */
 const fallbackNotFoundRoute = {
-  component: FullLayout,
+  component: BasicLayout,
   meta: {
     hideInBreadcrumb: true,
     hideInMenu: true,
@@ -11,11 +11,11 @@ const fallbackNotFoundRoute = {
     title: '404'
   },
   // name: 'FallbackNotFound',
-  path: '/not-found',
+  path: '/',
   children: [
     {
       name: 'FallbackNotFound',
-      path: '',
+      path: 'not-found',
       component: () => import('@/views/core/fallback/not-found.vue')
     }
   ]
@@ -23,25 +23,22 @@ const fallbackNotFoundRoute = {
 
 const coreRoutes = [
   {
-    name: 'Login',
-    path: '/login',
     component: AuthPageLayout,
+    meta: {
+      title: 'Authentication'
+    },
+    
+    name: 'authentication',
+    path: '/',
     children: [
       {
-        name: '/login',
-        path: '',
+        name: 'Login',
+        path: 'login',
         component: () => import('@/views/core/authentication/login.vue')
-      }
-    ]
-  },
-  {
-    name: 'shuyunLogin',
-    path: '/shuyunLogin',
-    component: AuthPageLayout,
-    children: [
+      },
       {
         name: 'shuyunLogin',
-        path: '',
+        path: 'shuyunLogin',
         component: () => import('@/views/core/authentication/shuyun-login.vue')
       }
     ]
@@ -103,6 +100,10 @@ const coreRoutes = [
     },
     path: '/wxapp/manage/decorate',
     component: () => import('@/view/decorate/index')
+  },
+  {
+    path: '/activelicense',
+    component: () => import('@/views/core/account-activation.vue')
   }
 ]
 

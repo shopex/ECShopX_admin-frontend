@@ -1507,7 +1507,9 @@ export default {
         this.commissionDialog = false
         this.$refs['finder'].refresh()
         this.$message.success('操作成功')
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
       this.formLoading = false
     },
     async onLabelFormSubmit() {

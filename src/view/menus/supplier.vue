@@ -334,16 +334,17 @@ export default {
       if (event.newIndex == event.oldIndex) {
         return
       }
+      let oldItem,newParent,childItem;
       // 向下移动
       if (event.newIndex > event.oldIndex) {
-        var oldItem = this.shopmenulist[event.oldIndex]
-        var newParent = this.shopmenulist[event.newIndex]
-        var childItem = this.shopmenulist[event.newIndex + 1]
+        oldItem = this.shopmenulist[event.oldIndex]
+        newParent = this.shopmenulist[event.newIndex]
+        childItem = this.shopmenulist[event.newIndex + 1]
       } else {
         // 向上移动
-        var oldItem = this.shopmenulist[event.oldIndex]
-        var newParent = this.shopmenulist[event.newIndex - 1]
-        var childItem = this.shopmenulist[event.newIndex]
+        oldItem = this.shopmenulist[event.oldIndex]
+        newParent = this.shopmenulist[event.newIndex - 1]
+        childItem = this.shopmenulist[event.newIndex]
       }
 
       console.log('old', oldItem)
