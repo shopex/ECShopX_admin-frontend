@@ -1565,17 +1565,6 @@ export default {
       this.show_rebate_sideBar = false
       this.show_sideBar = false
       this.show_itemStore = false
-      if (isNew) {
-        var routeData = this.$router.push({
-          path: this.matchRoutePath('editor/') + row.itemId,
-          query: { is_new: true }
-        })
-      } else {
-        var routeData = this.$router.push({
-          path: this.matchRoutePath('editor/') + row.itemId,
-          query: { detail: true }
-        })
-      }
     },
     saveRebateConf() {
       var rebateConf = []
@@ -1632,7 +1621,7 @@ export default {
             item.rebate_conf = {}
             item.rebate_conf.type = 'money'
             item.rebate_conf.value = {}
-            for (var key in this.popularizeSetting.popularize_ratio.profit) {
+            for (let key in this.popularizeSetting.popularize_ratio.profit) {
               item.rebate_conf.value[key] = ''
             }
           } else {
@@ -1640,7 +1629,7 @@ export default {
               this.popularizeSetting.popularize_ratio.type != item.rebate_conf.ratio_type &&
               item.rebate_conf.type != 'money'
             ) {
-              for (var key in this.popularizeSetting.popularize_ratio.profit) {
+              for (let key in this.popularizeSetting.popularize_ratio.profit) {
                 item.rebate_conf.value[key] = ''
               }
             }

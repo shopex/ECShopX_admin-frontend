@@ -14,7 +14,7 @@ export function createUserEnt(query) {
   return fetch({
     url: '/bspay/user_ent/create',
     method: 'post',
-    data: query
+    params: query
   })
 }
 // 更新企业用户(未开户)
@@ -46,7 +46,7 @@ export function createUserIndv(query) {
   return fetch({
     url: '/bspay/user_indv/create',
     method: 'post',
-    data: query
+    params: query
   })
 }
 // 更新个人用户对象(未开户)
@@ -54,7 +54,7 @@ export function modifyUserIndv(query) {
   return fetch({
     url: '/bspay/user_indv/modify',
     method: 'post',
-    data: query
+    params: query
   })
 }
 // 更新个人用户对象(已开户)
@@ -62,7 +62,7 @@ export function updateUserIndv(query) {
   return fetch({
     url: '/bspay/user_indv/update',
     method: 'post',
-    data: query
+    params: query
   })
 }
 // 查看  账户类型（个人）
@@ -145,5 +145,41 @@ export const subAccountDetail = (id) => {
   return fetch({
     url: `/bspay/trade/info/${id}`,
     method: 'get'
+  })
+}
+
+// 获取提现余额
+export const getWithdrawBalance = () => {
+  return fetch({
+    url: '/bspay/withdraw/balance',
+    method: 'get'
+  })
+}
+
+// 提现审核
+export const withdrawAudit = (params) => {
+  console.log('withdrawAudit----params',params)
+  return fetch({
+    url: '/bspay/withdraw/audit',
+    method: 'post',
+    params:params
+  })
+}
+
+// 提现申请
+export const withdrawApply = (params) => {
+  return fetch({
+    url: '/bspay/withdraw/apply',
+    method: 'post',
+    params: params
+  })
+}
+
+// 导出提现数据
+export const exportWithdrawData = (params) => {
+  return fetch({
+    url: '/bspay/withdraw/exportdata',
+    method: 'get',
+    params: params
   })
 }

@@ -1115,7 +1115,7 @@ export default {
         var temp = '微商城'
         a.href = response.data.data.base64Image
         if (response.data.data.tempname) {
-          var temp = response.data.data.tempname
+           temp = response.data.data.tempname
         }
         a.download = temp + row.name + '.png'
         a.click()

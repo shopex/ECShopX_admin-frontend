@@ -2,6 +2,7 @@ import { createSetting } from '@shopex/finder'
 import { Message, MessageBox } from 'element-ui'
 export default (vm) => {
   const formatDate = (timestamp) => {
+    if (!timestamp) return '-'
     var date = new Date(timestamp * 1000) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
     var YY = date.getFullYear() + '-'
     var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
@@ -25,7 +26,7 @@ export default (vm) => {
   }
   return createSetting({
     columns: [
-      { name: '提现日期', key: 'create_time', width: 150, formatter: formatDate },
+      { name: '提现日期', key: 'create_time', width: 200, formatter: formatDate },
       { name: '提现账户', key: 'user_name', width: 150 },
       { name: '提现卡号', key: 'bank_card', width: 150 },
       { name: '提现类型', key: 'cash_type', width: 150 },

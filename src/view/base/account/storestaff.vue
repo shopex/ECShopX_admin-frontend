@@ -41,13 +41,13 @@
     </SpFilterForm>
 
     <el-table v-loading="loading" border :data="accountsList">
-      <el-table-column label="登陆账号">
+      <!-- <el-table-column label="登陆账号">
         <template slot-scope="scope">
           {{ scope.row.login_name }}
           <el-tag v-if="scope.row.is_distributor_main" size="mini" type="danger"> 管理员 </el-tag>
         </template>
-      </el-table-column>
-      <el-table-column prop="mobile" label="手机号" />
+      </el-table-column> -->
+      <el-table-column prop="mobile" label="登录账号" />
       <el-table-column prop="username" label="姓名" />
       <el-table-column label="店铺名称">
         <template slot-scope="scope">

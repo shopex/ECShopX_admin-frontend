@@ -112,68 +112,56 @@
       </SpFilterForm>
 
       <div class="action-container">
-        <el-button type="primary" plain @click="addItems"> 添加商品 </el-button>
+        <el-button type="primary" @click="addItems"> 添加商品 </el-button>
 
-        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeCategory">
+        <el-button v-if="!IS_SUPPLIER()" type="primary" @click="changeCategory">
           更改销售分类
         </el-button>
-        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="changeGoodsLabel">
+        <el-button v-if="!IS_SUPPLIER()" type="primary" @click="changeGoodsLabel">
           打标签
         </el-button>
-        <el-button type="primary" plain @click="changeFreightTemplate"> 更改运费模板 </el-button>
+        <el-button type="primary" @click="changeFreightTemplate"> 更改运费模板 </el-button>
         <el-button
           v-if="!IS_ADMIN() && !IS_DISTRIBUTOR()"
           type="primary"
-          plain
           @click="onBatchSubmitItems"
         >
           批量提交审核
         </el-button>
-        <el-button type="primary" plain @click="changeItemsStore"> 统一库存 </el-button>
-        <el-button v-if="!IS_SUPPLIER()" type="primary" plain @click="batchChangeStore">
+        <el-button type="primary" @click="changeItemsStore"> 统一库存 </el-button>
+        <el-button v-if="!IS_SUPPLIER()" type="primary" @click="batchChangeStore">
           更改状态
         </el-button>
-        <el-button type="primary" plain @click="batchGifts('true')"> 设为赠品 </el-button>
-        <el-button type="primary" plain @click="batchGifts('false')"> 设为非赠品 </el-button>
+        <el-button type="primary" @click="batchGifts('true')"> 设为赠品 </el-button>
+        <el-button type="primary" @click="batchGifts('false')"> 设为非赠品 </el-button>
 
-        <el-button
-          v-if="IS_SUPPLIER()"
-          type="primary"
-          plain
-          @click="() => changeHaltTheSales('stop')"
-        >
+        <el-button v-if="IS_SUPPLIER()" type="primary" @click="() => changeHaltTheSales('stop')">
           停售
         </el-button>
-        <el-button
-          v-if="IS_SUPPLIER()"
-          type="primary"
-          plain
-          @click="() => changeHaltTheSales('start')"
-        >
+        <el-button v-if="IS_SUPPLIER()" type="primary" @click="() => changeHaltTheSales('start')">
           开售
         </el-button>
-        <el-button
-          type="primary"
-          plain
-          @click="() => syncGoodsFromTaoBao('physicalupload?file_type=upload_tb_items')"
-        >
+        <!-- <el-button type="primary" plain @click="changeGoodsPrice"> 批量改价 </el-button> -->
+        <!-- <el-button type="primary" @click="()=>handleImport('physicalupload?file_type=upload_tb_items')">
           同步淘宝商品
-        </el-button>
-
+        </el-button> -->
         <el-dropdown @command="handleImport">
           <el-button type="primary" plain icon="iconfont icon-daorucaozuo-01">
             导入<i class="el-icon-arrow-down el-icon--right" />
+
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-if="!IS_MERCHANT()" command="product-import">
+            <el-dropdown-item
+              v-if="$store.getters.login_type != 'merchant'"
+              command="product-import"
+            >
               商品导入
             </el-dropdown-item>
             <el-dropdown-item command="stock-import"> 库存导入 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
         <el-dropdown @command="handleExport">
-          <el-button type="primary" plain>
+          <el-button type="primary">
             导出<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -197,7 +185,7 @@
           上传商品到旺店通
         </el-button>
         <el-dropdown v-if="VERSION_STANDARD() && IS_ADMIN()">
-          <el-button type="primary" plain>
+          <el-button type="primary">
             同步商品<i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -426,7 +414,7 @@
 
       <el-dialog :title="sunCodeTitle" :visible.sync="sunCode" width="360px">
         <div class="page-code">
-          <img class="page-code-img" :src="appCodeUrl" />
+          <img class="page-code-img" :src="appCodeUrl">
           <div class="page-btns">
             <el-button type="primary" plain @click="handleDownload(sunCodeTitle)">
               下载码
@@ -869,7 +857,7 @@ export default {
                 IS_ADMIN() ||
                 IS_DISTRIBUTOR() ||
                 (IS_SUPPLIER() &&
-                  (row.audit_status == 'submitting' || row.audit_status == 'rejected' || row.approve_status == 'instock' ))
+                  (row.audit_status == 'submitting' || row.audit_status == 'rejected'))
               return isShow
             },
             action: {
@@ -887,7 +875,7 @@ export default {
                 }
                 this.$message.success('删除商品成功')
                 setTimeout(() => {
-                  this.$refs['finder'].refresh()
+                  this.$refs['finder'].refresh(true)
                 }, 200)
               }
             }
@@ -1131,25 +1119,28 @@ export default {
               </div>
             )
           },
-          // {
-          //   name: '审核结果',
-          //   key: 'audit_status',
-          //   width: 150,
-          //   render: (h, { row }) =>
-          //     row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
-          // },
-          // {
-          //   name: '错误信息',
-          //   key: 'audit_reason',
-          //   width: 150,
-          //   render: (h, { row }) => (
-          //     <div>
-          //       {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-          //         <div>{row.medicine_data.audit_reason}</div>
-          //       )}
-          //     </div>
-          //   )
-          // },
+          {
+            name: '审核结果',
+            key: 'audit_status',
+            width: 150,
+            render: (h, { row }) =>
+              row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
+          },
+          {
+            name: '错误信息',
+            key: 'audit_reason',
+            width: 150,
+            render: (h, { row }) => (
+              <div>
+                {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+                  <div onClick={() => this.handleErrDetail(row.medicine_data)}>
+                    {this.handleAuditReason(row.medicine_data)}
+                    <i class='el-icon-info'></i>
+                  </div>
+                )}
+              </div>
+            )
+          },
           // {
           //   name: '供应商货号',
           //   key: 'supplier_goods_bn',
@@ -1161,28 +1152,6 @@ export default {
             key: 'store',
             align: 'right',
             headerAlign: 'center'
-          },
-          {
-            name: '供应状态',
-            key: 'is_market',
-            formatter: (value, row, col) => {
-              return value == '1' ? '可售' : '不可售'
-            },
-            visible: IS_SUPPLIER()
-          },
-          {
-            name: '总部审核状态',
-            key: 'audit_status',
-            width: 110,
-            visible: !IS_ADMIN(),
-            render: (h, scope) => (
-              <div>
-                <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
-                {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
-                  <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
-                )}
-              </div>
-            )
           },
 
           // {
@@ -1231,14 +1200,20 @@ export default {
             align: 'right',
             headerAlign: 'center'
           },
-
           // {
           //   name: '来源供应商',
           //   key: 'operator_name',
           //   width: 100,
           //   visible: !(this.IS_DISTRIBUTOR() && this.VERSION_PLATFORM())
           // },
-
+          {
+            name: '供应状态',
+            key: 'is_market',
+            formatter: (value, row, col) => {
+              return value == '1' ? '可售' : '不可售'
+            },
+            visible: IS_SUPPLIER()
+          },
           {
             name: '商品状态',
             width: 120,
@@ -1247,6 +1222,20 @@ export default {
             formatter: (value, row, col) => {
               return this.statusOption.find((item) => item.value === value)?.title
             }
+          },
+          {
+            name: '审核状态',
+            key: 'audit_status',
+            width: 200,
+            visible: !IS_ADMIN(),
+            render: (h, scope) => (
+              <div>
+                <span>{GOODS_APPLY_STATUS[scope.row.audit_status]}</span>
+                {scope.row.audit_status == 'rejected' && loginType == 'supplier' && (
+                  <div class='physical-cell-reason'>拒绝原因：{scope.row.audit_reason}</div>
+                )}
+              </div>
+            )
           },
           { name: '销售分类', key: 'itemCatName', minWidth: 120 },
           { name: '起订量', key: 'start_num', minWidth: 120 },
@@ -1269,17 +1258,6 @@ export default {
             }
           },
           { name: '商品ID', key: 'goods_id', width: 80 },
-          { name: '是否处方药', key: 'is_prescription', width: 100,
-            formatter: (value, row, col) => {
-              return value == '1' ? '是' : '否'
-            }
-           },
-          { name: '审核结果', key: 'audit_status' ,
-            formatter: (value, row, col) => {
-                return GOODS_APPLY_STATUS[value]
-              }
-          },
-          { name: '错误信息', key: 'audit_reason' },
           {
             name: '创建时间',
             key: 'created',
@@ -1332,7 +1310,7 @@ export default {
         tabList.splice(1, 0, { name: '医药商品', value: 'is_medicine', activeName: 'third' })
       }
 
-      tabList.splice(1, 0, { name: '淘宝商品', value: 'taobao', activeName: 'taobao' })
+      // tabList.splice(1, 0, { name: '淘宝商品', value: 'taobao', activeName: 'taobao' })
 
       return tabList
     }
@@ -1433,7 +1411,11 @@ export default {
         this.sunCode = true
       })
     },
-
+    handleErrDetail(val) {
+      if (!val || !val.audit_reason) return
+      this.errMessage = val.audit_reason
+      this.errMessageVis = true
+    },
     async getSkuStoreByGoods(item_id) {
       this.skuLoading = true
       const { list } = await this.$api.goods.getItemsList({
@@ -1526,7 +1508,7 @@ export default {
       }
 
       //淘宝商品
-      if (this.activeName == 'taobao') {
+      if(this.activeName == 'taobao'){
         this.searchParams.audit_status = ''
       }
       this.searchParams.is_taobao = this.activeName == 'taobao' ? 1 : ''
@@ -1714,7 +1696,9 @@ export default {
         this.commissionDialog = false
         this.$refs['finder'].refresh()
         this.$message.success('操作成功')
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
       this.formLoading = false
     },
     async onLabelFormSubmit() {
@@ -1785,7 +1769,7 @@ export default {
         a.click()
       }
     },
-    syncGoodsFromTaoBao(command) {
+    handleImport(command) {
       this.$router.push({ path: `${this.$route.path}/${command}` })
     },
     async init() {
@@ -1806,13 +1790,6 @@ export default {
       this.getCategory()
       this.getAllTagLists()
       this.getGoodsBranchList()
-    },
-    handleImport(command) {
-      if (command === 'product-import') {
-        this.$router.push({ path: `${this.$route.path}/product-import` })
-      } else if (command === 'stock-import') {
-        this.$router.push({ path: `${this.$route.path}/stock-import` })
-      }
     },
     handleExport(command) {
       if (command === 'product-info') {

@@ -69,6 +69,32 @@ function createRequestClient() {
         })
         config.params = params
         delete config.data
+      } else if (config.method === 'put' || config.method === 'post') {
+        for (var key in config.data) {
+          if (typeof config.data[key] === 'boolean') {
+            console.log('config.data[key]', key, config.data[key])
+            config.data[key] = config.data[key] ? 'true' : 'false'
+          }
+        }
+      }
+      if (config.method === 'post') {
+        const { isUploadFile } = config.data || {}
+     
+        if (isUploadFile) {
+          let formParams = new FormData()
+          for (var key in config.data) {
+            if (typeof config.data[key] === 'boolean') {
+              console.log('config.data[key]', key, config.data[key])
+              config.data[key] = config.data[key] ? 'true' : 'false'
+            }
+            if (key !== 'isUploadFile') {
+              formParams.append(key, config.data[key])
+            }
+          }
+          config.data = formParams
+          delete config.params
+        }
+
       }
 
       if (config.method === 'post') {

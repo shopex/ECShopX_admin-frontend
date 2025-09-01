@@ -42,7 +42,7 @@ const routes = [
             }
           },
           {
-            path: 'physicalstoreupload',
+            path: 'stock-import',
             component: () => import('@/view/mall/goods/physical/normalGoodsStoreUpload'),
             meta: {
               title: '库存导入',
@@ -50,7 +50,7 @@ const routes = [
             }
           },
           {
-            path: 'physicalprofitupload',
+            path: 'profit-sharing-import',
             component: () => import('@/view/mall/goods/physical/normalGoodsProfitUpload'),
             meta: {
               title: '分润导入',
@@ -58,7 +58,7 @@ const routes = [
             }
           },
           {
-            path: 'physicalupload',
+            path: 'product-import',
             component: () => import('@/view/mall/goods/physical/normalGoodsUpload'),
             meta: {
               title: '商品导入',

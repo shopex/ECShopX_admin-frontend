@@ -142,12 +142,10 @@ export default {
     handleEdit(data, loginversion) {
       this.show_sideBar = true
       this.form.name = data.name
-      if (data.status == 'true') {
-        this.form.status = true
-      }
-      if (data.status == 'false') {
-        this.form.status = false
-      }
+    
+      this.form.status = data.status
+      
+      
       this.form.app_id = data.app_id
       this.form.secret = data.secret
       this.form.type = data.type
