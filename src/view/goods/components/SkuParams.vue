@@ -466,7 +466,6 @@ export default {
       return result
     },
     statusDisabled({ value }) {
-        console.log(1222,this.isPrescriptionApproved,this.medicinePrescription)
       //处方药审核通过
       if(this.isPrescriptionApproved)return false
 
