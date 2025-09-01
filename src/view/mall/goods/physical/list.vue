@@ -1119,28 +1119,28 @@ export default {
               </div>
             )
           },
-          // {
-          //   name: '审核结果',
-          //   key: 'audit_status',
-          //   width: 150,
-          //   render: (h, { row }) =>
-          //     row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
-          // },
-          // {
-          //   name: '错误信息',
-          //   key: 'audit_reason',
-          //   width: 150,
-          //   render: (h, { row }) => (
-          //     <div>
-          //       {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
-          //         <div onClick={() => this.handleErrDetail(row.medicine_data)}>
-          //           {this.handleAuditReason(row.medicine_data)}
-          //           <i class='el-icon-info'></i>
-          //         </div>
-          //       )}
-          //     </div>
-          //   )
-          // },
+          {
+            name: '审核结果',
+            key: 'audit_status',
+            width: 150,
+            render: (h, { row }) =>
+              row.medicine_data ? this.auditStatusMap[row.medicine_data.audit_status] : ''
+          },
+          {
+            name: '错误信息',
+            key: 'audit_reason',
+            width: 150,
+            render: (h, { row }) => (
+              <div>
+                {row.medicine_data?.audit_reason && row.medicine_data?.audit_status == 3 && (
+                  <div onClick={() => this.handleErrDetail(row.medicine_data)}>
+                    {this.handleAuditReason(row.medicine_data)}
+                    <i class='el-icon-info'></i>
+                  </div>
+                )}
+              </div>
+            )
+          },
           // {
           //   name: '供应商货号',
           //   key: 'supplier_goods_bn',
@@ -1411,7 +1411,11 @@ export default {
         this.sunCode = true
       })
     },
-
+    handleErrDetail(val) {
+      if (!val || !val.audit_reason) return
+      this.errMessage = val.audit_reason
+      this.errMessageVis = true
+    },
     async getSkuStoreByGoods(item_id) {
       this.skuLoading = true
       const { list } = await this.$api.goods.getItemsList({
