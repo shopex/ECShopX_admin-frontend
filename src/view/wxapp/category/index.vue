@@ -340,6 +340,13 @@ $txt-placeholder: #f5f5f7;
 .category-form {
   height: 100%;
   overflow-y: overlay;
+  .clearfix {
+    &::after {
+      display: block;
+      content: '';
+      clear: both;
+    }
+  }
   .series {
     position: relative;
     float: left;
