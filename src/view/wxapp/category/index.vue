@@ -852,8 +852,12 @@ $txt-placeholder: #f5f5f7;
                   </div>
 
                   <el-checkbox v-model="item.hot"> 热推 </el-checkbox>
-                  <div class="control-bar move iconfont icon-stream" />
-                  <div class="control-bar remove iconfont icon-trash" @click="remove(fidx)" />
+                  <div class="move" style="margin-left: 10px;">
+                    <SpIcon size="20" name="sort-one" />
+                  </div>
+                  <div class="remove" style="margin-left: 10px;">
+                    <SpIcon size="18" name="delete" @click="remove(fidx)" />
+                  </div>
                 </div>
                 <div v-if="form.name !== 'fresh'" class="form-child">
                   <draggable v-model="item.children" :options="dragSecondOptions">
@@ -881,11 +885,12 @@ $txt-placeholder: #f5f5f7;
                             {{ sitem.category_name ? sitem.category_name : '绑定分类' }}
                           </template>
                         </div>
-                        <div class="control-bar move iconfont icon-stream" />
-                        <div
-                          class="control-bar remove iconfont icon-trash"
-                          @click="remove(fidx, sidx)"
-                        />
+                        <div class="move" style="margin-left: 10px;">
+                          <SpIcon size="20" name="sort-one" />
+                        </div>
+                        <div class="remove" style="margin-left: 10px;">
+                          <SpIcon size="18" name="delete" @click="remove(fidx, sidx)" />
+                        </div>
                       </div>
                       <div class="form-child">
                         <draggable v-model="sitem.children" :options="dragLastOptions">
@@ -924,11 +929,12 @@ $txt-placeholder: #f5f5f7;
                                 }}{{ litem.category_id ? '商品分类：' : ''
                                 }}{{ litem.category_name ? litem.category_name : '绑定分类' }}
                               </div>
-                              <div class="control-bar move iconfont icon-stream" />
-                              <div
-                                class="control-bar remove iconfont icon-trash"
-                                @click="remove(fidx, sidx, lidx)"
-                              />
+                              <div class="move" style="margin-left: 10px;">
+                                <SpIcon size="20" name="sort-one" />
+                              </div>
+                              <div class="remove" style="margin-left: 10px;">
+                                <SpIcon size="18" name="delete" @click="remove(fidx, sidx, lidx)" />
+                              </div>
                             </div>
                           </div>
                         </draggable>
