@@ -388,10 +388,10 @@ $txt-placeholder: #f5f5f7;
       color: #ccc;
       background: #fff;
       z-index: 5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      .iconfont {
-        font-size: 20px;
-      }
       img {
         width: 50px;
         height: 50px;
@@ -824,7 +824,7 @@ $txt-placeholder: #f5f5f7;
                       :src="item.img ? item.img : 'https://fakeimg.pl/50x50'"
                       alt=""
                     >
-                    <div v-else class="iconfont icon-images" />
+                    <SpIcon v-else size="22" name="pic" />
                   </div>
                   <el-input v-model="item.name" placeholder="名称" />
                   <div
@@ -901,7 +901,7 @@ $txt-placeholder: #f5f5f7;
                                   :src="litem.img ? litem.img : 'https://fakeimg.pl/50x50'"
                                   alt=""
                                 >
-                                <div v-else class="iconfont icon-images" />
+                                <SpIcon v-else size="22" name="pic" />
                               </div>
                               <el-input v-model="litem.name" placeholder="名称" />
                               <div
