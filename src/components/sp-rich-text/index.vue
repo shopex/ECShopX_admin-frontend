@@ -153,7 +153,7 @@ const options = {
       icon: 'ecx-icon icon-tupian',
       name: 'uploader',
       dashboard: {
-        template: '<el-button @click="onUpload">图片上传</el-button>',
+        template: '<div><el-button @click="onUpload">图片上传</el-button></div>',
         data: function () {
           return {
             imgUrl: ''

@@ -41228,5 +41228,10 @@
 		"zh-cn": "隐私协议",
 		"en": "Privacy Policy",
 		"zh-tw": "隱私協議"
+	},
+	"uj1lto1k": {
+		"zh-cn": "<div><el-button @click=\"onUpload\">图片上传</el-button></div>",
+		"en": "",
+		"zh-tw": ""
 	}
 }
