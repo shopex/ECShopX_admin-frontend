@@ -92,7 +92,8 @@ export default {
         { id: 'hottopic', title: '种草列表' },
         { id: 'zitiOrder', title: '自提订单' },
         { id: 'customerService', title: '客服' },
-        { id: 'homeSearch', title: '搜索' }
+        { id: 'homeSearch', title: '搜索' },
+        { id: 'settings', title: '设置' }
       ],
       multiple: this.value?.multiple ?? true
     }
