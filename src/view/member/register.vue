@@ -75,7 +75,7 @@
                       placeholder="注册协议标题"
                       style="width: 500px"
                       show-word-limit
-                      maxlength="15"
+                      maxlength="30"
                     />
                   </el-form-item>
                   <el-form-item label="注册协议" prop="member_register.content">
@@ -93,7 +93,7 @@
                       placeholder="隐私政策标题"
                       style="width: 500px"
                       show-word-limit
-                      maxlength="15"
+                      maxlength="30"
                     />
                   </el-form-item>
                   <el-form-item label="隐私政策" prop="privacy.content">

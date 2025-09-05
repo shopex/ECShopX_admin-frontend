@@ -154,77 +154,77 @@ export default {
             })
           }
         },
-        {
-          label: '前端店铺展示',
-          key: 'nostores_status',
-          type: 'switch',
-          tip: '用于开启前端店铺切换功能',
-          isShow: VERSION_STANDARD(),
-          onChange: async e => {
-            const { nostores_status } = this.form
-            await this.$api.company.setNoStores({
-              nostores_status: !nostores_status
-            })
-          }
-        },
-        {
-          label: '店铺隔离',
-          key: 'stores_isolate',
-          type: 'switch',
-          tip: '开启后需添加店铺白名单方能访问店铺页面',
-          isShow: VERSION_STANDARD() && IS_ADMIN,
-          component: () => (
-            <div class="isolate-contanier">
-              <el-switch
-                v-model={this.form.stores_isolate}
-                onChange={() => {
-                  this.saveOpenDividedSetting()
-                }}
-              />
-              {this.form.stores_isolate && (
-                <div>
-                  <el-radio-group
-                    value={this.form.stores_isolate_type}
-                    onInput={(e) => {
-                      console.log(e)
-                      this.form.stores_isolate_type = e
-                      this.saveOpenDividedSetting()
-                    }}
-                  >
-                    <el-radio-button label='1'>
-                      <span>虚拟店铺</span>
-                    </el-radio-button>
-                    <el-radio-button label='2'>
-                      <span>引导页</span>
-                    </el-radio-button>
-                  </el-radio-group>
-                  {this.form.stores_isolate_type == '2' && (
-                    <div>
-                      <span
-                        class='isolate-set'
-                        onClick={() => {
-                          this.onClickStoresIsolate()
-                        }}
-                      >
-                        {this.form?.stores_isolate_template ? '已设置引导页模版' : '设置引导页模版'}
-                      </span>
-                      {this.form?.stores_isolate_template && (
-                        <el-button
-                          class='isolate-clear'
-                          onClick={() => {
-                            this.onClickClear()
-                          }}
-                        >
-                          清除
-                        </el-button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )
-        },
+        // {
+        //   label: '前端店铺展示',
+        //   key: 'nostores_status',
+        //   type: 'switch',
+        //   tip: '用于开启前端店铺切换功能',
+        //   isShow: VERSION_STANDARD(),
+        //   onChange: async e => {
+        //     const { nostores_status } = this.form
+        //     await this.$api.company.setNoStores({
+        //       nostores_status: !nostores_status
+        //     })
+        //   }
+        // },
+        // {
+        //   label: '店铺隔离',
+        //   key: 'stores_isolate',
+        //   type: 'switch',
+        //   tip: '开启后需添加店铺白名单方能访问店铺页面',
+        //   isShow: VERSION_STANDARD() && IS_ADMIN,
+        //   component: () => (
+        //     <div class="isolate-contanier">
+        //       <el-switch
+        //         v-model={this.form.stores_isolate}
+        //         onChange={() => {
+        //           this.saveOpenDividedSetting()
+        //         }}
+        //       />
+        //       {this.form.stores_isolate && (
+        //         <div>
+        //           <el-radio-group
+        //             value={this.form.stores_isolate_type}
+        //             onInput={(e) => {
+        //               console.log(e)
+        //               this.form.stores_isolate_type = e
+        //               this.saveOpenDividedSetting()
+        //             }}
+        //           >
+        //             <el-radio-button label='1'>
+        //               <span>虚拟店铺</span>
+        //             </el-radio-button>
+        //             <el-radio-button label='2'>
+        //               <span>引导页</span>
+        //             </el-radio-button>
+        //           </el-radio-group>
+        //           {this.form.stores_isolate_type == '2' && (
+        //             <div>
+        //               <span
+        //                 class='isolate-set'
+        //                 onClick={() => {
+        //                   this.onClickStoresIsolate()
+        //                 }}
+        //               >
+        //                 {this.form?.stores_isolate_template ? '已设置引导页模版' : '设置引导页模版'}
+        //               </span>
+        //               {this.form?.stores_isolate_template && (
+        //                 <el-button
+        //                   class='isolate-clear'
+        //                   onClick={() => {
+        //                     this.onClickClear()
+        //                   }}
+        //                 >
+        //                   清除
+        //                 </el-button>
+        //               )}
+        //             </div>
+        //           )}
+        //         </div>
+        //       )}
+        //     </div>
+        //   )
+        // },
         {
           label: '取消订单设置',
           key: 'repeat_cancel',
