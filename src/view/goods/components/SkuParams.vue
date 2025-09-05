@@ -484,8 +484,8 @@ export default {
       // 这个数据存的sku_id  格式 xx-xxx,但是这个skuchange的到是支持xx和xxx
       // 规格选择操作时,如果选择后的规格不在noDefaultSpecItems中,则需要把noDefaultSpecItems中的数据删除
       // 如果说 现在同步过来的商品 有 白色 黑色 尺码有 x s m,但是黑色只有 x s
-      console.log(this.noDefaultSpecItems,'222');
-      
+      console.log(this.noDefaultSpecItems, '222')
+
       this.getSkuItemImages()
       this.getSkuItems()
     },
@@ -551,12 +551,10 @@ export default {
       if (value || this.value.specItems) {
         const _value = value || this.value.specItems
         _specItems = _value.map((item) => {
-          const vKey = item.item_spec
-            ?.map(({ spec_value_id }) => spec_value_id)
-            ?.sort((a, b) => a - b) || []
-          const specName = item.item_spec?.map(
-            (el) => el.spec_custom_value_name || el.spec_value_name
-          ) || []
+          const vKey =
+            item.item_spec?.map(({ spec_value_id }) => spec_value_id)?.sort((a, b) => a - b) || []
+          const specName =
+            item.item_spec?.map((el) => el.spec_custom_value_name || el.spec_value_name) || []
           return {
             sku_id: vKey.join('_') || '',
             spec_name: specName?.join(' ') || '',
@@ -615,7 +613,7 @@ export default {
             sku_id: key,
             spec_name: this.getSpecName(item),
             is_default: false,
-            approve_status:item.approve_status || '',
+            approve_status: item.approve_status || '',
             store: item.store || '',
             max_num: item.max_num || '',
             item_bn: item.item_bn || '',
@@ -630,11 +628,11 @@ export default {
             supplier_goods_bn: item.supplier_goods_bn || '',
             tax_rate: item.tax_rate || '',
             delivery_time: item.delivery_time || '',
-            item_spec: item.item_spec || [],
+            item_spec: item.item_spec || []
           })
         }
       })
-      if(_specItems?.length >= specItems?.length) {
+      if (_specItems?.length >= specItems?.length) {
         const _temp = specItems.map((el) => el.join('_'))
         _specItems = _specItems.filter((el) => _temp.includes(el.sku_id))
       }
@@ -656,10 +654,13 @@ export default {
     getSpecName(keys) {
       const { skus } = this.value
       const specNames = []
-      keys.forEach((key, index) => {
-        const { attribute_value, custom_attribute_value } =
-          skus[index]?.skuValue?.find((s) => s?.attribute_value_id == key) || {}
-        specNames.push(custom_attribute_value || attribute_value)
+      const all = []
+      skus?.forEach((item) => {
+        all.push(...item.skuValue)
+      })
+      keys?.forEach((key) => {
+        const item = all.find((s) => s?.attribute_value_id == key) || {}
+        specNames.push(item.custom_attribute_value || item.attribute_value)
       })
       return specNames.join(' ')
     },
