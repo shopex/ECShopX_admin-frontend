@@ -875,7 +875,7 @@ export default {
                 }
                 this.$message.success('删除商品成功')
                 setTimeout(() => {
-                  this.$refs['finder'].refresh(true)
+                  this.$refs['finder'].refresh()
                 }, 200)
               }
             }
