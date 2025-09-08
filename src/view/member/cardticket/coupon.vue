@@ -51,7 +51,8 @@
                       编辑
                     </router-link>
                   </el-button>
-                  <el-popover v-if="appID" placement="top" width="200" trigger="click">
+                  <!-- <el-popover v-if="appID" placement="top" width="200" trigger="click"> -->
+                  <el-popover placement="top" width="200" trigger="click">
                     <div>
                       <img class="page-code" :src="appCodeUrl">
                       <div class="page-btns">
@@ -352,6 +353,8 @@ export default {
   methods: {
     async fetchWechatList() {
       const { list } = await this.$api.minimanage.gettemplateweapplist()
+      console.log(list, 'src/view/member/cardticket/coupon.vue-第355行')
+      debugger
       list.forEach((item, i) => {
         if (item.name == 'yykweishop') {
           this.appID = item.authorizer.authorizer_appid

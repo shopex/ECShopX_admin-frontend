@@ -52,7 +52,7 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item
+        <!-- <el-form-item
           v-if="form.tem_type == 'ask_answer_paper' && form.form_style == 'single'"
           label="头部文字"
         >
@@ -64,8 +64,8 @@
               placeholder="头部文字超级链接"
             />
           </el-col>
-        </el-form-item>
-        <el-form-item
+        </el-form-item> -->
+        <!-- <el-form-item
           v-if="form.tem_type == 'ask_answer_paper' && form.form_style == 'single'"
           label="头部内容"
         >
@@ -77,8 +77,8 @@
               placeholder="体测表单"
             />
           </el-col>
-        </el-form-item>
-        <el-form-item
+        </el-form-item> -->
+        <!-- <el-form-item
           v-if="form.tem_type == 'ask_answer_paper' && form.form_style == 'single'"
           label="底部文字"
         >
@@ -90,7 +90,7 @@
               placeholder="体测表单"
             />
           </el-col>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item
           label="表单内容"
           prop="content"

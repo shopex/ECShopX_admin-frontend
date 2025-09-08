@@ -380,13 +380,13 @@ export default {
     },
     fnPath() {
       if (this.$store.getters.login_type == 'merchant') {
-        return `/merchant/order/tradenormalorders/detail`
+        return `/merchant/order/order-manage/order-list/detail`
       } else if (this.$store.getters.login_type == 'distributor') {
-        return `/shopadmin/order/tradenormalorders/detail`
+        return `/shopadmin/order/order-manage/order-list/detail`
       }
 
       return this.$route.path.indexOf('servicetrade') === -1
-        ? '/order/entitytrade/tradenormalorders/detail'
+        ? '/order/order-manage/order-list/detail'
         : '/order/servicetrade/tradeservice/detail'
     },
     dateStrToTimeStamp(str) {

@@ -79,7 +79,7 @@
             <router-link
               target="_blank"
               :to="{
-                path: '/order/entitytrade/tradenormalorders/detail',
+                path: '/order/order-manage/order-list/detail',
                 query: { orderId: scope.row.order_id }
               }"
             >

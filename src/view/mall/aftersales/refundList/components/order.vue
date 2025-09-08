@@ -159,10 +159,10 @@
                 :to="{
                   path:
                     (`${$store.getters.login_type}` == 'distributor' &&
-                      '/shopadmin/order/tradenormalorders/detail') ||
+                      '/shopadmin/order/order-manage/order-list/detail') ||
                     (`${$store.getters.login_type}` == 'merchant' &&
-                      '/merchant/order/tradenormalorders/detail') ||
-                    '/order/entitytrade/tradenormalorders/detail',
+                      '/merchant/order/order-manage/order-list/detail') ||
+                    '/order/order-manage/order-list/detail',
                   query: { orderId: scope.row.order_id }
                 }"
               >
