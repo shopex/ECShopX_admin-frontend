@@ -49,7 +49,7 @@
       :get-status="setItemStatus"
       :rel-items-ids="relItems"
       :item-type="item_type"
-      :is-change-store="VERSION_PLATFORM()"
+      :is-change-store="$store.getters.login_type !== 'distributor'"
       @chooseStore="handleGoodsSubmit"
       @closeStoreDialog="handleGoodsDialogHide"
     />

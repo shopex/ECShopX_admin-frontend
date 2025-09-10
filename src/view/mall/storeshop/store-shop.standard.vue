@@ -245,6 +245,8 @@ export default {
                       is_can_sale: e
                     })
                     row.goods_can_sale = e
+                    this.$message.success('操作成功')
+                    this.$refs.finder.refresh()
                   }
                 }
               })
