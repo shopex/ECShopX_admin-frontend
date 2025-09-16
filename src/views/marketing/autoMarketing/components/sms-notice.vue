@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { getUrlPathByLoginType } from '@/utils'
 const SMS_TEMPLATE = {
   'member_birthday':
     '尊敬的会员：值此您生日之际，衷心祝您生日快乐！为感谢您对本店的支持，特此赠送您｛赠送内容｝｛数量｝。详情请查看官方小程序',

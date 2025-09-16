@@ -284,7 +284,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="100" label="开启业务员">
+        <!-- <el-table-column width="100" label="开启业务员">
           <template v-if="scope.row.is_valid !== 'delete'" slot-scope="scope">
             <el-switch
               v-model="scope.row.is_open_salesman"
@@ -293,7 +293,7 @@
               @change="switchChange(scope.$index, scope.row)"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column width="100" label="商家自配送">
           <template slot-scope="scope">
             {{ scope.row.is_self_delivery ? '是' : '否' }}

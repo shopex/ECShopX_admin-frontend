@@ -120,21 +120,11 @@
                 <el-button type="text">
                   <router-link
                     target="_blank"
-                    :to="{
-                      path:
-                        (`${$store.getters.login_type}` == 'distributor' &&
-                          '/shopadmin/order/aftersaleslist/detail') ||
-                        (`${$store.getters.login_type}` == 'supplier' &&
-                          '/supplier/order/aftersaleslist/detail') ||
-                        (`${$store.getters.login_type}` == 'merchant' &&
-                          '/merchant/order/aftersaleslist/detail') ||
-                        '/order/aftersales/aftersaleslist/detail',
-                      query: { aftersales_bn: scope.row.aftersales_bn }
-                    }"
+                    :to="{ path: getUrlPathByLoginType(`/order/order-manage/aftersales-list/detail?aftersales_bn=${scope.row.aftersales_bn}`) }"
                   >
-                    {{ scope.row.aftersales_bn }}
-                  </router-link>
-                </el-button>
+                  {{ scope.row.aftersales_bn }}
+                </router-link>
+              </el-button>
                 <el-tooltip effect="dark" content="复制" placement="top-start">
                   <i
                     v-clipboard:copy="scope.row.aftersales_bn"
@@ -163,17 +153,7 @@
                 <el-button type="text">
                   <router-link
                     target="_blank"
-                    :to="{
-                      path:
-                        (`${$store.getters.login_type}` == 'distributor' &&
-                          '/shopadmin/order/order-manage/order-list/detail') ||
-                        (`${$store.getters.login_type}` == 'supplier' &&
-                          '/supplier/order/order-manage/order-list/detail') ||
-                        (`${$store.getters.login_type}` == 'merchant' &&
-                          '/merchant/order/order-manage/order-list/detail') ||
-                        '/order/order-manage/order-list/detail',
-                      query: { orderId: scope.row.order_id }
-                    }"
+                    :to="{ path: getUrlPathByLoginType(`/order/order-manage/order-list/detail?orderId=${scope.row.order_id}`) }"
                   >
                     {{ scope.row.order_id }}
                   </router-link>
@@ -416,7 +396,7 @@
 import { mapGetters } from 'vuex'
 import RemarkModal from '@/components/remarkModal'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
-import { VERSION_B2C, IS_SUPPLIER } from '@/utils'
+import { VERSION_B2C, IS_SUPPLIER, getUrlPathByLoginType } from '@/utils'
 import { ORDER_CATEGORY, ORDER_TYPE, ORDER_TYPE_STANDARD } from '@/consts'
 export default {
   components: {

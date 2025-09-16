@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <SpPage>
     <div class="cer-box">
       <el-form :model="creInfo" label-width="150px">
         <el-row>
@@ -52,7 +52,7 @@
         <el-button type="primary" @click="dialogLookVisible = false"> 关 闭 </el-button>
       </div>
     </el-dialog>
-  </div>
+  </SpPage>
 </template>
 <script>
 import { Message } from 'element-ui'

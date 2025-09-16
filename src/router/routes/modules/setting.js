@@ -616,7 +616,18 @@ const routes = [
           permissions: ['setting.menumanage.merchantmenu']
         },
         component: () => import('@/view/menus/merchantmenu')
-      }
+      },
+      {
+        name: `systemconfigDamoCrm`,
+        path: 'system-config/damo-crm',
+        meta: {
+          aliasName: 'damoCrm',
+          icon: 'icon-products',
+          title: '达摩CRM',
+          permissions: ['setting.systemsetting.damoCrm']
+        },
+        component: () => import('@/view/base/setting/damoCrm/index')
+      },
     ]
   }
 ]

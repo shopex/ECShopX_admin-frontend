@@ -31,6 +31,13 @@
           <el-button type="text" @click="() => handleOrderClick(aftersalesInfo.order_id)">
             {{ aftersalesInfo.order_id }}
           </el-button>
+          <el-tooltip effect="dark" content="复制" placement="top-start">
+            <i
+              v-clipboard:copy="aftersalesInfo.order_id"
+              v-clipboard:success="onCopy"
+              class="el-icon-document-copy"
+            />
+          </el-tooltip>
         </el-col>
       </el-row>
       <el-row>
@@ -770,7 +777,7 @@ import hqbdlycorp_kname from '../../../common/hqbdlycorp_kname.json'
 import district from '../../../common/district.json'
 import RemarkModal from '@/components/remarkModal'
 import remarkMixin from '@/mixins/remarkMixin'
-import { isArray, isObject, IS_SUPPLIER } from '@/utils'
+import { isArray, isObject, IS_SUPPLIER, getUrlPathByLoginType } from '@/utils'
 import { getLogisticsLists } from '@/api/logistics'
 
 import { mapGetters } from 'vuex'
@@ -869,6 +876,12 @@ export default {
     this.getLogisticsListData()
   },
   methods: {
+    onCopy() {
+      this.$notify.success({
+        message: '复制成功',
+        showClose: true
+      })
+    },
     isArray,
     isObject,
     getLogisticsListData() {
@@ -932,11 +945,7 @@ export default {
       })
     },
     handleOrderClick(order_id) {
-      if (this.IS_ADMIN()) {
-        window.open(`/order/entitytrade/tradenormalorders?order_id=${order_id}`, '_blank')
-      } else {
-        window.open(`/shopadmin/order/tradenormalorders?order_id=${order_id}`, '_blank')
-      }
+      window.open(`${getUrlPathByLoginType(`/order/order-manage/order-list/detail?orderId=${order_id}`)}`, '_blank')
     },
     reviewSubmit() {
       this.reviewData.aftersales_bn = this.aftersales_bn
