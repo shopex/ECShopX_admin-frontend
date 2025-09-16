@@ -41243,5 +41243,30 @@
 		"zh-cn": "医药错误信息",
 		"en": "Medical error information",
 		"zh-tw": "醫藥錯誤信息"
+	},
+	"6g3gc35": {
+		"zh-cn": "达摩CRM",
+		"en": "",
+		"zh-tw": ""
+	},
+	"aaog484": {
+		"zh-cn": "企业标识",
+		"en": "",
+		"zh-tw": ""
+	},
+	"29aecn9": {
+		"zh-cn": "请输入appKey",
+		"en": "",
+		"zh-tw": ""
+	},
+	"6ajaw8c": {
+		"zh-cn": "请输入appSecret",
+		"en": "",
+		"zh-tw": ""
+	},
+	"n8ekqn7": {
+		"zh-cn": "请输入企业标识",
+		"en": "",
+		"zh-tw": ""
 	}
 }
