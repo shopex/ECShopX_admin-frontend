@@ -231,7 +231,6 @@
             <template slot-scope="scope">
               {{ scope.row.salesman_mobile }}
               <el-tooltip
-                v-if="datapass_block == 0"
                 effect="dark"
                 content="复制"
                 placement="top-start"
@@ -240,6 +239,7 @@
                   v-clipboard:copy="scope.row.salesman_mobile"
                   v-clipboard:success="onCopySuccess"
                   class="el-icon-document-copy"
+                  v-if="scope.row.salesman_mobile"
                 />
               </el-tooltip>
             </template>

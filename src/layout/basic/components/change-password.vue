@@ -99,13 +99,13 @@ export default {
     }
   },
   methods: {
-    async validate() {
+    async validate() { // 暴露给layout-header弹框
       await this.$refs.changePasswordForm.validate()
     },
-    async getFieldsValue() {
+    async getFieldsValue() { // 暴露给layout-header弹框
       return this.$refs.changePasswordForm.getFieldsValue()
     },
-    async onSubmit() {
+    async onSubmit() { // 暴露给layout-header弹框
       try {
         await this.$refs.changePasswordForm.handleSubmit()
         await this.handleSubmit(this.formData)
