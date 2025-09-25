@@ -1031,6 +1031,7 @@ export default {
     },
     refundAction() {
       const params = {
+        aftersales_bn: this.aftersales_bn,
         check_refund: this.check_refund,
         refunds_memo: this.refuse_reason,
         refund_fee: accMul(this.refund_fee, 100),
