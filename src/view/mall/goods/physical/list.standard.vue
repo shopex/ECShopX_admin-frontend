@@ -1183,9 +1183,9 @@ export default {
     handleImport(command) {
       if (command == 'physicalupload') {
         if (this.login_type == 'distributor') {
-          this.$router.push({ path: `/shopadmin/entity/goodsphysical/physicalupload` })
+          this.$router.push({ path: `/shopadmin/products/product-import` })
         } else {
-          this.$router.push({ path: `/entity/goods/goodsphysical/physicalupload` })
+          this.$router.push({ path: `/products/product-manage/self-products/product-import` })
         }
       } else if (command == 'physicalstoreupload') {
         if (this.login_type == 'distributor') {
