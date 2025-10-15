@@ -26,8 +26,8 @@
           />
         </el-select>
       </SpFilterFormItem>
-      <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="source" label="订单来源:">
-        <el-select v-model="params.source" clearable placeholder="请选择">
+      <SpFilterFormItem v-if="!VERSION_IN_PURCHASE" prop="source_id" label="订单来源:">
+        <el-select v-model="params.source_id" clearable placeholder="请选择">
           <el-option
             v-for="item in orderSourceList"
             :key="item.value"
@@ -674,7 +674,7 @@ export default {
         salesman_mobile: '',
         receipt_type: '', // 配送类型
         self_delivery_status: '', //配送状态
-        source: '', // 订单来源
+        source_id: '', // 订单来源
         order_status: '', // 订单状态
         order_class: '', // 订单类型
         delivery_staff_id: '', //配送员
@@ -1352,12 +1352,12 @@ export default {
   },
   async mounted() {
     this.origin = window.location.origin
-    const { tab, order_id, source } = this.$route.query
+    const { tab, order_id, source_id } = this.$route.query
     if (tab) {
       this.params.order_status = tab
     }
-    if (source) {
-      this.params.source = source
+    if (source_id) {
+      this.params.source_id = source_id
     }
     if (order_id) {
       this.params.order_id = order_id
