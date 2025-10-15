@@ -1352,12 +1352,15 @@ export default {
   },
   async mounted() {
     this.origin = window.location.origin
-    const { tab, order_id, source_id } = this.$route.query
+    const { tab, order_id, sourceId, monitorId } = this.$route.query
     if (tab) {
       this.params.order_status = tab
     }
-    if (source_id) {
-      this.params.source_id = source_id
+    if (monitorId) { // 千人千码跳过来
+      this.params.monitor_id = monitorId
+    }
+    if (sourceId) { // 千人千码跳过来
+      this.params.source_id = sourceId
     }
     if (order_id) {
       this.params.order_id = order_id

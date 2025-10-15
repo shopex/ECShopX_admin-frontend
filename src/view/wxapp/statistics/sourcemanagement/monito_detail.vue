@@ -449,7 +449,7 @@ export default {
         })
     },
     viewOrder(row){
-       window.open(`/order/entitytrade/tradenormalorders?source_id=${row.source_id}&monitorId=${row.monitor_id}`, '_blank')
+       window.open(`/order/entitytrade/tradenormalorders?sourceId=${row.source_id}&monitorId=${row.monitor_id}`, '_blank')
     },
     showlink (row) {
       var that = this
