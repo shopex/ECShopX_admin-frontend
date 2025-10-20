@@ -1522,7 +1522,7 @@ export default {
         tabList.splice(1, 0, { name: '医药商品', value: 'is_medicine', activeName: 'third' })
       }
 
-      tabList.splice(1, 0, { name: '淘宝商品', value: 'taobao', activeName: 'taobao' })
+      // tabList.splice(1, 0, { name: '淘宝商品', value: 'taobao', activeName: 'taobao' })
 
       return tabList
     },
