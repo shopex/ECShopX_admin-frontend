@@ -12,7 +12,7 @@
       <SpFilterFormItem prop="datetime" label="查询日期:">
         <el-date-picker
           v-model="queryForm.datetime"
-          clearable
+          :clearable="false"
           type="daterange"
           align="right"
           format="yyyy-MM-dd"
@@ -22,7 +22,7 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="enterprise_id" label="内购活动:" size="max">
+      <!-- <SpFilterFormItem prop="activity_id" label="内购活动:">
         <el-select
           v-model="queryForm.activity_id"
           v-scroll="() => pagesQuery.nextPage()"
@@ -36,7 +36,7 @@
             :value="item.id"
           />
         </el-select>
-      </SpFilterFormItem>
+      </SpFilterFormItem> -->
     </SpFilterForm>
 
     <div v-loading="loading">
@@ -67,14 +67,13 @@
   </div>
 </template>
 <script>
-import { PICKER_DATE_OPTIONS } from '@/consts'
 import Pages from '@/utils/pages'
 import moment from 'moment'
 import { createSetting } from '@shopex/finder'
 import { DualAxes } from '@antv/g2plot'
 export default {
   data() {
-    const start = moment().subtract('7', 'day')
+    const start = moment().subtract('8', 'day')
     const end = moment().subtract('1', 'day')
     return {
       queryForm: {
@@ -134,7 +133,37 @@ export default {
         amount_payed_count: 0,
         refunded_count: 0
       },
-      pickerOptions: PICKER_DATE_OPTIONS,
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 8)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 31)
+              picker.$emit('pick', [start, end])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 91)
+              picker.$emit('pick', [start, end])
+            }
+          }
+        ],
+        disabledDate: time => {
+          return time.getTime() > end
+        }
+      },
       line: null
     }
   },
@@ -158,11 +187,11 @@ export default {
       const params = {
         start: moment(start).format('YYYY-MM-DD'),
         end: moment(end).format('YYYY-MM-DD'),
-        act_id: activity_id.toString()
+        act_id: activity_id.length > 0 ? activity_id.toString() : ''
       }
-     if(params.act_id){
-      params.order_class= 'employee_purchase'
-     }
+      if (params.act_id) {
+        params.order_class = 'employee_purchase'
+      }
       this.loading = true
       const { list } = await this.$api.datacube.getCompanyData(params)
       this.loading = false

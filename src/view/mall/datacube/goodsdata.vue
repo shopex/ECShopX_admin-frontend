@@ -18,7 +18,7 @@
       <SpFilterFormItem prop="datetime" label="查询日期:">
         <el-date-picker
           v-model="queryForm.datetime"
-          clearable
+          :clearable="false"
           type="daterange"
           align="right"
           format="yyyy-MM-dd"
@@ -29,7 +29,7 @@
           :picker-options="pickerOptions"
         />
       </SpFilterFormItem>
-      <SpFilterFormItem prop="activity_id" label="内购活动:" size="max">
+      <!-- <SpFilterFormItem prop="activity_id" label="内购活动:">
         <el-select
           v-model="queryForm.activity_id"
           v-scroll="() => pagesQuery.nextPage()"
@@ -43,7 +43,7 @@
             :value="item.id"
           />
         </el-select>
-      </SpFilterFormItem>
+      </SpFilterFormItem> -->
     </SpFilterForm>
     <SpFinder
       ref="finder"
@@ -56,9 +56,6 @@
   </div>
 </template>
 <script>
-import json2csv from 'json2csv'
-import { PICKER_DATE_OPTIONS } from '@/consts'
-// import { getGoodsData } from '../../../api/datacube'
 import { createSetting } from '@shopex/finder'
 import moment from 'moment'
 import Pages from '@/utils/pages'
@@ -66,7 +63,7 @@ import { VERSION_IN_PURCHASE } from '@/utils'
 
 export default {
   data() {
-    const defaultStartDate = moment().subtract(7, 'day')
+    const defaultStartDate = moment().subtract(8, 'day')
     const defaultEndDate = moment().subtract(1, 'day')
     return {
       loading: true,
@@ -78,7 +75,37 @@ export default {
       },
       defaultTime: ['00:00:00', '23:59:59'],
       tableData: [],
-      pickerOptions: PICKER_DATE_OPTIONS,
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 8)
+              picker.$emit('pick', [start, defaultEndDate])
+            }
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 31)
+              picker.$emit('pick', [start, defaultEndDate])
+            }
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 91)
+              picker.$emit('pick', [start, defaultEndDate])
+            }
+          }
+        ],
+        disabledDate: time => {
+          return time.getTime() > defaultEndDate
+        }
+      },
       allListData: [],
       setting: createSetting({
         columns: [
@@ -123,14 +150,15 @@ export default {
   methods: {
     async fetch() {
       const {
-        datetime: [display_time_begin, display_time_end],
+        datetime,
         activity_id
-      } = this.queryForm
+      } = this.queryForm || {}
+      const [display_time_begin, display_time_end] = datetime || []
       const { list } = await this.$api.datacube.getGoodsData({
         start: moment(display_time_begin).format('YYYY-MM-DD'),
-        end: moment(display_time_end).format('YYYY-MM-DD')
-        // order_class: 'employee_purchase',
-        // act_id: activity_id.toString()
+        end: moment(display_time_end).format('YYYY-MM-DD'),
+        order_class: activity_id.length > 0 ? 'employee_purchase' : '',
+        act_id: activity_id.length > 0 ? activity_id.toString() : ''
       })
       this.tableData = list
       this.$nextTick(() => {
@@ -143,14 +171,15 @@ export default {
     async exportData() {
       this.exportloading = true
       const {
-        datetime: [display_time_begin, display_time_end],
+        datetime,
         activity_id
-      } = this.queryForm
+      } = this.queryForm || {}
+      const [display_time_begin, display_time_end] = datetime || []
       const { status, url } = await this.$api.datacube.getGoodsData({
         start: moment(display_time_begin).format('YYYY-MM-DD'),
         end: moment(display_time_end).format('YYYY-MM-DD'),
-        order_class: VERSION_IN_PURCHASE ? 'employee_purchase' : undefined,
-        act_id: activity_id.toString(),
+        order_class: activity_id.length > 0 ? 'employee_purchase' : '',
+        act_id: activity_id.length > 0 ? activity_id.toString() : '',
         export: 1
       })
       this.exportloading = false

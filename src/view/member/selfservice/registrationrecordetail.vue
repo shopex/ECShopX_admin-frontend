@@ -18,7 +18,7 @@
           label="活动有效时间"
           prop="activity_time"
         >
-          {{ recorddata.activity_start_time }} ~ {{ recorddata.activity_end_time }}
+          {{ recorddata.activity_start_time | datetime('YYYY-MM-DD HH:mm:ss') }} ~ {{ recorddata.activity_end_time | datetime('YYYY-MM-DD HH:mm:ss') }}
         </el-form-item>
         <el-form-item label="活动状态：">
           {{ recorddata.status_name }}
