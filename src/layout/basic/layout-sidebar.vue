@@ -41,6 +41,7 @@
           <SpIcon class="menu-icon" :name="computedMenuIcon(item)" :size="16" fill="#fff" />
           <span class="text-sm mt-1 text-white">{{ item.name }}</span>
         </li>
+        <li @click="handleMainMenuClick({ alias_name: 'license' })" class="text-center text-gray-500 text-sm mt-2 cursor-pointer">License</li>
       </ul>
     </div>
 
@@ -175,6 +176,8 @@ export default {
       const route = allRoutes.find(route => route.meta?.permissions?.includes(permission))
       if (route) {
         this.$router.push({ path: route.path })
+      } else if (item.alias_name == 'license') {
+        this.$router.push({ path: '/license' })
       } else {
         this.toNotFound()
       }

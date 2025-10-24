@@ -27,7 +27,7 @@
     }"
     ref="pageContainer"
   >
-    <div class="bg-white rounded-[6px]">
+    <div :style="{ background: bgColor }" class="rounded-[6px]">
       <div class="sp-page__header py-4 pl-5 pr-4 flex items-center" ref="header">
         <div class="sp-page__header-title">{{ title }}</div>
         <div class="sp-page__header-toolbar flex-1">
@@ -57,6 +57,10 @@ export default {
     noSticky: {
       type: Boolean,
       default: false
+    },
+    bgColor: {
+      type: String,
+      default: '#fff'
     }
   },
   data() {
