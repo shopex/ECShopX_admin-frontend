@@ -58,7 +58,7 @@
         </el-main>
 
         <el-footer class="flex justify-center items-center" height="50px">
-          <div class="bottom-text"> ECShopX © Licensed under <span class="cursor-pointer" @click="openShopex">Apache 2.0</span> · Powered by </div>
+          <div class="bottom-text"> ECShopX © Licensed under <span class="cursor-pointer" @click="openLicense">Apache 2.0</span> · Powered by </div>
           <SpImage :src="footerBackground" height="15" fit="contain" style="margin-top: 3px;cursor: pointer;" @click="openShopex" />
         </el-footer>
       </el-container>
@@ -112,6 +112,9 @@ export default {
     },
     openShopex() {
       window.open('https://www.shopex.cn', '_blank')
+    },
+    openLicense() {
+      this.$router.push({ path: '/license' })
     }
   }
 }
