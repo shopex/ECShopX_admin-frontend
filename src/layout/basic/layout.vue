@@ -58,7 +58,8 @@
         </el-main>
 
         <el-footer class="flex justify-center items-center" height="50px">
-          <SpImage :src="footerBackground" height="18" fit="contain" />
+          <div class="bottom-text"> ECShopX © Licensed under <span class="cursor-pointer" @click="openShopex">Apache 2.0</span> · Powered by </div>
+          <SpImage :src="footerBackground" height="15" fit="contain" style="margin-top: 3px;cursor: pointer;" @click="openShopex" />
         </el-footer>
       </el-container>
     </el-container>
@@ -91,7 +92,7 @@ export default {
   },
   computed: {
     footerBackground: () => {
-      return require(`@/assets/images/${DEFAULT_CONFIG.footerBackground}`)
+      return require(`@/assets/svgs/logo.svg`)
     },
     systemTitle: () => {
       return getSystemTitle()
@@ -108,6 +109,9 @@ export default {
     },
     handleSidebarChange(val) {
       this.showSubMenu = val
+    },
+    openShopex() {
+      window.open('https://www.shopex.cn', '_blank')
     }
   }
 }
@@ -117,5 +121,12 @@ export default {
 .el-header {
   padding-left: 8px;
   padding-right: 0;
+}
+.bottom-text {
+  font-size: 13px;
+  color: #B3B3B3;
+  // font-weight: 500;
+  margin-right: 10px;
+  font-style: medium;
 }
 </style>
