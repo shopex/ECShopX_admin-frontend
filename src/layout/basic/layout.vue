@@ -58,7 +58,7 @@
         </el-main>
 
         <el-footer class="flex justify-center items-center gap-2" height="50px">
-          <div class="style-medium size-13 text-[#B3B3B3]"> ECShopX © Licensed under <span class="cursor-pointer" @click="openLicense">Apache 2.0</span> · Powered by </div>
+          <div class="style-medium size-13 text-[#B3B3B3]"> ECShopX © Licensed under <span class="cursor-pointer border-b border-gray-300" @click="openLicense">Apache 2.0</span> · Powered by </div>
           <SpImage :src="footerBackground" class="cursor-pointer mt-1" height="15" fit="contain" @click="openShopex" />
         </el-footer>
       </el-container>
@@ -68,7 +68,7 @@
 
 <script>
 import DEFAULT_CONFIG from '@/config'
-import { getSystemTitle } from '@/utils'
+import { getSystemTitle, getBasePath } from '@/utils'
 import { micrApp } from '@/utils/micr-app'
 import LayoutSidebar from './layout-sidebar.vue'
 import LayoutContent from './layout-content.vue'
@@ -114,7 +114,8 @@ export default {
       window.open('https://www.shopex.cn', '_blank')
     },
     openLicense() {
-      this.$router.push({ path: '/license' })
+      const basePath = getBasePath()
+      window.open(`${basePath ? `/${basePath}` : ''}/license`, '_blank')
     }
   }
 }
