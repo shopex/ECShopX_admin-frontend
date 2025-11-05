@@ -30,25 +30,6 @@ if (process.env.NODE_ENV === 'development') {
 
 const i18nPlugin = new webpackPluginsAutoI18n.default(AutoI18nOptions)
 
-// 自定义插件：构建完成后添加开源标识
-class AddLicenseHeadersPlugin {
-  apply(compiler) {
-    compiler.hooks.done.tap('AddLicenseHeadersPlugin', (stats) => {
-      if (stats.hasErrors()) {
-        console.log('⚠️  构建有错误，跳过添加开源标识')
-        return
-      }
-      
-      console.log('🔄 构建完成，开始添加开源标识...')
-      try {
-        addLicenseHeaders()
-      } catch (error) {
-        console.error('❌ 添加开源标识失败:', error.message)
-      }
-    })
-  }
-}
-
 const SRC_PATH = path.resolve(__dirname, 'src')
 const envVars = process.env
 const isDev = process.env.NODE_ENV === 'development'
@@ -198,9 +179,6 @@ module.exports = {
 
       // 在主构建流程中添加文件复制插件
       config.plugins.push(new CopyWebpackPlugin(getNewpcCopyConfig()))
-      
-      // 添加开源标识插件
-      config.plugins.push(new AddLicenseHeadersPlugin())
     }
 
     // OSS CDN 上传配置
