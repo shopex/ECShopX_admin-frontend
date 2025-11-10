@@ -89,11 +89,17 @@ export default {
     onSizeChange(size) {
       this.pagination.onPageSizeChange(size)
     },
-    refresh(boolean) {
+    async refresh(boolean) {
       if (boolean) {
         this.pagination.reset()
       } else {
-        this.pagination.fetchData()
+        // 先获取数据
+        await this.pagination.fetchData()
+        // 如果当前页没有数据且不是第一页,自动跳转到前一页
+        if (this.pagination.state.data.length === 0 && this.pagination.state.page > 1) {
+          this.pagination.state.page = this.pagination.state.page - 1
+          await this.pagination.fetchData()
+        }
       }
     }
   }
