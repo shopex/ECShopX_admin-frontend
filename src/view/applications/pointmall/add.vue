@@ -70,7 +70,7 @@
               <el-row :gutter="20">
                 <el-col :xs="24" :sm="12" :md="8">
                   <el-form-item label="*商品标题">
-                    <el-input v-model="form.item_name" :maxlength="30" placeholder="" />
+                    <el-input v-model="form.item_name" :maxlength="100" placeholder="" />
                   </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="8">
