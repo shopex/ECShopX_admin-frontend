@@ -16,7 +16,7 @@
 // | Contact: 400-821-3106
 // +----------------------------------------------------------------------
 
-import { fetch } from './request'
+import fetch from '@/utils/fetch'
 
 export function getTradeList(query) {
   return fetch({

@@ -1117,7 +1117,20 @@ export default {
         const params = {
           pay_type: payType,
           ...formData,
-          is_open: formData.is_open ? 'true' : 'false'
+          is_open: formData.is_open ? 'true' : 'false',
+          isUploadFile: true
+        }
+        // 过滤掉值为 undefined 的参数
+        Object.keys(params).forEach(key => {
+          if (key === 'undefined') {
+            delete params[key]
+          }
+        })
+        if (payType == 'wxpay') { // 微信删除下面参数
+          delete params.cert_name
+          delete params.cert_url
+          delete params.cert_key_name
+          delete params.cert_key_url
         }
         
         await this.$api.trade.setPaymentSetting(params)
