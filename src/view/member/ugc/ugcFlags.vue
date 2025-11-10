@@ -67,7 +67,7 @@
           <el-input
             v-model="ruleForm.badge_name"
             placeholder="角标名称"
-            maxlength="4"
+            maxlength="20"
             :show-word-limit="true"
           />
         </el-form-item>
@@ -132,7 +132,7 @@ export default {
       rules: {
         badge_name: [
           { required: true, message: '请输入角标名称', trigger: 'blur' },
-          { max: 4, message: '长度不超过4个字符', trigger: 'blur' }
+          { max: 20, message: '长度不超过20个字符', trigger: 'blur' }
         ],
         badge_memo: [{ max: 50, message: '长度不超过50个字符', trigger: 'blur' }]
       },
