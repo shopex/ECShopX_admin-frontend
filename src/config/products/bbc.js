@@ -26,7 +26,7 @@ export default {
   systemTitleMerchant: '商户管理中心',
   systemTitleSupplier: '供应商管理中心',
   logo: 'logo-b2b2c.png',
-  loginBackground: 'login-b2b2c.jpg',
+  loginBackground: 'ecxbg.jpg',
   footerBackground: 'footer-b2b2c.png',
 
   // 主题配置

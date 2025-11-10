@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -18,11 +18,12 @@
 +----------------------------------------------------------------------
 -->
 <template>
-  <div class="bg-white h-full px-10 py-10 relative flex flex-col justify-center">
+  <div class="bg-white relative flex flex-col justify-center">
     <!-- form: {{ form }} -->
     <div>
-      <div class="text-3xl font-bold mb-3">{{ systemTitle }}</div>
-      <div class="text-sm text-muted-foreground">请输入您的帐户信息以开始管理您的项目</div>
+      <!-- <div class="text-3xl font-bold mb-3">{{ systemTitle }}</div> -->
+      <img src="/images/logo.png" alt="logo" width="140"/>
+      <div class="text-[18px] mt-10 text-[#333]">请登录</div>
     </div>
 
     <div class="mt-12">
@@ -30,7 +31,7 @@
     </div>
 
     <div class="mt-16">
-      <el-button type="primary" class="w-full h-[40px]" :loading="loading" @click="handleLogin">
+      <el-button type="primary" class="w-full h-[40px] rounded-[16px]" :loading="loading" @click="handleLogin">
         登录
       </el-button>
     </div>
@@ -84,7 +85,7 @@ const [Form, FormApi] = useForm({
       rules: [{ required: true, message: '请输入密码' }]
     }
   ],
-  labelWidth: '0',
+  // labelWidth: '0',
   showDefaultActions: false
 })
 

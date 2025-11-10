@@ -26,7 +26,7 @@ export default {
   systemTitleMerchant: '商户管理中心',
   systemTitleSupplier: '供应商管理中心',
   logo: 'logo-ng.png',
-  loginBackground: 'login-ng.jpg',
+  loginBackground: 'ecxbg.jpg',
   footerBackground: 'footer-ng.png',
 
   // 主题配置

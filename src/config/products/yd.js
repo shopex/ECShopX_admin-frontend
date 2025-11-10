@@ -26,7 +26,7 @@ export default {
   systemTitleMerchant: '商户管理中心',
   systemTitleSupplier: '供应商管理中心',
   logo: 'logo-yd.png',
-  loginBackground: 'login-yd.jpg',
+  loginBackground: 'ecxbg.jpg',
   footerBackground: 'footer-yd.png',
 
   // 主题配置

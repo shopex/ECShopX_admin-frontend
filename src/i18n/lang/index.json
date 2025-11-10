@@ -41898,5 +41898,15 @@
 		"zh-cn": "建议尺寸：（宽度640px，高度自适应）",
 		"en": "Recommended size: (width 640px, height adaptive)",
 		"zh-tw": "建議尺寸：（寬度640px，高度自適應）"
+	},
+	"ihi3fxa": {
+		"zh-cn": "长度不超过20个字符",
+		"en": "The length should not exceed 20 characters",
+		"zh-tw": "長度不超過20個字符"
+	},
+	"l2pgx3": {
+		"zh-cn": "请登录",
+		"en": "Please log in",
+		"zh-tw": "請登錄"
 	}
 }

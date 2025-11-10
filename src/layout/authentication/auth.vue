@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -18,7 +18,7 @@
 +----------------------------------------------------------------------
 -->
 <template>
-  <div class="h-full flex w-full relative">
+  <div class="h-full w-full relative" :style="loginBackGroundStyle">
     <!-- 头部logo和应用名称 -->
     <div class="absolute top-0 left-0 flex items-center gap-2 px-4 py-4">
       <SpImage :src="logo" height="30" fit="contain" />
@@ -31,12 +31,12 @@
     </div>
 
     <!-- 系统介绍 -->
-    <div class="flex-1">
+    <!-- <div class="flex-1">
       <div class="login-background" :style="loginBackGroundStyle" />
-    </div>
+    </div> -->
 
     <!-- 登录 -->
-    <AuthForm class="w-[34%]" />
+    <AuthForm class="w-[480px] mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
 
     <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
       <LicenseLogo />
@@ -74,7 +74,7 @@ export default {
     },
     loginBackGroundStyle: () => {
       return {
-        'background-image': `url(${require(`@/assets/images/${DEFAULT_CONFIG.loginBackground}`)})`,
+        'background-image': `url(/images/${DEFAULT_CONFIG.loginBackground})`,
         height: '100%',
         'background-size': 'cover',
         'background-position': 'center'
