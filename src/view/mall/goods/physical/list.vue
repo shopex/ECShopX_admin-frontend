@@ -1264,7 +1264,7 @@ export default {
             key: 'is_prescription',
             width: 150,
             render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否'),
-            visible: !!this.is_pharma_industry
+            visible: this.is_pharma_industry
           },
           {
             name: '医药错误信息',
@@ -1280,7 +1280,7 @@ export default {
                 )}
               </div>
             ),
-            visible: !!this.is_pharma_industry
+            visible: this.is_pharma_industry
           },
           {
             name: '创建时间',
