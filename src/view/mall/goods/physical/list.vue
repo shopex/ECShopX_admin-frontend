@@ -520,7 +520,7 @@ export default {
     // if (IS_SUPPLIER()) {
     //   tabList = [
     //     { name: '全部商品', value: 'all', activeName: 'first' },
-    //     { name: '待提交', value: 'submitting', activeName: 'submitting' },
+    //     { name: '待提交', value: 'submiting', activeName: 'submiting' },
     //     { name: '待审核', value: 'processing', activeName: 'processing' },
     //     { name: '已通过', value: 'approved', activeName: 'approved' },
     //     { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
@@ -879,8 +879,7 @@ export default {
               const isShow =
                 IS_ADMIN() ||
                 IS_DISTRIBUTOR() ||
-                (IS_SUPPLIER() &&
-                  (row.audit_status == 'submitting' || row.audit_status == 'rejected'))
+                (IS_SUPPLIER() && row.audit_status != 'processing' && row.audit_status != 'approved' && row.approve_status == 'onsale')
               return isShow
             },
             action: {
@@ -1316,7 +1315,7 @@ export default {
       if (IS_SUPPLIER()) {
         tabList = [
           { name: '全部商品', value: 'all', activeName: 'first' },
-          { name: '待提交', value: 'submitting', activeName: 'submitting' },
+          { name: '待提交', value: 'submiting', activeName: 'submiting' },
           { name: '待审核', value: 'processing', activeName: 'processing' },
           { name: '已通过', value: 'approved', activeName: 'approved' },
           { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
