@@ -118,9 +118,12 @@
         <el-button  v-if="isBindJstErp" plain type="primary" @click="uploadJstErpItems()">
           上传商品到聚水潭
         </el-button>
-        <export-tip @exportHandle="exportItemsData()">
-          <el-button type="primary" plain> 导出商品信息 </el-button>
-        </export-tip>
+        <el-dropdown @command="exportItemsData">
+          <el-button type="primary" plain> 导出 <i class="el-icon-arrow-down el-icon--right" /></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="product-export"> 商品导出 </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
 
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
