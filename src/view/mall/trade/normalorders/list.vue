@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -484,7 +484,7 @@
               {{ scope.row.self_delivery_operator_name }}
             </template>
           </el-table-column> -->
-  <!-- 
+  <!--
           <el-table-column label="配送费">
             <template slot-scope="scope">
               {{ scope.row.self_delivery_operator_name && scope.row.self_delivery_fee / 100 + '元' }}
@@ -664,7 +664,6 @@ import {
   ORDER_B2C_STATUS,
   IN_PURCHASE_STATUS,
   ORDER_TYPE,
-  ORDER_TYPE_STANDARD,
   ROLE_LIST,
   INVOICE_STATUS,
   ORDER_CATEGORY,
@@ -1615,7 +1614,7 @@ export default {
             receipt_type != 'ziti' &&
             cancel_status != 'WAIT_PROCESS' //待退款不展示发货按钮
             // 打开了聚水潭不显示
-            && !this.jstErpSetting?.is_open 
+            && !this.jstErpSetting?.is_open
             // && this.login_type == 'supplier'
           ) {
             actionBtns.push({ name: '发货', key: 'deliverGoods' })

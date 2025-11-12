@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -18,7 +18,7 @@
 +----------------------------------------------------------------------
 -->
 <template>
-  <div class="flex items-center gap-2">
+  <div class="flex items-center justify-center gap-2">
     <div class="style-medium size-13 text-[#B3B3B3]"> ECShopX © Licensed under <span class="cursor-pointer border-b border-gray-300" @click="openLicense">Apache 2.0</span> · Powered by </div>
     <SpImage :src="footerBackground" class="cursor-pointer mt-1" height="15" fit="contain" @click="openShopex" />
   </div>

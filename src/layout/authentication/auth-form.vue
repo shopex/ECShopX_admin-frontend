@@ -18,7 +18,7 @@
 +----------------------------------------------------------------------
 -->
 <template>
-  <div class="bg-white px-10 py-10 rounded-[16px]">
+  <div class="bg-white px-10 py-12 rounded-[16px]">
     <!-- <slot></slot> -->
     <router-view v-slot="{ Component, route }">
       <Transition>

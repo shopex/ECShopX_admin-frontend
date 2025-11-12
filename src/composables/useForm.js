@@ -26,6 +26,8 @@ export function useForm(options = {}) {
     formType = 'search-form', // 表单类型: 搜索表单、编辑表单等
     inline = false,
     labelWidth = '120px', // 标签宽度
+    labelInline = false,
+    hideFieldRequiredMark = false,
     rules = {}, // 校验规则
     showDefaultActions = true // 是否显示默认操作按钮
   } = options
@@ -140,7 +142,9 @@ export function useForm(options = {}) {
           formApi: FormApi,
           inline,
           labelWidth: labelWidth || '120px',
+          labelInline: labelInline,
           showDefaultActions: showDefaultActions,
+          hideFieldRequiredMark: hideFieldRequiredMark,
           value: this.value
         },
         on: {

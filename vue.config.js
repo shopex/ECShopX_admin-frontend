@@ -20,11 +20,13 @@ const AutoI18nOptions = {
   includePath: [/src\//, /node_modules\/element-ui\//]
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (process.argv.includes('i18n')) {
   AutoI18nOptions['translator'] = new YoudaoTranslator({
     appId: process.env.VUE_YOUDAO_APPID,
     appKey: process.env.VUE_YOUDAO_APPKEY
   })
+} else {
+  AutoI18nOptions['translator'] = new EmptyTranslator()
 }
 
 const i18nPlugin = new webpackPluginsAutoI18n.default(AutoI18nOptions)

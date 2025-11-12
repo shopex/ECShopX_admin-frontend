@@ -20,27 +20,23 @@
 <template>
   <div class="h-full w-full relative" :style="loginBackGroundStyle">
     <!-- 头部logo和应用名称 -->
-    <div class="absolute top-0 left-0 flex items-center gap-2 px-4 py-4">
-      <SpImage :src="logo" height="30" fit="contain" />
+
+    <div
+      class="w-[480px] mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
+      <div class="mb-4 flex items-center justify-end">
+        <SpLanguage>
+          <span class="text-[13px] ml-1">{{ currentLang }}</span>
+        </SpLanguage>
+      </div>
+
+      <AuthForm />
+
+      <div class="mt-8">
+        <LicenseLogo />
+      </div>
     </div>
-
-    <div class="absolute top-4 right-10 px-4 z-20 flex items-center gap-1">
-      <SpLanguage>
-        <span class="text-sm ml-1">{{ currentLang }}</span>
-      </SpLanguage>
-    </div>
-
-    <!-- 系统介绍 -->
-    <!-- <div class="flex-1">
-      <div class="login-background" :style="loginBackGroundStyle" />
-    </div> -->
-
     <!-- 登录 -->
-    <AuthForm class="w-[480px] mx-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-
-    <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-      <LicenseLogo />
-    </div>
   </div>
 </template>
 
@@ -60,8 +56,7 @@ export default {
       currentLang: ''
     }
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     footerBackground: () => {
       return require(`@/assets/svgs/logo.svg`)

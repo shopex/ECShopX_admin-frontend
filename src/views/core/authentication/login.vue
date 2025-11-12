@@ -19,26 +19,25 @@
 -->
 <template>
   <div class="bg-white relative flex flex-col justify-center">
-    <!-- form: {{ form }} -->
     <div>
-      <!-- <div class="text-3xl font-bold mb-3">{{ systemTitle }}</div> -->
-      <img src="/images/logo.png" alt="logo" width="140"/>
-      <div class="text-[18px] mt-10 text-[#333]">请登录</div>
+      <img src="/images/logo.png" alt="logo" width="140" />
+      <div class="text-[18px] mt-8 text-[#333]">请登录</div>
     </div>
 
-    <div class="mt-12">
+    <div class="mt-8">
       <LoginForm ref="formRef" />
     </div>
 
-    <div class="mt-16">
-      <el-button type="primary" class="w-full h-[40px] rounded-[16px]" :loading="loading" @click="handleLogin">
+    <div class="mt-8 text-right">
+      <el-button
+        round
+        class="h-[40px] rounded-[16px] !bg-black !text-white"
+        :loading="loading"
+        @click="handleLogin"
+      >
         登录
       </el-button>
     </div>
-
-    <!-- <div class="absolute -bottom-0.5 left-0 w-full text-center text-sm text-muted-foreground">
-      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ recoderNumber }}</a>
-    </div> -->
   </div>
 </template>
 
@@ -50,6 +49,26 @@ import { getSystemTitle } from '@/utils'
 const [Form, FormApi] = useForm({
   formItems: [
     {
+      label: '用户名',
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入用户名'
+      },
+      fieldName: 'account',
+      rules: [{ required: true, message: '请输入用户名' }]
+    },
+    {
+      label: '密码',
+      component: 'Input',
+      componentProps: {
+        type: 'password',
+        placeholder: '密码'
+      },
+      fieldName: 'pwd',
+      rules: [{ required: true, message: '请输入密码' }]
+    },
+    {
+      label: '角色',
       component: 'Select',
       componentProps: {
         placeholder: '请输入用户名',
@@ -66,27 +85,11 @@ const [Form, FormApi] = useForm({
       },
       fieldName: 'loginType',
       value: 'admin'
-    },
-    {
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入用户名'
-      },
-      fieldName: 'account',
-      rules: [{ required: true, message: '请输入用户名' }]
-    },
-    {
-      component: 'Input',
-      componentProps: {
-        type: 'password',
-        placeholder: '密码'
-      },
-      fieldName: 'pwd',
-      rules: [{ required: true, message: '请输入密码' }]
     }
   ],
-  // labelWidth: '0',
-  showDefaultActions: false
+  hideFieldRequiredMark: true,
+  showDefaultActions: false,
+  labelInline: true
 })
 
 export default {
@@ -114,6 +117,7 @@ export default {
   },
   methods: {
     async handleLogin() {
+      await this.formApi.validate()
       const formData = this.formApi.getFieldsValue()
       this.loading = true
       try {

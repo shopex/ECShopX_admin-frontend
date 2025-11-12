@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -134,7 +134,7 @@
         </SpFilterForm>
         <SpFinder
           ref="finder"
-          url='/aftersales'
+          url="/aftersales"
           :setting="finderSetting"
           :hooks="{
             beforeSearch: beforeSearch
@@ -190,7 +190,7 @@
                   active-color="#13ce66"
                   inactive-color="#ff4949"
                 />
-                <br>
+                <br />
                 <span class="frm-tips"
                   >如开启展示，则后台所输入内容将会展示在前端消费者提交售后申请的页面上，内容不超过200字</span
                 >
@@ -203,7 +203,7 @@
           </div>
         </el-dialog>
         <RemarkModal ref="modalRef" @onDone="handleRemarksDone" />
-        
+
         <!-- 批量审核弹框 -->
         <SpDialog
           ref="batchReviewDialogRef"
@@ -224,7 +224,7 @@ import RemarkModal from '@/components/remarkModal'
 import SpDialog from '@/components/sp-dialog'
 import mixin, { pageMixin, remarkMixin } from '@/mixins'
 import { VERSION_B2C, IS_SUPPLIER } from '@/utils'
-import { ORDER_CATEGORY, ORDER_TYPE, ORDER_TYPE_STANDARD } from '@/consts'
+import { ORDER_CATEGORY, ORDER_TYPE } from '@/consts'
 export default {
   components: {
     RemarkModal,
@@ -261,7 +261,7 @@ export default {
         ...initialParams
       },
       is_pharma_industry: false,
-      orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
+      orderType: ORDER_TYPE,
       orderCategory: ORDER_CATEGORY,
       shopList: [],
       aftersalesStatusList: [
@@ -285,7 +285,7 @@ export default {
       },
       aftersalesRemindVisible: false,
       aftersalesRemindTitle: '售后提醒内容',
-      orderType: this.VERSION_STANDARD ? ORDER_TYPE_STANDARD : ORDER_TYPE,
+      orderType: ORDER_TYPE,
       multipleSelection: [],
       // 批量审核相关
       batchReviewType: 'approved',
@@ -331,51 +331,71 @@ export default {
             key: 'aftersales_bn',
             width: 200,
             render: (h, { row }) => {
-              const linkPath = 
-                (`${this.$store.getters.login_type}` == 'distributor' && '/shopadmin/order/aftersaleslist/detail') ||
-                (`${this.$store.getters.login_type}` == 'supplier' && '/supplier/order/aftersaleslist/detail') ||
-                (`${this.$store.getters.login_type}` == 'merchant' && '/merchant/order/aftersaleslist/detail') ||
+              const linkPath =
+                (`${this.$store.getters.login_type}` == 'distributor' &&
+                  '/shopadmin/order/aftersaleslist/detail') ||
+                (`${this.$store.getters.login_type}` == 'supplier' &&
+                  '/supplier/order/aftersaleslist/detail') ||
+                (`${this.$store.getters.login_type}` == 'merchant' &&
+                  '/merchant/order/aftersaleslist/detail') ||
                 '/order/aftersales/aftersaleslist/detail'
               return h('div', [
                 h('div', { class: 'order-num' }, [
-                  h('el-button', {
-                    props: { type: 'text' },
-                    on: {
-                      click: () => {
-                        const routeData = this.$router.resolve({
-                          path: linkPath,
-                          query: { aftersales_bn: row.aftersales_bn }
-                        });
-                        window.open(routeData.href, '_blank');
-                        // this.$router.push({
-                        //   path: linkPath,
-                        //   query: { aftersales_bn: row.aftersales_bn }
-                        // })
-                      }
-                    }
-                  }, row.aftersales_bn),
-                  h('el-tooltip', {
-                    props: { effect: 'dark', content: '复制', placement: 'top-start' }
-                  }, [
-                    h('i', {
-                      class: 'el-icon-document-copy',
-                      style: { cursor: 'pointer' },
+                  h(
+                    'el-button',
+                    {
+                      props: { type: 'text' },
                       on: {
-                        click: () => this.copyToClipboard(row.aftersales_bn)
+                        click: () => {
+                          const routeData = this.$router.resolve({
+                            path: linkPath,
+                            query: { aftersales_bn: row.aftersales_bn }
+                          })
+                          window.open(routeData.href, '_blank')
+                          // this.$router.push({
+                          //   path: linkPath,
+                          //   query: { aftersales_bn: row.aftersales_bn }
+                          // })
+                        }
                       }
-                    })
-                  ])
+                    },
+                    row.aftersales_bn
+                  ),
+                  h(
+                    'el-tooltip',
+                    {
+                      props: { effect: 'dark', content: '复制', placement: 'top-start' }
+                    },
+                    [
+                      h('i', {
+                        class: 'el-icon-document-copy',
+                        style: { cursor: 'pointer' },
+                        on: {
+                          click: () => this.copyToClipboard(row.aftersales_bn)
+                        }
+                      })
+                    ]
+                  )
                 ]),
-                row.distributor_id !== '0' && h('div', { class: 'order-store' }, [
-                  h('el-tooltip', {
-                    props: { effect: 'dark', content: '店铺名', placement: 'top-start' }
-                  }, [h('i', { class: 'el-icon-office-building' })]),
-                  row.distributor_info.name
-                ]),
+                row.distributor_id !== '0' &&
+                  h('div', { class: 'order-store' }, [
+                    h(
+                      'el-tooltip',
+                      {
+                        props: { effect: 'dark', content: '店铺名', placement: 'top-start' }
+                      },
+                      [h('i', { class: 'el-icon-office-building' })]
+                    ),
+                    row.distributor_info.name
+                  ]),
                 h('div', { class: 'order-time' }, [
-                  h('el-tooltip', {
-                    props: { effect: 'dark', content: '申请时间', placement: 'top-start' }
-                  }, [h('i', { class: 'el-icon-time' })]),
+                  h(
+                    'el-tooltip',
+                    {
+                      props: { effect: 'dark', content: '申请时间', placement: 'top-start' }
+                    },
+                    [h('i', { class: 'el-icon-time' })]
+                  ),
                   this.$options.filters.datetime(row.create_time, 'YYYY-MM-DD HH:mm:ss')
                 ])
               ])
@@ -386,36 +406,47 @@ export default {
             key: 'order_id',
             minWidth: 180,
             render: (h, { row }) => {
-              const linkPath = 
-                (`${this.$store.getters.login_type}` == 'distributor' && '/shopadmin/order/tradenormalorders/detail') ||
-                (`${this.$store.getters.login_type}` == 'supplier' && '/supplier/order/tradenormalorders/detail') ||
-                (`${this.$store.getters.login_type}` == 'merchant' && '/merchant/order/tradenormalorders/detail') ||
+              const linkPath =
+                (`${this.$store.getters.login_type}` == 'distributor' &&
+                  '/shopadmin/order/tradenormalorders/detail') ||
+                (`${this.$store.getters.login_type}` == 'supplier' &&
+                  '/supplier/order/tradenormalorders/detail') ||
+                (`${this.$store.getters.login_type}` == 'merchant' &&
+                  '/merchant/order/tradenormalorders/detail') ||
                 '/order/entitytrade/tradenormalorders/detail'
-              
+
               return h('div', { class: 'order-num' }, [
-                h('el-button', {
+                h(
+                  'el-button',
+                  {
                     props: { type: 'text' },
                     on: {
                       click: () => {
                         const routeData = this.$router.resolve({
                           path: linkPath,
-                          query: { orderId: row.order_id },
-                        });
-                        window.open(routeData.href, '_blank');
+                          query: { orderId: row.order_id }
+                        })
+                        window.open(routeData.href, '_blank')
                       }
                     }
-                  }, row.order_id),
-                h('el-tooltip', {
-                  props: { effect: 'dark', content: '复制', placement: 'top-start' }
-                }, [
-                  h('i', {
-                    class: 'el-icon-document-copy',
-                    style: { cursor: 'pointer' },
-                    on: {
-                      click: () => this.copyToClipboard(row.order_id)
-                    }
-                  })
-                ])
+                  },
+                  row.order_id
+                ),
+                h(
+                  'el-tooltip',
+                  {
+                    props: { effect: 'dark', content: '复制', placement: 'top-start' }
+                  },
+                  [
+                    h('i', {
+                      class: 'el-icon-document-copy',
+                      style: { cursor: 'pointer' },
+                      on: {
+                        click: () => this.copyToClipboard(row.order_id)
+                      }
+                    })
+                  ]
+                )
               ])
             }
           },
@@ -425,12 +456,15 @@ export default {
             minWidth: 220,
             render: (h, { row }) => {
               if (row.detail && row.detail.length > 0) {
-                return h('div', row.detail.map(item => 
-                  h('div', { style: { marginBottom: '4px' } }, [
-                    h('div', { style: {} }, item.item_name),
-                    h('div', { style: {} }, `货号: ${item.item_bn}`)
-                  ])
-                ))
+                return h(
+                  'div',
+                  row.detail.map((item) =>
+                    h('div', { style: { marginBottom: '4px' } }, [
+                      h('div', { style: {} }, item.item_name),
+                      h('div', { style: {} }, `货号: ${item.item_bn}`)
+                    ])
+                  )
+                )
               }
               return h('span', {}, '-')
             }
@@ -502,23 +536,28 @@ export default {
             visible: !this.IS_SUPPLIER(),
             render: (h, { row }) => {
               if (!row.user_delete && this.$store.getters.login_type !== 'merchant') {
-                const linkPath = this.$store.getters.login_type != 'distributor' ? 
-                  '/member/member/memberlist/detail' : 
-                  '/shopadmin/member/member/memberlist/detail'
-                
+                const linkPath =
+                  this.$store.getters.login_type != 'distributor'
+                    ? '/member/member/memberlist/detail'
+                    : '/shopadmin/member/member/memberlist/detail'
+
                 return h('div', { class: 'order-num' }, [
-                  h('el-button', {
-                    props: { type: 'text' },
-                    on: {
-                      click: () => {
-                        const routeData = this.$router.resolve({
-                          path: linkPath,
-                          query: { user_id: row.user_id }
-                        });
-                        window.open(routeData.href, '_blank');
+                  h(
+                    'el-button',
+                    {
+                      props: { type: 'text' },
+                      on: {
+                        click: () => {
+                          const routeData = this.$router.resolve({
+                            path: linkPath,
+                            query: { user_id: row.user_id }
+                          })
+                          window.open(routeData.href, '_blank')
+                        }
                       }
-                    }
-                  }, row.mobile),
+                    },
+                    row.mobile
+                  )
                 ])
               }
               return h('span', {}, row.mobile)
@@ -565,14 +604,14 @@ export default {
             key: '',
             minWidth: 100,
             visible: this.IS_SUPPLIER(),
-            render: (h, { row }) => h('span', {}, row.detail[0].item_name),
+            render: (h, { row }) => h('span', {}, row.detail[0].item_name)
           },
           {
             name: '售后商品数量',
             key: '',
             minWidth: 120,
             visible: this.IS_SUPPLIER(),
-            render: (h, { row }) => h('span', {}, row.detail[0].num),
+            render: (h, { row }) => h('span', {}, row.detail[0].num)
           },
           {
             name: '金额',
@@ -604,9 +643,15 @@ export default {
                 'EXCHANGING_GOODS': { text: '换货', type: 'danger' }
               }
               const type = typeMap[row.aftersales_type]
-              return type ? h('el-tag', {
-                props: { type: type.type, size: 'mini' }
-              }, type.text) : h('span', {}, row.aftersales_type)
+              return type
+                ? h(
+                    'el-tag',
+                    {
+                      props: { type: type.type, size: 'mini' }
+                    },
+                    type.text
+                  )
+                : h('span', {}, row.aftersales_type)
             }
           },
           {
@@ -622,9 +667,15 @@ export default {
                 '4': { text: '已关闭', type: 'success' }
               }
               const status = statusMap[row.aftersales_status]
-              return status ? h('el-tag', {
-                props: { type: status.type, size: 'mini' }
-              }, status.text) : h('span', {}, row.aftersales_status)
+              return status
+                ? h(
+                    'el-tag',
+                    {
+                      props: { type: status.type, size: 'mini' }
+                    },
+                    status.text
+                  )
+                : h('span', {}, row.aftersales_status)
             }
           },
           {
@@ -634,28 +685,36 @@ export default {
             fixed: 'left',
             render: (h, { row }) => {
               return h('div', [
-                h('el-button', {
-                  props: { type: 'text' },
-                  on: {
-                    click: () => {
-                      this.$router.push({
-                        path: this.matchRoutePath('detail'),
-                        query: { aftersales_bn: row.aftersales_bn, resource: this.$route.path }
-                      })
+                h(
+                  'el-button',
+                  {
+                    props: { type: 'text' },
+                    on: {
+                      click: () => {
+                        this.$router.push({
+                          path: this.matchRoutePath('detail'),
+                          query: { aftersales_bn: row.aftersales_bn, resource: this.$route.path }
+                        })
+                      }
                     }
-                  }
-                }, '详情'),
-                h('el-button', {
-                  props: { type: 'text' },
-                  on: {
-                    click: () => this.clickShowRemark(row, 'afterList')
-                  }
-                }, '备注')
+                  },
+                  '详情'
+                ),
+                h(
+                  'el-button',
+                  {
+                    props: { type: 'text' },
+                    on: {
+                      click: () => this.clickShowRemark(row, 'afterList')
+                    }
+                  },
+                  '备注'
+                )
               ])
             }
           }
         ]
-      },
+      }
     }
   },
   computed: {
@@ -833,18 +892,21 @@ export default {
       const searchParams = {
         ...params,
         ...this.params,
-        ...this.dateTransfer(this.params.create_time || []),
+        ...this.dateTransfer(this.params.create_time || [])
       }
       return searchParams
     },
     copyToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         // 使用现代 Clipboard API
-        navigator.clipboard.writeText(text).then(() => {
-          this.$message.success('复制成功')
-        }).catch(() => {
-          this.fallbackCopyTextToClipboard(text)
-        })
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            this.$message.success('复制成功')
+          })
+          .catch(() => {
+            this.fallbackCopyTextToClipboard(text)
+          })
       } else {
         // 降级到传统方法
         this.fallbackCopyTextToClipboard(text)
@@ -877,7 +939,7 @@ export default {
       if (selection.length === 0) {
         return this.$message.error('请选择需要审核的数据')
       }
-      
+
       // 重置表单
       this.batchReviewForm = {
         is_approved: '1',
@@ -896,7 +958,7 @@ export default {
 
         const aftersalesBns = selection.map((row) => row.aftersales_bn)
         let params = {
-          aftersales_bn: aftersalesBns,
+          aftersales_bn: aftersalesBns
         }
         if (this.batchReviewType == 'refund') {
           params.check_refund = this.batchReviewForm.is_approved
@@ -918,7 +980,7 @@ export default {
         console.error('批量审核失败:', error)
         this.$message.error('批量审核失败，请重试')
       }
-    },
+    }
   }
 }
 </script>

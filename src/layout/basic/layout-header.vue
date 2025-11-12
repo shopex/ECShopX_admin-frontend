@@ -1,11 +1,11 @@
 <!--
 +----------------------------------------------------------------------
 | ECShopX open source E-commerce
-| ECShopX 开源商城系统 
+| ECShopX 开源商城系统
 +----------------------------------------------------------------------
 | Copyright (c) 2003-2025 ShopeX,Inc.All rights reserved.
 +----------------------------------------------------------------------
-| Corporate Website:  https://www.shopex.cn 
+| Corporate Website:  https://www.shopex.cn
 +----------------------------------------------------------------------
 | Licensed under the Apache License, Version 2.0
 | http://www.apache.org/licenses/LICENSE-2.0
@@ -34,23 +34,16 @@
     <div class="flex items-center gap-2 px-3">
       <!-- <SpIcon class="p-2" button radius name="translate" :size="16" @click="handleSystemInfo" /> -->
 
-      <SpLanguage />
+      <SpLanguage>
+        <span class="text-[13px] ml-1">{{ currentLang }}</span>
+      </SpLanguage>
 
-      <SpIcon class="p-2" button radius name="setting-two" :size="16" @click="handleSystemInfo" />
-
-      <SpIcon
-        v-if="IS_DISTRIBUTOR()"
-        button
-        radius
-        name="shop"
-        :size="16"
-        @click="handleShopList"
-      />
-      <!-- <SpIcon name="briefcase-business" :size="20" /> -->
+      <div class="text-[#B3B3B3] text-[13px] mx-2">|</div>
 
       <el-dropdown @command="handleCommand">
-        <div class="h-[44px] w-[44px] hover:bg-gray-100 rounded-full" style="padding: 6px">
-          <el-avatar :size="32" :src="accountAvatar" />
+        <div class="h-[36px] hover:bg-gray-100 rounded-full flex items-center justify-center" style="padding: 6px">
+          <el-avatar :size="24" :src="accountAvatar" />
+          <span class="text-[13px] ml-1">{{ accountInfo.username }}</span>
         </div>
         <el-dropdown-menu slot="dropdown" style="width: 200px">
           <el-dropdown-item command="user-center">
@@ -74,19 +67,22 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <!-- <GlobalSearch :menus="accessStore.accessMenus" />
+      <div v-if="IS_DISTRIBUTOR()" class="text-[#B3B3B3] text-[13px] mx-2">|</div>
 
-      <ExIcon type="button" name="Settings" :size="20" />
+      <SpIcon
+        v-if="IS_DISTRIBUTOR()"
+        button
+        radius
+        name="shop"
+        :size="16"
+        @click="handleShopList"
+      />
 
-      <ExIcon fill="black" type="button" name="Moon" :size="20" />
+      <div class="text-[#B3B3B3] text-[13px] mx-2">|</div>
 
-      <ExIcon type="button" name="Sun" :size="20" />
-
-      <ExIcon type="button" name="Codesandbox" :size="20" />
-
-      <ExIcon type="button" name="Languages" :size="20" />
-
-      <ExIcon type="button" name="Bell" :size="20" /> -->
+      <SpIcon class="p-2" button radius name="info" :size="16" @click="handleSystemInfo">
+        <span class="text-[13px] ml-1">系统信息</span>
+      </SpIcon>
     </div>
   </div>
 </template>
@@ -95,6 +91,7 @@
 import moment from 'moment'
 import { getBasePath, IS_DISTRIBUTOR } from '@/utils'
 import DEFAULT_USER from '@/assets/images/default-user.png'
+import i18n from '@/i18n'
 import UserInfo from './components/user-info.vue'
 import ChangePassword from './components/change-password.vue'
 import config from '../../../package.json'
@@ -130,6 +127,8 @@ export default {
       { label: '存储驱动', value: res.disk_driver },
       { label: 'Lumen框架', value: res.lumen_version }
     ]
+
+    this.currentLang = i18n[this.$store.state.system.lang]
   },
   methods: {
     async handleCommand(command) {

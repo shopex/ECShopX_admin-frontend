@@ -42,12 +42,20 @@ export default {
       default: ''
     },
     formData: Object,
+    hideFieldRequiredMark: {
+      type: Boolean,
+      default: false
+    },
     isShow: {
       type: Function
     },
     label: {
       type: String,
       default: ''
+    },
+    labelInline: {
+      type: Boolean,
+      default: false
     },
     rules: {
       type: Array,
@@ -350,6 +358,10 @@ export default {
               name: 'show',
               value: this.isShow ? this.isShow(this.modelValue) : true
             }
+          ],
+          class: [
+            { 'label-inline': this.labelInline },
+            { 'hide-field-required-mark': this.hideFieldRequiredMark }
           ]
         },
         [
