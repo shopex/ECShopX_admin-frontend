@@ -1,0 +1,15 @@
+
+.grade-setting-row{
+  border:1px solid #eaeefb;
+}
+.grade-setting-col{
+  height:100%;
+  padding:18px 20px;
+}
+.grade-setting-item{
+  padding-bottom:10px;
+}
+.title{
+  font-weight:700;
+}
+
