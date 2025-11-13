@@ -87,6 +87,19 @@ function createRequestClient() {
         })
         config.params = params
         delete config.data
+      } else {
+        // 处理文件上传
+        if (config.data && config.data.isUploadFile) {
+          const formData = new FormData()
+          Object.keys(config.data).forEach((key) => {
+            if (key !== 'isUploadFile') {
+              formData.append(key, config.data[key])
+            }
+          })
+          config.data = formData
+          // FormData 会自动设置 Content-Type，不需要手动设置
+          delete config.headers['Content-Type']
+        }
       }
 
       return config
@@ -173,10 +186,12 @@ function createRequestClient() {
 const requestClient = createRequestClient()
 
 const fetch = ({ url, method, params }) => {
-  return requestClient.request(url, {
+  // 如果 params 中包含 isUploadFile，需要特殊处理
+  const requestConfig = {
     method,
     data: params
-  })
+  }
+  return requestClient.request(url, requestConfig)
 }
 
 export { requestClient, fetch }
