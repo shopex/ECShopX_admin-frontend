@@ -53,7 +53,8 @@ export default {
   },
   data() {
     return {
-      currentLang: ''
+      currentLang: '',
+      isYD:process.env.VUE_APP_PLATFORM == 'yd'
     }
   },
   methods: {},

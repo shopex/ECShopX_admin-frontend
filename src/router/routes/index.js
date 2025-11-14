@@ -46,7 +46,7 @@ function mergeRouteModules(routeModules) {
 const dynamicRoutes = mergeRouteModules(
   dynamicRouteFiles.keys().filter((key) => key.startsWith('./'))
 )
-
+console.log('dynamicRoutes', dynamicRoutes)
 // 基础路由
 const routes = [...coreRoutes]
 

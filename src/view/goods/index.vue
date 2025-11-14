@@ -65,7 +65,7 @@
           "
           type="primary"
           :loading="submitLoading"
-          @click="onFormSubmit('submitting')"
+          @click="onFormSubmit('submiting')"
         >
           保存
         </el-button>

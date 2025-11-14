@@ -408,7 +408,7 @@ export const SECKILL_ACTIVITY_STATUS = {
 
 // 商品审核状态
 export const GOODS_APPLY_STATUS = {
-  submitting: '待提交',
+  submiting: '待提交',
   approved: '已审核',
   processing: '审核中',
   rejected: '已拒绝'

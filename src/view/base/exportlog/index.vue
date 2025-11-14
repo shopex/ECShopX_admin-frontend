@@ -73,11 +73,11 @@
         <!-- <el-tab-pane label="商品标签导出" name="normal_items_tag" /> -->
         <el-tab-pane label="积分记录导出" name="member_point_logs" />
         <el-tab-pane v-if="!VERSION_IN_PURCHASE()" label="店铺商品导出" name="distributor_items" />
-        <!-- <el-tab-pane
+        <el-tab-pane
           v-if="!VERSION_IN_PURCHASE()"
           label="积分商品导出"
           name="pointsmallitems"
-        /> -->
+        />
         <!-- <el-tab-pane
           label="权益导出"
           name="right"

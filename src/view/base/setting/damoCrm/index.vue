@@ -102,11 +102,12 @@ export default {
     async getConfig() {
       this.loading = true
       try {
-        const resp = await this.$api.third.getDmcrmSetting()
-        this.form.app_key = resp.data.data.app_key
-        this.form.app_secret = resp.data.data.app_secret
-        this.form.ent_sign = resp.data.data.ent_sign
-        this.form.is_open = resp.data.data.is_open ? true : false
+        const data = await this.$api.third.getDmcrmSetting()
+        console.log(data, data.app_key)
+        this.formData.app_key = data.app_key
+        this.formData.app_secret = data.app_secret
+        this.formData.ent_sign = data.ent_sign
+        this.formData.is_open = data.is_open ? true : false
         this.loading = false
       } catch (error) {
         console.log(error)

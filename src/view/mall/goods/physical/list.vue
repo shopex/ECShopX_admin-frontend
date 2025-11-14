@@ -520,7 +520,7 @@ export default {
     // if (IS_SUPPLIER()) {
     //   tabList = [
     //     { name: '全部商品', value: 'all', activeName: 'first' },
-    //     { name: '待提交', value: 'submitting', activeName: 'submitting' },
+    //     { name: '待提交', value: 'submiting', activeName: 'submiting' },
     //     { name: '待审核', value: 'processing', activeName: 'processing' },
     //     { name: '已通过', value: 'approved', activeName: 'approved' },
     //     { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
@@ -879,8 +879,7 @@ export default {
               const isShow =
                 IS_ADMIN() ||
                 IS_DISTRIBUTOR() ||
-                (IS_SUPPLIER() &&
-                  (row.audit_status == 'submitting' || row.audit_status == 'rejected'))
+                (IS_SUPPLIER() && row.is_market == 0 && row.audit_status != 'processing') // 供应商端：不可售&非审核中状态可删除
               return isShow
             },
             action: {
@@ -1264,7 +1263,7 @@ export default {
             key: 'is_prescription',
             width: 150,
             render: (h, { row }) => (row.is_prescription == '1' ? '是' : '否'),
-            visible: !!this.is_pharma_industry
+            visible: this.is_pharma_industry
           },
           {
             name: '医药错误信息',
@@ -1280,7 +1279,7 @@ export default {
                 )}
               </div>
             ),
-            visible: !!this.is_pharma_industry
+            visible: this.is_pharma_industry
           },
           {
             name: '创建时间',
@@ -1316,7 +1315,7 @@ export default {
       if (IS_SUPPLIER()) {
         tabList = [
           { name: '全部商品', value: 'all', activeName: 'first' },
-          { name: '待提交', value: 'submitting', activeName: 'submitting' },
+          { name: '待提交', value: 'submiting', activeName: 'submiting' },
           { name: '待审核', value: 'processing', activeName: 'processing' },
           { name: '已通过', value: 'approved', activeName: 'approved' },
           { name: '已拒绝', value: 'rejected', activeName: 'rejected' },
@@ -1835,15 +1834,16 @@ export default {
       if (this.selectionItems.length > 0) {
         exportParams['item_id'] = this.selectionItems.map((item) => item.item_id)
       }
-      const { url:exportKey } = await this.$api.goods.exportApiFileName(exportParams)
+      // const { url:exportKey } = await this.$api.goods.exportApiFileName(exportParams)
 
-      this.$store.dispatch('setExportKeyAndTotal', {exportKey, exportTotal:0})
-      // if (status) {
-      //   this.$message.success('已加入执行队列，请在设置-导出列表中下载')
-      //   this.$export_open(IS_SUPPLIER() ? 'supplier_goods' : 'items')
-      // } else {
-      //   this.$message.error('导出失败')
-      // }
+      // this.$store.dispatch('setExportKeyAndTotal', {exportKey, exportTotal:0})
+      const { status } = await this.$api.goods.exportItemsData(exportParams)
+      if (status) {
+        this.$message.success('已加入执行队列，请在设置-导出列表中下载')
+        this.$export_open(IS_SUPPLIER() ? 'supplier_goods' : 'items')
+      } else {
+        this.$message.error('导出失败')
+      }
     },
     async exportItemsTagData() {
       const exportParams = {

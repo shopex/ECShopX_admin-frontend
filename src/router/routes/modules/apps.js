@@ -86,50 +86,50 @@ const routes = [
           }
         ]
       },
-      {
-        name: 'pointMallProductManagement',
-        path: 'point-mall/product-management',
-        meta: {
-          aliasName: 'jfgoods',
-          icon: 'pay-circle',
-          title: '商品管理',
-          permissions: ['applications.jfmall.jfgoods']
-        },
-        component: () => import('@/view/applications/pointmall/list'),
-        children: [
-          {
-            path: 'editor/:itemId?',
-            component: () => import('@/view/applications/pointmall/add')
-          },
-          {
-            path: 'physicalupload',
-            name: `实体商品导入`,
-            component: () => import('@/view/applications/pointmall/goodsImport')
-          },
-          {
-            path: 'physicalstoreupload',
-            name: `商品库存导入`,
-            component: () => import('@/view/applications/pointmall/storeImport')
-          }
-        ]
-      },
-      {
-        name: 'pointMallOrderManagement',
-        path: 'point-mall/order-management',
-        meta: {
-          aliasName: 'jforders',
-          icon: 'pay-circle',
-          title: '订单管理',
-          permissions: ['applications.jfmall.jforders']
-        },
-        component: () => import('@/view/applications/pointmall/orderList'),
-        children: [
-          {
-            path: 'detail/:itemId?',
-            component: () => import('@/view/applications/pointmall/orderDetail')
-          }
-        ]
-      },
+      // {
+      //   name: 'pointMallProductManagement',
+      //   path: 'point-mall/product-management',
+      //   meta: {
+      //     aliasName: 'jfgoods',
+      //     icon: 'pay-circle',
+      //     title: '商品管理',
+      //     permissions: ['applications.jfmall.jfgoods']
+      //   },
+      //   component: () => import('@/view/applications/pointmall/list'),
+      //   children: [
+      //     {
+      //       path: 'editor/:itemId?',
+      //       component: () => import('@/view/applications/pointmall/add')
+      //     },
+      //     {
+      //       path: 'physicalupload',
+      //       name: `实体商品导入`,
+      //       component: () => import('@/view/applications/pointmall/goodsImport')
+      //     },
+      //     {
+      //       path: 'physicalstoreupload',
+      //       name: `商品库存导入`,
+      //       component: () => import('@/view/applications/pointmall/storeImport')
+      //     }
+      //   ]
+      // },
+      // {
+      //   name: 'pointMallOrderManagement',
+      //   path: 'point-mall/order-management',
+      //   meta: {
+      //     aliasName: 'jforders',
+      //     icon: 'pay-circle',
+      //     title: '订单管理',
+      //     permissions: ['applications.jfmall.jforders']
+      //   },
+      //   component: () => import('@/view/applications/pointmall/orderList'),
+      //   children: [
+      //     {
+      //       path: 'detail/:itemId?',
+      //       component: () => import('@/view/applications/pointmall/orderDetail')
+      //     }
+      //   ]
+      // },
       {
         name: 'basicSettings',
         path: 'point-mall/basic-settings',

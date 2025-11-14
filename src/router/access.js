@@ -103,6 +103,8 @@ function generateRoutes(options) {
   // 权限中的所有aliasName
   const permissions = getAllPermissions(accessMenus, 'alias_name')
   store.commit('access/setPermissions', { permissions })
+  console.log('permissions', permissions)
+  console.log('routes', routes)
   const accessRoutes = filterTreeByLeafPermissions(routes, permissions)
   console.log('paths:', accessRoutes)
   return accessRoutes

@@ -18,7 +18,7 @@
 +----------------------------------------------------------------------
 -->
 <template>
-  <div class="relative flex min-h-full w-full">
+  <div class="relative flex min-h-full w-full ">
     <el-container>
       <router-view v-slot="{ Component }">
         <Transition name="fade" appear mode="out-in">

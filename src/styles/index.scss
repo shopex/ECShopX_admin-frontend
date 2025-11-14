@@ -24,6 +24,11 @@
 @import './element-ui.scss';
 @import './common.scss';
 
+// 导入语言样式文件
+@import './lang-en.scss';
+@import './lang-zhcn.scss';
+@import './lang-zhtw.scss';
+
 html,
 body {
   margin: 0;

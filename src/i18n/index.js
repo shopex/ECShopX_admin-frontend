@@ -28,4 +28,9 @@ export const langMap = {
   zhtw: 'zh-TW'
 }
 
+// 同时支持 CommonJS 导出，供 Tailwind 插件使用
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { langMap, default: i18n }
+}
+
 export default i18n

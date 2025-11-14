@@ -129,10 +129,6 @@ All notable changes to this project will be documented in this file. See [standa
 * 1015bug修复 ([af73d73](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/af73d732a6b07d79ae8978e39ac8ad2f8ca532a4))
 * **菜单数据多语言适配:** 菜单数据多语言适配 ([5c825d5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5c825d5e72019c252de47065924e5d4939defd0f))
 * 插件更新 ([e18accf](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/e18accf5a1b396366e5303ae8cd73c37a54c15fb))
-<<<<<<< HEAD
-* 导入 ([47f816b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/47f816beb8bb9701adb4ea3d2ca5b3d90bf7c78b))
-=======
->>>>>>> master-opensource
 * 店铺商品-状态查询 ([3cf2a01](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3cf2a010479bdc6f990b1df1cd5b62b1919cc86d))
 * 调整 ([93243b6](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/93243b68b2ac99eccb8488d9b5f52b01f5b1ac8d))
 * 多语言整合 ([9ad310d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/9ad310d2dc0c006fd103c370392a8396cf33a4d5))
@@ -141,17 +137,14 @@ All notable changes to this project will be documented in this file. See [standa
 * 供应商商品删除按钮展示逻辑修改 ([aec7a1a](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/aec7a1a00786587e2d518e679fac4e90857f4e6e))
 * 会员和模板改动 ([b0c87ff](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b0c87ff672f3867100ae293429b13a51551fc1d5))
 * 会员和模板改动 ([491fc3c](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/491fc3c9e5d6811cf46700df601ef5509714d5fe))
-<<<<<<< HEAD
 * 兼容 ([3202db1](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3202db1b63722131cd369bf95623167b00afcb15))
 * 进件菜单路由 ([2834182](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2834182ef203703fcd494867091a7f331a7ff966))
 * 开源需可 ([b728338](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b728338025cd8be79a7b2670e02f11067a4e2307))
 * 开源logo替换 ([a9625da](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a9625daf02eff6d6c9979b4defb3f62d876f31d0))
 * 删除无用的支付方式 ([bd506cf](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/bd506cf2cf6f442cc47b63873a78c2c3c9969041))
-=======
 * 进件菜单路由 ([2834182](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2834182ef203703fcd494867091a7f331a7ff966))
 * 开源需可 ([b728338](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/b728338025cd8be79a7b2670e02f11067a4e2307))
 * 开源logo替换 ([a9625da](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/a9625daf02eff6d6c9979b4defb3f62d876f31d0))
->>>>>>> master-opensource
 * 删除自营商品重复字段 ([933c965](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/933c96538d23f9d8d097f0fffa80a0e5ed614e0e))
 * 商品列表列表顺序修改 ([48ab7f8](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/48ab7f8c4adb6cc0abf6affd2452909f88e1af98))
 * 商品详情视频兜底 ([5c86ac3](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5c86ac337b8722d1a79495d35cd1d6a4e590eaf9))
@@ -212,32 +205,26 @@ All notable changes to this project will be documented in this file. See [standa
 * eCX-7365:跳转404 ([6270979](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/6270979e03cf728a68cb09cb77328f38bedf4e12))
 * eCX-7378删除slot标签 ([3ba158f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3ba158fd03e57a81a5627ec8c9bcae980bc88868))
 * eCX-7384:活动时间 ([d0fa596](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d0fa5967a218fc373d55fb34cafc0c44913d0562))
-<<<<<<< HEAD
 * **ECX-7395/ECX-7420/ECX-7377/ECX-7418/ECX-7424:** bug修复 ([f3d1fe5](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f3d1fe5e479cd9caf19d6f157298d42b4be69484))
 * eCX-7411:弹框空白 ([ebe1a3f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/ebe1a3f29f4d8bbaf100cbdeb04a0bfbcfb3e9df))
 * eCX-7414:添加用户名 ([01a6230](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/01a6230dedead0abd12e36979b0c79b50d126180))
 * **ECX-7418:** 导入 ([8256bb2](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/8256bb2bd28b5e652fbaba805dc932846d7a5ce1))
 * **ECX-7438:** 软文列表搜索 ([ce6501d](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/ce6501d74a5dbfde84c435b87b48b557a5e44382))
-=======
 * eCX-7411:弹框空白 ([ebe1a3f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/ebe1a3f29f4d8bbaf100cbdeb04a0bfbcfb3e9df))
 * eCX-7414:添加用户名 ([01a6230](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/01a6230dedead0abd12e36979b0c79b50d126180))
->>>>>>> master-opensource
 * language ([456648a](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/456648a7a758fcc4fb80ea3dff254a2e507de883))
 * loading ([3ef6cbe](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/3ef6cbe769205c7ce67cfde54bc52a8373dd096a))
 * **m:** 修复页面含有功能按钮权限时，路由注册bug ([9070d4f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/9070d4f5f946ed9664ad84505e91030f77278467))
 * **merge:** merge ([293fc6c](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/293fc6cde608a3ee6bd6689abf664a21daf1132c))
 * ui调整 ([12a4c20](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/12a4c2075dd1a576af887576f3fa4b21c69753a0))
-<<<<<<< HEAD
 * **update package-lock.json:** update package-lock.json ([5185753](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/5185753efa370fd323c4dfce2bc87967379d70c2))
 * **update package:** jugglingdb-nano ([2430f9b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2430f9b877df58deff04e2f0722292127b8f7041))
 * **update package:** update package ([0d7f77b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/0d7f77b3845c18a9c4e7aeeda56c2f7637bf977f))
 * **update:** dockerfile ([2419277](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/2419277abc67a27bd009e4f242b8723b09284926))
 * updatelang ([7e72648](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/7e7264850e984049afedbd9f25979ca29ed3401d))
 * **update:** package-lock.json ([d02b6e3](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/d02b6e3ab7f75e3f0b32a63aad2517fbb49fc57c))
-=======
 * **update package:** update package ([0d7f77b](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/0d7f77b3845c18a9c4e7aeeda56c2f7637bf977f))
 * updatelang ([7e72648](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/7e7264850e984049afedbd9f25979ca29ed3401d))
->>>>>>> master-opensource
 * **web端模板装修添加多语言标识:** web端模板装修添加多语言标识 ([f6c458f](https://git.ishopex.cn/ecshopx/ecshopx-admin/commit/f6c458f83d887815f66b02469aaa05ca3009ed00))
 
 ## [3.22.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.21.1...v3.22.0) (2025-07-11)
