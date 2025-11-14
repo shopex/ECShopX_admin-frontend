@@ -19,3 +19,6 @@ release.*
 .npm-cache/_logs/
 .npm-cache/node-sass/
 .npm-cache/_update-notifier-last-checked
+.cursor/commands/
+AGENTS.md
+openspec/
