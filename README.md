@@ -1,4 +1,5 @@
-<h1 align="center">Admin Frontend</h1>
+Admin Frontend
+===============
 <p align="center">Demo | Document</p>
 
 # Getting started
