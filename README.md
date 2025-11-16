@@ -6,8 +6,6 @@
 Node.js (current LTS) and npm are required to run the project. To be sure about the version compatibility you can enable Node's corepack.
 
 ### Installation
-
-Install dependencies  
 ```
 cd ecshopx-admin
 npm i
