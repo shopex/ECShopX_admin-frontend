@@ -31,7 +31,7 @@ export default {
 
   // 主题配置
   themeConfig: {
-    primaryColor: 'hsl(37 100% 50%)',
+    primaryColor: 'hsl(259 75% 61%)',
     successColor: 'hsl(144 57% 58%)',
     destructiveColor: 'hsl(348 100% 61%)',
     warningColor: 'hsl(42 84% 61%)',
