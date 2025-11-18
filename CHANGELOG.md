@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/shopeX-2002/ECShopX_AdminFrontend/compare/v3.26.0...v4.0.0) (2025-11-18)
+
+
+### Bug Fixes
+
+* 处方药未显示 ([c4962be](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/c4962be34e6e439811e30c8bda1b163102d83163))
+* 调整字数大学 ([1b6acda](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/1b6acda4d8ac1b845890f05d1334fb3543e687e2))
+* 翻译 ([aec3bd9](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/aec3bd99a5fd4f4b0e6654340a3aa9906a3f4018))
+* 更新翻译文件 ([8a4c17d](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/8a4c17d957de64010f35134b3ab942bee4f66e9f))
+* 供应状态可售不显示 ([786f0e4](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/786f0e4a333b81359761c73edc5ecafcca0b646d))
+* 商品导出 ([7f8a433](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/7f8a433e3c614576c84f195c09a6132b47ba9036))
+* 添加开票设置路由 ([cffe2a8](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/cffe2a83a8b5858ccda2a82b3366153fe0948573))
+* 修改积分商品导出\&供应商商品显示删除按钮 ([99cc1f8](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/99cc1f82d2a6d6266d7bf4e515c1d825ec4a9593))
+* 针对英文内容样式进行一些优化 ([b14fb79](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/b14fb7996fb5a6a25462c891285661ab25d6010e))
+* **custom:** 商品名称字数100 ([8bec50b](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/8bec50b8b2a61e992b98d579929bc759e2bf8203))
+* **custom:** 制定商品 ([411d8a0](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/411d8a0b2ebb29d0be80abaea00288114aec6981))
+* **docker:** docker ([1b93dcf](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/1b93dcfb1a0e1a1ec929171ea70991bacdb59229))
+* **dockerfile-atlas:** dockerfile-atlas ([84e12b7](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/84e12b7f2e82e561d13710decb5fc9440af20830))
+* **ECX-7173:** 供应商-审核中/审核通过/可销售不显示删除按钮 ([5119a5b](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/5119a5b96deca842e32d28262ae2db3d2fbc7af6))
+* eCX-7447接口有空格 ([200a4c0](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/200a4c06a7daef9d2a3ceb07b46aef7e0be17c86))
+* eCX-7450 ([2cff85e](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/2cff85ed75b230579b8e747236667edb4c8f7dcf))
+* **ECX-7452:** 返回上一页刷新 ([0797f8d](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/0797f8d54f2cb0bc9a4dd9347769e8bac3f39dec))
+* **ECX-7454:** 修复删除最后一页数据有问题 ([c755395](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/c75539520cd53cfd544eefe6720c9fdb721de1a8))
+* **fix:** 登录页改造 ([a7d0743](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/a7d0743522f763523b79e78e86f5590d429007bb))
+* **fix:** 更新环境变量 ([1624ffc](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/1624ffc1c10a84cc4352f684e6e2bd9d5d2ad3ef))
+* **fix:** build ([94aecd6](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/94aecd69a86af3cc610171a75871a02efd30c110))
+* **fix:** build ([c4acf8c](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/c4acf8ca613d29b38ec0a5d9c33a81dc45959db6))
+* **header:** 添加产品名称 ([d61f104](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/d61f10403b03f600e800cc85740d0b596fad68a5))
+* **package-lock.json:** package-lock.json ([4c44f26](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/4c44f26872cc4b12191a3f58bfca7267af3365ad))
+* **package:** 修改package.json ([80ce5b4](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/80ce5b47bcbd364d9b5d5623d58f4e6cf4507ac0))
+* **scope:** 更新主题色 ([ae84964](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/ae84964df02eba7c2449abfda130f4b3942b1ff0))
+* **scope:** 修改logo ([f459520](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/f45952081d23876cee385bbca82cc9fdf94a307d))
+* **setting:** 短信服务Tab切换白屏 ([ae2a6c6](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/ae2a6c6f2e2218e688f9c7a8a13282f02accf3ac))
+* sp-form的label-position支持外部传入自定义 ([f65311b](https://github.com/shopeX-2002/ECShopX_AdminFrontend/commit/f65311b50b30c3ecc0a75f3711ca39f0e0881656))
+
 ## [3.26.0](https://git.ishopex.cn/ecshopx/ecshopx-admin/compare/v3.25.0...v3.26.0) (2025-11-03)
 
 
