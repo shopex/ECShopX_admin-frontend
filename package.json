@@ -4,7 +4,7 @@
   "description": "ecshopx admin",
   "author": "shopex",
   "private": true,
-  "repository": "https://github.com/shopeX-2002/ECShopX_management.git",
+  "repository": "https://github.com/shopeX-2002/ECShopX_AdminFrontend.git",
   "scripts": {
     "build:bbc": "PLATFORM=bbc vue-cli-service build",
     "build:b2c": "PLATFORM=b2c vue-cli-service build",
