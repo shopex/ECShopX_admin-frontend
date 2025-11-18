@@ -35,7 +35,6 @@ export default {
   computed: {},
   watch: {},
   mounted() {
-    document.title = getSystemTitle()
   },
   methods: {
     beforeEnter(el) {

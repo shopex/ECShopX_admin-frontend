@@ -87,7 +87,7 @@ function install(Vue) {
   Vue.prototype.IS_SUPPLIER = IS_SUPPLIER
   Vue.prototype.IS_MERCHANT = IS_MERCHANT
 
-  Vue.prototype.path_prefixes = process.env.VUE_APP_PREFIXES
+  Vue.prototype.path_prefixes = ''
   Vue.prototype.BASE_API =
     process.env.VUE_APP_BASE_API.indexOf('http') !== -1
       ? process.env.VUE_APP_BASE_API

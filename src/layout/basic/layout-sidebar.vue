@@ -9,8 +9,8 @@
       <div class="flex items-center mt-2 px-2">
         <SpImage
           class="bg-white mx-auto"
-          :src="$store.state.system?.logo"
-          height="56"
+          :src="$store.state.system?.logo || '/images/logo.png'"
+          height="38"
           fit="contain"
         />
       </div>
@@ -45,7 +45,7 @@
       v-if="subMenus.length > 0"
     >
       <!-- activeSubIndex: {{ activeSubIndex }} -->
-      <div class="h-[50px] pl-2">
+      <div class="h-[50px] pl-[18px]">
         <div class="light flex h-full items-center text-xl text-[#333]">
           <span>{{ systemTitle }}</span>
         </div>

@@ -245,7 +245,6 @@ Vue.prototype.VERSION_PLATFORM = VERSION_PLATFORM
 Vue.prototype.VERSION_B2C = VERSION_B2C
 Vue.prototype.VERSION_IN_PURCHASE = VERSION_IN_PURCHASE
 Vue.prototype.VERSION_SHUYUN = VERSION_SHUYUN
-Vue.prototype.VUE_APP_SYSTEM_NAME = SYSTEM_CONFIG[store.getters.versionMode].name
 Vue.prototype.VUE_APP_CHUZHI = process.env.VUE_APP_CHUZHI == 'true'
 
 Vue.prototype.IS_ADMIN = IS_ADMIN
@@ -253,7 +252,7 @@ Vue.prototype.IS_DISTRIBUTOR = IS_DISTRIBUTOR
 Vue.prototype.IS_SUPPLIER = IS_SUPPLIER
 Vue.prototype.IS_MERCHANT = IS_MERCHANT
 
-Vue.prototype.path_prefixes = process.env.VUE_APP_PREFIXES
+Vue.prototype.path_prefixes = ''
 Vue.prototype.BASE_API =
   process.env.VUE_APP_BASE_API.indexOf('http') !== -1
     ? process.env.VUE_APP_BASE_API
@@ -286,5 +285,3 @@ Vue.prototype.VUE_APP_LOCAL_DELIVERY_DIRVER = process.env.VUE_APP_LOCAL_DELIVERY
 Vue.prototype.companyBrand = '商派ECShopX'
 Vue.prototype.companyBrandImg = process.env.PRODUCT_MODEL === 'standard' ? 'onex' : 'ecshopx'
 Vue.prototype.$EventBus = new Vue()
-// 动态改变页面的title
-document.title = Vue.prototype.VUE_APP_SYSTEM_NAME
