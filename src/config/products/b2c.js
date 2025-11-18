@@ -3,7 +3,7 @@
  * See LICENSE file for license details.
  */
 export default {
-  productName: 'B2C多店',
+  productName: 'B2C',
   systemTitle: '云店管理中心',
   systemTitleShopadmin: '店铺管理中心',
   systemTitleMerchant: '商户管理中心',
