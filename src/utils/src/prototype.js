@@ -14,7 +14,6 @@ import {
   IS_MERCHANT,
   getUrlPathByLoginType
 } from '@/utils'
-import { SYSTEM_CONFIG } from '@/consts'
 import store from '@/store'
 import { export_open } from './utils'
 // import moment from 'moment'

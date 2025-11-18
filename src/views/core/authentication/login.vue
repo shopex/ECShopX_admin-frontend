@@ -7,6 +7,7 @@
   <div class="page-login bg-white relative flex flex-col justify-center">
     <div>
       <img src="/images/logo.png" alt="logo" width="220" />
+      <!-- If you remove or alter Shopex brand identifiers, you must obtain a branding removal license from Shopex.  Contact us at:  http://www.shopex.cn to purchase a branding removal license.   -->
       <div class="text-[28px] font-helvca mt-8 text-[#333] ">请登录</div>
     </div>
 

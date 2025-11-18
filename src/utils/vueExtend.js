@@ -16,7 +16,6 @@ import {
   getUrlPathByLoginType
 } from '@/utils'
 import CommonUtil from '@/common/js/util'
-import { SYSTEM_CONFIG } from '@/consts'
 import store from '@/store'
 // import moment from 'moment'
 // import district from '@/common/district.json'
