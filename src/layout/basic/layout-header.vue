@@ -27,7 +27,10 @@
       <div class="text-[#B3B3B3] text-[13px] mx-2">|</div>
 
       <el-dropdown @command="handleCommand">
-        <div class="h-[36px] hover:bg-gray-100 rounded-full flex items-center justify-center" style="padding: 6px">
+        <div
+          class="h-[36px] hover:bg-gray-100 rounded-full flex items-center justify-center"
+          style="padding: 6px"
+        >
           <el-avatar :size="24" :src="accountAvatar" />
           <span class="text-[13px] ml-1">{{ accountInfo.username }}</span>
         </div>
@@ -150,25 +153,21 @@ export default {
           }
         })
       } else if (command === 'password') {
-        if (this.accountInfo.logintype === 'admin') {
-          window.location.href = 'https://account.shopex.cn/account/security'
-        } else {
-          await this.$dialog.open({
-            title: '修改密码',
-            content: <ChangePassword ref='changePasswordForm' />,
-            size: 'mini',
-            confirmBefore: async () => {
-              try {
-                await this.$refs.changePasswordForm.onSubmit()
-                setTimeout(async () => {
-                  this.handleLogout()
-                }, 1000)
-              } catch (error) {
-                throw new Error(error)
-              }
+        await this.$dialog.open({
+          title: '修改密码',
+          content: <ChangePassword ref='changePasswordForm' />,
+          size: 'mini',
+          confirmBefore: async () => {
+            try {
+              await this.$refs.changePasswordForm.onSubmit()
+              setTimeout(async () => {
+                this.handleLogout()
+              }, 1000)
+            } catch (error) {
+              throw new Error(error)
             }
-          })
-        }
+          }
+        })
       }
     },
     async handleLogout() {
