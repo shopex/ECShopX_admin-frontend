@@ -52,7 +52,20 @@ npm i
 
 ### Run project
 ```
+# B2C Business Model
 npm run dev:b2c
+  
+# B2B2C Business Model
+npm run dev:bbc
+```
+
+### Build packages
+```
+# B2C Business Model
+npm run build:b2c
+  
+# B2B2C Business Model
+npm run build:bbc
 ```
 
 ## License
@@ -68,8 +81,3 @@ Subject to Licensee's/Customer's payment of fees and compliance with the terms a
 
 在被许可方/客户已支付相关费用并遵守其与shopeX之间适用商业授权文件条款与条件的前提下，
 该商业授权文件中的条款与条件将取代 Apache 2.0 协议，成为每个源文件的实际适用许可条款。
-
-### Build packages
-```
-npm run build:b2c
-```
