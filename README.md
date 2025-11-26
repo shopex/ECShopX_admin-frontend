@@ -46,7 +46,7 @@ VUE_APP_DEFAULT_LANG=en
 
 ### Installation
 ```
-cd ecshopx-admin
+cd ECShopX_admin-frontend
 npm i
 ```
 
